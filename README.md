@@ -1,6 +1,6 @@
 # Goal
 
-Summarize the [bitcoin-dev](https://lists.linuxfoundation.org/pipermail/bitcoin-dev) and [lightning-dev mailing](https://lists.linuxfoundation.org/pipermail/bitcoin-dev) lists with the goal of creating a feed for public consumption.
+Summarize the [bitcoin-dev](https://lists.linuxfoundation.org/pipermail/bitcoin-dev) and [lightning-dev mailing](https://lists.linuxfoundation.org/pipermail/bitcoin-dev) lists with the goal of creating a feed for public consumption. This project scrapes the mailing lists and then creates summaries based on date.
 
 ### Project Setup
 1. Install all the dependencies from requirements.txt file: `pip install -r requirements.txt`
