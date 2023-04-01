@@ -1,3 +1,7 @@
+# Goal
+
+Summarize the [bitcoin-dev](https://lists.linuxfoundation.org/pipermail/bitcoin-dev) and [lightning-dev mailing](https://lists.linuxfoundation.org/pipermail/bitcoin-dev) lists with the goal of creating a feed for public consumption.
+
 ### Project Setup
 1. Install all the dependencies from requirements.txt file: `pip install -r requirements.txt`
 2. Set up environment variables: Create `.env` file in the root folder and add following keys -
