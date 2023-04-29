@@ -2,6 +2,8 @@ import openai
 
 from src import config
 
+openai.api_key = config.OPENAI_API_KEY
+
 
 def generate_summary(prompt):
     summarization_prompt = f"Generate a detailed summary from below context fact fully without missing any important information. Do not use the word 'summary' in it.\n\n CONTEXT:\n\n{prompt}"
