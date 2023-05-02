@@ -3,23 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
     <title>Atom Feed Display</title>
+    <style type="text/css">
+        pre {
+            white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+            }
+    </style>
 </head>
-<body>
-    <h1>{{ feed.title }}</h1>
-    <p>Updated: {{ feed.updated }}</p>
-    {% if feed.author %}
-    <p>Author: {{ feed.author.name }}</p>
-    {% endif %}
+<body BGCOLOR="#fffffb">
+    <h1>{{ feed.feed.title }}</h1>
+    <hr>
     <ul>
+    
     {% for entry in feed.entries %}
-        <li>
-            <a href="{{ entry.link }}">{{ entry.title }}</a>
-            <p>Published: {{ entry.published }}</p>
-            <p>Updated: {{ entry.updated }}</p>
-            <p>Summary: {{ entry.summary }}</p>
-        </li>
+    {% for author in feed.feed.authors %}
+    <p><b>Author:</b> {{ author.name }}</p>
+    {% endfor %}
+        <a href="{{ entry.link }}">click here to read brief discussion</a> 
+        <p>Published on: {{ entry.published }}</p> 
+        <hr>
+        <h3> Summary:</h3>
+            <p>{{ entry.summary }}</p>
     {% endfor %}
     </ul>
+    <hr>
+    <p>Updated on: {{ feed.feed.updated }}</p>
 </body>
 </html>

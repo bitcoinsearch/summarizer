@@ -3,10 +3,11 @@ import openai
 from dotenv import load_dotenv
 from flask import Flask, request, Response, render_template, url_for
 from src import utils
-from feedgen.feed import FeedGenerator
 import feedparser
 import warnings
 
+print("Started scheduler...")
+os.popen('python scheduler.py > scheduler_logs.txt 2>&1 &')
 warnings.filterwarnings("ignore")
 
 load_dotenv()
@@ -47,10 +48,8 @@ def feed(year_month):
 
 @app.route('/<year_month>/<filename>')
 def display_feed(year_month, filename):
-    file_url = url_for('static', filename=f"{year_month}/{filename}")
-    print(file_url)
+    file_url = f"./static/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
-    print(xml_feed)
     return render_template('feed.html', feed=xml_feed)
 
 
