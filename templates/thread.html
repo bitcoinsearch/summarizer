@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thread View</title>
+</head>
+<body>
+    {% set year, month = year_month.split('_') %}
+    <h1>{{ month }} {{ year }} Archives by thread</h1>
+    <p>Messages sorted by: [ subject ] [ author ] [ date ]</p>
+    <p><a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">You can get more information about this list.</a></p>
+    <p>Starting: {{ min_date.strftime('%a %b %d %H:%M:%S %Z %Y') }}</p>
+    <p>Ending: {{ max_date.strftime('%a %b %d %H:%M:%S %Z %Y') }}</p>
+    <p>Messages: {{ posts | length }}</p>
+
+    <ul>
+        {% for post in posts %}
+        <li>
+        <a href="{{ url_for('display_feed', year_month=year_month, filename=post.filename) }}">[{{ post.title }}]</a>
+            {{ post.author }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p>The bitcoin-dev Archives</p>
+    <p><a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">You can get more information about this list.</a></p>
+    <p>Archive    View by:</p>
+    <p>January 2012:    [ Thread ] [ Subject ] [ Author ] [ Date ]</p>
+</body>
+</html>

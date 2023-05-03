@@ -338,15 +338,15 @@ def generate_chatgpt_summary(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-                {"role": "system", "content": "You are an intelligent assistant."},
-                {"role": "user", "content": f"{summarization_prompt}"},
-            ],
+            {"role": "system", "content": "You are an intelligent assistant."},
+            {"role": "user", "content": f"{summarization_prompt}"},
+        ],
         temperature=0.7,
         max_tokens=1000,
         top_p=1.0,
         frequency_penalty=0.0,
         presence_penalty=1
-        )
+    )
     response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
     return response_str
 
@@ -356,15 +356,15 @@ def consolidate_chatgpt_summary(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-                {"role": "system", "content": "You are an intelligent assistant."},
-                {"role": "user", "content": f"{consolidate_prompt}"},
-            ],
+            {"role": "system", "content": "You are an intelligent assistant."},
+            {"role": "user", "content": f"{consolidate_prompt}"},
+        ],
         temperature=0.7,
         max_tokens=1000,
         top_p=1.0,
         frequency_penalty=0.0,
         presence_penalty=1
-        )
+    )
     response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
     return response_str
 
@@ -374,14 +374,14 @@ def generate_chatgpt_title(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-                {"role": "system", "content": "You are an intelligent assistant."},
-                {"role": "user", "content": f"{title_generation_prompt}"},
-            ],
+            {"role": "system", "content": "You are an intelligent assistant."},
+            {"role": "user", "content": f"{title_generation_prompt}"},
+        ],
         temperature=0.7,
         max_tokens=1000,
         top_p=1.0,
         frequency_penalty=0.0,
         presence_penalty=1
-        )
+    )
     response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
     return response_str
