@@ -6,6 +6,7 @@ from flask import Flask, request, Response, render_template, url_for
 import feedparser
 import warnings
 import xml.etree.ElementTree as ET
+from flask_frozen import Freezer
 
 print("Started scheduler...")
 os.popen('python scheduler.py > scheduler_logs.txt 2>&1 &')
@@ -15,6 +16,8 @@ load_dotenv()
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = Flask(__name__)
+# app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET")
+freezer = Freezer(app)
 
 
 def parse_xml_files(folder):
@@ -102,4 +105,9 @@ def display_feed(year_month, filename):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "build":
+        freezer.freeze()
+    else:
+        app.run(debug=True)
