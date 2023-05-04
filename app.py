@@ -46,8 +46,8 @@ def get_year_month_data():
     folders = os.listdir(os.path.join(app.root_path, 'static'))
     data = []
     for f in folders:
-        year = f.split("_")[-1]
         month = f.split("_")[0]
+        year = f.split("_")[-1]
         data.append({"month": f"{month} {year}"})
     return data
 
@@ -62,7 +62,36 @@ def archive():
 def thread(year_month):
     folder = f'static/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
-    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date, max_date=max_date)
+    posts = sorted(posts, key=lambda p: p['author'])
+    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+                           max_date=max_date, type_by="thread")
+
+
+@app.route('/author/<year_month>')
+def author(year_month):
+    folder = f'static/{year_month}'
+    posts, min_date, max_date = parse_xml_files(folder)
+    posts = sorted(posts, key=lambda p: p['author'])
+    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+                           max_date=max_date, type_by="author")
+
+
+@app.route('/subject/<year_month>')
+def subject(year_month):
+    folder = f'static/{year_month}'
+    posts, min_date, max_date = parse_xml_files(folder)
+    posts = sorted(posts, key=lambda p: p['title'])
+    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+                           max_date=max_date, type_by="subject")
+
+
+@app.route('/date/<year_month>')
+def date(year_month):
+    folder = f'static/{year_month}'
+    posts, min_date, max_date = parse_xml_files(folder)
+    posts = sorted(posts, key=lambda p: p['date'])
+    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+                           max_date=max_date, type_by="date")
 
 
 @app.route('/<year_month>/<filename>')
