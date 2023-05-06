@@ -61,7 +61,7 @@ def archive():
     return render_template('archive.html', data=data)
 
 
-@app.route('/thread/<year_month>')
+@app.route('/thread.html/<year_month>')
 def thread(year_month):
     folder = f'static/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
@@ -70,7 +70,7 @@ def thread(year_month):
                            max_date=max_date, type_by="thread")
 
 
-@app.route('/author/<year_month>')
+@app.route('/author.html/<year_month>')
 def author(year_month):
     folder = f'static/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
@@ -79,7 +79,7 @@ def author(year_month):
                            max_date=max_date, type_by="author")
 
 
-@app.route('/subject/<year_month>')
+@app.route('/subject.html/<year_month>')
 def subject(year_month):
     folder = f'static/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
@@ -88,7 +88,7 @@ def subject(year_month):
                            max_date=max_date, type_by="subject")
 
 
-@app.route('/date/<year_month>')
+@app.route('/date.html/<year_month>')
 def date(year_month):
     folder = f'static/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
