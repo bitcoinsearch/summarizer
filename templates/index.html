@@ -1,20 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feeds</title>
-</head>
+<HEAD>
+   <title>The bitcoin-dev Archives Summary</title>
+   <META NAME="robots" CONTENT="noindex,follow">
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+</HEAD>
 
-<body>
-    <h1>Feeds</h1>
-    <ul>
-        {% for filename in xml_files %}
-        <li><a href="{{ url_for('display_feed', year_month=year_month, filename=filename) }}">{{
-                "_".join(filename.split("_")[1:]).replace(".xml","") }}</a></li>
-        {% endfor %}
-    </ul>
-</body>
+<BODY BGCOLOR="#ffffff">
+   <h1>The bitcoin-dev Archives Summary</h1>
+   <p>
+      You can get <a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">more information about this
+         list</a>.
+   </p>
 
-</html>
+   <table border=3>
+      <tr>
+         <td>Archive</td>
+         <td>View by:</td>
+         <td>Downloadable version</td>
+      </tr>
+
+      {% for row in data %}
+      <tr>
+         <td>{{ row.month }}:</td>
+         <td>
+            <A href="{{url_for('thread', year_month=row.month|replace(' ', '_'))}}">[ Thread ]</a>
+            <A href="{{url_for('subject', year_month=row.month|replace(' ', '_'))}}">[ Subject ]</a>
+            <A href="{{url_for('author', year_month=row.month|replace(' ', '_'))}}">[ Author ]</a>
+            <A href="{{url_for('date', year_month=row.month|replace(' ', '_'))}}">[ Date ]</a>
+         </td>
+         <td><A href="#">[ Gzip'd Text 31 KB ]</a></td>
+      </tr>
+
+
+      <tr>
+         {% endfor %}
+   </table>
+
+</BODY>
+
+</HTML>
