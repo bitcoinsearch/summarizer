@@ -163,7 +163,7 @@ def date(year_month):
                            max_date=max_date, type_by="date")
 
 
-@app.route('/<year_month>/<filename>')
+@app.route('/<year_month>/<filename>.html')
 def display_feed(year_month, filename):
     file_url = f"./static/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
