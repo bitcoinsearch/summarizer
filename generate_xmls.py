@@ -5,7 +5,6 @@ from feedgen.feed import FeedGenerator
 from tqdm import tqdm
 from elasticsearch import Elasticsearch
 import time
-
 from src.gpt_utils import generate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 from src.logger import LOGGER
@@ -104,10 +103,11 @@ class GenerateXML:
         fg.title(feed_data['title'])
         for author in feed_data['authors']:
             fg.author({'name': author})
-        fg.link(href=feed_data['base_url'], rel='alternate')
+        for link in feed_data['links']:
+            fg.link(href=link, rel='alternate')
         # add entries to the feed
         fe = fg.add_entry()
-        fe.id(feed_data['url'])
+        fe.id(feed_data['id'])
         fe.title(feed_data['title'])
         fe.link(href=feed_data['url'], rel='alternate')
         fe.published(feed_data['created_at'])
@@ -145,37 +145,60 @@ class GenerateXML:
 
         for month_year, email_df in tqdm(result):
             LOGGER.info(f"Working on {month_year}")
+            thread_group = email_df.groupby([emails_df['title']])
             month_name = self.month_dict[int(month_year[0])]
             str_month_year = f"{month_name}_{month_year[1]}"
             if not os.path.exists(f"static/{str_month_year}"):
                 self.create_folder(f"static/{str_month_year}")
-            count = 0
-            for i in email_df.index:
-                if count > 5:
+            g_no = 0
+            for _, thread_sub_df in tqdm(thread_group):
+                if g_no == 4:
                     break
-                count += 1
-                number = str(email_df.loc[i]['id']).split("-")[-1]
-                special_characters = ['/', ':', '@', '#', '$', '*', '&', '<', '>', '\\', '?']
-                xml_name = email_df.loc[i]['title']
-                xml_name = re.sub(r'[^A-Za-z0-9]+', '-', xml_name)
-                for sc in special_characters:
-                    xml_name = xml_name.replace(sc, "-")
-                LOGGER.info(f"File Name: {xml_name}")
-                file_path = f"static/{str_month_year}/{number}_{xml_name}.xml"
-                if os.path.exists(file_path):
-                    continue
-                summary = self.create_summary(email_df.loc[i]['body'])
-                feed_data = {
-                    'id': email_df.loc[i]['id'],
-                    'title': email_df.loc[i]['title'],
-                    'base_url': email_df.loc[i]['url'],
-                    'authors': email_df.loc[i]['authors'],
-                    'url': email_df.loc[i]['url'],
-                    'created_at': email_df.loc[i]['created_at_org'],
-                    'summary': summary
-                }
+                combined_body = ''
+                combined_authors = []
+                combined_links = []
+                xml_name = ''
+                for i in thread_sub_df.index:
+                    number = str(thread_sub_df.loc[i]['id']).split("-")[-1]
+                    special_characters = ['/', ':', '@', '#', '$', '*', '&', '<', '>', '\\', '?']
+                    xml_name = thread_sub_df.loc[i]['title']
+                    xml_name = re.sub(r'[^A-Za-z0-9]+', '-', xml_name)
+                    for sc in special_characters:
+                        xml_name = xml_name.replace(sc, "-")
+                    LOGGER.info(f"File Name: {xml_name}")
+                    file_path = f"static/{str_month_year}/{number}_{xml_name}.xml"
+                    combined_body = combined_body + "\n\n" + thread_sub_df.loc[i]['body']
+                    combined_authors.append(thread_sub_df.loc[i]['authors'][0])
+                    combined_links.append(f"{str_month_year}/{number}_{xml_name}.xml")
+                    if os.path.exists(file_path):
+                        continue
 
-                self.generate_xml(feed_data, file_path)
+                    summary = self.create_summary(thread_sub_df.loc[i]['body'])
+                    feed_data = {
+                        'id': thread_sub_df.loc[i]['id'],
+                        'title': thread_sub_df.loc[i]['title'],
+                        'authors': thread_sub_df.loc[i]['authors'],
+                        'url': thread_sub_df.loc[i]['url'],
+                        'links': [],
+                        'created_at': thread_sub_df.loc[i]['created_at_org'],
+                        'summary': summary
+                    }
+                    self.generate_xml(feed_data, file_path)
+
+                g_no += 1
+                if len(thread_sub_df.index) > 1:
+                    combined_summary = self.create_summary(combined_body)
+                    feed_data = {
+                        'id': thread_sub_df.iloc[0]['id'],
+                        'title': 'Combined summary - ' + thread_sub_df.iloc[0]['title'],
+                        'authors': combined_authors,
+                        'url': thread_sub_df.iloc[0]['url'],
+                        'links': combined_links,
+                        'created_at': thread_sub_df.iloc[0]['created_at_org'],
+                        'summary': combined_summary
+                    }
+                    file_path = f"static/{str_month_year}/combined_{xml_name}.xml"
+                    self.generate_xml(feed_data, file_path)
 
 
 if __name__ == "__main__":

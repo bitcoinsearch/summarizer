@@ -51,7 +51,7 @@ def generate_title(prompt):
 
 
 def generate_chatgpt_summary(prompt):
-    summarization_prompt = f"Generate a detailed summary from below context fact fully without missing any important information. Do not use the word 'summary' in it.\n\n CONTEXT:\n\n{prompt}"
+    summarization_prompt = f"Generate a detailed summary from below context fact fully without missing any important information. Try to retain all the links provided and use them in proper manner at proper place. Do not use the word 'summary' in it.\n\n CONTEXT:\n\n{prompt}"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[

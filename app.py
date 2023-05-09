@@ -4,16 +4,12 @@ import openai
 from dotenv import load_dotenv
 from flask import Flask, request, Response, render_template, url_for, abort
 import feedparser
-import warnings
 import xml.etree.ElementTree as ET
 from flask_frozen import Freezer
 
 from src.logger import setup_logger
 
 logger = setup_logger()
-# print("Started scheduler...")
-# os.popen('python scheduler.py > scheduler_logs.txt 2>&1 &')
-# warnings.filterwarnings("ignore")
 
 load_dotenv()
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -67,8 +63,8 @@ def generate_url_list(build_path=None):
 
         # Check if the folder exists
         if os.path.isdir(os.path.join(app.root_path, folder)):
-            for type_by in ["thread", "subject", "author", "date"]:
-                save_static_html(type_by, year_month, type_by, build_path)
+            # for type_by in ["thread", "subject", "author", "date"]:
+            # save_static_html(type_by, year_month, type_by, build_path)
 
             url_list.append(url_for("thread", year_month=year_month))
             url_list.append(url_for("subject", year_month=year_month))
@@ -96,7 +92,6 @@ def parse_xml_files(folder):
             author = root.find('atom:author/atom:name', namespace).text
             date = root.find('atom:entry/atom:published', namespace).text
             # summary = root.find('atom:entry/atom:summary', namespace).text
-
             posts.append({'title': title, 'author': author, 'date': date, 'filename': file})
 
     min_date = min(posts, key=lambda x: x['date'])['date']
@@ -123,12 +118,33 @@ def archive():
     return render_template('index.html', data=data)
 
 
+def sort_grouping(posts):
+    # return sorted(posts,key= lambda x:x['filename'].split("_")[1:])
+    combined = {}
+    threads = []
+    for post in posts:
+        if "combined_" in post['filename']:
+            ckey = '_'.join(post['filename'].split("_")[1:])
+            combined[ckey] = post
+        else:
+            threads.append(post)
+
+    sorted_threads = sorted(threads, key=lambda x: x['title'].split("_")[1:])
+    for i, thread in enumerate(sorted_threads):
+        ckey = '_'.join(thread['filename'].split("_")[1:])
+        if ckey in combined:
+            sorted_threads.insert(i, combined[ckey])
+            combined.pop(ckey)
+
+    return sorted_threads
+
+
 @app.route('/thread/<year_month>.html')
 def thread(year_month):
     try:
         folder = f'static/{year_month}'
         posts, min_date, max_date = parse_xml_files(folder)
-        posts = sorted(posts, key=lambda p: p['author'])
+        posts = sort_grouping(posts)
         return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
                                max_date=max_date, type_by="thread")
     except Exception as e:

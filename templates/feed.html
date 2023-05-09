@@ -20,14 +20,25 @@
     <ul>
 
         {% for entry in feed.entries %}
-        {% for author in feed.feed.authors %}
-        <p><b>Author:</b> {{ author.name }}</p>
-        {% endfor %}
-        <a href="{{ entry.link }}">click here to read brief discussion</a>
-        <p>Published on: {{ entry.published }}</p>
-        <hr>
-        <h3> Summary:</h3>
-        <p>{{ entry.summary }}</p>
+            {% if feed.feed.links|length > 0%}
+                {% for link in feed.feed.links %}
+                    <li>
+                    <a href="{{ url_for('display_feed',year_month=link.href.split('/').0,filename=link.href.split('/').1) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
+                    <b>{{feed.feed.authors[loop.index-1].name}}</b>
+                    </li>
+                {% endfor %}
+
+            {% else %}
+                {% for author in feed.feed.authors %}
+                <p><b>Author:</b> {{ author.name }}</p>
+                {% endfor %}
+            {% endif %}
+            <p></p>
+            <a href="{{ entry.link }}">click here to read brief discussion</a>
+            <p>Published on: {{ entry.published }}</p>
+            <hr>
+            <h3> Summary:</h3>
+            <p>{{ entry.summary }}</p>
         {% endfor %}
     </ul>
     <hr>
