@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>mailing-list-bitcoin-2017-January-013473</id>
+  <title>Combined summary - Anti-transaction replay in a hardfork</title>
+  <updated>2023-05-09T22:31:38.007423+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Matt Corallo</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <author>
+    <name>Matt Corallo</name>
+  </author>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <link href="Jan_2017/013473_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013494_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013485_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013482_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013480_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013477_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013505_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013484_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013483_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="Jan_2017/013478_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>mailing-list-bitcoin-2017-January-013473</id>
+    <title>Combined summary - Anti-transaction replay in a hardfork</title>
+    <updated>2023-05-09T22:31:38.007423+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-January/013473.html" rel="alternate"/>
+    <summary>This proposal suggests a solution to prevent replay attack during hardforks, which is an attempt to replay a transaction of one network on another network. The proposal aims to make anti-replay optional, not mandatory, for users on both existing and new forks and doesn't require any consensus changes in the existing network to avoid unnecessary debate. It also ensures that time-locked transactions made before the proposal are valid in the new network and transactions made specifically for the new network are invalid in the existing network to fix the O(n^2) signature checking bug. However, it is not possible to protect transactions made before the proposal, and it is up to the designer of a hardfork to decide whether this proposal is respected. The proposal includes several rules for both existing and new networks to prevent replay attacks. Limitations include the fact that it's impossible to protect previously-signed transactions, and wallet software compatibility should be considered. A reference implementation is available, and the proposal is based on the fact that fixing problems in bitcoin is constrained by the requirement of backward compatibility.
+The proposal under discussion pertains to a pre-BIP, which outlines a set of precautions to be taken for a hard fork. The idea is to ensure that the process of consensus rule changes, which make presently invalid transactions or blocks valid, does not lead to permanent ledger split as was seen in the Ethereum case. The proposal suggests the introduction of a new SignatureHash algorithm, with the addition of 0x2000000 to the nHashType before the hash is calculated, which would help fix the O(n^2) signature checking bug for non-segregated witness inputs, along with preventing replay attacks. Under the proposed rules, if the network characteristic byte is non-zero, and the new network characteristic bit is not set, then this transaction is invalid in the new network (soft fork). If the masked version is 2 or below, the new network must verify the transaction with existing script rules, while if it is 3 or above, the new network should verify the signatures with the new SignatureHash algorithm. The proposal also has some limitations; most notably, transactions made before the proposal cannot be protected, and users need to spend at least a relevant UTXO on the new network so that the replay transaction would be invalidated. Finally, there are some potential concerns regarding the proposal's effectiveness, especially in cases where the user may not have full control over the transaction.
+The context discusses the issue of replay attacks in a blockchain split, which is when a transaction from one network is replayed on another network. The proposal suggests creating a new SignatureHash algorithm to prevent such attacks and implementing it in the new network with a hardfork. The existing network would not require any consensus changes but would have a policy change that prevents transactions with only the existing network characteristic bit from being relayed or mined. The proposal also includes definitions for terms like "network characteristic byte" and "existing network characteristic bit." The rationale behind each rule is also explained in detail. Additionally, there is a suggestion for creating a "bridge" to replay all transactions from one network over to the other to avoid confusion for end-users.
+The Bitcoin development mailing list has discussed a pre-BIP proposal for hardforks that aims to protect against transaction replay attacks. The proposal acknowledges the need for backward compatibility and sets out four objectives. Firstly, anti-replay is an option rather than mandatory for users on both forks; secondly, time-locked transactions made before the proposal are valid in the new network; thirdly, no consensus changes are required in the existing network; and, finally, the O(n^2) signature checking bug could be fixed for non-segregated witness inputs. The proposal sets out rules for new and existing networks to ensure transactions are correctly identified and processed, including new SignatureHash algorithms for transactions with masked versions of 3 or above. Limitations include the inability to protect transactions made before the proposal and the requirement for hardfork designers to take the proposal into account.</summary>
+    <published>2017-01-24T14:33:29+00:00</published>
+  </entry>
+</feed>
