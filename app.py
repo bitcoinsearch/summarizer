@@ -63,8 +63,8 @@ def generate_url_list(build_path=None):
 
         # Check if the folder exists
         if os.path.isdir(os.path.join(app.root_path, folder)):
-            # for type_by in ["thread", "subject", "author", "date"]:
-            # save_static_html(type_by, year_month, type_by, build_path)
+            for type_by in ["thread", "subject", "author", "date"]:
+                save_static_html(type_by, year_month, type_by, build_path)
 
             url_list.append(url_for("thread", year_month=year_month))
             url_list.append(url_for("subject", year_month=year_month))
@@ -119,7 +119,19 @@ def archive():
 
 
 def sort_grouping(posts):
-    # return sorted(posts,key= lambda x:x['filename'].split("_")[1:])
+    '''
+    diff between filename and title
+
+    for combined file
+    # filename = combined_BIP-20-Rejected-process-for-BIP-21N.xml
+    # title = Combined summary - BIP-20-Rejected-process-for-BIP-21N
+
+    for simple file
+    # filename = 001234_BIP-20-Rejected-process-for-BIP-21N.xml
+    # title = BIP-20-Rejected-process-for-BIP-21N
+
+    '''
+
     combined = {}
     threads = []
     for post in posts:
@@ -129,7 +141,7 @@ def sort_grouping(posts):
         else:
             threads.append(post)
 
-    sorted_threads = sorted(threads, key=lambda x: x['title'].split("_")[1:])
+    sorted_threads = sorted(threads, key=lambda x: x['title'])
     for i, thread in enumerate(sorted_threads):
         ckey = '_'.join(thread['filename'].split("_")[1:])
         if ckey in combined:
@@ -139,12 +151,31 @@ def sort_grouping(posts):
     return sorted_threads
 
 
+def sort_and_grouping(posts):
+    combined = {}
+    for post in posts:
+        if "combined_" in post['filename']:
+            ckey = '_'.join(post['filename'].split("_")[1:])
+            combined[ckey] = post
+    sorted_threads = sorted(posts, key=lambda x: x['title'])
+    new_threads = []
+    for thread in sorted_threads:
+        if "combined_" not in thread['filename']:
+            ckey = '_'.join(thread['filename'].split("_")[1:])
+            if ckey not in combined:
+                new_threads.append(thread)
+        else:
+            new_threads.append(thread)
+
+    return new_threads
+
+
 @app.route('/thread/<year_month>.html')
 def thread(year_month):
     try:
         folder = f'static/{year_month}'
         posts, min_date, max_date = parse_xml_files(folder)
-        posts = sort_grouping(posts)
+        posts = sort_and_grouping(posts)
         return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
                                max_date=max_date, type_by="thread")
     except Exception as e:
@@ -183,7 +214,8 @@ def date(year_month):
 def display_feed(year_month, filename):
     file_url = f"./static/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
-    return render_template('feed.html', feed=xml_feed)
+    combined_filename = "combined_" + "_".join(filename.split("_")[1:])
+    return render_template('feed.html', feed=xml_feed, year_month=year_month, filename=combined_filename)
 
 
 if __name__ == '__main__':
