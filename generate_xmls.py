@@ -197,7 +197,9 @@ class GenerateXML:
             combined_summary = self.create_summary(combined_body)
             xml_name = self.clean_title(title)
             combined_links = list(title_df.apply(generate_local_xml, args=("1"), axis=1))
-            combined_authors = list(title_df['authors'].apply(lambda x: x[0]))
+            # combined_authors = list(title_df['authors'].apply(lambda x: x[0]))
+            combined_authors = list(
+                title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
             feed_data = {
                 'id': "2",
                 'title': 'Combined summary - ' + title,
@@ -218,6 +220,8 @@ class GenerateXML:
                 month_name = self.month_dict[int(month_year[0])]
                 str_month_year = f"{month_name}_{month_year[1]}"
                 file_path = f"static/{str_month_year}/combined_{xml_name}.xml"
+                # if os.path.exists(file_path):
+                #     continue
                 if not flag:
                     self.generate_xml(feed_data, file_path)
                     std_file_path = file_path
