@@ -51,7 +51,7 @@ def generate_title(prompt):
 
 
 def generate_chatgpt_summary(prompt):
-    summarization_prompt = f"Generate a detailed summary from below context fact fully without missing any important information. Try to retain all the links provided and use them in proper manner at proper place. Do not use the word 'summary' in it.\n\n CONTEXT:\n\n{prompt}"
+    summarization_prompt = f"Generate a detailed summary from below context fact fully without missing any important information. Try to retain all the links provided and use them in proper manner at proper place. Do not use the word 'summary' in it. Make the summary in paragraphs and use line breaks at proper places. Use cohesive writing style. \n\n CONTEXT:\n\n{prompt}"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -69,7 +69,7 @@ def generate_chatgpt_summary(prompt):
 
 
 def consolidate_chatgpt_summary(prompt):
-    consolidate_prompt = f"Consolidate below context.\n\n CONTEXT:\n\n{prompt}"
+    consolidate_prompt = f"Consolidate below context. Make paragraphs split by \n where necessary. \n\n CONTEXT:\n\n{prompt}"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[

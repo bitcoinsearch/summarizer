@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Version bytes</title>
-  <updated>2023-05-12T04:42:51.396404+00:00</updated>
+  <updated>2023-05-15T17:26:04.689111+00:00</updated>
   <author>
     <name>Pieter Wuille</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Version bytes</title>
-    <updated>2023-05-12T04:42:51.396404+00:00</updated>
+    <updated>2023-05-15T17:26:04.689111+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-July/000144.html" rel="alternate"/>
-    <summary>There was a discussion on IRC about standardizing the version bytes used by Bitcoin for various applications. Three components were identified to be meaningful, namely network (realnet, testnet, alternate chains), data class (address, private key, master key, etc.), and version (real version, per data class defined). While there is no technical reason why different networks and data classes would need separate version bytes, it is considered a good thing to keep them from colliding. To this end, bit 16 in the version byte is reserved for "alternate chain". When bit 16 is set, everything is up to the network itself, and no further semantics are defined. When bit 16 isn't set, testnet uses bit 1, and if bit 1 is set, XOR the rest of the version number with 111. Otherwise, odd=testnet, even=realnet. The remaining six bits (128,64,32 and 8,4,2) are used for data classes and versions. Data class 128 is used for private keys, while 224 defines an extended data class, in which another "data class" byte follows. Bit 16 defines "private", with 0 indicating bitcoin and 16 indicating alternate chain. Bit 1 defines testnet, with 0 indicating realnet and 1 indicating testnet. This discussion started when Stefan wanted to define a format for master keys from which to derive deterministic wallet keys. It was suggested to use data class 192 for that purpose, leaving lower numbers for more basic data like public keys.</summary>
+    <summary>After a discussion on IRC, the Bitcoin community decided to standardize the version bytes used for different applications. The three significant components of the new system are network, data class, and version number. Although there is no technical reason for different networks or data classes to have separate version bytes, it is essential to prevent them from colliding and causing confusion for users. To begin with, bit 16 in the version byte will be reserved for an alternate chain, such as Namecoin that currently uses version byte 52 for addresses. When bit 16 is set, the network itself can decide what everything means without further semantics. For cases where bit 16 isn't set, the rest of the network will use six bits, namely 128, 64, 32, and 8, 4, and 2.The testnet already uses version 111, which is not a single bit. Therefore, bit 1 will be used for testnet, and if bit 1 is set, XOR the remaining part of the version number with 111. Alternatively, they could reset testnet by changing its addresses slightly and state that odd numbers represent testnet while even numbers represent realnet. The remaining six bits of the version byte are divided into two groups: (128, 64, 32) for data classes and (8, 4, 2) for versions. Data class 0 represents addresses, while private keys are represented by data class 128. Bit 16 defines privacy, with 0 representing Bitcoin and 16 indicating an alternate chain. Bit 1 defines testnet, where 0 represents realnet and 1 represents testnet.The discussion started when Stefan wanted to define a format for master keys to derive deterministic wallet keys. Pieter suggests using data class 192 for that purpose, leaving the lower numbers for more basic data, like public keys. The standardization of version bytes will prevent confusion and ensure proper functioning of different applications in the Bitcoin ecosystem.</summary>
     <published>2011-07-07T11:15:58+00:00</published>
   </entry>
 </feed>

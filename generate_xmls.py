@@ -7,7 +7,7 @@ from elasticsearch import Elasticsearch
 import time
 import platform
 import shutil
-from src.gpt_utils import generate_chatgpt_summary
+from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 from src.logger import LOGGER
 
@@ -89,14 +89,18 @@ class GenerateXML:
         summ = []
         for b in self.check_size_body(body):
             summ.append(generate_chatgpt_summary(b))
-        return "\n".join(summ)
+        if len(summ) > 1:
+            summ = consolidate_chatgpt_summary("\n".join(summ))
+            return summ
+        else:
+            return "\n".join(summ)
 
     def create_summary(self, body):
         summ = self.gpt_api(body)
         return summ
 
     def create_folder(self, month_year):
-        os.makedirs(month_year)
+        os.makedirs(month_year, exist_ok=True)
 
     def generate_xml(self, feed_data, xml_file):
         # create feed generator
@@ -184,7 +188,7 @@ class GenerateXML:
         os_name = platform.system()
         print("Operating System:", os_name)
         titles = emails_df.sort_values('created_at')['title'].unique()
-        for title_idx, title in enumerate(titles):
+        for title_idx, title in tqdm(enumerate(titles)):
             if title_idx == 50:
                 break
             title_df = emails_df[emails_df['title'] == title]

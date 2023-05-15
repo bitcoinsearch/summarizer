@@ -6,6 +6,9 @@ from flask import Flask, request, Response, render_template, url_for, abort
 import feedparser
 import xml.etree.ElementTree as ET
 from flask_frozen import Freezer
+import re
+from flask import Flask
+from markupsafe import Markup
 
 from src.logger import setup_logger
 
@@ -15,7 +18,15 @@ load_dotenv()
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = Flask(__name__)
+
+
 # app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET")
+def linkify(text):
+    url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+    return Markup(url_pattern.sub(r'<a href="\g<0>">\g<0></a>', text))
+
+
+app.jinja_env.filters['linkify'] = linkify
 app.config['FREEZER_DEFAULT_URL_GENERATOR'] = 'flask_frozen.url_generators.default_url_generator_with_html'
 freezer = Freezer(app)
 

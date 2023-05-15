@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Discussion related to pull 349 and pull 319 (escrow transactions)</title>
-  <updated>2023-05-12T04:47:00.275036+00:00</updated>
+  <updated>2023-05-15T18:54:33.148447+00:00</updated>
   <author>
     <name>Gregory Maxwell</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Discussion related to pull 349 and pull 319 (escrow transactions)</title>
-    <updated>2023-05-12T04:47:00.275036+00:00</updated>
+    <updated>2023-05-15T18:54:33.148447+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-July/000217.html" rel="alternate"/>
-    <summary>Pull 349 implements an implementation of multiple signature escrowed transactions, which is a necessary addition to the client following the disappearance of clearcoin. The patch has been tested on a private network and appears to work well. However, it requires a new transaction type and more testing and discussion before it can be added to the client. Additionally, the patch exposes an issue with multisig validation due to redundancy in the script length coding opcodes, which means that it's possible to code a script multiple ways. One candidate fix for this issue is to exclude the length opcodes from the comparison, but this carries a risk of creating differences in how nodes validate transactions leading to lasting forks. Another potential solution would be to define that OP_PUSHDATA* cannot be used to push smaller lengths, which could be more efficiently encoded with direct length opcodes. Lastly, changing out the templating code to ensure that it codes the template the same way as the original was coded is another way of fixing this problem, but it seems tricky to implement and validate.</summary>
+    <summary>There is a proposed implementation of multiple signature escrowed transactions in Pull 349 on the Bitcoin GitHub. The author believes it is important to have this feature sooner rather than later, especially with Clearcoin gone. It has been tested on a private network and appears to work well, but further testing and discussion are needed before it can be added to the client. One challenge is that it requires a new transaction type, so it cannot be deployed until an updated isStandard is widely used in the network.However, the patch exposes an issue with multisig validation due to redundancy in the script length coding opcodes. This makes it possible to code a script multiple ways, causing the signature validation to fail when something used OP_PUSHDATA when a direct length could have been used. Pull 349 contains one candidate fix for this by excluding the length opcodes from the comparison, but it carries a risk of creating differences in how nodes validate transactions leading to lasting forks.Another way of fixing this would be to define that OP_PUSHDATA* cannot be used to push the smaller lengths that could be more efficiently encoded with the direct length opcodes, which would be consistent with current behavior and carry no severe split risk. A third option would be to change out the templating code works to make sure it codes the template the same way the original was coded, potentially solving problems beyond just the length coding issue.</summary>
     <published>2011-07-23T23:39:13+00:00</published>
   </entry>
 </feed>
