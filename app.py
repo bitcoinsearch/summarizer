@@ -17,7 +17,7 @@ logger = setup_logger()
 load_dotenv()
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='css')
 
 
 # app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET")
@@ -120,7 +120,8 @@ def get_year_month_data():
         month = f.split("_")[0]
         year = f.split("_")[-1]
         data.append({"month": f"{month} {year}"})
-    return data
+    data_sorted = sorted(data, key=lambda x: x["month"])
+    return data_sorted
 
 
 @app.route("/")

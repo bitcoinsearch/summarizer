@@ -1,3 +1,18 @@
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">-->
+<!--    <title>Atom Feed Display</title>-->
+<!--    <style type="text/css">-->
+<!--        pre {-->
+<!--            white-space: pre-wrap;-->
+<!--            /* css-2.1, curent FF, Opera, Safari */-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
 <!doctype html>
 <html lang="en">
 
@@ -6,46 +21,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
     <title>Atom Feed Display</title>
-    <style type="text/css">
-        pre {
-            white-space: pre-wrap;
-            /* css-2.1, curent FF, Opera, Safari */
-        }
-    </style>
+    <link rel="stylesheet" href="../archive_styles.css">
 </head>
 
 <body BGCOLOR="#fffffb">
-    <h1>{{ feed.feed.title }}</h1>
-    <hr>
+    {% if "Combined" in feed.feed.title %}
+    <h1>{{ feed.feed.title.split(" - ")[1] }} <span class="combined-summary">[combined summary]</span></h1>
+    <hr class="solid">
+    <br><b>Individual post summaries:</b>
+    {% for entry in feed.entries %}
     <ul>
-
-        {% for entry in feed.entries %}
-            {% if feed.feed.links|length > 0%}
-                {% for link in feed.feed.links %}
-                    <li>
-                    <a href="{{ url_for('display_feed',year_month=link.href.split('/').0,filename=link.href.split('/').1) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
-                    <b>{{feed.feed.authors[loop.index-1].name}}</b>
-                    </li>
-                {% endfor %}
-
-            {% else %}
-                {% for author in feed.feed.authors %}
-                <p><b>Author:</b> {{ author.name }}</p>
-                {% endfor %}
-                <p></p>
-                <a href="{{ url_for('display_feed', year_month=year_month, filename=filename) }}">Combined Summary</a>
-
-            {% endif %}
-            <p></p>
-            <a href="{{ entry.link }}">click here to read brief discussion</a>
-            <p>Published on: {{ entry.published }}</p>
-            <hr>
-            <h3> Summary:</h3>
-            <p>{{ entry.summary|linkify }}</p>
+        {% if feed.feed.links|length > 0%}
+        {% for link in feed.feed.links %}
+        <li>
+        <a href="{{ url_for('display_feed',year_month=link.href.split('/').0,filename=link.href.split('/').1) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
+        <b>{{feed.feed.authors[loop.index-1].name}}</b>
+        </li>
         {% endfor %}
+
+        {% else %}
+        {% for author in feed.feed.authors %}
+            <p><b>Author:</b> {{ author.name }}</p>
+        {% endfor %}
+        <p></p>
+        <a href="{{ url_for('display_feed', year_month=year_month, filename=filename) }}">Combined Summary of all posts in thread</a>
+        {% endif %}
     </ul>
+    <a href="{{ entry.link }}">Click here to read original discussion on the bitcoin-dev mailing list</a>
+    <p><i>Published on: {{ entry.published }}</i></p>
     <hr>
-    <p>Updated on: {{ feed.feed.updated }}</p>
+    <h3> Summary:</h3>
+    <p>{{ entry.summary|linkify }}</p>
+    <hr>
+    <p><i> Updated on: {{ feed.feed.updated }} </i></p>
+    {% endfor %}
+
+    {% else %}
+    <h1>{{ feed.feed.title }}</h1>
+    <hr class="solid">
+    {% for entry in feed.entries %}
+    <ul>
+        {% if feed.feed.links|length > 0%}
+        {% for link in feed.feed.links %}
+        <li>
+        <a href="{{ url_for('display_feed',year_month=link.href.split('/').0,filename=link.href.split('/').1) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
+        <b>{{feed.feed.authors[loop.index-1].name}}</b>
+        </li>
+        {% endfor %}
+
+        {% else %}
+        {% for author in feed.feed.authors %}
+            <p><b>Author:</b> {{ author.name }}
+            <br><i>Published on: {{ entry.published }}</i></p>
+
+        {% endfor %}
+        {% endif %}
+
+        <li>
+        <a href="{{ url_for('display_feed', year_month=year_month, filename=filename) }}"> Combined Summary of all posts in thread </a>
+        </li>
+        <li>
+        <a href="{{ entry.link }}"> Click here to read original discussion on the bitcoin-dev mailing list </a>
+        </li>
+
+    </ul>
+
+    <hr>
+    <h3> Summary:</h3>
+    <p>{{ entry.summary|linkify }}</p>
+    <hr>
+    <p><i> Updated on: {{ feed.feed.updated }} </i></p>
+    {% endfor %}
+    {% endif %}
+
+    <footer>
+        <span style="font-family: Arial, Helvetica, sans-serif;">&#10084;&#65039;</span> <a href="https://chaincode.com" target="_blank" rel="noreferrer" style="text-decoration: none; color: inherit;">Chaincode</a>
+    </footer>
 </body>
 
 </html>
