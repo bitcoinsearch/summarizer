@@ -37,9 +37,9 @@ def url_generator():
     yield from generate_url_list(build_path)
 
 
-def save_static_html(endpoint, year_month, type_by, build_path):
+def save_static_html(endpoint, dev_name, year_month, type_by, build_path):
     with app.app_context():
-        folder = f'static/{year_month}'
+        folder = f'static/{dev_name}/{year_month}'
         posts, min_date, max_date = parse_xml_files(folder)
 
         if type_by == "thread":
@@ -70,21 +70,21 @@ def generate_url_list(build_path=None):
 
     for row in data:
         year_month = row["month"].replace(" ", "_")
-        folder = f'static/{year_month}'
+        folder = f'static/{row["dev_name"]}/{year_month}'
 
         # Check if the folder exists
         if os.path.isdir(os.path.join(app.root_path, folder)):
             for type_by in ["thread", "subject", "author", "date"]:
-                save_static_html(type_by, year_month, type_by, build_path)
+                save_static_html(type_by, row["dev_name"], year_month, type_by, build_path)
 
-            url_list.append(url_for("thread", year_month=year_month))
-            url_list.append(url_for("subject", year_month=year_month))
-            url_list.append(url_for("author", year_month=year_month))
-            url_list.append(url_for("date", year_month=year_month))
+            url_list.append(url_for("thread", dev_name=row["dev_name"], year_month=year_month))
+            url_list.append(url_for("subject", dev_name=row["dev_name"], year_month=year_month))
+            url_list.append(url_for("author", dev_name=row["dev_name"], year_month=year_month))
+            url_list.append(url_for("date", dev_name=row["dev_name"], year_month=year_month))
 
             posts, _, _ = parse_xml_files(folder)
             for post in posts:
-                url_list.append(url_for("display_feed", year_month=year_month, filename=post["filename"]))
+                url_list.append(url_for("display_feed", dev_name=row["dev_name"],  year_month=year_month, filename=post["filename"]))
 
     return url_list
 
@@ -116,10 +116,11 @@ def parse_xml_files(folder):
 def get_year_month_data():
     folders = os.listdir(os.path.join(app.root_path, 'static'))
     data = []
-    for f in folders:
-        month = f.split("_")[0]
-        year = f.split("_")[-1]
-        data.append({"month": f"{month} {year}"})
+    for dev_folder in folders:
+        for f in os.listdir(os.path.join(app.root_path, f'static/{dev_folder}')):
+            month = f.split("_")[0]
+            year = f.split("_")[-1]
+            data.append({"month": f"{month} {year}", "dev_name":str(dev_folder)})
     data_sorted = sorted(data, key=lambda x: x["month"])
     return data_sorted
 
@@ -182,52 +183,52 @@ def sort_and_grouping(posts):
     return new_threads
 
 
-@app.route('/thread/<year_month>.html')
-def thread(year_month):
+@app.route('/thread/<dev_name>/<year_month>.html')
+def thread(dev_name, year_month):
     try:
-        folder = f'static/{year_month}'
+        folder = f'static/{dev_name}/{year_month}'
         posts, min_date, max_date = parse_xml_files(folder)
         posts = sort_and_grouping(posts)
-        return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+        return render_template('thread.html', posts=posts, dev_name=dev_name, year_month=year_month, min_date=min_date,
                                max_date=max_date, type_by="thread")
     except Exception as e:
         logger.exception(e)
         abort(500)
 
 
-@app.route('/author/<year_month>.html')
-def author(year_month):
-    folder = f'static/{year_month}'
+@app.route('/author/<dev_name>/<year_month>.html')
+def author(dev_name, year_month):
+    folder = f'static/{dev_name}/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
     posts = sorted(posts, key=lambda p: p['author'])
-    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+    return render_template('thread.html', posts=posts, dev_name=dev_name, year_month=year_month, min_date=min_date,
                            max_date=max_date, type_by="author")
 
 
-@app.route('/subject/<year_month>.html')
-def subject(year_month):
-    folder = f'static/{year_month}'
+@app.route('/subject/<dev_name>/<year_month>.html')
+def subject(dev_name, year_month):
+    folder = f'static/{dev_name}/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
     posts = sorted(posts, key=lambda p: p['title'])
-    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+    return render_template('thread.html', posts=posts, dev_name=dev_name, year_month=year_month, min_date=min_date,
                            max_date=max_date, type_by="subject")
 
 
-@app.route('/date/<year_month>.html')
-def date(year_month):
-    folder = f'static/{year_month}'
+@app.route('/date/<dev_name>/<year_month>.html')
+def date(dev_name, year_month):
+    folder = f'static/{dev_name}/{year_month}'
     posts, min_date, max_date = parse_xml_files(folder)
     posts = sorted(posts, key=lambda p: p['date'])
-    return render_template('thread.html', posts=posts, year_month=year_month, min_date=min_date,
+    return render_template('thread.html', posts=posts, dev_name=dev_name, year_month=year_month, min_date=min_date,
                            max_date=max_date, type_by="date")
 
 
-@app.route('/<year_month>/<filename>.html')
-def display_feed(year_month, filename):
-    file_url = f"./static/{year_month}/{filename}"
+@app.route('/<dev_name>/<year_month>/<filename>.html')
+def display_feed(dev_name, year_month, filename):
+    file_url = f"./static/{dev_name}/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
     combined_filename = "combined_" + "_".join(filename.split("_")[1:])
-    return render_template('feed.html', feed=xml_feed, year_month=year_month, filename=combined_filename)
+    return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month, filename=combined_filename)
 
 
 if __name__ == '__main__':

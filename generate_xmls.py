@@ -23,7 +23,7 @@ class ElasticSearchClient:
             http_auth=(self._es_username, self._es_password),
         )
 
-    def extract_data_from_es(self, es_index):
+    def extract_data_from_es(self, es_index, url):
         output_list = []
         start_time = time.time()
 
@@ -33,7 +33,7 @@ class ElasticSearchClient:
             query = {
                 "query": {
                     "match_phrase": {
-                        "domain": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+                        "domain": str(url)
                     }
                 }
             }
@@ -136,7 +136,7 @@ class GenerateXML:
     def get_id(self, id):
         return str(id).split("-")[-1]
 
-    def start(self, dict_data):
+    def start(self, dict_data, url):
         # data = open(json_path, "r")
         # dict_data = []
         # for line in data:
@@ -158,16 +158,26 @@ class GenerateXML:
         emails_df['created_at_org'] = emails_df['created_at']
         emails_df['created_at'] = pd.to_datetime(emails_df['created_at'], format="%Y-%m-%dT%H:%M:%S.%fZ")
 
-        def generate_local_xml(cols, combine_flag):
+        def generate_local_xml(cols, combine_flag, url):
             month_name = self.month_dict[int(cols['created_at'].month)]
             str_month_year = f"{month_name}_{int(cols['created_at'].year)}"
-            if not os.path.exists(f"static/{str_month_year}"):
-                self.create_folder(f"static/{str_month_year}")
-            number = self.get_id(cols['id'])
-            xml_name = self.clean_title(cols['title'])
-            file_path = f"static/{str_month_year}/{number}_{xml_name}.xml"
+            if "bitcoin-dev" in url:
+                if not os.path.exists(f"static/bitcoin-dev/{str_month_year}"):
+                    self.create_folder(f"static/bitcoin-dev/{str_month_year}")
+                number = self.get_id(cols['id'])
+                xml_name = self.clean_title(cols['title'])
+                file_path = f"static/bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml"
+            else:
+                if not os.path.exists(f"static/lightning-dev/{str_month_year}"):
+                    self.create_folder(f"static/lightning-dev/{str_month_year}")
+                number = self.get_id(cols['id'])
+                xml_name = self.clean_title(cols['title'])
+                file_path = f"static/lightning-dev/{str_month_year}/{number}_{xml_name}.xml"
             if os.path.exists(file_path):
-                link = f'{str_month_year}/{number}_{xml_name}.xml'
+                if "bitcoin-dev" in url:
+                    link = f'bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml'
+                else:
+                    link = f'lightning-dev/{str_month_year}/{number}_{xml_name}.xml'
                 return link
             summary = self.create_summary(cols['body'])
             feed_data = {
@@ -180,7 +190,10 @@ class GenerateXML:
                 'summary': summary
             }
             self.generate_xml(feed_data, file_path)
-            link = f'{str_month_year}/{number}_{xml_name}.xml'
+            if "bitcoin-dev" in url:
+                link = f'bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml'
+            else:
+                link = f'lightning-dev/{str_month_year}/{number}_{xml_name}.xml'
             return link
 
         # combine_summary_xml
@@ -195,12 +208,12 @@ class GenerateXML:
             if len(title_df) < 1:
                 continue
             if len(title_df) == 1:
-                generate_local_xml(title_df.iloc[0], "0")
+                generate_local_xml(title_df.iloc[0], "0", url)
                 continue
             combined_body = '\n\n'.join(title_df['body'].apply(str))
             combined_summary = self.create_summary(combined_body)
             xml_name = self.clean_title(title)
-            combined_links = list(title_df.apply(generate_local_xml, args=("1"), axis=1))
+            combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
             # combined_authors = list(title_df['authors'].apply(lambda x: x[0]))
             combined_authors = list(
                 title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
@@ -223,7 +236,10 @@ class GenerateXML:
                     break
                 month_name = self.month_dict[int(month_year[0])]
                 str_month_year = f"{month_name}_{month_year[1]}"
-                file_path = f"static/{str_month_year}/combined_{xml_name}.xml"
+                if "bitcoin-dev" in url:
+                    file_path = f"static/bitcoin-dev/{str_month_year}/combined_{xml_name}.xml"
+                else:
+                    file_path = f"static/lightning-dev/{str_month_year}/combined_{xml_name}.xml"
                 # if os.path.exists(file_path):
                 #     continue
                 if not flag:
@@ -241,5 +257,6 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    data_list = elastic_search.extract_data_from_es(ES_INDEX)
-    gen.start(data_list)
+    dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
+    gen.start(data_list, dev_url)

@@ -5,36 +5,44 @@
    <title>The bitcoin-dev Archives Summary</title>
    <META NAME="robots" CONTENT="noindex,follow">
    <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
    <link rel="stylesheet" href="../homepage_styles.css">
 </HEAD>
 
 <BODY BGCOLOR="#ffffff">
    <br><br>
-   <h1>bitcoin-dev Summaries</h1>
+   <h1>bitcoin-dev and lightning-dev Summaries</h1>
    <hr class="solid">
    <p>
-      Summaries of posts and threads in the <a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">bitcoin-dev</a> mailing list
+      Summaries of posts and threads in the <a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">bitcoin-dev</a> and <a href="https://lists.linuxfoundation.org/mailman/listinfo/lightning-dev">lightning-dev</a> mailing list
    </p>
 
    <table>
       <tr>
          <td></td>
-         <td></td>
-<!--         <td>Downloadable version</td>-->
+         <td class="center-text">bitcoin-dev</td>
+         <td class="center-text">lightning-dev</td>
       </tr>
 
       {% for row in data %}
          <tr>
             <td>{{ row.month }}:</td>
-            <td>
-               <A href="{{url_for('thread', year_month=row.month|replace(' ', '_'))}}">[ Thread ]</a>
-   <!--            <A href="{{url_for('subject', year_month=row.month|replace(' ', '_'))}}">[ Subject ]</a>-->
-   <!--            <A href="{{url_for('author', year_month=row.month|replace(' ', '_'))}}">[ Author ]</a>-->
-   <!--            <A href="{{url_for('date', year_month=row.month|replace(' ', '_'))}}">[ Date ]</a>-->
-            </td>
-   <!--         <td><A href="#">[ Gzip'd Text 31 KB ]</a></td>-->
+            {% if "bitcoin-dev" in row.dev_name %}
+               <td class="center-text">
+                  <A href="{{url_for('thread', dev_name=row.dev_name, year_month=row.month|replace(' ', '_'))}}">[ Thread ]</a>
+               </td>
+                <td class="center-text">
+                  -
+               </td>
+            {% else %}
+               <td class="center-text">
+                  -
+               </td>
+                <td class="center-text">
+                  <A href="{{url_for('thread', dev_name=row.dev_name, year_month=row.month|replace(' ', '_'))}}">[ Thread ]</a>
+               </td>
+            {% endif %}
          </tr>
-
 
          <tr>
      {% endfor %}

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
   <head>
-    <link rel="stylesheet" href="../archive_styles.css">
+    <link rel="stylesheet" href="../../archive_styles.css">
     <!--     <title>The bitcoin-dev May 2023 Archive by thread</title>-->
     <!--     <META NAME="robots" CONTENT="noindex,follow">-->
     <!--     <META http-equiv="Content-Type" content="text/html; charset=us-ascii">-->
@@ -16,14 +16,17 @@
   <br>
 
   <b>Sort Summaries by:</b>
-      <a href="{{url_for('subject', year_month=year_month)}}">[ subject ]</a>
-      <a href="{{url_for('author', year_month=year_month)}}">[ author ]</a>
-      <a href="{{url_for('date', year_month=year_month)}}">[ date ]</a>
-      <a href="{{url_for('thread', year_month=year_month)}}">[ thread ]</a>
+      <a href="{{url_for('subject', dev_name=dev_name, year_month=year_month)}}">[ subject ]</a>
+      <a href="{{url_for('author', dev_name=dev_name, year_month=year_month)}}">[ author ]</a>
+      <a href="{{url_for('date', dev_name=dev_name, year_month=year_month)}}">[ date ]</a>
+      <a href="{{url_for('thread', dev_name=dev_name, year_month=year_month)}}">[ thread ]</a>
 
   <br><br>
-  <b>More info on the <a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">bitcoin-dev</a> mailing list</b>
-
+  {% if "bitcoin-dev" in dev_name %}
+    <b>More info on the <a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">bitcoin-dev</a> mailing list</b>
+  {% else %}
+    <b>More info on the <a href="https://lists.linuxfoundation.org/mailman/listinfo/lightning-dev">lightning-dev</a> mailing list</b>
+  {% endif %}
   <p><b>Starting:</b> <i>{{ min_date.strftime('%a %b %d %H:%M:%S %Z %Y') }}</i><br>
     <b>Ending:</b> <i>{{ max_date.strftime('%a %b %d %H:%M:%S %Z %Y') }}</i><br>
     <b>Total Summaries:</b> {{ posts | length }}
@@ -33,12 +36,12 @@
   <UL>
     {% for post in posts %}
       {% if "Combined" in post.title%}
-        <LI><span class="combined-summary">[Combined Summary]</span><A HREF="{{ url_for('display_feed', year_month=year_month, filename=post.filename) }}">[{{ post.title.split(" - ")[1] }}]</A>
+        <LI><span class="combined-summary">[Combined Summary]</span><A HREF="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=post.filename) }}">[{{ post.title.split(" - ")[1] }}]</A>
           <I>{{ post.author }}
           </I>
         </LI>
       {% else %}
-        <LI><A HREF="{{ url_for('display_feed', year_month=year_month, filename=post.filename) }}">[{{ post.title }}]</A>
+        <LI><A HREF="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=post.filename) }}">[{{ post.title }}]</A>
           <I>{{ post.author }}
           </I>
         </LI>
