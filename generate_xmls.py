@@ -183,7 +183,7 @@ class GenerateXML:
             feed_data = {
                 'id': combine_flag,
                 'title': cols['title'],
-                'authors': cols['authors'],
+                'authors': [f"{cols['authors'][0]} {cols['created_at']}"],
                 'url': cols['url'],
                 'links': [],
                 'created_at': cols['created_at_org'],
@@ -259,4 +259,10 @@ if __name__ == "__main__":
                                          es_password=ES_PASSWORD)
     dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
-    gen.start(data_list, dev_url)
+    while True:
+        try:
+            gen.start(data_list, dev_url)
+        except Exception as ex:
+            print(ex)
+            gen.start(data_list, dev_url)
+

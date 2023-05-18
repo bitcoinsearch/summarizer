@@ -84,7 +84,8 @@ def generate_url_list(build_path=None):
 
             posts, _, _ = parse_xml_files(folder)
             for post in posts:
-                url_list.append(url_for("display_feed", dev_name=row["dev_name"],  year_month=year_month, filename=post["filename"]))
+                url_list.append(
+                    url_for("display_feed", dev_name=row["dev_name"], year_month=year_month, filename=post["filename"]))
 
     return url_list
 
@@ -120,7 +121,7 @@ def get_year_month_data():
         for f in os.listdir(os.path.join(app.root_path, f'static/{dev_folder}')):
             month = f.split("_")[0]
             year = f.split("_")[-1]
-            data.append({"month": f"{month} {year}", "dev_name":str(dev_folder)})
+            data.append({"month": f"{month} {year}", "dev_name": str(dev_folder)})
     data_sorted = sorted(data, key=lambda x: x["month"])
     return data_sorted
 
@@ -228,7 +229,8 @@ def display_feed(dev_name, year_month, filename):
     file_url = f"./static/{dev_name}/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
     combined_filename = "combined_" + "_".join(filename.split("_")[1:])
-    return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month, filename=combined_filename)
+    return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month,
+                           filename=combined_filename)
 
 
 if __name__ == '__main__':
