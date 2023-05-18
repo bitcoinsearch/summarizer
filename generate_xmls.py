@@ -260,7 +260,8 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    # dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
     str_month_year_list = []
@@ -282,8 +283,8 @@ if __name__ == "__main__":
     while True:
         extracted_month_year_list = os.listdir(dev_folder)
 
-        if len(extracted_month_year_list) == len(str_month_year_list):
-            break
+        # if len(extracted_month_year_list) == len(str_month_year_list):
+        #     break
         try:
             gen.start(data_list, dev_url)
             break
