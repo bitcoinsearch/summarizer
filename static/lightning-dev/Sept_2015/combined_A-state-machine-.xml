@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A state machine.</title>
-  <updated>2023-05-18T01:50:03.695992+00:00</updated>
+  <updated>2023-05-18T17:49:49.889726+00:00</updated>
   <author>
     <name>Anthony Towns 2015-08-31 02:24:26</name>
   </author>
@@ -23,9 +23,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - A state machine.</title>
-    <updated>2023-05-18T01:50:03.695992+00:00</updated>
+    <updated>2023-05-18T17:49:49.889726+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-August/000166.html" rel="alternate"/>
-    <summary>The conversation between Rusty Russell and Anthony Towns focuses on the development of a protocol for updating Hashed Time-Locked Contracts (HTLC). They discuss optimization possibilities and clarify the CMD_CLOSE option. The constraints of declining HTLCs and potential deadlocks are also considered. Additionally, they talk about error and bug handling when dealing with strangers on the network, as well as the potential costs of closing channels.One topic that comes up is time synchronization issues, and they propose adding a current time field to UPDATE_ADD_HTLC. Pierre raises a concern about the assumption that the initiator will fund the channel. They discuss how nodes will signal to initiate a connection and negotiate whether to register on a website or anchor the channel with PayPal or some other means. It's also discussed how initial funding can be as low as the node wants and then let the Lightning node fund the channel. Increasing the capacity of a channel would require a new anchor transaction.The state of the protocol is another point of discussion. Participants suggest a text flowchart for normal cases, which includes different states such as NORMAL, WAIT_FOR_HTLC_ACCEPT, UPDATE_COMPLETE, and UPDATE_SIG. They discuss combining the error paths applying to various states. Also, suggested is to have a constant tiebreak in case of simultaneous/overlapping channel updates, where whoever has the lowest channel balance wins. Finally, they discuss the potential deadlock and suggest having a "timeout waiting for message -&gt; retry/close channel." Overall, the conversation is highly technical and focused on improving the efficiency and functionality of the lightning network protocol.</summary>
+    <summary>The conversation between Rusty Russell and Anthony Towns centers around the Lightning Network's payment channel, which allows users to transact without involving the blockchain. They discuss the current states of the protocol and how CMD_CLOSE isn't a valid option when proposing an update. Instead, it is only valid during WAIT_FOR_UPDATE_SIG but not WAIT_FOR_HTLC_ACCEPT/WAIT_FOR_UPDATE_COMPLETE.One potential optimization discussed is updating multiple HTLCs at once. While it could be a practical solution, Russell shies away from implementing it now due to the current state of the protocol. They also discuss the possibility of declining broken HTLC updates and the potential for a deadlock in the system if both systems think they're high priority.Furthermore, they consider the possibility of ignoring some errors rather than automatically closing the channel. The INIT_NOANCHOR state can rebalance the channel using PKT_REBALANCE_VIA_BLOCKCHAIN. Finally, they discuss the assumption that whoever initiates a channel will be the one funding it.In terms of channel anchoring, the merchant can register with PayPal or anchor the channel with a random hub. They can also make use of an HTLC to move all the funds to the other side of their channel. It is possible to fund the channel later, and the initial funding for the transaction can be as low as desired. However, increasing the capacity of a channel requires a new anchor transaction.Overall, the conversation highlights the potential optimizations and limitations of the Lightning Network's payment channel, providing insight into the inner workings of the protocol.</summary>
     <published>2015-08-31T02:24:26+00:00</published>
   </entry>
 </feed>

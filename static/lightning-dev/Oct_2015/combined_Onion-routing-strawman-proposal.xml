@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Onion routing strawman proposal</title>
+  <updated>2023-05-18T17:57:59.434963+00:00</updated>
+  <author>
+    <name>Anthony Towns 2015-10-06 14:01:34</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-06 05:22:36</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-05 15:02:10</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-05 14:49:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-04 05:57:17</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-03 16:38:56</name>
+  </author>
+  <link href="lightning-dev/Oct_2015/000256_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000255_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000252_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000251_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000250_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000248_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Onion routing strawman proposal</title>
+    <updated>2023-05-18T17:57:59.435244+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000256.html" rel="alternate"/>
+    <summary>A group of developers at the Elements Project are working on onion routing code for the Lightning Network. They have pushed some test onion routing code in an acceptable format. The developers are using a fixed 3840 byte structure that is prefixed by padding. The structure includes the public key for each hop in plaintext, which is used to establish a shared secret with each hop via elliptic curve Diffie-Hellman (ECDH).The initiator uses their lightning node ID and the generated private key to initiate ECDH and routing node's pubkey; while the routing node uses their privkey and the hop.pubkey value. Symmetric AES &amp; HMAC keys are derived based on the secret. When a message is received, the recipient grabs the pubkey from the hop structure intended for them and calculates a shared secret. They then decrypt everything (except maybe the HMAC and pubkey) using AES in CTR mode with a nonce of IV.However, the developers are facing issues in reproducing the secret info using pyelliptic since libsec256k1 actually runs SHA256(y||x), where "x" is the value getting and y is '\x02' if the y value is even and '\x03' if it's odd, which makes it hard to determine the right secret directly.In this email thread, Rusty Russell has updated the code branch and made changes to onion_key.c. Anthony Towns questioned the use of flip_key(), which is only needed for a single use onion-msg-keys in onion_key.c. So he disabled that, and made the 02/03 prefix explicit. He also changed the "Message for blah..." to serialize the pubkey before turning it into hex. Onion_key was tweaked to avoid the for loop and cut calls. Running decoding through python is slow. It would be desirable to improve it by running decodes in a single python process but doing so is not sure if it is desirable.Rusty Russell reworked test_onion and Makefile test to separate generate and decode. Anthony Towns merged the pull request and asked about documenting lightning protocol/technology decisions. Anthony Towns suggested reducing message size from 128 bytes to 96 or 64 bytes and mentioned that nodes might want to do clever things, like allowing you to tell it to deliberately delay forwarding for an hour or two, or deduct fees from multiple HTLC's simultaneously. He also talked about redirecting an onion routed payment as compared to only allowing source-based routing. In this case, you need to add and drop hops which messes up constant-size packets.</summary>
+    <published>2015-10-06T14:01:34+00:00</published>
+  </entry>
+</feed>

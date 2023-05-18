@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - An Alternative Onion-Routing Proposal</title>
+  <updated>2023-05-18T16:40:55.488686+00:00</updated>
+  <author>
+    <name>Olaoluwa Osuntokun 2015-12-14 22:04:01</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2015-12-17 18:08:24</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2015-12-15 05:16:04</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2015-12-18 22:16:22</name>
+  </author>
+  <link href="lightning-dev/Dec_2015/000384_An-Alternative-Onion-Routing-Proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000394_An-Alternative-Onion-Routing-Proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000386_An-Alternative-Onion-Routing-Proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000397_An-Alternative-Onion-Routing-Proposal.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - An Alternative Onion-Routing Proposal</title>
+    <updated>2023-05-18T16:40:55.488686+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-December/000384.html" rel="alternate"/>
+    <summary>In this post, the author discusses their schemes for onion routing in the Lightning Network. Instead of creating their own mixing format and onion routing protocol, they turn to existing academic literature and find two schemes that fit elegantly into their problem domain: Sphinx and HORNET. Sphinx is a compact mixing format that achieves extremely small mix-headers by using a single group element that is deterministically re-randomized by each hop in the route. With a maximum diameter of 20 hops and a 16-byte MAC, a full onion blob weighs only 705 bytes which is considerably smaller than the current proposal. Sphinx also has built-in protection for replay attacks and provides sender anonymity with a formal proof of security.HORNET, on the other hand, leverages Sphinx to build a low-latency, high-bandwidth onion routing protocol that allows both sides to retain full unlinkability. It uses a cumulative circuit round-trip as a set up phase before messaging can begin and creates a duplex onion circuit between the sender and destination, achieving a level of throughput approaching 93 Gb/s. The primary addition to Sphinx's mix-header format is the Anonymous Header (AHDR), which stores all session-state within the onion-packet itself instead of requiring each node in the mix-net to store per-session state. The author recommends consulting the papers for the proper specifics of each scheme and highlights the key insights that make these schemes feasible for onion routing in the Lightning Network. They also provide a brief sketch of the mechanism behind Sphinx and explain how HORNET gets around performance issues introduced by Sphinx. Finally, they mention the potential usefulness of including the final destination address in the mix-header in a more hub-and-spoke-y network and recommend frequent key rotation to clear large storage overheads resulting from nodes remembering every derived shared secret they have ever come across.The HORNET protocol enables sender-receiver unlinkability, achieved through nested AHDRs. To send a message to Bob while maintaining full unlinkability, Bob first selects a rendezvous point and executes the set up protocol with Rodriguez. Bob then obtains an AHDR allowing Rodriguez to route messages to Bob. Bob publishes this AHDR_rb to a public bulletin board or directly to Alice if she has a hidden service set up. Alice obtains the AHDR_rb and includes it within the regular AHDR_ar to route to Bob. With this duplex onion route set up, Alice can send a message to Bob and propagate HTLCs along the full path in order to pay Bob. In order to mitigate potential DoS attacks, a payment system (as suggested in [8]) or required Hashcash challenge can be introduced. The HORNET protocol employs Sphinx for sender unlinkability.The conversation thread discusses various technical aspects related to the Lightning Network (LN) and the Sphinx mix-header protocol used for sending messages over LN. The participants discuss the use of different encryption algorithms and MACs, including ChaCha20-Poly1035 and AES-CTR+SHA-256-HMAC, for securing communication over the network. They also discuss the use of truncated hashes for node IDs in routing information and the potential implications on the choice of cipher and MAC.The conversation touches upon the idea of using HORNET's rendezvous protocol for enhanced privacy and a possible mechanism for graceful fallback to regular on-chain Bitcoin transactions.</summary>
+    <published>2015-12-14T22:04:01+00:00</published>
+  </entry>
+</feed>

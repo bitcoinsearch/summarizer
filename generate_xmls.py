@@ -7,6 +7,7 @@ from elasticsearch import Elasticsearch
 import time
 import platform
 import shutil
+from datetime import datetime
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 from src.logger import LOGGER
@@ -76,7 +77,7 @@ class GenerateXML:
 
     def check_size_body(self, body):
         tokens = TOKENIZER.encode(body)
-        temp = len(tokens) // 3000 + 1 if len(tokens) % 3000 else 0
+        temp = len(tokens) // 2000 + 1 if len(tokens) % 2000 else 0
         bodies = []
         sub_body_size = len(body) // temp
         for i in range(temp):
@@ -90,9 +91,11 @@ class GenerateXML:
         for b in self.check_size_body(body):
             summ.append(generate_chatgpt_summary(b))
         if len(summ) > 1:
+            print("consolidate summary generating")
             summ = consolidate_chatgpt_summary("\n".join(summ))
             return summ
         else:
+            print("Individual summary generating")
             return "\n".join(summ)
 
     def create_summary(self, body):
@@ -259,10 +262,32 @@ if __name__ == "__main__":
                                          es_password=ES_PASSWORD)
     dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
+
+    str_month_year_list = []
+    for data in data_list:
+        all_value = data["_source"]
+        datetime_obj = datetime.strptime(all_value['created_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        month_name = gen.month_dict[int(datetime_obj.month)]
+        str_month_year = f"{month_name}_{int(datetime_obj.year)}"
+        if str_month_year not in str_month_year_list:
+            str_month_year_list.append(str_month_year)
+
+    if "lightning-dev" in dev_url:
+        dev_folder = os.path.join("./static", "lightning-dev")
+    else:
+        dev_folder = os.path.join("./static", "bitcoin-dev")
+
+    delay = 45
+
     while True:
+        extracted_month_year_list = os.listdir(dev_folder)
+
+        if len(extracted_month_year_list) == len(str_month_year_list):
+            break
         try:
             gen.start(data_list, dev_url)
+            break
         except Exception as ex:
             print(ex)
-            gen.start(data_list, dev_url)
+            time.sleep(delay)
 

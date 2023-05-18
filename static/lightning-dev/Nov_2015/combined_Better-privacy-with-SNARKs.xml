@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Better privacy with SNARKs</title>
+  <updated>2023-05-18T16:29:42.937436+00:00</updated>
+  <author>
+    <name>Anthony Towns 2015-11-30 00:07:59</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-11-27 04:42:19</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-11-26 11:15:16</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-11-24 05:45:43</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-11-22 02:13:27</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-11-20 07:44:15</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-11-17 21:14:36</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-12-08 02:10:46</name>
+  </author>
+  <link href="lightning-dev/Nov_2015/000363_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000349_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000344_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000338_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000330_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000329_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000309_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000368_Better-privacy-with-SNARKs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Better privacy with SNARKs</title>
+    <updated>2023-05-18T16:29:42.937436+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000363.html" rel="alternate"/>
+    <summary>Anthony Towns presented three different approaches to forcing someone to reveal a private key corresponding to secp256k1 public key P without adding opcodes to Bitcoin. The first approach involves generating a signature with P that produces parameters for the signature with a combined total of 15 leading zero bytes or more. This approach can be satisfied using brute force by modifying a transaction, hashing it, and doing modular arithmetic ops. Using this approach reveals the secret key p: p = (2s - h)/r (mod O(g)).The second approach involves using elliptic curve (EC) keys to achieve the same result as the first approach without SNARKS. The third approach is an alternative method that Towns and andytoshi came up with. This approach uses a function called "revealP(Q,R,sigA,sigB,sigC)" that requires multiple check_multisig_verify operations in the scriptPubkey with pubkeys P, Q, and R, and stack operations to implement the function. The scriptSig has Q, R, and three signatures.Towns also discussed the cost associated with adding a minimal HTLC, which costs extra fees per HTLC per channel when cleared on the blockchain. He suggested accounting for this cost as "the cost of closing a channel is 4c (or 7c) times the number of simultaneous incoming HTLCs I'll accept, plus 4c times the number of simultaneous outgoing HTLCs I'll do."Andrew Towns suggested using zero-knowledge proofs (ZKPs) to "prove" that a specific payment hash is committed to in a lightning network payment channel without revealing the payment hash itself. The ZKP uses a cryptographic primitive called a SNARK to prove knowledge of a pre-image $R$ of some SHA-256 hash value $H$. The proof can be verified without knowledge of $R$, and $R$ can be kept private until such time as it needs to be revealed. The post goes on to detail how this might work for privacy within lightning network transactions, as well as other applications of HTLCs, such as atomic swaps across chains. The costs associated with generating and verifying these proofs are also discussed. It should be noted however, that this is not yet ready for prime-time, and requires further development and testing.The lightning network can be associated with a privacy limitation, where different hops of a transaction can be recognized by the same R value. By changing R at each step in the route, payment anonymity can be improved and it becomes difficult to attack the system. SNARKs can be used to prove that there are some secrets (R1 and R2) that satisfy some programmable condition based on public inputs (H1, H2, and X), without revealing those secrets. The extra burden for keeping the payment private falls entirely on the consumer rather than the merchant.There are a few "generic" crypto ops that might be useful to have, such as OP_CHECK_SECP256K1_MUL_VERIFY and OP_CHECK_INLINE_SIGNATURE_VERIFY. With a segregated witness proposal, introducing new opcodes is easy, so maybe someone would find a reason to prefer open-coding it like this?</summary>
+    <published>2015-11-30T00:07:59+00:00</published>
+  </entry>
+</feed>

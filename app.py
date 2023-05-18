@@ -1,4 +1,5 @@
 from datetime import datetime
+import calendar
 import os
 import openai
 from dotenv import load_dotenv
@@ -115,6 +116,21 @@ def parse_xml_files(folder):
 
 
 def get_year_month_data():
+    month_order = {
+        'Jan': 1,
+        'Feb': 2,
+        'March': 3,
+        'April': 4,
+        'May': 5,
+        'June': 6,
+        'July': 7,
+        'Aug': 8,
+        'Sept': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dec': 12
+    }
+
     folders = os.listdir(os.path.join(app.root_path, 'static'))
     data = []
     for dev_folder in folders:
@@ -122,7 +138,9 @@ def get_year_month_data():
             month = f.split("_")[0]
             year = f.split("_")[-1]
             data.append({"month": f"{month} {year}", "dev_name": str(dev_folder)})
-    data_sorted = sorted(data, key=lambda x: x["month"])
+    data_sorted = sorted(data, key=lambda x: (int(x['month'].split()[1]),
+                                              (month_order[x['month'].split()[0]])), reverse=True)
+
     return data_sorted
 
 

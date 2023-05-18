@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - daemon/p2p protocol</title>
+  <updated>2023-05-18T17:59:32.485283+00:00</updated>
+  <author>
+    <name>Anthony Towns 2015-12-16 06:30:23</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-21 03:43:10</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-16 20:53:55</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-19 22:09:09</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-19 05:30:03</name>
+  </author>
+  <link href="lightning-dev/Dec_2015/000392_daemon-p2p-protocol.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000286_daemon-p2p-protocol.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000265_daemon-p2p-protocol.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000277_daemon-p2p-protocol.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000271_daemon-p2p-protocol.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - daemon/p2p protocol</title>
+    <updated>2023-05-18T17:59:32.485283+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-December/000392.html" rel="alternate"/>
+    <summary>In a discussion about public key cryptography in lightning on Sat, Oct 17, 2015, Anthony Towns identified three uses for it: routing keys, anchor keys, and p2p keys. The anchor keys are used to sign every commitment, and so secure random signing parameters are important. Commitment keys might never be used if the channel is closed cooperatively. The commitment (public) keys need to be known to both parties to construct/validate the p2sh addresses of course.Rusty Russell suggested having a session nonce, but Anthony Towns thought it wouldn't help because nodes are already publishing their ids and IPs in a public IRC channel. The current protocol was shown to have some downsides. First, accepting incoming p2p connections reveals a node's id to anyone who asks. Second, if the node being connected to has been MITM'ed, the node id is revealed before realizing the problem. Third, multiple node ids can't be run on a single connection. Fourth, Bob has to do crypto operations for every connection which leads to potential DoS attacks. The post discusses the risks of revealing the relationship between a network address and the lightning network address. It can lead to physical identity disclosure, denial-of-service attacks, targeted hacking, and theft. The author suggests that the identification associated with an IP address could be useful for theft or DoS attacks. They suggest using a shared secret nonce instead of signed pubkey objects to avoid MITM and eavesdropping. The suggestion is to rely on a shared secret X when making new p2p connections. They also propose a clever way of handling the situation by routing payments that include Alice's network address to establish a new channel. The author concludes that until there are a substantial number of lightning nodes, it is better to delay implementing these suggestions.</summary>
+    <published>2015-12-16T06:30:23+00:00</published>
+  </entry>
+</feed>
