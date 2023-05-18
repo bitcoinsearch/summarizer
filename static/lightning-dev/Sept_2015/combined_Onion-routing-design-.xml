@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Onion routing design.</title>
+  <updated>2023-05-18T01:50:34.593530+00:00</updated>
+  <author>
+    <name>Anthony Towns 2015-09-22 05:25:44</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-09-22 01:22:57</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-09-19 01:44:18</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-09-19 01:27:16</name>
+  </author>
+  <link href="lightning-dev/Sept_2015/000205_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000204_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000194_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000193_Onion-routing-design-.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Onion routing design.</title>
+    <updated>2023-05-18T01:50:34.593530+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000205.html" rel="alternate"/>
+    <summary>The discussion revolves around the weakness of the Lightning Network routings with no MAC. Despite having R values, a nosy node can replace the routing entirely if it guesses the final destination correctly to probe. One defense is to fail to allow two HTLCs with the same R value, but this allows a simple way to probe back to the source. Probabilistic backoff of duplicate R values might be an option; however, a sophisticated probe sequence could still get probability. The idea of parallel probes doesn't work well since your neighbor knows R and can claim all of your probes. A solution proposed was to have two R values - one known only by the recipient, and one by the sender (S) to make the HTLCs payable on presentation of both R and S. The onion payload includes S encrypted to the final recipient where munging the payload makes the HTLC irredeemable, so misrouting gives no information. Nodes create the route backward to calculate the size, pick a total size randomly between 1024 and 4096, and pad it to that size with random padding of at least 32 bytes. The onion blob should be re-padded when forwarded to avoid dropping below 1024 bytes, which would enable the determination of being near the end of the chain. Adding random bytes to it or appending the encrypted bytes that made up the post of the payload from incoming messages should work. If OFB or CTR mode is used for the symmetric cipher, D_KD() of all the padding can be calculated to work out the hash H of the plain text message. CBC mode cannot be used because E_KD(grbg) needs to be known to know D_KD(padding).</summary>
+    <published>2015-09-22T05:25:44+00:00</published>
+  </entry>
+</feed>
