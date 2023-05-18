@@ -205,8 +205,8 @@ class GenerateXML:
         print("Operating System:", os_name)
         titles = emails_df.sort_values('created_at')['title'].unique()
         for title_idx, title in tqdm(enumerate(titles)):
-            if title_idx == 50:
-                break
+            # if title_idx == 50:
+            #     break
             title_df = emails_df[emails_df['title'] == title]
             if len(title_df) < 1:
                 continue
@@ -235,8 +235,8 @@ class GenerateXML:
             flag = False
             std_file_path = ''
             for idx, (month_year, _) in enumerate(month_year_group):
-                if idx == 5:
-                    break
+                # if idx == 5:
+                #     break
                 month_name = self.month_dict[int(month_year[0])]
                 str_month_year = f"{month_name}_{month_year[1]}"
                 if "bitcoin-dev" in url:

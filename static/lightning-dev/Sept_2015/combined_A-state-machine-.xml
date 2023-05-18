@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A state machine.</title>
-  <updated>2023-05-18T17:49:49.889726+00:00</updated>
+  <updated>2023-05-18T20:12:16.173312+00:00</updated>
   <author>
     <name>Anthony Towns 2015-08-31 02:24:26</name>
   </author>
@@ -23,9 +23,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - A state machine.</title>
-    <updated>2023-05-18T17:49:49.889726+00:00</updated>
+    <updated>2023-05-18T20:12:16.173312+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-August/000166.html" rel="alternate"/>
-    <summary>The conversation between Rusty Russell and Anthony Towns centers around the Lightning Network's payment channel, which allows users to transact without involving the blockchain. They discuss the current states of the protocol and how CMD_CLOSE isn't a valid option when proposing an update. Instead, it is only valid during WAIT_FOR_UPDATE_SIG but not WAIT_FOR_HTLC_ACCEPT/WAIT_FOR_UPDATE_COMPLETE.One potential optimization discussed is updating multiple HTLCs at once. While it could be a practical solution, Russell shies away from implementing it now due to the current state of the protocol. They also discuss the possibility of declining broken HTLC updates and the potential for a deadlock in the system if both systems think they're high priority.Furthermore, they consider the possibility of ignoring some errors rather than automatically closing the channel. The INIT_NOANCHOR state can rebalance the channel using PKT_REBALANCE_VIA_BLOCKCHAIN. Finally, they discuss the assumption that whoever initiates a channel will be the one funding it.In terms of channel anchoring, the merchant can register with PayPal or anchor the channel with a random hub. They can also make use of an HTLC to move all the funds to the other side of their channel. It is possible to fund the channel later, and the initial funding for the transaction can be as low as desired. However, increasing the capacity of a channel requires a new anchor transaction.Overall, the conversation highlights the potential optimizations and limitations of the Lightning Network's payment channel, providing insight into the inner workings of the protocol.</summary>
+    <summary>The email conversation between Rusty Russell and Anthony Towns covers various topics related to the Lightning Network protocol. One of the main points they discuss is the optimization of updating multiple HTLCs at once. They also talk about the use of CMD_CLOSE during WAIT_FOR_UPDATE_SIG, but not during WAIT_FOR_HTLC_ACCEPT/WAIT_FOR_UPDATE_COMPLETE, and the possibility of allowing CMD_CLOSE at any time like "Ctrl-C."Errors and declining HTLC updates are also discussed, as well as the potential usefulness of adding a current time field to UPDATE_ADD_HTLC to defuse clock sync problems. The assumption that whoever initiates a channel will fund it is also mentioned.Throughout the conversation, diagrams and code snippets are shared to aid in understanding the various topics being discussed. Another topic that is covered is the different scenarios for channel funding in the Lightning Network. Merchants can register with PayPal or fund the channel themselves using various options such as moving all funds to the other side of their channel, using an exchange account or a 'cold wallet' lightning channel. The initial funding can be kept low, and later increased via a new anchor transaction.There is also discussion of a potential protocol update where multiple HTLCs can be updated at once via a PKT_UPDATE_CHANNEL instead of ADD_HTLC, COMPLETE_HTLC, TIMEOUT_HTLC, etc variants. The PRIO stuff is referred to as klunky, while deadlock situations that may arise due to priority ambiguity are discussed, indicating the need for a "timeout waiting for message -&gt; retry/close channel" in most of the non-NORMAL states.Lastly, there is discussion of a proposed PKT_REBALANCE_VIA_BLOCKCHAIN option which would allow channel rebalancing in case of unbalanced channels.</summary>
     <published>2015-08-31T02:24:26+00:00</published>
   </entry>
 </feed>

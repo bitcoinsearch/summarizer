@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Return to the Layered Commit Transactions?</title>
-  <updated>2023-05-18T16:32:58.107531+00:00</updated>
+  <updated>2023-05-18T19:10:07.451275+00:00</updated>
   <author>
     <name>Anthony Towns 2015-11-30 01:25:54</name>
   </author>
@@ -23,9 +23,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Return to the Layered Commit Transactions?</title>
-    <updated>2023-05-18T16:32:58.108533+00:00</updated>
+    <updated>2023-05-18T19:10:07.451275+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000364.html" rel="alternate"/>
-    <summary>Rusty Russell and Anthony Towns had a conversation about the constraints on timeout based on fees. They suggested batching timeouts to save space in transactions. The maximum number of concurrent committed HTLCs on a channel is 3000 due to the standard limit on transactions. Bob needs to determine the timeout to set on the outgoing HTLC, T_b, in order to keep the channel with Alice open. He must resolve the outgoing HTLC by time T_a-d_a-f_a. At time T-d-f, if the HTLC has not been resolved off-chain, he needs to publish his commitment transaction and it will hit the chain at time T-d. The email thread discusses Bitcoin's constraints on HTLCs and commitment transactions. It explains how Alice can close a channel unilaterally when paying an HTLC and claim a refund while ensuring the counterparty is not cheated. Revocation time and absolute CLTV timeout are also covered, which must increase/decrease with each hop, respectively. The protocol ensures node 19 will demand a response from node 20 at time T-t+k, but worst case is three days unless there are multiple hop failures. If payment fails due to a single hop failure, the nodes' funds will be held up until the node comes back online. Reducing the OP_CHECKLOCKTIMEVERIFY argument would not work usefully because the revocation delay happens simultaneously. Finally, Rusty and Anthony discussed how to close the channel or drop to the blockchain well before T actually comes around.</summary>
+    <summary>Anthony Towns wrote about adding further constraints on timeout based on fees to avoid being left holding the bag. He suggested batching the timeouts for better efficiency, which can save both bytes and fees. In addition, he provided calculations for determining the timeout of outgoing HTLC when forwarding it from Alice to Carol through Bob's channel. The post also includes a discussion between Rusty Russell and Anthony Towns regarding definitions of CSV delay (d), top OP_CLTV timeout (T), commitment tx (C), published time (P), spent time (S), and refundable timeout (X) in relation to expiration. They also discussed how to close the channel if the HTLC is not resolved off-chain, and the possibility of fine people for keeping the channel open.Rusty Russell is discussing how to enforce constraints on Bitcoin transactions when a user wants to claim a refund by unilaterally closing a channel. He explains that different timeouts are enforced depending on the situation and outlines several scenarios in which the HTLC (Hashed Time-Locked Contract) times out. To ensure that HTLC expires before absolute CLTV timeout, Rusty suggests reducing the OP_CHECKLOCKTIMEVERIFY argument. Rusty also notes that revocation time should be long enough to spot someone cheating. Therefore, he suggests a minimum of 3 hours, while 12 hours will give users plenty of time to take their claim transactions and inject them into the Bitcoin network. In one scenario, node 19 would demand an answer from node 20 at time T-t+k, but since T=2 days and t=2 days, that's just time 0+k. The worst-case is three days unless there are multiple hop failures. A single hop failure at node 3 immediately after the transaction gets passed on would be worse. Within the next 33 days, node 3 wakes up, sees R and finishes the transaction.</summary>
     <published>2015-11-30T01:25:54+00:00</published>
   </entry>
 </feed>
