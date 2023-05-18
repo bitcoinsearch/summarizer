@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Discussion related to pull 349 and pull 319 (escrow transactions)</title>
-  <updated>2023-05-18T21:41:46.890270+00:00</updated>
+  <updated>2023-05-18T22:38:59.961659+00:00</updated>
   <author>
     <name>Gregory Maxwell 2011-08-04 20:35:53</name>
   </author>
@@ -15,9 +15,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Discussion related to pull 349 and pull 319 (escrow transactions)</title>
-    <updated>2023-05-18T21:41:46.890270+00:00</updated>
+    <updated>2023-05-18T22:38:59.961659+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-August/000298.html" rel="alternate"/>
-    <summary>In an email exchange, a discussion about the implementation of multiple signature escrowed transactions in Bitcoin was had. The current focus on maturity/bugfixes is probably going to delay the full patch for this feature, but the IsStandard part is uncontroversial and could go in quickly. It was suggested that Pull 319 be split into two pull requests: one which does the IsStandard change and one which adds the full escrow feature set. This way when the escrow patch does enter the mainline client it will meet up with a network which is happy to handle its transactions. Pull 349 contains a candidate fix for an issue with multisig validation, but it carries a risk of creating differences in how nodes validate transactions leading to lasting forks. The implementation of multiple signature escrowed transactions is something they believed Bitcoin ought to have sooner rather than later, especially since Clearcoin was gone. The patch needs more testing and discussion before it can be added to the client, but it won't be deployable until after an updated isStandard is widely used in the network. One challenge is that because it requires a new transaction type, it may lead to differences in how nodes validate transactions, causing lasting forks. There are different ways to fix this issue, including defining that OP_PUSHDATA* cannot be used to push the smaller lengths, which could be more efficiently encoded with the direct length opcodes. Another way would be to change out the templating code works to make sure it codes the template the same way the original was coded.</summary>
+    <summary>In an email conversation, the issue of implementing a full escrow feature set on Bitcoin's client was discussed. The focus on maturity/bugfixes may delay the patch, but the IsStandard part is uncontroversial and could be added quickly. Pull 349 implements a multiple signature escrowed transaction, which would be useful to have sooner rather than later, especially since clearcoin has gone. However, one issue with multisig validation was exposed by the patch: due to redundancy in the script length coding opcodes, it's possible to code a script multiple ways. This causes the signature validation to fail when something used OP_PUSHDATA when a direct length could have been used. One candidate fix for this is excluding the length opcodes from the comparison, but it carries a risk of creating differences in how nodes validate transactions leading to lasting forks. Another way of fixing it would be to define that OP_PUSHDATA* cannot be used to push the smaller lengths which could be more efficiently encoded with the direct length opcodes.</summary>
     <published>2011-08-04T20:35:53+00:00</published>
   </entry>
 </feed>
