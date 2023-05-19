@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Linux packaging letter</title>
+  <updated>2023-05-19T17:21:27.821059+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2013-07-23 22:33:47</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-07-23 20:50:28</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-07-23 20:14:58</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-07-24 19:35:45</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-07-24 03:19:31</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-07-24 00:50:48</name>
+  </author>
+  <link href="bitcoin-dev/July_2013/002986_Linux-packaging-letter.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2013/002983_Linux-packaging-letter.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2013/002981_Linux-packaging-letter.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2013/003005_Linux-packaging-letter.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2013/002994_Linux-packaging-letter.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2013/002989_Linux-packaging-letter.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Linux packaging letter</title>
+    <updated>2023-05-19T17:21:27.821059+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-July/002986.html" rel="alternate"/>
+    <summary>On July 23, 2013, Mike Hearn wrote about the discovery that Debian bitcoind had split out of consensus due to a patch-related issue in April. However, there is no reason to assume the reported problem is a fork or related to leveldb. Pieter suggests reaching out to packagers to educate them on the risks in a letter addressed to the Linux packaging community. The context discusses the concern of people with the initial draft of a package by Mike. The upstreams frequently raise concerns about the mutilation of their unique and precious snowflake. The intention was to address these concerns in the second and third paragraphs of the package, but they were shortened to avoid technical discussion and keep the package concise. The initial approach of "please don't package this at all" was later changed to "please understand first". The main priority is to avoid offending people and reduce initial bristling.The repeatable build infrastructure of the package is portable to any reasonable, mostly-POSIX-compliant system with gcc or clang. However, it may need some massaging, even though the tor project is beginning to use the same infrastructure. Expanding the supported output targets would be great for Bitcoin, but it's bounded by resources to adequately QA builds on alternative targets. Requiring precise library dependencies is quite awkward, as packages solving bugs can be problematic for Bitcoin.From a technical perspective, Bitcoin's purpose is to get computers worldwide to reach an agreement on the content of a database, subject to a pile of rules, in the face of potentially malicious input without any trusted parties. If there is a bug in the backing database, which returns not found when queried, it could lead to a fork in the consensus, effectively partitioning the network. To deploy such a fix in Bitcoin without creating risk for participants, a staged revision of the network protocol rules would be made. There would be a protocol update that fixed the database bug and explicitly rejected certain transactions. Users of Bitcoin would have to apply fixes/workaround by the switchover point or be left out of service or vulnerable. The organized updates to solve problems have been successful, typically spanning months to years.The Bitcoin software ecosystem and large scale software validation need to mature as harmless looking bug fixes in leveldb, boost, or openssl could be major doom event makers. Integrating the validation database library (leveldb) internally was one of the middle term solutions they did because it is known as a consistency critical component and a part of the system that is especially difficult to validate. Unfortunately, distributions have been patching Bitcoin to unbundle it. One of the reasons for this is that running with an uncontrolled consensus relevant inconsistent behavior can cause harm to users and customers. Additionally, with non-trivial userbases, the combination of uncoordinated patching appears to be unique to GNU/Linux systems.It is important to run a complete set of tests, which includes unit testing and full systems testing harness on new platforms. However, even this is currently not adequate as it is infeasible to achieve complete test coverage in things like cryptographic libraries and database environments. More clever tests will make undiscovered surprising behavior less likely but figuring out how to get the tests actually run if they take two hours and use 20GB of disk space is a challenge.Pieter has written an ECDSA library for their specific ECC curve which does signature validation &gt;6x faster than OpenSSL. This library may need to be adopted since it isn't obviously upstreamable due to some differing requirements for constant time operations. They may also need to adopt a backing database that is able to produce authentication proofs. In terms of packaging, they believe that portable software is better software. Portability forces users to dust out nasty cobwebs, reveals dependency on dangerous undefined behavior, encourages intelligent abstractions and appropriate testing, and invites contributions from more hands and eyes. While they are resource-bound on testing, submitting changes, and willing to do the work goes a long way to getting things done. They are open to fixes and build support even for systems they don't formally support. Although they have been accommodating system specific fixes, even for systems they don't formally support, they still need to mature.</summary>
+    <published>2013-07-23T22:33:47+00:00</published>
+  </entry>
+</feed>
