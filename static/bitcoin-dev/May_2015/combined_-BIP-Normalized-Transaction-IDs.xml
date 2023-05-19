@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - [BIP] Normalized Transaction IDs</title>
+  <updated>2023-05-19T20:26:07.404400+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2015-05-14 00:37:30</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-05-13 20:31:06</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-05-13 19:40:54</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-05-13 18:40:34</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-05-13 17:14:07</name>
+  </author>
+  <link href="bitcoin-dev/May_2015/008163_-BIP-Normalized-Transaction-IDs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2015/008160_-BIP-Normalized-Transaction-IDs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2015/008157_-BIP-Normalized-Transaction-IDs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2015/008155_-BIP-Normalized-Transaction-IDs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2015/008151_-BIP-Normalized-Transaction-IDs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - [BIP] Normalized Transaction IDs</title>
+    <updated>2023-05-19T20:26:07.404400+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-May/008163.html" rel="alternate"/>
+    <summary>A proposal has been made to normalize transaction IDs in order to address transaction malleability and facilitate higher level protocols. The benefit is that transaction IDs become independent of their ordering, simplifying the inner workings of Bitcoin. The normalized transaction ID is an alias used in parallel to the current (legacy) transaction IDs to address outputs in transactions. It is calculated by removing (zeroing) the scriptSig before computing the hash, which ensures that only data whose integrity is also guaranteed by the signatures influences the hash.However, there are concerns about the deployment costs of upgrading the world to this new system, as it would require every single piece of Bitcoin software on the planet to be changed, not just the validation code, fundamentally changing how transactions refer to each other. Additionally, blocks need to commit to the scriptSig data in blocks still so the proof of work of a block is invalidated by changing a scriptSig. Another concern is that normalized transaction IDs are only effectively non-malleable when all inputs they refer to are also non-malleable.The proposal being discussed here introduces the idea of normalized transaction IDs and two proposals were suggested - transactions and blocks keep referring to other transactions by full txid, but signature hashes are computed off normalized txids; blocks commit to full transaction data, but transactions and signature hashes use normalized txids. The latter solution would require an invasive hard fork. A full re-index of the blockchain would be required for the recursive system, which would replace all txids with "correct" values.A softfork idea proposed is that transactions get two txids, one used to reference them (computed as before), and one used in an (extended) sighash. The txins keep using the normal txid, so not structural changes to Bitcoin. The ntxid is computed by replacing the scriptSigs in inputs by the empty string, and by replacing the txids in txins by their corresponding ntxids. A new checksig operator is softforked in, which uses the ntxids in its sighashes rather than the full txid. To support efficiently computing ntxids, every tx in the utxo set stores the ntxid.A proposal for a new CHECKSIG operator for scripts was also discussed. It would remove scriptSigs from transactions before hashing and replace txids in txins by their ntxid. Wallets that do not support signing with the new operator would not give out addresses that use it. The proposal is related, but not the same as extending the sighash flags, which adds a new CHECKSIG operator to scripts. This new operator removes the scriptSigs from transactions before hashing and replaces the txids in txins by their ntxid. It does not add any data to transactions, and it is a softfork because it only impacts scripts using the new operator.Pieter argues that it does not make sense to allow mixed usage of the txids at all. They do not provide the actual benefit of guaranteed non-malleability before it becomes disallowed to use the old mechanism. That, together with the resource doubling needed for the UTXO set and the fact that an alternative which is only a softfork is available, makes this a bad idea in his opinion.</summary>
+    <published>2015-05-14T00:37:30+00:00</published>
+  </entry>
+</feed>
