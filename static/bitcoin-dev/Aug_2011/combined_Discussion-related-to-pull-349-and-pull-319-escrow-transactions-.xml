@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Discussion related to pull 349 and pull 319 (escrow transactions)</title>
-  <updated>2023-05-19T00:48:56.000770+00:00</updated>
+  <updated>2023-05-19T02:40:24.730118+00:00</updated>
   <author>
     <name>Gregory Maxwell 2011-08-04 20:35:53</name>
   </author>
@@ -15,9 +15,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Discussion related to pull 349 and pull 319 (escrow transactions)</title>
-    <updated>2023-05-19T00:48:56.000770+00:00</updated>
+    <updated>2023-05-19T02:40:24.730118+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-August/000298.html" rel="alternate"/>
-    <summary>In an email exchange on August 3, 2011, a discussion took place about the implementation of multiple signature escrowed transactions and making them deployable. The pull request 349 was proposed, which contained one candidate fix for multisig validation issues. However, this fix carried a risk of creating differences in how nodes validate transactions leading to lasting forks. Another way of fixing it would be to define that OP_PUSHDATA* cannot be used to push the smaller lengths, which could be more efficiently encoded with the direct length opcodes. The discussion also emphasized that the IsStandard part of the patch is uncontroversial and could go in quickly, while the full escrow feature set requires more testing and discussion before being added to the client. Therefore, it was suggested to split the 319 pull request into two: one which does the IsStandard change and one which adds the full escrow feature set. This way, when the escrow patch does enter the mainline client, it will meet up with a network which is happy to handle its transactions. It was noted that Eligius mining and probably other pools are open to the idea of upgrading, which means that non-standard transactions can still be mined in a reasonable time frame under one hour. However, it's not just a matter of mining power; it's also a question of propagation, as non-propagating transactions are extra vulnerable to double spending by a standard transaction. Overall, the conversation focused on the viability of implementing multiple signature escrowed transactions and the potential solutions to the multisig validation issue.</summary>
+    <summary>In an email exchange, the issue of mining non-standard transactions was discussed. While there is a hope that more than 30% of mining power could be upgraded to mine these transactions in under an hour, it's not just about mining power; propagation is also a concern. The current focus on maturity and bug fixes is likely to delay the full patch, but the IsStandard part is uncontroversial and could go in quickly. Therefore, it was suggested to split the patch into two pull requests: one for the IsStandard change and another for the full escrow feature set.Pull 349 implements a multiple signature escrowed transaction. This implementation needs testing and discussion before it can be added to the client. One challenge is that it requires a new transaction type, which won't be deployable until after an updated isStandard is widely used in the network. Hence, it makes sense to separate the IsStandard part of the patch and get it out in 0.4.However, Pull 349 exposes an issue with multisig validation, where a script can be coded in multiple ways due to redundancy in script length coding opcodes. A candidate fix to this is excluding the length opcodes from the comparison, although it carries a risk of creating differences in how nodes validate transactions leading to lasting forks. Another way of fixing this would be to define that OP_PUSHDATA* cannot be used to push smaller lengths that could be more efficiently encoded with direct length opcodes. However, this may carry no severe split risk. The third way of fixing this would be to change the templating code to ensure it codes the template the same way the original was coded, but this seems tricky to implement and validate.</summary>
     <published>2011-08-04T20:35:53+00:00</published>
   </entry>
 </feed>

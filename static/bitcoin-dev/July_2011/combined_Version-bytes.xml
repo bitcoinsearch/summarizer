@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Version bytes</title>
-  <updated>2023-05-19T01:24:11.436472+00:00</updated>
+  <updated>2023-05-19T02:36:18.289240+00:00</updated>
   <author>
     <name>Pieter Wuille 2011-07-07 11:15:58</name>
   </author>
@@ -19,9 +19,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Version bytes</title>
-    <updated>2023-05-19T01:24:11.436472+00:00</updated>
+    <updated>2023-05-19T02:36:18.289240+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-July/000144.html" rel="alternate"/>
-    <summary>Bitcoin is trying to standardize the version bytes it uses for various applications. There are three meaningful components that include network, data class, and version. The proposal suggests using bit 16 for alternate chain and when it is set, nothing will be defined. Testnet already uses version 111, so a trick can be used where bit 1 will be chosen for testnet, and if it is set, then XOR the rest of the version number with 111. For data classes, bits 128/64/32 are used, where 0 is for address, 32, 64, 96, 160, and 192 are reserved for future use, 128 is for a private key, and 224 is for extended data class, where another "data class" byte follows. Bit 16 defines "private," where 0 is bitcoin, and 16 is an alternate chain. Bits 8/4/2 define the version number, where 0 is the only thing used for now, 2,4,6,8,10,12 are reserved for future use, and 14 is for an extended version, where another version byte follows. Bit 1 defines testnet, where 0 is realnet, and 1 is testnet, which possibly uses XOR 111 if not reset. This discussion started when Stefan wanted to define a format for master keys from which to derive deterministic wallet keys. The proposal suggests using data class 192 for that, leaving the lower numbers for more basic data like public keys.</summary>
+    <summary>Bitcoin users have decided to standardize the version bytes used for several applications and try to keep them from colliding. The three components that seem meaningful are network (realnet, testnet, alternate chains), data class (address, private key, master key, etc.), and version (real version, per data class defined). Currently, namecoin is using version byte 52 for addresses, so they would like to reserve bit 16 in the version byte for “alternate chain”. When bit 16 is set, everything is up to the network itself, and no further semantics are defined. For non-alternate chains, bit 1 can be used to define testnet and if bit 1 is set, XOR the rest of the version number with 111. Otherwise, odd = testnet, even = realnet. That leaves us with 6 more bits to play with, 128,64,32 and 8,4,2. As 128 is already used for private keys, 128, 64, and 32 will be used for data classes, and 8, 4, and 2 for versions. The discussion started when Stefan wanted to define a format for master keys from which to derive deterministic wallet keys. They proposed using data class 192 for that, leaving the lower numbers for more basic data, like public keys. Pieter Wuille suggested some conventions he thinks should be adopted before everyone starts defining their own. He also provided a proposal that summarizes the convention.</summary>
     <published>2011-07-07T11:15:58+00:00</published>
   </entry>
 </feed>
