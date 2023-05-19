@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Announcement: libcoin</title>
-  <updated>2023-05-18T23:32:45.563431+00:00</updated>
+  <updated>2023-05-19T01:08:29.615501+00:00</updated>
   <author>
     <name>Gregory Maxwell 2012-02-02 17:12:04</name>
   </author>
@@ -27,9 +27,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Announcement: libcoin</title>
-    <updated>2023-05-18T23:32:45.563431+00:00</updated>
+    <updated>2023-05-19T01:08:29.615501+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-February/001182.html" rel="alternate"/>
-    <summary>Michael Grønager claimed that the libcoin/bitcoind client can download the entire blockchain 3.5 times faster than the bitcoin/bitcoind client, which takes less than 90 minutes on a modern laptop. However, Gregory Maxwell speculated that the speedup was due to removing the secure allocator and fixing the mlock performance bug. He also reported that libbitcoin was slower in syncing than the reference client. Maxwell suspected that the reason for this was because libbitcoin is CPU bound on ECDSA checks, which are skipped in bitcoin in blocks up to the highest hardcoded checkpoint. Additionally, Michael Grønager claimed that the RPC server in libcoin was much faster compared to the Satoshi client. He noted that the Satoshi client HTTP server executes all rpc commands in its own thread, but to do so, it needs to stop the thread of the Node. As a result, two threads block each other, resulting in longer waiting times. In contrast, in libcoin, all query methods access the blockchain as a const object and can safely query it without intervening with the Node thread's work. Nonetheless, Pieter, another user, questioned the safety of removing the locking altogether. Gregory Maxwell later reported that libbitcoin took almost exactly twice as long as the reference client to sync. Lastly, Michael Grønager commented on the significant speedup of the libcoin/bitcoind client, which he attributed to the RPC server being blistering fast compared to the Satoshi client.</summary>
+    <summary>Michael Grønager claimed on Wed, Feb 1, 2012, that the libcoin/bitcoind client downloads the entire block chain 3.5 times faster than the bitcoin/bitcoind client in less than 90 minutes on a modern laptop. However, some people believe that the speedup was almost solely due to the removal of the secure allocator and fixing of the mlock performance bug. Pieter expressed concern that the query code does not operate on a const copy of the blockchain structure, while Gregory Maxwell reported that libcoin took twice as long to sync as the bitcoin reference client. Michael Grønager claims that the RPC server in libcoin is much faster than in the Satoshi client because all query methods access the blockchain as a const object, which allows for safe querying without intervening with the Node thread. SendTo methods first query if a transaction can take place, then push it to the work-queue of the Node thread and exit immediately until the Node has finished its current tasks. There is contention during sync, but lock profiling shows little contention. Finally, some users believe that the big speedup is not typical for straight refactors that do not change data structures.</summary>
     <published>2012-02-02T17:12:04+00:00</published>
   </entry>
 </feed>
