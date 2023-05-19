@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Idea: Efficient bitcoin block propagation</title>
+  <updated>2023-05-19T21:18:20.315645+00:00</updated>
+  <author>
+    <name>Matt Corallo 2015-08-06 20:50:32</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-06 20:38:41</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2015-08-06 18:42:38</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2015-08-06 17:33:49</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2015-08-05 20:16:34</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-05 19:27:22</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-06 20:55:15</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2015-08-05 22:14:07</name>
+  </author>
+  <link href="bitcoin-dev/Aug_2015/009974_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009973_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009968_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009966_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009942_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009939_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009975_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/009944_Idea-Efficient-bitcoin-block-propagation.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Idea: Efficient bitcoin block propagation</title>
+    <updated>2023-05-19T21:18:20.316643+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-August/009974.html" rel="alternate"/>
+    <summary>The BlueMatt relay network is a system designed to relay transactions verified by a local node and keep a FIFO of the relayed transactions in both directions. It is synchronous on each side, and when a block is received on either side, it replaces transactions with their indexes in the FIFO and relays it along. Transactions not in the FIFO are escaped and sent whole. On the other side, the block is reconstructed using the stored data and handed to the node. The protocol is essentially to relay transactions, send the header when you get a block, iterate over transactions, and for each either use two bytes for nth-recent-transaction-relayed or use 0xffff-3-byte-length-transaction-data. Although the block relaying itself is explicitly "unvalidated", the software client can only be used with a mempool maintaining a full node because the node must wait to validate things. However, many stateless checks are done, and the relay network already validates block version numbers and only relays valid transactions. Recent optimizations include using block templates to learn transaction priority to be more immune to spam attacks. There is some discussion about the technical/security implications of larger blocks related to other things than propagation time, assuming people are using the available efficient relay protocol (or better). SPV mining is actually blinding mining on top of other pools' stratum work. It is easy to implement but there are other considerations. VFSSP avoids practical issues miners have had and causes delays even when they don't understand them or know about them. Bitcoin Core has cached validation for many years now, and if not for that and other optimizations, things would be really broken right now. The email thread on the Bitcoin-dev mailing list discusses a proposed solution to dramatically increase the speed of bitcoin block propagation after a new block has been mined. The VFSSP protocol cuts through various practical issues miners have had, including slow and unoptimized CreateNewBlock() function. Mining operations are typically operated in a fire and forget manner, so some of the use of VFSSP appears to be inertia. If a miner can lower their orphan rate by deploying a new protocol or fixing faulty hardware in their infrastructure, they're likely to do it because it takes less effort. Bad outcomes are possible even when they're not necessary because of incentives in this space. The relay network includes an optimized transmission protocol that enables sending the entire block typically with just a small number of bytes. Ultimately there is no need for information communicated with a block at discovery time proportional to the size of the block, with the right affordances; it can be accomplished with a small constant amount of data. The relay network protocol is already in use by the majority of large miners and is publicly available to anyone. Arnoud Kouwenhoven from Pukaki Corp has proposed an idea of sending bitcoin blocks in 5kb packets, which would solve speed of transmission and technical block size issues. According to Tom Harding, the relay network protocol is already efficient enough, so there would not be a need for any further optimizations. However, the technical/security implications of larger blocks are related to other things than propagation time. The proposal suggests that miners should build on the previous block they received, and then receive the next one as soon as possible. There are many nuances in this idea, and the first reaction may be that it is a crazy idea, but the proposal addresses the most important nuances in its version 0.2. Arnoud Kouwenhoven invites people to be critical in a friendly and constructive manner and will do their best to answer all questions that arise. The official proposal can be found in both PDF and HTML versions at pukaki.bz.In response to Lerner's question, Harding explains that the version check was added only hours after the initial fork. Even if the relay network had relayed the invalid post-softfork block, the relay network should not have had a significant effect on the growth of the fork. Harding also mentions that miners already aggressively relay around the network/between each other, so he is not worried about the relay network's impact. The reason behind large block discussions is still unclear, even though the speed of transmission has been solved by the relay network. Harding mentions that there are many practical issues miners face, such as mining operations being largely fire and forget, or running their own Bitcoin nodes in far away colocation. Therefore, blind mining off other pools' stratum work has become a popular solution, called validation free stratum subpooling (VFSSP). VFSSP avoids causing delays even when the participants don't know what or why something is causing a delay. However, Harding acknowledges that VFSSP cuts through a number of practical issues and avoids causing delays, but there are better solutions now.</summary>
+    <published>2015-08-06T20:50:32+00:00</published>
+  </entry>
+</feed>
