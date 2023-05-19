@@ -77,7 +77,15 @@ class GenerateXML:
 
     def check_size_body(self, body):
         tokens = TOKENIZER.encode(body)
-        temp = len(tokens) // 2000 + 1 if len(tokens) % 2000 else 0
+        # temp = len(tokens) // 2000 + 1 if len(tokens) % 2000 else 0
+        # division_value = max(1, len(tokens) // 3900)  # suggested by gpt
+        # temp = len(tokens) // division_value + 1 if len(tokens) % division_value else len(tokens) // division_value
+
+        if len(tokens) % 2000 == 0:
+            temp = len(tokens) // 2000
+        else:
+            temp = len(tokens) // 2000 + 1
+
         bodies = []
         sub_body_size = len(body) // temp
         for i in range(temp):
@@ -93,9 +101,11 @@ class GenerateXML:
         if len(summ) > 1:
             print("consolidate summary generating")
             summ = consolidate_chatgpt_summary("\n".join(summ))
+            print(summ)
             return summ
         else:
             print("Individual summary generating")
+            print("\n".join(summ))
             return "\n".join(summ)
 
     def create_summary(self, body):
@@ -263,8 +273,8 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    # dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
-    dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+    dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    # dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
     str_month_year_list = []
@@ -281,7 +291,7 @@ if __name__ == "__main__":
     else:
         dev_folder = os.path.join("./static", "bitcoin-dev")
 
-    delay = 45
+    delay = 50
 
     while True:
         extracted_month_year_list = os.listdir(dev_folder)

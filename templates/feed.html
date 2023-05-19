@@ -15,34 +15,36 @@
     <hr class="solid">
     <br><b>Individual post summaries:</b>
     {% for entry in feed.entries %}
-    <ul>
-        {% if feed.feed.links|length > 0%}
-        {% for link in feed.feed.links %}
-        <li>
-        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=link.href.split('/').1,filename=link.href.split('/').2) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
-        <b>{{feed.feed.authors[loop.index-1].name}}</b>
-        </li>
-        {% endfor %}
-
+        <ul>
+            {% if feed.feed.links|length > 0 %}
+                {% for link in feed.feed.links %}
+                    <li>
+                        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=link.href.split('/').1,filename=link.href.split('/').2) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
+                        <b>{{feed.feed.authors[loop.index-1].name}}</b>
+                    </li>
+                {% endfor %}
+            {% else %}
+                {% for author in feed.feed.authors %}
+                    <p><b>Author:</b> {{ author.name }}</p>
+                {% endfor %}
+                <p></p>
+                {% set my_url = url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) %}
+                {% if "combined" in my_url %}
+                    <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) }}">Combined Summary of all posts in thread</a>
+                {% endif %}
+            {% endif %}
+        </ul>
+        {% if "bitcoin-dev" in dev_name %}
+            <a href="{{ entry.link }}">Click here to read the original discussion on the bitcoin-dev mailing list</a>
         {% else %}
-        {% for author in feed.feed.authors %}
-            <p><b>Author:</b> {{ author.name }}</p>
-        {% endfor %}
-        <p></p>
-        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) }}">Combined Summary of all posts in thread</a>
+            <a href="{{ entry.link }}">Click here to read the original discussion on the lightning-dev mailing list</a>
         {% endif %}
-    </ul>
-    {% if "bitcoin-dev" in dev_name %}
-        <a href="{{ entry.link }}">Click here to read original discussion on the bitcoin-dev mailing list</a>
-    {% else %}
-        <a href="{{ entry.link }}">Click here to read original discussion on the lightning-dev mailing list</a>
-    {% endif %}
-    <p><i>Published on: {{ entry.published }}</i></p>
-    <hr>
-    <h3> Summary:</h3>
-    <p>{{ entry.summary|linkify }}</p>
-    <hr>
-    <p><i> Updated on: {{ feed.feed.updated }} </i></p>
+        <p><i>Published on: {{ entry.published }}</i></p>
+        <hr>
+        <h3>Summary:</h3>
+        <p>{{ entry.summary|linkify }}</p>
+        <hr>
+        <p><i>Updated on: {{ feed.feed.updated }}</i></p>
     {% endfor %}
 
     {% else %}
@@ -66,9 +68,12 @@
         {% endfor %}
         {% endif %}
 
+        {% set my_url = url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) %}
+        {% if "combined" in my_url %}
         <li>
         <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) }}"> Combined Summary of all posts in thread </a>
         </li>
+        {% endif %}
         <li>
             {% if "bitcoin-dev" in dev_name %}
                 <a href="{{ entry.link }}">Click here to read original discussion on the bitcoin-dev mailing list</a>

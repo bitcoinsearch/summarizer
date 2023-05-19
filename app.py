@@ -247,8 +247,12 @@ def display_feed(dev_name, year_month, filename):
     file_url = f"./static/{dev_name}/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
     combined_filename = "combined_" + "_".join(filename.split("_")[1:])
-    return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month,
-                           filename=combined_filename)
+    if combined_filename in os.listdir(os.path.join("./static", str(dev_name), str(year_month))):
+        return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month,
+                               filename=combined_filename)
+    else:
+        return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month,
+                               filename=filename)
 
 
 if __name__ == '__main__':
