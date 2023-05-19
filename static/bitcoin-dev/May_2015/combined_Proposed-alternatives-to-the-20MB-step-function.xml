@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Proposed alternatives to the 20MB step function</title>
+  <updated>2023-05-19T20:19:33.582111+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2015-05-10 21:33:15</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2015-05-09 03:36:07</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-05-28 17:34:32</name>
+  </author>
+  <link href="bitcoin-dev/May_2015/008074_Proposed-alternatives-to-the-20MB-step-function.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2015/008038_Proposed-alternatives-to-the-20MB-step-function.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2015/008328_Proposed-alternatives-to-the-20MB-step-function.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Proposed alternatives to the 20MB step function</title>
+    <updated>2023-05-19T20:19:33.582111+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-May/008074.html" rel="alternate"/>
+    <summary>In this email exchange between Gavin Andresen and Mark Friedenbach, they discuss a proposal for increasing block size within the confines of a self-supporting fee economy. However, Andresen argues that a hard upper limit is still necessary due to the difficulty in developing, testing, and provisioning something without knowing limits. Additionally, he notes that the proposal does not address incentive alignment between miners and everyone else or centralization pressures. Andresen suggests that changing how the size limit is computed can help better align incentives and reduce risk. Specifically, he proposes augmenting the "size" used for limit calculations to factor in UTXO impact. He also presents his favored formulation of a general dynamic control idea, where each miner expresses their preferred block size and there is a computed maximum based on 33rd percentile of last 2016 coinbase preferences. The effective maximum would be X bytes more, where X ranges from 0 to the computed maximum, with miners needing to reach a target F(x/computed_maximum) times the bits-difficulty. Overall, Andresen acknowledges the benefits of the proposed increase in block size but argues that a hard upper limit and changes in the size limit computation are necessary for further alignment of incentives and reduction in risk.The email discussion on the Bitcoin-development mailing list revolves around dynamic block size limit and its feasibility. The primary concern is that block propagation time could be proportional to the block size which can affect the efficiency of Bitcoin mining. The author argues against using the assumption of size-independent propagation, citing several reasons for it. Firstly, not every transaction is pre-relayed and pre-validated due to different relay policies, double-spend attempts, and transactions generated before a block had time to propagate. This results in extra bandwidth usage for efficient relay protocols, signature validation for unrelayed transactions, and database lookups for the inputs of unrelayed transactions cannot be cached in advance. Secondly, block validation with 100% known and pre-validated transactions is not constant time, due to updates that need to be made to the UTXO set. Thirdly, more efficient relay protocols have higher CPU costs for encoding/decoding. Despite these challenges, the author believes that if there is availability of hardware with higher bandwidth, faster disk/ram access times, and faster CPUs, larger blocks with the same propagation profile as smaller blocks would be possible.The discussion further delves into the idea of a dynamic maximum size limit based on recent history. It is suggested that the hard block size limit should be a function of the actual block sizes over some trailing sampling period. For example, take the median block size among the most recent 2016 blocks and multiply it by 1.5. This allows Bitcoin to scale up gradually and organically, rather than having human beings guessing at what is an appropriate limit. However, the author suggests using an average instead of a median size for better control over the maximum size. Additionally, calculating the average over the last 144 blocks (last 24 hours) would be better able to handle increased transaction volume around major holidays and react more quickly if an economically irrational attacker attempted to flood the network with fee-paying transactions. The author also proposes that the default mining policy for Bitcoin Core should be neutral, and something like Greg's formula for size should be used instead of bytes-on-the-wire to discourage bloating the UTXO set.The discussion concludes with the belief that miners will have a strong incentive to collectively impose whatever rules are necessary to make the system healthy again if the dynamic algorithm does not work as expected.</summary>
+    <published>2015-05-10T21:33:15+00:00</published>
+  </entry>
+</feed>
