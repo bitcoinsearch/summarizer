@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Malleable booleans</title>
+  <updated>2023-05-19T19:25:00.563331+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2014-10-14 02:34:16</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2014-10-14 02:45:47</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2014-10-14 18:54:36</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2014-10-14 07:52:44</name>
+  </author>
+  <link href="bitcoin-dev/Oct_2014/006736_Malleable-booleans.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2014/006737_Malleable-booleans.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2014/006743_Malleable-booleans.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2014/006739_Malleable-booleans.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Malleable booleans</title>
+    <updated>2023-05-19T19:25:00.563331+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006736.html" rel="alternate"/>
+    <summary>While working on a BIP62 implementation, Pieter Wuille discovered an additional type of malleability in the interpretation of booleans. Any byte array with non-zero bytes is interpreted as true and anything else as false. The code for dealing with booleans is not consistent, which means that scripts using booleans as inputs will be inherently malleable. To fix this, Pieter suggests changing BIP62 to state that interpreted booleans must be of minimal encoded size in addition to numbers. This change would affect the inputs to OP_IF and OP_NOTIF, inputs to OP_BOOLAND and OP_BOOLOR, and the resulting final element on the stack for validity. Peter Todd points out that some non-standard scripts on mainnet have opcodes that appeared to be attempts to solve this issue with variations of the following: DUP IF 1 EQUALVERIFY ELSE 0 EQUALVERIFY ENDIF. Pieter's goal is to have the property that for every possible script, there is an equivalent one that is non-malleable. A decent argument for doing this is that if a script author fails to properly 'bool-ize' every boolean-using path that can have non-minimal encodings in normal execution, one can always create an nVersion=1 transaction manually to spend the output, preventing funds from getting lost. Meanwhile, in the general case of a component script author having the canonical bool testing in every boolean-using opcode saves a lot of bytes.</summary>
+    <published>2014-10-14T02:34:16+00:00</published>
+  </entry>
+</feed>
