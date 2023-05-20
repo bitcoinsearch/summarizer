@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Signing CHECKSIG position in Tapscript</title>
+  <updated>2023-05-20T21:15:30.676658+00:00</updated>
+  <author>
+    <name>Anthony Towns 2019-12-06 04:51:53</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-12-03 08:35:38</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-11-28 08:06:59</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2019-12-01 16:09:54</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2019/017511_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2019/017506_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017497_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2019/017500_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Signing CHECKSIG position in Tapscript</title>
+    <updated>2023-05-20T21:15:30.676658+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-December/017511.html" rel="alternate"/>
+    <summary>In a recent discussion, Anthony Towns proposes using OP_BREADCRUMB to update an accumulator in place of CODESEPARATOR's behavior. The discussion also covers a general policy for signatures and witness values, which suggests the need for a CODESEPARATOR variant. However, it is too soon to propose this as it is not clear whether there is a practical need for it.A possible solution could be committing to a hash of all the witness data either popped off or not from the stack. Another solution suggested was having an "OP_DATACOMMIT" opcode that pops an element from the stack, does hash_"DataCommit"(element), and then any later signatures commit to that value. Russell O'Connor disagrees with Anthony Towns' suggestion that it is a bad idea for Alice to have put funds behind a script she doesn't understand in the first place.If a taproot address with multiple tapscripts is used for a multiparty smart contract or to spend funds in different ways, it is important to analyze all the branches to avoid hidden scripts that could divert money to unintended recipients. Techniques like miniscript and fixed templates specified in BIPs and BOLTs are better approaches as they allow a limited set of changes that can be safely made to a policy.The current behavior of CODESEP with taproot was first discussed in [1], which summarized it as "CODESEP -- lets you require different sigs for different parts of a single script". In this context, using CODESEPARATOR to protect against signature-copying attacks could be an effective solution. Additionally, it may not be possible to use CODESEPARATOR for anything other than preventing a signature from being reused for a different CHECKSIG operation on the same pubkey within the same script.The discussion is focused on potential security concerns regarding taproot script path spending. Specifically, the concern arises when multiple participants have signing conditions within a single UTXO or tapleaf. The proposed sighashes for taproot script path spending commit to the script being used, meaning that signatures cannot be reused in different leaves of the merkle tree of scripts for the UTXO.The proposal is to extend the protection provided by tapleaf in the signature to branches within a single tapscript, preventing signature copying attacks. It is suggested that if there are many branches in the script, it would be more efficient to do them through different branches in the merkle tree. However, it is argued that learning about CODESEPARATOR may not be a reasonable solution as people may not know to use it to protect themselves, and a Script design should make cheaper default Script programming choices safer.In response to a proposed alternative solution involving signing the CODESEPARATOR position but not the script code, it is argued that this is nonsensical as it involves signing a piece of data without an interpretation of its meaning.</summary>
+    <published>2019-12-06T04:51:53+00:00</published>
+  </entry>
+</feed>

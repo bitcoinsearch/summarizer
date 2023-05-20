@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Taproot proposal</title>
+  <updated>2023-05-20T20:22:41.295014+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2019-09-18 21:21:56</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-05-23 02:06:42</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-05-08 23:06:51</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-05-08 04:49:28</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-06-28 09:49:37</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-08-09 18:29:55</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-05-09 16:56:57</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-05-06 17:57:57</name>
+  </author>
+  <link href="bitcoin-dev/Sept_2019/017307_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016947_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016920_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016919_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017056_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2019/017248_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016927_Taproot-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016914_Taproot-proposal.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Taproot proposal</title>
+    <updated>2023-05-20T20:22:41.295014+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-September/017307.html" rel="alternate"/>
+    <summary>In a recent Bitcoin Development discussion, the topic of supporting P2SH wrapped Taproot was raised. The argument against supporting it is that most wallets/exchanges/services now support sending to native segwit addresses and that Taproot offers better privacy and homogeneity without P2SH wrapping. Furthermore, keeping P2SH support would require more complex validation code and increase the number of combinations software needs to test. There was also discussion around the Tapscript specification requiring the final value of the stack to be a single non-false value or an empty stack upon completion. While removing the potential malleability vector and simplifying development of Bitcoin Script could be benefits of requiring an empty stack, the impact appears to be marginal and at most provides marginal benefits. Finally, there was discussion around the y value of the taproot output key Q, with the proposal using (1) - explicitly setting Q sign in the witness program.The discussion is centered around the implementation of Bech32 addresses and Schnorr/Taproot activation in Bitcoin. The use of P2SH wrapped addresses may leak less information than native segwit addresses until native taproot outputs are common. There is no significant complexity impact on implementation, but there may be a minimal fungibility improvement by not having another bit that can leak some information about the software used. The possibility of using Taproot constructs while retaining external script limitations is discussed, and it is suggested that the annex construction can deal with specific functionalities like height-blockhash assertion. There is also a discussion on the usage of Schnorr signatures, specifically, how spending using the internal key always uses a single Schnorr signature and nothing else. If the script path spends use a leaf version of 0xc0, the script is interpreted as a tapscript (in which only Schnorr opcodes exist).Additionally, the use of an unsolvable tapleaf branch or a P2C construction is suggested to commit to something extra with the witness program. Finally, the annex can be used to make commitments at spending/signing time rather than when creating the address.The email thread starts with a suggestion to expand the number of bytes used for transaction digests for taproot signatures from 2 to 4 bytes, to better support proof-of-reserves via taproot signatures. The change is considered free, at least for current sighash modes. The email also discusses an encoding issue with var-integer fields for the number of inputs and outputs in transactions.In another thread, it is suggested that if everything is implicit in taproot, then the first byte of the control block should only be used for the tapscript leaf version. However, it is noted that if we want to maintain batch-verifiability of the taproot tweaking, we still need a bit in the control block to convey whether a negation was necessary to make P+H(P,m)G even, even if P and Q both have implied-even Y coordinates.Two BIP drafts are proposed for a Taproot softfork, including ideas to make all outputs and cooperative spends indistinguishable from each other, hide unexecuted branches in scripts using Merkle branches, enable wallet software to use key aggregation/thresholds within one input using Schnorr signatures, improve the signature hashing algorithm, replace OP_CHECKMULTISIG(VERIFY) with OP_CHECKSIGADD to support batch validation, tag hashing for domain separation, and provide extensibility through leaf versions, OP_SUCCESS opcodes, and upgradable pubkey types.An initial reference implementation of the consensus changes and preliminary construction/signing tests in the Python framework can be found on Github. The document explains basic wallet operations such as constructing outputs and signing, but more complex constructions are not standardized. It is likely desirable to define extensions to PSBT (BIP174) for interacting with Taproot, which is not included here.</summary>
+    <published>2019-09-18T21:21:56+00:00</published>
+  </entry>
+</feed>

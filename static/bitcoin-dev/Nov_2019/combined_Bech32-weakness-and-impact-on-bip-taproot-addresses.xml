@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Bech32 weakness and impact on bip-taproot addresses</title>
+  <updated>2023-05-20T21:06:38.611667+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2019-11-07 22:35:42</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-11-08 00:41:54</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-11-13 06:30:18</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-11-11 01:02:15</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-11-10 21:51:48</name>
+  </author>
+  <link href="bitcoin-dev/Nov_2019/017443_Bech32-weakness-and-impact-on-bip-taproot-addresses.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017445_Bech32-weakness-and-impact-on-bip-taproot-addresses.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017470_Bech32-weakness-and-impact-on-bip-taproot-addresses.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017461_Bech32-weakness-and-impact-on-bip-taproot-addresses.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017460_Bech32-weakness-and-impact-on-bip-taproot-addresses.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Bech32 weakness and impact on bip-taproot addresses</title>
+    <updated>2023-05-20T21:06:38.611667+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-November/017443.html" rel="alternate"/>
+    <summary>Pieter Wuille, a Bitcoin Core developer, has raised concerns about the mutation weakness in Bech32 and its impact on the design decisions around BIP-Taproot. This specific issue could have been made much less impactful with a slightly different approach. While it has little effect on the security of P2WPKH/P2WSH addresses, witness v1 outputs of length other than 32 remain unencumbered, which means that such an insertion or erasure would result in an output that can be spent by anyone, though this is considered to be unacceptable.To address this issue, one of the solutions proposed is to add the length for checksumming purposes without requiring the length to be actually added in the address format. However, there are other solutions which do include the length in some fashion directly in the checksum calculation, which may be preferable. For now, amending BIP173 to only permit length 20 and length 32 has been suggested. There is no immediate need for non-32/20-byte Segwit outputs, and limiting the size of Bech32 outputs has been suggested as a simpler solution. Pieter Wuille suggests restricting BIP173 to witness programs of length 20 or 32 and developing a variant of bech32 with better insertion/erasure detecting properties for witness programs of length different from 20 or 32. He believes improving bech32 itself is preferable over changing the way segwit addresses use bech32, as that can be done without making addresses even longer. In addition, Pieter Wuille proposes simply changing the constant 1 that is xor'ed into the checksum before encoding it to a 30-bit number. This has the advantage that a single checksum is never valid for both algorithms simultaneously. The discussion on the bitcoin-dev mailing list also highlights the potential downside of breaking batched transactions in some settings and the need for everyone to upgrade their bech32 libraries.</summary>
+    <published>2019-11-07T22:35:42+00:00</published>
+  </entry>
+</feed>
