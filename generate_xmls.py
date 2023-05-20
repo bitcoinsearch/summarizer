@@ -101,11 +101,11 @@ class GenerateXML:
         if len(summ) > 1:
             print("consolidate summary generating")
             summ = consolidate_chatgpt_summary("\n".join(summ))
-            print(summ)
+            # print(summ)
             return summ
         else:
             print("Individual summary generating")
-            print("\n".join(summ))
+            # print("\n".join(summ))
             return "\n".join(summ)
 
     def create_summary(self, body):
