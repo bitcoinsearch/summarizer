@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks</title>
+  <updated>2023-05-22T18:38:07.832385+00:00</updated>
+  <author>
+    <name>Anthony Towns 2022-03-22 23:11:05</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2022-03-22 05:37:03</name>
+  </author>
+  <link href="bitcoin-dev/March_2022/020171_Beyond-Jets-Microcode-Consensus-Critical-Jets-Without-Softforks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2022/020158_Beyond-Jets-Microcode-Consensus-Critical-Jets-Without-Softforks.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks</title>
+    <updated>2023-05-22T18:38:07.832385+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020171.html" rel="alternate"/>
+    <summary>The article delves into the use of microcode in Bitcoin SCRIPT and proposes a new technique for defining "jets." The proposal suggests the creation of a new low-level language called RISC that includes general instructions such as arithmetic, bytevector concatenation, and transaction introspection. This language would be stack-based and have more possible opcodes than the existing Bitcoin SCRIPT (CISC) language. With this proposal, the microcode would map the current Bitcoin SCRIPT `OP_` codes to one or more `UOP_` micro-opcodes, allowing for easier modification of the instruction set without requiring a hardfork. By considering the Bitcoin consensus layer as hardware, the author proposes using techniques used in hardware design, like microcode, to modify Bitcoin SCRIPT.To use a SCRIPT with `OP_CAT` enabled, users create a new transaction where one of the outputs contains Bitcoins and has the `scriptPubKey` of `OP_TRUE OP_RETURN`. Once the transaction has been confirmed, the user can then take the hash of the microcode serialization and use a Tapscript with the SCRIPT having the microcode hash as its first bytes followed by the `OP_` codes. The technique allows bugs in existing microcodes to be fixed by basing a new microcode from the existing microcode and redefining the buggy implementation. Existing Tapscripts need to be re-spent to point to the new bugfixed microcode.However, there are challenges and limitations to this proposal. For instance, the cost of creating new microcode and the difficulty in coming up with a consistent interpretation of the cost for different jit targets. There are also concerns about how this proposal addresses recursive covenants. The proposal suggests using LLVM, but this introduces a huge new dependency to the definition of consensus, and bugs in existing microcodes can only be fixed by doing an on-chain spend which is not free.Overall, the proposed technique has potential benefits, such as reducing the number of softforks needed. It remains to be seen whether it will be a viable solution for consensus-critical jets without softforks. Additionally, the technique does not require that a stack-based language is used; any sufficiently functional programming language should allow referential transparency.</summary>
+    <published>2022-03-22T23:11:05+00:00</published>
+  </entry>
+</feed>
