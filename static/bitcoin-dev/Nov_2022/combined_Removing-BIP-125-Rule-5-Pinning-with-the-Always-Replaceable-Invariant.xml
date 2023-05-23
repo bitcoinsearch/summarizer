@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Removing BIP-125 Rule #5 Pinning with the Always-Replaceable Invariant</title>
+  <updated>2023-05-22T22:48:20.296927+00:00</updated>
+  <author>
+    <name>Suhas Daftuar 2022-11-07 21:21:11</name>
+  </author>
+  <author>
+    <name>Peter Todd 2022-11-07 20:17:29</name>
+  </author>
+  <link href="bitcoin-dev/Nov_2022/021177_Removing-BIP-125-Rule-5-Pinning-with-the-Always-Replaceable-Invariant.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2022/021175_Removing-BIP-125-Rule-5-Pinning-with-the-Always-Replaceable-Invariant.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Removing BIP-125 Rule #5 Pinning with the Always-Replaceable Invariant</title>
+    <updated>2023-05-22T22:48:20.296927+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-November/021177.html" rel="alternate"/>
+    <summary>The Bitcoin Core currently implements Rule #5 of BIP-125, which limits the number of original transactions to be replaced and their descendant transactions that will be evicted from the mempool to a total of 100 transactions. However, this rule has no justification beyond avoiding "too much work," and it may be the case that this rule can be entirely removed as the overall mempool size naturally limits the maximum number of possible replacements. To address the issue of Rule #5 pinning, the Replaceability Invariant can be implemented, which states that no transaction may be accepted into the mempool that would cause another transaction to be unable to be replaced due to Rule #5. This can be achieved by maintaining an integer, nReplacementCandidates, for each transaction, verifying that nReplacementCandidates + 1 &lt; MAX_REPLACEMENT_CANDIDATES for non-conflicting transactions, and decrementing nReplacementCandidates by however many children have been replaced for all unconfirmed parents when conflicting transactions are considered for acceptance. When a block is mined, the nReplacementCandidates of all unconfirmed transactions remains unchanged because a confirmed transaction cannot spend an unconfirmed txout. The proposed rule is similar in spirit to the package limits already implemented in Bitcoin Core.</summary>
+    <published>2022-11-07T21:21:11+00:00</published>
+  </entry>
+</feed>

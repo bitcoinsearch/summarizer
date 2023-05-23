@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP Proposal: Receiving and Change Derivation Paths in a Single Descriptor</title>
+  <updated>2023-05-22T20:51:57.668421+00:00</updated>
+  <author>
+    <name>Andrew Chow 2022-07-27 14:58:28</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2022-07-26 22:27:58</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2022-07-26 21:41:12</name>
+  </author>
+  <author>
+    <name>Billy Tetrud 2022-08-04 01:16:52</name>
+  </author>
+  <link href="bitcoin-dev/July_2022/020802_BIP-Proposal-Receiving-and-Change-Derivation-Paths-in-a-Single-Descriptor.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2022/020793_BIP-Proposal-Receiving-and-Change-Derivation-Paths-in-a-Single-Descriptor.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2022/020791_BIP-Proposal-Receiving-and-Change-Derivation-Paths-in-a-Single-Descriptor.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2022/020823_BIP-Proposal-Receiving-and-Change-Derivation-Paths-in-a-Single-Descriptor.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP Proposal: Receiving and Change Derivation Paths in a Single Descriptor</title>
+    <updated>2023-05-22T20:51:57.669419+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020802.html" rel="alternate"/>
+    <summary>Andrew Chow proposed a modification to simplify and de-duplicate the representation of descriptors for receiving and change addresses in BIP 380. The proposal allows Key Expressions to indicate derivation path steps that can have multiple values, resulting in two almost identical descriptors with the difference being a single derivation path element.The common use case for this modification is to represent descriptors for producing receiving and change addresses. When interpreting for this use case, wallets should use the first descriptor for producing receiving addresses, and the second descriptor for producing change addresses. This modification is an addition to the Key Expressions defined in BIP 380 and is compatible with it.The text also mentions that any other tuple other than 'receive' and 'change' will be nonstandard. The modification specifies that when a forward slash (/) is encountered, parsers should produce two descriptors where the first descriptor uses the first NUM, and a second descriptor uses the second NUM. The BIP does not specify what each path is intended for, and defining the conventions of derivation path indexes should be a separate BIP. Any software that wishes to utilize non-standard extra indexes beyond 'receive' and 'change' should use separate descriptors instead for these extra indexes. The BIP suggests that when a new established purpose emerges for the next position in the index tuple, a new BIP should be made that defines such position.On 07/27/2022 04:44 AM, Pavol Rusnak responded to Andrew Chow's proposal, stating that he thinks it's worthwhile to generalize for any sized tuples. However, he doesn't have any existing particular use case in mind because BIP-44, BIP-84, etc. are fine with just using `,` but there might be some upcoming standards in the future that will want to introduce more sub-paths.Andrew Chow responded to Pavol Rusnak's email by asking if there were any use cases for variable length tuples. Pavol Rusnak had previously thanked Andrew for his BIP and confirmed that they had been using it for quite some time for Trezor in production.The modification uses two new characters: '/' and ';'. These are part of the descriptor character set and are covered by the checksum algorithm. As these are previously unused characters, old parsers will not accidentally mistake them for indicating something else. The BIP states that any interpretation of the purpose of such indexes and deriving new addresses at these indexes are strongly discouraged. Although people may use standards in use-case-specific ways, we cannot prevent them from creating non-standard extensions of standards.</summary>
+    <published>2022-07-27T14:58:28+00:00</published>
+  </entry>
+</feed>
