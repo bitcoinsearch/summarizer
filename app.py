@@ -23,7 +23,7 @@ app = Flask(__name__, static_url_path='', static_folder='css')
 
 # app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET")
 def linkify(text):
-    url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+    url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+(?<!\.)')
     return Markup(url_pattern.sub(r'<a href="\g<0>">\g<0></a>', text))
 
 
