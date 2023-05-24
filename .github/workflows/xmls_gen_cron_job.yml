@@ -34,12 +34,15 @@ jobs:
     - name: Execute Python script
       run: python xmls_generator_production.py
 
+    - name: Allow dubious ownership for /github/workspace
+      run: |
+        git config --global --add safe.directory /github/workspace
+        git config --global --add safe.directory /__w/{mailing-list-summaries}/{mailing-list-summaries}
+
     - name: Commit and push changes
       run: |
         git config user.name ${{ secrets.USERNAME_GIT }}
         git config user.email ${{ secrets.GMAIL_GIT }}
-        git config --global --add safe.directory /__w/{mailing-list-summaries}/{mailing-list-summaries}
-        git config --global --add safe.directory /github/workspace
         git add .
         git status
         git commit -m "Update generated files [skip ci]"

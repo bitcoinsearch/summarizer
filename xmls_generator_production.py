@@ -297,7 +297,6 @@ class GenerateXML:
                 self.file_present_df(files_list, namespace, combined_filename, title, xmls_list, df_dict)
 
         emails_df = pd.DataFrame(df_dict)
-        print(emails_df.shape)
 
         return emails_df
 
@@ -411,23 +410,24 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+    dev_urls = ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
+                "https://lists.linuxfoundation.org/pipermail/lightning-dev/"]
 
     # current_date_str = "2021-08-21"
     current_date_str = "2021-09-30"
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-    data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url, current_date_str)
-    print(len(data_list))
-    print(data_list)
+    for dev_url in dev_urls:
+        data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url, current_date_str)
+        print(data_list)
 
-    delay = 50
+        delay = 50
 
-    while True:
-        try:
-            gen.start(data_list, dev_url)
-            break
-        except Exception as ex:
-            print(ex)
-            time.sleep(delay)
+        while True:
+            try:
+                gen.start(data_list, dev_url)
+                break
+            except Exception as ex:
+                print(ex)
+                time.sleep(delay)
