@@ -19,9 +19,15 @@ jobs:
 
     steps:
     - name: Check out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
+
+    - name:
+      Fix Ownership run: |
+          chown -R $USER:$USER .
+          find . -type f -exec chmod 644 {} \; 
+          find . -type d -exec chmod 755 {} \;
 
     - name: Set up Python
       uses: actions/setup-python@v2
