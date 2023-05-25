@@ -23,12 +23,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name:
-      Fix Ownership run: |
-          chown -R $USER:$USER .
-          find . -type f -exec chmod 644 {} \; 
-          find . -type d -exec chmod 755 {} \;
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -42,8 +36,8 @@ jobs:
 
     - name: Allow dubious ownership for /github/workspace
       run: |
-        git config --global --add safe.directory /github/workspace
-        git config --global --add safe.directory /__w/{mailing-list-summaries}/{mailing-list-summaries}
+        sudo git config --global --add safe.directory /github/workspace
+        sudo git config --global --add safe.directory /__w/{mailing-list-summaries}/{mailing-list-summaries}
 
     - name: Commit and push changes
       run: |
