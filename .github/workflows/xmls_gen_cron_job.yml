@@ -1,0 +1,54 @@
+name: Daily Python Script Execution
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  execute_and_commit:
+    runs-on: ubuntu-latest
+
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ES_CLOUD_ID: ${{ secrets.ES_CLOUD_ID }}
+      ES_USERNAME: ${{ secrets.ES_USERNAME }}
+      ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
+      ES_INDEX: ${{ secrets.ES_INDEX }}
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Execute Python script
+      run: python xmls_generator_production.py
+
+    - name: Allow dubious ownership for /github/workspace
+      run: |
+        git config --global --add safe.directory /github/workspace
+        git config --global --add safe.directory /__w/{mailing-list-summaries}/{mailing-list-summaries}
+
+    - name: Commit and push changes
+      run: |
+        git config user.name ${{ secrets.USERNAME_GIT }}
+        git config user.email ${{ secrets.GMAIL_GIT }}
+        git add .
+        git status
+        git commit -m "Update generated files [skip ci]"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.5.0
+      with:
+        branch: main
+        github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
