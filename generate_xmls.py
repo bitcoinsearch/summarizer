@@ -75,41 +75,54 @@ class GenerateXML:
             7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
         }
 
-    def check_size_body(self, body):
-        tokens = TOKENIZER.encode(body)
-        body_length_limit = 3900
-
-        if len(tokens) <= body_length_limit:
-            return [body]  # If body tokens count is below the limit, return it as is
-
-        sub_body_size = body_length_limit // 2
-        tokens_per_sub_body = sub_body_size
-        bodies = []
+    def split_prompt_into_chunks(self, prompt, chunk_size):
+        tokens = TOKENIZER.encode(prompt)
+        chunks = []
 
         while len(tokens) > 0:
-            current_sub_body = TOKENIZER.decode(tokens[:tokens_per_sub_body]).strip()
+            current_chunk = TOKENIZER.decode(tokens[:chunk_size]).strip()
 
-            if current_sub_body:
-                bodies.append(current_sub_body)
+            if current_chunk:
+                chunks.append(current_chunk)
 
-            tokens = tokens[tokens_per_sub_body:]
+            tokens = tokens[chunk_size:]
 
-        return bodies
+        return chunks
+
+    def get_summary_chunks(self, body, tokens_per_sub_body):
+        chunks = self.split_prompt_into_chunks(body, tokens_per_sub_body)
+        summaries = []
+
+        for chunk in chunks:
+            summary = generate_chatgpt_summary(chunk)
+            summaries.append(summary)
+
+        return summaries
+
+    def recursive_summary(self, body, tokens_per_sub_body, max_length):
+        summaries = self.get_summary_chunks(body, tokens_per_sub_body)
+
+        summary_length = sum([len(TOKENIZER.encode(s)) for s in summaries])
+
+        if summary_length > max_length:
+            print("entering in recursion")
+            return self.recursive_summary(body, tokens_per_sub_body // 2, max_length)
+        else:
+            return summaries
 
     def gpt_api(self, body):
-        summ = []
-        for b in self.check_size_body(body):
-            summ.append(generate_chatgpt_summary(b))
-        if len(summ) > 1:
-            cons_sum = []
-            print("consolidate summary generating")
-            for b in self.check_size_body("\n".join(summ)):
-                cons_sum.append(generate_chatgpt_summary(b))
-            summ = consolidate_chatgpt_summary("\n".join(cons_sum))
-            return summ
+        body_length_limit = 2800
+        tokens_per_sub_body = 2000
+        summaries = self.recursive_summary(body, tokens_per_sub_body, body_length_limit)
+
+        if len(summaries) > 1:
+            print("Consolidate summary generating")
+            summary_str = "\n".join(summaries)
+            consolidated_summaries = consolidate_chatgpt_summary(summary_str)
+            return consolidated_summaries
         else:
             print("Individual summary generating")
-            return "\n".join(summ)
+            return "\n".join(summaries)
 
     def create_summary(self, body):
         summ = self.gpt_api(body)
@@ -276,8 +289,8 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
-    # dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+    # dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
     str_month_year_list = []
