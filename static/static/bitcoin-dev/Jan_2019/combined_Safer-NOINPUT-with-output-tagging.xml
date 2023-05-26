@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Safer NOINPUT with output tagging</title>
+  <updated>2023-05-20T19:01:56.247439+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-12-13 12:32:44</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-19 20:36:51</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-19 19:22:07</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-02-10 04:46:30</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 17:43:50</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 16:48:40</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-21 15:37:05</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-17 20:08:55</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-01-31 06:04:05</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 10:15:17</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-22 16:56:29</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-21 16:21:42</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-20 18:04:37</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-20 11:00:53</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-18 10:48:40</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2018/016549_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016695_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016693_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016675_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016674_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016671_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016579_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016562_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2019/016640_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016670_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016584_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016580_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016574_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016572_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016568_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Safer NOINPUT with output tagging</title>
+    <updated>2023-05-20T19:01:56.248439+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016549.html" rel="alternate"/>
+    <summary>The bitcoin-dev mailing list has been discussing the NOINPUT feature and how to minimize the risks of its misuse. One proposed solution is to tag an output to make it spendable with NOINPUT, and the tag must be explicitly made by the payer. There are two possible ways to do tagging: setting a certain bit in the tx version or a certain bit in the scriptPubKey. The advantages and disadvantages of both methods are discussed.In terms of a three-party channel, the process of semi-cooperative channel closing is described, which involves opening a branch channel with NOINPUT signature. Settlement transactions can be created to remove an unresponsive party from the channel without downtime by closing the channel and creating a new one with the remaining participants. The funding output of the new channel must be NOINPUT tagged because in eltoo, the settlement transaction ID is not final. Output tagging may result in reduced fungibility in multiparty eltoo channels. To minimize the fungibility loss, it is suggested to make it a social norm to try to make all outputs tagged to be NOINPUT-spendable if signed with NOINPUT. Settlement transactions could also be split into two: settlement tx X with tagged outputs (A&amp;B) and C, and settlement tx Y with untagged outputs (A&amp;B) and C. The branch channel could be opened on top of the tagged output of tx X, but if A and B decide to close the channel cooperatively, they could do it on top of the untagged output of tx Y without using NOINPUT to avoid fungibility loss.The discussion also covers the implementation of BIP68 relative locktime and OP_CSV in a 2-of-2 eltoo channel. Collaborative close is always simple, while unilateral close involves taking the trigger transaction and the latest update_n transaction and broadcasting them. The chain sees a setup transaction and a trigger transaction followed by two more transactions, which are signed with NOINPUT. In the worst case, there can be four transactions, two of which are special, and in the good case, there are only two transactions. With taproot, this method saves a lot more bytes.Moreover, the bitcoin-dev mailing list discusses the potential reduced fungibility in multiparty eltoo channels resulting from output tagging. Settlement transactions can be created to remove an unresponsive party from the channel without downtime by closing the channel and creating a new one with the remaining participants. To prevent double payment risks, outputs need to be "tagged" for it to be spendable with NOINPUT. There are two possible ways of tagging: setting a certain bit in the transaction version or a certain bit in the scriptPubKey. The concept of a walletless protocol for offchain systems has been proposed in the Bitcoin community. The proposal involves using `SIGHASH_NOINPUT` and modifying the offchain system setup to eliminate the need for the implementing software to have its own wallet. However, there are concerns about the reliability of this method due to the potential for NOINPUT signature replay risks.Finally, the discussion covers the design considerations of channel setup and trigger transaction in eltoo, and how it could be affected by output tagging and taproot. Johnson Lau suggests that explicit and configurable tags must be used for NOINPUT spending, which couldn't be hidden in taproot.</summary>
+    <published>2018-12-13T12:32:44+00:00</published>
+  </entry>
+</feed>

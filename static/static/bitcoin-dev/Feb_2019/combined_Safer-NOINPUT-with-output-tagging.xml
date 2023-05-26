@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Safer NOINPUT with output tagging</title>
+  <updated>2023-05-20T19:18:41.556214+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-12-13 12:32:44</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-19 20:36:51</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-19 19:22:07</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-02-10 04:46:30</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 17:43:50</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 16:48:40</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-21 15:37:05</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-17 20:08:55</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-01-31 06:04:05</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 10:15:17</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-22 16:56:29</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-21 16:21:42</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-20 18:04:37</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-20 11:00:53</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-18 10:48:40</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2018/016549_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016695_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016693_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016675_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016674_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016671_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016579_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016562_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2019/016640_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016670_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016584_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016580_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016574_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016572_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016568_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Safer NOINPUT with output tagging</title>
+    <updated>2023-05-20T19:18:41.556214+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016549.html" rel="alternate"/>
+    <summary>In the world of Bitcoin, NOINPUT is a powerful tool that offers many advantages but also comes with the risk of signature replay. Key-pair reuse in Bitcoin has been a social and technical norm since its inception, which increases the risk of accidental double payments. To mitigate this risk, Johnson Lau proposed a solution to tag an output as "one-time-use only" before it can be spendable with NOINPUT, requiring explicit tagging by the payer. There are two possible ways to do the tagging: setting a certain bit in the tx version or setting a certain bit in the scriptPubKey. ScriptPubKey tagging is only possible with native-segwit, not P2SH, while version tagging protects P2SH-segwit. However, adding back the tx version could be somewhat annoying. Output tagging can result in reduced fungibility in multiparty eltoo channels, where unresponsive parties must be removed without any downtime. The funding output of the new channel must be NOINPUT tagged, and the outputs should be tagged to be NOINPUT-spendable to minimize fungibility loss. Settlement transactions can be created for closing the channel cooperatively or semi-cooperatively. The bitcoin-dev mailing list discusses various types of settlement transactions in a three-party channel and their benefits and limitations. The fully combinatorial settlement type involves eltoo-style scripts for multi-sig outputs, allowing any two parties to trade with each other as long as there is enough liquidity in their branch channel. However, uncooperative settlement costs are higher, and the number of settlement txs grows factorially as the number of parties increase. Challenges faced in creating an eltoo-like protocol that works without predicting in advance who will become absent can be addressed using a childchain for Bitcoin or Transaction Fragments. Furthermore, ZmnSCPxj suggests avoiding reduced fungibility in the Bitcoin Lightning network by manually operating a hardware wallet to fund the channel, where a set of addresses is fed to the hot offchain wallet. The conversation between Christian Decker and Johnson Lau discusses the use of BIP68 relative-locktime in 2-of-2 branch and its potential applications. Collaborative close only requires signing a new transaction that spends the setup output and adding outputs according to the agreed state. For unilateral close, both the trigger transaction and the latest update_n transaction are broadcasted, and the settlement transaction is executed after the CSV timeout expires.In conclusion, output tagging can be used in eltoo without any issue, and it offers more smart contract capacity while minimizing the risks of misuse. The proposed solution is compatible with eltoo, and it can be generalized to the combinatorial settlement model. However, the tradeoff is the risk of signature replay, which can be mitigated by using explicit tagging by the payer.</summary>
+    <published>2018-12-13T12:32:44+00:00</published>
+  </entry>
+</feed>

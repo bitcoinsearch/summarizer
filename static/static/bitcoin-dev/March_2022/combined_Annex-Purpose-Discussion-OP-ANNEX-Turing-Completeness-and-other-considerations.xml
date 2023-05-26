@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Annex Purpose Discussion: OP_ANNEX, Turing Completeness, and other considerations</title>
+  <updated>2023-05-22T18:09:44.472361+00:00</updated>
+  <author>
+    <name>Anthony Towns 2022-03-07 08:08:03</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2022-03-05 05:59:24</name>
+  </author>
+  <author>
+    <name>Jeremy Rubin 2022-03-04 23:21:41</name>
+  </author>
+  <link href="bitcoin-dev/March_2022/020072_Annex-Purpose-Discussion-OP-ANNEX-Turing-Completeness-and-other-considerations.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2022/020047_Annex-Purpose-Discussion-OP-ANNEX-Turing-Completeness-and-other-considerations.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2022/020045_Annex-Purpose-Discussion-OP-ANNEX-Turing-Completeness-and-other-considerations.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Annex Purpose Discussion: OP_ANNEX, Turing Completeness, and other considerations</title>
+    <updated>2023-05-22T18:09:44.472361+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020072.html" rel="alternate"/>
+    <summary>Bitcoin developers have been discussing the difference between information in the annex and information in a script. The annex is a reserved area that allows for additional information to be added to a transaction without requiring a hard fork. One potential use case for the annex is the OP_ANNEX opcode, which would allow an annex to be pushed onto the stack in a script.However, accessing individual entries from the annex could be problematic if different fragments require incompatible interpretations of the annex. The annex is committed to via signatures, making it non-third party malleable. While the annex can be used without having to execute or analyze a script, it does not reduce the total work required.SIGHASH_GROUP might be optimized by allowing a group of inputs to claim a group of outputs for signing, but not allowing inputs from different groups to ever claim the same output. It is better to get at that state as easily as possible rather than having to actually execute other scripts before you can tell if your script is going to be valid. There is currently no reason to have padding specifiable at spend time.The annex is a reserved field in Bitcoin that indicates the validation costs of computationally expensive new opcodes in a way that is recognizable without knowing the scriptPubKey of the output being spent. Until its meaning is defined, users should not include annex in transactions as it may lead to permanent fund loss.Using the annex has some limitations, such as the inconvenience of needing to pre-sign all possible sums of both annex costs when cold/hot use different numbers of signatures or use checksigCISAadd requiring an annex argument. One option could be to banish the OP_ANNEX opcode, which puts the annex on the stack along with a 0 or 1. Another solution would be to soft-fork the annex out of the current Checksig and redesign it later when a new mechanism is available.Overall, while there are potential issues with the annex, it provides flexibility for future use cases. Reserving the annex now means new consensus rules can be used immediately with utxos that predate the new rules. Discussion on the purpose of the annex and its possible usage can be found in the Taproot review meetings, and the BIP341 only reserves an area to put the annex; it doesn't define how it's used or why it should be used.</summary>
+    <published>2022-03-07T08:08:03+00:00</published>
+  </entry>
+</feed>

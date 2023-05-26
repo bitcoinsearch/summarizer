@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP proposal - Dandelion: Privacy Preserving Transaction Propagation</title>
+  <updated>2023-05-20T03:02:18.425995+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2017-06-13 01:00:50</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-06-26 05:20:02</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2018-06-12 01:05:14</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2018-06-06 04:01:00</name>
+  </author>
+  <link href="bitcoin-dev/June_2017/014573_BIP-proposal-Dandelion-Privacy-Preserving-Transaction-Propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2018/016163_BIP-proposal-Dandelion-Privacy-Preserving-Transaction-Propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2018/016109_BIP-proposal-Dandelion-Privacy-Preserving-Transaction-Propagation.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2018/016083_BIP-proposal-Dandelion-Privacy-Preserving-Transaction-Propagation.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP proposal - Dandelion: Privacy Preserving Transaction Propagation</title>
+    <updated>2023-05-20T03:02:18.425995+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-June/014573.html" rel="alternate"/>
+    <summary>Bitcoin developers have proposed a privacy-enhancing modification to Bitcoin's transaction propagation mechanism, called Dandelion. The goal of this modification is to obscure the original source IP of each transaction, making it harder for attackers to learn which nodes were involved in the stem phase. The proposal includes the concept of "Mempool Embargo", meaning that a node receiving a "stem phase" transaction behaves as though it never heard of it until it receives it again from someone else or until a random timer elapses.The BIP for Dandelion has been put together and a preliminary implementation has been made available for feedback. The text of the BIP appears inadequate, and the proposal suggests that the text should be simplified and clarified to achieve indistinguishability regardless of what other protocol features are used. The primary functionality would need just a flag to determine if a transaction would be accepted to the mempool but for the flag, but which skips actually adding it. Handling chains of unconfirmed stem transactions is made more complicated by this and deserves careful consideration.Dandelion propagation potentially makes it possible to measure properties of the inter-node connection graph, leading to concerns about partitioning nodes by disconnecting all their outbound connections. An additional countermeasure suggested against attacks on partial deployment is to make the wallet's use of stem forwarding be a configuration option which is initially hidden and set to off. Regarding interaction with BIPs 37 and 133, the proposal recommends not allowing fee filters from peers to influence the choice of route due to the possibility of malicious nodes exploiting this to launch serious deanonymization attacks. Instead, automatic fluffing or applying fee filters in the stempool has been suggested.The implementation of the protocol has been tested on a small network, and an updated BIP document with further details on motivation, specification, compatibility, and implementation has been released. Several issues have been raised in relation to the protocol. For example, it will be worthwhile to describe the intended node behavior in the BIP, at a higher level than Bitcoin Core patchsets, but more detailed than what is in the BIP now. Additionally, interaction with feefilter (BIP 133) and Bloom filter (BIP 37) needs to be considered.It has been suggested that perhaps Dandelion transactions should not be subject to the same filters as other transactions. Another issue relates to mempool dependent transactions. The current implementation accepts Dandelion transactions which are dependant on other Dandelion (stempool) transactions and on confirmed blockchain transactions, but not ones that are dependant on other unconfirmed normal mempool transactions. This needs to be addressed in the finalization of the protocol.Orphan transactions also need to be considered in dynamic networks. It is expected that sometimes a dependent transaction will go on a different route than its parent. Should there be a Dandelion-orphan-pool of transactions like the normal mempool has a set of orphan transactions? Regarding preferred connections, it has been suggested that we bias the outgoing connection peer selection code to prefer Dandelion-capable peers when the number is too low.In terms of implementation, several issues need to be addressed. For instance, how do we control the size of the stempool? Should acceptance of a transaction to the normal mempool and/or blockchain result in eviction of it (and conflicts) from the stempool? Additionally, it has been suggested that instead of fully materializing all the routes, a vector of 2 selected Dandelion-supporting peers be maintained.Finally, it has been proposed that a clearer spec for node behavior in the BIP be prioritized.</summary>
+    <published>2017-06-13T01:00:50+00:00</published>
+  </entry>
+</feed>

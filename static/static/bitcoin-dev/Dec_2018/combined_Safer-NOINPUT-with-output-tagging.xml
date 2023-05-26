@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Safer NOINPUT with output tagging</title>
+  <updated>2023-05-20T19:35:57.397224+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-12-13 12:32:44</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-19 20:36:51</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-19 19:22:07</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-02-10 04:46:30</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 17:43:50</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 16:48:40</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-21 15:37:05</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-17 20:08:55</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-01-31 06:04:05</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-02-09 10:15:17</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-22 16:56:29</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-21 16:21:42</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-20 18:04:37</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-20 11:00:53</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-12-18 10:48:40</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2018/016549_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016695_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016693_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016675_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016674_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016671_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016579_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016562_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2019/016640_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016670_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016584_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016580_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016574_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016572_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016568_Safer-NOINPUT-with-output-tagging.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Safer NOINPUT with output tagging</title>
+    <updated>2023-05-20T19:35:57.398223+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016549.html" rel="alternate"/>
+    <summary>The Bitcoin developer community has been discussing the implementation of a NOINPUT feature for smart contracts in Bitcoin's layer-1 protocol. However, there are concerns that this feature could lead to accidental double payments due to address reuse. To mitigate this risk, proposals have been made to tag outputs that can be spent with NOINPUT, either through setting a certain bit in the transaction version or in the scriptPubKey. Both methods have pros and cons. Tagging with scriptPubKey allows per-output basis tagging but is only possible with native-segwit. On the other hand, tagging with tx version protects P2SH-segwit but requires adding it back to the UTXO database. An extension to the version tagging makes NOINPUT even safer by signing the version of the previous transaction.Output tagging may result in reduced fungibility in multiparty eltoo channels. If one party becomes unresponsive, the remaining participants want to remove the party from the channel without downtime. Settlement transactions must pay off the unresponsive party and fund a new channel with the remaining participants. When the party becomes unresponsive, the channel is closed by broadcasting the update transaction as usual. The funding output of the new channel must be NOINPUT tagged, which results in loss of fungibility. To prevent this, the funding output of the new channel can be untagged until it is confirmed that the unresponsive party will not return.The conversation also discusses the use of BIP68 relative locktime and OP_CSV in eltoo state update, where it is unnecessary to restrict the relative locktime through OP_CSV because both parties need to agree with the same nSequence value of the settlement tx. The script structure can be committed to with masking and CSV is needed for all output scripts of the updates. Collaborative close is simple as it involves creating a new transaction that spends the setup output and adding outputs according to the agreed upon state.Additionally, the conversation discusses the concept of a walletless protocol, where developers explore ways for offchain walletless software developers to focus on offchain software features. Concerns related to the reliability of the walletless contract opening due to NOINPUT committing to the input value could cause issues if the third party paid an unexpected value. While the walletless protocol is a powerful concept, there are tradeoffs and risks to consider.The Bitcoin developer community has been discussing a proposal for NOINPUT, which is aimed at mitigating accidental double payments that occur when a payer mistakenly pays to a previously spent address. There are two possible ways to tag outputs: by setting a certain bit in the transaction version or in the scriptPubKey. Both methods have advantages and disadvantages. Tagging with scriptPubKey allows per-output tagging but is only possible with native-segwit. Tagging with tx version protects P2SH-segwit, and all existing wallets are protected by default. The proposed solution ensures that tagging must be explicitly made by the payer, and an output must be tagged for it to be spendable with NOINPUT.The bitcoin-dev mailing list also discusses the use of Output Tagging for multiparty eltoo channels. If one party becomes unresponsive, the remaining participants can remove them from the channel without downtime by creating settlement transactions that pay off the unresponsive party and fund a new channel with the remaining participants. However, using output tagging can result in reduced fungibility in these channels. Additionally, the conversation discusses the design considerations for a tagging system that could be used in conjunction with eltoo. The tags need to be explicit and configurable by the payer and are intended to avoid NOINPUT-related trouble. Overall, the goal is to enable smart contracts while minimizing the risks of misuse and reducing fungibility loss. The conversation also explores other proposals that require NOINPUT and are adversely affected by either way of tagging. It concludes that option b), making 3 sigs for each update, is cheaper and more private than option a), making 2 sigs for each update. However, option a) may still be acceptable as missing some SINGLEINPUT signatures is not catastrophic. Finally, it suggests that if output tagging is required, it should have no adverse effect on eltoo as long as the setup output is not tagged.</summary>
+    <published>2018-12-13T12:32:44+00:00</published>
+  </entry>
+</feed>

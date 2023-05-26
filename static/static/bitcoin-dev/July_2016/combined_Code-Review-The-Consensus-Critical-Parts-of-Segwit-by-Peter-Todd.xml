@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Code Review: The Consensus Critical Parts of Segwit by Peter Todd</title>
+  <updated>2023-05-19T23:33:16.220099+00:00</updated>
+  <author>
+    <name>Johnson Lau 2016-07-02 19:20:42</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2016-06-28 16:22:45</name>
+  </author>
+  <link href="bitcoin-dev/July_2016/012881_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2016/012831_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Code Review: The Consensus Critical Parts of Segwit by Peter Todd</title>
+    <updated>2023-05-19T23:33:16.220099+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012881.html" rel="alternate"/>
+    <summary>The code for transactions spending a witness output with an unknown version is valid even if the transaction doesn’t have any witnesses. The argument for the P2PKH special case is that they don't want to make it possible to use 160-bit commitments for multisig, which might need 256-bit security. However, they do want to special-case pubkeys to save a few bytes. Storing 1 BTC for a few months does not really require the security level of P2PKH. It is noted that SHA256 would be insecure and adding a zero after the nVersion as suggested would not be helpful at all. Unlimited space has been reserved after the witness commitment, which means anything after 38 bytes has no consensus meaning. There is no efficient way to add a new commitment with softfork. Segwit has additional pay-to-witness-pubkey-hashP2WPKH that lets you use a 160-bit (20 byte) commitment. P2WPKH gives the same level of security as P2PKH, but with a smaller scriptPubKey. Users are given the option to choose to accept the less secure 160-bit commitment if their use-case doesn’t need the full 256-bit security level. Secondly, in the P2SH case, the segwit redeemScript should be the only downside, serialized witness script is constrained to 520 bytes max. There is no explicit assurance that signatures for the new signature hash can’t be reused for the old signature hash; however, it will lead to a hash collision.</summary>
+    <published>2016-07-02T19:20:42+00:00</published>
+  </entry>
+</feed>

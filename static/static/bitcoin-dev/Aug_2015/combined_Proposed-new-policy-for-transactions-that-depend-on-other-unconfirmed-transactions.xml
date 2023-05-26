@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Proposed new policy for transactions that depend on other unconfirmed transactions</title>
+  <updated>2023-05-19T21:44:49.120033+00:00</updated>
+  <author>
+    <name>Matt Corallo 2015-08-21 19:22:39</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-10-08 03:33:07</name>
+  </author>
+  <link href="bitcoin-dev/Aug_2015/010567_Proposed-new-policy-for-transactions-that-depend-on-other-unconfirmed-transactions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2015/011478_Proposed-new-policy-for-transactions-that-depend-on-other-unconfirmed-transactions.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Proposed new policy for transactions that depend on other unconfirmed transactions</title>
+    <updated>2023-05-19T21:44:49.120033+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-August/010567.html" rel="alternate"/>
+    <summary>A proposal has been made for a new set of requirements as a policy on when to accept new transactions into the mempool and relay them. The policy would affect transactions which have inputs from other transactions that are not yet confirmed in the blockchain. The motivation for this policy is to limit the size of a mempool, as discussed in pull request 6470.Once the mempool is full, a new transaction must be able to pay not only for the transaction it would evict but any dependent transactions that would be removed from the mempool as well. The proposal includes four new policy limits, all of which are command line configurable. The first two limits ensure that no chain of transactions will be too large for the eviction code to handle. The maximum number of descendant transactions allowed is 1000, and the maximum descendant size is the total size of all descendant transactions divided by 200, which is default at 2.5MB. The third limit ensures that calculating the state required for sorting and limiting the mempool and enforcing the first two limits is computationally feasible, with a maximum number of ancestor transactions allowed at 100. The fourth limit maintains the pre-existing policy goal that all transactions in the mempool should be mineable in the next block. No transaction shall be accepted if the total size of all its unconfirmed ancestor transactions is too large, with a default of 1MB.These limits would have affected less than 2% of transactions entering the mempool in April or May of 2015. During the period of July 6th through 14th, 2015, while the network was under stress test, as many as 25% of the transactions would have been affected.The code to implement the descendant package tracking and new policy limits can be found in pull request 6557, built off of pull request 6470. The proposed limits are considered generous, but designed to be as generous as computationally feasible, making them unobjectionable. However, this does not preclude future changes to policy that would reduce these limits.Some suggested use cases for the proposed limits were discussed, with some arguing that dropping the limit of entire transaction dependency trees to something like 10 transactions, maximum two levels deep, wouldn't be a problem either.The proposal was discussed on bitcoin-dev mailing list. There was a PR up for this change at https://github.com/bitcoin/bitcoin/pull/6771, which was getting some discussion for those following along. Later on, Alex Morcos proposed updates to the new policy limits on unconfirmed transaction chains.The existing limits in master and scheduled for release in 0.12 were Ancestor packages = 100 txs and 900kb total size, and Descendant packages = 1000 txs and 2500kb total size. He proposed a significant reduction in these limits before 0.12 was released. The proposed new limits were Ancestor packages = 25 txs and 100kb total size, and Descendant packages = 25 txs and 100kb total size. The most restrictive of these limits was the 25 transaction count on descendant packages. Over the period of April and May of 2015, 5.8% of transactions would have violated this limit alone. Applying all the limits together would have affected 6.1% of transactions. These limits were policy limits that affect transactions which depend on other unconfirmed transactions only and are not a change to consensus rules.</summary>
+    <published>2015-08-21T19:22:39+00:00</published>
+  </entry>
+</feed>

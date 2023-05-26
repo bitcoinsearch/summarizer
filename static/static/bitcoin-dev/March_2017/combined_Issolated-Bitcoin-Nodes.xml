@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Issolated Bitcoin Nodes</title>
+  <updated>2023-05-20T01:09:11.084337+00:00</updated>
+  <author>
+    <name>Matt Corallo 2017-03-23 23:01:09</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2017-03-24 03:38:21</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2017-03-24 00:20:32</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2017-03-23 23:14:28</name>
+  </author>
+  <link href="bitcoin-dev/March_2017/013767_Issolated-Bitcoin-Nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013771_Issolated-Bitcoin-Nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013768_Issolated-Bitcoin-Nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013766_Issolated-Bitcoin-Nodes.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Issolated Bitcoin Nodes</title>
+    <updated>2023-05-20T01:09:11.084337+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013767.html" rel="alternate"/>
+    <summary>Bitcoin's testnet recently experienced multiple chain splits and reorganizations, which were not caused by a single user but rather by different users mining multiple blocks in each chain. The issue was initially thought to be related to network issues, but it was revealed that the issue occurred with nodes running version 0.12.X. When blocks were propagated from bitcoind 0.12.+ to newer nodes, they were not being propagated to peers with newer versions, while newer blocks were being propagated to peers with older versions. This backward compatibility issue between 0.13.X+ and older versions caused isolated nodes without any notice for the node owners.The problem was due to Segwit blocks since Testnet had already activated Segwit. Nodes with segwit active only download blocks from other segwit peers as old peers cannot provide the witness data they need to verify the blocks. Reorgs in testnet are common and may be part of different tests and experiments, but it seems that the forks are not created by a single user and multiple blocks were mined by different users in each chain. After some time, a reorg occurs and it all comes to a normal state as a single chain. Investigation shows that the fork occurs with nodes 0.12, in some situations, nodes 0.12 has longer/different chains. The blocks in both chains are valid, so something must be occurring in the communication between nodes but not related to the network itself. The backward compatibility issue is simple to replicate. There is no evidence yet of how it can be used maliciously or exploited by a miner. Bitcoin Core 0.13.0+ will use its outbound connections to connect to segwit-enabled peers so that it will be relaying segwit blocks to someone. Because of the poor propagation, a 0.13.0+ miner can find a block at the same height, which is more likely to get built upon. The poorly propagated block can still reach other 0.12.x- miners who can build upon it due to the low difficulty and difficulty resets, thus causing multiple chains to exist, particularly among pockets of 0.12.x- nodes. The reorgs happen when either the 0.12.x- nodes hear of the segwit blockchain that is presumably longer because it has the majority hashrate, or when people run bridges which allow 0.12.x- nodes relay blocks to 0.13.0+ nodes.</summary>
+    <published>2017-03-23T23:01:09+00:00</published>
+  </entry>
+</feed>

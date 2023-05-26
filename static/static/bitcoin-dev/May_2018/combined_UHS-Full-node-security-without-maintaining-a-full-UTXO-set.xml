@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - UHS: Full-node security without maintaining a full UTXO set</title>
+  <updated>2023-05-20T13:14:53.265368+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2018-05-17 16:56:39</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-05-17 15:28:28</name>
+  </author>
+  <link href="bitcoin-dev/May_2018/015977_UHS-Full-node-security-without-maintaining-a-full-UTXO-set.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/015973_UHS-Full-node-security-without-maintaining-a-full-UTXO-set.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - UHS: Full-node security without maintaining a full UTXO set</title>
+    <updated>2023-05-20T13:14:53.265368+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-May/015977.html" rel="alternate"/>
+    <summary>A proposal has been made to replace unspent transaction outputs (UTXO) with hashes to reduce the size of a pruned node, provide faster validation, and shift the burden of holding UTXO data from verifiers to spenders. The proposal suggests creating a hash from the concatenation of the new outpoint and the dereferenced prevout data when spending an output later. Instead of storing the full dereferenced prevout entries in a UTXO set as is currently done, their hashes are stored to an Unspent Transaction Output Hash Set (UHS). The UHS is substantially smaller than a full UTXO set and can be queried afterwards to verify previous output inclusion. Entire blocks could potentially be verified out-of-order because all input data is provided, only the inclusion checks have to be in-order. Pay-to-pubkey outputs are less burdensome on full nodes since they use no more space on-disk than pay-to-pubkey-hash or pay-to-script-hash. The UTXO storage size grows exactly linearly with UTXO count, as opposed to growing linearly with UTXO data size. This may be relevant when considering new larger output types which would otherwise cause the UTXO Set size to increase more quickly.The proposal for a new Bitcoin UTXO model, known as the UHS (Unspent Hash Set), has been discussed on the Bitcoin-dev mailing list. The UHS model replaces the current UTXO set with a hash-based data structure, which eliminates the need for an Undo data set that is currently used to roll back orphaned blocks and reduces disk space by approximately 12%. Assuming sha256 for the UHS's hash function, no fundamental changes to Bitcoin's security model are introduced because the unspent transaction output hashes commit to all necessary data, including output types.Transitioning from the current UTXO model to the UHS would require allocating a new service-bit to indicate that a node is willing to serve blocks and transactions with dereferenced prevout data appended. Wallets would begin holding full prevout data for their unspent outputs, though they could probably back-into the data as-is. The primary drawback of the UHS approach is the ~5% network overhead. Additionally, there is the possibility that a few "bridge nodes" may be needed for some time.In a future with a network of only pruned UHS nodes, an old wallet with no knowledge of its dereferenced prevout data would need to broadcast an old-style transaction, and have a bridge node append the extra data before forwarding it along the network. The code for a quick proof-of-concept implementation can be found on GitHub. The UHS concept is an evolution of Bram Cohen's TXO bitfield idea and was influenced by Pieter Wuille's work on Rolling UTXO set hashes.</summary>
+    <published>2018-05-17T16:56:39+00:00</published>
+  </entry>
+</feed>

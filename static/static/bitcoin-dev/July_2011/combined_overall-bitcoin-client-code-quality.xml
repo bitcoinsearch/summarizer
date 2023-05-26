@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - overall bitcoin client code quality</title>
+  <updated>2023-05-19T02:39:22.618300+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2011-07-12 23:40:46</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2011-07-10 23:36:53</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2011-07-13 00:17:59</name>
+  </author>
+  <link href="bitcoin-dev/July_2011/000179_overall-bitcoin-client-code-quality.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000170_overall-bitcoin-client-code-quality.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000180_overall-bitcoin-client-code-quality.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - overall bitcoin client code quality</title>
+    <updated>2023-05-19T02:39:22.618300+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-July/000179.html" rel="alternate"/>
+    <summary>In a discussion about code quality, Michael Offel expressed his belief that every class should be able to stand on its own so it can be reused in other projects or situations. He also suggested that this method makes it easier to catch and extend classes, and it creates an easier-to-read history in terms of source control.However, someone else pointed out that when it comes to coding, talk is cheap and that aesthetics talk seems like pointless shed-painting, particularly coming from people who are not doing substantial work. The proposal was made for reimplementing parts as libraries and switching to them after validating them, which is a fine idea. The critical logic of blockchain validation needed new, clean, secondary implementations, as well as good automatic testing shims that could find inconsistencies between implementations.Michael Offel raised concerns about the poor quality of code documentation and the lack of clear splitting of the code into modules with well-defined interfaces. Additionally, he noted the poor use of threads by Bitcoin, which starts a new thread for every little module it has and locks some kind of global mutex whenever there is serious work to do. In general, the development goals for Bitcoin include improving code cleanliness, modularization, and clearer splitting of the code into modules with well-defined interfaces. There is also a need for new, clean secondary implementations of critical blockchain validation logic and good automatic testing shims that can find inconsistencies between implementations.The Bitcoin code is in need of significant improvement, with issues such as hardcoded values, long build times, and poorly implemented modules. The suggestion is to begin a complete rewrite, inspired by the old code rather than moving a lot of "known to be somehow functional" around. However, it would be ideal to rewrite 90% of Bitcoin just to fix code clarity, which is more work than anyone has time for. Instead, it is suggested to clean up the code in chunks.The official Bitcoin client should be a reference project for other clients and must, therefore, be extra clean and well-documented. The current code quality is very prone to bugs, but it is not due to any one person's fault. While there is a style guide, it does not include anything about readability. Additionally, there are numerous hardcoded values for the official and testnet block chains that could be moved to a chain description file to allow custom chains and clean up the code.Although the code is messy in terms of global usage and poorly-implemented RPC/net/etc, most of the code is absolutely fine if thrown into clearly-defined methods and classes. The suggestion is to remove all threads and critical sections and build a sequential easy to follow model. Boost is also an unnecessary heavy non-standard dependency that is a barrier for new developers. It is much higher priority to clean up the code than comment it better, plus there are various other features/more user-facing issues that need fixing as well.The Bitcoin code base is not as messy as it seems, and its algorithms are quite good the way they stand. However, there are some inefficiencies that could be improved with a ground-up rewrite of the backend. Moving all chain-related settings to a chain description file may be an interesting debate, but running multiple chains for production use is not recommended. It's necessary to share the difficulty of the main chain and have all adjustable parameters in one place to quickly build an internal testnet without crazy firewalling to prevent it from dying.The transaction fees are there for a reason, and offering each user the option to just relay every transaction off the wire is not an option. Gavin Andresen's comment about telling everybody to stop using bitcoin so much for six months while implementing a much better client was not meant to be taken seriously. Trying to fix bugs on an old codebase while rewriting a new one is worthless and just creating way more effort than is necessary. BDB offers a good mix compared to a SQL-driven library, and it provides good Database transactioning which Bitcoin does depend on on some circumstances.</summary>
+    <published>2011-07-12T23:40:46+00:00</published>
+  </entry>
+</feed>

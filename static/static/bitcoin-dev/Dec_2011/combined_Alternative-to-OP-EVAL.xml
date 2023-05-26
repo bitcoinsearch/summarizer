@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Alternative to OP_EVAL</title>
+  <updated>2023-05-19T02:57:59.423277+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2011-12-29 21:00:26</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2011-12-29 19:08:39</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2011/001006_Alternative-to-OP-EVAL.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2011/001004_Alternative-to-OP-EVAL.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Alternative to OP_EVAL</title>
+    <updated>2023-05-19T02:57:59.423277+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-December/001006.html" rel="alternate"/>
+    <summary>Pieter Wuille proposed a more restricted alternative to OP_EVAL called OP_CHECKEDEVAL. It achieves the same properties as OP_EVAL by restricting it in a way that does not touch the stack or altstack. Instead, it looks at the last (code-position wise) literal pushed on the stack and uses that as the script to be executed. The subscript is executed in an independent environment that inherits only the main stack. This allows the outer script to hide information from the inner script by temporarily moving it to the alt stack. OP_EVAL is an effective no-op for the execution state of the outer script except when it potentially causes failure or pops an element from the literal-only stack. A pay-to-script-hash becomes OP_EVAL OP_HASH160 OP_EQUAL, and is redeemed using [script input] &gt;. OP_CHECKEDEVAL looks at the two elements most recently (in code position) pushed by a literal and not yet consumed by another OP_CHECKEDEVAL. These are S (the serialized script) and H (its hash). This implies it defines its own literal-only stack, where all literals push to, and only OP_CHECKEDEVAL pops from. For the outer script, OP_CHECKEDEVAL has no effect at all except for 2 elements popped from the literal-only stack and potentially causing failure. It does not touch the main stack, alt stack, or any other part of the execution state not listed above. Failure occurs when either of these conditions hold: No two elements remain on the literal-only stack, the Hash(S) != H, or the inner script execution caused failure. For the execution of the inner script, it is executed in a completely new and independent execution environment, executes the deserialized S, and inherits the main stack and alt stack without the serialized script and the hash themselves from the outer execution.The implementation of OP_CHECKEDEVAL is very similar to what was already done for OP_EVAL. The only modifications are that EvalScriptInner needs less by-ref arguments, as it cannot modify the parent's state, and a literal-only stack needs to be maintained. This alternative combines all advantages, including easy spend-to-script-hash (shorter than OP_EVAL), backward compatibility (guaranteed by construction, instead of separately enforced like with OP_EVAL), statically analyzable (though it requires deserializing the script data), and possibility to introduce a new language inside (not done in this proposal). Its only disadvantages are that it is slightly less flexible than OP_EVAL, as it disallows dynamic interaction with serialized scripts, and static code analyzers need to deserialize script data.</summary>
+    <published>2011-12-29T21:00:26+00:00</published>
+  </entry>
+</feed>

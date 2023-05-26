@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Anti-transaction replay in a hardfork</title>
+  <updated>2023-05-20T00:45:29.315088+00:00</updated>
+  <author>
+    <name>Johnson Lau 2017-01-24 14:33:29</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2017-01-26 17:41:55</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-26 09:20:54</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-25 07:42:13</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-25 07:21:57</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-25 04:03:40</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-27 20:47:22</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-26 07:14:52</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2017-01-26 03:29:14</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-25 07:05:59</name>
+  </author>
+  <link href="bitcoin-dev/Jan_2017/013473_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013494_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013485_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013482_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013480_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013477_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013505_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013484_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013483_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013478_Anti-transaction-replay-in-a-hardfork.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Anti-transaction replay in a hardfork</title>
+    <updated>2023-05-20T00:45:29.316088+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-January/013473.html" rel="alternate"/>
+    <summary>This proposal aims to prevent replay attacks during hard forks, which can lead to financial loss for users. The proposal includes rules for both the existing and new networks, as well as rationales for each rule. The proposal also has limitations, such as the inability to protect transactions made before the proposal. The reference implementation is available in a demo. Wallets that can upgrade should do so to maximize chain divergence, while compatibility with existing transaction signing software and hardware should also be considered.The discussion revolves around the proposal for a planned hardfork and the issue of replay attack. The writer argues that the proposal is not technically feasible as there could be orphaning in the old chain, miners of the new chain may see different history of the old chain and mining is a random process. Therefore, the technical issues are not solvable when both forks are decentralised mining. In contrast, the user suggests creating a bridge that replays all transactions from one network over to the other, and vice-versa which would be transparent to the end-user. This proposal would prevent users "tainting" their prefork-mined coins with coins mined after the fork. The advantage of pre-fork coins being recorded on both forks is that if one fork goes extinct, no one loses any money. The idea is to encourage the minority chain to die, and unity returned. However, the goal should be unity not permanent division.The current conversation is a pre-BIP (Bitcoin Improvement Proposal) and requires formatting to make it a formal BIP. The motivation behind this proposal is to avoid a permanent ledger split as demonstrated by Ethereum (“DAO hardfork") and protect against transaction replay attack. The proposal has the following objectives: A. For users on both existing and new fork, anti-replay is an option, not mandatory. B. For transactions created before this proposal is made, they are not protected from anti-replay. C. It doesn’t require any consensus changes in the existing network to avoid unnecessary debate. D. As a beneficial feature, it will allow a smooth transition of wallet software and hardware and support anybody who might have a hardware wallet locked away in a safe deposit box for years.The proposal discusses a fix for the O(n^2) signature checking bug, which could be fixed for non-segregated witness inputs. The proposal introduces new definitions such as "Network characteristic byte", "Masked version", "Existing network", "New network", "Existing network characteristic bit" and "New network characteristic bit". It also introduces new rules for the new and existing networks, which include making transactions invalid in the new network if the network characteristic byte is non-zero and the new network characteristic bit is not set, verifying signatures with a new SignatureHash algorithm for masked versions 3 or above, and not changing any consensus rule in the existing network. The proposal also provides rationales for each rule, including anti-replay for existing network transactions on the new network, time-locked transactions made before the proposal being valid in the new network, anti-replay for new network transactions on the old network, preparing for the next hardfork from the new network, and minimising change to the existing network. It also outlines some limitations of the proposal, such as the inability to protect transactions made before the proposal and the need for designers of hardforks to decide whether this proposal is respected. In addition, the proposal includes a reference implementation in the forcenet2 branch of Github. There is also a discussion about the proposal's effectiveness in preventing replay attacks, specifically in cases where Alice has no control over the UTXO used in the transaction. The context discusses the proposal of Johnson Lau, which involves a hard fork to prevent transaction replay attacks during a blockchain split. The proposal suggests that new networks enforce a new SignatureHash for transactions with an nVersion not used in the existing network. This will ensure that such transactions are not accepted by the existing network, thereby preventing any replay attack. Tom Harding, however, criticized the proposal stating that it was self-defeating and unlikely to be included in new network designs. Chris Priest, on the other hand, proposed creating a "bridge" that replays all transactions from one network over to the other and vice versa. The advantage of pre-fork coins being recorded on both forks is that if one fork becomes extinct, no one loses any money.This pre-BIP proposal suggests a way to prevent replay attacks during a hardfork, inspired by the DAO hardfork. Anti-replay would be optional for users on both existing and new forks. Transactions created before this proposal is made are not protected from anti-replay, and the new fork must accept these transactions. It doesn't require any consensus changes in the existing network, which minimizes the change to the existing network. The proposal involves network characteristic bytes that denote up to 8 networks sharing a common history, masked versions of transaction nVersions, and several rules in both new and existing networks. However, it</summary>
+    <published>2017-01-24T14:33:29+00:00</published>
+  </entry>
+</feed>

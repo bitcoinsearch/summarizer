@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - TAPLEAF_UPDATE_VERIFY covenant opcode</title>
+  <updated>2023-05-21T04:03:00.195927+00:00</updated>
+  <author>
+    <name>Olaoluwa Osuntokun 2021-09-23 00:29:18</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-10 07:42:19</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-09 09:16:12</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-09 06:41:38</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-20 14:52:46</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-15 06:50:51</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-11 03:26:44</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-09 06:53:30</name>
+  </author>
+  <author>
+    <name>Billy Tetrud 2021-10-29 15:47:12</name>
+  </author>
+  <link href="bitcoin-dev/Sept_2021/019485_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019429_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019422_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019419_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019476_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019458_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019438_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019420_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2021/019584_TAPLEAF-UPDATE-VERIFY-covenant-opcode.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - TAPLEAF_UPDATE_VERIFY covenant opcode</title>
+    <updated>2023-05-21T04:03:00.196926+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-September/019485.html" rel="alternate"/>
+    <summary>Bitcoin developer Anthony Towns proposed a new opcode called "TAPLEAF_UPDATE_VERIFY" (TLUV) on the bitcoin-dev mailing list. TLUV would allow for updating the internal public key, specifying a new step for the merkle path, and removing scripts or merkle path steps. Additionally, an OP_PUSH_ANNEX op code is proposed to provide an upgrade mechanism for tapscript output. The proposal could allow for a Plasma Cash-like Commit Chain, which would let users contest modifications to the tree in order to withdraw their funds.However, there is concern that this proposal doesn't allow utxos to interact with each other easily without a coordination layer to synchronize access. One solution to this concurrency issue is to allow "contracts" to be identified via a fixed ID (as long as they are active in the chain). Transactions then specify their contract and "regular" inputs, with the requirement that every transaction spends at least a single regular input.Taproot can be used to create recursive covenants for securing funds in various scenarios, such as joint ventures or automated market makers. The TLUV opcode takes three inputs to specify how to update the internal public key, add a new step for the merkle path, and remove the current script and/or merkle path steps. The functionality can be used for a basic vault where funds are ultimately protected by a cold wallet key, and a hot wallet key is available for more convenient transactions. The covenant design limits the hot wallet to withdrawing at most L satoshis every D blocks, so that if funds are stolen, only L is lost. The bitcoin-dev mailing list has been discussing the implementation of a release/locked/available vault construct, which involves locked script, available script, and release script. One challenge discussed was the ability of anyone who could make a valid spend of the transaction to violate the covenant by spending to an unencumbered witness v2 output and stealing the funds. To address this challenge, an approach suggested was to extend the signature digest algorithm to encompass the segwit version of the spending transaction outputs. In addition, there were further discussions around optimising splitting/merging vaults/pools. The discussion also covered various technical aspects related to script versions, parity bits, tapscripts, and opcode optimization. Furthermore, Anthony Towns proposed a way to introduce an opcode called IN_OUT_AMOUNT that allows doing maths on values. The presence of IN_OUT_AMOUNT in the script upgrades ADD, SUB, and comparison operators to support 64-bit values. Enabling MUL, DIV and MOD might also be worthwhile.The author suggests ignoring the caveat of taproot using 32-byte x-only pubkeys for the scriptPubKey and the internal public key, which might be feasible for modest-sized pools. However, to deal with it properly, one needs to have the utxo commit to the parity of the internal public key and need some way to find out that value when using TLUV. Overall, the discussion surrounding the TLUV opcode and the possibilities it presents highlights the importance of the covenant space in creating more decentralized self-custodial applications built on top of Bitcoin.</summary>
+    <published>2021-09-23T00:29:18+00:00</published>
+  </entry>
+</feed>

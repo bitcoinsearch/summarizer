@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Unenforceable fee obligations in multiparty protocols with Taproot inputs</title>
+  <updated>2023-05-22T23:35:14.069078+00:00</updated>
+  <author>
+    <name>Anthony Towns 2023-02-11 05:14:55</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2023-02-12 06:47:31</name>
+  </author>
+  <author>
+    <name>Yuval Kogman 2023-02-07 02:49:28</name>
+  </author>
+  <link href="bitcoin-dev/Feb_2023/021460_Unenforceable-fee-obligations-in-multiparty-protocols-with-Taproot-inputs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2023/021462_Unenforceable-fee-obligations-in-multiparty-protocols-with-Taproot-inputs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2023/021444_Unenforceable-fee-obligations-in-multiparty-protocols-with-Taproot-inputs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Unenforceable fee obligations in multiparty protocols with Taproot inputs</title>
+    <updated>2023-05-22T23:35:14.069078+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-February/021460.html" rel="alternate"/>
+    <summary>There is a bug in Taproot that allows the same Tapleaf to be repeated multiple times in the same Taproot, potentially at different Taplevels incurring different Tapfee rates. The countermeasure is that you should always know the entire Taptree when interacting with someone's Tapspend. Fix for the bug is to sign the entire tapbranch instead of the tapleaf. Some people highlighted minor problems with the last email. In Taproot, if you want to prevent signatures migrating to another branch or within a branch, you can use the CODESEPARATOR opcode which was redisigned in Taproot for exactly this purpose. Tapleaf hash is always covered by the signature (though not in some ANYONECANPAY proposals) so you can never migrate signatures between tapbranches. Since Taproot spends have variable size which depends on the path being used, the last such input to be signed in a multiparty transaction can always use a larger than estimated signature to unfairly extract a fee contribution from the other parties to the transaction (keeping the absolute fees the same and reducing the feerate for the transaction). This effectively steals a fee from other participants. The mitigations for this include RBF, enforcing a minimal weight for all non-witness data in the transaction before the transaction is considered fully constructed, trusted coordinator, reputation, increasing costliness and signature ordering.</summary>
+    <published>2023-02-11T05:14:55+00:00</published>
+  </entry>
+</feed>

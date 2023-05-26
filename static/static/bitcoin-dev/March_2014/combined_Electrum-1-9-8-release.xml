@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Electrum 1.9.8 release</title>
+  <updated>2023-05-19T18:16:01.843733+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2014-03-16 13:54:49</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2014-03-16 14:39:11</name>
+  </author>
+  <link href="bitcoin-dev/March_2014/004720_Electrum-1-9-8-release.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2014/004722_Electrum-1-9-8-release.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Electrum 1.9.8 release</title>
+    <updated>2023-05-19T18:16:01.843733+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-March/004720.html" rel="alternate"/>
+    <summary>In an email dated March 16, 2014, Thomas Voegtlin stated that the encryption algorithm used in the wallet was ECIES and that the code was borrowed from https://github.com/jackjack-jj/jeeq. Users could use the 'getpubkeys' command to obtain the public key corresponding to a Bitcoin address in their wallet. The 'decrypt' command would then assume that the wallet had the private key corresponding to the public key passed as an argument. However, it has been discovered that the cryptosystem used in the repository is insecure in several ways and is not actually implementing ECIES. One of the most critical issues is that instead of using a cryptographically strong MAC tied to the ephemeral secret, it uses a trivial 16-bit check value. This means that an arbitrary message encrypted to a third person can be decoded if they allow no more than 65536 queries to a decryption oracle to decrypt some other message. Furthermore, in the event that a random query to a decryption oracle yields a result (1:2^16 times), the result directly reveals the ECDH value because it is only additively combined with the message value. If the implementation does not check if the nonce point is on the curve, the result can yield a point on the twist instead of the curve, which is far more vulnerable to recovery of the private key. ECIES uses a KDF instead of using the ECDH result directly to avoid this. Although there may be other problems or mitigating factors, it is difficult to determine what the implementation is doing. In another email response, Thomas Voegtlin acknowledged the flaws in the implementation and stated that he would look into fixing the code. It was also noted that the implementation leaks about 7 bits of data per message chunk and that it is likely that some messages are incorrectly decrypted. Overall, the implementation was considered to be screwy and suspect.</summary>
+    <published>2014-03-16T13:54:49+00:00</published>
+  </entry>
+</feed>

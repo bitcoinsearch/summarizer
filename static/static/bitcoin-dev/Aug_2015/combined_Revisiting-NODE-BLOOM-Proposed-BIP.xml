@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Revisiting NODE_BLOOM: Proposed BIP</title>
+  <updated>2023-05-19T21:40:59.838332+00:00</updated>
+  <author>
+    <name>Matt Corallo 2015-08-21 04:46:17</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-24 18:28:59</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-24 18:07:05</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-24 17:37:51</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-22 01:08:13</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-21 17:55:58</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-24 17:39:12</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-22 01:08:49</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2015-08-21 17:53:34</name>
+  </author>
+  <link href="bitcoin-dev/Aug_2015/010535_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010634_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010632_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010627_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010589_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010564_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010628_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010590_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2015/010563_Revisiting-NODE-BLOOM-Proposed-BIP.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Revisiting NODE_BLOOM: Proposed BIP</title>
+    <updated>2023-05-19T21:40:59.838332+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-August/010535.html" rel="alternate"/>
+    <summary>The NODE_BLOOM service bit is being added to the bitcoin protocol to allow peers to explicitly advertise that they support bloom filters. This is proposed in a Standards Track (draft) BIP, which extends the BIP 37 Connection Bloom filtering. The new protocol version allows peers to identify old nodes that support bloom filtering despite lacking the new service bit. The motivation behind this extension is that BIP 37 did not specify a service bit for the bloom filter service, thus assuming that all nodes that serve peers data support it. However, connection filtering algorithm proposed in BIP 37 has been shown to provide little-to-no privacy and poses a significant DoS risk on some nodes, making it necessary to allow node operators to disable connection bloom filtering as per their needs.The NODE_BLOOM service bit is distinct from NODE_NETWORK, and it is legal to advertise NODE_BLOOM but not NODE_NETWORK. If a node does not support bloom filters but receives a "filterload", "filteradd", or "filterclear" message from a peer, the node should disconnect that peer immediately. For backwards compatibility, in initial implementations, nodes may choose to only disconnect nodes which have the new protocol version set and attempt to send a filter command.While outside the scope of this BIP, it is suggested that DNS seeds and other peer discovery mechanisms support the ability to specify the services required; current implementations simply check only that NODE_NETWORK is set. A suggestion was put forward to allow switching on a per-connection basis rather than globally. Matt Corallo agreed with the idea of adding a DNS seed section to this BIP. Still, he also mentioned that relying on seeds every time you start your node is not a good idea and should be used only as a last resort after careful consideration of downsides. He also suggested that instead of returning NODE_NETWORK nodes, DNS seeds should return any node that responds to getaddr, allowing clients to connect to a few DNS seeds by name, then select the peers they want based on nServices. The increase in protocol version is for backwards compatibility. Old nodes which are not yet aware of NODE_BLOOM and use a protocol version &gt; node without NODE_BLOOM. This feature may be removed after there are sufficient NODE_BLOOM nodes available and SPV clients have upgraded, allowing node operators to fully close the bloom-related DoS vectors. The underlying idea also conflicts with some proposals to "shard" the blockchain, again suggesting that we need a bit to handle future upgrades to more scalable designs. The Bitcoin Improvement Proposal (BIP) 37 did not specify a service bit for the bloom filter service, which has been shown to provide little to no privacy and poses a large DoS risk on some nodes. The NODE_BLOOM BIP extends BIP 37 by defining a service bit to allow peers to advertise that they support bloom filters explicitly. Nodes which support bloom filters should set the protocol bit. Otherwise, it should remain unset.The proposal will not break any existing clients in the first release. After sufficient time to upgrade SPV clients, a new version will be released which will result in older SPV clients finding themselves disconnected from peers when they send filter* commands, so they can go find other peers which do support bloom filtering. The reference implementation can be found at https://github.com/bitcoin/bitcoin/pull/6579. This document is placed in the public domain.</summary>
+    <published>2015-08-21T04:46:17+00:00</published>
+  </entry>
+</feed>

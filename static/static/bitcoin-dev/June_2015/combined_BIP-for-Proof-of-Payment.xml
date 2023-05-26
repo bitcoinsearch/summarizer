@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP for Proof of Payment</title>
+  <updated>2023-05-19T20:39:24.252510+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2015-06-06 15:23:48</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-06-06 15:13:46</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-06-06 14:47:05</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-06-16 19:48:54</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-06-16 19:25:12</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-06-16 14:31:34</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2015-06-15 10:00:52</name>
+  </author>
+  <link href="bitcoin-dev/June_2015/008504_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2015/008502_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2015/008500_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2015/008754_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2015/008753_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2015/008741_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2015/008680_BIP-for-Proof-of-Payment.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP for Proof of Payment</title>
+    <updated>2023-05-19T20:39:24.252510+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/008504.html" rel="alternate"/>
+    <summary>Kalle Rosenbaum has proposed a new BIP (Bitcoin Improvement Proposal) called 'Proof of Payment' (PoP), which is intended to be a proof that a payment has been made. PoP provides a way for merchants to provide access to their services based on prior payment, without the need for user accounts or databases of paid transactions. The conversation is about this proposed BIP, which describes how a wallet can prove to a server that it has the ability to sign a certain transaction. There are several scenarios in which it would be useful to prove that you have paid for something without any personal information being involved. The desirable properties for PoP include that it should be generated on demand, be usable only once to avoid issues due to theft, be able to create a PoP for any payment regardless of script type, prove that you have enough credentials to unlock all the inputs of the proven transaction, and be easy to implement by wallets and servers to ease adoption. Current methods of proving a payment include using BIP0070, which does not meet several of the desirable properties, and signing messages chosen by the server with private keys used to sign the transaction, which could meet some of the desirable properties if designed so. The proposal suggests using an invalid opcode rather than OP_RETURN to share code. Furthermore, the proposal suggests changing the signature hashing algorithm by adding a constant string or bitflipping the txin prevout hashes to render the signatures in a PoP unusable for actual transactions while still committing to the same actual transaction. Possible alternative names are also discussed.The data structure of PoP(T) has the exact same structure as a bitcoin transaction with the same inputs as T and in the same order as in T, but with each sequence number set to 0. There is exactly one output, called the pop output, with value 0. The PoP must be set to 499999999 to prevent the PoP from being included in a block, should it appear on the bitcoin p2p network. This is also the reason for setting the sequence numbers to 0 since the sequence number of ffffffff would make lock_time ineffective.The Proof of Payment (PoP) is a method for proving that a payment has been made and received, using the same signing process as bitcoin transactions. A random nonce is included in the PoP request to make it harder to use a stolen PoP, and the server generates a new nonce for every PoP request. The process involves sending a PoP request from the server to the wallet, identifying a transaction T, creating an unsigned PoP (UPoP), asking the user to sign it, and sending the signed PoP to the destination provided in the request. The server validates the PoP and responds with "valid" or "invalid". Security considerations include the possibility of interception and tampering with the PoP-request parameters, which can be mitigated by using secure connections. Stealing a PoP is also possible, but the probability per try is low and the server should have a mechanism for detecting and slowing down brute force attacks. It is important to keep the security of the wallet after it has been emptied. Wallets should not rely on the transaction id of the outgoing transaction due to transaction malleability. The validation process involves several steps such as checking the format of the PoP, ensuring there is only one output with value 0 conforming to the OP_RETURN output format, and verifying that the inputs of the PoP match those of transaction T except for the sequence numbers which must all be 0. The server runs the scripts of all the inputs, checks that the txid in the PoP output is the transaction being proved, and returns "valid" if all these checks pass. References include BIP0021 and BIP0070, which are URI Scheme and Payment Protocol specifications respectively. The reference implementation for PoP is available on GitHub, along with the Mycelium fork on GitHub.Pieter Wuille raised a concern that PoP assumes one transaction corresponds to a single payment, which is not compatible with CoinJoin or with systems that want to combine multiple payments in a single transaction. Additionally, Wuille argued that it's not necessary to assign identities to payers; instead, tracking payments should be enough. The purpose of the PoP is to ensure that only the person who paid for it, and not anyone else, can use it during the given period. It is not compatible with CoinJoin or systems that combine multiple payments in a single transaction. In cases where the wallet used to pay must also be used to issue the PoP, people using PoP should be aware of its limitations and act accordingly.It is not possible to avoid sharing the token and private keys used for signing in PoP. The original payer can also hand over the private keys to someone else, who can then create PoPs for the service. The use of a token does not</summary>
+    <published>2015-06-06T15:23:48+00:00</published>
+  </entry>
+</feed>

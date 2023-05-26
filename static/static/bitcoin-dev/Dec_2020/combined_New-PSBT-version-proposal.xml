@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - New PSBT version proposal</title>
+  <updated>2023-05-21T00:22:10.670773+00:00</updated>
+  <author>
+    <name>Andrew Chow 2020-12-09 22:25:37</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2021-01-21 19:50:45</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2021-01-14 17:07:44</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2021-01-06 23:48:31</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2020-12-23 21:32:33</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2020-12-23 21:30:04</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2020-12-22 20:12:22</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2021-01-15 17:28:09</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2020/018300_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2021/018369_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2021/018351_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2021/018342_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2020/018327_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2020/018326_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2020/018319_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2021/018355_New-PSBT-version-proposal.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - New PSBT version proposal</title>
+    <updated>2023-05-21T00:22:10.670773+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-December/018300.html" rel="alternate"/>
+    <summary>Bitcoin Core developer Andrew Chow has proposed a new version of the Partially Signed Bitcoin Transaction (PSBT) format that aims to address deficiencies in the current PSBT v0. The proposed version, PSBTv2, would allow for inputs and outputs to be added to the PSBT after creation, which is not possible with the current version as the fixed global unsigned transaction cannot be changed. The proposal includes adding several new fields to the PSBT, such as PSBT_GLOBAL_TX_VERSION, PSBT_GLOBAL_PREFERRED_LOCKTIME, PSBT_GLOBAL_INPUT_COUNT, PSBT_GLOBAL_OUTPUT_COUNT, PSBT_IN_PREVIOUS_TXID, PSBT_IN_OUTPUT_INDEX, PSBT_IN_SEQUENCE, PSBT_IN_REQUIRED_LOCKTIME, PSBT_OUT_VALUE, and PSBT_OUT_OUTPUT_SCRIPT. Compatibility with PSBTv0 has been maintained, and test vectors are yet to be created.PSBTv2 introduces new roles and modifies some existing roles. In PSBTv2, the Creator initializes the PSBT with 0 inputs and 0 outputs, while the Updater can set the sequence number. The Signer must update the PSBT_GLOBAL_TX_MODIFIABLE and PSBT_GLOBAL_SIGHASH_SINGLE_INPUTS fields after signing inputs, and the Transaction Extractor should produce a fully valid, network serialized transaction if all inputs are complete.To address the problem of adding new inputs and outputs to the transaction while also bringing all information related to a given input or output to one place, PSBTv2 introduces a new global field called PSBT_GLOBAL_UNDER_CONSTRUCTION. This flag may be set to True when inputs and outputs are being updated, signed, and finalized. If this field is omitted or set to False, no further inputs and outputs may be added to the PSBT.The proposed changes also include setting the version number to 2 and adding two lock time fields to support adding inputs and outputs. However, certain rules must be followed to ensure that adding additional inputs and outputs will not invalidate existing signatures. PSBTv2 allows for the construction of transactions, where inputs and outputs can be added as needed. However, care must be taken when combining PSBTs as there is no longer a unique transaction identifier. If these changes are deemed reasonable by the community, Chow will modify BIP 174 to incorporate them.Andrew Chow requests feedback from the community before submitting a pull request. The full modified BIP can be found on Github, and test vectors are yet to be determined.</summary>
+    <published>2020-12-09T22:25:37+00:00</published>
+  </entry>
+</feed>

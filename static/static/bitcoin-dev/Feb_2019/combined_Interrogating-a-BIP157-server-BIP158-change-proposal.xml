@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Interrogating a BIP157 server, BIP158 change proposal</title>
+  <updated>2023-05-20T19:46:51.371532+00:00</updated>
+  <author>
+    <name>Matt Corallo 2019-02-05 12:21:45</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2019-02-05 01:42:57</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2019-02-07 20:36:25</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2019-02-06 18:17:11</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2019-02-06 00:17:05</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2019-02-06 00:05:57</name>
+  </author>
+  <link href="bitcoin-dev/Feb_2019/016654_Interrogating-a-BIP157-server-BIP158-change-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016652_Interrogating-a-BIP157-server-BIP158-change-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016665_Interrogating-a-BIP157-server-BIP158-change-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016661_Interrogating-a-BIP157-server-BIP158-change-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016657_Interrogating-a-BIP157-server-BIP158-change-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2019/016656_Interrogating-a-BIP157-server-BIP158-change-proposal.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Interrogating a BIP157 server, BIP158 change proposal</title>
+    <updated>2023-05-20T19:46:51.371532+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-February/016654.html" rel="alternate"/>
+    <summary>The Bitcoin developers are currently proposing changes to the BIP 157 and BIP 158 protocols for blockchain clients. The existing protocol has left clients unable to determine the integrity of a block filter in a bandwidth-efficient manner due to the inclusion of input scripts. To address this issue, three possible solutions have been proposed. These include introducing a new P2P message that retrieves all prev-outputs for a given block and verifies the scripts against the block by executing them; tracking multiple possible filter header chains and downloading any block that matches any filter received for a particular block header; or committing filters into the chain via witness reserved value or coinbase OP_RETURN.Tamas Blummer, a Bitcoin developer, has suggested changes to the BIP158 protocol for creating compact client-side block filtering. The proposal aims to improve the filter chain in created and spent outpoints, which would allow clients to query servers more effectively. Currently, the server's filter is checked against output scripts in a downloaded block. The new system would require that filters contain only created scripts and spent outpoints. This could make it easier for wallets to recognize payments to their addresses as output scripts are included, and spends from the wallet would be recognized because the wallet knows outpoints of its previously received coins so it can query the filters for them.The discussion among Bitcoin developers mainly revolves around the design choice of filter for Bitcoin Core. Tamas Blummer argues that the current design choice seriously limits, practically disables a light client to prove that the filter is correct. He suggests moving to spent outpoint + output script filter as it offers lower security than now attainable. Laolu Olaoluwa Osuntokun thinks it's too late into the current deployment of the BIPs to change things around yet again. Jim Posen provides three possibilities for clients given that clients cannot reliably determine the integrity of a block filter in a bandwidth-efficient manner. Option 2 is recommended despite the downsides since it requires the smallest number of changes and removes some synchronicity assumptions. The proponents of the PRs to bitcoind are aware of the options and tradeoffs to be had.Tamas Blummer proposes a change to BIP158 that would include created scripts and spent outpoints in the filter chain, which would simplify the interrogation process for clients as the decision on filter correctness would not require more bandwidth than downloading a block at the mismatching checkpoint. A better solution suggested is to change BIP158 to have a base filter that contains spent outpoints and the scriptPubKey of each output aside from all OP_RETURN output scripts. Wallets would recognize payments to their addresses by the filter, and spends from the wallet would be recognized, allowing the client to query the filters for them. Interrogation of a filter server would also simplify, since the filter of the block can be checked entirely against the contents of the same block, and the client could only be forced at max to download 1/1000th of the blockchain in addition to the filter header history. Laolu supports adding this as an additional filter type, leaving it up to full node implementations that have deployed the base protocol to integrate it or not.</summary>
+    <published>2019-02-05T12:21:45+00:00</published>
+  </entry>
+</feed>
