@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import pandas as pd
 from feedgen.feed import FeedGenerator
 from tqdm import tqdm
@@ -94,6 +95,7 @@ class GenerateXML:
         summaries = []
 
         for chunk in chunks:
+            time.sleep(0.1)
             summary = generate_chatgpt_summary(chunk)
             summaries.append(summary)
 
@@ -118,6 +120,7 @@ class GenerateXML:
         if len(summaries) > 1:
             print("Consolidate summary generating")
             summary_str = "\n".join(summaries)
+            time.sleep(0.1)
             consolidated_summaries = consolidate_chatgpt_summary(summary_str)
             return consolidated_summaries
         else:
