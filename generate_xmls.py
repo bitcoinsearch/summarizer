@@ -77,21 +77,23 @@ class GenerateXML:
 
     def check_size_body(self, body):
         tokens = TOKENIZER.encode(body)
-        # temp = len(tokens) // 2000 + 1 if len(tokens) % 2000 else 0
-        # division_value = max(1, len(tokens) // 3900)  # suggested by gpt
-        # temp = len(tokens) // division_value + 1 if len(tokens) % division_value else len(tokens) // division_value
+        body_length_limit = 3900
 
-        if len(tokens) % 2000 == 0:
-            temp = len(tokens) // 2000
-        else:
-            temp = len(tokens) // 2000 + 1
+        if len(tokens) <= body_length_limit:
+            return [body]  # If body tokens count is below the limit, return it as is
 
+        sub_body_size = body_length_limit // 2
+        tokens_per_sub_body = sub_body_size
         bodies = []
-        sub_body_size = len(body) // temp
-        for i in range(temp):
-            s_num = sub_body_size * i
-            e_num = (sub_body_size * i) + sub_body_size
-            bodies.append(body[s_num:e_num])
+
+        while len(tokens) > 0:
+            current_sub_body = TOKENIZER.decode(tokens[:tokens_per_sub_body]).strip()
+
+            if current_sub_body:
+                bodies.append(current_sub_body)
+
+            tokens = tokens[tokens_per_sub_body:]
+
         return bodies
 
     def gpt_api(self, body):
@@ -99,13 +101,14 @@ class GenerateXML:
         for b in self.check_size_body(body):
             summ.append(generate_chatgpt_summary(b))
         if len(summ) > 1:
+            cons_sum = []
             print("consolidate summary generating")
-            summ = consolidate_chatgpt_summary("\n".join(summ))
-            # print(summ)
+            for b in self.check_size_body("\n".join(summ)):
+                cons_sum.append(generate_chatgpt_summary(b))
+            summ = consolidate_chatgpt_summary("\n".join(cons_sum))
             return summ
         else:
             print("Individual summary generating")
-            # print("\n".join(summ))
             return "\n".join(summ)
 
     def create_summary(self, body):
