@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP Proposal: Compact Client Side Filtering for Light Clients</title>
+  <updated>2023-05-20T02:51:48.363505+00:00</updated>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-01 19:01:14</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-11-09 23:44:07</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-06-19 22:41:49</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-09 04:47:19</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-09 03:59:17</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-09 03:50:37</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-06-07 21:41:36</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-09 03:42:58</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-09 03:03:51</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-02 04:49:16</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-06-02 02:28:54</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2017-06-01 22:10:34</name>
+  </author>
+  <link href="bitcoin-dev/June_2017/014474_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015273_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014623_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014553_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014552_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014551_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014530_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014550_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014549_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014481_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014479_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2017/014477_BIP-Proposal-Compact-Client-Side-Filtering-for-Light-Clients.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP Proposal: Compact Client Side Filtering for Light Clients</title>
+    <updated>2023-05-20T02:51:48.363505+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-June/014474.html" rel="alternate"/>
+    <summary>Alex Akselrod and Laolu Osuntokun have proposed a new light client BIP called GCS Light Client. The primary motivation behind this work was enabling a light client mode for lnd to support a lightweight back end paving the way for the usage of Lightning on mobile phones and other devices. The proposal provides a specification for the much-discussed client-side filtering reversal of BIP-37, and uses client-side filtering based on Golomb-Rice coded sets. Full-nodes maintain an additional index of the chain, and serve this compact filter to light clients that request them. Light clients then fetch these filters, query them locally and may fetch the block if a relevant item matches. One specific area that needs feedback is the parameter selection. Unlike BIP-37 which allows clients to dynamically tune their false positive rate, GCS Light Client uses a fixed false-positive of P = 1/2^20. To optimize the sum of filter_download_bandwidth and expected_block_false_positive_bandwidth, Alex has made a JS calculator available to explore the effect of tweaking the false positive rate in addition to the following variables: the number of items the wallet is scanning for, the size of the blocks, number of blocks fetched, and the size of the filters themselves. Karl Johan Alm (kallewoof) has done extensive analysis of his own, focusing on a distinct encoding type. His filters use a binomial encoding directly on the filter contents while GCS Light Client creates a Golomb-Coded set with the contents being hashes of the filter items.The Lightning Network team has also proposed a new light client BIP using the 'golomb-coded sets' (GCS) method to filter block contents. This proposed method is seen as more private and efficient than the current BIP37 method. The GCS method would only require sending output addresses or entire transactions in compressed form, which would be faster and more secure. Laolu Osuntokun, co-author of the proposal, has pushed a series of updates to the text of the BIP repo linked in the post.Tomas van der Wansem proposed another type of light client with different security characteristics. The client would receive the TXID (uncompressed), the spent outpoints (with TXIDs compressed) and the pubkey hash (compressed to reasonable amount of false positives). The client could verify the TXIDs against the merkle root with a much stronger (PoW) guarantee compared to the guarantee based on the assumption of peers being distinct, which is what the current proposal seems to make. The idea of making the last X blocks binsearchable to speed up syncing for clients was not originally considered, but it could result in considerable bandwidth savings for clients doing a historical sync or catching up to the chain after being inactive for months/weeks. To pursue this approach, new fields would need to be added to the `getcfilter` and `getcfheaders` messages to indicate the range of blocks to be included in the returned filter. Whether to keep all the filters on disk or dynamically re-generate a particular range is an implementation detail, but nodes that already do block pruning could discard very old filters. A proposal for a new light client BIP has been made by Olaoluwa Osuntokun and Alex Akselrod. The proposal uses client-side filtering that is based off of Golomb-Rice coded sets and full nodes maintain an additional index of the chain serving this compact filter (the index) to light clients upon request. Clients fetch these filters, query them locally and maybe download the block if a relevant item matches. One specific area they would like feedback on is parameter selection, unlike BIP-37 which allows clients to dynamically tune their false positive rate, this proposal uses a fixed false positive. They have done some analysis and optimization attempting to optimize filter_download_bandwidth + expected_block_false_positive_bandwidth. The authors have implemented a new light-client mode that uses client-side filtering based off of Golomb-Rice coded sets. Full-nodes maintain an additional index of the chain, and serve this compact filter (the index) to light clients which request them. Light clients then fetch these filters, query the locally and maybe fetch the block if a relevant item matches. They calculate the expected bandwidth utilization using the CDF of the Geometric Distribution. These statistics are for Feb 2016 until about a month ago since height 400k: total max: 74983, regular size: 1165148878, regular avg: 2504.856172982827, regular median: 24812, regular max: 64554, extended size: 1588089652, extended avg: 3414.1011875585823, extended median: 35260, extended max: 41731. The proposal only makes a one honest peer assumption, which is the same as any other operating mode. Clients still download all the</summary>
+    <published>2017-06-01T19:01:14+00:00</published>
+  </entry>
+</feed>

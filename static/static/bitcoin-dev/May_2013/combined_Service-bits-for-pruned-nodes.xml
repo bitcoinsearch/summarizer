@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Service bits for pruned nodes</title>
+  <updated>2023-05-19T16:52:43.116749+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2013-04-28 15:51:55</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2013-05-06 13:13:55</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2013-05-03 12:30:19</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-04-28 19:50:22</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-04-29 03:36:49</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2013-04-28 16:44:52</name>
+  </author>
+  <link href="bitcoin-dev/April_2013/002461_Service-bits-for-pruned-nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2013/002504_Service-bits-for-pruned-nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2013/002493_Service-bits-for-pruned-nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2013/002466_Service-bits-for-pruned-nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2013/002468_Service-bits-for-pruned-nodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2013/002463_Service-bits-for-pruned-nodes.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Service bits for pruned nodes</title>
+    <updated>2023-05-19T16:52:43.116749+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-April/002461.html" rel="alternate"/>
+    <summary>Pieter proposed a solution to manage the historic data on the Bitcoin network. He suggested adding two extra service bits to the P2P protocol: NODE_VALIDATE and NODE_BLOCKS_2016, which would separate the different responsibilities of network nodes into separate bits so that they could be implemented independently. The idea is to have nodes that fully validate and relay blocks and transactions but do not keep historic blocks around, called pruning nodes. Pieter monitored the frequency of block depths requested from his public node and found that 2016 nicely matched the set of frequently-requested blocks. However, additional degrees such as 144 or 210000 could be considered later if necessary. Pieter will write a BIP to formalize this proposal.Mike Hearn suggested optimizing current peer exchange and developing better bootstrap mechanisms to help new and old nodes find nodes to synchronize from. Pieter agreed with Mike's point about moving to a system where they get seeds from a DNS and connect to one or a few of the results but noted that DNS seeds cannot convey information about relaying/verifying nodes and nodes that serve (part of) the historic chain. To address this issue, Pieter proposed adding a field to addr messages to maintain the number of top blocks served, adding a field to version message to announce the actual first block served, and adding service bits to separately enable "relaying/verifying node" and "serves (part of) the historic chain." He emphasized that "serving historic data" and "relaying fresh data" are separate responsibilities, and there's no need to require them to be combined. The discussion also touched upon how to manage the historic data on the Bitcoin network. One suggestion was to have nodes pick their own ranges of blocks to keep, rather than having fixed intervals. The most recent data should be retained and treated specially. It was important for the storage to be splittable into ranges because nodes may not want to serve historic data due to storage constraints. Simple ranges quantized to groups of 100 or 1000 blocks could work fine beyond the most recent 4000 blocks.Another suggestion was to use BitTorrent for managing the storage capacity, but this would require extra software and opening additional ports, which might make contributing difficult. Moreover, BitTorrent is blocked on many networks and can be confused with illicit copying. Integrating BitTorrent would also create more network-exposed attack surfaces, making it more work than just adding the ability to add ranges to address messages.Instead, the proposal is to add new fields to the addr message and relay those fields to newer nodes so that every node could advertise the height at which it pruned. This allows for a more flexible model, and the "relay/validation" responsibility can be split off from the "serve historic data" one, with separate service bits for those. Disconnecting in case something is requested that isn't served seems like an acceptable behavior. NODE_VALIDATE doesn't say anything about which blocks are available; it just means it relays and validates. It can be combined with NODE_BLOCKS_2016 if those blocks are also served. Over time, different implementations may handle these functions separately.</summary>
+    <published>2013-04-28T15:51:55+00:00</published>
+  </entry>
+</feed>

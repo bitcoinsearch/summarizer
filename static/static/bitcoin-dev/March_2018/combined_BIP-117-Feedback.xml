@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP 117 Feedback</title>
+  <updated>2023-05-20T04:45:33.842030+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-03-05 15:28:20</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-01-16 03:27:26</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2018-01-09 14:21:08</name>
+  </author>
+  <link href="bitcoin-dev/March_2018/015800_BIP-117-Feedback.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2018/015557_BIP-117-Feedback.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2018/015532_BIP-117-Feedback.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP 117 Feedback</title>
+    <updated>2023-05-20T04:45:33.842030+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-March/015800.html" rel="alternate"/>
+    <summary>The use of altstack in v0 P2WSH should be left untouched as BIP117 may confiscate those UTXOs because the altstack would unlikely be executable. Even in v1 witness, altstack should remain a temporary data storage. The “(many scripts) concatenated together in reverse order to form a serialized script” in BIP117 is exactly the same security hole of Satoshi’s scriptSig + OP_CODESAPARATOR + scriptPubKey. That means it is possible to skip execution of scriptPubKey by using a scriptSig with an invalid push operation, so the whole concatenated script becomes a simple push. For SigOp limit, we should migrate to a model of limiting sigop per weight and count the actual number of sigop during execution. This approach is cheaper to analyze as we only need to look at the witness size, and don’t need to look at the script at all. Rusty Russell is concerned about the flexibility of BIP 117, stating that it seems to be doing too much. He suggests that the implementation of tail recursion should be a single blob, and if a single element is left on the altstack, pop and execute it. Rusty also mentions that dropping SIGOP and opcode limits requires more justification, especially measurements and bounds on execution times. In addition, Pieter believes that static analyzing the number of opcodes and sigops gets us absolutely nothing. Removing separate execution limits entirely and complicating future ability to introduce unified costing towards weight of execution cost seems the wrong way to go. One suggestion to reduce the impact of this is limiting the per-script execution to something proportional to the script size. Another idea that has been suggested on this list is to mark pushes of potentially executable code on the stack/witness explicitly.</summary>
+    <published>2018-03-05T15:28:20+00:00</published>
+  </entry>
+</feed>

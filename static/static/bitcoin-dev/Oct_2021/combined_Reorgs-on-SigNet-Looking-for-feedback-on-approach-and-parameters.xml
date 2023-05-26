@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Reorgs on SigNet - Looking for feedback on approach and parameters</title>
+  <updated>2023-05-21T03:40:10.575468+00:00</updated>
+  <author>
+    <name>Anthony Towns 2021-10-15 04:41:50</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-15 15:24:43</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-12 07:53:05</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-10 18:24:15</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-08 07:59:04</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-09-14 04:56:10</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-13 16:24:29</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-13 05:33:24</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-10 19:22:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2021-09-10 00:50:08</name>
+  </author>
+  <link href="bitcoin-dev/Oct_2021/019544_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019463_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019441_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019433_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019416_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019452_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019451_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019447_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019434_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2021/019428_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Reorgs on SigNet - Looking for feedback on approach and parameters</title>
+    <updated>2023-05-21T03:40:10.576526+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-October/019544.html" rel="alternate"/>
+    <summary>Bitcoin developers are engaged in a discussion about Signet, a test network for Bitcoin. While some users find it useful for integration testing, others feel that its block timing distribution is confusing and non-useful. Signet's block timing distribution can cause issues with the lightning to_self_delay feature, which is specified in blocks. Private signets offer advantages over the default public signet, as they allow users to control the consensus rules and test new soft forks. On the other hand, the default public signet has pre-existing infrastructure setup like miners, explorers, and faucets. The optimal time interval for reorgs on Signet is also being considered. Some suggest that reorgs should occur frequently, while others argue that the default Signet should resemble mainnet behavior, where reorgs do not occur frequently. The goal of Signet is to simplify testing by keeping the header format the same, allowing SPV clients to function without significant modification. A proposal to create a flag that allows users to accept reorgs or not, depending on their needs, is being discussed. If users turn off reorgs, they will see a consistent chain moving forward, similar to the practical experience of mainnet. To move the default Signet closer to resembling mainnet even more closely, it is suggested to generate batches of transactions to fill up blocks and create a fee market. This will help in testing features like RBF and Lightning unhappy paths (justice transactions, perhaps even pinning attacks etc) in future. The scenario is discussed where at least two nodes and miner scripts need to be running, and an always-miner and a race-miner both have the same hash rate. Assuming both are well-connected to the network, it's random which miner will first mine and propagate a block. In the end, the always-miner chain will always win the race. The discussion also revolves around how deep reorgs should be on average, and concerns regarding doing this on the default signet, making sure that nodes that set -signetacceptreorg=0 don't end up partitioning the p2p network due to either rejecting a higher work chain or rejecting txs due to double-spends across the two chains. A draft of code for -signetacceptreorg=0 is available on Github. The original proposal was to have a different reorg signing key, but there were two problems with that approach. The signet block signature encodes the signet challenge, which makes it difficult to distinguish valid-but-will-become-stale blocks from invalid blocks. Using a version bit seems like the easiest way of doing that. Users can opt-out of reorgs in case they explicitly want to remain unaffected. The reorg-interval depends on the user's needs, and too frequent reorgs could hinder other SigNet users. Blocks on Signet get mined at a similar rate to mainnet, so waiting for blocks is necessary. Testnet3 can have huge variances in block discovery times, some days without blocks being found, and thousands of blocks found in a day. Signet is less expensive in fees or risk than mainnet and takes far less time for IBD than testnet. In summary, the discussion on Bitcoin development mailing list includes proposals and considerations related to Signet, a test network for Bitcoin. Developers are seeking feedback on how often reorgs should happen, with some suggesting three per day, 48 blocks apart, while others argue for reorgs every block. The aim is to make testing easier by allowing software to use Signet without modification.</summary>
+    <published>2021-10-15T04:41:50+00:00</published>
+  </entry>
+</feed>

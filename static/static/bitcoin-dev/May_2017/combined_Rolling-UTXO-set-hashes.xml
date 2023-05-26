@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Rolling UTXO set hashes</title>
+  <updated>2023-05-20T02:22:18.603429+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2017-05-15 20:01:14</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2017-05-23 20:43:45</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-05-16 18:20:00</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2017-05-16 18:17:19</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-05-15 23:59:58</name>
+  </author>
+  <link href="bitcoin-dev/May_2017/014337_Rolling-UTXO-set-hashes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2017/014402_Rolling-UTXO-set-hashes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2017/014347_Rolling-UTXO-set-hashes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2017/014345_Rolling-UTXO-set-hashes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2017/014341_Rolling-UTXO-set-hashes.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Rolling UTXO set hashes</title>
+    <updated>2023-05-20T02:22:18.604403+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-May/014337.html" rel="alternate"/>
+    <summary>The article discusses an efficient way of computing a UTXO set hash that allows for adding and deleting elements in any order. The author proposes using MuHash modulo a sufficiently large safe prime or an elliptic curve group to compute the hash of unordered data incrementally. Both approaches support adding and deleting set elements in any order, allowing for easy maintenance of a running sum for the entire UTXO set. Preliminary benchmarks suggest that these approaches are reasonable for full nodes to maintain, effectively providing a rolling cryptographic checksum of the UTXO set at all times. Use cases include database consistency checking, replacement for Bitcoin Core's gettxoutsetinfo RPC's hash computation, and fast sync methods with known good blocks/UTXO sets.The Bitcoin community has raised concerns about efficiently comparing UTXO sets, and rolling UTXO set hashes have been proposed as a potential solution. However, this approach does not address the question of how to reduce full node costs by sending proofs instead of requiring them to maintain the data. There are different models proposed, including insertion-ordered TXO trees, txid-ordered UTXO Patricia tries, AVL+ trees, and append-only bitfield. Each model has different trade-offs in terms of CPU, RAM for validators, complexity for wallets/index services, etc., and there is no network-wide choice yet. It is worthwhile to investigate solutions to the "how can we efficiently compare UTXO sets" problem separately from the "how do we reduce full node costs by sending proofs instead of it maintaining the data."Lite nodes with UTXO sets have long been an advantage for committing to UTXO data, and the recent interest in full block lite clients for privacy reasons complements membership proofless usage. However, the size of txin prevout/nsequence and spent txouts for transactions with unspent outputs left should also be considered. The construction being considered and benchmarked uses 256-bit truncated SHA512(256bit txid || 32bit voutindex || 1bit coinbase || 31bit height || CTxOut output) as secp256k1 X coordinate or as key to seed a ChaCha20 PRNG whose outputs is the 3072-bit MuHash number.</summary>
+    <published>2017-05-15T20:01:14+00:00</published>
+  </entry>
+</feed>

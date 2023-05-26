@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Using a storage engine without UTXO-index</title>
+  <updated>2023-05-20T01:56:10.776973+00:00</updated>
+  <author>
+    <name>Johnson Lau 2017-04-08 19:23:29</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-04-08 00:44:50</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-04-07 01:09:26</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-04-08 22:12:09</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-04-08 20:21:04</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-04-07 19:42:22</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-04-07 18:18:32</name>
+  </author>
+  <link href="bitcoin-dev/April_2017/014101_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014083_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014054_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014109_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014104_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014074_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014071_Using-a-storage-engine-without-UTXO-index.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Using a storage engine without UTXO-index</title>
+    <updated>2023-05-20T01:56:10.776973+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-April/014101.html" rel="alternate"/>
+    <summary>In a Bitcoin-dev mailing list, Tomas is discussing the importance of protocol/implementation separation and how UTXO data is always a resource cost for script validation. He notes that the ratio of different costs is not necessarily identical across implementation and suggests an experiment with regtest.There is also a discussion on Bitcrust's storage engine, which performs not good with 100-in-1-out transactions. For anti-DoS purposes, it is suggested to limit the number of previous 1-in-100-out transactions. The long term minimal disk storage requirement can't be less than all the unspent outputs.Latency related costs in Bitcoin Core do not depend on the number of outputs in transactions in a block. Bitcrust separates script validation (base load when transactions come in) from order validation (peak load when blocks come in). The software still needs an analog of a (U)TXO database, and there is a discussion on the spent index rejection of invalid spends.The software does not exploit mempool pre-validation due to hard to detect consensus faults that could split the network because of bugs in the past. Signature validation is cached and takes most of the block validation time, hence risky optimization for mempool pre-validation is not necessary. Other optimizations are being implemented to make the system more efficient.The efficiency claims are only with regards to order validation. Bitcrust's order validation is very fast if we assume all transactions are already pre-synced and verified. The tx order in a block is not important unless they are dependent. Bitcrust does not support minimum disk and memory usage yet. The reversal of costs during peak load order validation is a rather interesting feature of using spend-tree based validation. A protocol addressing the UTXO growth might not be worth considering protocol improvements for this solution. A network in which many nodes maintain a transaction index also enables a class of light node applications that ask peers to prove existence and spentness of TXO's. The proposals long term resource requirements are directly proportional to the amount of unspent output data, which grows over time at some fraction of the total transaction volume.</summary>
+    <published>2017-04-08T19:23:29+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - CPFP Carve-Out for Fee-Prediction Issues in Contracting Applications (eg Lightning)</title>
+  <updated>2023-05-20T18:35:05.191378+00:00</updated>
+  <author>
+    <name>Matt Corallo 2019-01-07 15:18:52</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-11-30 19:33:56</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-11-29 19:37:54</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-10-25 17:30:41</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-10-24 21:25:14</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-01-08 14:46:45</name>
+  </author>
+  <author>
+    <name>Bob McElrath 2018-12-02 15:08:39</name>
+  </author>
+  <link href="bitcoin-dev/Jan_2019/016608_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2018/016520_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2018/016518_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017433_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017432_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2019/016610_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2018/016524_CPFP-Carve-Out-for-Fee-Prediction-Issues-in-Contracting-Applications-eg-Lightning-.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - CPFP Carve-Out for Fee-Prediction Issues in Contracting Applications (eg Lightning)</title>
+    <updated>2023-05-20T18:35:05.191378+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-January/016608.html" rel="alternate"/>
+    <summary>In the world of Bitcoin, Lightning Network is a popular payment channel system that allows for faster, cheaper transactions. However, there are security concerns around the use of CPFP (Child Pays For Parent) in relation to Lightning and contracting/payment channel systems. An attack involving delaying confirmation of a transaction can increase the fee cost of confirming it, making it difficult for the non-delaying counterparty to claim the HTLC using the hash-preimage.To address this issue, two solutions have been proposed. One solution involves tweaking Lightning's commitment transaction to have two small-value outputs that are immediately spendable by each participant. The other solution involves allowing transactors to mark their transactions as "likely-to-be-RBF'ed" to enable a relay policy where children of such transactions would be rejected unless the resulting package would be "near the top of the mempool".However, implementing these solutions has its challenges. Defining a "near the top of the mempool" criteria for large batched transactions is not entirely secure as it does not guarantee confirmation by some deadline. Additionally, giving up the ability to RBF/CPFP more than once in case the fee moves away from the sender can be a significant restriction. The original proposal is somewhat of a hack and its implementation proposal relies on some form of package relay.The discussion further involved tweaking anti-DoS CPFP rules in Bitcoin Core/BIP 125, including two small-value outputs in Lightning's commitment transaction that are immediately spendable by each channel participant, and allowing them to chain children off without allowing unrelated third-parties to chain children. This scheme could address the specific attack without tweaking the RBF rules of BIP 125, since it does not involve an RBF at all.As an alternative proposal, Rusty Russell suggested client-side methods for package relay. This could be done by checking if a transaction is above 250 satoshi per kweight but below minrelayfee, putting it in a side-cache with a 60-second timeout sweep, and processing them as a pair if something comes in which depends on it which is above minrelayfee.In summary, the lightning network and similar systems work by exchanging pre-signed transactions for future broadcast. However, predicting the required feerate for timely confirmation is difficult, and utilizing CPFP and dependent transaction relay to allow parties to broadcast low-feerate transactions has proven challenging due to complexity around RBF/CPFP anti-DoS rules. While solutions have been proposed, implementing them has its challenges and potential impact on mempool acceptance code and eviction policy.</summary>
+    <published>2019-01-07T15:18:52+00:00</published>
+  </entry>
+</feed>

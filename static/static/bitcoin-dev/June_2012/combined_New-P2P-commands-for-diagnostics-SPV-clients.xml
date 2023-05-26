@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - New P2P commands for diagnostics, SPV clients</title>
+  <updated>2023-05-19T03:44:43.440080+00:00</updated>
+  <author>
+    <name>Matt Corallo 2012-06-19 19:09:58</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2012-06-15 16:20:27</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2012-06-15 14:56:52</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2012-06-15 13:19:06</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2012-06-15 14:39:44</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2012-07-23 16:40:36</name>
+  </author>
+  <link href="bitcoin-dev/June_2012/001617_New-P2P-commands-for-diagnostics-SPV-clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2012/001548_New-P2P-commands-for-diagnostics-SPV-clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2012/001542_New-P2P-commands-for-diagnostics-SPV-clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2012/001537_New-P2P-commands-for-diagnostics-SPV-clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2012/001541_New-P2P-commands-for-diagnostics-SPV-clients.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2012/001727_New-P2P-commands-for-diagnostics-SPV-clients.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - New P2P commands for diagnostics, SPV clients</title>
+    <updated>2023-05-19T03:44:43.440080+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-June/001617.html" rel="alternate"/>
+    <summary>Bitcoin developers are discussing the implementation of a new feature to reduce network load and speed up block propagation. One developer suggests implementing a filter negotiation protocol to allow SPV clients to choose how much CPU and memory usage each node is allowed to use. Another developer proposes a three-part change that includes adding the mempool command, changing the "block" message format, and introducing a new message called getmerkletx. They also discuss the need to specify the format for filterload and filteradd commands, which enable special behavior changes for mempool and existing P2P commands. Finally, they agree on the importance of input from potential users about what information they might need and the format requirements for the new messages to be added.The discussion is regarding Bloom Filters, and Andreas Petersson has some concerns about the current implementation. He suggests that the process requires a complicated setup, where the client will ask the server to replay the whole blockchain filtered. This means that the server will have to do a full scan of his data and only filter out non-matching entries. The way it is now, there is no method of indexing the data for expected requests. Andreas suggests a possible scheme where the client takes his list of addesses, hashes them to form a bloom filter of length 64KiB, and combines them with | to add more 1's with each address. The server maintains a binary tree data structure of unspent outputs arranged by the Bloom filter bits. To build the tree, the server would need to calculate the 64KiB bits for each address and arrange them in a binary tree. That way, he can easily traverse the tree for a given bloom query. Matt responds by saying that although he likes the idea of having a "give me all unspent outputs for my pubkeys" command, he sees quite a future for clients somewhere between "I store nothing but pubkeys and don't know about the chain" and "I store a full chain" and the bloom filters as described are pretty useful for many clients in that in-between. Also, for clients that are "Really lightweight clients," should probably just stick with an electrum-style server-client system with specialized servers instead of relying on P2P nodes to provide them with a list of unspent outputs/etc.Matt also mentions that the current implementation checks each input+output to see if the hash160 of the dest addr, hash160 of the pubkey or hash160 of the p2sh sh matches the filter as-is. From the list provided, he thinks adding a check to allow adding a specific outpoint to a filter would be nice.</summary>
+    <published>2012-06-19T19:09:58+00:00</published>
+  </entry>
+</feed>

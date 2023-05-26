@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - SIGHASH2 for version 1 witness programme</title>
+  <updated>2023-05-20T16:46:44.591830+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-08-30 20:38:06</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-05-31 18:35:41</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-07-02 18:23:48</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-08-31 07:42:07</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-06-01 18:45:57</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2018-06-01 17:03:05</name>
+  </author>
+  <link href="bitcoin-dev/Aug_2018/016345_SIGHASH2-for-version-1-witness-programme.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016047_SIGHASH2-for-version-1-witness-programme.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2018/016188_SIGHASH2-for-version-1-witness-programme.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2018/016347_SIGHASH2-for-version-1-witness-programme.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2018/016056_SIGHASH2-for-version-1-witness-programme.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2018/016054_SIGHASH2-for-version-1-witness-programme.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - SIGHASH2 for version 1 witness programme</title>
+    <updated>2023-05-20T16:46:44.591830+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-August/016345.html" rel="alternate"/>
+    <summary>Johnson Lau has proposed a new BIP (Bitcoin Improvement Proposal) that defines signature checking operations in version 1 witness program. The proposal aims to use compact signatures to save space and provide more SIGHASH options for greater flexibility. The updated specification is applicable to OP_CHECKSIG and OP_CHECKSIGVERIFY in version 1 witness program. The public key must be exactly 33 bytes and the signature format rules apply only if the first byte of the public key is 0x02 or 0x03. The new format saves ~8 bytes per signature compared to the current DER format, according to Lau. Furthermore, the proposal introduces new hashtype definitions that are re-defined with the double SHA256 of the serialization of various elements. The bit flags are defined in a negative way, such as NOLOCKTIME, to save space. Additionally, some combinations are missing to save bits for useless flags. The default and most commonly used case is SIGHASH2_ALL, making it zero size to save space. Finally, the proposal fixes some minor problems found during the BIP143 review, such as the possibility of having the same SignatureHash() results for a legacy and a witness transaction.Johnson Lau has proposed a new version of BIP143 that focuses on improving security and reduces the number of optional features. The new features include signing all input values, signing both scriptCode and previous scriptPubKey, SIGHASH2_NOINPUT that commits to both scriptCode and scriptPubKey, disallowing out-of-range cases, signing the highest index output, dual output, signing the amount of fees, and signing the witness size. Christian Decker has recommended against using SIGHASH_NOINPUT variant as it would prevent binding floating transactions to predecessors. Lau has asked if NOINPUT should commit to scriptCode and/or scriptPubKey, and whether LASTOUTPUT and DUALOUTPUT should be added. The latter was suggested by gmaxwell for Kickstarter projects but Lau doubts its usefulness. Instead, he suggests a fully flexible way to sign a subset of outputs, an approach with potential problems such as code complexity, limited number of outputs, and variable signature size. Finally, Lau asks whether to sign the exact witness size or an upper size limit.Johnson Lau has revised his proposal for SIGHASH2 after receiving feedback. The new version improves security and reduces the number of optional features. The proposal is a superset of the existing SIGHASH and BIP118 SIGHASH_NOINPUT with further flexibility but not being too complicated. The major new features compared with BIP143 include signing all input values, signing both scriptCode and previous scriptPubKey, and committing to the size of witness. Lau has shared formatted BIP and sample code on Github. Lau has also asked for suggestions regarding some questions. Firstly, whether NOINPUT should commit to scriptCode and/or scriptPubKey. Secondly, whether LASTOUTPUT and DUALOUTPUT should be added or a fully flexible way to sign a subset of outputs should be implemented. Thirdly, whether the exact witness size or an upper size limit should be signed. Finally, Lau has mentioned that since 2016 he has made several proposals for the next generation of script, and now suggests implementing MAST and other new script functions inside Taproot and/or Graftroot proposed by Maxwell.The Bitcoin Improvement Proposal #147 is an update to the Bitcoin protocol that introduces a new signature format and redefines hashtype definitions. The new signature format saves approximately 8 bytes per signature compared to the current DER format. If the signature size is zero, it is accepted as the "valid failing" signature for OP_CHECKSIG to return a FALSE value to the stack. However, the script execution must fail with a signature size not 0, 64, 65, or 66-byte.The hashtype and SignatureHash function are redefined in the new proposal, which includes double SHA256 of the serialization of 13 fields. The bit flags are defined in a negative way (e.g., NOLOCKTIME), and the hashtype of 0 is known as SIGHASH2_ALL, which covers all available options. The hashtype of 0x3ff is also known as SIGHASH2_NONE, which covers nothing, and users must not set the reserved bits unless defined by future proposals.The proposal provides examples of equivalent SIGHASH2 values for other SIGHASH schemes and notes that legacy and BIP143 SIGHASH only implicitly commit to the fee paid. Legacy SIGHASH always implicitly commits to the input value, but the BIP147 proposal decouples INPUT and SEQUENCE for flexibility. Other changes include making NOSCRIPTCODE optional and putting NOVERSION and NOSCRIPTCODE in the second byte to keep signatures below 66 bytes.Johnson Lau has proposed a new BIP that defines signature checking operations in version 1 witness program. The specification is applicable to OP_CHECKSIG and OP_CHECKSIGVERIFY and</summary>
+    <published>2018-08-30T20:38:06+00:00</published>
+  </entry>
+</feed>

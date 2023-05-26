@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - 0.4rc1 known bugs</title>
+  <updated>2023-05-19T02:50:35.741740+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2011-09-06 11:55:30</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2011-09-04 02:43:48</name>
+  </author>
+  <link href="bitcoin-dev/Sept_2011/000463_0-4rc1-known-bugs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2011/000447_0-4rc1-known-bugs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - 0.4rc1 known bugs</title>
+    <updated>2023-05-19T02:50:35.741740+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-September/000463.html" rel="alternate"/>
+    <summary>On September 4, 2011, Pieter Wuille wrote on GitHub that he had compiled bitcoind with Gavin Andresen's DEBUG_LOCKORDER and fixed two potential reported deadlock issues. However, it turned out that there were no actual potential deadlocks because all locking of cs_vRecv/cs_vSend happens inside TRY_CRITICAL_SECTION blocks. Pieter suggested to Gavin that he add the rule to his debug code that ignores critical sections that are only locked through TRY_...? Gavin Andresen provided a quick status update on September 3, 2011, regarding 0.4. He reported that sipa found what looks like a deadlock between the addr-handling and IRC-join-handling code. UukGoblin also reported a deadlock problem on a bitcoind handling getwork requests. Andresen stated that if someone wants to get more familiar with the bitcoin code and has a lot of patience, tracking down deadlocks is a great way to do it. Additionally, ArtForz found a performance bug with transactions that have thousands of inputs and outputs on the solidcoin test network.Regarding the actual deadlock between IRC seeding and AddAddress, internally DB also uses pthreads to implement the txn_begin()/commit() scheme. These need to be taken into account when searching for deadlocks, but are obviously not detected by DEBUG_LOCKORDER. In particular here, the processing of "addr" created a db transaction for the entire message, while only locking cs_mapAddresses inside AddAddress. For IRC seeded addresses, however, no db tx was precreated, and AddAddress first locked cs_mapAddress, and then did the database write (causing a lock) inside. The solution to this issue was to make some changes in main.cpp. In ProcessMessage, case "addr", the new addresses are stored in CAddrDB. CRITICAL_BLOCK(cs_mapAddresses) is added to lock cs_mapAddresses inside AddAddress, and addrDB.TxnBegin() is called to start a new transaction. After that, the function checks if it has processed all addresses, and if so, it commits the transaction with addrDB.TxnCommit(). Additionally, Gavin reported that Gitian doesn't build properly, which was his fault.</summary>
+    <published>2011-09-06T11:55:30+00:00</published>
+  </entry>
+</feed>
