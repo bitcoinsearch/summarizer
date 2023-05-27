@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Speeding up "getbalance &lt;account&gt;" calls</title>
+  <updated>2023-05-26T18:35:48.645749+00:00</updated>
+  <author>
+    <name>John Smith 2011-06-24 05:30:54</name>
+  </author>
+  <author>
+    <name>jan at uos.de 2011-06-23 21:51:43</name>
+  </author>
+  <author>
+    <name>jan at uos.de 2011-07-04 11:40:28</name>
+  </author>
+  <author>
+    <name>Jan Vornberger 2011-07-03 16:29:05</name>
+  </author>
+  <author>
+    <name>jan at uos.de 2011-07-04 11:40:28</name>
+  </author>
+  <author>
+    <name>John Smith 2011-06-24 05:30:54</name>
+  </author>
+  <author>
+    <name>Jan Vornberger 2011-07-03 16:29:05</name>
+  </author>
+  <author>
+    <name>jan at uos.de 2011-07-04 11:40:28</name>
+  </author>
+  <author>
+    <name>Jan Vornberger 2011-07-03 16:29:05</name>
+  </author>
+  <author>
+    <name>jan at uos.de 2011-06-23 21:51:43</name>
+  </author>
+  <author>
+    <name>jan at uos.de 2011-06-23 21:51:43</name>
+  </author>
+  <author>
+    <name>John Smith 2011-06-24 05:30:54</name>
+  </author>
+  <link href="bitcoin-dev/June_2011/000063_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2011/000062_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000128_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000127_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000128_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2011/000063_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000127_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000128_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000127_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2011/000062_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2011/000062_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2011/000063_Speeding-up-getbalance-account-calls.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Speeding up "getbalance &lt;account&gt;" calls</title>
+    <updated>2023-05-26T18:35:48.645874+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-June/000063.html" rel="alternate"/>
+    <summary>Jan Vornberger, the developer of Instawallet, faced a bottleneck issue with the 'getbalance' API taking too long to complete. He discovered that bitcoind ran through all relevant transactions each time anew to compute the balance. Jan considered implementing a caching system in bitcoind to cache calls to getbalance and invalidate the cache when new blocks or transactions that affect the wallet arrive. However, he was unsure whether a more sophisticated cache that only invalidated affected entries would be necessary to handle block chain reorgs. To address the issue, John Smith suggested scanning the wallet every time there is a change in the blockchain using a hash_map to accumulate balances for all accounts. This approach would reduce the time taken to return the balance for an account, make it predictable, and less prone to bugs. It would also handle block chain reorgs without any issues.Jan implemented this suggestion and created a list of all account balances every time a new block comes in or a transaction that affects the wallet appears. The list is stored in a "map" right now. Initially, Jan did not use a hash map because he was new to C++ and was confused about what to use. However, he chose a tree-based implementation of a map due to limited memory on his VPS.When Jan tried to use "sendfrom," it triggered a rebuild of the cache and could not return before the rebuild was complete. To address this, Jan changed the approach slightly so that a complete rebuild of the cache would only happen on new blocks (in case reorgs happen). On new wallet transactions, the cache would just be adjusted incrementally. Jan warned that the cache would not work correctly with the RPC command "move" since he had not implemented the necessary adjustments yet. Overall, implementing the suggested solution improved the efficiency and reliability of the balance computation process.</summary>
+    <published>2011-06-24T05:30:54+00:00</published>
+  </entry>
+</feed>
