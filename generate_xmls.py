@@ -169,11 +169,6 @@ class GenerateXML:
         return str(id).split("-")[-1]
 
     def start(self, dict_data, url):
-        # data = open(json_path, "r")
-        # dict_data = []
-        # for line in data:
-        #     dict_data.append(json.loads(line))
-
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
                        'url', 'authors']
@@ -296,27 +291,9 @@ if __name__ == "__main__":
     dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
-    str_month_year_list = []
-    for data in data_list:
-        all_value = data["_source"]
-        datetime_obj = datetime.strptime(all_value['created_at'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        month_name = gen.month_dict[int(datetime_obj.month)]
-        str_month_year = f"{month_name}_{int(datetime_obj.year)}"
-        if str_month_year not in str_month_year_list:
-            str_month_year_list.append(str_month_year)
-
-    if "lightning-dev" in dev_url:
-        dev_folder = os.path.join("./static", "lightning-dev")
-    else:
-        dev_folder = os.path.join("./static", "bitcoin-dev")
-
     delay = 50
 
     while True:
-        extracted_month_year_list = os.listdir(dev_folder)
-
-        # if len(extracted_month_year_list) == len(str_month_year_list):
-        #     break
         try:
             gen.start(data_list, dev_url)
             break
