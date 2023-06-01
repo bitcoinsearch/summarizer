@@ -106,6 +106,9 @@ class GenerateXML:
 
         summary_length = sum([len(TOKENIZER.encode(s)) for s in summaries])
 
+        print(f"Summary length: {summary_length}")
+        print(f"Max length: {max_length}")
+
         if summary_length > max_length:
             print("entering in recursion")
             return self.recursive_summary(body, tokens_per_sub_body // 2, max_length)
@@ -114,7 +117,7 @@ class GenerateXML:
 
     def gpt_api(self, body):
         body_length_limit = 2800
-        tokens_per_sub_body = 2000
+        tokens_per_sub_body = 1000
         summaries = self.recursive_summary(body, tokens_per_sub_body, body_length_limit)
 
         if len(summaries) > 1:
