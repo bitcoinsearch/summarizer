@@ -94,8 +94,10 @@ class GenerateXML:
         chunks = self.split_prompt_into_chunks(body, tokens_per_sub_body)
         summaries = []
 
+        print(f"Total chunks: {len(chunks)}")
+
         for chunk in chunks:
-            time.sleep(0.1)
+            time.sleep(2)
             summary = generate_chatgpt_summary(chunk)
             summaries.append(summary)
 
@@ -123,7 +125,7 @@ class GenerateXML:
         if len(summaries) > 1:
             print("Consolidate summary generating")
             summary_str = "\n".join(summaries)
-            time.sleep(0.1)
+            time.sleep(2)
             consolidated_summaries = consolidate_chatgpt_summary(summary_str)
             return consolidated_summaries
         else:
