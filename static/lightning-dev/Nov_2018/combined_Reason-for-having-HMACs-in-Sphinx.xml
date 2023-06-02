@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Reason for having HMACs in Sphinx</title>
+  <updated>2023-06-02T15:26:43.715405+00:00</updated>
+  <author>
+    <name>Corné Plooy 2018-12-04 10:23:28</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-12-04 10:38:58</name>
+  </author>
+  <author>
+    <name>Corné Plooy 2018-12-04 10:47:59</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-12-04 18:45:56</name>
+  </author>
+  <author>
+    <name>Christian Decker 2018-12-06 15:24:20</name>
+  </author>
+  <author>
+    <name>Corné Plooy 2018-11-29 15:31:34</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2018-12-05 00:44:44</name>
+  </author>
+  <author>
+    <name>René Pickhardt 2018-11-29 16:32:18</name>
+  </author>
+  <author>
+    <name>Christian Decker 2018-11-29 17:13:29</name>
+  </author>
+  <author>
+    <name>Christian Decker 2018-12-05 12:13:40</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2018-12-06 00:22:22</name>
+  </author>
+  <author>
+    <name>Corné Plooy 2018-12-06 11:51:30</name>
+  </author>
+  <link href="lightning-dev/Dec_2018/001711_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001712_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001713_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001717_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001726_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001693_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001719_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001694_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001696_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001720_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001722_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2018/001725_Reason-for-having-HMACs-in-Sphinx.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Reason for having HMACs in Sphinx</title>
+    <updated>2023-06-02T15:26:43.715405+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001711.html" rel="alternate"/>
+    <summary>To prevent a potential attack on the Lightning network, a shared secret can be included in the onion message to the final node. This will ensure that an intermediate node cannot guess the final node and launch an attack. The protocol involves generating a shared secret by the payee as part of the invoice, which is passed on to the payer. The payer includes the shared secret in the per-hop data to the payee.The payee then checks whether the received shared secret corresponds to the generated one. If it doesn't, the payment hash is unrecognized, and the payee behaves in the same way as when the payment hash is unrecognized. With this protocol, a final node can no longer be distinguished from a non-final node with this attack. However, this type of attack can still be generalized to test whether a certain second-degree neighbor, third-degree neighbor, etc. is the final node, which scales poorly with increasing network distance.Adding HMACs to the Lightning network ensures that the next hop will return an error if anything was changed, removing the leak about which node would have failed the route. However, an attacker could learn the path length by messing with different per-hop payloads. This problem arises because the HMAC prevents a hop from modifying the packet before forwarding, and the next node not detecting that modification.To prevent this, the shared secret needs to be encrypted like the rest of the per-hop data so that the attacker cannot learn the shared secret and include it in their own replacement onion. With a 32-bit shared secret, it would take an average of 248 days for an attacker who can do 100 attempts per second to crack it for a single guess of which node is the final node.</summary>
+    <published>2018-12-04T10:23:28+00:00</published>
+  </entry>
+</feed>

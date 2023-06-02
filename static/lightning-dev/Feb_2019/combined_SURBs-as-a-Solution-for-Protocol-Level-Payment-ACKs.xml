@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - SURBs as a Solution for Protocol-Level Payment ACKs</title>
+  <updated>2023-06-02T17:22:56.630483+00:00</updated>
+  <author>
+    <name>Olaoluwa Osuntokun 2019-02-08 01:19:13</name>
+  </author>
+  <author>
+    <name>Kulpreet Singh 2019-02-11 21:03:43</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-02-19 00:50:25</name>
+  </author>
+  <link href="lightning-dev/Feb_2019/001862_SURBs-as-a-Solution-for-Protocol-Level-Payment-ACKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2019/001865_SURBs-as-a-Solution-for-Protocol-Level-Payment-ACKs.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2019/001876_SURBs-as-a-Solution-for-Protocol-Level-Payment-ACKs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - SURBs as a Solution for Protocol-Level Payment ACKs</title>
+    <updated>2023-06-02T17:22:56.630483+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-February/001862.html" rel="alternate"/>
+    <summary>The Lightning Network is a protocol used to make fast and cheap transactions over the Bitcoin network. The network has been working on design related to the Sphinx packet, which prompted revisiting the original Sphinx paper to refresh memory on the finer details of the protocol. The paper highlighted the potential use of single-use-reply-blocks (SURBs) to implement a "payment ACK" for each sent HTLC. Currently, HTLC routing is mainly a game of "send and hope it arrives," as there is no clear indication of when an HTLC has arrived at its destination.Implementing some sort of "payment ACK" feature would benefit HTLC routing. As part of BOLT 1.1, it was agreed upon that implementing a payment ACK scheme would be beneficial. A payment ACK scheme allows the sender to know when a payment has reached the receiver. It also helps in AMP implementations by allowing feedback on successfully routed splits. Enforcing and relying on ACKs may also thwart any games receivers might play, claiming that the HTLC "didn't actually arrive."To implement payment ACKs, the sender can craft a SURB, and mark the receipt of the SURB as the payment ACK itself. Creating and processing a SURB is identical to the regular HTLC packets used today, and the code impact to the code sphinx packet logic is minimal. Then, the e2e payload is reintroduced so that it can carry the SURB in the forward direction (HLTC add). The backwards packet would also have a payload of random bytes with the same size as a regular packet to make them look identical on the wire.The approach is better than a potential client-server payment negotiation protocol as it doesn't require any additional servers alongside the node, maintains sender anonymity, and doesn't rely on any sort of PKI. From the perspective of packet analysis, errors today are identifiable due to the packet size, but SURBs have the same profile as regular HTLC adds since they use the same Sphinx packet format. Unlike the wrapped onion errors, intermediate nodes are also able to validate the integrity of the payment ACK as they'll check the per-hop MAC as normal. Additionally, the replies naturally create cover traffic as they look like regular payments.One downside is that this approach would essentially double the size of HTLC messages on the network today, as they need to carry SURBs. Most candidates for possible rendezvous schemes to deploy would also increase the packet size if allowed up to 20 hops in both directions. By reintroducing SURBs, there is an opportunity to cleanly solve the payment ACK issue, re-use a component of Lightning, enable protocol-level streaming/subscription payments, and make replies indistinguishable-ish from regular payments.</summary>
+    <published>2019-02-08T01:19:13+00:00</published>
+  </entry>
+</feed>
