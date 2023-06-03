@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - An Idea to Improve Connectivity of the Graph</title>
-  <updated>2023-05-24T20:34:59.790185+00:00</updated>
+  <updated>2023-06-02T02:02:01.620344+00:00</updated>
   <author>
-    <name>Christian Decker 2018-02-05 13:21:54</name>
+    <name>Abhishek Sharma 2018-02-04 18:21:48</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-04-11 09:40:11</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-04-05 16:13:19</name>
@@ -28,12 +31,10 @@
     <name>Alejandro Ranchal Pedrosa 2018-03-29 15:10:37</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-04-11 09:40:11</name>
+    <name>Christian Decker 2018-02-05 13:21:54</name>
   </author>
-  <author>
-    <name>Abhishek Sharma 2018-02-04 18:21:48</name>
-  </author>
-  <link href="lightning-dev/Feb_2018/000991_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2018/000986_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001161_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001135_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001138_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001159_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
@@ -41,15 +42,14 @@
   <link href="lightning-dev/April_2018/001167_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2018/000987_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001129_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001161_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2018/000986_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2018/000991_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - An Idea to Improve Connectivity of the Graph</title>
-    <updated>2023-05-24T20:34:59.790185+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-February/000991.html" rel="alternate"/>
-    <summary>In a discussion on Lightning-dev, Christian expressed concern over state invalidations in Lightning and their unsuitability for multi-party negotiations beyond two parties. This is due to the exponential growth of potential reactions to a party cheating. The Channel Factories paper addresses this issue by using the Duplex Micropayment Channel construction instead of retaliation construction in LN. Christian also raised confusion regarding how misbehavior on one channel could be retaliated against on another channel if they are logically independent. Abhishek Sharma proposed a modification to the Lightning Network that would require fewer open channels. His idea involves three parties committing their funds all at once and moving their funds between the three open channels between them, creating three open channels between each of them with a pre-set capacity.This mechanism can be useful when parties wish to transact but don't have enough funds in the required channel. For example, if parties A, B, C, D, and E have channels and balances as mentioned above, D cannot send E 1.0 BTC without opening a new channel and waiting for the network to verify it. But, A can ask B to move her 1.0 in channel AB to channel AC to enable D to route 1.0 BTC from A to C and finally to E.ZmnSCPxj from Lightning-dev asked for more details on Sharma's idea and Bitcoin transactions involved, comparing it to the Burchert-Decker-Wattenhofer Channel Factories. In response, Christian Decker pointed out a potential issue with the selection of 1 bit sequence diffs in the branching process, which results in a large number of invalidations. He also discussed the toolbox for long-lasting DMCs, including techniques such as using a sequence of `nSequence`d transactions off-chain with a branching factor of 2 or the Poon-Dryja technique.In conclusion, while state invalidations in Lightning may not be suitable for multi-party negotiations beyond two parties, alternative techniques such as long-lasting DMCs and the modification proposed by Sharma can be useful. It's important to consider the trade-offs of each technique and choose the one that fits the specific use case best.</summary>
-    <published>2018-02-05T13:21:54+00:00</published>
+    <updated>2023-06-02T02:02:01.620344+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-February/000986.html" rel="alternate"/>
+    <summary>Abhishek Sharma, a Brown University Computer Science student, proposed a modification to the Lightning Network that reduces the number of channels needed. The proposal involves three parties committing their funds all at once and being able to move their funds between the three open channels if they have permission from the counterparty. A new technique for creating off-chain transactions called `nSequence`d transactions is also described, which allows for easy incrementation using a sequence of transactions representing a binary counter.The issue of retaliatory constructions in multi-party cases has been raised, and separate retaliatory constructions for each scenario are necessary as it becomes complicated to determine how the money should be divided between the other two parties if one party cheats. Rusty shachains require only O(1) storage on the number of updates, making retaliatory constructions more suitable for channels. Channel factories can use the Duplex construction near the root of the initial on-chain anchor transaction but be terminated in Poon-Dryja retaliatory channels. This balance allows for restructuring channels to be rarer compared to updating them normally for normal usage.A member of the Lightning Network development team, Christian Decker, has pointed out that the current approach to state invalidations in the Lightning Network is not well-suited for multi-party negotiations beyond two parties. The Channel Factories paper relies on the Duplex Micropayment Channel construction instead of retaliation construction in LN as the potential reactions to a party cheating grows exponentially in the number of parties in the contract. Alejandro asks for further elaboration on this assumption from the community.ZmnSCPxj asked Abhishek Sharma about the details of Bitcoin transactions, how commitment transactions spend and requested a graph of transaction chains that ensure correct operation of his idea. He also referenced the Burchert-Decker-Wattenhofer Channel Factories paper and asked how it's different from Sharma's idea. Sharma proposed a specific kind of transaction where three parties commit their funds all at once and are able to move their funds between the three open channels between them. This mechanism can be useful as it allows for routing transactions that were previously not possible without opening new channels and waiting for network verification. Sharma gave an example of his idea and illustrated how it could improve users' ability to route their transactions.All parties post the last signed balance statements each of them has when it comes time to close out their channels. If any collusion is detected, all funds in all three channels are forfeited to the non-colluding party. This provides users with an ability to route their transactions better with fewer total channels needing to be open. Sharma explained why such a mechanism can be useful and showed how parties can send BTC without opening a new channel and waiting for the network to verify it. C always knows, if she is following the protocol, exactly how much should be in channel AB and can prove this. If there were four parties, C couldn't prove on her own that some set of parties colluded to trade on an old balance.</summary>
+    <published>2018-02-04T18:21:48+00:00</published>
   </entry>
 </feed>

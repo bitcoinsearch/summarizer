@@ -2,22 +2,66 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Commitment Transaction Format Update Proposals?</title>
-  <updated>2023-05-20T08:59:24.453830+00:00</updated>
+  <updated>2023-06-02T04:00:50.661645+00:00</updated>
+  <author>
+    <name>Rusty Russell 2018-11-06 04:59:52</name>
+  </author>
+  <author>
+    <name>Fabrice Drouin 2018-10-18 11:28:31</name>
+  </author>
   <author>
     <name>Olaoluwa Osuntokun 2018-11-06 04:29:21</name>
   </author>
   <author>
+    <name>Rusty Russell 2018-10-12 04:56:03</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2018-10-12 06:36:57</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-10-12 07:08:48</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2018-10-13 02:59:02</name>
+  </author>
+  <author>
+    <name>Jim Posen 2018-10-20 20:36:59</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2018-10-23 10:43:26</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-10-12 06:19:31</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2018-10-19 10:42:31</name>
+  </author>
+  <author>
+    <name>Conner Fromknecht 2018-10-20 16:12:00</name>
+  </author>
+  <author>
     <name>Olaoluwa Osuntokun 2018-11-06 06:03:19</name>
   </author>
+  <link href="lightning-dev/Nov_2018/001519_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001466_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001518_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001446_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001449_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001450_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001452_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001471_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001473_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001448_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001469_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2018/001470_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001520_Commitment-Transaction-Format-Update-Proposals-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Commitment Transaction Format Update Proposals?</title>
-    <updated>2023-05-20T08:59:24.453830+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001518.html" rel="alternate"/>
-    <summary>On October 12, 2018, Rusty Russell suggested combining changes to the Lightning Network's commitment transaction format into a single feature called `commitment_style2`. This feature includes several updates such as allowing Child Pays for Parent (CPFP) with an OP_TRUE-style output for fees, using BIP-32-style `remotepubkey` to avoid data loss issues, and making CLTV timeout symmetrical to prevent gaming of the peer into closing. If `commitment_style2` is negotiated, `update_fee` becomes a protocol error. The feerate for commitment transactions is always 253 satoshi/Sipa, and it has a P2WSH OP_TRUE output of 1000 satoshi. Fees and OP_TRUE are always paid by the initial funder, and HTLC-timeout and HTLC-success txs sigs are SIGHASH_ANYONECANPAY|SIGHASH_SINGLE, allowing users to bring their own fees.In addition, the derivation of `localpubkey`, `remotepubkey`, `local_htlcpubkey`, `remote_htlcpubkey`, `local_delayedpubkey`, and `remote_delayedpubkey` now uses a two-stage unhardened BIP-32 derivation based on the commitment number. Two-stage unhardened BIP-32 derivation allows for 2^48 transactions while BIP-32 only supports 2^31, with the first 17 bits being used to derive the parent for the next 31 bits. `to_self_delay` for both sides is the maximum of either the `open_channel` or `accept_channel`. Finally, `to_remote` is now a P2WSH of `to_self_delay` OP_CSV OP_DROP OP_CHECKSIG. However, Laoluwa Osuntokun questioned whether this change was at odds with the goal of getting funds back immediately if the remote party force closes without requiring knowledge of secret data.</summary>
-    <published>2018-11-06T04:29:21+00:00</published>
+    <updated>2023-06-02T04:00:50.661645+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001519.html" rel="alternate"/>
+    <summary>The Lightning Network developers proposed changes to the commitment transaction format to manage fees more efficiently. One proposal was to use an OP_TRUE-style output to enable Child Pays for Parent (CPFP) instead of agreeing on future fees. Another change was to make the `remotepubkey` a BIP-32-style to avoid the option_data_loss_protect problem. Additionally, it was suggested that the CLTV timeout be symmetrical to simplify game theory analysis.These changes will be combined into a single `commitment_style2` feature instead of having a testing matrix of all these disabled and enabled. If `commitment_style2` is negotiated, update_fee is a protocol error. The feerate for commitment transactions will always be 253 satoshi/Sipa, with fees and OP_TRUE paid by the initial funder in most cases.HTLC-timeout and HTLC-success txs sigs are SIGHASH_ANYONECANPAY|SIGHASH_SINGLE, and derivation now uses a two-stage unhardened BIP-32 derivation based on the commitment number. Furthermore, both parties can specify their own `to_self_delay`, and `to_remote` is now a P2WSH of `to_self_delay` OP_CSV OP_DROP OP_CHECKSIG.Overall, the conversations focused on finding ways to manage onchain fees in a more flexible and efficient manner, including using CPFP and symmetrical timeouts. The changes proposed aim to simplify the backup and recovery workflow with the current commitment design.</summary>
+    <published>2018-11-06T04:59:52+00:00</published>
   </entry>
 </feed>

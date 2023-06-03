@@ -9,6 +9,7 @@ import time
 import platform
 import shutil
 from datetime import datetime
+import xml.etree.ElementTree as ET
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 from src.logger import LOGGER
@@ -228,6 +229,28 @@ class GenerateXML:
                 link = f'lightning-dev/{str_month_year}/{number}_{xml_name}.xml'
             return link
 
+        def get_summary_from_file(cols, url):
+            namespace = {'atom': 'http://www.w3.org/2005/Atom'}
+            month_name = self.month_dict[int(cols['created_at'].month)]
+            str_month_year = f"{month_name}_{int(cols['created_at'].year)}"
+            if "bitcoin-dev" in url:
+                if not os.path.exists(f"static/bitcoin-dev/{str_month_year}"):
+                    self.create_folder(f"static/bitcoin-dev/{str_month_year}")
+                number = self.get_id(cols['id'])
+                xml_name = self.clean_title(cols['title'])
+                file_path = f"static/bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml"
+            else:
+                if not os.path.exists(f"static/lightning-dev/{str_month_year}"):
+                    self.create_folder(f"static/lightning-dev/{str_month_year}")
+                number = self.get_id(cols['id'])
+                xml_name = self.clean_title(cols['title'])
+                file_path = f"static/lightning-dev/{str_month_year}/{number}_{xml_name}.xml"
+            if os.path.exists(file_path):
+                tree = ET.parse(file_path)
+                root = tree.getroot()
+                summary = root.find('atom:entry/atom:summary', namespace).text
+                return summary
+
         # combine_summary_xml
         # Get the operating system name
         os_name = platform.system()
@@ -242,58 +265,59 @@ class GenerateXML:
                 continue
             if len(title_df) == 1:
                 generate_local_xml(title_df.iloc[0], "0", url)
-                # continue
-            # combined_body = '\n\n'.join(title_df['body'].apply(str))
-            # xml_name = self.clean_title(title)
-            # combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
-            # # combined_authors = list(title_df['authors'].apply(lambda x: x[0]))
-            # combined_authors = list(
-            #     title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
-            #
-            # month_year_group = title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
-            #
-            # flag = False
-            # std_file_path = ''
-            # for idx, (month_year, _) in enumerate(month_year_group):
-            #     print(f"###### {month_year}")
-            #     # if idx == 5:
-            #     #     break
-            #     month_name = self.month_dict[int(month_year[0])]
-            #     str_month_year = f"{month_name}_{month_year[1]}"
-            #     if "bitcoin-dev" in url:
-            #         file_path = f"static/bitcoin-dev/{str_month_year}/combined_{xml_name}.xml"
-            #     else:
-            #         file_path = f"static/lightning-dev/{str_month_year}/combined_{xml_name}.xml"
-            #     if os.path.exists(file_path):
-            #         print(f"Skiping Combined summary generation file already exists. {file_path}")
-            #         continue
-            #     combined_summary = self.create_summary(combined_body)
-            #     feed_data = {
-            #         'id': "2",
-            #         'title': 'Combined summary - ' + title,
-            #         'authors': combined_authors,
-            #         'url': title_df.iloc[0]['url'],
-            #         'links': combined_links,
-            #         'created_at': title_df.iloc[0]['created_at_org'],
-            #         'summary': combined_summary
-            #     }
-            #     if not flag:
-            #         self.generate_xml(feed_data, file_path)
-            #         std_file_path = file_path
-            #         flag = True
-            #     else:
-            #         if os_name == "Windows":
-            #             shutil.copy(std_file_path, file_path)
-            #         elif os_name == "Linux":
-            #             os.system(f"cp {std_file_path} {file_path}")
+                continue
+            combined_body = '\n\n'.join(filter(None, list(title_df.apply(get_summary_from_file, args=(url,), axis=1))))
+            xml_name = self.clean_title(title)
+            combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
+            # combined_authors = list(title_df['authors'].apply(lambda x: x[0]))
+            combined_authors = list(
+                title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
+
+            month_year_group = title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
+
+            flag = False
+            std_file_path = ''
+            for idx, (month_year, _) in enumerate(month_year_group):
+                print(f"###### {month_year}")
+                # if idx == 5:
+                #     break
+                month_name = self.month_dict[int(month_year[0])]
+                str_month_year = f"{month_name}_{month_year[1]}"
+                if "bitcoin-dev" in url:
+                    file_path = f"static/bitcoin-dev/{str_month_year}/combined_{xml_name}.xml"
+                else:
+                    file_path = f"static/lightning-dev/{str_month_year}/combined_{xml_name}.xml"
+
+                if os.path.exists(file_path):
+                    print(f"Skiping Combined summary generation file already exists. {file_path}")
+                    continue
+                combined_summary = self.create_summary(combined_body)
+                feed_data = {
+                    'id': "2",
+                    'title': 'Combined summary - ' + title,
+                    'authors': combined_authors,
+                    'url': title_df.iloc[0]['url'],
+                    'links': combined_links,
+                    'created_at': title_df.iloc[0]['created_at_org'],
+                    'summary': combined_summary
+                }
+                if not flag:
+                    self.generate_xml(feed_data, file_path)
+                    std_file_path = file_path
+                    flag = True
+                else:
+                    if os_name == "Windows":
+                        shutil.copy(std_file_path, file_path)
+                    elif os_name == "Linux":
+                        os.system(f"cp {std_file_path} {file_path}")
 
 
 if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    # dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
-    dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+    dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    # dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
     delay = 50

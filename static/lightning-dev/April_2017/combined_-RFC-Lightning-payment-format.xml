@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [RFC] Lightning payment format</title>
-  <updated>2023-05-24T01:20:36.583866+00:00</updated>
+  <updated>2023-06-02T01:02:48.729936+00:00</updated>
+  <author>
+    <name>Rusty Russell 2017-04-29 00:57:32</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2017-05-04 04:42:51</name>
+  </author>
   <author>
     <name>Rusty Russell 2017-05-09 01:37:28</name>
   </author>
@@ -39,12 +45,8 @@
   <author>
     <name>Rusty Russell 2017-05-29 10:48:51</name>
   </author>
-  <author>
-    <name>Rusty Russell 2017-05-04 04:42:51</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2017-04-29 00:57:32</name>
-  </author>
+  <link href="lightning-dev/April_2017/000683_-RFC-Lightning-payment-format.xml" rel="alternate"/>
+  <link href="lightning-dev/May_2017/000695_-RFC-Lightning-payment-format.xml" rel="alternate"/>
   <link href="lightning-dev/May_2017/000712_-RFC-Lightning-payment-format.xml" rel="alternate"/>
   <link href="lightning-dev/May_2017/000714_-RFC-Lightning-payment-format.xml" rel="alternate"/>
   <link href="lightning-dev/May_2017/000719_-RFC-Lightning-payment-format.xml" rel="alternate"/>
@@ -57,15 +59,13 @@
   <link href="lightning-dev/May_2017/000710_-RFC-Lightning-payment-format.xml" rel="alternate"/>
   <link href="lightning-dev/May_2017/000730_-RFC-Lightning-payment-format.xml" rel="alternate"/>
   <link href="lightning-dev/May_2017/000731_-RFC-Lightning-payment-format.xml" rel="alternate"/>
-  <link href="lightning-dev/May_2017/000695_-RFC-Lightning-payment-format.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2017/000683_-RFC-Lightning-payment-format.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [RFC] Lightning payment format</title>
-    <updated>2023-05-24T01:20:36.583866+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-May/000712.html" rel="alternate"/>
-    <summary>The Lightning Network is a second-layer solution for Bitcoin that aims to improve the scalability and speed of transactions on the network. One aspect of this technology that has been under development is the payment request format. Recently, Rusty Russell and Olaoluwa Osuntokun have proposed improvements to the format.Their suggestions include using a tag-based payment request format and replacing chanID with the compressed serialized public key to optimize the size of signatures in payreqs. However, some are hesitant to make this change due to concerns about network propagation time and reliance on a full view of the network. Another proposal they suggest is using Bech32 as a serialization format for invoices. This would allow for easy decoding, but some argue that the added checksum is not necessary for such long payment request strings.In the latest update, the payment request now includes an expiry time in seconds, and there is an example encoder/decoder available which supports the format, including fallback addresses. The developers have also included a timestamp and expiry date in the latest version of the protocol to help users enforce payment deadlines. Additionally, the developers are working on a shared payment request format to improve efficiency and extensibility. Rusty Russell has also shared a draft format for requesting payments via lightning network and an incomplete implementation on Github. The signature is over the human-readable part and data in 5-bit bytes. Overall, these improvements aim to enhance the Lightning Network's payment request format with better efficiency and extensibility, while also considering concerns around network propagation time and reliance on a full view of the network. An incomplete implementation has been provided in the examples.sh file, with different scenarios for sending payments, including one with extra routing info to get to a specific node. The lightning-address.py file includes the code for encoding and decoding the payment request.</summary>
-    <published>2017-05-09T01:37:28+00:00</published>
+    <updated>2023-06-02T01:02:48.729936+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-April/000683.html" rel="alternate"/>
+    <summary>The Lightning Network has been a topic of conversation among developers, with optimization of lightning network payments being a key focus. A draft format for requesting lightning payments and an implementation available on GitHub have been shared by the author. However, a concern raised in the discussion is users being unable to verify the validity of a signature without a mapping. One proposed solution is using the 8-byte chanid to compactly refer to the destination, assuming that the network topology is well-known. Another proposed solution is implementing key recovery instead, where the signature covers the entire payreq.There is also discussion about the use of BTC shorthands, with Rusty Russell suggesting using m (milli), u (micro), n (nano), and p (pico) and turning the proposal into BOLT 10 if people like the change. The readability of invoices for Bitcoin transactions is discussed in another email exchange between Rusty Russell and Christian Decker. They agree to use BTC with m/u/n/p instead of bech32 and to support a different, human-readable encoding. Olaoluwa Osuntokun critiques the encoding used in Bitcoin addresses, stating that it doesn't carry over to the Lightning Network payreq use-case. However, it is useful for QR codes and denser than hex. The Lightning Development mailing list also discusses the proposal to replace chanID with compressed serialized public key. The consensus is that while optimizing the size of payment requests may not be as important since they are sent out-of-band, key recovery from the signature is still necessary. There is also debate about the use of tags in payment requests, which offers flexibility for application developers.Fabrice Drouin suggested adding a timestamp and expiry date to payment requests in the Lightning-dev mailing list, which was later implemented by Rusty Russell. The tagged parts of the data include the description of the payment, the fallback on-chain address, and extra routing information. Christian Decker expressed his concerns about using `short_channel_id` as an alias for the endpoint, as well as the amount shorthands (k/m/g/...) from the proposal since invoices are not user-readable. Despite his concerns, Decker praised the proposal overall and approved of using bech32 as a serialization format.There is also a discussion about reintroducing the end-to-end payload in Sphinx derived onion format to avoid needing to shave off bytes from the per-hop payload later on. This was removed in a previous version due to its large size and lack of clear use case at the time. However, some users have expressed interest in having this feature for mid-points as well. Regarding Schnorr signatures, Rusty initially believed they would lose the ability to include a recovery ID. However, after speaking with Pieter Wuille, it was determined that if modern practices are followed, it is possible to commit to the pubkeyhash instead of the pubkey directly. Finally, Rusty proposed turning the changes into BOLT 11 as interoperability tests between implementations draw nearer.</summary>
+    <published>2017-04-29T00:57:32+00:00</published>
   </entry>
 </feed>

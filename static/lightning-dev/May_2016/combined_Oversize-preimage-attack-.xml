@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Oversize preimage attack.</title>
-  <updated>2023-05-23T23:40:21.904346+00:00</updated>
+  <updated>2023-06-02T00:33:35.766593+00:00</updated>
   <author>
     <name>Rusty Russell 2016-05-02 05:07:22</name>
   </author>
@@ -19,9 +19,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Oversize preimage attack.</title>
-    <updated>2023-05-23T23:40:21.904346+00:00</updated>
+    <updated>2023-06-02T00:33:35.766593+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-May/000529.html" rel="alternate"/>
-    <summary>The author of the email is about to modify the HTLC scripts for the first time in a while by prepending "OP_SIZE 32 OP_EQUALVERIFY". This change means that timing out an HTLC requires a 32 byte value, but it is the simplest and shortest change. Without this change, the length of a scriptsig which redeems a transaction was ill-defined because an attacker could create an HTLC with different preimage sizes that wouldn't work with nodes using wire protocol. Additionally, the per-side HTLC limit will be dropped from 1500 to 450 in BOLT #2. The purpose of this is to ensure that a single "steal" transaction that spends all the inputs is still under 400k cost, simplifying the protocol. A responder on the mailing list mentions that the Segwit's witness program validation logic ensures that each element of the passed witness stack is less-than-or-equal-to the maximum script element size (520 bytes). Therefore, even without the additional OP_SIZE check, Script will enforce a ceiling on the pre-image size. The responder also notes that they have made similar observations about the scripts recently.</summary>
+    <summary>The context describes Rusty's plan to modify the HTLC scripts by adding "OP_SIZE 32 OP_EQUALVERIFY" at the beginning of the scripts, which will define the length of a scriptsig that redeems a transaction. This change will also drop the per-side HTLC limit from 1500 to 450 in BOLT #2, simplifying the protocol and reducing the cost of stealing the inputs. The limitation of no on-chain restriction for the preimage size was discussed, which could result in non-standard transactions that may not propagate. However, Segwit's witness program validation logic checks each element of the passed witness stack before execution itself, ensuring that the pre-image size is less-than-or-equal-to the maximum script element size of 520 bytes. A similar modification was made to their scripts by Olaoluwa Osuntokun, who discussed the requirement of using a 110k preimage to redeem and dropping it to the blockchain. In response, Rusty thanks Olaoluwa Osuntokun for sounding the alarm with the mailing-list post and enquires about any other issues that may have been missed.</summary>
     <published>2016-05-02T05:07:22+00:00</published>
   </entry>
 </feed>

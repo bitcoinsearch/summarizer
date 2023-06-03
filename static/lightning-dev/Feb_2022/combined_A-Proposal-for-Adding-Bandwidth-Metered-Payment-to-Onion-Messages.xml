@@ -2,22 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A Proposal for Adding Bandwidth Metered Payment to Onion Messages</title>
-  <updated>2023-05-23T17:15:27.531899+00:00</updated>
+  <updated>2023-06-03T07:40:14.370724+00:00</updated>
+  <author>
+    <name>Olaoluwa Osuntokun 2022-03-23 00:25:40</name>
+  </author>
   <author>
     <name>Olaoluwa Osuntokun 2022-02-24 01:20:28</name>
   </author>
   <author>
-    <name>Olaoluwa Osuntokun 2022-03-23 00:25:40</name>
+    <name>Rusty Russell 2022-02-24 04:37:46</name>
   </author>
-  <link href="lightning-dev/Feb_2022/003498_A-Proposal-for-Adding-Bandwidth-Metered-Payment-to-Onion-Messages.xml" rel="alternate"/>
   <link href="lightning-dev/March_2022/003525_A-Proposal-for-Adding-Bandwidth-Metered-Payment-to-Onion-Messages.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2022/003498_A-Proposal-for-Adding-Bandwidth-Metered-Payment-to-Onion-Messages.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2022/003499_A-Proposal-for-Adding-Bandwidth-Metered-Payment-to-Onion-Messages.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - A Proposal for Adding Bandwidth Metered Payment to Onion Messages</title>
-    <updated>2023-05-23T17:15:27.531899+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-February/003498.html" rel="alternate"/>
-    <summary>The Lightning Network protocol has undergone an update to enable nodes to receive compensation for forwarding onion messages on the network. This new feature supplements existing fee revenue, making it more sustainable for individuals or entities to run a Lightning node. This compensation is dependent on the demand for forwarding bandwidth by wallets, services, and applications. To initiate this process, the sender creates new `onion_session_id`'s for all nodes in the messaging route it doesn't already have an active session with and sends an AMP payment to the receiver along with the proposed `onion_session_id`. Once a session has been confirmed, the sender can use it to send messages to the receiver. Nodes forward onion messages that include the session ID and check that the session hasn't expired and that the session has sufficient bandwidth available.A proposal has been made to address issues such as spamming, lack of compensation for forwarding, and rate limiting. This proposal adds an explicit onion messaging session creation phase and provides a way for nodes to be compensated for their bandwidth allocation during that session. The node_ann message will include two new TLVs which allow nodes to signal their willingness to be paid for forwarding onion messages and specify their pricing. The HTLC onion blob will also be extended to include a new TLV for tendering paid onion message session creation. This proposal expands the scope of LN beyond a decentralized p2p payment system and enables various use cases like streaming video transfer, network tunneled VPNs, large file downloads, and popcorn time. However, there may be some trade-offs, including adding a small amount of per-session state to nodes that want to be paid to forward onion messages. The multi-hop invoice fetching rate may be limited for some nodes to prevent overloading them, and there is a discussion about whether tightly coupling an invoice/offer to a single node is compatible with the multi-node receive architectures that some services are beginning to deploy. Overall, this proposal offers a way to address issues while enabling more functionality in the LN protocol.</summary>
-    <published>2022-02-24T01:20:28+00:00</published>
+    <updated>2023-06-03T07:40:14.371723+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-March/003525.html" rel="alternate"/>
+    <summary>Laolu and Rusty had an email conversation about Lightning Network technology, discussing topics such as AMP and keysend specifications. Lightning Labs proposed a way to expand the scope of the Lightning Network beyond being just a decentralized peer-to-peer payment system by introducing onion messaging, which would allow for sending and receiving invoices directly over the existing Lightning Network. However, there were issues with unsolicited messages, lack of compensation for network bandwidth expended by forwarding nodes, and rate limiting policies not being concretely addressed.To address these issues, the Lightning Network has proposed a two-phase onion messaging session creation process in which the sender purchases forwarding bandwidth from intermediate nodes and requests session creation with the receiver in a single atomic step. Once successful session creation is achieved, the sender can use the purchased bandwidth to send messages to the receiver. Additionally, the proposal suggests using AMP to extend push payment to a receiver for the purchase of bandwidth sessions.Nodes add new TLVs to their node announcement to express a new fee rate for forwarding messages and also include a feature bit to indicate that they only accept payment for forwarding. A 32-byte session identifier is transmitted to each intermediate hop using a new TLV within the existing HTLC (Hashed TimeLock Contract) onion blob. The proposed system expands the scope of LN to support pseudonymous messaging and arbitrary data transfer across the network.During session creation, the sender creates new onion_session_id's for all nodes in the messaging route it doesn't already have an active session with. To initiate session creation, the node sends an AMP payment to the receiver that drops off the proper fee to each intermediate hop along with the proposed onion_session_id. Session creation is rejected if the receiver chooses to fail back any of the AMP HTLC splits. Once a session has been finalized, the sender can use it to send messages to the receiver. When forwarding onion messages, nodes check that the session hasn't expired and the session also has enough bandwidth left.The proposed system supplements the existing fee revenue of nodes, potentially making it more sustainable to run a Lightning node. Laolu and Rusty also discussed the idea of charging for forwarding onion messages, which can be implemented on top of existing onion_messages. They made references to specific resources such as bLIP and BOLT tracker. Furthermore, they touched upon incentivizing nodes to reliably forward messages.</summary>
+    <published>2022-03-23T00:25:40+00:00</published>
   </entry>
 </feed>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Onion messages rate-limiting</title>
+  <updated>2023-06-03T09:29:09.620306+00:00</updated>
+  <author>
+    <name>Joost Jager 2022-07-11 09:08:53</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2022-06-29 08:28:26</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2022-06-30 07:46:59</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2022-06-30 16:47:32</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2022-07-02 01:09:05</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2022-07-04 02:00:26</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2022-07-04 02:07:16</name>
+  </author>
+  <author>
+    <name>Antoine Riard 2022-07-05 19:58:59</name>
+  </author>
+  <author>
+    <name>Joost Jager 2022-07-10 08:43:27</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2022-07-10 19:14:17</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2022-07-26 08:16:24</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2022-07-02 00:48:32</name>
+  </author>
+  <author>
+    <name>Olaoluwa Osuntokun 2022-06-30 00:22:08</name>
+  </author>
+  <author>
+    <name>vwallace 2022-06-30 01:24:52</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2022-06-30 02:19:04</name>
+  </author>
+  <author>
+    <name>Christian Decker 2022-06-30 10:15:18</name>
+  </author>
+  <link href="lightning-dev/July_2022/003663_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003623_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003637_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003642_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003653_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003656_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003657_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003660_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003661_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003662_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003664_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2022/003652_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003631_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003634_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003635_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003639_Onion-messages-rate-limiting.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Onion messages rate-limiting</title>
+    <updated>2023-06-03T09:29:09.620306+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-July/003663.html" rel="alternate"/>
+    <summary>During the recent Oakland Dev Summit, lightning engineers discussed potential ways to address the issue of rate-limiting onion messages in Lightning Network. Rusty proposed a rate-limiting scheme that statistically propagates back to the correct sender. The proposed simple rate-limiting scheme involves applying per-peer rate limits on incoming onion messages that should be relayed and allowing more onion messages from peers with whom they have channels. Nodes keep track of where an onion message came from using the node_id of the peer who sent that message, and only need the last such node_id per outgoing connection to ensure a small memory footprint. If an incoming onion message reaches the rate limit, the receiver sends onion_message_drop to the sender, halving their rate limits with that peer.In an email exchange, Laolu questions the viability of proposals to introduce pre-payments for HTLCs to mitigate jamming attacks. Instead, he advocates for the forwarding pass approach, which would gracefully degrade to stratified topology and allow major flows of the network to continue even in the face of disruption. Olaoluwa Osuntokun and Matt discuss the issue of paying for spam in relation to pre-payments for Hash Time-Locked Contracts (HTLCs) to mitigate jamming attacks. While HTLCs differ in cost from PoW-for-spam, naive proposals for pre-payments are not ideal. Instead, Olaoluwa advocates for the forwarding pass approach that would allow major flows of the network to continue despite disruption. Matt suggests a "pay per HTLC-locked-time" fee with Rusty's proposal, which allows someone to force-close a channel to "blame" a hop for not failing back after fees stop coming in.The discussion highlights the need to find formulas for probabilities to evaluate the efficiency of rate-limiting relayed message spam in an anonymous/pseudonymous network. Researchers hope to learn from what is and isn't working with how Tor handles things and come up with a good model to evaluate that scheme. However, there are still concerns about the possibility of a single party flooding the network and causing nodes to trigger their rate limits, thereby affecting the usability of onion messages for well-behaving parties.In a conversation with Joost, Matt Corallo discusses the issue of spamming in the Lightning Network. He suggests that requiring a channel to relay onion messages puts a significant cost on getting an onion messaging channel. Backpressure based rate limiting is good to bootstrap as a naive DoS protection for onion messages though it may not be robust enough in the long-term. On the other hand, explicit payment allows an attacker to pay much less to break the system. Corallo also notes that making it expensive enough to mount a months-long DDoS without impacting legitimate users is pretty easy. However, no reasonable cost scheme will work if someone can reasonably trivially take out the network for minutes at a time to make it have perceptibly high failure rates. In response to Joost's question about what will happen if the attacker has enough channels to hit the rate limit on an important connection some hops away from themselves, Corallo suggests that node operators may work together to trace back to the source and take down the attacker. However, this requires operators to know each other. Corallo also notes that this is a difference between the Lightning Network and the internet where routers on the internet know each other and have physical links between them, whereas in lightning ties can be much looser. Bandwidth attacks would be fairly sophisticated so it might not be a concern for the short-term, but it might need some proportion between onion bandwidth units across the network and the cost of opening channels in the future. There is also a concern that we might have "spontaneous" bandwidth DoS in the future, if the onion traffic is leveraged beyond offers for discovery of LSP liquidity services. For confidentiality reasons, a LN node might not use the Noise connections to learn about such services. The LN node might be also interested to do real market-discovery by fetching the services rates from all the LSP, while engaging with only one, therefore provoking a spike in onion bandwidth consumed across the network without symmetric HTLC traffic. This concern is hypothetical as that class of traffic might end up announced in gossip. Olaoluwa Osuntokun and Matt are discussing the use of backpressure rate limiting as a solution to mitigate attacks on the Lightning Network. While Olaoluwa agrees that backpressure can work in DoS situations, he raises concerns about its reliability for routine tasks like fetching invoices. They discuss the similarities between the Lightning Network and Tor, but Matt points out that invoice requests require trivial amounts of bandwidth and are not comparable to Tor's current attack. Finally, they address using backpressure for rate limiting HTLCs, which Matt confirms is already being done with a tight rate limit of around 400 HTLCs in flight at once.</summary>
+    <published>2022-07-11T09:08:53+00:00</published>
+  </entry>
+</feed>
