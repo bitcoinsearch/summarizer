@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - eltoo towers and implications for settlement key derivation</title>
+  <updated>2023-06-02T21:56:28.826680+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2019-12-03 08:26:22</name>
+  </author>
+  <author>
+    <name>Conner Fromknecht 2019-11-26 23:41:14</name>
+  </author>
+  <author>
+    <name>Conner Fromknecht 2019-12-03 03:03:16</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-12-02 23:53:01</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2019-12-03 02:55:19</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-12-03 04:00:10</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2019-12-03 04:43:27</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-12-03 07:33:25</name>
+  </author>
+  <author>
+    <name>Christian Decker 2019-12-04 13:46:30</name>
+  </author>
+  <author>
+    <name>Christian Decker 2019-12-04 13:48:20</name>
+  </author>
+  <author>
+    <name>Christian Decker 2019-12-04 13:53:39</name>
+  </author>
+  <link href="lightning-dev/Dec_2019/002363_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2019/002349_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002359_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002356_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002358_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002360_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002361_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002362_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002364_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002365_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002366_eltoo-towers-and-implications-for-settlement-key-derivation.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - eltoo towers and implications for settlement key derivation</title>
+    <updated>2023-06-02T21:56:28.826680+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-December/002363.html" rel="alternate"/>
+    <summary>In a recent email thread on the Lightning-Dev mailing list, a topic related to watchtowers and channel construction was revisited. Conner Fromknecht pointed out some factors that would affect channel construction in relation to the eltoo paper. According to Fromknecht, for a tower to spend, it must also produce a witness script that matches the input's witness program when hashed. To ensure that settlement transactions can only spend from one update transaction, each update transaction uses unique keys for the settlement clause. This means that each state has a unique witness program.However, another user on the mailing list, aj, argued that this is not necessary with the ANYPREVOUT design. The design proposed by aj utilizes a common taproot internal key P=muSig(A,B) for update transactions. The tapscript paths are defined by two transactions: Update n and Settlement n. Update n has a script of OP_1 CHECKSIGVERIFY [500e6+n+1] CLTV and a witness of [ANYPREVOUTANYSCRIPT sig]. Settlement n has a witness of [ANYPREVOUT sig] and a sequence number of delay; nLockTime=500e6+n+1. This method relies on having the two variants of ANYPREVOUT, one of which commits to the state number through committing to the [500e6+n+1] value in the update tx's script. As a result, unique keys are not required to ensure settlement transaction n cannot spend settlement transaction n+k. With this, it is possible to tell which update was posted by subtracting 500e6 from the nLocktime and use that to calculate the tapscript the update transaction used, and the internal key is constant.The watchtower only needs to post the latest update transaction. As long as the latest update is posted, the only transaction that can spend it is the correct settlement transaction. This implies that the user can post the correct settlement transaction whenever they are back online, even if it is weeks or months later. This design simplifies channel construction without the need for unique keys, making it easier to manage and maintain channels.</summary>
+    <published>2019-12-03T08:26:22+00:00</published>
+  </entry>
+</feed>
