@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [1.1] Proposed `funding_cancelled` message</title>
-  <updated>2023-06-02T01:51:34.670434+00:00</updated>
+  <updated>2023-06-03T18:03:53.858247+00:00</updated>
+  <author>
+    <name>Pierre 2018-01-08 18:28:35</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-09 05:44:14</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-15 02:14:57</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-01-15 23:25:24</name>
+  </author>
   <author>
     <name>7riw77 at gmail.com 2018-01-18 11:03:58</name>
   </author>
@@ -36,18 +48,10 @@
   <author>
     <name>ZmnSCPxj 2018-01-22 10:36:40</name>
   </author>
-  <author>
-    <name>Pierre 2018-01-08 18:28:35</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-01-09 05:44:14</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-01-15 02:14:57</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2018-01-15 23:25:24</name>
-  </author>
+  <link href="lightning-dev/Jan_2018/000908_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000910_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000931_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000934_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000947_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000954_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000956_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
@@ -59,17 +63,13 @@
   <link href="lightning-dev/Jan_2018/000932_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000933_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000957_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000908_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000910_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000931_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000934_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [1.1] Proposed `funding_cancelled` message</title>
-    <updated>2023-06-02T01:51:34.670434+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000947.html" rel="alternate"/>
-    <summary>The Lightning Network has potential security risks, including denial-of-service attacks and resource exhaustion. One proposed solution is the implementation of a `funding_cancelled` message that can inform the fundee node that the funder node is sure that the channel funding transaction cannot be confirmed. However, there are concerns about how this message may not work for multi-channel funding transactions.Another issue with the Lightning Network is the lack of a protocol-required minimum timeout for channels. To address this problem, one member of the Lightning Development mailing list suggested having something like "a receiving node MUST keep a channel ready to be used for at least a week prior to funding transaction confirmation." Additionally, there is concern about malicious nodes continuously sending `open_channel` -&gt; `funding_created` messages with random numbers for transaction ID, which could make the cost of tracking an unopened channel arbitrarily high. One potential solution is for a node implementation to limit the number of pending channel opens for each peer.There is also discussion about imposing a limit of 25 channels per peer to prevent potential denial-of-service attacks. However, failed channel opening attempts can count as resources on the receiver, potentially leading to exhaustion and network failure. ZmnSCPxj suggests addressing this issue by avoiding fixed pools of resources that can be easily exhausted and designing a network of devices that can handle these problems without losing essential state. He argues that the proposed `funding_cancelled` message would allow an honest party to free up the limited resource of pending channel opens without having to wait for the timeout.The proposal of implementing 'funding_cancelled' lets the funder free up the imposed resource limit on the fundee side. The sender intends to inform the fundee node that the funder node is certain that the channel funding transaction cannot confirm. However, if the initial transaction sent funds to the fundee via push_msat, the fundee may not want to trust the funder on this matter. To establish trust in a trustless manner, the funder can attach the actual deprecated funding transaction (which may or may not be signed) to the 'funding_cancelled' message.There is also discussion about potential solutions to distributed denial of service attacks and the relative resource consumption differences on an attacker simulating multiple nodes versus one simulating a single node. The email suggests several solutions such as coming closer to stateless on the server side during session setup before knowing the request is going to be followed through/is legitimate and having the ability to shift a transaction from one server to another without losing some essential state.</summary>
-    <published>2018-01-18T11:03:58+00:00</published>
+    <updated>2023-06-03T18:03:53.858247+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000908.html" rel="alternate"/>
+    <summary>A proposal has been put forward by ZmnSCPxj via Lightning-dev to inform the fundee node that the funder node is certain that the channel funding transaction can never confirm. The lack of a protocol-required minimum timeout for unopened channels is causing issues with replaceable funding transactions. To implement replace-by-fee funding transactions, one would need to keep track of all versions of the funding transaction and state of each version. The funder needs to keep track of all versions of the funding transaction broadcasted and delete such entries from its database that can never confirm. Sending `funding_cancelled` in this case is simply "being nice", and the fundee ignores this at its own detriment, wasting resources each block to check for a transaction that logically can never confirm.The proposed funding_cancelled message would allow an honest party to free up the limited resource of pending channel opens without having to wait for the timeout. It was suggested that a protocol-required minimum timeout could address the issue of varying concepts for acceptable wait times. However, there are concerns about unnecessary complexity in the protocol and potential denial-of-service attacks from failed channel opening attempts counting as a resource on the receiver.In a discussion on the Lightning-dev mailing list, Matt Corallo expressed confusion about why a limit of 25 channels per node should cause any issues. The email exchange discusses the proposal of a limit on each peer to reduce the actual CPU, bandwidth, and storage resources that each peer can consume on the attacked node. The proposed limit would allow the server to serve more peers and possibly shrug off a 10k or 100k attack that it otherwise would be unable to service if each peer could consume an arbitrary amount of resources on the server.The discussion moves on to the possibility of distributed denial of service attacks and the relative resource consumption differences on an attacker simulating multiple nodes versus one simulating a single node. It is suggested that solutions like minimizing server-side state during session setup and designing a network of devices that can handle these problems could be useful in preventing similar attacks on the lightning network.Overall, it is important to address potential security risks and solutions before they happen to maintain the trust of the overall network. The proposal has received some criticism but also support for its potential benefits.</summary>
+    <published>2018-01-08T18:28:35+00:00</published>
   </entry>
 </feed>

@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Onion routing design.</title>
-  <updated>2023-06-01T23:46:58.751258+00:00</updated>
+  <updated>2023-06-03T15:30:09.046283+00:00</updated>
+  <author>
+    <name>Anthony Towns 2015-09-19 01:44:18</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-09-20 20:48:37</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-09-22 01:22:57</name>
+  </author>
+  <author>
+    <name>Zooko Wilcox-OHearn 2015-09-22 01:27:03</name>
+  </author>
   <author>
     <name>Rusty Russell 2015-09-20 21:05:58</name>
   </author>
@@ -18,34 +30,22 @@
   <author>
     <name>Rusty Russell 2015-09-22 10:38:08</name>
   </author>
-  <author>
-    <name>Anthony Towns 2015-09-19 01:44:18</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-09-20 20:48:37</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-09-22 01:22:57</name>
-  </author>
-  <author>
-    <name>Zooko Wilcox-OHearn 2015-09-22 01:27:03</name>
-  </author>
+  <link href="lightning-dev/Sept_2015/000194_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000196_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000204_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000207_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000198_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000191_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000193_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000205_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000208_Onion-routing-design-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000194_Onion-routing-design-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000196_Onion-routing-design-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000204_Onion-routing-design-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000207_Onion-routing-design-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Onion routing design.</title>
-    <updated>2023-06-01T23:46:58.751258+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000198.html" rel="alternate"/>
-    <summary>The conversation revolves around the vulnerabilities in the Lightning Network and the methods used to protect transaction routes from being guessed and exploited. Nodes create a route backward to calculate size and randomly pick a total size between 1024 and 4096, padding it with at least 32 bytes of random padding to offer protection from guessing the route length. However, there is potential vulnerability due to the lack of MAC, which could enable a nosy node to replace routing entirely, leading to a successful or failed HTLC.Several defenses are proposed, such as disallowing two HTLCs with the same R value, forcing probe serialization, and probabilistic backoff for duplicate R values. However, these solutions may not work for more sophisticated probe sequences. One solution suggested is having two R values, one known only by the recipient and one by the sender, making the HTLCs payable on presentation of both R and S and including S encrypted to the final recipient in the onion payload.Another issue discussed is that nodes should not leak information to passive observers on the route due to errors. To prevent information leakage, signing errors and using the 'sum' field as a secret key seems sensible. The format of a route for onion routing was also discussed by Rusty Russell in terms of requirements and desiderata.Although onion routing provides limited protection against correlating HTLCs by R value, it is suggested that the format of a route should be something like required bytes hop_key; encrypted with a public key and required bytes route; encrypted with hop_key. OFB or CTR mode for the symmetric cipher can be used to calculate D_KD() of all the padding and work out the hash H of the plaintext message. CBC mode cannot be used because they need to know E_KD(grbg) to know D_KD(padding), but they need to know grbg to know H, and they need to know E_KD(H + ...) to work out E_KD(grbg). They cannot use sum for Kx because they need to know Kx before working out the sum.The conversation also touches upon the vulnerability of the Tor network to probing attacks that reveal the length of the chain. In summary, the conversation discusses various solutions to the vulnerabilities in the Lightning Network, including adding padding, disallowing duplicate R values, and having two R values, among others. The conversation also highlights the need for confidential transactions to maintain financial privacy.</summary>
-    <published>2015-09-20T21:05:58+00:00</published>
+    <updated>2023-06-03T15:30:09.046283+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000194.html" rel="alternate"/>
+    <summary>In a series of email conversations and discussions on the Lightning Network mailing list, Rusty Russell discusses the vulnerability of the network to route probing attacks. The lack of MAC protection leaves the system open to nosy nodes replacing routing entirely and guessing the final destination correctly. Russell suggests several partial defenses, including disallowing two HTLCs with the same R value and probabilistic backoff for duplicate R values. However, these solutions have potential probing attack issues, and parallel probes are limited by channel capacity.To address the problem, Russell proposes having two R values, one known only by the recipient and one by the sender, making htlcs payable on presentation of both R and S. He also suggests re-padding the onion blob when forwarding and encrypting 0 padding using a pubkey.Anthony Towns suggests combining this approach with using OFB or CTR mode for the symmetric cipher and setting S as sha256(H+X) where X is the plaintext routing message. The format of a route should require bytes of data decrypted by each node using its own pubkey to reveal where the data should go next and how much fee can be taken.Zooko Wilcox-OHearn requested notes about requirements/desiderata from Rusty for a network that is a source routing network. In this type of network, the sender details the payment path because fees vary with path and the sender pays. To maintain financial privacy, an onion routing-style setup where each node only knows prev and next seems most sensible.Rusty is currently working on test code in which there are one node hop and full route description in the onion structure. The receive on a node works by using ECDH on onion→hop[0]→pubkey and Rusty's privkey to extract the secret key. Then deriving enckey (SHA256(seckey || 0)), hmackey (SHA256(seckey || 1)), iv (SHA256(seckey || 2)) and pad_iv (SHA256(seckey || 3)).After checking HMAC of every part of struct onion after hmac (including pubkey) and decrypting (AES 256 CTR mode, using enckey and iv above) struct onion from pubkey onwards, first struct hop is for us and to forward, remove first hop, and append padding (thus keeping total length the same). Finally, padding is generated by AES-256-CTR encrypting all-zeroes with enckey and pad_iv, resulting in even the final node having no idea of path length. However, generating this onion correctly is a bit tricky, but it is perfectly possible. Unused hops are filled with random garbage.The purpose behind all these processes is to garble the padding and render the payment unredeemable without relying on any verification or cooperation from anyone else on the network. Overall, onion routing offers limited protection against correlating HTLCs by R value, and signing errors and using the 'sum' field as a secret key seems sensible to prevent information leakage to passive observers on the route.</summary>
+    <published>2015-09-19T01:44:18+00:00</published>
   </entry>
 </feed>

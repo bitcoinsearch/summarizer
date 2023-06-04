@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Acknowledgements in BOLT #2</title>
-  <updated>2023-06-02T00:31:00.202798+00:00</updated>
+  <updated>2023-06-03T16:23:43.173862+00:00</updated>
+  <author>
+    <name>Pierre 2016-04-01 13:32:15</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2016-04-04 02:04:34</name>
+  </author>
   <author>
     <name>Joseph Poon 2016-04-01 19:38:50</name>
   </author>
@@ -12,24 +18,18 @@
   <author>
     <name>Fabrice Drouin 2016-04-01 14:57:37</name>
   </author>
-  <author>
-    <name>Pierre 2016-04-01 13:32:15</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2016-04-04 02:04:34</name>
-  </author>
+  <link href="lightning-dev/April_2016/000507_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2016/000512_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/April_2016/000510_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/March_2016/000506_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/April_2016/000508_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2016/000507_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2016/000512_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Acknowledgements in BOLT #2</title>
-    <updated>2023-06-02T00:31:00.202798+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-April/000510.html" rel="alternate"/>
-    <summary>In an email conversation between Pierre and the Lightning Network developers in April 2016, Joseph Poon explained that odd/even HTLC IDs were originally intended for debugging purposes, but he had been working on a cleaner solution. Rusty agreed with Pierre's concerns about the placement of acknowledgements in BOLT #2 and suggested moving the "ack" back into the update_commit/authenticate messages to avoid needing to write persistently to disk before every new packet sent.In a recent discussion, it was realized that HTLC IDs are not always sufficient, and the acknowledge field needs to be taken into account in some cases. This is because in certain scenarios, checking the 'acknowledge' field becomes necessary to prevent mismatches in expected signatures. The new absolute "lnd-like 64 bits unique id" introduced in Rusty is preferred over the previous relative "order-I-added-them-in" id to keep track of messages received and restart conversations after a reconnect.At the protocol level, only the HTLC id should be used instead of relying on the acknowledge field. However, at the transport level, the acknowledge field should still be relied upon to know which messages should be replayed. Although seemingly redundant, this approach separates the transport from the protocol, making testing easier. Additionally, the even/odd differentiation of HTLC ids is used to quickly determine the direction of a given HTLC and catch bugs. The latest spec leaves this open, but the current implementation uses a different number from other nodes, making it easier to eyeball.</summary>
-    <published>2016-04-01T19:38:50+00:00</published>
+    <updated>2023-06-03T16:23:43.173862+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-April/000507.html" rel="alternate"/>
+    <summary>The recent introduction of htlc ids in Rusty has led to discussions about the use of 64-bit unique identifiers for HTLCs instead of relative "order-I-added-them-in" ids. This change is necessary to distinguish between two HTLCs with the same R value and simplify the use of keypair-based contracts. The even/odd differentiation of htlc ids is used to quickly determine the direction of a given htlc, and this helps to catch bugs. At different levels, cases can be handled differently, but using the acknowledge field may not be optimal as it could lead to redundancy, while using the HTLC id at the protocol level would make more sense. At the transport level, the acknowledge field can still be relied upon to determine which messages should be replayed. Pierre had raised concerns about the placement of acknowledgements in BOLT #2, which Rusty agrees with and wants to document. In scenarios where A sends ADD HTLC X, ADD HTLC Y, ADD HTLC Z and B sends FAIL Y, then A sends SIG Z before receiving the last message from B, checking the 'acknowledge' field becomes necessary as it may close the channel without knowing if A received the "FAIL Y" message or not.</summary>
+    <published>2016-04-01T13:32:15+00:00</published>
   </entry>
 </feed>

@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Protocol for multiple in-flight updates.</title>
-  <updated>2023-06-02T00:21:10.014677+00:00</updated>
+  <updated>2023-06-03T16:11:45.898023+00:00</updated>
+  <author>
+    <name>Rusty Russell 2016-02-01 10:08:01</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2016-02-04 06:35:03</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2016-02-05 00:54:14</name>
+  </author>
   <author>
     <name>Joseph Poon 2016-02-02 07:28:14</name>
   </author>
@@ -24,15 +33,9 @@
   <author>
     <name>Rusty Russell 2016-02-04 04:08:35</name>
   </author>
-  <author>
-    <name>Rusty Russell 2016-02-01 10:08:01</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2016-02-04 06:35:03</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2016-02-05 00:54:14</name>
-  </author>
+  <link href="lightning-dev/Feb_2016/000418_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2016/000430_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2016/000431_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000422_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000427_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000428_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
@@ -40,16 +43,13 @@
   <link href="lightning-dev/Feb_2016/000424_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000426_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000429_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000418_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000430_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000431_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Protocol for multiple in-flight updates.</title>
-    <updated>2023-06-02T00:21:10.014677+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-February/000422.html" rel="alternate"/>
-    <summary>In the context provided, Joseph Poon and Rusty Russell discuss various aspects of the Lightning Network's protocol for handling transactions. The protocol involves maintaining two sets of proposals for adding to and removing from HTLCs, with each proposal requiring an add request that can be declined or accepted. If accepted, it is added to the proposals. Removing a proposal can be done through timeout or settle.The protocol also requires three steps for synchronous across-the-wire commit transactions, which are considered more secure than two. The email exchanges between Rusty Russell and Joseph Poon also touch on the topic of the HTLC modification request process, with both parties acknowledging that any modification accepted by the other party is included in the next Commitment signature message. In another conversation, Joseph Poon and Rusty Russell discuss the use of a signature that covers a certain range of values for Hashed Time-Locked Contracts (HTLCs) in the Lightning Network. They note that the counter aspect requires two counters- one for each originator of the request- to allow for simultaneous action on accept/reject/etc. The context also presents a strawman protocol that addresses the need for a more sophisticated approach to overlapping requests, particularly when pipelining requests. To simplify the protocol, one always tells the other side what the next revocation hash will be as part of finalizing a commit transaction. Packets involved in the protocol include update_add_htlc, update_decline_htlc, update_accept_htlc, update_fulfill_htlc, update_timeout_htlc, update_fail_htlc, update_commit, update_commit_accept, and update_commit_complete.Finally, Rusty discusses the Lightning Network's protocol for preventing cut-through HTLCs. According to Rusty's explanation, the "signature covers you up to X me up to Y" resolves the in-flight issue, but he questions whether it is more of a request ID than an HTLC ID.The commit process involves moving all staged HTLCs to signing and revoking, generating their commit transaction using the add complete and add signing and revoking HTLCs, signing it, and sending "commit { staged-htlcs; sig }". The other party generates their commit tx using all the add complete and any timeout prestage or settle prestage which are not listed in staged-htlcs. After checking the signature's validity, they send "commit revocation { old-revocation-preimage }" for the previous commit tx.Proposals suggest that there's no reason to accept anything except an add request, thus, the states SETTLE_PRESTAGE and TIMEOUT_PRESTAGE are redundant. There are also other failures, which suggests a FAIL message, perhaps with a reason message that might be encrypted back to the payer. C-lightning only allows closes to be sent from the HTLC recipient, and TIMEOUT is defined as the responsibility of the HTLC proposer. In order to reduce latency, an HTLC can be staged on the outgoing channel before it's committed on the incoming one. However, this means an HTLC recipient can't commit to the HTLC until the HTLC sender does. To address this, a new "unstage request" is needed to unstage if the incoming HTLC fails to complete in reasonable time.It's not necessary to commit to adds and removes in order with each other, but a commit message always commits to all HTLCs proposed and committed by the other side, all removes staged by the other side up to some counter, all HTLCs proposed by this side up to some counter, and all removes sent by this side. This implies that HTLCs and remove requests should be counted separately, and the HTLC count could serve as an HTLC ID which makes timeout/fail/abort messages shorter than using R hashes. Finally, it should be illegal to send a noop commit (i.e., one which doesn't change the commit tx).</summary>
-    <published>2016-02-02T07:28:14+00:00</published>
+    <updated>2023-06-03T16:11:45.898023+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-February/000418.html" rel="alternate"/>
+    <summary>The email exchange between Rusty Russell and Joseph Poon discusses the HTLC negotiation protocol for preventing cut-through HTLCs in Lightning Network. The protocol involves different states and steps, including adding an HTLC, removing an HTLC through timeout or settle, committing all changes, and proposing a new protocol to prevent overlapping requests. Joseph suggests a more secure three-step commit transaction, while Rusty proposes variants of the protocol for better throughput.They also discuss the need for two IDs sent in the commitment message and the importance of keeping messages in order. If the replyer skips the requester's Add Requests when replying, it is assumed that the skipped requests are request rejections or an outright channel closeout since it should never happen. This is to enforce accept/reject order and to ensure that modifications included in the signature/transaction do not change after-the-fact. Joseph suggests disallowing skipping as a protocol violation, which could lead to a gentler close protocol where sending a close message implies the initiator would send no more adds and reject all received. Two IDs, one for each party, are included in the Commitment signature message, allowing for timing issues with HTLC Add responses not being fully synced up.Rusty thanks Joseph and mentions he will try to document the protocol in another email. The protocol is still being optimized, but any accepted modification by the other party is included. While it may take some time to clean out all the remaining HTLCs for mutual close, at least the other side knows what is happening and can replace capacity by opening new channels if needed.</summary>
+    <published>2016-02-01T10:08:01+00:00</published>
   </entry>
 </feed>

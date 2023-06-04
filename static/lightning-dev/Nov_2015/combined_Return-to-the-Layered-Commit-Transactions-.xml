@@ -2,16 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Return to the Layered Commit Transactions?</title>
-  <updated>2023-06-02T00:05:10.893813+00:00</updated>
-  <author>
-    <name>Anthony Towns 2015-11-27 21:27:42</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-11-25 00:02:54</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-11-27 03:42:55</name>
-  </author>
+  <updated>2023-06-03T15:54:06.188306+00:00</updated>
   <author>
     <name>Anthony Towns 2015-11-27 05:14:46</name>
   </author>
@@ -24,20 +15,29 @@
   <author>
     <name>Anthony Towns 2015-11-25 09:07:54</name>
   </author>
-  <link href="lightning-dev/Nov_2015/000361_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2015/000341_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2015/000346_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
+  <author>
+    <name>Anthony Towns 2015-11-27 21:27:42</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-11-25 00:02:54</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-11-27 03:42:55</name>
+  </author>
   <link href="lightning-dev/Nov_2015/000350_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2015/000364_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2015/000339_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2015/000343_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000361_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000341_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000346_Return-to-the-Layered-Commit-Transactions-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Return to the Layered Commit Transactions?</title>
-    <updated>2023-06-02T00:05:10.894807+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000361.html" rel="alternate"/>
-    <summary>The email conversation between Anthony Towns and Rusty Russell discusses the calculations necessary to determine the timeout on outgoing HTLC. The timeout is determined by several factors such as T, the timeout in the HTLC; d, the CSV delay in the HTLC; n, how long it takes to be confident someone else can't double spend an input to the transaction and f, how long it takes for transactions to get the first confirmation given how much fee is paid. They also explain that at time T-d-f, if the HTLC hasn't been resolved off-chain, one needs to publish their commitment transaction. It'll hit the chain at time T-d. At time T, both the CTLV and CSV clauses are satisfied, so one can spend it and should attempt to do so immediately.Anthony has also proposed that if one didn't get fast resolution on an HTLC, then they'd require proof that a commit tx was published, or they'd close the channel themselves to create such proof to hand back. However, the problem arises when one doesn't know how many hops are ahead of them and the rule is "wait 1 minute, if you don't get a response, close the channel," then everyone in the chain will close the channel at once. In an email thread from November 2015, Anthony Towns suggests adding further constraints on timeouts based on fees so as to avoid being left holding the bag. He also suggests batching timeouts for better efficiency.While working on the payment layer and experimenting with timeouts and timeframes for CSV and CLTV, Mats observed some issues. Firstly, it is not possible for HTLCs to have a long revocation time and a short refund time due to the way scripts and commit transactions are designed. Secondly, there are race conditions where both parties can claim the payment depending on propagation time of the transaction. Thirdly, as the absolute CLTV timeout must increase with each hop, it can provide insight into the position within the route. However, this can also result in a long total refund time. Mats played with the numbers but didn't see any solution to the problem.The proposed protocol ensures that S &gt;= P+d and S &gt;= X when A is paying the HTLC and wants to claim a refund by unilaterally closing the channel. Depending on fees paid, the transaction gets n confirmations by time T+y or else Bob manages a double spend, revealing R. The absolute CLTV timeout can decrease with each hop. If your node is online and robust, 3 hours should be sufficient for revocation time. For 20 hops and everyone using one day for revocation time and two days for HTLC timeout delta, the original HTLC times out in 40 days while the last HTLC times out in 2 days, falling to the blockchain.</summary>
-    <published>2015-11-27T21:27:42+00:00</published>
+    <updated>2023-06-03T15:54:06.188306+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000350.html" rel="alternate"/>
+    <summary>The discussion between Rusty Russell and Anthony Towns centers around the constraints for HTLCs and commitment transactions in the context of Bitcoin. They explain that the revocation time must be long enough to spot cheating, and the HTLC inter-hop-delta should be much greater than the revocation time. The proposed protocol ensures that S &gt;= P+d and S &gt;= X when A is paying the HTLC and wants to claim a refund by unilaterally closing the channel. The conversation also highlights the need for channels to have parameters "t" and "k" as well as "d" to drop to the blockchain well before T actually comes around.Anthony suggests adding further constraints on timeouts based on fees to avoid being left holding the bag and recommends expiring 1000 concurrent HTLCs on a channel in five batches of 20 instead of individually for better efficiency. However, while experimenting with timeouts for CSV and CLTV, Mats Jerratsch discovered issues related to the design of single output of scripts and commit transaction, where HTLCs cannot have a long revocation time and a short refund time simultaneously. This results in problematic race conditions where both parties can technically claim the payment depending on the propagation time of the transaction. To solve this issue, he proposes separating 'claiming-a-payment-using-R' and 'revoking-an-output' into two layers, enforced by revealing R within a separate timeframe than the revocation timeframe.The conversation also discusses the calculations necessary to determine the timeout on outgoing HTLC, which is determined by factors such as T, d, n, and f. If the HTLC has not been resolved off-chain at time T-d-f, one needs to publish the commitment transaction and spend it immediately. At time T+f+n, one will be confident that the transaction is safe. Anthony proposes requiring proof that a commit tx was published or closing the channel oneself to create such proof if there is no fast resolution on an HTLC. The issue, however, is that the number of hops ahead is unknown, and setting a fixed timeout for all nodes would result in all nodes closing the channel at once.</summary>
+    <published>2015-11-27T05:14:46+00:00</published>
   </entry>
 </feed>

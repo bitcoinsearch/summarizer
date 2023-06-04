@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Probe cancellation</title>
-  <updated>2023-06-02T04:20:54.212487+00:00</updated>
+  <updated>2023-06-03T20:08:31.980546+00:00</updated>
   <author>
     <name>Anthony Towns 2018-11-10 03:26:06</name>
   </author>
@@ -15,9 +15,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Probe cancellation</title>
-    <updated>2023-06-02T04:20:54.212487+00:00</updated>
+    <updated>2023-06-03T20:08:31.980546+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001554.html" rel="alternate"/>
-    <summary>The email thread is discussing a solution to freeing up scarce resources on the network by making probing routes more efficient and cancelling stuck probes from both the sending and receiving direction. The current risk of probing is that if the probe discovers a failing node/channel, the probe HTLC will get stuck, using up HTLC slots and memory for each of the well-behaved nodes. The proposed solution suggests allowing for cancelling stuck probes from the sending direction as well as the receiving direction. To implement this solution, a 128b random number X would be generated, H=bitwise-not(SHA256(X)) would be calculated, and a probe payment over path P, hash H, amount V would be made, waiting for a response of success or error, unknown hash, routing failure, or timeout. This approach would provide an option for someone making an honest effort to probe the network to not inadvertently attack it in case a probe fails. However, an attacker may still take the option to not do this.In order to ensure that everyone can safely drop the incoming transaction, a payment hash would be generated as SHA256("something") XOR 0xFF..FF or similar. All one has to do is send a packet saying this was a probe, and telling you the "something" to verify, and free up the slot/funds from the probe, as can everyone else except for the actual failing nodes. It is important to consider that if the probe has a realistic value rather than just a few (milli)satoshis, it might lock up real money too.Overall, this proposed solution would help to address the issue of ensuring reliability in payment routing without consuming HTLC slots and memory for well-behaved nodes.</summary>
+    <summary>The email thread discusses a potential solution to freeing up scarce resources on the network by making probing routes more efficient and cancelling stuck probes from both the sending and receiving direction. The risk of probing is that if a probe discovers a failing node/channel, it will get stuck, using up HTLC slots and memory for each of the well-behaved nodes. The proposed solution suggests generating a 128b random number X, calculating H=bitwise-not(SHA256(X)), making a probe payment over path P, hash H, amount V, and waiting for response.To ensure reliability in payment routing, one could allow cancelling stuck probes from both directions. This can involve generating a payment hash as SHA256("something") XOR 0xFF..FF or similar, and sending a packet saying this was a probe along with the "something" to verify, and freeing up the slot/funds from the probe. However, an attacker may still choose not to do this. Overall, this solution provides an option for someone making an honest effort to probe the network to not inadvertently attack it in case a probe fails.</summary>
     <published>2018-11-10T03:26:06+00:00</published>
   </entry>
 </feed>

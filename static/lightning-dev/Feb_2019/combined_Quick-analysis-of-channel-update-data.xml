@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Quick analysis of channel_update data</title>
-  <updated>2023-06-02T16:57:48.917793+00:00</updated>
+  <updated>2023-06-03T21:27:20.314617+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2019-01-04 03:43:14</name>
+  </author>
+  <author>
+    <name>Fabrice Drouin 2019-01-08 17:22:23</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-01-08 23:44:06</name>
+  </author>
+  <author>
+    <name>Christian Decker 2019-01-02 17:26:07</name>
+  </author>
   <author>
     <name>Fabrice Drouin 2019-01-04 08:58:17</name>
   </author>
@@ -39,18 +51,10 @@
   <author>
     <name>Fabrice Drouin 2019-01-20 19:53:56</name>
   </author>
-  <author>
-    <name>ZmnSCPxj 2019-01-04 03:43:14</name>
-  </author>
-  <author>
-    <name>Fabrice Drouin 2019-01-08 17:22:23</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2019-01-08 23:44:06</name>
-  </author>
-  <author>
-    <name>Christian Decker 2019-01-02 17:26:07</name>
-  </author>
+  <link href="lightning-dev/Jan_2019/001789_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2019/001811_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2019/001815_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2019/001774_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001790_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2019/001874_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001773_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
@@ -63,17 +67,13 @@
   <link href="lightning-dev/Jan_2019/001813_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001816_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001829_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2019/001789_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2019/001811_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2019/001815_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2019/001774_Quick-analysis-of-channel-update-data.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Quick analysis of channel_update data</title>
-    <updated>2023-06-02T16:57:48.918757+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001790.html" rel="alternate"/>
-    <summary>The Lightning Network's channel update traffic has been a topic of discussion among members of the community. Rusty Russell and Fabrice Drouin examined the issue and found that updating channels with unchanged parameters is a major cause of the traffic. They also observed that "flapping" channels, likely due to unreliable hosts, could be another cause of the updates.To address these issues, they suggested implementing a basic checksum to improve routing table sync and ratelimiting enables to avoid penalizing flapping channels. Additionally, they proposed different approaches to the eager-disable and lazy-enable concept, with Christian Decker suggesting local policies at senders of the update to reduce flapping updates.Further investigations by Fabrice revealed that 85% of the time, information was queried that had already been received, leading to inefficiencies in collecting and querying information on routing tables and channel updates. To address this, he suggested discarding newer duplicates unless they are more than one week old and remembering the latest timestamp of duplicates for future advanced reconstruction schemes. Adding a basic checksum to channel range queries is also proposed as a solution. However, Rusty questioned whether all these measures were necessary and suggested locally updating timestamps and signatures for identical updates and not broadcasting them if they were the only changes.The Lightning-dev mailing list recently discussed the issue of flapping updates in a network and its impact on routing tables. If a sender node sends out two identical updates with different timestamps and signatures, both updates get dropped if the intermediate node's flush interval is triggered before it receives them. To reduce flapping updates, local policies at the update senders should be used, rather than building in-network deduplications. Heuristics can also be used to close channels to unreliable nodes instead of filtering/delaying publishing updates for them.Participants suggested "eager-disable" and "lazy-enable" policies to improve traffic and efficiency. There were concerns that nodes may not detect when a channel has been re-enabled if updates are discarded, and that nodes may discard channels as stale if they don't receive new updates when they reconnect. It was suggested to ratelimit own enables to one per 120 seconds to solve the issue.The email exchange also discussed set reconciliation schemes and how reconciling [channel_id | checksum] can reduce communication rounds to determine if channel parameters have changed. In a separate email, Fabrice Drouin shared his findings about frequent channel updates, even when fee parameters don't change. There were many disable/enable/disable updates sent several times a day for the same channel ID, as well as updates that don't change anything except the timestamp and signatures. Christian Decker suggested locally updating the timestamp and signature for old channel_updates instead of forwarding the update, and delaying channel_updates depending on the past stability of that peer.Overall, the email exchange acknowledged that achieving consistency in views of the routing table may not be possible, and the protocol should be considered a best effort gossip protocol. Improving the efficiency of the Lightning Network's gossip protocol is an ongoing effort that involves multiple solutions such as heuristics, local policies, and adding a basic checksum to channel range queries. The findings from the investigations suggest that these measures could significantly reduce channel update traffic and improve network structure.</summary>
-    <published>2019-01-04T08:58:17+00:00</published>
+    <updated>2023-06-03T21:27:20.314617+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001789.html" rel="alternate"/>
+    <summary>The Lightning Network community has been discussing issues related to channel updates and routing tables via email exchanges. One of the main problems discussed is flapping updates, which can cause inconsistencies in routing tables. The community suggests different heuristics that could reduce gossip traffic and improve routing efficiency. Another issue discussed is set reconciliation schemes and how to reconcile channel parameters to avoid further communication rounds. Frequent channel updates even when fee parameters remain unchanged are also a concern. Many updates do not change anything except for a new timestamp and signatures, occurring several times a day for the same channel ID. Hourly backups of routing tables reveal this issue. Suggestions to improve routing table sync include using a basic checksum that covers only fees and HTLC min/max values. The community acknowledges that achieving consistency in views of the routing table may not be possible, but they continue to propose solutions that can be implemented as local policy without warranting any spec changes.Fabrice Drouin suggests that the Lightning Network's efficiency of collecting and querying routing tables and channel updates could be improved with a basic checksum that covers fees and HTLC min/max value. Rusty Russell suggested discarding the newer duplicate when a node is updated too fast or remembering the latest timestamp of the duplicate for future advanced reconstruction schemes. However, this method assumes a single update partner and still results in flaps, which might even lead to a stuck state for some channels. Christian Decker responds suggesting that building in-network deduplications is unnecessary and local policies at the senders of the update should be implemented to reduce flapping updates. In addition, the article discusses a scenario where a node in a network receives updates from another node through multiple paths, which can result in dropped updates and inconsistent states. Rusty suggests locally updating timestamps and signatures for identical updates and not broadcasting them if they were the only changes.The article also suggests "eager-disable" and "lazy-enable," where disables are sent right away, and enables are put on an exponential backoff timeout. The routing protocol should also be less chatty, and heuristics can be used to improve traffic. Flapping channels, possibly due to unreliable hosts, can cause issues with the efficiency of collecting and querying routing tables and channel updates. These heuristics would probably be used to close channels to unreliable nodes instead of filtering/delaying publishing updates for them.Finally, the article argues that lazy-disable is the current best practice since it assumes that the channel is still advertised as available, while eager-enable is used only when a disable message has been sent. The channel_update traffic does not primarily cause nodes to publish new updates when channels are about to become stale, and heuristics can be used to close channels to unreliable nodes instead of filtering/delaying publishing updates for them.</summary>
+    <published>2019-01-04T03:43:14+00:00</published>
   </entry>
 </feed>

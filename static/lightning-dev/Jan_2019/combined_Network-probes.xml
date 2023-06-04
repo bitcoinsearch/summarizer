@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Network probes</title>
-  <updated>2023-06-02T17:09:02.695612+00:00</updated>
+  <updated>2023-06-03T21:33:59.213880+00:00</updated>
+  <author>
+    <name>Andrea RASPITZU 2019-01-21 09:43:57</name>
+  </author>
   <author>
     <name>Olaoluwa Osuntokun 2019-01-18 21:06:51</name>
   </author>
@@ -12,20 +15,17 @@
   <author>
     <name>Matt Corallo 2019-01-21 23:15:59</name>
   </author>
-  <author>
-    <name>Andrea RASPITZU 2019-01-21 09:43:57</name>
-  </author>
+  <link href="lightning-dev/Jan_2019/001833_Network-probes.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001825_Network-probes.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001824_Network-probes.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2019/001837_Network-probes.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2019/001833_Network-probes.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Network probes</title>
-    <updated>2023-06-02T17:09:02.695612+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001825.html" rel="alternate"/>
-    <summary>The Lightning Network is a decentralized network that enables fast and low-cost transactions of Bitcoin. However, one issue the network faces is how to probe the network to check for the liveliness of a path before sending out a payment. Currently, a random payment hash is issued which is not redeemable by anyone; if the destination (and the path) is lively, it will respond with an error. To improve this process, the padding of the per_hop field of the onion can be used. With a single bit of the padding, the final node can be informed that this is a probe and not an actual payment. This saves the receiving node from doing a database lookup and does not reveal anything to intermediate nodes.Nodes may opt to maintain a series of hierarchical bloom filters, with the highest tier filter containing only payment hashes for non-expired invoices, which would allow them to avoid almost all database lookups for incoming unknown payment hashes (probes or not). However, Matt expressed concern about this idea as it could potentially lead to timing attacks to discover if a node is the target for a payment. It is important to consider security risks before implementing new strategies in order to protect against potential vulnerabilities.Laolu recently implemented a type of spontaneous payment that works today in the wild. A requirement for this was fully functional EOB packing logic at the sender, and multi-packet unwrapping at the receiver. All that would need to be done is specify an EOB type for this special probe type of HTLC. As it doesn't need any additional data, it only consumes a single pivot hop and doesn't require the route to be extended.Aj's prior post on this front suggested making probe HTLCs identifiable to the receiver, allowing intermediate nodes to drop them. Allowing intermediate nodes to identify probe HTLCs has privacy implications, as it creates two path-level classes of HTLCs. However, this may help with QoS scheduling on the forwarding plane for nodes, as they may want to prioritize actual payments over probes, with some nodes opting to not forward probes at all.In a recent email exchange, Olaoluwa Osuntokun suggested that nodes should start using bloom filters to avoid most database lookups for incoming payment hashes. However, it is important to consider security risks before implementing new strategies in order to protect against potential vulnerabilities.</summary>
-    <published>2019-01-18T21:06:51+00:00</published>
+    <updated>2023-06-03T21:33:59.213880+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001833.html" rel="alternate"/>
+    <summary>The Lightning Network is a decentralized network that allows for fast and cheap transactions of Bitcoin. One issue the network faces is how to probe the network to check for the liveliness of a path before sending out a payment. Currently, a random payment hash is issued that is not redeemable by anyone; if the destination (and the path) is lively, it will respond with an error. To improve this process, the padding of the per_hop field of the onion can be used. With a single bit of the padding, the final node can be informed that this is a probe and not an actual payment. This saves the receiving node from doing a database lookup and does not reveal anything to intermediate nodes. Nodes may opt to maintain a series of hierarchical bloom filters, which would allow them to avoid almost all database lookups for incoming unknown payment hashes (probes or not).The author of the message is proposing a discussion on whether or not to probe the network to check for the liveliness of a path before sending out a payment. The author believes that probing can help reduce the error rate of payments and even detect stale channels. In order to improve this process, the author suggests using the padding of the per_hop field of the onion and with a single bit of the padding, telling the final node that this is a probe and not an actual payment. In a recent email exchange, Olaoluwa Osuntokun suggested that nodes should start using bloom filters to avoid most database lookups for incoming payment hashes. However, Matt expressed concern about this idea as it could potentially lead to timing attacks to discover if a node is the target for a payment. It is important to consider security risks before implementing new strategies in order to protect against potential vulnerabilities.Aj's prior post on this front suggested making probe HTLCs identifiable to the receiver, allowing intermediate nodes to drop them. Allowing intermediate nodes to identify probe HTLCs has privacy implications, as it creates two path-level classes of HTLCs. However, this may help with QoS scheduling on the forwarding plane for nodes, as they may want to prioritize actual payments over probes, with some nodes opting to not forward probes at all.The email also mentions a prior post on making probe HTLCs identifiable to the receiver and allowing intermediate nodes to drop them. The sender can send out another different type of probe that would tell the intermediate nodes that the previous one was not actually a payment, allowing the network to free resources. However, introducing probes that can be dropped and/or prioritized by intermediate nodes is a privacy issue and can be abused, as it allows them to respond differently, thus the probe result cannot be trusted entirely. In conclusion, probing the Lightning Network to check for liveliness of a path before sending out a payment can be improved by using the padding of per_hop field of onion and adding hierarchical bloom filters. While allowing intermediate nodes to identify probe HTLCs can improve QoS scheduling on the forwarding plane for nodes, it also has privacy implications. It is important to consider security risks and potential vulnerabilities before implementing new strategies.</summary>
+    <published>2019-01-21T09:43:57+00:00</published>
   </entry>
 </feed>

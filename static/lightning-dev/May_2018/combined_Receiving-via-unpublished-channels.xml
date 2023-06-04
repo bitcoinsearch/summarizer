@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Receiving via unpublished channels</title>
-  <updated>2023-06-02T02:57:17.879205+00:00</updated>
+  <updated>2023-06-03T18:53:27.626473+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2018-05-07 22:39:43</name>
+  </author>
+  <author>
+    <name>Hiroshi UENO 2018-05-09 04:49:40</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-05-09 05:17:26</name>
+  </author>
   <author>
     <name>ueno at nayuta.co 2018-05-08 06:33:53</name>
   </author>
@@ -24,15 +33,9 @@
   <author>
     <name>Hiroshi Ueno 2018-05-15 14:54:08</name>
   </author>
-  <author>
-    <name>ZmnSCPxj 2018-05-07 22:39:43</name>
-  </author>
-  <author>
-    <name>Hiroshi UENO 2018-05-09 04:49:40</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-05-09 05:17:26</name>
-  </author>
+  <link href="lightning-dev/May_2018/001243_Receiving-via-unpublished-channels.xml" rel="alternate"/>
+  <link href="lightning-dev/May_2018/001257_Receiving-via-unpublished-channels.xml" rel="alternate"/>
+  <link href="lightning-dev/May_2018/001258_Receiving-via-unpublished-channels.xml" rel="alternate"/>
   <link href="lightning-dev/May_2018/001248_Receiving-via-unpublished-channels.xml" rel="alternate"/>
   <link href="lightning-dev/May_2018/001259_Receiving-via-unpublished-channels.xml" rel="alternate"/>
   <link href="lightning-dev/May_2018/001281_Receiving-via-unpublished-channels.xml" rel="alternate"/>
@@ -40,16 +43,13 @@
   <link href="lightning-dev/May_2018/001241_Receiving-via-unpublished-channels.xml" rel="alternate"/>
   <link href="lightning-dev/May_2018/001280_Receiving-via-unpublished-channels.xml" rel="alternate"/>
   <link href="lightning-dev/May_2018/001283_Receiving-via-unpublished-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/May_2018/001243_Receiving-via-unpublished-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/May_2018/001257_Receiving-via-unpublished-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/May_2018/001258_Receiving-via-unpublished-channels.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Receiving via unpublished channels</title>
-    <updated>2023-06-02T02:57:17.879205+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-May/001248.html" rel="alternate"/>
-    <summary>The context revolves around the behavior of `open_channel.channel_flags` and `channel_update` in C-lightning. According to the discussion, a temporary `channel_update` is sent after `funding_locked` has been sent by both sides, as well as reconnection. However, it is not sent if the channel is shutting down or has already achieved the announcement depth. After that, the "normal" `channel_update` should get sent after a `channel_announcement`.Moreover, the conversation touches upon how to obtain onLightning fee rates for invoice `r` fields when creating private routes. Nayuta-ueno asked for clarification on whether c-lightning checks the 'r' field from payee's invoice. ZmnSCPxj explained that the invoice has a signature for the entire invoice, but only the payee's signature is included in the channel fee.ZmnSCPxj further added that the payee has an incentive to provide accurate channel information since incorrect information could lead to payment failure. Thus, only the payee's signature should suffice, and if they provide bad information, they risk not getting paid.Lastly, ZmnSCPxj also provided information about the Ptarmigan Lightning Network project by Nayuta Ueno/Nayutaco. The project, which can be found on GitHub at https://github.com/nayutaco/ptarmigan, is associated with the daemon ucoind and the CLI ucoincli.</summary>
-    <published>2018-05-08T06:33:53+00:00</published>
+    <updated>2023-06-03T18:53:27.626473+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-May/001243.html" rel="alternate"/>
+    <summary>During a recent discussion on the Lightning-dev mailing list, concerns were raised about creating invoices with `r` fields while implementing support for them. ZmnSCPxj pointed out that there is a problem when trying to receive payments via an unpublished channel without knowing what onLightning fees the other side of that channel wants to charge. To address this issue, an idea was proposed to send a `channel_update` as soon as the channel locks in, regardless of whether it is published or unpublished. This approach seems to be back-compatible because software that does not expect this behavior will simply drop the `channel_update`. To standardize this behavior, ZmnSCPxj asked for feedback from other Lightning Network implementations (lnd, eclair, ucoin, lit). Additionally, he asked about the intended way to get the onLightning fee rates to put into invoice `r` fields for private routes.Nayuta-ueno is currently implementing the `r` field to their node called ptarmigan and has a question about whether c-lightning checks something in the `r` field from payee's invoice. ZmnSCPxj clarified that the `r` field does not contain a signature like the `channel_update`, and the invoice has a signature for the whole invoice. Only the payee signature is needed since the fee for this channel is from the peer of the payee. The payee has an incentive to provide accurate information about the channel as payment may fail if the channel fees or CLTV-delta is not as expected.Temporary `channel_update` messages are sent after `funding_locked` has been sent by both sides or upon reconnection; however, if the channel is shutting down or has already achieved the announcement depth, then any fee updates would be pointless. C-lightning always sends the `channel_update`. Nayuta-ueno appreciated the response and intends to implement this like c-lightning to ptarmigan.Overall, the discussion focused on standardizing Lightning fees across different implementations and ensuring accurate information about channels is provided to avoid payment failure.</summary>
+    <published>2018-05-07T22:39:43+00:00</published>
   </entry>
 </feed>

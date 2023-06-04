@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - More thoughts on NOINPUT safety</title>
-  <updated>2023-06-02T17:56:09.000048+00:00</updated>
+  <updated>2023-06-03T21:42:56.610702+00:00</updated>
+  <author>
+    <name>Anthony Towns 2019-03-13 01:41:43</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2019-03-20 07:38:22</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-03-21 09:06:14</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-03-22 04:23:28</name>
+  </author>
   <author>
     <name>ZmnSCPxj 2019-03-21 10:05:09</name>
   </author>
@@ -51,18 +63,10 @@
   <author>
     <name>Anthony Towns 2019-03-18 06:38:56</name>
   </author>
-  <author>
-    <name>Anthony Towns 2019-03-13 01:41:43</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2019-03-20 07:38:22</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2019-03-21 09:06:14</name>
-  </author>
-  <author>
-    <name>Johnson Lau 2019-03-22 04:23:28</name>
-  </author>
+  <link href="lightning-dev/March_2019/001893_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2019/001924_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2019/001929_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2019/001934_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
   <link href="lightning-dev/March_2019/001930_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
   <link href="lightning-dev/March_2019/001931_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
   <link href="lightning-dev/March_2019/001933_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
@@ -79,17 +83,13 @@
   <link href="lightning-dev/March_2019/001898_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
   <link href="lightning-dev/March_2019/001900_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
   <link href="lightning-dev/March_2019/001917_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2019/001893_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2019/001924_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2019/001929_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2019/001934_More-thoughts-on-NOINPUT-safety.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - More thoughts on NOINPUT safety</title>
-    <updated>2023-06-02T17:56:09.000048+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-March/001930.html" rel="alternate"/>
-    <summary>In various email threads on Bitcoin-dev and Lightning-dev mailing lists, members discussed different methods for enforcing timelocks in Bitcoin transactions. Options include signing with NOINPUT, NOSCRIPT, and codeseparatorpos=1; signing with codeseparatorpos=-1 and NOINPUT but committing to the script code and nSequence (for the CSV delay); or using OP_CHECKLOCKTIMEVERIFY and OP_DROP, as well as OP_CHECKDLSVERIFY and OP_CHECKDLS. Discussions also centered around the use of NOINPUT signatures in eltoo channels and the potential risks and benefits associated with their implementation.Solutions proposed include requiring NOINPUT signatures to always be accompanied by a non-NOINPUT signature, using output tagging to indicate NOINPUT capability, and dropping NOINPUT from normal taproot key path spending. Members also discussed the concept of offchain transactions and how they are affected by settlement transactions.The discussion on the bitcoin-dev mailing list regarding the eltoo paper suggests that BIP68 relative-time is sufficient for update and settlement purposes instead of using OP_CSV (BIP112). For update purposes, A and B will co-sign a muSig with nLockTime = t without committing to the scriptCode and BIP68 lock time. However, for settlement purposes, they will co-sign with an agreed BIP68 locktime and commit to the scriptCode. The update sig can be bound to any previous update tx immediately, while the settlement sig would only bind to a specific update tx after the relative locktime has passed.The eltoo paper suggests using OP_CSV which is not necessary if one party could single-handedly decide the relative locktime, which is not the case with a muSig. Finally, even a script using OP_CHECKLOCKTIMEVERIFY OP_DROP OP_CHECKSIGVERIFY OP_CHECKSIG does not require OP_CSV because the two signatures must use the same relative locktime, or the transaction is invalid. In order to bind to only that update tx, NOINPUT but committing to the script code and nSequence (for the CSV delay) requires two pubkeys, two sigs, and the taproot point reveal. The discussion also touched on privacy concerns and the workarounds available to limit the amount of historical data revealed about on-chain coin used in Lightning.</summary>
-    <published>2019-03-21T10:05:09+00:00</published>
+    <updated>2023-06-03T21:42:56.611700+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-March/001893.html" rel="alternate"/>
+    <summary>The article discusses the potential risks and benefits of NOINPUT implementation in the Bitcoin ecosystem. One concern with NOINPUT implementation in eltoo is that it reintroduces third-party malleability to transactions, but a safety measure is in place if the "finish" transaction is also a NOINPUT tx with a CSV delay. However, there are two fundamental ways NOINPUT can cause problems for users. First, the signature could be applied to an unexpectedly different script. Second, someone else could reuse the prior signature to forward money without the user's consent.To address these issues, OP_MASK has been proposed, but it doesn't apply to address blacklists. There is also concern about losing funds due to replays, which could lead to major exchanges banning sending funds to any address capable of NOINPUT. The Lightning Network developer suggested changing the network's rules regarding signature hashing from requiring that transactions must not use SIGHASH_NOINPUT to requiring that transactions must have at least one non-SIGHASH_NOINPUT signature.The Lightning-dev mailing list discussed several technical details related to Bitcoin transactions and the use of NOINPUT signatures in eltoo channels. Anthony Towns proposed "taproot plus" outputs that would allow users to include noinput signatures in addition to normal taproot address features. Rusty Russell suggested making "must have a sig that commits to the input tx" a standardness rule rather than consensus if it is deemed necessary. The discussion also touched on the potential problems caused by NOINPUT signatures, with one possible scenario being that naive users might lose funds due to replays.In another email exchange, the writer sought clarification on whether Taproot can be used in conjunction with output tagging. Another user responded that they view tagged outputs as "taproot plus," which would allow for normal taproot functions as well as noinput signatures. The discussion also touched on the use of scriptless scripts for handling HTLCs and the need for multiple signatures in active channels.The article discusses a proposed approach to improve the safety and efficiency of NOINPUT in Bitcoin's eltoo protocol. The approach involves having two signatures for each update transaction, one with NOINPUT and a previous update transaction as input, and one with SINGLE|ANYONECANPAY sig and the funding transaction as input. This approach would require more storage and communication requirements, but it has three potential gains: making NOINPUT safer, giving fewer hints that eltoo is being used, and putting less data/computation load on the blockchain.However, using a key path spend (without a script) could be cheaper on the blockchain. Moreover, requiring a non-NOINPUT signature would reduce a unilateral close to only being special due to the settlement transaction having a relative timelock, reducing the number of signatures required from 1+n signatures per update today to 4+n signatures if using scriptless scripts. An alternative proposal involves adding a trigger transaction that needs to be published in a unilateral case, but this would increase the on-chain footprint. The extra latency introduced by the interactive signing protocol for muSig could also be a hit, particularly if multiparty channels with many participants are involved, rather than just two. Output tagging can already indicate the usage of NOINPUT, so it seems like the second benefit probably won't exist.</summary>
+    <published>2019-03-13T01:41:43+00:00</published>
   </entry>
 </feed>

@@ -2,19 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [PATCH v3] daemon: encrypted communication (version 3)</title>
-  <updated>2023-06-01T23:55:59.515849+00:00</updated>
-  <author>
-    <name>Rusty Russell 2015-10-27 19:41:20</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-23 01:33:33</name>
-  </author>
-  <author>
-    <name>Mats Jerratsch 2015-10-27 18:01:32</name>
-  </author>
-  <author>
-    <name>Peter Todd 2015-10-27 20:40:47</name>
-  </author>
+  <updated>2023-06-03T15:42:45.097777+00:00</updated>
   <author>
     <name>Pierre 2015-10-27 10:34:44</name>
   </author>
@@ -33,23 +21,35 @@
   <author>
     <name>Rusty Russell 2015-10-28 02:17:20</name>
   </author>
-  <link href="lightning-dev/Oct_2015/000298_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000287_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000296_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000301_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
+  <author>
+    <name>Rusty Russell 2015-10-27 19:41:20</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-10-23 01:33:33</name>
+  </author>
+  <author>
+    <name>Mats Jerratsch 2015-10-27 18:01:32</name>
+  </author>
+  <author>
+    <name>Peter Todd 2015-10-27 20:40:47</name>
+  </author>
   <link href="lightning-dev/Oct_2015/000294_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000295_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000299_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000300_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000306_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000308_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000298_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000287_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000296_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000301_-PATCH-v3-daemon-encrypted-communication-version-3-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [PATCH v3] daemon: encrypted communication (version 3)</title>
-    <updated>2023-06-01T23:55:59.515849+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000298.html" rel="alternate"/>
-    <summary>The Lightning Network protocol uses even and odd numbered protobuf fields to handle unknown fields in the protocol. According to Rusty Russell, odd numbered fields are optional and can be ignored by existing implementations, while even numbered fields are required and will cause an abort if received. This numbering system can also be used to deliberately break backward compatibility in future versions of the protocol. The author discusses the use of ECDH to derive a shared secret for encryption and raises concerns about the 'totlen' field, which represents the size of the unencrypted serialized protobuf message instead of the total data transmitted. Mats Jerratsch suggests that replay protection is already provided by AES-CTR and that 'totlen' may not be necessary. However, Rusty notes that some level of replay is still required for robustness when nodes crash. Additionally, Rusty discusses the process of introducing a field with the intention of making it optional or eventually compulsory, suggesting adding the field as two optional fields, labeled 11 and 12, to make the transition easier.</summary>
-    <published>2015-10-27T19:41:20+00:00</published>
+    <updated>2023-06-03T15:42:45.097777+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000294.html" rel="alternate"/>
+    <summary>The Lightning network protocol uses even and odd numbered protobuf fields to break backward compatibility in the future after some transition. Even numbered fields are required and must be understood, while odd numbered fields are optional and can be ignored by existing implementations. The author discusses the process of introducing a field with the intention of making it optional or eventually compulsory, suggesting adding the field as two optional fields to make the transition easier.Regarding encryption, the author explains that ECDH is used to derive a shared secret, which is then used to generate transmission encoding parameters for each side, including Session AES-128 key, Session HMAC key, and IV for AES. When encrypting packets, all data transmitted is covered by an SHA256 HMAC, with totlen referring to the size of the unencrypted serialized protobuf message. However, the author raises concerns about the comment in the code where totlen represents the size of the unencrypted serialized protobuf message rather than the total data transmitted. The author also questions why totlen includes the length of itself since it doesn't define the encrypted message boundaries anyway. Additionally, they inquire why the length is encoded on 64 bits instead of 32 bits.The handling of unknown protobuf fields in a protocol is based on whether they are odd or even numbered. Odd numbered fields are optional and backwards compatible, while even numbered fields are required and will result in an abort if received. The numbering system can be used to deliberately break backward compatibility in the future after some transition. Rusty Russell suggests documenting this information in Matsjj's lightning-core docs repository.The code involved in encrypted packets protected by an HMAC and containing a serialized protobuf message includes a totlen field meant to track the total data transmitted. However, it appears to actually track the size of the unencrypted message, and totlen includes its own length, which seems unnecessary since it doesn't define the encrypted message boundaries. The field was originally intended for replay protection, but as AES-CTR already provides this, totlen is not needed.The Lightning Network daemon uses C code, which includes three primary functions for handling cryptographic packets and other helper functions. The updated code contains changes to multiple files, including the addition of a new struct called io_data in peer.h and the modification of the "pkt__field_descriptors" variable to add a new field for authentication named "auth". The code also includes several other functions to perform various tasks such as generating a session key, wrapping/unwrapping packets, and freeing memory.</summary>
+    <published>2015-10-27T10:34:44+00:00</published>
   </entry>
 </feed>

@@ -2,15 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - High level fee mechanics</title>
-  <updated>2023-06-02T02:30:03.366723+00:00</updated>
+  <updated>2023-06-03T18:33:39.173476+00:00</updated>
   <author>
-    <name>ZmnSCPxj 2018-03-18 23:48:57</name>
+    <name>Thomas Steenholdt 2018-04-10 15:02:39</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-04-12 04:49:23</name>
+  </author>
+  <author>
+    <name>Benjamin Mord 2018-04-12 20:37:17</name>
+  </author>
+  <author>
+    <name>Thomas Steenholdt 2018-03-19 11:30:35</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-04-11 09:17:15</name>
   </author>
   <author>
     <name>Benjamin Mord 2018-04-11 16:00:47</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-03-18 23:48:57</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-04-11 03:04:09</name>
@@ -27,37 +39,25 @@
   <author>
     <name>Thomas Steenholdt 2018-03-18 22:24:07</name>
   </author>
-  <author>
-    <name>Thomas Steenholdt 2018-04-10 15:02:39</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-04-12 04:49:23</name>
-  </author>
-  <author>
-    <name>Benjamin Mord 2018-04-12 20:37:17</name>
-  </author>
-  <author>
-    <name>Thomas Steenholdt 2018-03-19 11:30:35</name>
-  </author>
-  <link href="lightning-dev/March_2018/001099_High-level-fee-mechanics.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001154_High-level-fee-mechanics.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001171_High-level-fee-mechanics.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001174_High-level-fee-mechanics.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001101_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001160_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001164_High-level-fee-mechanics.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001099_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001156_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001158_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001177_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001179_High-level-fee-mechanics.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001098_High-level-fee-mechanics.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001154_High-level-fee-mechanics.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001171_High-level-fee-mechanics.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001174_High-level-fee-mechanics.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001101_High-level-fee-mechanics.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - High level fee mechanics</title>
-    <updated>2023-06-02T02:30:03.366723+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-March/001099.html" rel="alternate"/>
-    <summary>In Lightning Network, channels can be used to establish routes for routed payments, allowing a payment from A to D to be made through B and C. The fees on B and C are known ahead of time by A through the `channel_update` message in BOLT#7, which contains `fee_base_msat` and `fee_proportional_millionths`. To compute the payment that needs to reach C, the C-&gt;D fee is calculated by adding the `fee_base_msat` and (C-&gt;D `fee_proportion_millionts` * `msatoshi` / 1,000,000) to the payment value.Similarly, the payment from B to C is computed by replacing `msatoshi` with the payment that should reach C. A offers B a value higher than what it instructs B to forward to C, and the difference is the fee. A pays the entire fee since the highest value is at the source. To announce fees in the payment scenario, node gossip is used through `channel_update` messages. However, the balance of each peer on the network is not revealed as it represents the amount of money each peer owns on that channel. Real-life implementations like c-lightning get payment routes through brute-force trial-and-error, which is less desirable than getting exact channel balances at each balance update.ZmnSCPxj proposes the idea of channels having the option to publicize their balances to improve routing performance and scalability in a large network while balancing privacy with efficiency. Channels with high balance could have their fees reduced to encourage others to use them, and channels with low balance could have their fees increased. Adjusting Lightning network fees could also improve economic efficiency and impact expected channel lifetime. Nonlinear pricing combined with the AMP proposal would increase efficiency. However, no current node software implements this yet.Fee establishment, announcement, and claiming in a payment over Lightning Network are detailed in the BOLT spec. Node gossip provides information about `fee_base_msat` and `fee_proportional_millionths` for each channel in the `channel_update` message. If A has obsolete information about fees, payment routing will fail, but the channel_update will be sent as part of the error message. A computes the fees needed to cover all fees and offers B a higher value than what it instructs B to forward to C. The difference is the fee, and A pays the entire fee since the highest value is at the source.</summary>
-    <published>2018-03-18T23:48:57+00:00</published>
+    <updated>2023-06-03T18:33:39.174474+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001154.html" rel="alternate"/>
+    <summary>In a conversation between Benjamin Mord and ZmnSCPxj, they discuss the importance of considering short and long-term goals when building systems. They highlight the economic efficiency of Lightning operation and the critical nature of pricing as a signaling mechanism that impacts channel lifetime. Mord suggests adding an optional exponential component to permit a price exponent which may be set higher than 1. However, ZmnSCPxj notes that larger payments have a lower chance of successfully propagating through the network and that adding a nonlinear component would be difficult without the proposed AMP proposal. ZmnSCPxj proposes the idea of channels having the option to publicize their balances in order to improve routing performance and scalability in a large network. However, revealing channel balances would compromise privacy since each balance represents the amount of money each peer owns on that channel. Furthermore, adding a nonlinear component to the protocol would be difficult as there is no provision for it in the protocol. They also touch on the power law assumption of transaction size distribution and the more general approach to estimating channel lifespan. The writer seeks information on the mechanics of Lightning fees, particularly in the case of routed payments. They ask several questions including how A knows ahead of time the fees on B and C, how A knows the amount of fees that need to be added to the payment to cover all fees, if D is aware of the full amount including fees, and how the fees are actually claimed. ZmnSCPxj explains how fees are established, announced and ultimately claimed in a payment over Lightning Network, using node gossip and `channel_update` messages. The channel balance of each peer is not revealed by node gossip, as it represents the amount of money each peer owns on that channel, and any changes to that balance represent a send/receive on that channel. Finally, the earlier AMP proposal by roasbeef is back-compatible but does not support a proof-of-payment compatible with ZKCP protocols. Mord expresses skepticism towards discrete logarithm's long-term security and views scriptless scripts as being dangerously seductive. Despite this, he suggests that it is worth assuming that we will eventually want and need alternative methods of achieving AMP in order to think strategically about how fee dynamics can improve efficiency over time.</summary>
+    <published>2018-04-10T15:02:39+00:00</published>
   </entry>
 </feed>

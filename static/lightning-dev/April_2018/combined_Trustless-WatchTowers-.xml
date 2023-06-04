@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Trustless WatchTowers?</title>
-  <updated>2023-06-02T02:49:34.239373+00:00</updated>
+  <updated>2023-06-03T18:49:05.590308+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2018-04-17 08:02:43</name>
+  </author>
+  <author>
+    <name>Conner Fromknecht 2018-04-17 09:07:22</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-04-18 10:16:26</name>
+  </author>
   <author>
     <name>ZmnSCPxj 2018-04-16 23:30:27</name>
   </author>
@@ -27,15 +36,9 @@
   <author>
     <name>Conner Fromknecht 2018-04-17 08:30:42</name>
   </author>
-  <author>
-    <name>ZmnSCPxj 2018-04-17 08:02:43</name>
-  </author>
-  <author>
-    <name>Conner Fromknecht 2018-04-17 09:07:22</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-04-18 10:16:26</name>
-  </author>
+  <link href="lightning-dev/April_2018/001199_Trustless-WatchTowers-.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001201_Trustless-WatchTowers-.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001203_Trustless-WatchTowers-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001195_Trustless-WatchTowers-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001196_Trustless-WatchTowers-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001198_Trustless-WatchTowers-.xml" rel="alternate"/>
@@ -44,16 +47,13 @@
   <link href="lightning-dev/April_2018/001194_Trustless-WatchTowers-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001197_Trustless-WatchTowers-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001200_Trustless-WatchTowers-.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001199_Trustless-WatchTowers-.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001201_Trustless-WatchTowers-.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001203_Trustless-WatchTowers-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Trustless WatchTowers?</title>
-    <updated>2023-06-02T02:49:34.239373+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001195.html" rel="alternate"/>
-    <summary>The Lightning Network's need for a trustless WatchTower system is discussed in various email conversations and mailing lists. One approach mentioned is the "encrypted blob" method, where a transaction ID and blob are sent to the watchtower, which can decrypt the blob to create a justice transaction or template type and signatures. The storage requirements for the watchtower are mainly dominated by the number of HTLC signatures in the encrypted blob.To optimize this, the watchtower only needs to act if second stage transactions are confirmed, and independent sweep transactions could be sent for each HTLC output. The ability to sweep each HTLC independently is necessary given the complexity of how the on-chain state-space can manifest. There are also discussions of creating a new BOLT document to formalize the approach, but it is acknowledged that there are still implementation details to address. A proposed change is to separate commitment outpoints from HTLC outpoints to prevent broadcasting of the commitment transaction before CLTVs expire. The conversation also mentions potential issues with confirmation delays of second-level HTLCtxns giving attackers control over when the txns appear on the network. Additionally, concerns are raised about the current interface requiring a trusted WatchTower, potentially leading to loss of channel funds. The solution proposed is for nodes to generate fully-signed justice transactions immediately after every revoked commitment transaction and transmit them to the WatchTower. Laolu suggests an alternative approach where the client only needs to send out the latest items in the script template and signatures for the various breach outputs, allowing the server to reproduce the justice transaction that satisfies the latest template and signature.Conner Fromknecht and ZmnSCPxj discuss the implementation of a watchtower feature that detects the case in which the second-level transactions have already been spent, and then forgoes sweeping them entirely. They also discuss how spending commitment outputs independently can resolve issues with an attacker possibly choosing sets of outputs that the watchtower cannot act on. The conversation includes technical details about the confirmation of second-level HTLC transactions being separated by arbitrary delays and the need to separate the commitment outpoints from the HTLC outpoints. It was agreed that it seems necessary and would be a reasonable compromise of the tradeoffs at hand. A possible problem has been identified with the encrypted blob approach in Lightning Network. If a potential thief knows the commitment transaction and its ID, they can send many (txid[16:], blob) with random blob to the WatchTower(s), causing various issues. An obvious solution would be for the WatchTower to charge a tiny amount for each (txid[16:] blob) pairs it keeps. However, this could lead to a loop, as every successful and unsuccessful payment requires two channel updates, invalidating two commitment transactions and requiring two (txid[16:], blob) pairs.One way to break this loop would be for WatchTowers to provide a "prepaid watching" service. Rusty can contact two WatchTowers, get invoices for prepaid watching, pay the invoices, get preimages as “tickets,” use the tickets to put blobs from one WatchTower to the other, and have multiple WatchTowers to reduce how much each WatchTower learns about Rusty. Overall, having a solid/workable v0 is important if it is to be deployed, and there are ways to improve on this and make it even more efficient in the future.</summary>
-    <published>2018-04-16T23:30:27+00:00</published>
+    <updated>2023-06-03T18:49:05.590308+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001199.html" rel="alternate"/>
+    <summary>The email conversation between Conner and ZmnSCPxj is focused on the WatchTower protocol used in lnd. They discuss ways to optimize the set of signatures sent to the watchtower, including sending only the latest items in the script template and signatures for the various breach outputs instead of the entire justice transaction. They also discuss potential issues with the confirmation of second-level HTLC transactions and the need to separate the commitment outpoints from the HTLC outpoints.ZmnSCPxj proposes a minimal solution involving signatures for independent sweep transactions, allowing the watchtower to sweep each HTLC output individually to prevent attackers from moving funds from the channel into their wallet. The encrypted blob approach for watchtowers is also discussed, which involves sending an encrypted blob with a hint to the watchtower that can be decrypted to assemble a justice transaction.To prevent attackers from exploiting the network, changes in lightning network code are needed, including detecting spent commitment outputs and second-level transactions and forgoing the sweeping of already spent second-level transactions. A new BOLT document may be created to formalize the approach, but implementation details still need to be addressed.The proposed changes are seen as a reasonable compromise between the tradeoffs at hand and the potential for future improvements. Nicolas Dorier has requested additional hooks in c-lightning for a simple WatchTower system, but there are concerns about the current interface requiring a trusted WatchTower, which could lead to the loss of channel funds. Finally, the idea of simplifying the construction of WatchTowers by creating one-blob-one-justice pairs for each outpoint of the revoked commitment transaction is suggested.</summary>
+    <published>2018-04-17T08:02:43+00:00</published>
   </entry>
 </feed>

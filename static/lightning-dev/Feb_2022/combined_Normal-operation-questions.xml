@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Normal operation questions</title>
-  <updated>2023-06-03T07:38:24.895417+00:00</updated>
+  <updated>2023-06-04T03:08:13.372212+00:00</updated>
   <author>
     <name>Olaoluwa Osuntokun 2022-02-15 23:13:47</name>
   </author>
@@ -23,9 +23,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Normal operation questions</title>
-    <updated>2023-06-03T07:38:24.895417+00:00</updated>
+    <updated>2023-06-04T03:08:13.372212+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-February/003473.html" rel="alternate"/>
-    <summary>Concurrent signatures in Lightning Network's Normal Operation protocol may generate additional messages due to the asymmetric state of revocation channels. It creates additional states depending on the processing order of concurrent messages. However, it is necessary to have an extra round of commitment_signed and revoke_and_ack messages to remove the HTLC from both commitment transactions. Alice doesn't need to send a new signature immediately after adding a new HTLC to the pending set of HTLCs. She may want to delay her signature if she has other HTLCs she wants to add to the commitment transaction. In cases where Alice is forwarding the HTLC and Bob's side of the channel has been dormant, it is in her best interest to propose a new state immediately as she may generate some routing fees from a successful forward.When Bob sends the update_fulfill_htlc, both parties exchange commitment_signed and revoke_and_ack messages again to update their commitment state off-chain. Once Alice receives the pre-image (assuming a multi-hop scenario), she can opt to not wait for the full exchange and instead pipeline the pre-image back upstream in the route. This reduces perceived user latency for payments.</summary>
+    <summary>In an email exchange between Benjamin Weintraub and Olaoluwa Osuntokun, Weintraub asked two questions about the Normal Operation protocol regarding a single-hop payment between Alice and Bob over a single channel. Firstly, he asked why it was important for Alice to send the `commitment_signed` message after sending `update_add_htlc` before Bob. Secondly, Weintraub asked why both Alice and Bob need to exchange `commitment_signed` and `revoke_and_ack` messages again after Bob sends the `update_fulfill_htlc`. Osuntokun responded that while it is not absolutely necessary for Alice to send `commitment_signed` first, delaying the signature allows her to batch/pipeline updates to the channel, especially if she has other HTLCs she wants to add to the commitment transaction. Concurrent signatures are not an issue, but will generate additional state transitions for both sides to have the exact same set of locked-in HTLCs.Osuntokun explained that both parties need to exchange `commitment_signed` and `revoke_and_ack` messages again after Bob sends the `update_fulfill_htlc` to update their commitment state off-chain, even though Bob is the one claiming the funds with the pre-image. Once Alice receives the pre-image, she can opt to pipeline the pre-image back upstream in the route instead of waiting for the full exchange, which reduces perceived user latency for payments.Concurrent signatures in Lightning Network's Normal Operation protocol may generate additional messages due to the asymmetric state of revocation channels. It is necessary to have an extra round of commitment_signed and revoke_and_ack messages to remove the HTLC from both commitment transactions. In cases where Alice is forwarding the HTLC and Bob's side of the channel has been dormant, it is in her best interest to propose a new state immediately as she may generate some routing fees from a successful forward. Overall, the Normal Operation protocol in Lightning Network has specific rules and processes that must be followed for successful payment transfers over a single channel.</summary>
     <published>2022-02-15T23:13:47+00:00</published>
   </entry>
 </feed>

@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Commitment transaction format suggestions/proposals.</title>
-  <updated>2023-06-02T00:58:50.389153+00:00</updated>
-  <author>
-    <name>Rusty Russell 2017-01-25 00:53:24</name>
-  </author>
+  <updated>2023-06-03T17:26:33.786161+00:00</updated>
   <author>
     <name>Fabrice Drouin 2017-01-25 21:27:52</name>
   </author>
-  <link href="lightning-dev/Jan_2017/000663_Commitment-transaction-format-suggestions-proposals-.xml" rel="alternate"/>
+  <author>
+    <name>Rusty Russell 2017-01-25 00:53:24</name>
+  </author>
   <link href="lightning-dev/Jan_2017/000664_Commitment-transaction-format-suggestions-proposals-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000663_Commitment-transaction-format-suggestions-proposals-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Commitment transaction format suggestions/proposals.</title>
-    <updated>2023-06-02T00:58:50.389153+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-January/000663.html" rel="alternate"/>
-    <summary>In discussions about proposed changes to commitment transactions in the Lightning Network, one suggestion is to make the to-remote output P2WPKH instead of P2PKH. Another proposal involves making commitment transaction outputs directly spendable by the penalty transaction, which would eliminate the use of revocation key with HTLC-success or HTLC-timeout transactions. These changes could simplify BOLT2 and reduce potential bottlenecks in the system, but there are still complexities involved with handling offered and received HTLCs. To address these complexities, Rusty Russell and Fabrice Drouin proposed using a multisig 2-of-3 with `localkey`, `remotekey`, and `revocationkey` for the offered HTLC output script. This script allows for funds to be claimed without waiting for HTLC timeout refunds and can be spent with various combinations of keys. The witness script can also be used to spend the output with the payment preimage and the remote and local keys, with the remote key after a delay. The proposed solution includes an OP_SWAP, OP_SIZE 32 OP_EQUAL, OP_NOTIF, OP_ELSE and other elements. While optimizing for the smallest possible on-chain footprint is important, the tradeoffs of these proposed changes will need to be discussed before any decisions are made. Additionally, implementing these changes could result in a weight increase of about 6% for the commitment tx. Overall, these proposed changes aim to simplify the Lightning Network and improve its efficiency.</summary>
-    <published>2017-01-25T00:53:24+00:00</published>
+    <updated>2023-06-03T17:26:33.786161+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-January/000664.html" rel="alternate"/>
+    <summary>Proposed changes for commitment transactions in the Lightning Network have been discussed by developers Rusty Russell and Fabrice Drouin. One proposed change is to use a multisig 2-of-3 with localkey, remotekey, and revocationkey for the Offered HTLC Output script. This script allows funds to be claimed without waiting for HTLC timeout refunds and can be spent with the remote key and payment preimage or with the remote key and local key, as well as with the remote key and revocation key. The Received HTLC Output script uses an additional IF branch and can be spent with the payment preimage and the remote and local keys, with the remote key after a delay, but can also be spent with the remote key and revocation key.The proposed changes would simplify BOLT2 and relieve the need to generate and send signatures, reducing potential bottlenecks in the system. However, while optimizing for the smallest possible on-chain footprint is a valid concern, the tradeoffs will need to be discussed before any decisions are made. In addition to the above proposals, there are other changes under consideration. The first is whether to make the to-remote output P2WPKH instead of P2PKH in order to save some bytes. The second proposed change entails making commitment transaction outputs directly spendable by the penalty transaction, which would eliminate the use of revocation key with HTLC-success or HTLC-timeout transactions.These changes have been discussed outside of GitHub to reach a wider audience. While the weight of the commitment tx may increase by about 6% if the proposed changes are implemented, the improvements include using revocation keys, which means users don't know the revocation key that can be used to take all funds if a revoked commit tx is published. The proposed solution includes an OP_SWAP, OP_SIZE 32 OP_EQUAL, OP_NOTIF, OP_ELSE and other elements. An optimization suggestion was made but deemed unnecessary due to "minimal IF constraints".</summary>
+    <published>2017-01-25T21:27:52+00:00</published>
   </entry>
 </feed>

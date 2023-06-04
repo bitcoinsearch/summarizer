@@ -2,16 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - type,len,value standard</title>
-  <updated>2023-06-02T04:35:21.737532+00:00</updated>
-  <author>
-    <name>Rusty Russell 2018-11-16 00:25:34</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-11-15 04:54:25</name>
-  </author>
-  <author>
-    <name>Conner Fromknecht 2018-11-16 00:12:45</name>
-  </author>
+  <updated>2023-06-03T20:19:36.848724+00:00</updated>
   <author>
     <name>Christian Decker 2018-11-15 20:12:53</name>
   </author>
@@ -24,20 +15,29 @@
   <author>
     <name>ZmnSCPxj 2018-11-15 09:45:13</name>
   </author>
-  <link href="lightning-dev/Nov_2018/001620_type-len-value-standard.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2018/001604_type-len-value-standard.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2018/001614_type-len-value-standard.xml" rel="alternate"/>
+  <author>
+    <name>Rusty Russell 2018-11-16 00:25:34</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-11-15 04:54:25</name>
+  </author>
+  <author>
+    <name>Conner Fromknecht 2018-11-16 00:12:45</name>
+  </author>
   <link href="lightning-dev/Nov_2018/001627_type-len-value-standard.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001605_type-len-value-standard.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001607_type-len-value-standard.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001609_type-len-value-standard.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001620_type-len-value-standard.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001604_type-len-value-standard.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001614_type-len-value-standard.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - type,len,value standard</title>
-    <updated>2023-06-02T04:35:21.737532+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001620.html" rel="alternate"/>
-    <summary>The discussion among Conner Fromknecht and ZmnSCPxj revolves around the use of `type,len,value` sequence in BOLT messaging. It has been agreed that each `type` must be unique, and repeated fields should be serialized under a single root key. However, it is unclear whether the `type`s must be in ascending order. There is debate over whether the `type` should be one byte or two, with agreement that if a message has 256 optional fields, it may be time to consider a new message type altogether. Similarly, there is discussion over whether the `len` should be one byte or two with the suggestion of using varint as a compromise.A proposal was made during a summit to add `type,len,value` feature at the end of messages and other intercommunication structures to allow for future additional fields while maintaining backward compatibility. The proposal was agreed upon that each `type` must be unique. There was discussion as to whether or not the `type`s should be in ascending order, and various aspects of the proposal were considered, including what to do if an unknown even `type` is found and whether the `len` should be one or two bytes. It was also proposed to create a separate BOLT for `type,len,value`, but it was unclear whether this was necessary.The structure of `type,len,value` sequence was discussed, where the `type`s must be in ascending order to make it easier for a naive parser. The length of `type` is suggested to be one byte instead of two to avoid creating a new message type for 256 optional fields. For an even `type` that is not known, it is suggested to crash and burn to maintain consistency. However, this could depend on the context of the gossip messages or link-level messages. It is also proposed to use varint for the length of `len` since one byte is not enough for all lengths, but two seems excessive for uint8 or even uint32. A separate BOLT document is proposed for `type,len,value` to add new fields proposed in 1.1 and to help spec and verify the t-l-v data structures separately.In addition, there was a discussion regarding the max message size of 65KB, with one option being to allow the varint to be max 2 bytes. Finally, during the conversation, the topic of byte length was brought up, specifically regarding the use of one or two bytes for various lengths. One member suggested using varint instead, as one byte would not suffice for all lengths, and two bytes may be excessive. The original member clarified that they were indeed suggesting the use of varint and suggested creating a section or part in a different BOLT to describe it since Lightning does not currently have varint.</summary>
-    <published>2018-11-16T00:25:34+00:00</published>
+    <updated>2023-06-03T20:19:36.848724+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001627.html" rel="alternate"/>
+    <summary>The conversation focuses on the structure of `type, len, value` sequence in BOLT messaging. It is suggested that the `type`s should be in ascending order to make checking uniqueness easier for a naive parser. The length of `type` is proposed to be one byte instead of two to avoid creating a new message type for 256 optional fields. For an unknown even `type`, it is suggested to crash and burn to maintain consistency. The use of varint for the length of `len` is proposed to address the issue of insufficient bytes for all lengths. A separate BOLT document is also proposed for `type,len,value` to add new fields and help spec and verify t-l-v data structures. During a summit, a proposal was brought up to add `type,len,value` to messages and intercommunication structures for backward compatibility while allowing future additional fields. Each `type` must be unique, but it is unclear whether they must be in ascending order. There are debates over the length of `type` and `len`, with some suggesting the use of varint. The question of odd `type`s' acceptability depends on the message context. A separate BOLT for `type,len,value` is proposed, but specifics about sub-TLV structures are not yet fleshed out.A proposal is made to allow varint to be max 2 bytes to address the max message size of 65KB. The discussion revolves around implementing varint in Lightning and the creation of a section or part in a different BOLT to describe it.</summary>
+    <published>2018-11-15T20:12:53+00:00</published>
   </entry>
 </feed>

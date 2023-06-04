@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Payment Re-routing</title>
-  <updated>2023-06-01T23:15:40.293659+00:00</updated>
+  <updated>2023-06-03T14:58:32.181053+00:00</updated>
+  <author>
+    <name>Kevin Greene 2015-07-01 16:31:47</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-06-27 05:30:53</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-06-27 06:41:04</name>
+  </author>
   <author>
     <name>Kevin Greene 2015-07-01 18:19:09</name>
   </author>
@@ -22,42 +31,33 @@
     <name>Stephen Morse 2015-06-30 04:59:43</name>
   </author>
   <author>
+    <name>Rusty Russell 2015-06-30 08:03:00</name>
+  </author>
+  <author>
     <name>Nick ODell 2015-07-01 16:55:46</name>
   </author>
   <author>
     <name>Rusty Russell 2015-07-02 05:11:18</name>
   </author>
-  <author>
-    <name>Rusty Russell 2015-06-30 08:03:00</name>
-  </author>
-  <author>
-    <name>Kevin Greene 2015-07-01 16:31:47</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-06-27 05:30:53</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-06-27 06:41:04</name>
-  </author>
+  <link href="lightning-dev/July_2015/000012_Payment-Re-routing.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2015/000008_Payment-Re-routing.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2015/000009_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000014_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000015_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000016_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000018_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/June_2015/000007_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/June_2015/000010_Payment-Re-routing.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2015/000011_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000013_Payment-Re-routing.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000017_Payment-Re-routing.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2015/000011_Payment-Re-routing.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000012_Payment-Re-routing.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2015/000008_Payment-Re-routing.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2015/000009_Payment-Re-routing.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Payment Re-routing</title>
-    <updated>2023-06-01T23:15:40.294659+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-July/000014.html" rel="alternate"/>
-    <summary>The Lightning Network is a payment channel that allows for fast and inexpensive transactions. However, the issue of trust arises when rerouting payments. If a payment channel becomes unresponsive mid-payment, rerouting the payment can lead to the original non-responsive party revealing the pre-image to someone else and effectively stealing extra BTC. This could occur maliciously or non-maliciously due to honest outages.In an email exchange, Rusty and Stephen discussed how rerouting payments could result in theft if parties collude. To prevent this, one solution proposed was to delay only a portion of the payment while rerouting the rest or redistributing payments among other functioning paths. Delaying the entire payment is not a good option as it goes against the concept of fast transactions.Stephen also proposed re-routing only 99% of the payment while waiting for the non-responsive party to rejoin or redistributing payments allotted for the broken path among other functioning paths. However, this solution is not foolproof because it assumes that E is not colluding with C to split the profits.To solve this problem, a separate preimage for each message is needed. E can provide A with 100 hashes to use as she wishes. However, producing 100 preimages is easy using crypto rather than hashes.The Lightning Network does not have a central processor to enforce the reputation of nodes, making it crucial for users to rely on highly available processors and not do rerouting. Nonetheless, a rating system based on node trustworthiness could be implemented to address issues of dishonesty. The Lightning Network could use a similar system to Tor's directory authority to enforce node reputations without requiring everyone to use the same directory authority.Alternative solutions include smaller payments across diverse paths, which could potentially incentivize honesty. Overall, implementing cryptographic solutions and rating systems based on node trustworthiness could minimize the impact of dishonesty on the Lightning Network.</summary>
-    <published>2015-07-01T18:19:09+00:00</published>
+    <updated>2023-06-03T14:58:32.181053+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-July/000012.html" rel="alternate"/>
+    <summary>The Lightning Network is a payment channel that allows for fast and cheap transactions on the Bitcoin network. However, there are concerns about the security of the network when rerouting payments.In an email exchange between Stephen Morse and Rusty Russell, the issue of a potential failure mode in the A -&gt; C -&gt; E payment channel was discussed. The concern was that if C became unresponsive, C could collude with another party to steal funds.Joseph Poon suggested a solution off-list, which involved E routing a conditional refund back to A with a larger timeout via a different route. This would pay back the amount to A if they presented the preimage for the initial stalled payment and another preimage only A had. However, this solution raises questions about how nodes get paid and whether A can provide evidence that the route had timed out.To fix this issue, C could obtain a refund from E if they know they have been offline for longer than B's willingness to wait before re-routing. One possible solution suggested by Stephen was to reroute only 99% of the payment while waiting for C to rejoin. Alternatively, if multiple paths are used, redistribute the remaining payments among the other functioning paths.The bigger problem here is that incentives are slightly skewed towards dishonesty. Breaking the payment into smaller chunks and across diverse paths can minimize the impact of dishonesty, but this approach results in reduced bandwidth and speed. A rating system could potentially be used to address this issue.There is no central processor to enforce node reputations in the Lightning Network, unlike Visa which kicks out banks that fail to meet their SLAs. To solve this issue, a set of authorities for directory nodes could open payment channels with all known lightning processors and use a protocol to periodically move money back and forth to verify connectivity. The Lightning network could benefit from the use of a system similar to Tor's nine "directory authorities" that record whether nodes in the network are available, vote among themselves to produce a directory consensus, and sign it. This would enable enforcement of the reputation of lightning nodes without requiring everyone to use the same directory authority.Nick ODell suggests that B could advertise its connected peers similar to BGP AS-Paths. Rusty then asks about the routing mechanism in the Lightning Network, indicating that it's worth discussing in a separate thread. Kevin Greene acknowledges Rusty's suggestion and decides to start a new thread on the topic.In conclusion, the Lightning Network has the potential for security issues when rerouting payments. Alternative solutions such as breaking up payments into smaller chunks and using a rating system based on node trustworthiness are proposed. The Lightning network could use a similar system to Tor's directory authority to verify connectivity. Further research may be necessary to determine the best course of action to prevent theft on the Lightning Network.</summary>
+    <published>2015-07-01T16:31:47+00:00</published>
   </entry>
 </feed>

@@ -2,19 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Selling timestamps (via payment points and scalars + Pedersen commitments ) [try2]</title>
-  <updated>2023-06-02T20:27:40.646375+00:00</updated>
-  <author>
-    <name>Lloyd Fournier 2019-09-25 23:38:57</name>
-  </author>
-  <author>
-    <name>Peter Todd 2019-09-26 09:08:01</name>
-  </author>
-  <author>
-    <name>Konstantin Ketterer 2019-09-25 09:01:28</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2019-09-25 23:21:10</name>
-  </author>
+  <updated>2023-06-03T22:32:46.384112+00:00</updated>
   <author>
     <name>Konstantin Ketterer 2019-09-26 16:51:47</name>
   </author>
@@ -27,21 +15,33 @@
   <author>
     <name>Anthony Towns 2019-09-25 19:29:58</name>
   </author>
-  <link href="lightning-dev/Sept_2019/002171_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2019/002172_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2019/002166_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2019/002170_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
+  <author>
+    <name>Lloyd Fournier 2019-09-25 23:38:57</name>
+  </author>
+  <author>
+    <name>Peter Todd 2019-09-26 09:08:01</name>
+  </author>
+  <author>
+    <name>Konstantin Ketterer 2019-09-25 09:01:28</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2019-09-25 23:21:10</name>
+  </author>
   <link href="lightning-dev/Sept_2019/002173_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2019/002167_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2019/002168_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2019/002169_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2019/002171_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2019/002172_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2019/002166_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2019/002170_Selling-timestamps-via-payment-points-and-scalars-Pedersen-commitments-try2-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Selling timestamps (via payment points and scalars + Pedersen commitments ) [try2]</title>
-    <updated>2023-06-02T20:27:40.646375+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-September/002171.html" rel="alternate"/>
-    <summary>A proposed solution for timestamping data using Bitcoin's blockchain is discussed in an email thread. The process involves sending the hash of the message to a timestamping server that calculates Pedersen commit, hashes it, builds a merkle tree with other commits, and publishes a valid transaction containing the merkle root to the Bitcoin blockchain. After a certain number of block confirmations and with the given proof, it can be confirmed that the commitment C is indeed part of the Bitcoin blockchain. To prove payment, a lightning payment with C - x*H = r*G as the payment point is sent to the timestamping server. The model suggested for the timestamping service involves fixed and floating users, where fixed users pay a subscription fee, which covers the costs and get placed relatively high in the merkle tree, while the floating users are placed low in the merkle tree and are basically free money. The merkle tree has 2**N-1 fixed slots, all at height N, then 2**K floating slots, all at height N+K. It is suggested that some up-front fee should be charged to prevent people from spamming with things to timestamp that they're never going to pay for.It is also suggested that since it's off-chain, R and C can also be provided with a zero-knowledge proof that one knows an r such that R = SHA256(r) and C = SHA256(x || r). This can be done with lightning as it exists today. In a recent discussion, the possibility of using Lightning Network to pay for a server was brought up. One participant suggested providing R and C along with a zero knowledge proof that one knows an r such that R = SHA256(r) and C = SHA256(x || r). Another participant mentioned insisting on paying only if the server reveals an r that matches some known R such that R = SHA256(r), as currently done in Lightning network.However, the challenge was then posed of proving, knowing only R and x and that there exists some r such that R = SHA256(r), that C = SHA256(x || r). It was suggested that if one knows x and r, they can generate C and R and a zero knowledge proof of the relationship between x, C, and R without revealing r. This could potentially be done with bulletproofs. However, it was noted that this zero knowledge proof already proves that C was generated based on x, making the timestamp unnecessary.The Pedersen commitments and pay to point is considered the most suitable approach, but this can be generalized in payment channels with hashes if there were something like OP_CAT. The concept of HTLC unlocks based on whether one can provide an r such that H(r || x) == C is also introduced. However, the zkp already proves that C was generated based on x, so the timestamp is obtained free of cost. The interactive zero-knowledge protocol is suggested as an alternative. If one knows x and r, they can generate C and R and a zero knowledge proof of the relationship between x, C, and R that does not reveal r.Despite the proposed solution for timestamping data using Bitcoin's blockchain, the need for such a paid service seems unnecessary since scalable timestamping services like OpenTimestamps already exist. OpenTimestamps uses giant merkle trees built every second in a scalable way to amortize the cost of BTC transactions across the entire world's timestamps, thus eliminating the need to charge for timestamps. Furthermore, Andrew Poelstra has created an open pull request to add secp256k1 commitments to OpenTimestamps, which could be useful in implementing Konstantin's proposed system.</summary>
-    <published>2019-09-25T23:38:57+00:00</published>
+    <updated>2023-06-03T22:32:46.384112+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-September/002173.html" rel="alternate"/>
+    <summary>Konstantin Ketterer, a high school graduate, has proposed a solution for timestamping data using Bitcoin's blockchain. The proposed system involves sending a hash of the message to a timestamping server, which calculates Pedersen commit and builds a merkle tree with other commits. Then, a valid transaction containing the merkle root is published to the Bitcoin blockchain. After a certain number of blocks, the user can confirm that the commitment is part of the blockchain. To prove payment, a lightning payment with C - x*H = r*G as the payment point is sent to the timestamping server. This scheme shifts the risk of timestamping service from the buyer to the seller, who now has to pay the on-chain transaction fee upfront.However, the need for such a paid service seems unnecessary since scalable timestamping services like OpenTimestamps already exist. OpenTimestamps uses giant merkle trees built every second in a scalable way to amortize the cost of BTC transactions across the entire world's timestamps, thus eliminating the need to charge for timestamps. Furthermore, Andrew Poelstra has created an open pull request to add secp256k1 commitments to OpenTimestamps, which could be useful in implementing Konstantin's proposed system.The conversation also discusses a way to timestamp messages without relying on free services or paying high fees. The proposed solution involves buying a place in a Merkle tree "risk-free." To do so, the user sends the hash x of their message to the timestamping server, which then calculates a Pedersen commit, builds a Merkle tree with other commits in it, and publishes a valid transaction containing the Merkle root to the Bitcoin blockchain. After a certain number of block confirmations, the commitment C is confirmed as part of the Bitcoin blockchain, and the user sends a lightning payment with C-x*H=r*G as the payment point to the timestamping server. As proof of payment, the server must reveal r to receive the money.The discussion also touches on using zero-knowledge proofs to timestamp data. ZmnSCPxj suggests a method for providing a timestamp using a zero-knowledge proof that doesn't reveal the secret `r`, but proves the relationship between `x`, `C`, and `R`. Aj asks how to prove that `C = SHA256(x || r)` knowing only `R` and `x`. ZmnSCPxj suggests generating C and R and a generic zkp of the relationship between x, C, and R that doesn't reveal `r`. However, this zkp already proves that C was generated based on `x`, so it provides a timestamp for free. They also discuss a paper that might be relevant, and note that lightning payments are essentially zero-knowledge contingent payments already.</summary>
+    <published>2019-09-26T16:51:47+00:00</published>
   </entry>
 </feed>

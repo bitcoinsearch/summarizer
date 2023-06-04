@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A couple questions about sequence number:</title>
-  <updated>2023-06-01T23:32:47.658875+00:00</updated>
+  <updated>2023-06-03T15:14:07.425278+00:00</updated>
+  <author>
+    <name>Jeremy Rubin 2015-08-10 15:03:56</name>
+  </author>
+  <author>
+    <name>Adam Back 2015-08-10 19:08:38</name>
+  </author>
   <author>
     <name>Jeremy Rubin 2015-08-10 18:09:33</name>
   </author>
@@ -12,24 +18,18 @@
   <author>
     <name>Jorge Timón 2015-08-10 18:04:27</name>
   </author>
-  <author>
-    <name>Jeremy Rubin 2015-08-10 15:03:56</name>
-  </author>
-  <author>
-    <name>Adam Back 2015-08-10 19:08:38</name>
-  </author>
+  <link href="lightning-dev/Aug_2015/000104_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2015/000108_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2015/000107_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2015/000105_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2015/000106_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2015/000104_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2015/000108_A-couple-questions-about-sequence-number-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - A couple questions about sequence number:</title>
-    <updated>2023-06-01T23:32:47.658875+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-August/000107.html" rel="alternate"/>
-    <summary>In a discussion on the Lightning-dev mailing list, it was clarified that Lightning uses sequence numbers to achieve a relative lock-time. BIP 68 specifies a new consensus rule that allows the sequence number field to mandate a required minimum age for each input. This means that Lightning uses relative lock-times rather than an increment-on-each-transaction sequence number in the traditional sense. The sequence number field can be used to achieve a confirmation delay of a certain number of blocks after its parent block.Jeremy Rubin raised two questions regarding the use of sequence numbers in Lightning. Firstly, he asked about race conditions and how they are addressed with respect to blockchain height. Secondly, he questioned how using sequence numbers to select the right transaction to include could leak information about the number of LN transactions that took place, potentially making it meterable by external parties such as miners. He suggests incrementing by a random amount to alleviate reliable metering by external parties.Furthermore, Jorge Timón opines that the number inversion to "preserve the old nSequence semantics" is not worth it. It's less usable and harder to understand. Renaming nSequence to nMaturity and "check sequence verify" to "verify input maturity" may greatly simplify the documentation. However, he believes it may not be the right thread to repeat this.Lastly, the relative lock time (RCLTV) is used to prevent channels from automatically expiring, which would require new channels to be established periodically. The Lightning Network uses the sequence number field of the transaction format, but not as an increment-on-each-transaction sequence number in the traditional sense. Rather, BIP 68 specifies a new consensus rule by which the sequence number field can mandate a required minimum age for each input, thereby achieving a relative lock-time. Using sequence numbers to select the right transaction to include is good, but it would seem to leak information about how many LN transactions took place, which could then make it meterable by external parties.</summary>
-    <published>2015-08-10T18:09:33+00:00</published>
+    <updated>2023-06-03T15:14:07.425278+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-August/000104.html" rel="alternate"/>
+    <summary>The Lightning Network, a payment channel protocol built on top of Bitcoin, uses sequence numbers to achieve relative lock-time. This enables channels to stay open indefinitely through rebalancing of funds and prevents them from expiring. It does this by mandating a required minimum age for each input using the sequence number field of the transaction format. For example, a script pathway can take effect 30 days after confirmation of the parent if the sequence number of the spending transaction is equal to MAX_INT - 4320 (= 144 * 30).Jeremy Rubin raised two concerns about the use of sequence numbers in Lightning. Firstly, he questioned how race conditions are addressed regarding blockchain height. Secondly, he pointed out that using sequence numbers to select the right transaction to include could leak information about the number of LN transactions that took place. This could potentially make it meterable by external parties such as miners. He suggested incrementing by a random amount to alleviate reliable metering.In response, Mark Friedenbach clarified that BIP 68 specifies a new consensus rule allowing the sequence number field to mandate a required minimum age for each input. This allows Lightning to use relative lock-times and avoid an increment-on-each-transaction sequence number in the traditional sense. Jorge Timón suggested renaming nSequence to nMaturity and "check sequence verify" to "verify input maturity" to simplify documentation. However, he acknowledged that this may not be the appropriate thread to repeat this.</summary>
+    <published>2015-08-10T15:03:56+00:00</published>
   </entry>
 </feed>
