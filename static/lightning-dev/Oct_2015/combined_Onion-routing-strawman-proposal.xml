@@ -2,58 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Onion routing strawman proposal</title>
-  <updated>2023-06-01T23:52:06.513658+00:00</updated>
+  <updated>2023-05-18T20:19:14.292113+00:00</updated>
   <author>
-    <name>Richard Kiss 2015-10-03 18:02:39</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-10-05 14:49:00</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-10-03 16:38:56</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-06 01:49:14</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-02 05:48:39</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-10-04 05:57:17</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-10-05 15:02:10</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-06 01:48:11</name>
+    <name>Anthony Towns 2015-10-06 14:01:34</name>
   </author>
   <author>
     <name>Anthony Towns 2015-10-06 05:22:36</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-10-06 14:01:34</name>
+    <name>Anthony Towns 2015-10-05 15:02:10</name>
   </author>
   <author>
-    <name>Rusty Russell 2015-10-06 22:35:01</name>
+    <name>Anthony Towns 2015-10-05 14:49:00</name>
   </author>
-  <link href="lightning-dev/Oct_2015/000249_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000251_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000248_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000253_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000247_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000250_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000252_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000254_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000255_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <author>
+    <name>Anthony Towns 2015-10-04 05:57:17</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-03 16:38:56</name>
+  </author>
   <link href="lightning-dev/Oct_2015/000256_Onion-routing-strawman-proposal.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000257_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000255_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000252_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000251_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000250_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000248_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Onion routing strawman proposal</title>
-    <updated>2023-06-01T23:52:06.514654+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000249.html" rel="alternate"/>
-    <summary>The Lightning Network project utilizes random EC key pairs and ECDH to establish a shared secret with each hop, generating symmetric AES &amp; HMAC keys based on the secret. Rusty Russell has shared a test onion routing code for review that includes basic encryption methods such as AES128 counter mode, HMAC using SHA256, and ECDH. In an email conversation in October 2015, Anthony Towns expressed frustration over implementing the program in Python but reported later that the decoding/forwarding was successfully working with pyelliptic. Rusty Russell made changes to the test_onion and Makefile test to separate generate and decode, with the inclusion of the Python version. Anthony Towns questioned the use of flip_key() in onion_key.c, so Russell disables it and makes other changes like making the 02/03 prefix explicit and tweaking onion_key to avoid the for loop and cut calls. The decoding process through Python is slow due to loading modules, so it may not be desirable to run decodes in a single Python process. Finally, the two discuss creating an RFC or wiki to document the Lightning protocol and technology decisions.</summary>
-    <published>2015-10-03T18:02:39+00:00</published>
+    <updated>2023-05-18T20:19:14.292113+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000256.html" rel="alternate"/>
+    <summary>The email conversation revolves around the changes made to test_onion and Makefile test with regards to onion routing implementation in Lightning Network using elliptic curve cryptography. The python version of the code is also discussed along with the use of flip_key() in onion_key.c, which was disabled and 02/03 prefix was made explicit. However, it remains unclear whether the saving of a bit/byte is worth it or not.Further discussion focuses on making changes to "Message for blah..." to serialize the pubkey before turning it into hex and tweaking onion_key to avoid the for loop and cut calls, as running decoding through python is slow and needs improvement.The participants also talk about documenting lightning protocol/technology decisions and consider reducing the message size of 128 bytes to 96 or 64 bytes. They highlight that adding and dropping hops to redirect an onion routed payment messes up constant-size packets.In addition to discussing the successful decoding/forwarding of the code using pyelliptic, they mention that the python version does creation too, but it is not known if the C version can decode it.Overall, the participants discuss generating random EC key pairs for each hop, establishing shared secrets with each hop using ECDH, and deriving symmetric AES and HMAC keys based on the secret. They note that lightning nodes are identified by the full 512-bit public key used for routing, unlike in normal bitcoin pay2pubkey transactions where knowing the HASH160 of the pubkey is enough.Finally, they add comments to an existing secp256k1 pull request to use only the x value when creating secrets, which would be friendlier to alternative implementations for ECDH.</summary>
+    <published>2015-10-06T14:01:34+00:00</published>
   </entry>
 </feed>

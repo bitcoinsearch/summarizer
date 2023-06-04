@@ -2,58 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Minor protocol revisions.</title>
-  <updated>2023-06-01T23:51:02.282750+00:00</updated>
-  <author>
-    <name>Rusty Russell 2015-09-30 04:16:24</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-09-24 05:47:41</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-09-24 11:54:02</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-09-25 01:11:02</name>
-  </author>
+  <updated>2023-05-18T20:18:08.358972+00:00</updated>
   <author>
     <name>Anthony Towns 2015-09-30 04:07:59</name>
-  </author>
-  <author>
-    <name>Pierre 2015-10-13 11:45:39</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-13 19:52:50</name>
-  </author>
-  <author>
-    <name>Pierre 2015-09-24 10:25:11</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-09-25 00:27:35</name>
   </author>
   <author>
     <name>Anthony Towns 2015-09-29 06:47:40</name>
   </author>
   <author>
-    <name>Rusty Russell 2015-09-30 01:41:09</name>
+    <name>Anthony Towns 2015-09-24 11:54:02</name>
   </author>
-  <link href="lightning-dev/Sept_2015/000245_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000218_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000221_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000232_Minor-protocol-revisions-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000244_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000260_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000261_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000220_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000229_Minor-protocol-revisions-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000242_Minor-protocol-revisions-.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2015/000243_Minor-protocol-revisions-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000221_Minor-protocol-revisions-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Minor protocol revisions.</title>
-    <updated>2023-06-01T23:51:02.282750+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000245.html" rel="alternate"/>
-    <summary>In an email conversation, Rusty Russell and Anthony Towns discuss state coverage testing for a code. Rusty mentions that the tests aren't exhaustive and only serve to ensure that the state machine doesn't crash. He lists the varying degrees of thoroughness of the tests, which include ensuring that the state machine never gets into an invalid state, never sends a packet the other side doesn't expect, terminates if not on the main loop, does not deadlock, and cleans up. In another email exchange, Rusty has shared some updates on the Close and HTLC rejection scenarios in Lightning Network. The new update includes an additional ACK stage for close which confirms that the close ack has been received. The HTLC rejection now handles cases such as bad route and insufficient fees. Rusty also talked about placing an upper bound of 0.04 BTC on each HTLC, which is more than enough to cover micropayment uses of lightning. However, the low ceiling raises concerns that the micropayment use case is the primary target while scalability and speed are more interesting properties of lightning. A user requested for an updated version of svg and also asked for aj's 'flat' version. Aj responded by saying that he has updated state.py and provided a new flow that works. However, Pierre is still confused about the rationale behind all the existing closing flows and states.In a post by Rusty Russell, he acknowledges the correction made by readers who pointed out that bitcoin did not jump in value by a factor of 10^8. Instead, as a secondary effect, 32 bits places a ceiling of 0.04 satoshi, which should actually be 0.04 BTC. A discussion is taking place between Anthony Towns and Pierre regarding the updated version of svg. Aj, previously designed a flow which has been updated by Towns to work more efficiently. The updated svg can be viewed at http://azure.erisian.com.au/~aj/tmp/lightstate/simplified-states-20150929.svg. However, some transitions are still missing.Finally, Towns explains the issues he faced while testing states coverage. He explains that thorough testing requires more than throwing every packet at it and recording what happens, stating that state doesn't quite encapsulate everything. Furthermore, he says that simulating pairs and covering all combinations of states between them, as well as taking into account non-packet events, like timeouts and bitcoin watch events, are also important. Rusty concludes by saying that while more comments and testing would be nice, he has to stop writing tests at some point.</summary>
-    <published>2015-09-30T04:16:24+00:00</published>
+    <updated>2023-05-18T20:18:08.358972+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000244.html" rel="alternate"/>
+    <summary>On September 30, 2015, Rusty Russell shared his opinion that the current exhaustive testing of code was insufficient. He suggested that having optional output of traces for successful test cases would make it easier to understand what the code actually does. Rusty also pointed out that CLOSE should start tracking HTLCs just like when a commitment is published so that there is no need for unnecessary elevated fees or CSV delays. On September 24, 2015, Pierre requested an updated version of svg to understand the rationale behind all existing closing flows and states. Aj found a solution and updated state.py, which works in this flow: test/test_state_coverage --dump-states | tee STATES / ./state.py &gt; update.dot / dot -Tsvg update.dot &gt; update.svg. Rusty Russell suggested that instead of exhaustive testing, some optional output of traces for successful test cases would make it clear what the code actually does. On September 24, 2015, Pierre requested an updated version of svg to understand the rationale behind all the existing closing flows and states. Aj updated state.py, which works in this flow: test/test_state_coverage --dump-states | tee STATES / ./state.py &gt; update.dot / dot -Tsvg update.dot &gt; update.svg. Rusty Russell pointed out that CLOSE should start tracking HTLCs just like when a commitment is published so that there is no need for unnecessary elevated fees or CSV delays.Aj analyzed the HTLC precision increase with ceiling drops on September 24, 2015. The 32-bit puts a ceiling of 0.04 satoshi (currently about $10USD) on each HTLC. To send more than $10 via lightning, multiple transactions with different R values can be done. A maximum is also useful for routing, as it helps obscure how much is being spent. A maximum seems pretty helpful for planning how to fund a node too.</summary>
+    <published>2015-09-30T04:07:59+00:00</published>
   </entry>
 </feed>

@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Simplified protocol for multiple in-flight updates.</title>
-  <updated>2023-06-02T00:21:41.499108+00:00</updated>
-  <author>
-    <name>Joseph Poon 2016-02-09 01:08:20</name>
-  </author>
+  <updated>2023-05-23T22:34:22.995144+00:00</updated>
   <author>
     <name>Rusty Russell 2016-02-09 04:30:24</name>
   </author>
   <author>
     <name>Rusty Russell 2016-02-08 20:17:07</name>
   </author>
-  <link href="lightning-dev/Feb_2016/000435_Simplified-protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <author>
+    <name>Joseph Poon 2016-02-09 01:08:20</name>
+  </author>
   <link href="lightning-dev/Feb_2016/000436_Simplified-protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000432_Simplified-protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2016/000435_Simplified-protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Simplified protocol for multiple in-flight updates.</title>
-    <updated>2023-06-02T00:21:41.499108+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-February/000435.html" rel="alternate"/>
-    <summary>During a discussion, Rusty Russell suggested that eliminating acknowledgements would simplify the protocol for Hashed Time-Lock Contracts (HTLCs). However, it was noted that this could lead to uncertainty about whether the other party has received the message. Removing HTLCs securely requires removing them, committing, and then the other party revokes the prior commitment. Joseph Poon pointed out that optimizing against payment failure on the ADD side is important as failure may require a re-route in the opposite direction to do a full cancel with a non-responsive node in multi-hop payments. However, Russell was not convinced that the re-route scheme will be used in practice. If both nodes are well-connected, eliminating acknowledgements is more optimal if latency is the primary concern. The Lightning Network payment channel protocol can be simplified by eliminating acknowledgements. Updates are sent through ADD, SETTLE, TIMEOUT, FAIL, and UNADD messages followed by a COMMIT message with a signature. Each side tracks two commit transactions: their own and the other side's. Once the recipient receives the COMMIT message, they commit the updates to their own commit transaction and stage them to the other side's commit transaction. To speed up the process, a non-binding ADD_FAIL message can be added to hint at failing an HTLC as soon as it is committed, allowing the recipient to UNADD if it receives it in time. Fee negotiation can be included in the COMMIT message, with a requested fee rate and a range of acceptable values. In the case of a REJECT message, the fee range can be adjusted and the COMPLETE message can be reattempted. Similar fee negotiation would be required for mutual close.</summary>
-    <published>2016-02-09T01:08:20+00:00</published>
+    <updated>2023-05-23T22:34:22.995144+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-February/000436.html" rel="alternate"/>
+    <summary>In a discussion between Joseph Poon and Rusty Russell, the former argues that while eliminating acknowledgments would simplify the protocol in adding HTLCs, there are tradeoffs such as uncertainty about whether the other party has received the message. Removing HTLC securely requires removing it, committing to it, and waiting for the other party to revoke prior commitment, but if the success/failure ratio is high enough, it can be worth it. However, this may have disadvantages with intermittently connected nodes as confirmation time windows are smaller for non-responsive payments. Poon also optimizes against payment failure on the add side to avoid re-routing in the opposite direction to do a full cancel with a non-responsive node in multi-hop payments.</summary>
+    <published>2016-02-09T04:30:24+00:00</published>
   </entry>
 </feed>

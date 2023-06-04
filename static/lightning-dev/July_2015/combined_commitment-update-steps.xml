@@ -2,50 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - commitment update steps</title>
-  <updated>2023-06-01T23:26:51.911341+00:00</updated>
+  <updated>2023-05-18T20:38:37.649960+00:00</updated>
   <author>
     <name>Anthony Towns 2015-07-23 04:40:45</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-07-24 00:49:49</name>
-  </author>
-  <author>
-    <name>Joseph Poon 2015-07-24 23:24:49</name>
   </author>
   <author>
     <name>Anthony Towns 2015-07-24 03:30:05</name>
   </author>
   <author>
-    <name>Joseph Poon 2015-07-24 22:38:28</name>
-  </author>
-  <author>
-    <name>Joseph Poon 2015-07-25 00:38:25</name>
-  </author>
-  <author>
     <name>Anthony Towns 2015-07-25 08:44:26</name>
   </author>
-  <author>
-    <name>Rusty Russell 2015-07-27 01:43:19</name>
-  </author>
-  <author>
-    <name>Joseph Poon 2015-07-27 21:29:56</name>
-  </author>
   <link href="lightning-dev/July_2015/000053_commitment-update-steps.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000057_commitment-update-steps.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000060_commitment-update-steps.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000058_commitment-update-steps.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000059_commitment-update-steps.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000061_commitment-update-steps.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000062_commitment-update-steps.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000066_commitment-update-steps.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2015/000071_commitment-update-steps.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - commitment update steps</title>
-    <updated>2023-06-01T23:26:51.911341+00:00</updated>
+    <updated>2023-05-18T20:38:37.649960+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-July/000053.html" rel="alternate"/>
-    <summary>The Lightning Network's lightning protocol for network-protocol level involves Alice and Bob, who have a channel set up with fully signed commitment transactions. Alice proposes an unsigned transaction to update the channel to reflect a conditional payment from Bob once R is revealed. The process ensures that both parties have matching, updated, signed commitment transactions along with secrets necessary to void attempts to use older commitments. In case of cheating, either party can safely close the channel after any step. The process becomes more complicated if pay2scripthash is used for HTLCs.Anthony Towns raises concerns about the security of payment channels in the Lightning Network. If Alice cheats and publishes an old commitment, Bob would need to work out which of the 100 Alice_N hashes he knows or can work out is being abused; prior to the DELAY expiring. Rusty Russell suggests using a dummy output of "0: OP_RETURN 42" to make that calculation trivial. Joseph Poon proposes storing prior commitment transactions as a stop-gap solution, including the timeout and original Commitment Transaction height when the HTLC was first made, which amounts to 48 bits of storage per HTLC output per fully expired Commitment Transaction.Rusty Russell suggests adding an extra output "0: OP_RETURN 42 #R1 #R2 #R3 #R4" to deal with the issue of pay2scripthash making it harder for Bob to claim the final outputs if he could unhash the scripts. Joseph Poon suggests using nLockTime with values below current unix-time as a filter/counter, to overload it for long-term use, giving over 937 million values at the time of writing. For each HTLC output, it amounts to 48 bits (6 bytes) of storage per fully expired Commitment Transaction. It’s also mentioned that OP_RETURN is viewed as acceptable and should be able to fit 3 outputs per OP_RETURN metadata output.The author notes that using OP_RETURN metadata for transactions is objectively better than just having the nonstandard non-P2SH output when considering transaction size. The use of 16-bit and 32-bit values for timeouts and commitment transactions, respectively, is explained. Joseph Poon proposes storing prior Commitment Transactions in order to work out which value to use when claiming cheating. Naively, another channel can be opened but alternatively, a new anchor can be created which spends existing anchors. In conclusion, the Lightning Network's lightning protocol ensures matching, updated, signed commitment transactions along with secrets necessary to void attempts to use older commitments. Various solutions are proposed to deal with security concerns and storage limitations, including using dummy outputs, storing prior commitment transactions, adding extra outputs, and using nLockTime as a filter/counter.In a blockchain transaction, R4 is used to find the other HTLCs. HTLC stands for hash time-locked contract, which is a type of smart contract used in blockchain technology. The R4 function is used to locate and identify the other HTLCs in the transaction. Smart contracts are self-executing contracts that are set up with specific rules and regulations. They are designed to automatically execute when certain conditions are met. HTLCs are a specific type of smart contract that use cryptographic hashes and time locks to ensure that funds are only released under specific circumstances. R4 is a specific function within the blockchain system that is used to locate HTLCs within a transaction. It is an important tool for blockchain developers, as it helps them to identify and manage the various smart contracts within the system. This function can be used to verify the existence and validity of the HTLCs, and to ensure that they are executed correctly. Overall, R4 plays a crucial role in managing and verifying the complex network of smart contracts that make up the blockchain system. By using this function, developers can ensure that transactions are secure and transparent, and that all parties involved are able to fulfill their obligations.</summary>
+    <summary>The lightning protocol is a network-protocol level that allows for conditional payments. Assuming Alice and Bob already have a channel setup, their current commitments are illustrated in the process of updating the channel to reflect a conditional payment from Bob once R is revealed. This involves Bob checking transaction structure, amounts, and R, after which Alice discards old commitment txn, replies, and stores her new transaction. If the protocol follows through to completion, then they each have matching, updated, signed commitment transactions; along with the secrets necessary to void attempts to use older commitments.HTLCs (Hashed Time-Locked Contracts) are discussed in terms of storage and identification within a channel. One proposed solution is to use nLockTime with values below current unixtime as filter/counter for identifying the commitment transaction, giving about a billion updates per channel. However, this only solves commitment transactions but not HTLC outputs. One suggestion is to store the information for every commitment and each HTLC output, but this would require too much storage. A more feasible alternative is to increment nLockTime with every new HTLC or every N commitment updates since the last time nLockTime incremented.Another suggestion is to use OP_RETURN metadata output to fit three outputs per metadata, where 32-bits is used for the Commitment Transaction. With OP_CTV and OP_CSV, one only needs to know the txn's commitment id, which can be worked out from nLockTime anyway. The key management works by calculating the key set used for HTLC #N given any secret M&gt;N.Regarding the frequency of updates, if a channel is updated ~100 times a second and lasts for a month, that would be 259M updates which on a laptop would take 22 minutes of search time. Even waiting for 3 days worth of OP_CSV delay would still be manageable. If one spends a year doing 100 new HTLC/s, that's 57GB for HTLCs. If n is set to be 100k hashes to search through and assuming 1000 commitments/s in a worst-case distribution, that's just an extra 5MB. ~60GB after a year is about 30*12 = 360 GB-months of data, which is about $12 on Amazon S3.</summary>
     <published>2015-07-23T04:40:45+00:00</published>
   </entry>
 </feed>

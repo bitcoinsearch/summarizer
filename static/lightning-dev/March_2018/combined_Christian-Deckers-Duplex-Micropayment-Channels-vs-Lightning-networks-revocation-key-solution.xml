@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Christian Deckers Duplex Micropayment Channels vs Lightning networks revocation key solution</title>
-  <updated>2023-06-02T02:21:58.528572+00:00</updated>
-  <author>
-    <name>ZmnSCPxj 2018-03-05 13:28:49</name>
-  </author>
+  <updated>2023-05-24T21:30:38.833615+00:00</updated>
   <author>
     <name>René Pickhardt 2018-03-03 23:30:23</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-03-05 13:50:10</name>
   </author>
-  <link href="lightning-dev/March_2018/001069_Christian-Deckers-Duplex-Micropayment-Channels-vs-Lightning-networks-revocation-key-solution.xml" rel="alternate"/>
+  <author>
+    <name>ZmnSCPxj 2018-03-05 13:28:49</name>
+  </author>
   <link href="lightning-dev/March_2018/001065_Christian-Deckers-Duplex-Micropayment-Channels-vs-Lightning-networks-revocation-key-solution.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001070_Christian-Deckers-Duplex-Micropayment-Channels-vs-Lightning-networks-revocation-key-solution.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001069_Christian-Deckers-Duplex-Micropayment-Channels-vs-Lightning-networks-revocation-key-solution.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Christian Deckers Duplex Micropayment Channels vs Lightning networks revocation key solution</title>
-    <updated>2023-06-02T02:21:58.528572+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-March/001069.html" rel="alternate"/>
-    <summary>The email discusses the differences between Poon-Dryja (revocation) channels and Decker-Wattenhofer duplex micropayment channels. The maximum lockup period for funds in a channel is proportional to the number of updates the channel can have, with shorter worst-case lockup periods resulting from fewer updates before the channel can only be closed. Poon-Dryja channels have no limit on the number of updates possible and use O(1) lockup time and transactions for an n update limit. In contrast, Decker-Wattenhofer uses O(log n) lockup time and transactions for n update limits. Every payment requires two updates, one to get payer funds to an HTLC and the other to get the HTLC funds to the payee.Although Decker-Wattenhofer has the advantage of being extendable to any number of participants per channel, the construction of Poon-Dryja channels cannot be easily extended beyond two per channel. To address this limitation, Burchert-Decker-Wattenhofer channel factories combine multiple two-participant Poon-Dryja channels that can have any number of updates, with the Decker-Wattenhofer part only updated if all participants agree to redistribute their funds. Rusty Russell’s “shachain” concept reduces storage for a sequence of revocation keys to just 64 bytes. The writer of the email, who is new to lightning dev, has been studying Christian Decker's work on duplex micropayment channels and wonders why the lightning spec went with the revocation key system instead of Decker's solution. The writer acknowledges that the revocation system was already in the whitepaper but finds it complex to handle and potentially requiring a third party observing service to detect cheaters. The writer expresses respect for the creators of the lightning network and believes it will become history. However, the key revocation system in Lightning Network seems to be complex to handle and requires a third party observing service to detect a cheater. Rusty also mentioned this in his article on the matter.Under Decker-Wattenhofer, a potential thief could try to reuse old invalid state, making it necessary to be online after the kickoff transaction gets confirmed to broadcast the latest commitment transaction. If offline for long, a watchtower-like service is also needed. Watchtowers under Poon-Dryja only need to store the shachain and the funding txid, while those under Decker-Wattenhofer would have to store entire relative-timelocked transactions, leaking economic information at each update. Channels drop on-chain, making economic information publicly readable.</summary>
-    <published>2018-03-05T13:28:49+00:00</published>
+    <updated>2023-05-24T21:30:38.833615+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-March/001065.html" rel="alternate"/>
+    <summary>Rene Pickhardt, a new Lightning dev asked about the rational for the lightning spec to go with revocation key system instead of Christian Decker's solution. The revocation system was already in the whitepaper and at the time of writing the whitepaper the work by Christian Decker wasn't out yet. Potential third-party observing service to detect cheaters is needed with the key revocation system which is complex to handle. However, ZmnSCPxj thinks that watchtowers under Poon-Dryja need only store the shachain and the funding txid, whereas watchtowers under Decker-Wattenhofer would have to store entire relative-timelocked transactions, leaking economic information at each update to a Decker-Wattenhofer watchtower. The main issue with duplex channels is that the maximum lockup period for funds in the worst case is proportional to the number of updates the channel can have. With Poon-Dryja (revocation) channels, there is no limit on the number of updates possible on a channel, especially when using Rusty Russell's "shachain" concept, where you get O(1) lockup time and O(1) transactions for n update limit under Poon-Dryja rather than O(log n) lockup time and O(log n) transactions for Decker-Wattenhofer. Every payment requires two updates: one to get payer funds to an HTLC, and the other to get the HTLC funds to the payee (or to revert the HTLC funds to the payer in case of routing failure). The potential thief trying to reuse old invalid state could make sure you will be offline for a few days, then broadcast (and hope it confirms) the kickoff transaction, wait for the old invalid state to be valid, and then broadcast the old invalid commitment transaction. Decker-Wattenhofer does have the advantage that its construction can be extended to any number of participants per channel, while Poon-Dryja does not seem like it can be easily extended beyond two per channel. The Burchert-Decker-Wattenhofer channel factories are where a Decker-Wattenhofer multiparticipant channel construction terminates into multiple two-participant Poon-Dryja channels.</summary>
+    <published>2018-03-03T23:30:23+00:00</published>
   </entry>
 </feed>

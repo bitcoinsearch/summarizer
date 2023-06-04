@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Decker-Wattenhofer channels (was: An Idea to Improve Connectivity of the Graph)</title>
-  <updated>2023-06-02T02:46:57.959563+00:00</updated>
+  <updated>2023-05-24T23:20:41.097053+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2018-04-13 13:41:32</name>
+  </author>
   <author>
     <name>Christian Decker 2018-04-13 20:51:54</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-04-15 14:04:38</name>
   </author>
-  <author>
-    <name>ZmnSCPxj 2018-04-13 13:41:32</name>
-  </author>
+  <link href="lightning-dev/April_2018/001178_Decker-Wattenhofer-channels-was-An-Idea-to-Improve-Connectivity-of-the-Graph-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001180_Decker-Wattenhofer-channels-was-An-Idea-to-Improve-Connectivity-of-the-Graph-.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001184_Decker-Wattenhofer-channels-was-An-Idea-to-Improve-Connectivity-of-the-Graph-.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001178_Decker-Wattenhofer-channels-was-An-Idea-to-Improve-Connectivity-of-the-Graph-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Decker-Wattenhofer channels (was: An Idea to Improve Connectivity of the Graph)</title>
-    <updated>2023-06-02T02:46:57.959563+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001180.html" rel="alternate"/>
-    <summary>ZmnSCPxj seeks clarification on how Hashed Timelock Contracts (HTLCs) are offered under the Decker-Wattenhofer Duplex Micropayment Channels, which uses an invalidation tree to split funds between payer and payee in individual simplex channels. The issue at hand is how HTLCs with absolute timelocks can be compatible with the relative timelock used by the invalidation tree. This is contrasted with Poon-Dryja channels, where the relative-timelock only exists on the claim transaction after a unilateral commitment transaction. The suggestion is to terminate these channels into Poon-Dryja channels with smaller relative locktimes to allow for more frequent updates while keeping the locktimes involved relatively small.The precision of `cltv_delta` should also be adjusted for channels created inside a channel factory due to the relative locktime consumed by the invalidation tree structure. Another suggestion made is to not allow channel factories to enable channel reorganization. Instead, funding transactions that fund the entire factory could be confirmed on-chain, followed by an off-chain split transaction that funds multiple channels, and finally commitment transactions that spend from the split transaction. In case of a multilateral close where all channel factory owners are available for closing, the split and commitment transactions can be collapsed into a single close transaction. Overall, ZmnSCPxj expresses concern that the issue of how HTLCs are handled under Decker-Wattenhofer channel factories, which use invalidation trees internally before paying out HTLCs, needs clarification.</summary>
-    <published>2018-04-13T20:51:54+00:00</published>
+    <updated>2023-05-24T23:20:41.097053+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001178.html" rel="alternate"/>
+    <summary>ZmnSCPxj is wondering about how HTLCs are offered under Decker-Wattenhofer Duplex Micropayment Channels. According to the Decker-Wattenhofer construction, the transaction sequence is funding -&gt; trigger -&gt; (relative-timelock) invalidation tree -&gt; ... (relative-timelock) invalidation tree. The outputs of the final invalidation tree transaction splits up the contents of the funds between the payer and payee in the individual simplex channels that compose the duplex channels. However, HTLCs have an absolute timelock, so ZmnSCPxj is uncertain how those are forced into compatibility with the relative timelock the invalidation tree uses. Under Poon-Dryja channels, the relative-timelock exists only on the claim transaction after a unilateral commitment transaction. HTLCs are offered as outputs of the unilateral commitment transaction so that the relative-timelock on the main output does not interfere with their normal operation. The HTLC-timeout case, the relative timelock is relative to the absolute one that comes first. This seems likely to affect Burchert-Decker-Wattenhofer channel factories which use invalidation trees internally also, which come before the HTLCs they eventually pay out to.ZmnSCPxj suggests terminating Burchert-Decker-Wattenhofer channel factories into Poon-Dryja channels to keep the locktimes involved relatively small for the number of updates we can support. He also suggests imposing some rules such as having three or more members, each member puts an equal amount, and channels to be fixed in cyclic superhub structure to save blockspace.</summary>
+    <published>2018-04-13T13:41:32+00:00</published>
   </entry>
 </feed>

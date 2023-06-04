@@ -2,10 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Specifications of Broadcasting Layers</title>
-  <updated>2023-06-01T23:54:53.804617+00:00</updated>
-  <author>
-    <name>Rusty Russell 2015-10-20 06:31:16</name>
-  </author>
+  <updated>2023-05-23T21:04:13.190871+00:00</updated>
   <author>
     <name>Mats Jerratsch 2015-10-16 13:23:34</name>
   </author>
@@ -15,17 +12,20 @@
   <author>
     <name>Rusty Russell 2015-10-19 00:48:30</name>
   </author>
-  <link href="lightning-dev/Oct_2015/000281_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
+  <author>
+    <name>Rusty Russell 2015-10-20 06:31:16</name>
+  </author>
   <link href="lightning-dev/Oct_2015/000263_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000278_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000274_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000281_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Specifications of Broadcasting Layers</title>
-    <updated>2023-06-01T23:54:53.804617+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000281.html" rel="alternate"/>
-    <summary>In a discussion thread on the Lightning-dev mailing list, Rusty Russell and Anthony Towns were discussing the frequency of channel updates to be sent over IRC. Rusty estimated that pubkey-channel-relationships would be relayed every 10 days at approximately 264 bytes, while node addresses/IP would be sent every 12 hours at around 133 bytes and channel-status would be sent once an hour at 176 bytes. However, Rusty noted that sending updates once per hour might be optimistic as channels approach exhaustion. Rusty's design point was for 1 million nodes, ideally on a cell phone. In the short term, Bitcoin used IRC as the peer protocol because it was easy to debug and implement. Rusty plans to aim for that while researching more ambitious proposals. Anthony agreed with Rusty's plan and suggested being able to log the entire network dynamics. Doing the above estimates over IRC would require doubling the byte size to encode keys/sigs into hex and adding about 32B per message for IRC protocol overhead. Assuming approximately 10 channels per node, the estimated bytes per node per day would be 560B for pubkey-channel-relationships, 564B for node addresses/IP, and 384B for channel-status, respectively, totaling 93,284B/node/day. Rusty acknowledged that they would get kicked off freenode long before reaching that number but believed it would allow them to master the other parts of the protocol first, up to a few hundred nodes.The author is discussing three different broadcast messages that require different handling due to their varying levels of dynamism. The first message, Pubkey-Channel-Relationships, is very static and relayed every 10 days with a size of 264 bytes. The second message, which contains node addresses/IP, is dynamic and depends on the nodes. It is estimated to be sent approximately every 12 hours and has a size of 133 bytes. The third message, Channel-Status, has highly varied content depending on actual traffic and node usage. It is estimated to be sent once an hour with a size of 176 bytes.The author would love to combine the first and third messages to save the 80 bytes of an additional signature, but they do not believe that the first message is worth being broadcast hourly. They also mention wanting to spare some additional bytes in the first message for a reputation system. These three messages combined add up to 2.5 GB daily data or 30 kb/s constant load, with hard drive space being around 330 MB.To implement this, the author suggests using either a gossip protocol or a DHT approach. A new node would need to retrieve the full dataset before opening a channel with a new node. The author suggests designing a way to distribute the load of retrieving the full dataset among several nodes, although it may not be necessary as 330 MB isn't too much to retrieve from a small number of nodes. Lastly, the author notes that the network currently has around 100k nodes, although Rusty usually starts with higher estimates.In this communication, Mats Jerratsch introduces three different broadcast messages that require different handling. The first message is Pubkey-Channel-Relationships which is static and relayed every 10 days, with a size of 264 Bytes. The second message is Node addresses/IP, which depends on the nodes, with dynamic/static IP and approximately sent every 12 hours, with an estimated size of 133 Bytes. The third message is Channel-Status (capacity, fee, ...) that varies highly depending on actual traffic and node usage, and it should be sent once an hour with an estimated size of 176 Bytes. Rusty suggests that when channels approach exhaustion, fees may rise significantly, and you want to know if capacity is sufficient for the amount you're sending.A random beacon model requires only partial topology knowledge, which makes these numbers scale much better. However, it introduces another factor. Rusty suggests realizing it as some kind of gossip protocol or using some DHT approach. Bram Cohen was supportive of using BitTorrent's DHT for (1 and 2). For #3, they need their own inline protocol. A new node would want to retrieve the full dataset before opening a channel with a new node. So they need to design a way of retrieving the full dataset for fresh nodes, probably in some load-distributed way. In the short term, Bitcoin used IRC as the peer protocol. It is easy to debug and trivial to implement, so Rusty aims for that while they research their more ambitious proposals.</summary>
-    <published>2015-10-20T06:31:16+00:00</published>
+    <updated>2023-05-23T21:04:13.190871+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000263.html" rel="alternate"/>
+    <summary>The Lightning Network is considering using an IRC protocol to broadcast messages, as it is easy to debug and trivial to implement. There are three different broadcast messages that are differently dynamic: Pubkey-Channel-Relationships are very static and relayed every 10 days; Node addresses/IP depends on the nodes, whether they have a dynamic or static IP, and would be sent approximately every 12 hours; Channel-Status is highly dependent on actual traffic and node usage, and would be sent once an hour. The estimates for the byte size of each message seem about the right ballpark. Combining (1) and (3) to save space is not worth an hourly broadcast. Mats Jerratsch suggests using a gossip protocol or a DHT approach, with Bram Cohen supporting the use of BitTorrent's DHT. Rusty Russell has been aiming for a design point of 1 million nodes, ideally on a cell phone. The network will need to design a way of retrieving the full dataset for fresh nodes in some load-distributed way; however, rusty usually starts even higher than the 100k nodes that currently make up the network.</summary>
+    <published>2015-10-16T13:23:34+00:00</published>
   </entry>
 </feed>

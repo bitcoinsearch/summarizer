@@ -2,38 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Eltoo / Anyprevout &amp; Baked in Sequences</title>
-  <updated>2023-06-03T05:05:13.857505+00:00</updated>
-  <author>
-    <name>Jeremy 2021-07-08 01:00:20</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2021-07-08 08:44:16</name>
-  </author>
-  <author>
-    <name>Jeremy 2021-07-08 15:48:14</name>
-  </author>
+  <updated>2023-05-23T15:23:16.224698+00:00</updated>
   <author>
     <name>Anthony Towns 2021-07-12 05:01:15</name>
   </author>
   <author>
-    <name>Jeremy 2021-07-12 22:07:29</name>
-  </author>
-  <author>
     <name>Anthony Towns 2021-07-14 03:32:00</name>
   </author>
-  <link href="lightning-dev/July_2021/003112_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2021/003114_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2021/003115_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <author>
+    <name>Anthony Towns 2021-07-08 08:44:16</name>
+  </author>
   <link href="lightning-dev/July_2021/003126_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2021/003129_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
   <link href="lightning-dev/July_2021/003132_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003114_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Eltoo / Anyprevout &amp; Baked in Sequences</title>
-    <updated>2023-06-03T05:05:13.857505+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-July/003112.html" rel="alternate"/>
-    <summary>In a Bitcoin development mailing list, concerns were raised over the usage of Eltoo and absolute lock time simultaneously. It was pointed out that using Eltoo in such a case would overload the CLTV clause. To tackle this issue, a new CSV type, 'eltoo sequences' could be defined. However, this technique cannot be used with a sequence tag. Therefore, adding a per-input absolute locktime to the annex was suggested as a better alternative. This approach could also be used to add a commitment to an historical block hash to disambiguate which branch of a chain split or reorg a transaction is valid for.During an email conversation between Jeremy and AJ, they discussed the use of relative locktime and absolute locktime for the same input. While Jeremy believed that there was no use case for it, AJ argued that ruling it out would be suboptimal. However, he later realized that overloading the nSequence for a per-input absolute locktime could result in not being able to reuse the same input's nSequence for a per-input relative locktime. AJ then mentioned a use case for this scenario, which involves cut-through of PTLC refunds when the timeout expires well after the channel settlement delay has passed. He also discussed the concept of sequence tagged keys and suggested that sequencing restrictions should be obvious from some simple combination of nlocktime/nsequence/annex so that scripts/signatures don't have to be evaluated to determine if a transaction is final. Jeremy suggests that only one bit of information should be returned from the evaluation process, specifically whether the transaction is invalid or not. He argues that all other relevant information such as fees, transaction finality, and currency forks should be easily parsed from the transaction itself. However, he notes that the current system does not have this property and provides an example of a transaction that fails due to the "top stack item is greater than the transaction input sequence" rule. When asked how to determine if a transaction can be included without running the script, it is explained that while the script must be run at some point, it is not necessary to do so in order to differentiate between the transaction being valid on one chain versus another. Additionally, it is noted that while timelocks always go from invalid to valid, it is valuable that transactions cannot go from valid to invalid as it limits the number of cases where transactions (and their descendents) must be removed from the mempool.</summary>
-    <published>2021-07-08T01:00:20+00:00</published>
+    <updated>2023-05-23T15:23:16.224698+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-July/003126.html" rel="alternate"/>
+    <summary>In a series of emails between Jeremy and AJ, they discuss different aspects of Bitcoin's scripting system. They suggest that sequencing restrictions should be obvious from a simple parsing of the transaction, and that evaluating a script should only return one bit of information: whether the transaction is invalid or not. They also discuss a new CSV type called 'eltoo sequences' which would give a per-input sequence but cannot be used with a sequence tag. Additionally, they talk about how adding a per-input absolute locktime to the annex could be used to cheaply add a commitment to an historical block hash, which could help disambiguate which branch of a chain split or reorg a transaction is valid for. Finally, they mention that it is already impossible to simultaneously spend two inputs if one requires a locktime specified by mediantime and the other by block height, and adding per-input locktimes would satisfy both concerns.</summary>
+    <published>2021-07-12T05:01:15+00:00</published>
   </entry>
 </feed>
