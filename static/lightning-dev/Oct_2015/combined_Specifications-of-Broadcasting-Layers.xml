@@ -2,30 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Specifications of Broadcasting Layers</title>
-  <updated>2023-06-03T15:41:00.743352+00:00</updated>
-  <author>
-    <name>Rusty Russell 2015-10-19 00:48:30</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-20 06:31:16</name>
-  </author>
+  <updated>2023-05-23T21:04:13.190871+00:00</updated>
   <author>
     <name>Mats Jerratsch 2015-10-16 13:23:34</name>
   </author>
   <author>
     <name>Anthony Towns 2015-10-19 23:55:01</name>
   </author>
-  <link href="lightning-dev/Oct_2015/000274_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000281_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
+  <author>
+    <name>Rusty Russell 2015-10-19 00:48:30</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-10-20 06:31:16</name>
+  </author>
   <link href="lightning-dev/Oct_2015/000263_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000278_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000274_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000281_Specifications-of-Broadcasting-Layers.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Specifications of Broadcasting Layers</title>
-    <updated>2023-06-03T15:41:00.744351+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000274.html" rel="alternate"/>
-    <summary>In a Lightning-dev mailing list discussion, Mats Jerratsch introduced three different broadcast messages that require different handling. The first message, Pubkey-Channel-Relationships, is very static and relayed every 10 days with a size of 264 bytes. The second message, which contains node addresses/IP, is dynamic and depends on the nodes. It is estimated to be sent approximately every 12 hours and has a size of 133 bytes. The third message, Channel-Status, has highly varied content depending on actual traffic and node usage. It is estimated to be sent once an hour with a size of 176 bytes.Rusty Russell has proposed using IRC as the peer protocol for the Lightning Network. The network includes these three types of information that need to be shared: pubkey-channel-relationships, node addresses/IP, and channel-status. These three types of data are static and relayed every 10 days, every 12 hours, and once an hour respectively. While these estimates seem reasonable, Russell believes that once per hour transmission may be optimistic when channels approach exhaustion. The goal for the Lightning Network is to accommodate one million nodes, ideally on a cell phone. Bitcoin used IRC as the peer protocol in the short term. Rusty Russell plans to use IRC as well while researching more ambitious proposals.The author suggests using either a gossip protocol or a DHT approach to implement the network. A new node would need to retrieve the full dataset before opening a channel with a new node. The author suggests designing a way to distribute the load of retrieving the full dataset among several nodes. Lastly, the author notes that the network currently has around 100k nodes, although Rusty usually starts with higher estimates.Assuming ~10 channels per node and converting to bytes/node/day, this results in 560B/node/day, 564B/node/day, and 92,160B/node/day. Therefore, the total is 93,284B/node/day which is about 1.054 KiB/s per thousand nodes. If a single server relays this to a thousand nodes, that’s 8.2 megabit/s outgoing already. Thus, the plan probably maxes out somewhere between 500-3000 nodes. Finally, it is noted that bitcoin only used IRC to get IP addresses to connect to, which were encoded in the nicks used, rather than anything being actually said. It seems like that got up to 10000 nodes.</summary>
-    <published>2015-10-19T00:48:30+00:00</published>
+    <updated>2023-05-23T21:04:13.190871+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000263.html" rel="alternate"/>
+    <summary>The Lightning Network is considering using an IRC protocol to broadcast messages, as it is easy to debug and trivial to implement. There are three different broadcast messages that are differently dynamic: Pubkey-Channel-Relationships are very static and relayed every 10 days; Node addresses/IP depends on the nodes, whether they have a dynamic or static IP, and would be sent approximately every 12 hours; Channel-Status is highly dependent on actual traffic and node usage, and would be sent once an hour. The estimates for the byte size of each message seem about the right ballpark. Combining (1) and (3) to save space is not worth an hourly broadcast. Mats Jerratsch suggests using a gossip protocol or a DHT approach, with Bram Cohen supporting the use of BitTorrent's DHT. Rusty Russell has been aiming for a design point of 1 million nodes, ideally on a cell phone. The network will need to design a way of retrieving the full dataset for fresh nodes in some load-distributed way; however, rusty usually starts even higher than the 100k nodes that currently make up the network.</summary>
+    <published>2015-10-16T13:23:34+00:00</published>
   </entry>
 </feed>

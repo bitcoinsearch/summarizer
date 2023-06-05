@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Directionality of the transaction fees</title>
-  <updated>2023-06-03T17:50:46.766457+00:00</updated>
+  <updated>2023-05-24T03:25:30.776625+00:00</updated>
+  <author>
+    <name>Edward Marynarz 2017-12-22 06:37:37</name>
+  </author>
   <author>
     <name>Edziu Marynarz 2017-12-06 11:04:34</name>
   </author>
@@ -18,22 +21,19 @@
   <author>
     <name>Rusty Russell 2017-12-12 01:25:47</name>
   </author>
-  <author>
-    <name>Edward Marynarz 2017-12-22 06:37:37</name>
-  </author>
+  <link href="lightning-dev/Dec_2017/000867_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2017/000815_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2017/000816_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2017/000823_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2017/000819_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2017/000827_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2017/000867_Directionality-of-the-transaction-fees.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Directionality of the transaction fees</title>
-    <updated>2023-06-03T17:50:46.766457+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-December/000815.html" rel="alternate"/>
-    <summary>The Lightning Network is a payment protocol built on top of the Bitcoin blockchain, designed to facilitate faster and cheaper transactions. However, there can be issues with channel imbalance if most transactions flow in one direction. To address this, fees could be set for each direction of the channel. By ramping up fees on the receiving end of the channel that is getting large and lowering fees on the empty end, it may be possible to prevent imbalance. This would reduce the risk involved in Lightning Network channels, as they become riskier on the receive side the more the channel value deviates from the original state.Johan Torås Halseth confirms that fees can be set for each direction of the channel. After the initial mutual channel_announce message, each peer sends its own channel_update, meaning each user controls their own fees. Fees are charged on entry to the channel, so if there is an A-&gt;B channel, A charges the fee, and if you traverse B-&gt;C, B charges the fee. Rusty Russell explains that fees are charged upon entering a Lightning Network channel. If a transaction is made from A to B, A charges a fee. If the transaction is then made from B to C, B charges a fee. The sender and recipient cannot set their own fees, but forwarding nodes can charge appropriate fees for both parties.However, Rusty Russell raises concerns about the fee structure for sending and receiving on Lightning Network. Receiving is actually more costly than sending if you have less balance than the initial opening of the channel. When asked if the fee can be negative to help with channel rebalancing, Rusty explains that while this was a possibility in his original implementation, it turned out to be a strange idea that complicates routing. The conversation then turns to the risks associated with channel initiation and the potential for hubs to close channels with some balance fee-free, leaving users without the channel opening fees and no receiving channel. The current system relies on market pressure, but with Schnorr signatures, this may no longer be the case, and market pressure may not be a strong enough incentive.</summary>
-    <published>2017-12-06T11:04:34+00:00</published>
+    <updated>2023-05-24T03:25:30.776625+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-December/000867.html" rel="alternate"/>
+    <summary>In a recent conversation on the Lightning Network mailing list, Rusty Russell and Edward discussed the possibility of setting fees for each direction of a channel. The main concern was that in some scenarios, the creator of an LN channel pays all on-chain fees, while the other side of the channel simply cashes out the balance, leaving the initiator without the channel opening fees and no receiving channel.Rusty Russell explained that the channel initiator pays all on-chain fees at the moment, which is simple but potentially gamable. However, it was confirmed that the fees can indeed be set for each direction of the channel by each node in the channel, as per the lightning-rfc. This means that regulating imbalances with fees would be best if the LN applications could do it automatically. The channel reserves ensure that each node always has some balance at stake in case an old state is broadcast. While forwarding nodes can charge appropriate fees, receiving is more costly than sending if you have more than the initial state of your channel. Channel_update messages are used to control your own fees, which follow after the initial mutual channel_announce message.It is important to note that negative fees would complicate routing in the network. Therefore, it is essential for LN applications to regulate imbalances with fees to prevent potential issues. Overall, the discussion highlighted the need for proper regulation of fees in both directions of an LN channel to ensure fair transactions for all parties involved.</summary>
+    <published>2017-12-22T06:37:37+00:00</published>
   </entry>
 </feed>

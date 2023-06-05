@@ -2,46 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - daemon/p2p protocol</title>
-  <updated>2023-06-03T15:41:36.203101+00:00</updated>
+  <updated>2023-05-18T20:21:37.402737+00:00</updated>
   <author>
-    <name>Rusty Russell 2015-10-19 18:44:19</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2015-10-19 22:09:09</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2015-10-21 01:11:45</name>
+    <name>Anthony Towns 2015-12-16 06:30:23</name>
   </author>
   <author>
     <name>Anthony Towns 2015-10-21 03:43:10</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-12-16 06:30:23</name>
-  </author>
-  <author>
     <name>Anthony Towns 2015-10-16 20:53:55</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2015-10-19 08:51:52</name>
+    <name>Anthony Towns 2015-10-19 22:09:09</name>
   </author>
   <author>
     <name>Anthony Towns 2015-10-19 05:30:03</name>
   </author>
-  <link href="lightning-dev/Oct_2015/000275_daemon-p2p-protocol.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000277_daemon-p2p-protocol.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000285_daemon-p2p-protocol.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000286_daemon-p2p-protocol.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2015/000392_daemon-p2p-protocol.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000286_daemon-p2p-protocol.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000265_daemon-p2p-protocol.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2015/000273_daemon-p2p-protocol.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000277_daemon-p2p-protocol.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000271_daemon-p2p-protocol.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - daemon/p2p protocol</title>
-    <updated>2023-06-03T15:41:36.204096+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000275.html" rel="alternate"/>
-    <summary>Anthony Towns discusses the daemon/p2p protocol, which currently relies on protobufs with union support. Towns also delves into the use of public key cryptography in lightning, including routing keys, anchor keys, and p2p keys. However, the current p2p protocol involves risks such as revealing node identity, MITM attacks and potential DoS attacks. In discussions from October 2015, Mats Jerratsch and aj suggest adding IP-PubKey-Relationship to the gossip protocol to mitigate risks associated with lightning nodes. They also discuss the risks of MITM and eavesdropping and propose sending a shared secret nonce to avoid revealing node identity.Rusty Russell proposes using a session nonce to improve security in an email thread from October 21, 2015. Although the nonce can help with correlation, it needs to change to maintain security. Russell also acknowledges that using a nonce may overcomplicate things since nodes are already publishing their ids and IPs in a public IRC channel.In another email thread from October 2015, Anthony Towns suggests three potential uses for public key crypto in lightning: routing keys, anchor keys, and p2p keys. The Lightning Network currently relies on protobufs with union support and fixed-length fields can be implemented using custom field options.Mats Jerratsch proposes adding IP-PubKey-relationship to the gossip protocol in a forum discussion on the Lightning Network. One suggestion is to have lightning nodes run on dedicated machines and firewalled against any incoming connections. Implementing any of the above options should be delayed until there are thousands of lightning nodes.Lastly, in an email discussion, Anthony Towns highlights the sensitivity of the relationship between a network address and the lightning network address. It is suggested to implement the above-mentioned ways until there is a substantial number of lightning nodes (1000s).</summary>
-    <published>2015-10-19T18:44:19+00:00</published>
+    <updated>2023-05-18T20:21:37.402737+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-December/000392.html" rel="alternate"/>
+    <summary>In a discussion between Anthony Towns and Rusty Russell, they identified three different uses for public key cryptography in lightning. The first use is routing keys that are used for constructing the onion. The second use is anchor keys, which are used for spending the anchor transaction for a channel and thus signing commitment transactions. The third use is p2p keys, which are used for establishing a shared secret when talking to a node, to avoid p2p communications being available to someone else.There are some downsides to this protocol, such as revealing physical identity, making denial-of-service attacks straightforward, and giving a point of entry for targeted hacking to steal money. Different ways to handle these issues have been proposed, such as using fixed-length fields and treating the relationship between a network address and the lightning network address as sensitive.During their discussion on the risks associated with lightning nodes, Anthony Towns suggests that treating a network address (IPv4/IPv6 addr and port, tor service) and the lightning network address as sensitive is valuable. He explains that revealing a network address helps reveal physical identity, makes denial-of-service attacks straightforward, and gives a point of entry for targeted hacking to steal money. They then list various ways attackers may exploit this information. For instance, if you're a merchant, it's easy to find out your lightning id; during the trading day, you'll probably have a relatively large balance in your lightning channels. If an attacker can find your IP address and hack into your system, they can steal that money. If you're making lots of money routing payments, an attacker might be able to deduce that from public information and know that you have a lot of money in lightning channels that they can steal. Anthony also notes that he cannot think of a reason why a consumer's lightning ID would matter, but he has missed something. Denial of service becomes possible if someone knows the lightning ID of a person they do not like. It is trivial to attack them using botnets, etc. If you know X has a channel with you then figuring out X's IP might let me monitor X's TCP connections, which, in turn, would help me figure out your IP.There are three ways attackers can associate the info: given a lightning id, cheaply work out the IP that provides it; given an IP, cheaply work out the lightning id associated with it; given an IP and a lightning id, confirm/deny whether that lightning id is provided by that IP. To handle these problems, one way is to rely on a shared secret X when making a new p2p connection. When you know who you're talking to, you send "Hi. I'm Alice. My nonce is X." Bob responds, "Good to meet you. I'm Bob.". Rest is encrypted to ECDH(A,B). Alice sends SIG_Alice(Alice || Bob || A || ECDH(A,B)). Bob sends SIG_Bob(Bob || Alice || B || ECDH(A,B)). In case you don't know who you are talking to, you don't send a nonce and do the current protocol. Once you're connected (or once you have a channel set up), they'll tell you a nonce to use next time. If Bob wants some degree of privacy while still accepting anonymous connections, he generates a new ID to hand out to anonymous connections every so often. He links this up to one of his other IDs or to one of his neighbors by reusing a pre-existing channel. If you're asking someone to connect to you and have a bunch of IDs, you give them a nonce to use that will select the correct one. You use nonces as a hash key to lookup your ID, their ID, and any channels you have open. You don't share or reuse nonces.</summary>
+    <published>2015-12-16T06:30:23+00:00</published>
   </entry>
 </feed>

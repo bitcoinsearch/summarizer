@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Insufficient funder balance for paying fees</title>
-  <updated>2023-06-03T18:05:26.675117+00:00</updated>
+  <updated>2023-05-24T18:29:28.223287+00:00</updated>
   <author>
     <name>Pierre 2018-01-12 11:56:39</name>
   </author>
   <author>
-    <name>Johan Torås Halseth 2018-01-12 12:41:09</name>
-  </author>
-  <author>
     <name>Johan Torås Halseth 2018-01-12 10:32:23</name>
   </author>
+  <author>
+    <name>Johan Torås Halseth 2018-01-12 12:41:09</name>
+  </author>
   <link href="lightning-dev/Jan_2018/000924_Insufficient-funder-balance-for-paying-fees.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000925_Insufficient-funder-balance-for-paying-fees.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000923_Insufficient-funder-balance-for-paying-fees.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000925_Insufficient-funder-balance-for-paying-fees.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Insufficient funder balance for paying fees</title>
-    <updated>2023-06-03T18:05:26.675117+00:00</updated>
+    <updated>2023-05-24T18:29:28.223287+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000924.html" rel="alternate"/>
-    <summary>In an email exchange, Johan and Pierre discuss a corner case in which a node may fail the channel due to insufficient fees. Pierre notes that this situation is similar to a race condition described in BOLT 2 and specifies that it may be appropriate to fail the channel if the fundee would end up with all funds in an unpublishable transaction. Johan agrees and adds that these cases are unlikely to occur with the right choice of parameters. They conclude that it is less error-prone to fail the channel instead of trying to recover from it.The links provided in the email include BOLT 2 and BOLT 3, which specify how to handle these situations, as well as the Lightning Network RFCs. Additionally, Johan posted a question on how Eclair and c-lightning handle a specific scenario involving Alice and Bob adding HTLCs simultaneously with low balances. This could potentially violate the channel reserve requirement or deplete the entire channel if the reserve is set to zero. Johan asks for the expected way of handling this situation from both Alice and Bob's perspective. Pierre suggests that an appropriate choice of channel parameters mainly max_htlc_value_in_flight_msat, channel_reserve_satoshis, max_accepted_htlcs could probably reduce the probability of insufficient fees happening. Two links are also provided: [1] for updating fees and [2] for fee payment in lightning transactions.</summary>
+    <summary>Johan asked how Eclair and c-lightning handle a situation where Alice is the funder of a channel with Bob, Alice wants to add an HTLC and has just enough balance for it and the extra fee, but at the same time Bob also wants to add an HTLC and sees that Alice has enough balance to pay the fee for his HTLC. They both send the AddHTLC at the same time, but Alice does not have enough balance to cover her own HTLC and fees as well as Bob's, which could violate the channel reserve requirement or deplete her channel completely if the channel reserve is set to 0. Pierre suggested that this situation is similar to the race condition described in BOLT 2, which handling is specified in BOLT 3. The timing of the commit_sig/revoke_and_ack messages matters more than the update_add_htlc messages because of the acknowledgment logic that excludes remote's unsigned updates. Each party will receive a commitment tx with insufficient (possibly zero) fees. According to BOLT 3, they may decide to fail the channel using their previous commitment. Currently, Eclair won't fail the channel, but Pierre thinks they probably should, especially if they are the fundee and would end up with all funds in an unpublishable tx. An appropriate choice of channel parameters could probably reduce the probability of this happening.</summary>
     <published>2018-01-12T11:56:39+00:00</published>
   </entry>
 </feed>

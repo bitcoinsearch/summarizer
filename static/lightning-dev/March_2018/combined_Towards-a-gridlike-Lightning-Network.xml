@@ -2,18 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Towards a gridlike Lightning Network</title>
-  <updated>2023-06-03T18:38:52.148834+00:00</updated>
+  <updated>2023-05-24T22:36:32.148717+00:00</updated>
   <author>
     <name>ZmnSCPxj 2018-04-19 02:04:52</name>
   </author>
   <author>
     <name>Benjamin Mord 2018-04-20 20:43:20</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-03-20 03:19:02</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-03-24 12:07:52</name>
   </author>
   <author>
     <name>Benjamin Mord 2018-04-18 23:56:17</name>
@@ -27,21 +21,27 @@
   <author>
     <name>ZmnSCPxj 2018-03-23 15:29:19</name>
   </author>
+  <author>
+    <name>ZmnSCPxj 2018-03-20 03:19:02</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-03-24 12:07:52</name>
+  </author>
   <link href="lightning-dev/April_2018/001205_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001216_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001108_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001118_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001204_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001206_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001208_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001117_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001108_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001118_Towards-a-gridlike-Lightning-Network.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Towards a gridlike Lightning Network</title>
-    <updated>2023-06-03T18:38:52.148834+00:00</updated>
+    <updated>2023-05-24T22:36:32.149716+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001205.html" rel="alternate"/>
-    <summary>In a Lightning-dev mailing list, members discussed the identification of a 'neighborhood' and the establishment of an order within that neighborhood for cycle formation in the Lightning Network. One member suggested using bloom filters to define a neighborhood, which is considered the most valuable contribution among the suggestions.ZmnSCPxj, a Lightning Network developer, has proposed an algorithm that utilizes node gossip to identify peers with which to form superhubs. The algorithm starts with a 32-bit number and uses a hash algorithm to filter nodes based on their public key. Nodes with a matching highest bit are kept in the set while others are removed. The remaining nodes are sorted according to hash, and the next node in the list becomes the candidate peer. If the candidate already has a channel with the node or cannot be contacted, the process is repeated by incrementing i.However, there is a need for coordination to set up cyclic superhubs. ZmnSCPxj praises Benjamin's use of bloom filters but questions the ability to make cycle establishment within a neighborhood robust in a dynamic context. ZmnSCPxj suggests a heuristic where the probability of establishing a channel is proportional to the number of bits in common in the pubkey hash. He notes that the main benefit of the algorithm he describes is that it flattens the number of channels a node will have and reduces centralization while having similar reachability as random selection.ZmnSCPxj's algorithm starts with `i` = 0 and a set of known nodes, including our own node. Iterate over `i` and compute hash = H(i || pubkey) for each node. Also compute our_hash = H(i || our_pubkey) for ourselves and put this in a working set. Iterate over bits and split the working set into two sets, the matching set and the non-matching set, where the bit in the hash matches the bit in our_hash. If the non-matching set is empty, skip to the next bit. If the matching set is 1 or 2 members, or the non-matching set is 1 or 2 members, merge the two sets together into the working set and exit this loop: we have found a cyclic superhub. Else, set the working set to the matching set. The set should be sorted according to hash (treat the hash as a 160-bit big-endian number).According to ZmnSCPxj, even if nodes have some divergence in their own local maps of the network, the difference can be filtered away, and the nodes that are "destined" to form a superhub can still find each other in the same superhub.It may sometimes be useful to empirically test aggregate effects of different routing heuristics, however naive or artificial the underlying assumptions may need to be. Therefore, it is asked if there is a simulation platform yet for experimenting with ideas such as this. Benjamin Mord asks if there is a simulation platform yet for experimenting with ideas such as this and if there is an API to separate such strategies from the protocol itself. He also asks if there is a place yet to specify such heuristics where tight coordination on details are of mutual benefit, such as a bolt. Nodes could track the routes of payments that flow through their channels and could spot fees that seem both large and popular, and could use this information to identify under-served nodes to which a direct channel might be in order.</summary>
+    <summary>In the Lightning Network, ZmnSCPxj proposed an algorithm to establish cyclic superhubs that would organize the network and make it more accessible. The proposed algorithm involves computing a hash for each node and iterating over the bits of the hash to split nodes into matching and non-matching sets. Additionally, ZmnSCPxj presented an algorithm that, given a set of nodes extracted from node gossip, returns a peer to try connecting and funding a channel to. The algorithm involves using a well-used hash algorithm such as RIPEMD160(SHA256(x)), specifying the size of 'i' (32-bits) and indicating its endianness with big-endian being used as typical for Lightning and network order.The establishment of a unique ordering for cycle establishment within a neighborhood is a much more ambitious undertaking. The proposed algorithm will force all nodes to have exactly two incoming and two outgoing channels, reducing centralization at the LN layer, but there are concerns about how cycles recover when someone leaves and the privacy goals of the network. ZmnSCPxj also suggested using bloom filters to define neighborhoods with high connectivity and sparse but redundant connections among these neighborhoods to maintain useful competition and redundancy. A member named Benjamin Mord asked about simulation platforms for experimenting with different routing heuristics. Rusty simulated an older version of the idea, but there was a bug in the code affecting reachability. The author presented another algorithm that returns a peer to try connecting and funding a channel to, starting with `i` = 0 and filtering down to a set of at least 3 nodes. While dynamic optimization based on actual usage is possible, it compromises privacy. The Lightning Network requires nodes to open channels to establish their existence on the network, but there is no incentive for existing nodes to close existing channels and open new ones for new nodes as it costs on-chain fees. Nodes could track payment routes and fees to identify under-served nodes to which a direct channel might be in order if dynamic optimization based on actual usage were possible. The article "Cyclic Superhubs as Solution Towards Reasonable Lightning Network Topography" proposes using cycles to organize the network and make it more accessible for all participants. However, coordination is needed to set up cyclic superhubs and a node cannot form cyclic superhubs by itself.</summary>
     <published>2018-04-19T02:04:52+00:00</published>
   </entry>
 </feed>

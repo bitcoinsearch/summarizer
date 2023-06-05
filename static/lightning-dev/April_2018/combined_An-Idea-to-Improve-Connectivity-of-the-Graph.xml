@@ -2,15 +2,9 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - An Idea to Improve Connectivity of the Graph</title>
-  <updated>2023-06-03T18:11:21.831194+00:00</updated>
+  <updated>2023-05-24T20:34:59.790185+00:00</updated>
   <author>
     <name>Christian Decker 2018-02-05 13:21:54</name>
-  </author>
-  <author>
-    <name>Abhishek Sharma 2018-02-04 18:21:48</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2018-04-11 09:40:11</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-04-05 16:13:19</name>
@@ -33,9 +27,13 @@
   <author>
     <name>Alejandro Ranchal Pedrosa 2018-03-29 15:10:37</name>
   </author>
+  <author>
+    <name>ZmnSCPxj 2018-04-11 09:40:11</name>
+  </author>
+  <author>
+    <name>Abhishek Sharma 2018-02-04 18:21:48</name>
+  </author>
   <link href="lightning-dev/Feb_2018/000991_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2018/000986_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001161_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001135_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001138_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001159_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
@@ -43,13 +41,15 @@
   <link href="lightning-dev/April_2018/001167_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2018/000987_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001129_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001161_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2018/000986_An-Idea-to-Improve-Connectivity-of-the-Graph.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - An Idea to Improve Connectivity of the Graph</title>
-    <updated>2023-06-03T18:11:21.832193+00:00</updated>
+    <updated>2023-05-24T20:34:59.790185+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-February/000991.html" rel="alternate"/>
-    <summary>During a technical discussion, the issue of invalidations in a branching tree structure was raised due to the use of 1 bit sequence diffs. The Lightning Network was also discussed, with Abhishek Sharma proposing a modification that would allow for fewer channels to be open. Under this proposal, three parties would commit their funds all at once and create three open channels between one another. They could then move their funds between these channels with permission from the counterparty, which would improve routing abilities without opening new channels and waiting for network verification.ZmnSCPxj requested more details about Bitcoin transactions, including the on-chain anchor and transaction that spends it, as well as Lightning commitment transactions and graphing transaction chains to ensure correct operation of the idea. ZmnSCPxj also asked Abhishek to explain the difference between his idea and the Burchert-Decker-Wattenhofer Channel Factories.Christian Decker, a member of the Lightning Network development team, pointed out that the current approach to state invalidations in the Lightning Network is not well-suited for multi-party negotiations beyond two parties. This is due to the potential exponential growth in reactions to a party cheating in contracts with multiple parties. Alejandro has sought further elaboration on this assumption from the community.The issue of using retaliatory constructions in multi-party cases has been raised by ZmnSCPxj on the Lightning-dev forum. The challenge is how to extend the two-party model to three-party cases where A cheats. Pre-committed retaliation transactions have been proposed as a way to identify and punish the misbehaving party, but this solution has challenges, including the possibility of colluding parties punishing each other. Retaliatory constructions do not impose limits on the number of updates allowed to the offchain "purse," making them more suitable for channels. Channel factories can use the Duplex construction near the root of the initial on-chain anchor transaction but be terminated in Poon-Dryja retaliatory channels. In a conversation between Christian and Alejandro, the former argues that the tradeoff between penaltyless invalidation and long-lasting DMCs is not as bad as people usually interpret. The DMC construction has parameters that allow tweaking the number of invalidations, and with parameters similar to LN, 1.4 billion updates can be achieved, which equals years of operation without needing to re-anchor. However, long-lasting DMCs require either an initial refund transaction with a very distant relative locktime or periodic updates in the form of a refund transaction pointing to a new refund transaction resetting the initial locktime instead of actually refunding. In extreme cases of both approaches, funds may become locked for a significant amount of time without penalizing the unresponsive party, leading to the worst-case utility of the channel decreasing due to accumulative blockchain fees.ZmnSCPxj also shares a technique to create an output with indefinite lifetime while being protected against unresponsive counterparty. The technique involves using a sequence of `nSequence`d transactions off-chain wherein only the funding transaction is on-chain and kickoff, bit1, and bit0 transactions are all kept off-chain. The branching factor of 2 technique described by ZmnSCPxj is different from the branching factor of 48 used in the paper. For a 32-bit counter for a maximum of 4,294,967,296 updates transactions in sequence, we need 33 transactions in sequence kept off-chain. In a unilateral close, all transactions are fed into the blockchain one-by-one. The drawback of this technique is the large number of transactions in sequence in a unilateral close. However, normal operation only keeps all transactions off-chain and touches the chain on unilateral or bilateral close.Overall, these discussions highlight the challenges and potential solutions for multi-party negotiations beyond two parties in the Lightning Network. While there are trade-offs between different techniques, such as penaltyless invalidation and long-lasting DMCs, researchers continue to explore new approaches to optimize the network's scalability and efficiency.</summary>
+    <summary>In a discussion on Lightning-dev, Christian expressed concern over state invalidations in Lightning and their unsuitability for multi-party negotiations beyond two parties. This is due to the exponential growth of potential reactions to a party cheating. The Channel Factories paper addresses this issue by using the Duplex Micropayment Channel construction instead of retaliation construction in LN. Christian also raised confusion regarding how misbehavior on one channel could be retaliated against on another channel if they are logically independent. Abhishek Sharma proposed a modification to the Lightning Network that would require fewer open channels. His idea involves three parties committing their funds all at once and moving their funds between the three open channels between them, creating three open channels between each of them with a pre-set capacity.This mechanism can be useful when parties wish to transact but don't have enough funds in the required channel. For example, if parties A, B, C, D, and E have channels and balances as mentioned above, D cannot send E 1.0 BTC without opening a new channel and waiting for the network to verify it. But, A can ask B to move her 1.0 in channel AB to channel AC to enable D to route 1.0 BTC from A to C and finally to E.ZmnSCPxj from Lightning-dev asked for more details on Sharma's idea and Bitcoin transactions involved, comparing it to the Burchert-Decker-Wattenhofer Channel Factories. In response, Christian Decker pointed out a potential issue with the selection of 1 bit sequence diffs in the branching process, which results in a large number of invalidations. He also discussed the toolbox for long-lasting DMCs, including techniques such as using a sequence of `nSequence`d transactions off-chain with a branching factor of 2 or the Poon-Dryja technique.In conclusion, while state invalidations in Lightning may not be suitable for multi-party negotiations beyond two parties, alternative techniques such as long-lasting DMCs and the modification proposed by Sharma can be useful. It's important to consider the trade-offs of each technique and choose the one that fits the specific use case best.</summary>
     <published>2018-02-05T13:21:54+00:00</published>
   </entry>
 </feed>

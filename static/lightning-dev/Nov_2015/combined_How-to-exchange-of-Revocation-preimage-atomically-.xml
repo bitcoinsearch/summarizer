@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - How to exchange of Revocation preimage atomically ?</title>
-  <updated>2023-06-03T15:52:05.550529+00:00</updated>
+  <updated>2023-05-23T21:41:36.755079+00:00</updated>
   <author>
     <name>Nicolas Dorier 2015-11-24 02:36:20</name>
   </author>
@@ -19,9 +19,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - How to exchange of Revocation preimage atomically ?</title>
-    <updated>2023-06-03T15:52:05.550529+00:00</updated>
+    <updated>2023-05-23T21:41:36.755079+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000334.html" rel="alternate"/>
-    <summary>During a review of BIP 112, Nicolas Dorier, a Bitcoin developer, noticed a potential attack on the Lightning Network protocol. The issue arises when both parties want to revoke a commitment but need to exchange the revocation preimage. If not done atomically, Alice can intentionally withhold her revocation, preventing Bob from withdrawing his funds. Rusty, another Bitcoin developer, acknowledged the issue and provided a solution.The concern was addressed by Tadge, who explained that there is no real attack as every update of channel state has an initiator. The user initiating the channel state change goes first, meaning the payer goes first. With revocations, if Alice sends more coin to Bob, Alice signs a new state and sends half signed tx to Bob. Bob signs the new state and sends half signed tx to Alice. Alice revokes the old state by sending preimage to Bob, and Bob revokes the old state by sending preimage to Alice. If Bob fails to perform the last step, the payment can be considered not to have gone through. However, Bob does not have much motivation to fail as leaving the channel in an indeterminate state is worse for him than a fully determined state where he has more money. Therefore, requiring a third party may be a solution, but this defeats the purpose.</summary>
+    <summary>Nicolas Dorier, who was learning about the Lightning Network, noticed a potential attack when reviewing bip 112. He pointed out that when both parties want to revoke a commitment, they need to send one another the revocation preimage, but if not done atomically, Alice intentionally not sending her revocation after receiving Bob's would prevent Bob from withdrawing his funds. He wondered if he was missing something or if requiring a third party is the only way of fixing this, expecting he does not collude, which defeats the purpose. Tadge replied that all payments are "push" payments, and in practice, every update of a channel state has an initiator. He explained how the process works and said it’s not atomic so payer goes first. Therefore, if Alice doesn't do the second step, Bob still has the new commit tx he can drop on the blockchain.</summary>
     <published>2015-11-24T02:36:20+00:00</published>
   </entry>
 </feed>

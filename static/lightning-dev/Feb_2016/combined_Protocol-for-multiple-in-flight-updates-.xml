@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Protocol for multiple in-flight updates.</title>
-  <updated>2023-06-03T16:11:45.898023+00:00</updated>
+  <updated>2023-05-23T22:32:50.644475+00:00</updated>
+  <author>
+    <name>Rusty Russell 2016-02-02 01:18:17</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2016-02-03 00:32:50</name>
+  </author>
+  <author>
+    <name>Joseph Poon 2016-02-03 01:33:30</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2016-02-04 04:08:35</name>
+  </author>
   <author>
     <name>Rusty Russell 2016-02-01 10:08:01</name>
   </author>
@@ -21,35 +33,23 @@
   <author>
     <name>Joseph Poon 2016-02-03 05:01:35</name>
   </author>
-  <author>
-    <name>Rusty Russell 2016-02-02 01:18:17</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2016-02-03 00:32:50</name>
-  </author>
-  <author>
-    <name>Joseph Poon 2016-02-03 01:33:30</name>
-  </author>
-  <author>
-    <name>Rusty Russell 2016-02-04 04:08:35</name>
-  </author>
+  <link href="lightning-dev/Feb_2016/000421_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2016/000424_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2016/000426_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2016/000429_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000418_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000430_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000431_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000422_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000427_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2016/000428_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000421_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000424_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000426_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2016/000429_Protocol-for-multiple-in-flight-updates-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Protocol for multiple in-flight updates.</title>
-    <updated>2023-06-03T16:11:45.898023+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-February/000418.html" rel="alternate"/>
-    <summary>The email exchange between Rusty Russell and Joseph Poon discusses the HTLC negotiation protocol for preventing cut-through HTLCs in Lightning Network. The protocol involves different states and steps, including adding an HTLC, removing an HTLC through timeout or settle, committing all changes, and proposing a new protocol to prevent overlapping requests. Joseph suggests a more secure three-step commit transaction, while Rusty proposes variants of the protocol for better throughput.They also discuss the need for two IDs sent in the commitment message and the importance of keeping messages in order. If the replyer skips the requester's Add Requests when replying, it is assumed that the skipped requests are request rejections or an outright channel closeout since it should never happen. This is to enforce accept/reject order and to ensure that modifications included in the signature/transaction do not change after-the-fact. Joseph suggests disallowing skipping as a protocol violation, which could lead to a gentler close protocol where sending a close message implies the initiator would send no more adds and reject all received. Two IDs, one for each party, are included in the Commitment signature message, allowing for timing issues with HTLC Add responses not being fully synced up.Rusty thanks Joseph and mentions he will try to document the protocol in another email. The protocol is still being optimized, but any accepted modification by the other party is included. While it may take some time to clean out all the remaining HTLCs for mutual close, at least the other side knows what is happening and can replace capacity by opening new channels if needed.</summary>
-    <published>2016-02-01T10:08:01+00:00</published>
+    <updated>2023-05-23T22:32:50.644475+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-February/000421.html" rel="alternate"/>
+    <summary>The email exchange between Rusty Russell and Joseph Poon discusses the latter's proposed HTLC negotiation protocol. The protocol involves adding, removing or settling HTLCs, with both parties sending messages in order to ensure all messages are accounted for through accept/reject orders. The proposal suggests a three-step process for more secure transactions, but acknowledges that asynchronous steps are simpler. The protocol also includes two broadcastable commitments from each party, as well as staging and counter IDs for modifications. The email thread also discusses the commit steps for HTLCs, with Rusty asking about cut-through prevention and committing with regards to HTLC states. The proposal suggests an "unstage request" to unstage an HTLC if it fails to complete within a reasonable time. Additionally, there may be no reason to accept anything except an add request, and SETTLE_PRESTAGE and TIMEOUT_PRESTAGE states may be redundant.The proposal also considers handling upstream node rejected messages with FAIL messages, and defines TIMEOUT as the responsibility of the HTLC proposer. Finally, the proposal suggests that starting staging an HTLC on the outgoing channel before it's committed on the incoming one can reduce latency, though this means the HTLC recipient cannot commit to the HTLC until the sender does.Overall, the protocol is still being optimized, but it presents a simpler approach to pipelining requests with sophisticated overlaps.</summary>
+    <published>2016-02-02T01:18:17+00:00</published>
   </entry>
 </feed>
