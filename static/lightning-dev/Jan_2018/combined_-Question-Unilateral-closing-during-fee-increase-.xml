@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [Question] Unilateral closing during fee increase.</title>
-  <updated>2023-06-03T18:05:53.553174+00:00</updated>
+  <updated>2023-05-24T18:32:03.958782+00:00</updated>
   <author>
     <name>ZmnSCPxj 2018-01-15 02:01:36</name>
+  </author>
+  <author>
+    <name>Peter Todd 2018-01-14 12:32:29</name>
   </author>
   <author>
     <name>Johan Torås Halseth 2018-01-16 23:47:04</name>
@@ -15,21 +18,18 @@
   <author>
     <name>Richard 2018-01-14 12:37:55</name>
   </author>
-  <author>
-    <name>Peter Todd 2018-01-14 12:32:29</name>
-  </author>
   <link href="lightning-dev/Jan_2018/000930_-Question-Unilateral-closing-during-fee-increase-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000927_-Question-Unilateral-closing-during-fee-increase-.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000943_-Question-Unilateral-closing-during-fee-increase-.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000926_-Question-Unilateral-closing-during-fee-increase-.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000928_-Question-Unilateral-closing-during-fee-increase-.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000927_-Question-Unilateral-closing-during-fee-increase-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [Question] Unilateral closing during fee increase.</title>
-    <updated>2023-06-03T18:05:53.554184+00:00</updated>
+    <updated>2023-05-24T18:32:03.958782+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000930.html" rel="alternate"/>
-    <summary>The Lightning-dev mailing list has been discussing the issue of one side of a channel having complete control over it and whether this could be used to change fee size when closing channels. However, this would require trust in the other party, highlighting the importance of trust in the Lightning Network. Johan raises the issue of a mainnet channel force closed two weeks ago that is still not mined, suggesting SIGHASH flag magic as a solution. Meanwhile, Jonathan faces a problem with unilateral close due to CSV timelock and suggests using CPFPs to redeem the to_remote output, but script verification will fail and the CSV timer won't start. The discussion also touches upon potential issues with closing channels and offers solutions such as out-of-band fee payment mechanisms or using a Lightning transaction to pay for those services. In another message to the Bitcoin development mailing list, Jonathan poses the question of what happens when a channel partner disappears, leaving transactions at around 100 satoshi/byte that won't confirm due to insufficient fees. The to_local output cannot be redeemed until the commitment transaction is confirmed + the CSV timeout, but the to_remote output probably won't be redeemed as the other person is offline. Waiting for the other person to come online seems to be the only remedy, but since CSV will cause script verification to fail, a CPFP transaction will not be propagated. Some solutions suggested include using out-of-band fee payment mechanisms or using a Lightning transaction to pay for that service more cheaply than on-chain payments those existing accelerators currently use.</summary>
+    <summary>In a Lightning-dev mailing list, a user asked if one side of the channel has 100% of funds, can the last message give that user complete control over the channel to close it unilaterally without any interaction from the other side. The only trustless way to transfer control of funds from one-sided back to both parties would be an on-chain transaction. This puts trust into the system and if one is going to trust anyway, they can probably trust that the other side will inform them of pending shutdown on their side and cooperatively close. Another user inquired about what course of action to take if a commitment transaction will never confirm due to low fees. They suggested using out-of-band fee payment mechanisms such as confirmtx.com and pushtx.btc.com to get the transaction mined without an on-blockchain payment. In the future, SIGHASH flag magic could be used to add an extra input that could go to fees or add both a new input and output, where the difference goes to fees. However, this would change the TXID of the commitment transaction. If keeping the TXID intact is important, one solution would be to always add a small output to every commitment transaction that anyone can spend.</summary>
     <published>2018-01-15T02:01:36+00:00</published>
   </entry>
 </feed>

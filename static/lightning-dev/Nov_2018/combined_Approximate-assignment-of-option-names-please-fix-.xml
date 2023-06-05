@@ -2,15 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Approximate assignment of option names: please fix!</title>
-  <updated>2023-06-03T20:11:30.661237+00:00</updated>
+  <updated>2023-05-25T16:23:24.164527+00:00</updated>
+  <author>
+    <name>Corné Plooy 2018-11-27 15:54:27</name>
+  </author>
   <author>
     <name>Olaoluwa Osuntokun 2018-11-16 03:32:40</name>
   </author>
   <author>
     <name>Rusty Russell 2018-11-13 23:50:49</name>
-  </author>
-  <author>
-    <name>Corné Plooy 2018-11-27 15:54:27</name>
   </author>
   <author>
     <name>Rusty Russell 2018-11-12 23:49:06</name>
@@ -27,9 +27,9 @@
   <author>
     <name>ZmnSCPxj 2018-11-16 04:21:19</name>
   </author>
+  <link href="lightning-dev/Nov_2018/001677_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001619_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001588_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2018/001677_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001571_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001572_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001578_Approximate-assignment-of-option-names-please-fix-.xml" rel="alternate"/>
@@ -39,9 +39,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Approximate assignment of option names: please fix!</title>
-    <updated>2023-06-03T20:11:30.661237+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001619.html" rel="alternate"/>
-    <summary>The Lightning-dev mailing list has been discussing the feature masks for local and global bits in the Lightning Network. Rusty Russell suggests promoting local bits to global bits, but if every node will eventually support a bit, it should stay local. The OG AMP feature is spontaneous and may not have an invoice, so it should be a global feature. It is questioned whether to tie spontaneous payment to OG AMP or support one that is payable by base AMP or normal singlepath. Additionally, merging `option_switch_ephkey` and `option_og_amp` into `option_extra_onion_packet_types` is suggested as both require understanding extended onion packet types. Pierre challenges the current definition of local and global feature masks, arguing that he would like to advertise the fact that his node supports 'option_data_loss_protect,' which is a local feature. He further suggests getting rid of the global/local distinction and using node_features in the node_announcement message to describe the features that his node supports/requires and connection_features in the init message set for this particular connection. Corné Plooy suggests that the global/local distinction in routing might not be necessary as current features don't seem to require it, but Rusty suggests that users should not set compulsory feature bits in their node_announcements unless they want to stop routing.ZmnSCPxj and Olaoluwa Osuntokun discuss the nature of OG AMP payments in Lightning, with ZmnSCPxj arguing that OG AMP payments are spontaneous and may not require an invoice, whereas Osuntokun believes that invoices can still be used to tag payments. The use of an 8-byte identifier in the invoice can signal a service or good to be dispersed once a payment is received. Rusty Russell prompts the developers to edit their feature bits as appropriate before he assigns bit numbers. The email thread aims to assign bit numbers soon and can be found on the Lightning-dev mailing list.</summary>
-    <published>2018-11-16T03:32:40+00:00</published>
+    <updated>2023-05-25T16:23:24.164527+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001677.html" rel="alternate"/>
+    <summary>The Lightning Network developers are currently discussing the distinction between local and global features. The network specification divides feature masks into local and global categories, where local features concern direct peers, and global features can affect HTLCs, thus being advertised to other nodes as well. Rusty Russell expected local features to become more common over time, so by the time an implementation decided "I don't even want to talk to nodes without feature X", most nodes would support that feature.However, there is a debate about whether people want to pre-filter by local features and if so, only some local features or all of them. This has led to suggestions for making the ones people want global features or removing the local/global distinction altogether. Pierre questions the sense of this definition and suggests getting rid of the global/local distinction and instead having a node_features that describes features a node supports/requires and a connection_features that are set for this particular connection. They should match.Corne Plooy suggests that keeping the distinction is useful to avoid gossiping everything for privacy reasons, but current features don't seem to need this. Rusty points out that the distinction matters for compulsory features because if you don't understand a global feature, you can't route through a node, but if you don't understand a local feature, you can't connect to a node. ZmnSCPxj argues that OG AMP is inherently spontaneous in nature, and therefore there might not exist an invoice to put the feature on.The context also describes the process of depositing to an exchange and receiving an invoice that includes a new feature indicating acceptance of AMP payments with an 8-byte identifier. This inclusion signals the exchange to credit the account with the deposit once all payments arrive, which can be generalized to any case where a service or good is to be dispersed after receiving payment. A discussion on Lightning-dev mailing list mentions the spontaneous nature of OG AMP and the possibility of tying spontaneous payment to OG AMP or supporting one that is payable by base AMP or normal singlepath. The message also suggests merging `option_switch_ephkey` and `option_og_amp` into `option_extra_onion_packet_types`.Rusty Russell went through the wiki and made up option names for feature masks that are split into local and global features affecting protocol between nodes and HTLCs. The post requests editing of bits for assigning bit numbers soon. The specifications mentioned in the conversation are available at https://github.com/lightningnetwork/lightning-rfc/wiki/Lightning-Specification-1.1-Proposal-States.</summary>
+    <published>2018-11-27T15:54:27+00:00</published>
   </entry>
 </feed>

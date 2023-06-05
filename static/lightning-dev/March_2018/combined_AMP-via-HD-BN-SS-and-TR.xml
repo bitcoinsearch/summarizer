@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - AMP via HD, BN+SS, and TR</title>
-  <updated>2023-06-03T18:36:27.267463+00:00</updated>
+  <updated>2023-05-24T22:20:49.095977+00:00</updated>
   <author>
     <name>ZmnSCPxj 2018-03-19 00:25:13</name>
+  </author>
+  <author>
+    <name>Andrew Poelstra 2018-03-19 14:57:57</name>
   </author>
   <author>
     <name>ZmnSCPxj 2018-03-20 02:32:16</name>
@@ -12,20 +15,17 @@
   <author>
     <name>ZmnSCPxj 2018-03-20 06:25:20</name>
   </author>
-  <author>
-    <name>Andrew Poelstra 2018-03-19 14:57:57</name>
-  </author>
   <link href="lightning-dev/March_2018/001100_AMP-via-HD-BN-SS-and-TR.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001106_AMP-via-HD-BN-SS-and-TR.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001107_AMP-via-HD-BN-SS-and-TR.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001109_AMP-via-HD-BN-SS-and-TR.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001106_AMP-via-HD-BN-SS-and-TR.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - AMP via HD, BN+SS, and TR</title>
-    <updated>2023-06-03T18:36:27.267463+00:00</updated>
+    <updated>2023-05-24T22:20:49.095977+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-March/001100.html" rel="alternate"/>
-    <summary>The email discusses the concept of atomic multipath payment (AMP), which has two main properties: it has a proof-of-payment and multipath decorrelation. The author explains the use of BIP32 hierarchically derived (HD) keys by Wuille to derive child keys from a parent key. The author also outlines how a conditional payment can be made, with the payee providing a private key that matches a public key, using Poelstra's Scriptless Script concept, which requires the Bellare-Neven (BN) signatures. Additionally, Maxwell's taproot construction is used to form the timelock half of an HTLC. The author proposes a method for multipath payments, wherein the payer derives multiple child keys and sets up conditional payments requiring revelation of each private child key. The payee waits until all partial payments are received before claiming them, as revelation of any one child key would reveal the parent private key serving as proof-of-payment. This method achieves atomicity in the sense that the payee cannot claim partial payments.The email conversation between ZmnSCPxj and Andrew Poelstra discusses the idea of making atomic multipath payments (AMP) with proof-of-payment and multi-path decorrelation properties. BIP32 hierarchically derived (HD) keys by Wuille are used to derive private and public child keys, and conditional payments require revelation of the private child key for each public key. Scriptless Script handles only the equivalent of hash locking while Taproot can form the timelock half of an HTLC. An "output has different spend conditions depending on who publishes to the chain" primitive using Graftroot is suggested as a powerful feature that nobody has noticed until recently. The email also mentions the use of adaptor signatures which are reblinded at each layer, allowing arbitrary sets of signatures to be made atomic, and using discrete logs as challenges makes reblinding and transferable proof-of-payment easy. The email concludes with Andrew mentioning his ongoing work in understanding Lightning and figuring out better ways to use scriptless scripts.</summary>
+    <summary>ZmnSCPxj recently proposed a new method for multipath payments called Atomic Multipath Payment (AMP) system in a discussion on the Lightning-dev mailing list. This system has two key properties: proof-of-payment and multipath decorrelation. It is based on BIP32 hierarchically derived keys by Wuille, where a parent private key can derive k_i child keys for integer i, and K_i public child keys can be derived for integer i as well.To perform a multipath payment, the invoice contains the parent public key K_par. From this, the payer derives as many K_i as needed to split the payment. Each path has a different k_i, providing multipath decorrelation. Conditional payments are required, which can only be performed if the payee provides a private key that matches a public key. Scriptless Script (SS) concept handles only the equivalent of hashlocking; hence we still need a timelock in case the payee refuses to reveal the proof-of-payment t. The payee receiving a partial payment is not incentivized to claim it immediately because revealing even one child key k_i will reveal the parent private key k_par that serves as proof-of-payment. The payee waits to claim all partial payments until the entire payment arrives at the payee. Andrew Poelstra confirmed that this method is feasible by replacing hash challenges with adaptor signatures that are reblinded at each layer. Furthermore, the email ends with further discussion on using adaptor signatures and Graftroot for a more powerful output spend condition.Overall, this proposal offers an alternative to atomic multi-path payments, where the payee can claim any partial payments even if the entire payment has not yet arrived, which may be useful in scenarios where the parent secret key k_par is valuable.</summary>
     <published>2018-03-19T00:25:13+00:00</published>
   </entry>
 </feed>

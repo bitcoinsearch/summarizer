@@ -2,46 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Increase channel-jamming capital requirements by not counting dust HTLCs</title>
-  <updated>2023-06-04T01:20:26.717625+00:00</updated>
+  <updated>2023-05-23T14:40:19.523592+00:00</updated>
   <author>
-    <name>Eugene Siegel 2021-04-23 15:58:18</name>
-  </author>
-  <author>
-    <name>Bastien TEINTURIER 2021-04-23 16:24:26</name>
-  </author>
-  <author>
-    <name>Bastien TEINTURIER 2021-04-24 08:01:28</name>
-  </author>
-  <author>
-    <name>Eugene Siegel 2021-04-23 21:44:07</name>
+    <name>Matt Corallo 2021-04-26 15:08:18</name>
   </author>
   <author>
     <name>Matt Corallo 2021-04-24 04:02:38</name>
   </author>
-  <author>
-    <name>Bastien TEINTURIER 2021-04-26 07:13:00</name>
-  </author>
-  <author>
-    <name>Eugene Siegel 2021-04-26 15:03:15</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-04-26 15:08:18</name>
-  </author>
-  <link href="lightning-dev/April_2021/003005_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2021/003007_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2021/003015_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2021/003008_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2021/003009_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2021/003017_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2021/003018_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
   <link href="lightning-dev/April_2021/003019_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2021/003009_Increase-channel-jamming-capital-requirements-by-not-counting-dust-HTLCs.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Increase channel-jamming capital requirements by not counting dust HTLCs</title>
-    <updated>2023-06-04T01:20:26.718624+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-April/003005.html" rel="alternate"/>
-    <summary>In the context provided, Eugene Siegel proposed a simple mitigation to increase the capital requirement of channel-jamming attacks. This would prevent an unsophisticated attacker with low capital from jamming a target channel. The proposal suggests trimming dust HTLC outputs in commitment transactions while still allowing for 483 non-dust HTLCs per side to be included. However, Bastien Teinturier pointed out that dust HTLCs count towards the 483 HTLC limit because of `update_fee`, which could lead to other kinds of attacks if the limit is exceeded. Despite this concern, there are no downsides to the proposal besides code-writing, and it can raise the capital requirement of channel-jamming so that each HTLC must be non-dust, rather than spamming 1 sat payments.The Lightning-dev mailing list discussed Eugene Siegel's proposal to increase the capital requirement of channel-jamming attacks. In the commitment transaction, dust HTLC outputs will be trimmed, but the reason for the 483 HTLC limit each side has in the spec is to prevent commitment tx's from growing unreasonably large. Bastien Teinturier clarified that dust HTLCs count towards the 483 HTLC limit because of `update_fee`. Matt Corallo added that update_fee messages do not change the dust limit for outputs in a channel. Eugene Siegel's proposal aims to raise the capital requirement of channel-jamming so that each HTLC must be non-dust, rather than spamming 1 sat payments. He believes it is a free mitigation without any downsides, besides code-writing.There is also a discussion about the counting of dust and trimmed HTLCs towards max_accepted_htlcs. The speaker suggests that counting dust towards that amount should not be done. However, they express a need to think more about the issue where it's not possible to lower the feerate. This seems like a spec issue according to the speaker. The discussion revolves around the technicalities of Bitcoin Lightning Network (Lnd) and its implementation.Upon closer inspection, it appears that the spec already includes a statement advising against counting dust HTLCs. This information was brought to light after Eugene Siegel raised a concern regarding the possibility of lowering the feerate. While this issue does seem to be related to the spec, it is important to note that there is currently no in-protocol method for changing the dust limit, rendering the aforementioned concern irrelevant. It has been acknowledged that the same mistake had been made in the past and will be rectified moving forward.</summary>
-    <published>2021-04-23T15:58:18+00:00</published>
+    <updated>2023-05-23T14:40:19.523592+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-April/003019.html" rel="alternate"/>
+    <summary>A proposal was made by Eugene Siegel to mitigate channel-jamming attacks by increasing the capital requirement for unsophisticated attackers. The proposal suggests trimming dust HTLC outputs in a commitment transaction, as the reason for the 483 HTLC limit is to prevent commitment transactions from growing too large and ensure they can be included in a block. By not including dust HTLCs in this calculation, it would still allow for 483 non-dust HTLCs to be included. This would raise the capital requirement for channel-jamming so that each HTLC must be non-dust, rather than spamming with 1 sat payments. Bastien Teinturier raised concerns about the issue where it's not possible to lower the feerate if dust HTLCs are not counted, as some HTLCs that were previously dust won't be dust anymore and may exceed the 483 HTLC output limit. However, Eugene Siegel stated that there is no current in-protocol way to change the dust limit, so the issue doesn't apply here. Additionally, he suggested making changes to the update_fee message to include the dust limit for outputs in a channel.</summary>
+    <published>2021-04-26T15:08:18+00:00</published>
   </entry>
 </feed>
