@@ -98,9 +98,14 @@ class GenerateXML:
         print(f"Total chunks: {len(chunks)}")
 
         for chunk in chunks:
-            time.sleep(2)
-            summary = generate_chatgpt_summary(chunk)
-            summaries.append(summary)
+            while True:
+                try:
+                    time.sleep(2)
+                    summary = generate_chatgpt_summary(chunk)
+                    summaries.append(summary)
+                    break
+                except Exception as ex:
+                    print(ex)
 
         return summaries
 
@@ -114,21 +119,27 @@ class GenerateXML:
 
         if summary_length > max_length:
             print("entering in recursion")
-            return self.recursive_summary(body, tokens_per_sub_body // 2, max_length)
+            return self.recursive_summary("".join(summaries), tokens_per_sub_body, max_length)
         else:
             return summaries
 
     def gpt_api(self, body):
         body_length_limit = 2800
-        tokens_per_sub_body = 2000
+        tokens_per_sub_body = 2700
         summaries = self.recursive_summary(body, tokens_per_sub_body, body_length_limit)
 
         if len(summaries) > 1:
             print("Consolidate summary generating")
             summary_str = "\n".join(summaries)
-            time.sleep(2)
-            consolidated_summaries = consolidate_chatgpt_summary(summary_str)
+            while True:
+                try:
+                    time.sleep(2)
+                    consolidated_summaries = consolidate_chatgpt_summary(summary_str)
+                    break
+                except Exception as ex:
+                    print(ex)
             return consolidated_summaries
+
         else:
             print("Individual summary generating")
             return "\n".join(summaries)
@@ -250,6 +261,8 @@ class GenerateXML:
                 root = tree.getroot()
                 summary = root.find('atom:entry/atom:summary', namespace).text
                 return summary
+            else:
+                return cols['body']
 
         # combine_summary_xml
         # Get the operating system name
@@ -266,12 +279,12 @@ class GenerateXML:
             if len(title_df) == 1:
                 generate_local_xml(title_df.iloc[0], "0", url)
                 continue
-            combined_body = '\n\n'.join(filter(None, list(title_df.apply(get_summary_from_file, args=(url,), axis=1))))
             xml_name = self.clean_title(title)
             combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
             # combined_authors = list(title_df['authors'].apply(lambda x: x[0]))
             combined_authors = list(
                 title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
+            combined_body = '\n\n'.join(filter(None, list(title_df.apply(get_summary_from_file, args=(url,), axis=1))))
 
             month_year_group = title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
 
@@ -316,8 +329,8 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
-    # dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+    # dev_url = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
     delay = 50
