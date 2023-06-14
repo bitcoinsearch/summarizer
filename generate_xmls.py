@@ -1,5 +1,6 @@
 import os
 import re
+import traceback
 import time
 import pandas as pd
 from feedgen.feed import FeedGenerator
@@ -98,6 +99,7 @@ class GenerateXML:
         print(f"Total chunks: {len(chunks)}")
 
         for chunk in chunks:
+            count = 0
             while True:
                 try:
                     time.sleep(2)
@@ -105,7 +107,10 @@ class GenerateXML:
                     summaries.append(summary)
                     break
                 except Exception as ex:
-                    print(ex)
+                    count += 1
+                    if count > 5:
+                        break
+                    print(f"Chunk summary ran into error: {traceback.format_exc()}")
 
         return summaries
 
@@ -131,13 +136,17 @@ class GenerateXML:
         if len(summaries) > 1:
             print("Consolidate summary generating")
             summary_str = "\n".join(summaries)
+            count = 0
             while True:
                 try:
                     time.sleep(2)
                     consolidated_summaries = consolidate_chatgpt_summary(summary_str)
                     break
                 except Exception as ex:
-                    print(ex)
+                    count += 1
+                    if count > 5:
+                        break
+                    print(f"Consolidate summary ran into error {traceback.format_exc()}.")
             return consolidated_summaries
 
         else:
