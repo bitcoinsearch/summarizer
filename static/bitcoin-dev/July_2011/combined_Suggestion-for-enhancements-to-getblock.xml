@@ -2,10 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Suggestion for enhancements to getblock</title>
-  <updated>2023-05-26T19:15:10.497844+00:00</updated>
-  <author>
-    <name>Gregory Maxwell 2011-07-07 17:45:31</name>
-  </author>
+  <updated>2023-06-04T17:14:04.944015+00:00</updated>
   <author>
     <name>Andy Parkins 2011-07-07 09:49:47</name>
   </author>
@@ -57,7 +54,9 @@
   <author>
     <name>Andy Parkins 2011-07-07 09:49:47</name>
   </author>
-  <link href="bitcoin-dev/July_2011/000150_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
+  <author>
+    <name>Gregory Maxwell 2011-07-07 17:45:31</name>
+  </author>
   <link href="bitcoin-dev/July_2011/000143_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2011/000145_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2011/000147_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
@@ -75,13 +74,14 @@
   <link href="bitcoin-dev/July_2011/000151_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2011/000150_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2011/000143_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2011/000150_Suggestion-for-enhancements-to-getblock.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Suggestion for enhancements to getblock</title>
-    <updated>2023-05-26T19:15:10.498013+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-July/000150.html" rel="alternate"/>
-    <summary>In a discussion between two individuals, Andy Parkins and Mike Hearn, the topic of lightweight clients is discussed. Andy suggests that a lightweight client should be able to calculate a balance for an arbitrary address by requesting transactions pending and ensuring they are valid and in blocks. Mike argues that this is not feasible because there is no way for a client to know in advance whether any broadcast transaction contains a send to an address in its wallet. Furthermore, he suggests implementing filters to match against transactions and have the remote node only relay those matching transactions, which can be sent in one big inv after setting a filter. The conversation also touches on the idea of verifying the merkle tree and the scalability issues of downloading the entire memory pool.Dr. Andy Parkins, an alternative client and library developer, made a suggestion on the Bitcoin forum regarding protocol changes to improve a lightweight client's functionality. He proposed two changes that could be achieved by adding new commands to the protocol or by extending the existing getblocks command. Firstly, he suggested that the lightweight client should be able to request transactions instead of blocks. When finding a message type MSG_TX request, it would return the block that contains the transaction rather than sending the transaction. This way, the lightweight client can create a list of relevant hashes for the history it's after and look only at a few full blocks instead of the entire blockchain. Secondly, he suggested that a special virtual block request be possible. If a lightweight client sends a getblocks request containing an all-zero hash, then the virtual block should be returned in a block message. That virtual block will contain all the current pending transactions. The combination of these two protocol changes would make it possible for any client to have access to a large chunk of the facilities available on blockexplorer.com and bitcoincharts.com. The author also discusses the need to calculate balances for specific addresses and the difficulty of doing so without requiring the whole blockchain. They suggest implementing a filter that matches against transactions to relay only those relevant to the lightweight client's wallet addresses. Additionally, the author mentions the need for lightweight clients to be able to verify the validity of transactions and their dependencies recursively. Finally, the author acknowledges the challenge of building an alternative client and remaining 100% compatible with the official client.However, Mike Hearn pointed out that lightweight/SPV clients cannot prove that their transactions are not double spend. They must treat appearing deep in the chain as ipso-facto proof of validity and trust full nodes. He also suggested implementing filtering suggestions to reduce the privacy implications of downloading the entire memory pool. While Andy argued that filtering doesn't help when a client needs all the transactions pending in the last ten minutes, he agreed that new commands could be added to the protocol for these changes. The two also disagreed on whether introducing new commands to the official client is acceptable or not.</summary>
-    <published>2011-07-07T17:45:31+00:00</published>
+    <updated>2023-06-04T17:14:04.944015+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-July/000143.html" rel="alternate"/>
+    <summary>Bitcoin developer Mike Hearn and Dr. Andy Parkins discussed the possibility of allowing lightweight clients to calculate balances for specific addresses without requiring the entire blockchain. However, it was clarified that an index of all transactions is needed to prove a transaction's validity. Every incoming transaction has to be examined because there is no way for a client to know in advance whether any broadcast transaction contains a send to an address in its wallet. Furthermore, there is no way to know if transactions for an address in your wallet were contained in blocks missed while offline. Hearn expressed interest in supporting a split wallet feature where the private key is held elsewhere but the current balance in a particular address can still be reported.To improve the functionality of lightweight clients, the author of an email exchange suggests two changes to the Bitcoin protocol. The first change involves allowing the getblocks message to accept inventory items of type MSG_TX as well as MSG_BLOCK, which would allow a lightweight client to request only the block that contains a specific transaction, rather than having to download the entire blockchain. The second change involves the creation of a special virtual block request using an all-zero hash. This virtual block would list all current pending transactions and could be used by a lightweight client to check if a transaction sending coins to one of their addresses is pending.In a discussion thread on the Bitcoin forum, Mike Hearn suggested that appearing deep in the blockchain should be considered as proof of validity. This trust is essential for Lightweight/SPV clients and cannot be achieved any other way. The author believes these changes would give any client many of the facilities available in blockexplorer.com and bitcoincharts.com.Regarding the issue of requesting the current pending transaction list, implementing filtering suggestions would be more scalable than downloading the entire memory pool. Downloading the entire memory pool does not scale well, so it would be best to give remote nodes a filter to match against transactions and only relay those. Probabilistic filters can be set on different nodes to reduce privacy implications.In an email thread, Andy Parkins discussed a situation where he is only interested in the history of his wallet addresses and stores block headers only. When he receives a block broadcast with a transaction that sends coins to one of his addresses, he wants to request those transactions and ensure their validity and presence in blocks.</summary>
+    <published>2011-07-07T09:49:47+00:00</published>
   </entry>
 </feed>

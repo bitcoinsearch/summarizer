@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Bumping up against flood control limits again?</title>
-  <updated>2023-05-26T18:06:45.459769+00:00</updated>
+  <updated>2023-06-04T16:40:18.045943+00:00</updated>
   <author>
     <name>Mike Hearn 2011-06-14 16:44:41</name>
   </author>
@@ -43,9 +43,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Bumping up against flood control limits again?</title>
-    <updated>2023-05-26T18:06:45.459874+00:00</updated>
+    <updated>2023-06-04T16:40:18.045943+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-June/000015.html" rel="alternate"/>
-    <summary>Block sizes in the Bitcoin protocol are becoming a scalability issue. During testing of chain download, the user was disconnected because they exceeded the 10mb flood control limit. This flood control is a serious limitation for scalability, and solutions include raising the limit or simultaneously lowering the batch size. However, these solutions may hurt chain download speed in high latency environments. The flood limit could be based on size in bytes rather than the number of blocks.Furthermore, the P2P code was not written for large amounts of streaming data and requires improvement. Jeff Garzik noted that this is an unfortunate relic of how bitcoin P2P code is written. If the remote side has reduced their TCP window to zero, bitcoin will still buffer so that it may continue processing other P2P traffic from other nodes. That makes sense in the case of tiny, 31-byte address messages but not huge block chain download messages. The main goal was not flood control but preventing an internal buffer memory explosion. HTTP servers certainly don't buffer huge amounts in memory; they would keel over if so. HTTP servers have been working on the reverse, in fact: moving the data-pushing over to sendfile(2) syscall and similar optimizations. We already have the block chain on disk, so in theory, if we can eliminate the outgoing network buffer and simply use a pointer into the block chain file, we can send as much data as we want.Overall, block sizes need to be addressed to prevent further scalability issues. Mike Hearn wrote about this problem on June 14, 2011, noting that block sizes in the Bitcoin protocol had started to get quite large once again. The P2P code needs some serious thinking as it was not designed for huge amounts of streaming data. By eliminating the outgoing network buffer and using a pointer into the block chain file, we could send as much data as we want.</summary>
+    <summary>Bitcoin developer Mike Hearn has raised concerns about the growing block sizes which could lead to scalability issues in flood control. During testing, he was disconnected due to surpassing the 10mb flood control limit, caused by an average of 20kb per block at 500 blocks. He suggests two solutions; increase the flood control limit or raise the limit and decrease the batch size. However, lowering the batch size to 100 or even 50 could slow chain download speed in high latency environments, which is already a bottleneck. Mike Hearn proposes using a pointer into the block chain file as an alternative to prevent an internal buffer memory explosion. But the current P2P code is not equipped to handle huge amounts of streaming data and needs further development to resolve this issue. The P2P code was not initially written to handle large downloads, according to Jeff Garzik, who agreed with Hearn's concerns. The author requests input on how to best address this issue with the growing block sizes and flood control limitations.</summary>
     <published>2011-06-14T16:44:41+00:00</published>
   </entry>
 </feed>

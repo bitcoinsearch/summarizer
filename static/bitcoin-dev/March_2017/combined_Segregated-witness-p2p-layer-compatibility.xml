@@ -2,22 +2,50 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Segregated witness p2p layer compatibility</title>
-  <updated>2023-05-20T01:15:26.829211+00:00</updated>
+  <updated>2023-06-11T22:38:52.931320+00:00</updated>
+  <author>
+    <name>Suhas Daftuar 2017-03-27 19:22:43</name>
+  </author>
   <author>
     <name>Suhas Daftuar 2017-03-27 19:22:43</name>
   </author>
   <author>
     <name>Matt Corallo 2017-03-27 19:32:30</name>
   </author>
+  <author>
+    <name>Matt Corallo 2017-03-27 19:32:30</name>
+  </author>
+  <author>
+    <name>Eric Voskuil 2017-03-27 21:03:08</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2017-03-27 19:32:30</name>
+  </author>
+  <author>
+    <name>Eric Voskuil 2017-03-27 21:03:08</name>
+  </author>
+  <author>
+    <name>Eric Voskuil 2017-03-27 21:03:08</name>
+  </author>
+  <author>
+    <name>Suhas Daftuar 2017-03-27 19:22:43</name>
+  </author>
+  <link href="bitcoin-dev/March_2017/013811_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013811_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013812_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013812_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013814_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013812_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013814_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013814_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2017/013811_Segregated-witness-p2p-layer-compatibility.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Segregated witness p2p layer compatibility</title>
-    <updated>2023-05-20T01:15:26.829211+00:00</updated>
+    <updated>2023-06-11T22:38:52.932319+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013811.html" rel="alternate"/>
-    <summary>Recently, there have been discussions on peer-to-peer implementation details in Bitcoin Core's Segregated Witness code that require clarification. After SegWit activation, Bitcoin Core nodes will not download blocks from non-SegWit peers to prevent downloading invalid blocks without the necessary witness data. However, non-SegWit blocks will still be evaluated under the same rules as pre-SegWit versions of the software. At the consensus layer, non-SegWit blocks that are valid to older nodes are also valid to SegWit nodes. But at the peer-to-peer layer, SegWit-enabled nodes will only download those blocks if announced by a SegWit-enabled peer. The phrase "protocol requirements of SegWit" is confusing because it involves two different layers: the consensus protocol layer and the peer-to-peer protocol layer. In neither layer is the behavior of not downloading blocks from non-NODE WITNESS peers a "requirement". It is an implementation detail in the Bitcoin Core code that alternate implementations compliant with BIP 144 could implement differently.If a miner wants to continue mining post-SegWit activation but using pre-SegWit software, they would need to relay their blocks to a SegWit-enabled peer. There are several ways miners can do this, including using the RPC call "submitblock" on a SegWit-enabled node or explicitly delivering the block to a SegWit node over the P2P network. It is incorrect to say that "A miner running pre-SegWit code will produce blocks that no SegWit node will ever receive." Even though SegWit nodes will only download those blocks if announced by a SegWit-enabled peer, there are bridge nodes on the network, and miners have other options to relay their block.Therefore, it is important to highlight this detail and better document this behavior as it is essential for miners to be aware of. The issue deserves specific mention in a BIP. Although the testnet setup has only a few nodes acting as bridges, mainnet already has many systems that act as effective bridges today, including several relay networks in use that bypass the P2P network.In summary, Bitcoin Core nodes will not download blocks from non-SegWit peers after SegWit activation. Non-SegWit blocks are evaluated under the same rules as prior versions of the software and are valid to SegWit nodes. SegWit-enabled nodes will only download those blocks if announced by a SegWit-enabled peer at the P2P layer. Miners using pre-SegWit software can still relay their blocks to a SegWit-enabled peer through various means, such as using the RPC call "submitblock" or running a bridge node. It is important to better document this behavior for miners to be aware of, although there are currently bridge nodes on the network and miners have other options to relay their blocks.</summary>
+    <summary>The implementation of Segregated Witness (SegWit) in Bitcoin Core has been discussed on the bitcoin-dev mailing list. After SegWit activation, Bitcoin Core nodes will not attempt to download any blocks from non-SegWit peers for bandwidth optimization, but non-SegWit blocks are still valid to all nodes. Eric Voskuil suggested that pre-SegWit miners would produce blocks that no SegWit node would ever receive due to protocol requirements, but this is an implementation detail and alternate implementations could differ. Non-SegWit miners can relay their blocks to a SegWit-enabled peer through various methods, including using the RPC call "submitblock" or running a bridge node. It is noted that Bitcoin Core has been implemented to not see valid blocks announced by certain peers, but this can be worked around. Overall, although documentation needs improvement, non-SegWit miners' blocks are expected to get relayed post-SegWit activation through bridge nodes currently running.</summary>
     <published>2017-03-27T19:22:43+00:00</published>
   </entry>
 </feed>

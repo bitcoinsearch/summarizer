@@ -1,7 +1,7 @@
 import os
 import glob
 
-if __name__=="__main__":
+if __name__ == "__main__":
     # 1. List XML files that start with "combined".
     pattern = "combined*.xml"
     # combined_files = glob.glob(f"static/bitcoin-dev/**/{pattern}")

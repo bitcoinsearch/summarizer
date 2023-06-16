@@ -2,22 +2,74 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP 32.5</title>
-  <updated>2023-05-19T17:26:39.076230+00:00</updated>
+  <updated>2023-06-07T16:05:16.198852+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2013-08-20 08:35:29</name>
+  </author>
+  <author>
+    <name>Jeremy Spilman 2013-08-16 19:37:50</name>
+  </author>
   <author>
     <name>Gregory Maxwell 2013-08-16 02:26:29</name>
   </author>
   <author>
+    <name>Mike Hearn 2013-08-16 11:32:39</name>
+  </author>
+  <author>
+    <name>Peter Todd 2013-08-16 13:29:11</name>
+  </author>
+  <author>
+    <name>Jeremy Spilman 2013-08-16 19:37:50</name>
+  </author>
+  <author>
+    <name>Jeremy Spilman 2013-08-16 19:37:50</name>
+  </author>
+  <author>
     <name>Gregory Maxwell 2013-08-20 08:35:29</name>
   </author>
+  <author>
+    <name>Gregory Maxwell 2013-08-16 02:26:29</name>
+  </author>
+  <author>
+    <name>Mike Hearn 2013-08-16 11:32:39</name>
+  </author>
+  <author>
+    <name>Peter Todd 2013-08-16 13:29:11</name>
+  </author>
+  <author>
+    <name>Peter Todd 2013-08-16 13:29:11</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-08-16 02:26:29</name>
+  </author>
+  <author>
+    <name>Mike Hearn 2013-08-16 11:32:39</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2013-08-20 08:35:29</name>
+  </author>
+  <link href="bitcoin-dev/Aug_2013/003194_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003150_BIP-32-5.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2013/003128_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003132_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003135_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003150_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003150_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003194_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003128_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003132_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003135_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003135_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003128_BIP-32-5.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2013/003132_BIP-32-5.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2013/003194_BIP-32-5.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - BIP 32.5</title>
-    <updated>2023-05-19T17:26:39.076230+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-August/003128.html" rel="alternate"/>
-    <summary>The proposal suggests having a BIP32 addendum that recommends a specific deterministic DSA derandomization procedure to generate the DSA nonce. This is due to the risk of compromising DSA systems caused by poor randomness at runtime, which can allow for maliciously modified hardware wallets to leak keys material via signatures. The proposal argues that a fully deterministic signature would allow for complete test vectors in signing and complete confidence that there is no random number related weakness in a signing implementation. The use of even S values in signatures is also recommended to eliminate this source of mutability in transactions. The proposal acknowledges that industry is moving in the direction of derandomized DSA as it has become clear that DSA is hazardous otherwise. An alternative is implementing a still random construct where K is some H(message||key||random), but this loses the advantage of being able to externally verify that an implementation is not leaking information. Libcrypt has implemented derandomized DSA in git and the ed25519 signature system of DJB, et. al. also uses a similar derandomization. OpenSSL development has also implemented a form of this recently. The proposal concludes by suggesting that implementing even S values in signatures will become a network requirement for Bitcoin someday, but regardless, it makes sense to implement it as a best practice sooner rather than later. Gregory Maxwell is positive about the proposal and plans to start on an actual BIP document for it.</summary>
-    <published>2013-08-16T02:26:29+00:00</published>
+    <updated>2023-06-07T16:05:16.199851+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-August/003194.html" rel="alternate"/>
+    <summary>In August 2013, Gregory Maxwell suggested creating a BIP32 addendum to make signing-related recommendations. He highlighted blockchain.info's mywallet as another DSA duplicated K disaster occurring. The author proposes removing the "CS-PRNG" component from signing, which adds no value and detracts from deterministic signing benefits. However, the CS-PRNG is necessary for generating the root master key of an HD wallet, creating vulnerability if a single invocation is weak. The author suggests cumulative entropy collection over time through multiple sources to mitigate this risk and using smartphone sensors to provide additional entropy for increased protection.The author proposes a BIP32 addendum for specific deterministic recommendations for DSA derandomization procedures. Derandomized DSA has become industry practice as it eliminates hazards present otherwise. Maliciously modified hardware wallets could leak key material via signatures, even without producing insecure K values. Deterministic signatures make such misbehavior practically discoverable. The author recommends implementing a procedure for using only even S values in signatures, eliminating a source of mutability in transactions. A new BIP that includes the above recommendations would be implemented if reviewed positively.Bitcoin developer Mike Hearn questioned the necessity of hardware wallets in an email conversation from August 2013, expressing mistrust in both hardware wallets and computers. The discussion also touched on the lack of multisig support in the first version of TREZOR and the challenges of implementing P2SH support for sending payments through Android wallets.</summary>
+    <published>2013-08-20T08:35:29+00:00</published>
   </entry>
 </feed>

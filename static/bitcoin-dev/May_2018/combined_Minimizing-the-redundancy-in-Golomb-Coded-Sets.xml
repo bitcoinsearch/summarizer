@@ -2,26 +2,74 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Minimizing the redundancy in Golomb Coded Sets</title>
-  <updated>2023-05-20T16:31:44.001008+00:00</updated>
+  <updated>2023-06-13T02:57:21.236645+00:00</updated>
   <author>
     <name>Pieter Wuille 2018-05-25 17:54:17</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-05-25 18:42:41</name>
   </author>
   <author>
     <name>Gregory Maxwell 2018-05-25 21:13:55</name>
   </author>
   <author>
+    <name>Pieter Wuille 2018-05-25 17:54:17</name>
+  </author>
+  <author>
     <name>Gregory Maxwell 2018-05-25 18:42:41</name>
   </author>
+  <author>
+    <name>Jim Posen 2018-05-29 22:38:01</name>
+  </author>
+  <author>
+    <name>Lucas Ontivero 2018-05-30 03:10:04</name>
+  </author>
+  <author>
+    <name>Jim Posen 2018-05-29 22:38:01</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-05-25 21:13:55</name>
+  </author>
+  <author>
+    <name>Lucas Ontivero 2018-05-30 03:10:04</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2018-05-25 17:54:17</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-05-25 18:42:41</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-05-25 21:13:55</name>
+  </author>
+  <author>
+    <name>Lucas Ontivero 2018-05-30 03:10:04</name>
+  </author>
+  <author>
+    <name>Jim Posen 2018-05-29 22:38:01</name>
+  </author>
   <link href="bitcoin-dev/May_2018/016029_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
-  <link href="bitcoin-dev/May_2018/016031_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2018/016030_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016031_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016029_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016030_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016039_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016041_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016039_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016031_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016041_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016029_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016030_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016031_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016041_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2018/016039_Minimizing-the-redundancy-in-Golomb-Coded-Sets.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Minimizing the redundancy in Golomb Coded Sets</title>
-    <updated>2023-05-20T16:31:44.001008+00:00</updated>
+    <updated>2023-06-13T02:57:21.236645+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-May/016029.html" rel="alternate"/>
-    <summary>Pieter Wuille posted on the bitcoin-dev mailing list proposing an optimal parameter selection for the Golomb Coded Sets that are proposed in BIP158. He found that if we want a false positive rate (FP rate) of exactly 1 in 2^20, the Rice parameter should be 19, not 20. However, if we don't want this FP rate, we should pick an FP rate of 1 in a 1.4971*2^B. For example, M=784931 B=19 or M=1569861 B=20. Gregory Maxwell replied to Pieter's post saying that if the configuration is roughly right, then M=784931 B=19 should be used, as it was a paste error. Another user did a rough analysis using Pieter's approximations on what parameters minimize the total communications for a lite wallet scanning the chain and fetching a witnessless block whenever they get a filter hit. For a wallet with 1000 keys and blocks of 1MB, if the number of entries in the filter is at least 5096, then M=784931 results in a lower total data rate (FP blocks + filters) than M=1569861. The optimal value for the rice parameter 18 is M=392465, which is better if at least 10192 entries are set, and optimal FP for rice 17 is M=196233, which is better if at least 20384 entries are set. The prior filter set proposal sets roughly 13300 entries per full block, and it is estimated that the in+out scripts only ones are setting about 7500 entries. Assuming that all-scripts inputs and outputs (but no txids) are used and that the guess of 7500 bits set for that configuration is roughly right, then M=1569861 and rice parameter 19 should be used. The actual optimal FP rate for total data transferred won't be one that gets the optimal rice coding efficiency, but since different clients will be monitoring for different numbers of keys, it probably makes sense to pick a parameter with optimal compression rather than optimal-data-transfer-for-a-specific-key-count.</summary>
+    <summary>Pieter Wuille spent time working on the optimal parameter selection for the Golomb Coded Sets proposed in BIP158. He suggested that if an FP rate of exactly 1 in 2^20 is required, then the Rice parameter should be 19 instead of 20. If not, then an FP rate of 1 in a 1.4971*2^B should be picked. The approximations were used to analyze what parameters minimize total communications for lite wallet scanning. When using all-scripts inputs and outputs (but no txids), it is estimated that roughly 7500 bits will be set. Therefore, M=1569861 and rice parameter 19 should be used to achieve the actual optimal FP rate for total data transferred.In an email on May 25, 2018, Gregory Maxwell corrected a previous statement regarding configuration and stated that M=784931 and rice parameter 19 should be used. Jim Posen conducted an analysis of selecting a good P value to reduce total data downloaded using Golomb-Rice filters on mainnet. He determined that the optimal B parameter for different numbers of filter elements watched by the client ranges from 13 to 23. In particular, for C = 10, B = 13 is optimal; for C = 100, B = 16 is optimal; for C = 1,000, B = 20 is optimal; and for C = 10,000, B = 23 is optimal.The author has also conducted an analysis on selecting a good P value to reduce total data downloaded considering both filters themselves and blocks in the case of false positive matches, using data from mainnet. The quantity it minimizes is based on the number of filter elements per block (N), Golomb-Rice coding parameter (B), and the number of filter elements watched by the client (C). The main result shows that for different values of C, the optimal value of B ranges from 13 to 23. Any value of B in the range 16 to 20 seems reasonable, with M=1.4971 * 2^B for optimal compression. The selection of the parameter depends on the target number of elements that a client may watch.In response to Posen's findings, Pieter Wuille asked for the CSV to help with developing a Wallet that uses Golomb-Rice filters.</summary>
     <published>2018-05-25T17:54:17+00:00</published>
   </entry>
 </feed>

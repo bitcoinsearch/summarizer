@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Extension block softfork proposal</title>
-  <updated>2023-05-20T00:48:57.017362+00:00</updated>
+  <updated>2023-06-11T21:15:38.076811+00:00</updated>
+  <author>
+    <name>Johnson Lau 2017-01-26 09:39:43</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2017-01-28 00:35:55</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-01-26 09:39:43</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2017-01-28 00:35:55</name>
+  </author>
   <author>
     <name>Johnson Lau 2017-01-26 09:39:43</name>
   </author>
@@ -11,13 +23,17 @@
   </author>
   <link href="bitcoin-dev/Jan_2017/013490_Extension-block-softfork-proposal.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2017/013510_Extension-block-softfork-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013490_Extension-block-softfork-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013510_Extension-block-softfork-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013490_Extension-block-softfork-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2017/013510_Extension-block-softfork-proposal.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Extension block softfork proposal</title>
-    <updated>2023-05-20T00:48:57.017362+00:00</updated>
+    <updated>2023-06-11T21:15:38.076811+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-January/013490.html" rel="alternate"/>
-    <summary>The proposal submitted by Johnson Lau suggests a pre-BIP that introduces extension blocks, providing more block space through a soft fork that is completely transparent to existing wallets. The proposal aims to not break any current security assumptions while defining new terminology, such as bridging witness program, xblock, and xUTXO. The author argues that the use of extension blocks sets the network up for terrible precedent and a massive risk, allowing large miners and economic users to force others to switch to new consensus rules with potentially little consensus or review.To send bitcoins from the main UTXO to the xUTXO, the proposal suggests sending money to a new form of witness program wrapped by P2SH. Users can then trade inside the xblock just like in the main block. However, sending money back to the main block from the xblock requires a returning transaction, which is a special xtx sending money to a bridging witness program with a direction flag of 0x01. These bridging witness programs won’t be recorded in the xUTXO set, and an output is added to the integrating tx, with the bridging witness program and corresponding value called the “returning UTXO”. The returning UTXOs are not spendable until confirmed by 100 blocks, ensuring security. The proposal also discusses the limitations of legacy wallets when sending money to decentralized markets, stating that the returning UTXO cannot have an arbitrary scriptPubKey and must use a special output scriptPubKey to guarantee the recipient understands the implications. The proposal raises questions on whether the design could be simplified without compromising security, whether it is acceptable to do it without the 100-block maturity requirement, thus breaking some long-held assumptions, and if 100-block is an overkill. In terms of user experience, the proposal drastically changes it, as no current users (except miners) would expect such 100-block freezing. The direction flag is needed to ensure the recipient won't be paid with a returning transaction unless explicitly requested, and it might be combined with the serialized witness version to save one byte. However, decentralized markets using simple hash-time-locked txs may allow people to exchange value between block and xblock, bypassing the 100 block requirement, which is cheaper. Ultimately, the proposal argues that the idea of miners soft-forking in sidechains is a massive risk, making it a social cost rather than an individual trust problem.</summary>
+    <summary>A proposal has been made for implementing extra block space through a soft-fork without compromising existing security assumptions and being transparent to existing wallets. The new wallets taking advantage of the extra block space will have a different user experience. The proposal defines terminology such as main block/tx/UTXO, extension transaction/block/UTXO, bridging witness program, integrating UTXO/transaction, returning transaction, fees collection in xblock, and xblock commitment.The email discusses the controversial idea of an extension block, which would allow for more block space through a soft fork. While soft forks are generally preferable to hard forks, the extension block proposal enters into "coerciveness" territory. The email argues that this sets us up for some pretty terrible precedent; the idea that miners will start soft-forking in sidechains is a massive risk. Finally, the email emphasizes that while this may be an interesting academic topic, there is a significant social cost associated with implementing an extension block.On a different note, the proposal describes a method for sending bitcoins from the main UTXO to an xUTXO, where people can trade inside the xblock just like in the main block. The integration of UTXO and transaction is explained in detail, including special bridging witness programs for returning transactions and fees collection in xblock. The proposal also discusses the challenge of sending money back from the xblock to the main block, which requires 100-block maturity for the returning UTXO.The author acknowledges that this drastically changes the user experience and suggests the use of a decentralized market to exchange value between the blocks. The proposal raises questions about simplifying the design without compromising security, eliminating the 100-block maturity requirement, and reducing the maturity time. The direction flag is needed to ensure that the recipient won't be paid with a returning transaction unless explicitly requested and may be combined with the serialized witness version to save one byte. Overall, the proposal is presented for discussion on the bitcoin-dev mailing list.</summary>
     <published>2017-01-26T09:39:43+00:00</published>
   </entry>
 </feed>

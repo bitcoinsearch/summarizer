@@ -2,22 +2,62 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Attack by modifying non-segwit transactions after segwit is accepted ?</title>
-  <updated>2023-05-19T23:51:27.424817+00:00</updated>
+  <updated>2023-06-11T19:55:57.923569+00:00</updated>
+  <author>
+    <name>Sergio Demian Lerner 2016-08-24 20:51:47</name>
+  </author>
+  <author>
+    <name>Sergio Demian Lerner 2016-08-26 13:16:36</name>
+  </author>
+  <author>
+    <name>Sergio Demian Lerner 2016-08-24 20:51:47</name>
+  </author>
   <author>
     <name>Johnson Lau 2016-08-25 01:49:34</name>
   </author>
   <author>
     <name>Johnson Lau 2016-09-01 11:29:29</name>
   </author>
+  <author>
+    <name>Johnson Lau 2016-08-25 01:49:34</name>
+  </author>
+  <author>
+    <name>Sergio Demian Lerner 2016-08-26 13:16:36</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2016-08-25 01:49:34</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2016-09-01 11:29:29</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2016-09-01 11:29:29</name>
+  </author>
+  <author>
+    <name>Sergio Demian Lerner 2016-08-26 13:16:36</name>
+  </author>
+  <author>
+    <name>Sergio Demian Lerner 2016-08-24 20:51:47</name>
+  </author>
+  <link href="bitcoin-dev/Aug_2016/013071_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013084_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013071_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2016/013074_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2016/013094_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013074_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013084_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013074_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2016/013094_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2016/013094_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013084_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2016/013071_Attack-by-modifying-non-segwit-transactions-after-segwit-is-accepted-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Attack by modifying non-segwit transactions after segwit is accepted ?</title>
-    <updated>2023-05-19T23:51:27.424817+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-August/013074.html" rel="alternate"/>
-    <summary>The Bitcoin code has a consensus rule that adding witness data to a non-segwit script is invalid. A PR has been created to detect such violations and ban the peer early. The link to the PR is provided for interested parties to review. Additionally, an alternative approach to running scripts of incoming transactions has been suggested, which involves validating utxos as a major part of validation. A conversation between Sergio Demian Lerner and Johnson Lau about the topic is also included in the context. They discuss how a check in the code prevents this attack and clarify that there is no real attack, despite discussions on Reddit. Lerner notes that he is asking the community for clarification, not asserting the existence of a vulnerability. The segwit code is complex, and some key parts of the consensus code are spread over the source files. Overall, it is important for interested parties to review the links provided and ask questions when necessary to ensure proper functioning of the code.</summary>
-    <published>2016-08-25T01:49:34+00:00</published>
+    <updated>2023-06-11T19:55:57.923569+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-August/013071.html" rel="alternate"/>
+    <summary>A potential vulnerability in the segwit code has been discussed on Bitcoin Improvement Proposals (BIP), where a malicious node could receive a non-segwit transaction and re-format it into a segwit transaction with up to 400 Kbytes of segwit witness program data, resulting in both transactions having the same hash. Although this large modified transaction would likely not be properly relayed by the network due to low fees per byte, an attacker could modify the original transaction adding segwit witness program data only up to the point where the transaction is relayed but miners are discouraged to include it in blocks due to low fees/byte, successfully preventing the transaction from being mined. Another issue is that an attacker can encode arbitrary data, such as virus signatures or illegal content, into passing non-segwit transactions. One proposed solution is to increase the transaction version to 3 for segwit transactions, so a non-segwit transaction cannot be converted into a segwit transaction without changing the transaction hash. However, this does not solve all problems, as transactions having a mixture of segwit and non-segwit inputs could still suffer the same attack even if they are version 3. A simple check to prevent most of the problems would be to add a rule to IsStandardTX() that prevents witness programs from having a stack element of length greater than MAX_SCRIPT_ELEMENT_SIZE. It has been clarified that adding witness data to a non-segwit script is invalid by consensus. Johnson Lau responded to a post clarifying that there is no real attack and provided links to relevant code. Lau also shared a pull request that detects such violations early and bans the peer and suggested another approach by running the scripts of all incoming transactions, making validation easier. The discussion highlights the complexities of the segwit code and ways to prevent potential attacks or vulnerabilities. Relevant links to code and pull requests are provided for further reference.</summary>
+    <published>2016-08-24T20:51:47+00:00</published>
   </entry>
 </feed>

@@ -2,22 +2,62 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - SIGHASH_ANYPREVOUT proposal</title>
-  <updated>2023-05-20T20:29:05.448705+00:00</updated>
+  <updated>2023-06-13T18:52:10.115322+00:00</updated>
   <author>
     <name>Anthony Towns 2019-05-10 20:38:04</name>
   </author>
   <author>
+    <name>Rusty Russell 2019-05-27 01:26:01</name>
+  </author>
+  <author>
     <name>Anthony Towns 2019-05-22 20:11:31</name>
   </author>
+  <author>
+    <name>Rusty Russell 2019-05-27 01:26:01</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-05-22 20:11:31</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-05-10 20:38:04</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-05-27 01:26:01</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-05-10 20:38:04</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-05-22 02:47:31</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-05-22 02:47:31</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-05-22 20:11:31</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-05-22 02:47:31</name>
+  </author>
   <link href="bitcoin-dev/May_2019/016929_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016983_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2019/016944_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016983_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016944_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016929_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016983_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016929_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016938_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016938_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016944_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016938_SIGHASH-ANYPREVOUT-proposal.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - SIGHASH_ANYPREVOUT proposal</title>
-    <updated>2023-05-20T20:29:05.448705+00:00</updated>
+    <updated>2023-06-13T18:52:10.115322+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-May/016929.html" rel="alternate"/>
-    <summary>In this email, ajtowns shared a BIP draft that enables SIGHASH_ANYPREVOUT and SIGHASH_ANYPREVOUTANYSCRIPT on top of taproot/tapscript. The author expressed caution about the implementation of ANYPREVOUT signature due to several issues that came up during its development. In contrast, taproot has a roughed-out security proof for over a year now. The draft includes an additional regular signature to accompany every ANYPREVOUT signature to limit possible negative impacts. The theory assumes that the private key for that signature is maintained similarly to current transactions, but it may not survive adversarial reality. ajtowns shared some interesting features of the BIP draft, such as upgrading tapscript's existing CHECKSIG, demonstrating how to use the taproot internal key as the public key for CHECKSIG operations in script, and having two variants, ANYPREVOUT and ANYPREVOUTANYSCRIPT, which seems helpful for eltoo. The author discussed the safety of funds in Bitcoin and suggested that funds are safe in Bitcoin if they're held in a cryptographically secured UTXO under enough proof of work that a reorg is unlikely. The author believes that as long as personal use of ANYPREVOUT is only to sign transactions that pay the money back to oneself, the funds will remain safe. Making ANYPREVOUT only available via script is aligned with this notion. However, the author acknowledged that there may be other ways in which ANYPREVOUT is scary that could be formalized and addressed. Finally, ajtowns added that ANYPREVOUT may not be compatible with luke's "malleability proof" wallet idea.</summary>
+    <summary>Bitcoin developer Rusty Russell has proposed changes to the SIGHASH_ANYPREVOUT feature in a BIP draft shared on bitcoin-dev. While he believes that taproot is ready for implementation, he expresses less confidence in ANYPREVOUT's readiness due to potential unforeseen problems despite its existence for years.Russell suggests renaming it to SIGHASH_UNSAFE_ANYPREVOUT and adding a warning about its unsafe nature for general wallet usage. He also proposes finding a way to make ANYPREVOUT safe enough so that it doesn't require scary warnings. However, he disagrees with Anthony Towns' suggestion that an individual only uses ANYPREVOUT to sign transactions that pay the money back to themselves, believing that sharing with an untrusted party is insecure without further complex arrangements.The discussion on the safety of ANYPREVOUT continues between Rusty and Anthony. Rusty notes the concern of using correctly but nasty gotchas inherent in rebinding. However, that concern is fully addressed by Don't Reuse Addresses. Finally, he highlights four reasons why he believes the benefits of chaparones do not justify enshrining their complexity into the protocol, including that they don't seem to help with accidental key reuse and that miners can reorg and invalidate downstream txs.Anthony Towns shares a follow-up BIP draft enabling SIGHASH_ANYPREVOUT and SIGHASH_ANYPREVOUTANYSCRIPT on top of taproot/tapscript. The BIP draft and a sample implementation based on the taproot branch are available via links provided by the author. The implementation includes interesting features such as how to upgrade tapscript's existing opcodes for new SIGHASH methods or potentially a new signature scheme, a new elliptic curve, or other public key schemes. Additionally, there are two variants of ANYPREVOUT: ANYPREVOUT and ANYPREVOUTANYSCRIPT, which seems useful for eltoo.Russell believes that making ANYPREVOUT only available via script is aligned with keeping funds safe. Although it is not compatible with Luke's "malleability proof" wallet idea, it does not add any systemic risk if someone else reuses its addresses. He suggests eliminating chaparone signature requirements due to their complexity not being justified by their benefits. However, he notes that this principle will remain true with ANYPREV because for lightning, the locktime will be fairly high before these transactions are generally spendable and doing this would require special software. Lastly, he feels that objections to rebinding must be backed by facts.</summary>
     <published>2019-05-10T20:38:04+00:00</published>
   </entry>
 </feed>
