@@ -3,7 +3,7 @@ import calendar
 import os
 import openai
 from dotenv import load_dotenv
-from flask import Flask, request, Response, render_template, url_for, abort
+from flask import Flask, request, Response, render_template, url_for, abort, send_file
 import feedparser
 import xml.etree.ElementTree as ET
 from flask_frozen import Freezer
@@ -61,7 +61,7 @@ def save_static_html(endpoint, dev_name, year_month, type_by, build_path):
         os.makedirs(html_folder_path, exist_ok=True)
         html_file_path = os.path.join(html_folder_path, f"{year_month}.html")
 
-        with open(html_file_path, "w") as f:
+        with open(html_file_path, "w", encoding="utf-8") as f:
             f.write(html)
 
 
@@ -253,6 +253,22 @@ def display_feed(dev_name, year_month, filename):
     else:
         return render_template('feed.html', feed=xml_feed, dev_name=dev_name, year_month=year_month,
                                filename=filename)
+
+
+@app.route('/<dev_name>/<year_month>/<filename>')
+def display_xml(dev_name, year_month, filename):
+    original_file_path = f"./static/{dev_name}/{year_month}/{filename}"
+    combined_filename = "combined_" + "_".join(filename.split("_")[1:])
+    combined_file_path = f"./static/{dev_name}/{year_month}/{combined_filename}"
+
+    if os.path.exists(original_file_path):
+        file_path = original_file_path
+    elif os.path.exists(combined_file_path):
+        file_path = combined_file_path
+    else:
+        return f"Error: {filename} not found in {year_month}", 404
+
+    return send_file(file_path, mimetype='text/xml')
 
 
 if __name__ == '__main__':
