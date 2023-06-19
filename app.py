@@ -10,6 +10,7 @@ from flask_frozen import Freezer
 import re
 from flask import Flask
 from markupsafe import Markup
+import shutil
 
 from src.logger import setup_logger
 
@@ -65,6 +66,15 @@ def save_static_html(endpoint, dev_name, year_month, type_by, build_path):
             f.write(html)
 
 
+def save_static_xml(dev_name, year_month, filename, build_path):
+    original_file_path = os.path.join(app.root_path, f"static/{dev_name}/{year_month}/{filename}")
+    xml_folder_path = os.path.join(build_path, dev_name, year_month)
+    os.makedirs(xml_folder_path, exist_ok=True)
+    xml_file_path = os.path.join(xml_folder_path, filename)
+
+    shutil.copyfile(original_file_path, xml_file_path)
+
+
 def generate_url_list(build_path=None):
     url_list = []
     data = get_year_month_data()
@@ -85,6 +95,7 @@ def generate_url_list(build_path=None):
 
             posts, _, _ = parse_xml_files(folder)
             for post in posts:
+                save_static_xml(row["dev_name"], year_month, post["filename"], build_path)
                 url_list.append(
                     url_for("display_feed", dev_name=row["dev_name"], year_month=year_month, filename=post["filename"]))
 
