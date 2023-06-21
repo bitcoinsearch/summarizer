@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Liquidity griefing for 0-conf dual-funded txs</title>
+  <updated>2023-06-21T00:44:44.142086+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-06-07 09:46:36+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Liquidity griefing for 0-conf dual-funded txs</title>
+    <updated>2023-06-21T00:44:44.142125+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003975.html" rel="alternate"/>
+    <summary>The challenge of liquidity griefing attacks from malicious peers can occur when using dual-funded transactions in lightning. Locking utxos after adding them to a shared transaction and the remote node going silent can result in locked, unusable liquidity. A solution is to never lock utxos used in dual-funded transactions. However, this approach falls short when using 0-conf due to accidental double-spending of a 0-conf channel resulting in loss of funds for one of the peers. To prevent this, a reasonable mid-term solution is to use v3 transactions for channel funding and splicing. In the longer term, some form of anti-DoS token will be needed to avoid this class of issue. Nodes that want to offer 0-conf channels need to ensure that the utxos they use for 0-conf are isolated from those used for non 0-conf to prevent double-spending. A "soft lock" can be used when selecting utxos for a non 0-conf funding attempt. Eclair's current approach is opportunistic 0-conf, which allows for immediate use of the channel if certain conditions are met. Longer-term solutions include mitigating channel jamming with the Staking Credentials framework, which could be deployed by dual-funding market-makers beyond routing hops. The dual-funding initiator should pay to the maker a fee scale up on the amount of UTXOs contributed, and some worst-case liquidity griefing scenario. Another solution is to enforce that any contributed outputs must be encumbered by a 1 CSV, unless being a 2-of-2 funding. Nodes can also disable inbound payments or require a longer cltv_expiry_delta than usual in case of mempool fee spikes delaying the 0-conf chain confirmation.</summary>
+    <published>2023-06-07T09:46:36+00:00</published>
+  </entry>
+</feed>

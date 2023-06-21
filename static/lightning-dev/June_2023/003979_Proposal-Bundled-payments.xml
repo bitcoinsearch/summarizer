@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Proposal: Bundled payments</title>
+  <updated>2023-06-21T00:48:59.527875+00:00</updated>
+  <author>
+    <name>Thomas Voegtlin 2023-06-14 08:09:45+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Proposal: Bundled payments</title>
+    <updated>2023-06-21T00:48:59.527905+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003979.html" rel="alternate"/>
+    <summary>Thomas Voegtlin, the founder of Electrum wallet, has proposed an extension to BOLT-11 that would enable two bundled payments with distinct preimages and amounts within a single invoice. The use case is for services such as submarine swaps and JIT channels that require a mining fee prepayment in order for a non-custodial exchange to take place. Service providers currently ask for prepayments due to no guarantees that the client will actually claim the payment. The issue lies with competitors who do not require a dedicated wallet, such as the Boltz exchange, and are vulnerable to DoS attacks where the attacker forces them to pay on-chain fees. This separation between wallet and submarine swap providers is what would enable competition. Lightning Loop could benefit from that by distributing an app that does not require a local LND instance. This would vastly increase your potential user base. The only ingredient that is missing is the bundling of fee prepayment and main payment in the same invoice. The semantics of bundled payments include two preimages and two amounts: prepayment and main payment. The receiver should wait until all the HTLCs of both payments have arrived before they fulfill the HTLCs of the pre-payment. If the main payment does not arrive, they should fail the pre-payment with an MPP timeout. Once the HTLCs of both payments have arrived, the receiver fulfills the HTLCs of the prepayment, and they broadcast their on-chain transaction. Note that the main payment can still fail if the sender never reveals the preimage of the main payment.In order to be properly non-custodial, a submarine swap client needs to be able to unilaterally sweep or timeout an on chain HTLC while also validating all the swap parameters. In other words, one always requires dedicated logic to fully verify the swap parameters and perform an on-chain sweep/timeout, which is a requirement for a trust-minimized swap. A user can trust the service to just send to the given address or pay an invoice for them, but that's not a trust-minimized swap. An ongoing standardization effort for LSP protocols is currently taking place, and Boltz is working to add submarine swaps to it.</summary>
+    <published>2023-06-14T08:09:45+00:00</published>
+  </entry>
+</feed>

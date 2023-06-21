@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Liquidity griefing for 0-conf dual-funded txs</title>
+  <updated>2023-06-21T00:44:28.354882+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-06-07 00:41:12+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Liquidity griefing for 0-conf dual-funded txs</title>
+    <updated>2023-06-21T00:44:28.354928+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003974.html" rel="alternate"/>
+    <summary>The challenge of protecting against liquidity griefing attacks from malicious peers in dual funded transactions is discussed by Bastien Teinturier. One issue with this approach is that if peers lock their UTXOs as soon as they have decided to add them to the shared transaction, the remote node may go silent and the honest node has some liquidity that is locked and unusable. An elegant solution to this issue is to never lock UTXOs used in dual funded transactions. However, using 0-conf forces nodes to lock UTXOs to avoid accidentally double-spending a 0-conf channel, which means that nodes offering 0-conf services expose themselves to liquidity griefing.Another related issue is that nodes that want to offer 0-conf channels must ensure that the UTXOs they use for 0-conf are isolated from the UTXOs they use for non 0-conf. This can be fixed by using a "soft lock" when selecting UTXOs for a non 0-conf funding attempt. 0-conf funding attempts must ignore soft locked UTXOs while non 0-conf funding attempts can (should) reuse soft locked UTXOs. In eclair, they are currently doing "opportunistic" 0-conf. If they receive `channel_ready` immediately, and they're the only contributor to the funding transaction, and the transaction hasn't been RBF-ed yet, then they immediately send `channel_ready` as well and start using that channel. Unfortunately, they cannot do that anymore when mixing 0-conf and non 0-conf funding attempts because the UTXOs may be soft locked, preventing an upgrade to 0-conf. As a more long-term solution, solutions worked out to mitigate channel jamming could be reused, such as the Staking Credentials framework deployed by dual-funding market-makers beyond routing hops. The dual-funding initiator should pay to the maker a fee scale up on the amount of UTXOs contributed, and some worst-case liquidity griefing scenario. A privacy-preserving credential can be introduced between the payment of the fee and the redeem of the service to unlink dual-funding initiators (if the maker has enough volume to constitute a reasonable anonymity set).</summary>
+    <published>2023-06-07T00:41:12+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Proposal: Bundled payments</title>
+  <updated>2023-06-21T00:48:31.363013+00:00</updated>
+  <author>
+    <name>Thomas Voegtlin 2023-06-13 08:10:29+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Proposal: Bundled payments</title>
+    <updated>2023-06-21T00:48:31.363045+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003977.html" rel="alternate"/>
+    <summary>In this proposal, ThomasV suggests an extension to BOLT-11 where an invoice can contain two bundled payments with distinct preimages and amounts. This is intended for services that require the prepayment of a mining fee in order for a non-custodian exchange to take place such as Submarine swaps and JIT channels. Service providers receive an HTLC for which they do not have the preimage and must send funds on-chain and wait for the client to reveal the preimage when they claim the payment. The proposed change would allow for prepayment and main payment in the same BOLT-11 invoice and level the playing field for service providers. Currently, dedicated client software like Loop by Lightning Labs can ask for a prepayment because their software can handle it. However, competitors who do require a dedicated wallet cannot do that. In the case of JIT channels, providers who want to protect themselves against a mining fee attack need to ask for the preimage of the main payment before they open the channel. This makes their service custodian and subject to European MICA regulation. The proposal adds semantics for bundled payments in BOLT-11 invoices, where the receiver should wait until all the HTLCs of both payments have arrived before fulfilling the HTLCs of the pre-payment. If the main payment does not arrive, they should fail the pre-payment with a MPP timeout. Once the HTLCs of both payments have arrived, the receiver fulfills the HTLCs of the prepayment, and they broadcast their on-chain transaction. ThomasV believes that such a change should be implemented in BOLT-11 and not using BOLT-12 or onion messages since his proposal does not require the exchange of new messages. He also believes that ACINQ would benefit from this as it would make it possible for them to make their pay-to-open service fully non-custodian.</summary>
+    <published>2023-06-13T08:10:29+00:00</published>
+  </entry>
+</feed>
