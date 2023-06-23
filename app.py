@@ -255,6 +255,7 @@ def date(dev_name, year_month):
 
 @app.route('/<dev_name>/<year_month>/<filename>.html')
 def display_feed(dev_name, year_month, filename):
+    filename = filename + ".xml"
     file_url = f"./static/{dev_name}/{year_month}/{filename}"
     xml_feed = feedparser.parse(file_url)
     combined_filename = "combined_" + "_".join(filename.split("_")[1:])
