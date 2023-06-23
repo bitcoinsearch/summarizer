@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Liquidity griefing for 0-conf dual-funded txs</title>
-  <updated>2023-06-22T01:23:17.194250+00:00</updated>
+  <updated>2023-06-23T01:34:08.520996+00:00</updated>
   <author>
     <name>Antoine Riard 2023-06-07 00:41:12+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Liquidity griefing for 0-conf dual-funded txs</title>
-    <updated>2023-06-22T01:23:17.194273+00:00</updated>
+    <updated>2023-06-23T01:34:08.521024+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003974.html" rel="alternate"/>
-    <summary>Bastien Teinturier, a contributor to the Lightning Network, has written a post on how to protect against liquidity griefing attacks from malicious peers while offering 0-conf services. The post highlights the challenges created by the introduction of dual-funded transactions and how nodes offering 0-conf services expose themselves to liquidity griefing. To avoid this, Bastien suggests that the "soft lock" strategy be used when selecting utxos for non-0-conf funding attempts, while 0-conf funding attempts should ignore soft locked utxos. However, he notes that this strategy may still be susceptible to liquidity griefing with dual-funding or splicing. Bastien also suggests using a long-term solution in which the Staking Credentials framework could be deployed by dual-funding market-makers beyond routing hops. He states that the dual-funding initiator should pay the maker a fee scale up on the amount of UTXOs contributed and some worst-case liquidity griefing scenario. In eclair, they are currently doing an "opportunistic" 0-conf, but they cannot do that anymore when mixing 0-conf and non-0-conf funding attempts because the utxos may be soft-locked, preventing them from upgrading to 0-conf. Bastien invites others to share their ideas on how to improve the situation and offer good enough protections against liquidity griefing for nodes offering 0-conf services.</summary>
+    <summary>The introduction of dual funded transactions in lightning has created challenges, including how to protect against liquidity griefing attacks from malicious peers. The dual funding protocol involves exchanging data about the utxos each peer adds to the shared transaction, then exchanging signatures and broadcasting the resulting transaction. If a remote node goes silent in the middle of an instance of the protocol, liquidity is locked and unusable. To address this issue, an elegant solution is to never lock utxos used in dual funded transactions, which allows for automatic reuse in another instance of the protocol if a remote node goes silent. However, this solution falls short when using 0-conf, as accidentally double-spending a 0-conf channel can result in loss of funds for one of the peers. Nodes that want to offer 0-conf channels must ensure that the utxos they use for 0-conf are isolated from the utxos they use for non 0-conf. This can be fixed by using a "soft lock" when selecting utxos for a non 0-conf funding attempt. In eclair, opportunistic 0-conf is used under certain conditions, but this cannot be done when mixing 0-conf and non 0-conf funding attempts because the utxos may be soft-locked, preventing an upgrade to 0-conf. To prevent liquidity griefing related to mempool vectors, the honest counterparty can enforce that any contributed outputs must be encumbered by a 1 CSV unless being a 2-of-2 funding. As a long-term solution, solutions worked out to mitigate channel jamming could be reused, such as deploying the Staking Credentials framework by dual-funding market-makers beyond routing hops. The dual-funding initiator should pay the maker a fee scale up on the amount of UTXOs contributed and some worst-case liquidity griefing scenario. A privacy-preserving credential can be introduced between the payment of the fee and the redeem of the service to unlink dual-funding initiators.</summary>
     <published>2023-06-07T00:41:12+00:00</published>
   </entry>
 </feed>

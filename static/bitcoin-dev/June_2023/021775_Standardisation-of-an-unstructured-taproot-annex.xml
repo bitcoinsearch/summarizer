@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Standardisation of an unstructured taproot annex</title>
-  <updated>2023-06-22T01:14:27.712042+00:00</updated>
+  <updated>2023-06-23T01:24:58.121934+00:00</updated>
   <author>
     <name>Antoine Riard 2023-06-18 20:32:12+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Standardisation of an unstructured taproot annex</title>
-    <updated>2023-06-22T01:14:27.712079+00:00</updated>
+    <updated>2023-06-23T01:24:58.121972+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-June/021775.html" rel="alternate"/>
-    <summary>A proposal has been made to require every input to commit to an annex even if it is empty, which would mean rejecting a transaction where the minimal annex with its 0x50 tag is absent. This change would require modifying current Taproot support on the Lightning-side, as all P2TR spends must add an annex and commit to it in the BIP341 signature digest. This could potentially be a mandatory upgrade for Lightning nodes, as failure to do so would break propagations of their `option_taproot` channel transactions. Another approach to protecting opt-in users is to limit the maximum size/weight of the witness/transaction to 256 bytes. However, there is another proposal to introduce the maximum size/weight of the witness/transaction as a TLV record itself. This branch also implements the "only allow tlv record 0" with the TLV format from bips #1381. It's suggested that this approach would not unduly impact current users, and is pretty simple from an accounting perspective. It can also be further relaxed in the future if we so decide by using max tx size policy "hints" in an annex field. Overall, the proposal includes an opt-in annex, Tlv format, only allowing tlv record 0, and limiting the maximum size of the value to 256 bytes to protect opt-in users. The limit of 126 bytes proposed in another pull request isn't sufficient for these types of vaults. If there are two presigned txes (unvault and emergency), those signatures would already take up 2*64=128 bytes. Then you also want to store 32 bytes for the ephemeral key itself as the key can't be reconstructed from the schnorr signature.</summary>
+    <summary>The discussion on the bitcoin-dev mailing list has centered around proposals related to Taproot support on the Lightning-side. One proposal requires every input to commit to an annex, even if it is empty, and failing to do so would break propagations of channel transactions. The second approach introduces a maximum size/weight of the witness/transaction as a TLV record in order to protect opt-in users. This can be further relaxed in the future by using max tx size policy "hints" in an annex field. The limit of 126 bytes proposed in a previous pull request was deemed insufficient for certain types of vaults involving multiple presigned transactions and additional parameters. Therefore, the proposal suggests limiting the maximum size of the value to 256 bytes to protect opt-in users. Overall, the proposals aim to ensure that existing multi-party protocols remain unaffected while also allowing for future extensibility.</summary>
     <published>2023-06-18T20:32:12+00:00</published>
   </entry>
 </feed>

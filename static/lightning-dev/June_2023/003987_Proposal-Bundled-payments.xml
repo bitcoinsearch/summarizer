@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Proposal: Bundled payments</title>
-  <updated>2023-06-22T01:29:31.659888+00:00</updated>
+  <updated>2023-06-23T01:43:33.721260+00:00</updated>
   <author>
     <name>Thomas Voegtlin 2023-06-20 07:32:15+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Proposal: Bundled payments</title>
-    <updated>2023-06-22T01:29:31.659911+00:00</updated>
+    <updated>2023-06-23T01:43:33.721288+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003987.html" rel="alternate"/>
-    <summary>Dave has asked Thomas if it is acceptable for the prepayment to use a keysend payment with the onion message payload for the receiver indicating what payment hash to associate with the prepayment. Dave thinks that only an extra_fee_via_keysend field would be required in BOLT11 invoices if this is allowed. The semantics of bundled payments are that the BOLT-11 invoice contains two preimages and two amounts: prepayment and main payment. The receiver should wait until all the HTLCs of both payments have arrived before they fulfill the HTLCs of the pre-payment. If the main payment does not arrive, they should fail the pre-payment with an MPP timeout. Once the HTLCs of both payments have arrived, the receiver fulfills the HTLCs of the prepayment, and they broadcast their on-chain transaction. Thomas thinks that the invoice needs a feature bit so that the receiver can decide to make prepayment optional or required. If the feature is optional, the prepayment amount must be subtracted from the main payment amount. In the example given by Dave, Alice would expect to receive either (1 BTC, invoice payment_hash) or (1 BTC - minus 10k sats, invoice payment_hash) + (10k sats, prepayment_hash via keysend).</summary>
+    <summary>Thomas and David are discussing the semantics of bundled payments. Thomas suggests that an invoice would need a feature bit for the receiver to decide whether prepayment is optional or required. For the feature to be optional, the prepayment amount should be subtracted from the main payment amount. The invoice would either contain the 1 BTC invoice payment hash or (1 BTC - minus 10k sats, invoice payment_hash) + (10k sats, prepayment_hash via keysend). David asks if it's necessary for a BOLT11 invoice to contain a payment hash for the prepayment or if it would be acceptable for the prepayment to use a keysend payment with metadata indicating what payment hash to associate with the prepayment. He suggests adding an extra_fee_via_keysend field to BOLT11 invoices, which would be significantly smaller and allow encoding the field in an existing BOLT11 field like (d) description or (m) metadata field. Electrum Technologies GmbH, located in Berlin, Germany, provides the email communication platform for the discussion.</summary>
     <published>2023-06-20T07:32:15+00:00</published>
   </entry>
 </feed>

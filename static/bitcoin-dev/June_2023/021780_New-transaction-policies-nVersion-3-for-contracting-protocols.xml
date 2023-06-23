@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>New transaction policies (nVersion=3) for contracting protocols</title>
+  <updated>2023-06-23T01:22:21.670524+00:00</updated>
+  <author>
+    <name>Greg Sanders 2023-06-21 20:57:45+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>New transaction policies (nVersion=3) for contracting protocols</title>
+    <updated>2023-06-23T01:22:21.670569+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-June/021780.html" rel="alternate"/>
+    <summary>The Bitcoin Core team recently proposed a set of mempool/transaction relay policies to aid L2/contract protocols. The proposal aims to address Rule 3 pinning and potentially eliminate CPFP carve-out by incorporating feedback from previous discussions. To achieve this, the proposal suggests modifications to package RBF rules and additional policy rules applying to V3 transactions. These V3 transactions can be replaced even if they do not signal BIP125 replaceability, allowing for "inherited" replaceability signaling when descendants of unconfirmed transactions are created.Checking whether a transaction signals replaceability in this way does not require mempool traversal. However, an unconfirmed V3 transaction cannot have more than one descendant, and its size cannot exceed 1000 virtual bytes. On the other hand, a confirmed V3 transaction's descendant does not need to be V3. As part of the policy update, the proposal also suggests allowing OP_TRUE to become a standard script type to save bytes and enabling a single dust-value output that is immediately spent by the package, making anchors easier to design.Additionally, Bitcoin developer Gloria proposed a new policy for Bitcoin transactions, which includes a V3 descendant limit to restrict unconfirmed transactions. The package may still include new unconfirmed inputs, but the minimum between package feerate and ancestor feerate of the child must not be lower than the individual feerates of all directly conflicting transactions and the ancestor feerates of all original transactions. A new rule has been added requiring all package transactions with mempool conflicts to be V3, and this also means the "sponsoring" child transaction must be V3. This effectively means that only V3 transactions can pay to replace their ancestors' conflicts and only V3 transactions' replacements may be paid for by a descendant. Commitment transactions should be V3 and have one anchor output, signed with 0 fees or 1sat/vbyte once package relay is deployed on a significant portion of the network.If the commitment tx must be broadcast, determine the desired feerate at broadcast time and spend the anchor output in a high-feerate transaction. Gloria also addressed expected questions about Rule 3 Pinning, privacy issues, backward compatibility, and whether V2 transactions can replace V3 transactions and vice versa. Feedback and review are appreciated.</summary>
+    <published>2023-06-21T20:57:45+00:00</published>
+  </entry>
+</feed>
