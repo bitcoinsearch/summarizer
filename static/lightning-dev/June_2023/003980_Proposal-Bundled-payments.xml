@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Proposal: Bundled payments</title>
-  <updated>2023-06-23T01:41:51.101896+00:00</updated>
+  <updated>2023-06-24T01:40:02.214106+00:00</updated>
   <author>
     <name>Matt Corallo 2023-06-14 17:28:04+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Proposal: Bundled payments</title>
-    <updated>2023-06-23T01:41:51.101991+00:00</updated>
+    <updated>2023-06-24T01:40:02.214133+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003980.html" rel="alternate"/>
-    <summary>In an email to the Lightning-dev mailing list, Thomas Voegtlin proposed an extension to BOLT-11 that would allow for two bundled payments with distinct preimages and amounts. The use case for this proposal is for services that require the prepayment of a mining fee in order for a non-custodian exchange to take place, such as Submarine swaps and JIT channels. Providers who want to protect themselves against mining fee attacks need to ask the preimage of the main payment before they open the channel, which makes their service custodian. In order to solve this issue, it would be beneficial to bundle the prepayment and the main payment in the same BOLT-11 invoice.The semantics of bundled payments are that the BOLT-11 invoice contains two preimages and two amounts: prepayment and main payment. The receiver should wait until all the HTLCs of both payments have arrived before they fulfill the HTLCs of the pre-payment. If the main payment does not arrive, they should fail the pre-payment with an MPP timeout. Once the HTLCs of both payments have arrived, the receiver fulfills the HTLCs of the prepayment, and they broadcast their on-chain transaction.Voegtlin believes that this proposal would level the field in terms of competition between lightning service providers and make it possible for providers to make their pay-to-open service fully non-custodian. He also thinks that such a change should be implemented in BOLT-11 and not using BOLT-12 or onion messages because the proposal does not require the exchange of new messages.</summary>
+    <summary>In an email to the Lightning-dev mailing list, Thomas Voegtlin proposed an extension to BOLT-11 that would allow invoices to contain two bundled payments with distinct preimages and amounts. The use case for this proposal is for services that require a prepayment of mining fees in order for a non-custodian exchange to take place, such as submarine swaps and JIT channels. The issue is that without a guarantee that clients will claim payment, service providers need to ask for prepayment, which can lead to DoS attacks. By bundling the prepayment and main payment into the same BOLT-11 invoice, it would level the playing field between lightning service providers. Currently, using a dedicated client is required to use Loop, while competitors who don't have an established user base running a dedicated client are vulnerable to mining fee attacks. ACINQ could also benefit from this change by making it possible for them to make their pay-to-open service fully non-custodial. Voegtlin believes that such a change should be implemented in BOLT-11 instead of using BOLT-12 or onion messages because it doesn't require the exchange of new messages, and adding new messages would unnecessarily complicate things. However, Matt suggests that the ship has probably sailed on getting any kind of new interoperable change into BOLT-11. He states that rolling out another new incompatible version of BOLT-11 and expecting the entire ecosystem to support it doesn't seem all that likely. If they're working towards specifying some "standard" way of doing swaps, he believes it should be built on OMs so that it can be done more privately.</summary>
     <published>2023-06-14T17:28:04+00:00</published>
   </entry>
 </feed>

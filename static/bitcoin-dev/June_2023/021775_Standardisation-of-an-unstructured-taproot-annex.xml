@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Standardisation of an unstructured taproot annex</title>
-  <updated>2023-06-23T01:24:58.121934+00:00</updated>
+  <updated>2023-06-24T01:24:25.233619+00:00</updated>
   <author>
     <name>Antoine Riard 2023-06-18 20:32:12+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Standardisation of an unstructured taproot annex</title>
-    <updated>2023-06-23T01:24:58.121972+00:00</updated>
+    <updated>2023-06-24T01:24:25.233659+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-June/021775.html" rel="alternate"/>
-    <summary>The discussion on the bitcoin-dev mailing list has centered around proposals related to Taproot support on the Lightning-side. One proposal requires every input to commit to an annex, even if it is empty, and failing to do so would break propagations of channel transactions. The second approach introduces a maximum size/weight of the witness/transaction as a TLV record in order to protect opt-in users. This can be further relaxed in the future by using max tx size policy "hints" in an annex field. The limit of 126 bytes proposed in a previous pull request was deemed insufficient for certain types of vaults involving multiple presigned transactions and additional parameters. Therefore, the proposal suggests limiting the maximum size of the value to 256 bytes to protect opt-in users. Overall, the proposals aim to ensure that existing multi-party protocols remain unaffected while also allowing for future extensibility.</summary>
+    <summary>The bitcoin developers are discussing the implementation of an opt-in annex for every input, even if it is empty. This would require modifying current Taproot support on the Lightning-side, where all P2TR spends must add an annex and commit to it in the BIP341 signature digest. The upgrade is mandatory for Lightning nodes, as failure to do so would break propagations of their `option_taproot` channel transactions. Another approach suggested is to limit the maximum size/weight of the witness/transaction by introducing it as a TLV record itself. Additionally, the format of TLV records from bips #1381 allows only tlv record 0 - unstructured data that could be used for future extensibility. However, there is a practical objection to making the annex standard under these conditions as the limit of 126 bytes isn't sufficient for some types of vaults. If there are two presigned txes (unvault and emergency), those signatures would already take up 2*64=128 bytes. It is suggested to limit the maximum size of the value to 256 bytes to protect opt-in users.</summary>
     <published>2023-06-18T20:32:12+00:00</published>
   </entry>
 </feed>
