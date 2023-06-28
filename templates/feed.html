@@ -19,7 +19,7 @@
             {% if feed.feed.links|length > 0 %}
                 {% for link in feed.feed.links %}
                     <li>
-                        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=link.href.split('/').1,filename=link.href.split('/').2) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
+                        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=link.href.split('/').1,filename=link.href.split('/').2[:-4]) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
                         <b>{{feed.feed.authors[loop.index-1].name}}</b>
                     </li>
                 {% endfor %}
@@ -30,7 +30,7 @@
                 <p></p>
                 {% set my_url = url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) %}
                 {% if "combined" in my_url %}
-                    <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) }}">Combined Summary of all posts in thread</a>
+                    <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename[:-4]) }}">Combined Summary of all posts in thread</a>
                 {% endif %}
             {% endif %}
         </ul>
@@ -55,7 +55,7 @@
         {% if feed.feed.links|length > 0%}
         {% for link in feed.feed.links %}
         <li>
-        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=link.href.split('/').1,filename=link.href.split('/').2) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
+        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=link.href.split('/').1,filename=link.href.split('/').2[:-4]) }}">{{feed.feed.title.replace("Combined summary - ","")}}</a>
         <b>{{feed.feed.authors[loop.index-1].name}}</b>
         </li>
         {% endfor %}
@@ -71,7 +71,7 @@
         {% set my_url = url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) %}
         {% if "combined" in my_url %}
         <li>
-        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename) }}"> Combined Summary of all posts in thread </a>
+        <a href="{{ url_for('display_feed', dev_name=dev_name, year_month=year_month, filename=filename[:-4]) }}"> Combined Summary of all posts in thread </a>
         </li>
         {% endif %}
         <li>
