@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposal: Bundled payments</title>
-  <updated>2023-06-28T03:43:28.566356+00:00</updated>
+  <updated>2023-06-29T03:02:13.478098+00:00</updated>
+  <author>
+    <name>Thomas Voegtlin 2023-06-13 08:10:29+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER  + 2023-06-15 09:01:32+00:00</name>
+  </author>
+  <author>
+    <name>Thomas Voegtlin  + 2023-06-15 08:22:39+00:00</name>
+  </author>
   <author>
     <name>Matt Corallo 2023-06-14 17:28:04+00:00</name>
   </author>
@@ -23,15 +32,6 @@
   </author>
   <author>
     <name>SomberNight 2023-06-20 16:49:05+00:00</name>
-  </author>
-  <author>
-    <name>Bastien TEINTURIER  + 2023-06-15 09:01:32+00:00</name>
-  </author>
-  <author>
-    <name>Thomas Voegtlin  + 2023-06-15 08:22:39+00:00</name>
-  </author>
-  <author>
-    <name>Thomas Voegtlin 2023-06-13 08:10:29+00:00</name>
   </author>
   <author>
     <name>Bastien TEINTURIER  + 2023-06-15 09:01:32+00:00</name>
@@ -102,6 +102,9 @@
   <author>
     <name>Thomas Voegtlin  + 2023-06-15 08:22:39+00:00</name>
   </author>
+  <link href="lightning-dev/June_2023/003977_Proposal-Bundled-payments.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2023/003982_Proposal-Bundled-payments.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2023/003981_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003980_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003982_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003981_Proposal-Bundled-payments.xml" rel="alternate"/>
@@ -109,9 +112,6 @@
   <link href="lightning-dev/June_2023/003982_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003981_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003990_Proposal-Bundled-payments.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2023/003982_Proposal-Bundled-payments.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2023/003981_Proposal-Bundled-payments.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2023/003977_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003982_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003981_Proposal-Bundled-payments.xml" rel="alternate"/>
   <link href="lightning-dev/June_2023/003979_Proposal-Bundled-payments.xml" rel="alternate"/>
@@ -139,9 +139,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Proposal: Bundled payments</title>
-    <updated>2023-06-28T03:43:28.566554+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003980.html" rel="alternate"/>
-    <summary>In a recent proposal, Thomas Voegtlin suggests an extension to BOLT-11, the Lightning Network protocol, where an invoice can contain two bundled payments with distinct preimages and amounts. This proposal is aimed at services that require prepayment of a mining fee for non-custodian exchanges such as submarine swaps and JIT channels. The goal is to level the playing field in terms of competition among lightning service providers.Currently, dedicated clients are needed to use Loop, leaving competitors without an established user base vulnerable to mining fee attacks. Thomas believes that ACINQ, a lightning service provider, would benefit from this proposed change as it would enable them to make their pay-to-open service fully non-custodian, aligning with upcoming regulations. He suggests implementing this change in BOLT-11 rather than using BOLT-12 or onion messages.The proposed semantics of bundled payments include having two preimages and two amounts (prepayment and main payment) in the BOLT-11 invoice. The receiver should wait until all HTLCs (Hash Time-Locked Contracts) of both payments have arrived before fulfilling the HTLCs of the pre-payment. If the main payment does not arrive, the pre-payment should be failed with a MPP (Multi-Path Payments) timeout. Once the HTLCs of both payments have arrived, the receiver fulfills the HTLCs of the pre-payment and broadcasts the on-chain transaction.Matt Corallo responded to Thomas's proposal, expressing skepticism about the feasibility of introducing new interoperable changes into BOLT-11. He believes that rolling out another incompatible version of BOLT-11 and expecting broad support from the entire ecosystem is unlikely. Instead, he suggests working towards specifying a "standard" way of doing swaps and building it on OMs (Onion Messages) for increased privacy. He also addresses Thomas's question about the distinction between splice-out and submarine swaps, explaining that submarine swaps allow for adding receiving capacity to a channel.In response to Matt's comments, Thomas emphasizes that the proposed change is a small one and does not require significant interactivity beyond what BOLT-11 already offers. He believes that two major implementations, Lightning Labs and ACINQ, have incentives to support this proposal. Additionally, he suggests making the new feature optional during a transition period and explains how it could be implemented with new fields and feature bits in the invoice. The decision to make this feature required or optional would ultimately rest with the service provider.Overall, Thomas proposes an extension to BOLT-11 to accommodate bundled payments with distinct preimages and amounts for services that require mining fee prepayments. This change aims to address vulnerabilities and improve competition among lightning service providers. However, Matt expresses doubts about introducing new changes to BOLT-11 and suggests focusing on specifying a standard way of doing swaps using OMs.</summary>
-    <published>2023-06-14T17:28:04+00:00</published>
+    <updated>2023-06-29T03:02:13.478309+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003977.html" rel="alternate"/>
+    <summary>Thomas Voegtlin has proposed an extension to BOLT-11, the Lightning Network protocol, that would allow invoices to contain two bundled payments with distinct preimages and amounts. This proposal is aimed at services like Submarine swaps and JIT channels, which require prepayment of mining fees for non-custodian exchanges. By implementing this change in BOLT-11, it would level the competition field between lightning service providers. Currently, using dedicated clients like Loop is necessary for such exchanges, putting competitors without an established user base at risk of mining fee attacks.The proposed change involves including two preimages and two amounts in the BOLT-11 invoice: one for the prepayment and one for the main payment. The receiver would need to wait for both HTLCs to arrive before fulfilling the pre-payment. If the main payment does not arrive, the pre-payment would fail with a MPP timeout. Once both payments have arrived, the receiver fulfills the HTLCs of the pre-payment and broadcasts the on-chain transaction. The decision to make this feature required or optional lies with the service provider.Matt Corallo expresses skepticism about introducing new changes to BOLT-11, stating that getting support from the entire ecosystem may be difficult. He suggests focusing on specifying a standard way of doing swaps and building it on OMs (Onion Messages) for increased privacy.There are differing opinions on whether this extension should be implemented in Bolt 11 or Bolt 12. Thomas believes that including it in Bolt 12 makes more sense due to the active development and implementation of Bolt 12 by all parties involved. However, Matt points out that it will likely take years for Bolt 12 to become the dominant payment method on Lightning.Overall, the proposal aims to improve the competition between lightning service providers by allowing reverse submarine swap payments to come from any wallet. However, the narrow set of requirements for users, such as having an on-chain wallet separate from their lightning wallet, may limit its practicality. It remains to be seen whether this extension will be implemented and how it will impact the Lightning Network ecosystem.</summary>
+    <published>2023-06-13T08:10:29+00:00</published>
   </entry>
 </feed>
