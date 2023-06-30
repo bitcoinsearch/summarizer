@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Equalizing Packet Size</title>
+  <updated>2023-06-30T03:07:17.902686+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-06-29 18:13:10+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Equalizing Packet Size</title>
+    <updated>2023-06-30T03:07:17.902709+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/004000.html" rel="alternate"/>
+    <summary>Recently, it has been discovered that even with Noise encryption, an eavesdropper can potentially guess the messages being sent between Lightning Network (LN) nodes by analyzing the sizes of IP packets transmitted. This poses a security threat as it allows the eavesdropper to determine how payments are being routed across the network.To mitigate this issue, a solution is proposed which involves ensuring that all packet sizes are the same. The BOLT8 specification, which builds on top of TCP, treats the receiver's perspective as receiving a stream of bytes, although the underlying IP is actually packetized.Most implementations have an object or software construction responsible for encrypting messages for BOLT8 tunnels. To address the packet size vulnerability, this object can be modified to include a "buffer" in addition to its tunnel encryption capabilities.The interface of this object would have entry points for sending BOLT8 messages and flushing the buffer. The object itself would contain an internal buffer of fixed size, which it fills with ciphertext from the "send BOLT8 message" interface. When the buffer becomes full, the object uses the POSIX `send` API to transmit it as a packet, ensuring fixed packet sizes.The "flush" entry point monitors the buffer's fill level and adds a `pong` message to pad it until the buffer is completely full. There is a consideration for an edge case where the buffer is nearly full and adding the mandatory 2-byte message length and 2-byte message ID would cause an overflow, which should be handled appropriately.Since the object inserts `pong` messages, it cannot function solely as a simple buffer; it must modify the encryptor state with the inserted `pong` message within the stream of BOLT8 messages.This approach enables a sequence of `update_add_htlc` messages followed by a `commitment_signed` message to potentially be combined into a single fixed-size packet or multiple fixed-size packets. The "flush" entry point must be called to ensure the counterparty receives the complete tail end of the `commitment_signed`.To enhance robustness against internal bugs and adopt a defensive programming approach, the object could include an individual randomized timer that periodically triggers the "flush" operation. This compensates for cases where the implementation fails to properly flush when waiting for a response from the counterparty, transforming potential interop bugs into performance bugs.The suggested buffer size should match the packet size of `update_add_htlc` to optimize latency, as it is expected to fit within a single IP packet.This proposal aims to address the security concerns related to packet size analysis in LN communication, ensuring a more secure and private network.Regards,ZmnSCPxj</summary>
+    <published>2023-06-29T18:13:10+00:00</published>
+  </entry>
+</feed>
