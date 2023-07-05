@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Standardisation of an unstructured taproot annex</title>
-  <updated>2023-07-04T02:39:24.290908+00:00</updated>
+  <updated>2023-07-05T02:37:31.345941+00:00</updated>
   <author>
     <name>Greg Sanders 2023-06-18 20:40:53+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Standardisation of an unstructured taproot annex</title>
-    <updated>2023-07-04T02:39:24.290936+00:00</updated>
+    <updated>2023-07-05T02:37:31.345978+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-June/021774.html" rel="alternate"/>
-    <summary>Antoine Riard suggested a modification to the current Taproot support on the Lightning-side, where all P2TR spends must add an annex and commit to it in the BIP341 signature digest. This would be a mandatory upgrade for Lightning nodes, as failure to do so would break propagations of their `option_taproot` channel transactions. There is another approach suggested by Antoine Riard, where the maximum size/weight of the witness/transaction is introduced as a TLV record itself. He provided a link to a branch that implements this approach along with the "only allow tlv record 0" using the TLV format from BIP #1381.Greg Sanders responded to Joost Jager's question about whether it would still be necessary to restrict the annex size. Greg mentioned that he thinks it's worth considering the restriction to protect opt-in users and for anti-pinning efforts. However, he also noted that it wouldn't be sufficient for all pinning vectors.Joost Jager proposed a set of policies for opt-in annex-vaults to ensure they remain unaffected by existing multi-party protocols. These policies include requiring every input to commit to an annex even if it is empty, using the Tlv format as defined in BIP #1381 for future extensibility, allowing only unstructured data in the tlv record 0 for future extensibility, and limiting the maximum size of the value to 256 bytes to protect opt-in users.However, Joost pointed out that the current limit of 126 bytes in a pull request made by bitcoin-inquisition isn't sufficient for these types of vaults. He explained that the signatures for two presigned transactions (unvault and emergency) alone would take up 128 bytes, and additional space is needed for the ephemeral key and other vault parameters.Overall, there are discussions and suggestions regarding modifying Taproot support on the Lightning-side, introducing a TLV record for the maximum size/weight of transactions, and implementing policies to protect opt-in users and future extensibility.</summary>
+    <summary>Antoine Riard raised a question about the requirement for every input to commit to an annex, even if it is empty, in order to protect existing multi-party protocols. He mentioned that this modification would be necessary for Lightning nodes using Taproot support, as failure to do so would break propagations of their `option_taproot` channel transactions. Greg Sanders requested a citation for this information and expressed his opinion that protocols should not be built on undeveloped upgrade hooks. Antoine also discussed the approach of limiting the maximum size of the value to 256 bytes as a means of protecting opt-in users, and shared a link to a branch implementing this approach. Joost Jager joined the discussion and proposed a set of conditions for an opt-in annex, including the use of TLV format and a limit on the maximum size of the value. However, he noted that the current limit of 126 bytes proposed in another branch would not be sufficient for certain vaults. Joost asked for any remaining practical objections to making the annex standard under these conditions.</summary>
     <published>2023-06-18T20:40:53+00:00</published>
   </entry>
 </feed>
