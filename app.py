@@ -11,6 +11,7 @@ import re
 from flask import Flask
 from markupsafe import Markup
 import shutil
+import nltk
 
 from src.logger import setup_logger
 
@@ -28,7 +29,17 @@ def linkify(text):
     return Markup(url_pattern.sub(r'<a href="\g<0>">\g<0></a>', text))
 
 
-app.jinja_env.filters['linkify'] = linkify
+def remove_unfinished_sentences(text):
+    sentences = nltk.sent_tokenize(text)
+    if not sentences[-1].endswith(('.', '!', '?')):
+        sentences = sentences[:-1]
+    text = ' '.join(sentences)
+    url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+(?<!\.)')
+    return Markup(url_pattern.sub(r'<a href="\g<0>">\g<0></a>', text))
+
+
+# app.jinja_env.filters['linkify'] = linkify
+app.jinja_env.filters['remove_unfinished'] = remove_unfinished_sentences
 app.config['FREEZER_DEFAULT_URL_GENERATOR'] = 'flask_frozen.url_generators.default_url_generator_with_html'
 freezer = Freezer(app)
 
@@ -285,6 +296,7 @@ def display_xml(dev_name, year_month, filename):
 
 if __name__ == '__main__':
     import sys
+    nltk.download('punkt')
 
     if len(sys.argv) > 1 and sys.argv[1] == "build":
         freezer.freeze()
