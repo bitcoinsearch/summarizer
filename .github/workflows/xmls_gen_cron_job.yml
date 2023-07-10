@@ -1,0 +1,41 @@
+name: Daily Python Script Execution
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  execute_and_commit:
+    runs-on: ubuntu-latest
+
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ES_CLOUD_ID: ${{ secrets.ES_CLOUD_ID }}
+      ES_USERNAME: ${{ secrets.ES_USERNAME }}
+      ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
+      ES_INDEX: ${{ secrets.ES_INDEX }}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GH_PAGES_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Execute Python script
+      run: python xmls_generator_production.py
+
+    - name: Commit changes
+      run: git diff --quiet && git diff --staged --quiet || (git add . ; git commit -m "Updated new generated files"; git push)
