@@ -30,10 +30,13 @@ def linkify(text):
 
 
 def remove_unfinished_sentences(text):
-    sentences = nltk.sent_tokenize(text)
-    if not sentences[-1].endswith(('.', '!', '?')):
-        sentences = sentences[:-1]
-    text = ' '.join(sentences)
+    try:
+        sentences = nltk.sent_tokenize(text)
+        if not sentences[-1].endswith(('.', '!', '?')):
+            sentences = sentences[:-1]
+        text = ' '.join(sentences)
+    except Exception as ex:
+        print(f"Error: {ex}")
     url_pattern = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+(?<!\.)')
     return Markup(url_pattern.sub(r'<a href="\g<0>">\g<0></a>', text))
 
