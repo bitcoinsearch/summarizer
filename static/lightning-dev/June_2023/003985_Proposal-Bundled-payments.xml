@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Proposal: Bundled payments</title>
-  <updated>2023-07-11T02:38:35.400087+00:00</updated>
+  <updated>2023-07-12T02:47:31.732676+00:00</updated>
   <author>
     <name>David A. Harding 2023-06-19 20:29:34+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Proposal: Bundled payments</title>
-    <updated>2023-07-11T02:38:35.400115+00:00</updated>
+    <updated>2023-07-12T02:47:31.732715+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003985.html" rel="alternate"/>
-    <summary>In an email exchange between Thomas Voegtlin and Dave, they discuss the semantics of bundled payments. According to Thomas, a BOLT-11 invoice in bundled payments contains two preimages and two amounts: a prepayment and a main payment. The receiver is instructed to wait until all the HTLCs (Hash Time Locked Contracts) of both payments have arrived before fulfilling the HTLCs of the pre-payment. If the main payment does not arrive, the pre-payment should be failed with a MPP (Multi-Path Payment) timeout. Once the HTLCs of both payments have arrived, the receiver fulfills the HTLCs of the prepayment and broadcasts their on-chain transaction. It's important to note that the main payment can still fail if the sender never reveals the preimage of the main payment.Dave raises a question about whether a BOLT11 invoice should contain a payment hash for the prepayment or if it would be acceptable to use a keysend payment with an onion message payload indicating what payment hash to associate with the prepayment. For example, if Alice wants to receive 1 BTC to a specific hash, she could send a keysend payment with metadata indicating that the receiver shouldn't claim the prepayment until they receive the 1 BTC HTLC associated with that hash. Dave suggests extending BOLT11 invoices with an "extra_fee_via_keysend" field, which would be smaller and allow for encoding in existing BOLT11 fields like the description or metadata field. This approach could allow for immediate implementation until an updated version of BOLT11 or an alternative using offers becomes widely deployed.Overall, the discussion revolves around the semantics of bundled payments in BOLT11 invoices and the possibility of using keysend payments with additional metadata to facilitate the process.</summary>
+    <summary>In an email exchange between Thomas Voegtlin and Dave, the semantics of bundled payments are discussed. Thomas explains that a BOLT-11 invoice in bundled payments contains two preimages and two amounts: prepayment and main payment. The receiver is instructed to wait until all HTLCs (Hashed Timelock Contracts) of both payments have arrived before fulfilling the HTLCs of the pre-payment. If the main payment does not arrive, the receiver should fail the pre-payment with a MPP (Multi-Path Payments) timeout. Once the HTLCs of both payments have arrived, the receiver can then fulfill the HTLCs of the prepayment and broadcast their on-chain transaction. However, it is noted that the main payment can still fail if the sender never reveals the preimage of the main payment.Dave raises a question to Thomas about whether a BOLT11 invoice actually needs to contain a payment hash for the prepayment, or if using a keysend payment with an onion message payload would be acceptable. In this scenario, the receiver would receive the keysend payment with metadata indicating which payment hash to associate with the prepayment. Dave suggests extending BOLT11 invoices with an extra_fee_via_keysend field, which would make the invoice smaller. He also proposes encoding the extra_fee_via_keysend field in an existing BOLT11 field like the description or metadata field, allowing for immediate implementation until an updated version of BOLT11 or an alternative using offers becomes widely deployed.Overall, the email exchange delves into the semantics of bundled payments and explores possible optimizations and enhancements to the BOLT11 invoice format.</summary>
     <published>2023-06-19T20:29:34+00:00</published>
   </entry>
 </feed>
