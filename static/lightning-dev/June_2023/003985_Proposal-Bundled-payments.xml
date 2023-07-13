@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Proposal: Bundled payments</title>
-  <updated>2023-07-12T02:47:31.732676+00:00</updated>
+  <updated>2023-07-13T02:57:47.504720+00:00</updated>
   <author>
     <name>David A. Harding 2023-06-19 20:29:34+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Proposal: Bundled payments</title>
-    <updated>2023-07-12T02:47:31.732715+00:00</updated>
+    <updated>2023-07-13T02:57:47.504750+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003985.html" rel="alternate"/>
-    <summary>In an email exchange between Thomas Voegtlin and Dave, the semantics of bundled payments are discussed. Thomas explains that a BOLT-11 invoice in bundled payments contains two preimages and two amounts: prepayment and main payment. The receiver is instructed to wait until all HTLCs (Hashed Timelock Contracts) of both payments have arrived before fulfilling the HTLCs of the pre-payment. If the main payment does not arrive, the receiver should fail the pre-payment with a MPP (Multi-Path Payments) timeout. Once the HTLCs of both payments have arrived, the receiver can then fulfill the HTLCs of the prepayment and broadcast their on-chain transaction. However, it is noted that the main payment can still fail if the sender never reveals the preimage of the main payment.Dave raises a question to Thomas about whether a BOLT11 invoice actually needs to contain a payment hash for the prepayment, or if using a keysend payment with an onion message payload would be acceptable. In this scenario, the receiver would receive the keysend payment with metadata indicating which payment hash to associate with the prepayment. Dave suggests extending BOLT11 invoices with an extra_fee_via_keysend field, which would make the invoice smaller. He also proposes encoding the extra_fee_via_keysend field in an existing BOLT11 field like the description or metadata field, allowing for immediate implementation until an updated version of BOLT11 or an alternative using offers becomes widely deployed.Overall, the email exchange delves into the semantics of bundled payments and explores possible optimizations and enhancements to the BOLT11 invoice format.</summary>
+    <summary>In an email conversation between Thomas Voegtlin and Dave, the semantics of bundled payments are discussed. Voegtlin explains that a BOLT-11 invoice, which is used in the Lightning Network protocol, contains two preimages and two amounts: a prepayment and a main payment. He further explains that the receiver should wait until all the Hashed Time-Locked Contracts (HTLCs) of both payments have arrived before fulfilling the HTLCs of the pre-payment. If the main payment does not arrive, the pre-payment should be failed with a MPP (Multi-Path Payments) timeout. Once the HTLCs of both payments have arrived, the receiver can fulfill the HTLCs of the prepayment and broadcast their on-chain transaction.Dave then raises a question about whether it is necessary for a BOLT11 invoice to contain a payment hash for the prepayment or if it would be acceptable for the prepayment to use a keysend payment with an onion message payload indicating the payment hash to associate with the prepayment. He suggests extending the BOLT11 invoices with an extra_fee_via_keysend field, which would be smaller and could be encoded in existing BOLT11 fields like the description or metadata field. This would allow for immediate implementation until an updated version of BOLT11 or an alternative using offers becomes widely deployed.The discussion revolves around the technical aspects of bundled payments and the potential modifications to the BOLT11 invoice format to accommodate them. It explores the possibility of using keysend payments and additional fields in the invoice to streamline the process.</summary>
     <published>2023-06-19T20:29:34+00:00</published>
   </entry>
 </feed>
