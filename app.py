@@ -159,10 +159,11 @@ def get_year_month_data():
     folders = os.listdir(os.path.join(app.root_path, 'static'))
     data = []
     for dev_folder in folders:
-        for f in os.listdir(os.path.join(app.root_path, f'static/{dev_folder}')):
-            month = f.split("_")[0]
-            year = f.split("_")[-1]
-            data.append({"month": f"{month} {year}", "dev_name": str(dev_folder)})
+        if os.path.isdir(os.path.join(app.root_path, f'static/{dev_folder}')):
+            for f in os.listdir(os.path.join(app.root_path, f'static/{dev_folder}')):
+                month = f.split("_")[0]
+                year = f.split("_")[-1]
+                data.append({"month": f"{month} {year}", "dev_name": str(dev_folder)})
     data_sorted = sorted(data, key=lambda x: (int(x['month'].split()[1]),
                                               (month_order[x['month'].split()[0]])), reverse=True)
 
