@@ -416,8 +416,12 @@ if __name__ == "__main__":
         data_list = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=3)
         logger.info(f"collected top_n results for {dev_name}")
 
+        seen_titles = set()
         for data in data_list:
             title = data['_source']['title']
+            if title in seen_titles:
+                continue
+            seen_titles.add(title)
             counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
                                                                                  df=all_data_df)
             authors = data['_source']['authors']
