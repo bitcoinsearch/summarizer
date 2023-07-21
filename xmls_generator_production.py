@@ -17,6 +17,7 @@ import os
 from dotenv import load_dotenv
 import sys
 import warnings
+from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
 
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
@@ -135,16 +136,18 @@ class GenerateXML:
         print(f"Total chunks: {len(chunks)}")
 
         for chunk in chunks:
-            count = 0
+            count_gen_sum = 0
             while True:
                 try:
                     time.sleep(2)
                     summary = generate_chatgpt_summary(chunk)
                     summaries.append(summary)
                     break
-                except Exception as ex:
-                    count += 1
-                    if count > 5:
+                except (APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError) as ex:
+                    logger.error(str(ex))
+                    count_gen_sum += 1
+                    time.sleep(0.2)
+                    if count_gen_sum > 5:
                         sys.exit(f"Chunk summary ran into error: {traceback.format_exc()}")
 
         return summaries
@@ -171,15 +174,17 @@ class GenerateXML:
         if len(summaries) > 1:
             print("Consolidate summary generating")
             summary_str = "\n".join(summaries)
-            count = 0
+            count_api = 0
             while True:
                 try:
                     time.sleep(2)
                     consolidated_summaries = consolidate_chatgpt_summary(summary_str)
                     break
-                except Exception as ex:
-                    count += 1
-                    if count > 5:
+                except (APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError) as ex:
+                    logger.error(str(ex))
+                    count_api += 1
+                    time.sleep(0.2)
+                    if count_api > 5:
                         sys.exit(f"Chunk summary ran into error: {traceback.format_exc()}")
 
             return consolidated_summaries
@@ -493,15 +498,16 @@ if __name__ == "__main__":
         logger.info(f"Total threads received for {dev_name}: {len(data_list)}")
 
         delay = 1
-        count = 0
+        count_main = 0
 
         while True:
             try:
                 gen.start(data_list, dev_url)
                 break
-            except Exception as ex:
+            except (APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError) as ex:
+                logger.error(str(ex))
                 logger.error(ex)
                 time.sleep(delay)
-                count += 1
-                if count > 5:
+                count_main += 1
+                if count_main > 5:
                     sys.exit(ex)
