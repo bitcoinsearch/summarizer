@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import sys
 import warnings
 import pytz
+import json
 
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
@@ -156,7 +157,7 @@ class ElasticSearchClient:
         return counts, contributors
 
 
-class GenerateXML:
+class GenerateJSON:
     def __init__(self) -> None:
         self.month_dict = {
             1: "Jan", 2: "Feb", 3: "March", 4: "April", 5: "May", 6: "June",
@@ -320,16 +321,13 @@ class GenerateXML:
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
         return response_str
 
-    def create_atom_feed(self, dict_list, file_name="homepage.xml"):
-
-        fg = FeedGenerator()
-        fg.id("1")
-
+    def create_json_feed(self, dict_list, file_name="homepage.json"):
         recent_post_summ = self.generate_recent_posts_summary(dict_list)
-        fg.title(recent_post_summ)
 
+        json_string = {"header_summary": recent_post_summ}
+
+        home_page_data = []
         for data in dict_list:
-
             number = self.get_id(data["_source"]["id"])
             title = data["_source"]["title"]
             published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -347,55 +345,50 @@ class GenerateXML:
 
             bullets = self.create_n_bullets(xml_summary, n=3)
 
-            summary_data = str({
+            entry_data = {
+                "id": number,
+                "title": title,
+                "link": url,
+                "authors": authors,
+                "published_at": published_at.isoformat(),
                 "summary": bullets,
-                "n_threads": data["_source"]["n_threads"],
-                "dev_name": data['_source']['dev_name']
-            })
+                "n_threads":data["_source"]["n_threads"],
+                "dev_name": data['_source']['dev_name'],
+                "contributors": contributors,
+            }
 
-            entry = fg.add_entry()
-            entry.id(number)
-            entry.title(title)
-            entry.link(href=url, rel='alternate')
-            for author in authors:
-                entry.author(name=author)
-            entry.published(published_at)
-            entry.summary(summary_data)
-            for contributor in contributors:
-                entry.contributor(name=contributor)
+            home_page_data.append(entry_data)
 
-        atom_string = fg.atom_str(pretty=True)
+        json_string["enteries"] = home_page_data
 
         f_name = f"static/{file_name}"
-        logger.info(f_name)
-        with open(f_name, 'wb') as f:
-            f.write(atom_string)
+        with open(f_name, 'w') as f:
+            f.write(json.dumps(json_string, indent=4))
             logger.info(f"saved file: {f_name}")
         return f_name
 
     def start_process(self, dict_data):
         logger.info("start start_process")
         if len(dict_data) > 0:
-            _ = self.create_atom_feed(dict_data)
+            _ = self.create_json_feed(dict_data)
         else:
             logger.error(f"Data list empty! Please check the data again.")
 
-    def get_existing_xml_ids(self, file_path):
+    def get_existing_json_ids(self, file_path):
         current_directory = os.getcwd()
         full_path = os.path.join(current_directory, file_path)
         if os.path.exists(full_path):
-            namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
-            tree = ET.parse(file_path)
-            root = tree.getroot()
-            id_list = root.findall(".//atom:entry/atom:id", namespaces)
-            return [id.text for id in id_list]
+            with open(full_path, 'r') as j:
+                data = json.load(j)
+            id_list = [item['id'] for item in data['enteries']]
+            return id_list
         else:
-            logger.info(f"No homepage.xml file found: {full_path}")
+            logger.info(f"No homepage.json file found: {full_path}")
             return []
 
 
 if __name__ == "__main__":
-    gen = GenerateXML()
+    gen = GenerateJSON()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
 
@@ -423,8 +416,12 @@ if __name__ == "__main__":
         data_list = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=3)
         logger.info(f"collected top_n results for {dev_name}")
 
+        seen_titles = set()
         for data in data_list:
             title = data['_source']['title']
+            if title in seen_titles:
+                continue
+            seen_titles.add(title)
             counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
                                                                                  df=all_data_df)
             authors = data['_source']['authors']
@@ -437,7 +434,7 @@ if __name__ == "__main__":
 
     logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
 
-    xml_ids = gen.get_existing_xml_ids(file_path=r"static/homepage.xml")
+    xml_ids = gen.get_existing_json_ids(file_path=r"static/homepage.json")
     recent_post_ids = [gen.get_id(data['_source']['id']) for data in recent_data_list]
 
     if set(recent_post_ids) != set(xml_ids):
@@ -457,4 +454,4 @@ if __name__ == "__main__":
                 if count > 5:
                     sys.exit(ex)
     else:
-        logger.info("No change in recent posts, no need to update homepage.xml file")
+        logger.info("No change in recent posts, no need to update homepage.json file")
