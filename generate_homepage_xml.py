@@ -106,16 +106,73 @@ class ElasticSearchClient:
             es_results,
             key=lambda x: datetime.strptime(x['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'), reverse=True
         )
-        return es_results_sorted[:top_n]
+        unique_results = []
+        seen_titles = set()
 
-    def fetch_all_data_for_url(self, es_index):
+        # Iterate through the sorted results
+        for result in es_results_sorted:
+            title = result['_source']['title']
+            # Only add the result if we haven't already seen the title
+            if title not in seen_titles:
+                unique_results.append(result)
+                seen_titles.add(title)
+
+            # Break after we've gotten top_n unique results
+            if len(unique_results) >= top_n:
+                break
+
+        return unique_results
+
+    def filter_top_active_posts(self, es_results, top_n, all_data_df):
+        unique_results = []
+        seen_titles = set()
+
+        thread_dict = {}
+
+        # Add this loop to create dictionary with title as key and thread count as value
+        for result in es_results:
+            title = result['_source']['title']
+            if title not in seen_titles:
+                counts, contributors = self.fetch_contributors_and_threads(title=title,
+                                                                           domain=result['_source']['domain'],
+                                                                           df=all_data_df)
+                thread_dict[title] = counts
+                result['_source']['n_threads'] = counts  # add thread count to source
+                seen_titles.add(title)
+
+        # Use the dictionary created above, to sort the results
+        es_results_sorted = sorted(
+            es_results,
+            key=lambda x: thread_dict[x['_source']['title']], reverse=True
+        )
+
+        seen_titles = set()
+        for result in es_results_sorted:
+            title = result['_source']['title']
+            if title not in seen_titles:
+                unique_results.append(result)
+                seen_titles.add(title)
+
+            # Break after we've gotten top_n unique results
+            if len(unique_results) >= top_n:
+                break
+
+        return unique_results
+
+    def fetch_all_data_for_url(self, es_index, url):
         logger.info(f"fetching all the data")
         output_list = []
         start_time = time.time()
 
         if self._es_client.ping():
             logger.info("connected to the ElasticSearch")
-            query = {}
+            query = {
+                "query": {
+                    "match_phrase": {
+                        "domain": str(url)
+                    }
+                }
+            }
 
             # Initialize the scroll
             scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
@@ -253,7 +310,7 @@ class GenerateJSON:
         return str(id).split("-")[-1]
 
     def create_n_bullets(self, body_summary, n=3):
-        bullets_prompt = f"Generate {n} bullet points based on below context. \n\n CONTEXT:\n\n{body_summary}"
+        bullets_prompt = f"Generate {n} bullet points based on below context which summarize the context well. Do not use more than some 15 words in each bullet point. Make sure to number the points as 1,2 3. Do not use any other way to number them. \n\n CONTEXT:\n\n{body_summary}"
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -261,7 +318,7 @@ class GenerateJSON:
                 {"role": "user", "content": f"{bullets_prompt}"},
             ],
             temperature=0.7,
-            max_tokens=500,
+            max_tokens=300,
             top_p=1.0,
             frequency_penalty=0.0,
             presence_penalty=1
@@ -307,7 +364,7 @@ class GenerateJSON:
                 body = data['_source']['body']
                 body_summ = self.create_summary(body)
                 recent_post_data += body_summ
-
+        recent_post_data = self.create_summary(recent_post_data)
         summ_prompt = f"Consolidate below context in 3 sentences strictly. \n\n CONTEXT:\n\n{recent_post_data}"
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -321,45 +378,55 @@ class GenerateJSON:
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
         return response_str
 
-    def create_json_feed(self, dict_list, file_name="homepage.json"):
-        recent_post_summ = self.generate_recent_posts_summary(dict_list)
+    def create_single_entery(self, data):
+        number = self.get_id(data["_source"]["id"])
+        title = data["_source"]["title"]
+        published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        published_at = pytz.UTC.localize(published_at)
+        contributors = data['_source']['contributors']
+        url = data['_source']['url']
+        authors = data['_source']['authors']
+        body = data['_source']['body']
+
+        # fetch the summary from xml if exist
+        xml_summary = self.get_xml_summary(data)
+
+        if xml_summary is None:
+            xml_summary = self.create_summary(body)
+
+        bullets = self.create_n_bullets(xml_summary, n=3)
+
+        entry_data = {
+            "id": number,
+            "title": title,
+            "link": url,
+            "authors": authors,
+            "published_at": published_at.isoformat(),
+            "summary": bullets,
+            "n_threads": data["_source"]["n_threads"],
+            "dev_name": data['_source']['dev_name'],
+            "contributors": contributors,
+        }
+        return entry_data
+
+    def create_json_feed(self, recent_dict_list, active_data_list, file_name="homepage.json"):
+        recent_post_summ = self.generate_recent_posts_summary(recent_dict_list)
 
         json_string = {"header_summary": recent_post_summ}
 
-        home_page_data = []
-        for data in dict_list:
-            number = self.get_id(data["_source"]["id"])
-            title = data["_source"]["title"]
-            published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            published_at = pytz.UTC.localize(published_at)
-            contributors = data['_source']['contributors']
-            url = data['_source']['url']
-            authors = data['_source']['authors']
-            body = data['_source']['body']
+        recent_page_data = []
+        for data in recent_dict_list:
+            entry_data = self.create_single_entery(data)
+            recent_page_data.append(entry_data)
 
-            # fetch the summary from xml if exist
-            xml_summary = self.get_xml_summary(data)
+        json_string["recent_posts"] = recent_page_data
 
-            if xml_summary is None:
-                xml_summary = self.create_summary(body)
+        active_page_data = []
+        for data in active_data_list:
+            entry_data = self.create_single_entery(data)
+            active_page_data.append(entry_data)
 
-            bullets = self.create_n_bullets(xml_summary, n=3)
-
-            entry_data = {
-                "id": number,
-                "title": title,
-                "link": url,
-                "authors": authors,
-                "published_at": published_at.isoformat(),
-                "summary": bullets,
-                "n_threads":data["_source"]["n_threads"],
-                "dev_name": data['_source']['dev_name'],
-                "contributors": contributors,
-            }
-
-            home_page_data.append(entry_data)
-
-        json_string["enteries"] = home_page_data
+        json_string["active_posts"] = active_page_data
 
         f_name = f"static/{file_name}"
         with open(f_name, 'w') as f:
@@ -367,10 +434,10 @@ class GenerateJSON:
             logger.info(f"saved file: {f_name}")
         return f_name
 
-    def start_process(self, dict_data):
+    def start_process(self, recent_post_data, active_post_data):
         logger.info("start start_process")
-        if len(dict_data) > 0:
-            _ = self.create_json_feed(dict_data)
+        if len(recent_post_data) > 0 or len(active_post_data) > 0:
+            _ = self.create_json_feed(recent_post_data, active_post_data)
         else:
             logger.error(f"Data list empty! Please check the data again.")
 
@@ -380,7 +447,8 @@ class GenerateJSON:
         if os.path.exists(full_path):
             with open(full_path, 'r') as j:
                 data = json.load(j)
-            id_list = [item['id'] for item in data['enteries']]
+            id_list = [item['title'] for item in data['recent_posts']]
+            id_list = id_list + [item['title'] for item in data['active_posts']]
             return id_list
         else:
             logger.info(f"No homepage.json file found: {full_path}")
@@ -392,8 +460,6 @@ if __name__ == "__main__":
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
 
-    all_data_df = elastic_search.fetch_all_data_for_url(ES_INDEX)
-
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
@@ -402,22 +468,24 @@ if __name__ == "__main__":
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=30)
+    start_date = datetime.now() - timedelta(days=60)
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
 
     recent_data_list = []
+    active_data_list = []
     for dev_url in dev_urls:
+        all_data_df = elastic_search.fetch_all_data_for_url(ES_INDEX, url=dev_url)
         data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url, start_date_str, current_date_str)
         dev_name = dev_url.split("/")[-2]
         logger.info(f"Total threads received for {dev_name}: {len(data_list)}")
 
-        data_list = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=3)
-        logger.info(f"collected top_n results for {dev_name}")
+        recent_posts_data = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=6)
+        logger.info(f"collected top_n results for {dev_name}, length of data {len(data_list)}")
 
         seen_titles = set()
-        for data in data_list:
+        for data in recent_posts_data:
             title = data['_source']['title']
             if title in seen_titles:
                 continue
@@ -432,12 +500,34 @@ if __name__ == "__main__":
             data['_source']['dev_name'] = dev_name
             recent_data_list.append(data)
 
-    logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
+        logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
+        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=6,
+                                                                   all_data_df=all_data_df)
+        for data in active_posts_data:
+            title = data['_source']['title']
+            if title in seen_titles:
+                continue
+            seen_titles.add(title)
+            counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
+                                                                                 df=all_data_df)
+            authors = data['_source']['authors']
+            for author in authors:
+                contributors.remove(author)
+            data['_source']['n_threads'] = counts
+            data['_source']['contributors'] = contributors
+            data['_source']['dev_name'] = dev_name
+            active_data_list.append(data)
+
+        logger.info(f"Number of active posts collected: {len(active_data_list)}")
 
     xml_ids = gen.get_existing_json_ids(file_path=r"static/homepage.json")
-    recent_post_ids = [gen.get_id(data['_source']['id']) for data in recent_data_list]
+    recent_post_ids = [gen.get_id(data['_source']['title']) for data in recent_data_list]
+    active_post_ids = [gen.get_id(data['_source']['title']) for data in active_data_list]
 
-    if set(recent_post_ids) != set(xml_ids):
+    # Combine the titles to create a concatenated set
+    all_post_titles = set(recent_post_ids + active_post_ids)
+
+    if all_post_titles != set(xml_ids):
         logger.info("changes found in recent posts")
 
         delay = 1
@@ -445,7 +535,7 @@ if __name__ == "__main__":
 
         while True:
             try:
-                gen.start_process(recent_data_list)
+                gen.start_process(recent_data_list, active_data_list)
                 break
             except Exception as ex:
                 logger.error(ex)
