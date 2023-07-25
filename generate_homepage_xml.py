@@ -253,7 +253,6 @@ class GenerateJSON:
                     count += 1
                     if count > 5:
                         sys.exit(f"Chunk summary ran into error: {traceback.format_exc()}")
-
         return summaries
 
     def recursive_summary(self, body, tokens_per_sub_body, max_length):
@@ -329,6 +328,7 @@ class GenerateJSON:
         )
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
         response_str = response_str.replace('.-', '.\n-')
+        response_str = response_str.replace('. -', '.\n-')
         return response_str
 
     def get_xml_summary(self, data):
@@ -392,6 +392,10 @@ class GenerateJSON:
         url = data['_source']['url']
         authors = data['_source']['authors']
         body = data['_source']['body']
+        xml_name = self.clean_title(title)
+        month_name = self.month_dict[int(published_at.month)]
+        str_month_year = f"{month_name}_{int(published_at.year)}"
+        file_path = f"static/{dev_name}/{str_month_year}/{number}_{xml_name}.xml"
 
         # fetch the summary from xml if exist
         xml_summary = self.get_xml_summary(data)
@@ -411,6 +415,7 @@ class GenerateJSON:
             "n_threads": data["_source"]["n_threads"],
             "dev_name": data['_source']['dev_name'],
             "contributors": contributors,
+            "file_path": file_path
         }
         return entry_data
 
