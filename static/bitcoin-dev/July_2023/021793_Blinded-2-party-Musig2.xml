@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Blinded 2-party Musig2</title>
+  <updated>2023-07-25T02:21:15.906940+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-07-24 10:50:13+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Blinded 2-party Musig2</title>
+    <updated>2023-07-25T02:21:15.906979+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021793.html" rel="alternate"/>
+    <summary>In an email exchange, Tom Trevethan discusses the implementation of a version of 2-of-2 Schnorr MuSig2 for statechains. The goal is to have the server (party 1) fully blinded so that it does not learn the aggregate public key, aggregate signature, or the message being signed. The security of this model relies on trusting the statechain server to report the number of partial signatures generated, rather than enforcing rules on what it has signed in the unblinded case.The MuSig2 protocol operates by party 1 generating a private key (x1) and a public key (X1 = x1G), while party 2 generates a private key (x2) and a public key (X2 = x2G). The set of public keys is denoted as L = {X1, X2}. The key aggregation coefficient is calculated as KeyAggCoef(L, X) = H(L, X). The shared (aggregate) public key is then calculated as X = a1X1 + a2X2, where a1 = KeyAggCoef(L, X1) and a2 = KeyAggCoef(L, X2).To sign a message m, party 1 generates a nonce (r1) and calculates R1 = r1G. Party 2 similarly generates a nonce (r2) and calculates R2 = r2G. These nonces are then aggregated into R = R1 + R2. Next, party 1 computes the challenge c = H(X || R || m) and calculates s1 = c.a1.x1 + r1. Party 2 performs the same calculation with its own variables, computing c = H(X || R || m) and s2 = c.a2.x2 + r2. The final signature is then represented as (R, s1 + s2).When party 1 is blinded, several adjustments are made. Key aggregation is performed only by party 2; party 1 simply sends X1 to party 2. Similarly, nonce aggregation is performed only by party 2, with party 1 sending R1 to party 2. Party 2 then computes c = H(X || R || m) and sends it to party 1 to compute s1 = c.a1.x1 + r1. In this way, party 1 never learns the final value of (R, s1 + s2) or the message.Tom seeks comments on these adjustments and any potential issues that may arise from this approach.</summary>
+    <published>2023-07-24T10:50:13+00:00</published>
+  </entry>
+</feed>

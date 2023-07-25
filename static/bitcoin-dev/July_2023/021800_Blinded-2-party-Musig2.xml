@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Blinded 2-party Musig2</title>
+  <updated>2023-07-25T02:23:12.831017+00:00</updated>
+  <author>
+    <name>Tom Trevethan 2023-07-24 16:08:28+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Blinded 2-party Musig2</title>
+    <updated>2023-07-25T02:23:12.831047+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021800.html" rel="alternate"/>
+    <summary>In a discussion on the bitcoin-dev mailing list, the topic of implementing a version of 2-of-2 Schnorr MuSig2 for statechains was raised. The goal is to have a server (party 1) that is fully 'blinded', meaning it holds a private key required to generate an aggregate signature on an aggregate public key, but it does not learn important information such as the aggregate public key, the aggregate signature, and the message being signed.The security of this blinded statechain model relies on trusting the statechain server to report the number of partial signatures it has generated for a particular key, rather than trusting it to enforce rules on what it has signed in the unblinded case. The full set of signatures generated is then verified client-side.The MuSig2 protocol operates by having Party 1 generate a private key x1 and public key X1, while Party 2 generates a private key x2 and public key X2. The set of public keys is denoted as L = {X1, X2}, and the key aggregation coefficient is computed as KeyAggCoef(L, X) = H(L, X), where H is a hash function. The shared (aggregate) public key X is calculated as a linear combination of the individual public keys: X = a1X1 + a2X2, where a1 = KeyAggCoef(L, X1) and a2 = KeyAggCoef(L, X2).To sign a message m, both parties generate nonces (random values used only once) and elliptic curve points. These nonces are then aggregated into R using point addition. Each party independently computes a 'challenge' value c = H(X||R||m) and uses it to calculate their respective signature components: s1 = c.a1.x1 + r1 for Party 1 and s2 = c.a2.x2 + r2 for Party 2. The final signature is the combination of R and the sum of s1 and s2.In the case of blinding for Party 1, the goal is to prevent Party 1 from learning the full public key or final signature. To achieve this, Party 1 does not need to independently compute and verify the challenge value c. Instead, the following steps are taken:1) Key aggregation is performed only by Party 2, who receives X1 from Party 1.2) Nonce aggregation is also performed only by Party 2, who receives R1 from Party 1.3) Party 2 computes the challenge value c = H(X||R||m) and sends it to Party 1. Party 1 then uses it to compute s1 = c.a1.x1 + r1.By following this approach, Party 1 never learns the final value of (R, s1+s2) or the message being signed (m).The discussion raised some concerns about the vulnerability of this scheme to certain attacks. In particular, it was mentioned that MuSig2 requires multiple 'R' points per signatory to prevent certain attacks. The current scheme described by Tom Trevethan only has one 'R' per party, raising questions about its vulnerability to those attacks.Overall, the discussion revolves around the implementation of a blinded statechain protocol using Schnorr MuSig2 and addresses the security considerations and potential issues associated with it.</summary>
+    <published>2023-07-24T16:08:28+00:00</published>
+  </entry>
+</feed>
