@@ -310,20 +310,25 @@ class GenerateJSON:
         return str(id).split("-")[-1]
 
     def create_n_bullets(self, body_summary, n=3):
-        bullets_prompt = f"Generate {n} bullet points based on below context which summarize the context well. Do not use more than some 15 words in each bullet point. Make sure to number the points as 1,2 3. Do not use any other way to number them. \n\n CONTEXT:\n\n{body_summary}"
+        bullets_prompt = f"""Summarize the following context into {3} distinct sentences based on the guidelines 
+        mentioned below. 
+            1. Each sentence you write should not exceed fifteen words. 
+            2. Each sentence should begin on a new line and should start with a hyphen (-). 
+            3. Please adhere to all English grammatical rules while writing the sentences, 
+                maintaining formal tone and employing proper spacing. 
+        CONTEXT:\n\n{body_summary}"""
+
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an intelligent."},
                 {"role": "user", "content": f"{bullets_prompt}"},
             ],
-            temperature=0.7,
+            temperature=1,
             max_tokens=300,
-            top_p=1.0,
-            frequency_penalty=0.0,
-            presence_penalty=1
         )
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
+        response_str = response_str.replace('.-', '.\n-')
         return response_str
 
     def get_xml_summary(self, data):
@@ -457,8 +462,6 @@ class GenerateJSON:
 
 if __name__ == "__main__":
 
-    logger.add("generate_homepage_xml.log", rotation="12:00")
-
     gen = GenerateJSON()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
@@ -471,7 +474,7 @@ if __name__ == "__main__":
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=90)
+    start_date = datetime.now() - timedelta(days=60)
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
