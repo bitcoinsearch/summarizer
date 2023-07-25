@@ -348,7 +348,7 @@ class GenerateJSON:
             summ = "\n".join([summ.text for summ in summ_list])
             return summ
         else:
-            logger.info(f"No xml file found: {full_path}")
+            logger.warning(f"No xml file found: {full_path}")
             return None
 
     def generate_recent_posts_summary(self, dict_list):
@@ -431,11 +431,11 @@ class GenerateJSON:
         f_name = f"static/{file_name}"
         with open(f_name, 'w') as f:
             f.write(json.dumps(json_string, indent=4))
-            logger.info(f"saved file: {f_name}")
+            logger.success(f"saved file: {f_name}")
         return f_name
 
     def start_process(self, recent_post_data, active_post_data):
-        logger.info("start start_process")
+        logger.info("Creating Homepage.json file ... ")
         if len(recent_post_data) > 0 or len(active_post_data) > 0:
             _ = self.create_json_feed(recent_post_data, active_post_data)
         else:
@@ -451,11 +451,14 @@ class GenerateJSON:
             id_list = id_list + [item['title'] for item in data['active_posts']]
             return id_list
         else:
-            logger.info(f"No homepage.json file found: {full_path}")
+            logger.warning(f"No existing homepage.json file found: {full_path}")
             return []
 
 
 if __name__ == "__main__":
+
+    logger.add("generate_homepage_xml.log", rotation="12:00")
+
     gen = GenerateJSON()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
@@ -468,7 +471,7 @@ if __name__ == "__main__":
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=60)
+    start_date = datetime.now() - timedelta(days=90)
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
@@ -481,8 +484,9 @@ if __name__ == "__main__":
         dev_name = dev_url.split("/")[-2]
         logger.info(f"Total threads received for {dev_name}: {len(data_list)}")
 
-        recent_posts_data = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=6)
-        logger.info(f"collected top_n results for {dev_name}, length of data {len(data_list)}")
+        recent_posts_data = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=10)
+        if len(recent_posts_data) >= 6:
+            recent_posts_data = recent_posts_data[:6]
 
         seen_titles = set()
         for data in recent_posts_data:
@@ -501,9 +505,12 @@ if __name__ == "__main__":
             recent_data_list.append(data)
 
         logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
-        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=6,
+        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=10,
                                                                    all_data_df=all_data_df)
+        active_posts_data_counter = 0
         for data in active_posts_data:
+            if active_posts_data_counter >= 6:
+                break
             title = data['_source']['title']
             if title in seen_titles:
                 continue
@@ -517,6 +524,7 @@ if __name__ == "__main__":
             data['_source']['contributors'] = contributors
             data['_source']['dev_name'] = dev_name
             active_data_list.append(data)
+            active_posts_data_counter += 1
 
         logger.info(f"Number of active posts collected: {len(active_data_list)}")
 
@@ -528,13 +536,14 @@ if __name__ == "__main__":
     all_post_titles = set(recent_post_ids + active_post_ids)
 
     if all_post_titles != set(xml_ids):
-        logger.info("changes found in recent posts")
+        logger.info("changes found in recent posts ... ")
 
         delay = 1
         count = 0
 
         while True:
             try:
+                logger.info(f"active posts: {len(active_data_list)}, recent posts: {len(recent_data_list)}")
                 gen.start_process(recent_data_list, active_data_list)
                 break
             except Exception as ex:
@@ -544,4 +553,4 @@ if __name__ == "__main__":
                 if count > 5:
                     sys.exit(ex)
     else:
-        logger.info("No change in recent posts, no need to update homepage.json file")
+        logger.success("No change in recent posts, no need to update homepage.json file")
