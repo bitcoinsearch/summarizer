@@ -1,51 +1,52 @@
 {
-    "header_summary": "The discussion focuses on the vulnerabilities and potential solutions for blind MuSig schemes, particularly MuSig1, highlighting the need for further research in this area. The conversation covers various topics related to the Lightning Network protocol, including V3 transactions, Taproot upgrade, Gossip protocol versions, multi-sig channel parties, PTLCs, and channel jamming mitigation. The pull request introduces a new protocol for closing a channel in the Lightning Network, simplifying the process and removing older protocols, with detailed explanations provided for the new protocol, closing transaction structure, and feature options related to closing negotiation.",
+    "header_summary": "The context discusses the v=2 nonces signing protocol of musig2 and the challenges of preventing attacks and maintaining confidentiality. It also addresses the concerns about the growth of \"inscriptions\" on the blockchain and the need for options to reject them. Additionally, it explores proposals for using MuSig2 signing for mutual closes and the complexities of pricing fees and implementing an ideal payment system.",
     "enteries": [
         {
-            "id": "021802",
+            "id": "021804",
             "title": "Blinded 2-party Musig2",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021802.html",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021804.html",
             "authors": [
-                "AdamISZ"
+                "Tom Trevethan"
             ],
-            "published_at": "2023-07-24T16:51:44+00:00",
-            "summary": "- The discussion focuses on the vulnerabilities of blind MuSig schemes, specifically MuSig1.- @Jonas suggests an alternative scheme to address the potential attack scenarios in MuSig1.- Further research is needed to explore and develop secure blind MuSig schemes.",
-            "n_threads": 11,
+            "published_at": "2023-07-25T16:05:48+00:00",
+            "summary": "- The v=2 nonces signing protocol of musig2 is designed to prevent the Wagner attack by blinding the challenge value c from the server.- The key aggregation coefficient of 1 for each key in statecoin transfer prevents \"rogue key attacks\" and ensures a valid signature over the aggregate key.- The updated key generation protocol involves the server generating a private key x1 and a public key X1, while the user generates a private key x2, a public key X2, and a random blinding nonce z.",
+            "n_threads": 13,
             "dev_name": "bitcoin-dev",
             "contributors": [
+                "AdamISZ",
                 "Erik Aronesty",
                 "Jonas Nick",
-                "Tom Trevethan",
                 "ZmnSCPxj"
             ]
         },
         {
-            "id": "004015",
-            "title": "LN Summit 2023 Notes",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004015.html",
+            "id": "021805",
+            "title": "Concern about \"Inscriptions\".",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021805.html",
             "authors": [
-                "Antoine Riard"
+                "leohaf at orangepill.ovh"
             ],
-            "published_at": "2023-07-20T09:33:35+00:00",
-            "summary": "- The Lightning Network protocol conversation covered topics such as V3 transactions, Taproot upgrade, and Gossip protocol versions.- Approaches for achieving multi-sig channel parties were explored, including using scripts, FROSTy, and recursive musig.- Channel jamming mitigation was addressed, with monetary, reputation-based, and scarce resource-based solutions identified.",
-            "n_threads": 2,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "Carla Kirk-Cohen"
-            ]
+            "published_at": "2023-07-25T14:11:49+00:00",
+            "summary": "- The bug pertaining to the \"inscriptions\" developed by @rodarmor has caused a rapid growth in size on the blockchain, impacting the UTXO set and resulting in daily growth of 25MB.- Current options in Bitcoin Core do not effectively address the issue of inscriptions, with the only available patch being impractical for most users.- Implementing a feature that allows users to reject inscriptions in the mempool would help mitigate the negative impact and protect the integrity of the network.",
+            "n_threads": 1,
+            "dev_name": "bitcoin-dev",
+            "contributors": []
         },
         {
-            "id": "004013",
-            "title": "option_simple_close for \"unfailable\" closing",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004013.html",
+            "id": "004016",
+            "title": "LN Summit 2023 Notes",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004016.html",
             "authors": [
-                "Rusty Russell"
+                "ZmnSCPxj"
             ],
-            "published_at": "2023-07-17T21:55:29+00:00",
-            "summary": "1. The pull request introduces a new protocol for closing a channel in the Lightning Network, which aims to avoid failure scenarios caused by fee disagreement.2. The new protocol allows each side to indicate whether they want to omit their own output, providing flexibility in the closing negotiation process.3. This pull request also includes updates to the relevant documentation files, providing detailed explanations of the new protocol, the structure of the closing transaction, and the feature options related to closing negotiation.",
-            "n_threads": 1,
+            "published_at": "2023-07-24T08:13:49+00:00",
+            "summary": "- Proposal to use tapscript branch for unilateral closes instead of MuSig2 signing for commitment transactions.- Consideration of dynamic unconditional fees based on demand rather than static fees.- Challenges in setting failure thresholds and reputation-based solutions for preventing attacks in the network.",
+            "n_threads": 3,
             "dev_name": "lightning-dev",
-            "contributors": []
+            "contributors": [
+                "Antoine Riard",
+                "Carla Kirk-Cohen"
+            ]
         }
     ]
 }
