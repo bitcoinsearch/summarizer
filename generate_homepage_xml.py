@@ -308,12 +308,14 @@ class GenerateJSON:
         return str(id).split("-")[-1]
 
     def create_n_bullets(self, body_summary, n=3):
-        bullets_prompt = f"""Summarize the following context into {3} distinct sentences based on the guidelines 
+        bullets_prompt = f"""Summarize the following context into {n} distinct sentences based on the guidelines 
         mentioned below. 
             1. Each sentence you write should not exceed fifteen words. 
             2. Each sentence should begin on a new line and should start with a hyphen (-) and you must add space after hyphen (-).
+                E.g., - This is a first sentence. - This is a second sentence. - This is a third sentence.
             3. Please adhere to all English grammatical rules while writing the sentences, 
                 maintaining formal tone and employing proper spacing. 
+            4. Do not write anything like - The context discusses..., In this context... etc.
         CONTEXT:\n\n{body_summary}"""
 
         response = openai.ChatCompletion.create(
@@ -327,8 +329,8 @@ class GenerateJSON:
         )
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
         response_str = re.sub(r'-(?=[a-zA-Z])', '- ', response_str, count=1)
-        response_str = response_str.replace('.- ', '.\n - ')
-        response_str = response_str.replace('. - ', '.\n - ')
+        response_str = response_str.replace('.- ', '.\n- ')
+        response_str = response_str.replace('. - ', '.\n- ')
         return response_str
 
     def get_xml_summary(self, data):
