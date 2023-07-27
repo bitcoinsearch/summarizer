@@ -1,51 +1,71 @@
 {
-    "header_summary": "The context discusses the v=2 nonces signing protocol of musig2 and the challenges of preventing attacks and maintaining confidentiality. It also addresses the concerns about the growth of \"inscriptions\" on the blockchain and the need for options to reject them. Additionally, it explores proposals for using MuSig2 signing for mutual closes and the complexities of pricing fees and implementing an ideal payment system.",
+    "header_summary": "Tom Trevethan questioned whether proving knowledge of the ephemeral keys used in generating each R value could prevent the Wagner attack, but Jonas Nick argued that proving knowledge of the signing key (PoP) cannot prevent attacks on nonces and challenges. Bastien raised concerns about the impact of blinded paths on privacy and decentralization in the Lightning Network, questioning the necessity of routing payments through regulated nodes. Ben Carman discussed the potential implications of enforcing payments through compliant nodes, highlighting privacy risks for the sender and the possibility of bypassing pleb routing nodes. The discussion also covered various aspects of Bitcoin network policies, including the \"top of mempool\" assumption, lightning unilateral closes, zero-fee transactions with ephemeral outputs, and the addition of trimmed HTLCs. A hybrid approach to channel jamming mitigation was proposed, involving monetary measures and reasonable fees for regular users. The email thread also addressed issues related to fees, market influence, proving time in case of issues, and potential problems with fees and channel closures. It concluded with a resolution on the need for a hybrid approach to address channel jamming. Finally, the thread discussed the security risk posed by the analysis of IP packet sizes in the Lightning Network and proposed a solution using the BOLT8 specification to ensure uniform packet sizes and enhance privacy and security.",
     "enteries": [
         {
-            "id": "021804",
+            "id": "021817",
             "title": "Blinded 2-party Musig2",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021804.html",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021817.html",
             "authors": [
-                "Tom Trevethan"
+                "Erik Aronesty"
             ],
-            "published_at": "2023-07-25T16:05:48+00:00",
-            "summary": "- The v=2 nonces signing protocol of musig2 is designed to prevent the Wagner attack by blinding the challenge value c from the server.- The key aggregation coefficient of 1 for each key in statecoin transfer prevents \"rogue key attacks\" and ensures a valid signature over the aggregate key.- The updated key generation protocol involves the server generating a private key x1 and a public key X1, while the user generates a private key x2, a public key X2, and a random blinding nonce z.",
-            "n_threads": 13,
+            "published_at": "2023-07-26T22:06:44+00:00",
+            "summary": "- Tom Trevethan raised the question of whether proving knowledge of the r values could prevent the Wagner attack.- Jonas Nick responded that proving knowledge of the signing key (proof of possession, PoP) cannot prevent attacks on nonces and challenges.- No further information or context is provided in the given excerpt.",
+            "n_threads": 23,
             "dev_name": "bitcoin-dev",
             "contributors": [
                 "AdamISZ",
-                "Erik Aronesty",
+                "Andrew Poelstra",
                 "Jonas Nick",
+                "Tom Trevethan",
+                "ZmnSCPxj",
+                "moonsettler"
+            ]
+        },
+        {
+            "id": "004021",
+            "title": "Blinded Paths Doom Scenario",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004021.html",
+            "authors": [
+                "Bastien TEINTURIER"
+            ],
+            "published_at": "2023-07-26T16:18:08+00:00",
+            "summary": "- Blinded paths in the Lightning Network provide privacy benefits for the receiver by hiding among an anonymous set of nodes within a certain number of hops from the introduction point.- Routing payments through \"regulated\" nodes in the network could have implications for privacy and decentralization, as it bypasses pleb routing nodes and forces users to route their payments exclusively through large regulated hubs.- The need for multiple hops in the payment route increases the sender's dependence on being closely connected to the introduction node or any nodes along the blinded path, posing potential privacy risks.",
+            "n_threads": 2,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Ben Carman"
+            ]
+        },
+        {
+            "id": "004020",
+            "title": "LN Summit 2023 Notes",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004020.html",
+            "authors": [
+                "Anthony Towns"
+            ],
+            "published_at": "2023-07-26T08:05:23+00:00",
+            "summary": "1. The concept of \"top of mempool\" assumption was discussed, with different stakeholders having different goals and priorities in transaction selection.2. Suggestions were made to improve lightning unilateral closes by allowing special cases for their inclusion in blocks, even when regular nodes don't relay them.3. A hybrid approach to channel jamming mitigation was proposed, involving monetary measures such as charging for bandwidth and compute resources, imposing fees for liquidity DoS prevention, and setting higher fees for actual payments.",
+            "n_threads": 5,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Antoine Riard",
+                "Carla Kirk-Cohen",
                 "ZmnSCPxj"
             ]
         },
         {
-            "id": "021805",
-            "title": "Concern about \"Inscriptions\".",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021805.html",
+            "id": "004019",
+            "title": "Equalizing Packet Size",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004019.html",
             "authors": [
-                "leohaf at orangepill.ovh"
+                "Antoine Riard"
             ],
-            "published_at": "2023-07-25T14:11:49+00:00",
-            "summary": "- The bug pertaining to the \"inscriptions\" developed by @rodarmor has caused a rapid growth in size on the blockchain, impacting the UTXO set and resulting in daily growth of 25MB.- Current options in Bitcoin Core do not effectively address the issue of inscriptions, with the only available patch being impractical for most users.- Implementing a feature that allows users to reject inscriptions in the mempool would help mitigate the negative impact and protect the integrity of the network.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": []
-        },
-        {
-            "id": "004016",
-            "title": "LN Summit 2023 Notes",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004016.html",
-            "authors": [
-                "ZmnSCPxj"
-            ],
-            "published_at": "2023-07-24T08:13:49+00:00",
-            "summary": "- Proposal to use tapscript branch for unilateral closes instead of MuSig2 signing for commitment transactions.- Consideration of dynamic unconditional fees based on demand rather than static fees.- Challenges in setting failure thresholds and reputation-based solutions for preventing attacks in the network.",
-            "n_threads": 3,
+            "published_at": "2023-07-26T01:30:20+00:00",
+            "summary": "1. The use of uniform packet sizes can mitigate the risk of eavesdroppers deducing message content in the Lightning Network.2. Implementing a buffer within BOLT8 tunnel encrypter objects allows for the transmission of fixed-size packets, enhancing privacy and security.3. Incorporating a randomized timer and self-flush mechanism in the object can enhance robustness against internal bugs and ensure complete delivery of messages to the counterparty.",
+            "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Antoine Riard",
-                "Carla Kirk-Cohen"
+                "ZmnSCPxj"
             ]
         }
     ]
