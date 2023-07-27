@@ -1,53 +1,25 @@
 {
-    "header_summary": "The context discusses the problems caused by spam attacks in the Bitcoin network, the potential risks of accepting unconfirmed inputs in coinjoin transactions, the issue of front-running in peer-to-peer marketplaces, concerns about privacy and decentralization in the Lightning Network, and the introduction of a new protocol for closing channels. The discussions highlight the need for action against spam attacks, the potential dangers of allowing unconfirmed inputs, suggestions for addressing front-running, concerns about privacy risks in the Lightning Network, and the proposed protocol for simplifying channel closures.",
-    "recent_posts": [
+    "header_summary": "Tom Trevethan questioned whether proving knowledge of the ephemeral keys used in generating each R value could prevent the Wagner attack, but Jonas Nick argued that proving knowledge of the signing key (PoP) cannot prevent attacks on nonces and challenges. Bastien raised concerns about the impact of blinded paths on privacy and decentralization in the Lightning Network, questioning the necessity of routing payments through regulated nodes. Ben Carman discussed the potential implications of enforcing payments through compliant nodes, highlighting privacy risks for the sender and the possibility of bypassing pleb routing nodes. The discussion also covered various aspects of Bitcoin network policies, including the \"top of mempool\" assumption, lightning unilateral closes, zero-fee transactions with ephemeral outputs, and the addition of trimmed HTLCs. A hybrid approach to channel jamming mitigation was proposed, involving monetary measures and reasonable fees for regular users. The email thread also addressed issues related to fees, market influence, proving time in case of issues, and potential problems with fees and channel closures. It concluded with a resolution on the need for a hybrid approach to address channel jamming. Finally, the thread discussed the security risk posed by the analysis of IP packet sizes in the Lightning Network and proposed a solution using the BOLT8 specification to ensure uniform packet sizes and enhance privacy and security.",
+    "enteries": [
         {
-            "id": "021809",
-            "title": "Concern about \"Inscriptions\".",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021809.html",
+            "id": "021817",
+            "title": "Blinded 2-party Musig2",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021817.html",
             "authors": [
-                "leohaf at orangepill.ovh"
+                "Erik Aronesty"
             ],
-            "published_at": "2023-07-26T09:46:51+00:00",
-            "summary": "- The spam attack caused by inscriptions in the Bitcoin network is a significant problem.\n - Taking action against inscriptions can prevent future spam attacks and signal rejection of such behavior.\n - Adding a standardization option without a soft fork could address the complexity of rejecting inscriptions.",
-            "n_threads": 3,
+            "published_at": "2023-07-26T22:06:44+00:00",
+            "summary": "- Tom Trevethan raised the question of whether proving knowledge of the r values could prevent the Wagner attack.- Jonas Nick responded that proving knowledge of the signing key (proof of possession, PoP) cannot prevent attacks on nonces and challenges.- No further information or context is provided in the given excerpt.",
+            "n_threads": 23,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "vjudeu at gazeta.pl"
-            ],
-            "file_path": "static/bitcoin-dev/July_2023/021809_Concern-about-Inscriptions-.xml"
-        },
-        {
-            "id": "021785",
-            "title": "Denial of Service using Package Relay",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021785.html",
-            "authors": [
-                "Andrew Chow"
-            ],
-            "published_at": "2023-07-06T17:24:47+00:00",
-            "summary": "- On 07/06/2023, a user expressed concerns about accepting unconfirmed inputs in coinjoin transactions.\n - They pointed out the risks of allowing unconfirmed inputs and the potential for coinjoin invalidation.\n - The user also discussed the benefits of package relay and upcoming RBF proposals for coinjoin security and efficiency.",
-            "n_threads": 2,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "alicexbt"
-            ],
-            "file_path": "static/bitcoin-dev/July_2023/021785_Denial-of-Service-using-Package-Relay.xml"
-        },
-        {
-            "id": "021782",
-            "title": "Civ Kit: A Peer-to-Peer Electronic Market System",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-June/021782.html",
-            "authors": [
-                "Antoine Riard"
-            ],
-            "published_at": "2023-06-30T03:46:32+00:00",
-            "summary": "- Front- running in peer-to-peer marketplaces refers to capitalizing on trade opportunities before publishing.\n - Concerns were raised regarding CivKit's model resembling a brokerage rather than an exchange.\n - Security mitigations discussed included duplicating offers, monitoring latency anomalies, and federating bulletin boards.",
-            "n_threads": 4,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Chris Stewart"
-            ],
-            "file_path": "static/bitcoin-dev/June_2023/021782_Civ-Kit-A-Peer-to-Peer-Electronic-Market-System.xml"
+                "AdamISZ",
+                "Andrew Poelstra",
+                "Jonas Nick",
+                "Tom Trevethan",
+                "ZmnSCPxj",
+                "moonsettler"
+            ]
         },
         {
             "id": "004021",
@@ -57,13 +29,29 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-07-26T16:18:08+00:00",
-            "summary": "- Bastien raises valid concerns about privacy and decentralization in the Lightning Network due to blinded paths.\n - Enforcing payments through \"compliant\" nodes could affect privacy and decentralization on the network.\n - This approach may enhance payment reliability for the recipient but poses privacy risks for the sender.",
+            "summary": "- Blinded paths in the Lightning Network provide privacy benefits for the receiver by hiding among an anonymous set of nodes within a certain number of hops from the introduction point.- Routing payments through \"regulated\" nodes in the network could have implications for privacy and decentralization, as it bypasses pleb routing nodes and forces users to route their payments exclusively through large regulated hubs.- The need for multiple hops in the payment route increases the sender's dependence on being closely connected to the introduction node or any nodes along the blinded path, posing potential privacy risks.",
             "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
                 "Ben Carman"
+            ]
+        },
+        {
+            "id": "004020",
+            "title": "LN Summit 2023 Notes",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004020.html",
+            "authors": [
+                "Anthony Towns"
             ],
-            "file_path": "static/lightning-dev/July_2023/004021_Blinded-Paths-Doom-Scenario.xml"
+            "published_at": "2023-07-26T08:05:23+00:00",
+            "summary": "1. The concept of \"top of mempool\" assumption was discussed, with different stakeholders having different goals and priorities in transaction selection.2. Suggestions were made to improve lightning unilateral closes by allowing special cases for their inclusion in blocks, even when regular nodes don't relay them.3. A hybrid approach to channel jamming mitigation was proposed, involving monetary measures such as charging for bandwidth and compute resources, imposing fees for liquidity DoS prevention, and setting higher fees for actual payments.",
+            "n_threads": 5,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Antoine Riard",
+                "Carla Kirk-Cohen",
+                "ZmnSCPxj"
+            ]
         },
         {
             "id": "004019",
@@ -73,145 +61,12 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-07-26T01:30:20+00:00",
-            "summary": "- Even with Noise encryption, eavesdroppers can deduce message content by analyzing packet sizes.\n - Implementing BOLT8 specification can ensure uniform packet sizes and mitigate security risks.\n - Extending BOLT8 tunnel encrypter objects to include buffering functionality enables fixed- size packets for enhanced privacy.",
+            "summary": "1. The use of uniform packet sizes can mitigate the risk of eavesdroppers deducing message content in the Lightning Network.2. Implementing a buffer within BOLT8 tunnel encrypter objects allows for the transmission of fixed-size packets, enhancing privacy and security.3. Incorporating a randomized timer and self-flush mechanism in the object can enhance robustness against internal bugs and ensure complete delivery of messages to the counterparty.",
             "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
                 "ZmnSCPxj"
-            ],
-            "file_path": "static/lightning-dev/July_2023/004019_Equalizing-Packet-Size.xml"
-        },
-        {
-            "id": "004013",
-            "title": "option_simple_close for \"unfailable\" closing",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004013.html",
-            "authors": [
-                "Rusty Russell"
-            ],
-            "published_at": "2023-07-17T21:55:29+00:00",
-            "summary": "- The pull request introduces a new channel closing protocol in the Lightning Network.\n - The protocol simplifies the closing process and removes older protocols for channel closure.\n - Detailed explanations are provided for the new protocol, closing transaction structure, and feature options.",
-            "n_threads": 1,
-            "dev_name": "lightning-dev",
-            "contributors": [],
-            "file_path": "static/lightning-dev/July_2023/004013_option-simple-close-for-unfailable-closing.xml"
-        }
-    ],
-    "active_posts": [
-        {
-            "id": "021731",
-            "title": "Standardisation of an unstructured taproot annex",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-June/021731.html",
-            "authors": [
-                "Joost Jager"
-            ],
-            "published_at": "2023-06-02T15:00:37+00:00",
-            "summary": "- The taproot annex is being considered for standardization as a flexible Type- Length-Value format.\n - In the meantime, an immediate solution is to allow a free-form annex starting with '0'.\n - This approach offers utilization, flexibility, and efficiency, with potential for future structured formats.",
-            "n_threads": 30,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Antoine Riard",
-                "David A. Harding",
-                "Greg Sanders",
-                "Peter Todd"
-            ],
-            "file_path": "static/bitcoin-dev/June_2023/combined_Standardisation-of-an-unstructured-taproot-annex.xml"
-        },
-        {
-            "id": "021792",
-            "title": "Blinded 2-party Musig2",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021792.html",
-            "authors": [
-                "Tom Trevethan"
-            ],
-            "published_at": "2023-07-24T07:46:11+00:00",
-            "summary": "- The implementation discusses the use of 2-of-2 Schnorr Musig2 for statechains, ensuring party 1 remains 'blinded'.-The security of blinded statechains relies on trusting the server's report on partial signatures.-The 2-of-2 musig2 protocol involves generating private-public key pairs, aggregating keys, and signing messages.",
-            "n_threads": 23,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "AdamISZ",
-                "Andrew Poelstra",
-                "Erik Aronesty",
-                "Jonas Nick",
-                "ZmnSCPxj",
-                "moonsettler"
-            ],
-            "file_path": "static/bitcoin-dev/July_2023/combined_Blinded-2-party-Musig2.xml"
-        },
-        {
-            "id": "021786",
-            "title": "On the experiment of the Bitcoin Contracting Primitives WG and marking this community process \"up for grabs\"",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021786.html",
-            "authors": [
-                "Antoine Riard"
-            ],
-            "published_at": "2023-07-18T20:18:49+00:00",
-            "summary": "- Last year, a new community process was introduced to specify covenants due to failures and discussions about proposals. -During this period, initiatives like the Bitcoin Contracting Primitives Working Group were established, holding monthly meetings and in-depth discussions. -Though the author will focus on Lightning development, they encourage others to continue efforts on covenant changes proposals.",
-            "n_threads": 6,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Greg Sanders",
-                "Keagan McClelland"
-            ],
-            "file_path": "static/bitcoin-dev/July_2023/combined_On-the-experiment-of-the-Bitcoin-Contracting-Primitives-WG-and-marking-this-community-process-up-for-grabs-.xml"
-        },
-        {
-            "id": "003918",
-            "title": "HTLC Endorsement for Jamming Mitigation",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-April/003918.html",
-            "authors": [
-                "Carla Kirk-Cohen"
-            ],
-            "published_at": "2023-04-28T18:48:40+00:00",
-            "summary": "- The email updates about channel jamming and the next call on May 1st.\n - The group plans to gather data on HTLC endorsement and local reputation tracking for jamming mitigation.\n - They propose a reputation scheme for endorsing HTLCs and mitigating channel jamming.",
-            "n_threads": 18,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "Antoine Riard",
-                "Christian Decker",
-                "Clara Shikhelman",
-                "Michael Folkson",
-                "Vincenzo Palazzo"
-            ],
-            "file_path": "static/lightning-dev/April_2023/combined_HTLC-Endorsement-for-Jamming-Mitigation.xml"
-        },
-        {
-            "id": "003983",
-            "title": "Potential vulnerability in Lightning backends: BOLT-11 \"payment hash\" does not commit to payment!",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003983.html",
-            "authors": [
-                "callebtc"
-            ],
-            "published_at": "2023-06-19T15:26:05+00:00",
-            "summary": "- The LNbits team discovered an exploit allowing attackers to create balances with invoices. -Users are urged to update to LNbits version 0.10.5 to patch the exploit. -LNbits team warns of similar exploits in other Lightning applications and suggests additional security measures.",
-            "n_threads": 9,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "Antoine Riard",
-                "David A. Harding",
-                "Martin Habov\u0161tiak",
-                "Olaoluwa Osuntokun",
-                "Rusty Russell",
-                "fiatjaf"
-            ],
-            "file_path": "static/lightning-dev/June_2023/combined_Potential-vulnerability-in-Lightning-backends-BOLT-11-payment-hash-does-not-commit-to-payment-.xml"
-        },
-        {
-            "id": "004014",
-            "title": "LN Summit 2023 Notes",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004014.html",
-            "authors": [
-                "Carla Kirk-Cohen"
-            ],
-            "published_at": "2023-07-19T13:56:11+00:00",
-            "summary": "- In late June, the annual specification meeting took place in New York City.-The attendees attempted to take transcript-style notes, which can be found at this link.-The notes aim to capture the discussions that occurred during the summit, rather than providing a concise summary.",
-            "n_threads": 5,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "Anthony Towns",
-                "Antoine Riard",
-                "ZmnSCPxj"
-            ],
-            "file_path": "static/lightning-dev/July_2023/combined_LN-Summit-2023-Notes.xml"
+            ]
         }
     ]
 }
