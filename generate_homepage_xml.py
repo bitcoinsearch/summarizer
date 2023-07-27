@@ -311,7 +311,7 @@ class GenerateJSON:
         bullets_prompt = f"""Summarize the following context into {3} distinct sentences based on the guidelines 
         mentioned below. 
             1. Each sentence you write should not exceed fifteen words. 
-            2. Each sentence should begin on a new line and should start with a hyphen (-). 
+            2. Each sentence should begin on a new line and should start with a hyphen (-) and you must add space after hyphen (-).
             3. Please adhere to all English grammatical rules while writing the sentences, 
                 maintaining formal tone and employing proper spacing. 
         CONTEXT:\n\n{body_summary}"""
@@ -326,8 +326,9 @@ class GenerateJSON:
             max_tokens=300,
         )
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
-        response_str = response_str.replace('.-', '.\n-')
-        response_str = response_str.replace('. -', '.\n-')
+        response_str = re.sub(r'-(?=[a-zA-Z])', '- ', response_str, count=1)
+        response_str = response_str.replace('.- ', '.\n - ')
+        response_str = response_str.replace('. - ', '.\n - ')
         return response_str
 
     def get_xml_summary(self, data):
@@ -382,7 +383,7 @@ class GenerateJSON:
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
         return response_str
 
-    def create_single_entery(self, data):
+    def create_single_entery(self, data, is_active=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -391,10 +392,17 @@ class GenerateJSON:
         url = data['_source']['url']
         authors = data['_source']['authors']
         body = data['_source']['body']
+        local_dev_name = data['_source']['dev_name']
         xml_name = self.clean_title(title)
         month_name = self.month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
-        file_path = f"static/{dev_name}/{str_month_year}/{number}_{xml_name}.xml"
+        if is_active:
+            if os.path.exists(f"./static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"):
+                file_path = f"static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
+            else:
+                file_path = f"static/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
+        else:
+            file_path = f"static/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
 
         # fetch the summary from xml if exist
         xml_summary = self.get_xml_summary(data)
@@ -412,7 +420,7 @@ class GenerateJSON:
             "published_at": published_at.isoformat(),
             "summary": bullets,
             "n_threads": data["_source"]["n_threads"],
-            "dev_name": data['_source']['dev_name'],
+            "dev_name": local_dev_name,
             "contributors": contributors,
             "file_path": file_path
         }
@@ -432,7 +440,7 @@ class GenerateJSON:
 
         active_page_data = []
         for data in active_data_list:
-            entry_data = self.create_single_entery(data)
+            entry_data = self.create_single_entery(data, is_active=True)
             active_page_data.append(entry_data)
 
         json_string["active_posts"] = active_page_data
@@ -478,7 +486,7 @@ if __name__ == "__main__":
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=60)
+    start_date = datetime.now() - timedelta(days=30)
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
@@ -491,36 +499,14 @@ if __name__ == "__main__":
         dev_name = dev_url.split("/")[-2]
         logger.info(f"Total threads received for {dev_name}: {len(data_list)}")
 
-        # top recent posts
-        recent_posts_data = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=10)
-        if len(recent_posts_data) >= 6:
-            recent_posts_data = recent_posts_data[:6]
-
         seen_titles = set()
-        for data in recent_posts_data:
-            title = data['_source']['title']
-            if title in seen_titles:
-                continue
-            seen_titles.add(title)
-            counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
-                                                                                 df=all_data_df)
-            authors = data['_source']['authors']
-            for author in authors:
-                contributors.remove(author)
-            data['_source']['n_threads'] = counts
-            data['_source']['contributors'] = contributors
-            data['_source']['dev_name'] = dev_name
-            recent_data_list.append(data)
-
-        logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
-
         # top active posts
-        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=20,
+        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=10,
                                                                    all_data_df=all_data_df)
 
         active_posts_data_counter = 0
         for data in active_posts_data:
-            if active_posts_data_counter >= 6:
+            if active_posts_data_counter >= 3:
                 break
             title = data['_source']['title']
             if title in seen_titles:
@@ -546,6 +532,32 @@ if __name__ == "__main__":
                     break
 
         logger.info(f"Number of active posts collected: {len(active_data_list)}")
+
+        # top recent posts
+        recent_data_post_counter = 0
+        recent_posts_data = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=20)
+        # if len(recent_posts_data) >= 3:
+        #     recent_posts_data = recent_posts_data[:3]
+
+        for data in recent_posts_data:
+            title = data['_source']['title']
+            if title in seen_titles:
+                continue
+            seen_titles.add(title)
+            if recent_data_post_counter >= 3:
+                break
+            counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
+                                                                                 df=all_data_df)
+            authors = data['_source']['authors']
+            for author in authors:
+                contributors.remove(author)
+            data['_source']['n_threads'] = counts
+            data['_source']['contributors'] = contributors
+            data['_source']['dev_name'] = dev_name
+            recent_data_list.append(data)
+            recent_data_post_counter += 1
+
+        logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
 
     xml_ids = gen.get_existing_json_ids(file_path=r"static/homepage.json")
     recent_post_ids = [gen.get_id(data['_source']['title']) for data in recent_data_list]
