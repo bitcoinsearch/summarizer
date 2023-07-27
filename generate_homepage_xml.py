@@ -313,9 +313,12 @@ class GenerateJSON:
             1. Each sentence you write should not exceed fifteen words. 
             2. Each sentence should begin on a new line and should start with a hyphen (-) and you must add space after hyphen (-).
                 E.g., - This is a first sentence. - This is a second sentence. - This is a third sentence.
+                E.g., Incorrect: "-This is a sentence.-This is another sentence."
+                    Correct: "- This is a sentence. - This is another sentence."
             3. Please adhere to all English grammatical rules while writing the sentences, 
                 maintaining formal tone and employing proper spacing. 
-            4. Do not write anything like - The context discusses..., In this context... etc.
+            4. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
+                Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..."
         CONTEXT:\n\n{body_summary}"""
 
         response = openai.ChatCompletion.create(
@@ -328,7 +331,6 @@ class GenerateJSON:
             max_tokens=300,
         )
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
-        response_str = re.sub(r'-(?=[a-zA-Z])', '- ', response_str, count=1)
         response_str = response_str.replace('.- ', '.\n- ')
         response_str = response_str.replace('. - ', '.\n- ')
         return response_str
@@ -375,7 +377,8 @@ class GenerateJSON:
         summ_prompt = f"""Summarize the following context into 3 or 4 distinct sentences based on the guidelines 
         mentioned below.
             1. Each sentence you write should not exceed fifteen words.
-            2. Do not write anything like - The context discusses..., In this context... etc.
+            2. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
+                Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..."
             3. Please adhere to all English grammatical rules while writing the sentences, 
                 maintaining formal tone and employing proper spacing.
             4. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
@@ -487,7 +490,6 @@ if __name__ == "__main__":
     gen = GenerateJSON()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
