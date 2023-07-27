@@ -372,7 +372,15 @@ class GenerateJSON:
                 body_summ = self.create_summary(body)
                 recent_post_data += body_summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"Consolidate below context in 3 sentences strictly. \n\n CONTEXT:\n\n{recent_post_data}"
+        summ_prompt = f"""Summarize the following context into 3 or 4 distinct sentences based on the guidelines 
+        mentioned below.
+            1. Each sentence you write should not exceed fifteen words.
+            2. Do not write anything like - The context discusses..., In this context... etc.
+            3. Please adhere to all English grammatical rules while writing the sentences, 
+                maintaining formal tone and employing proper spacing.
+            4. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
+                E.g., Incorrect: "This is a sentence.This is another sentence." Correct: "This is a sentence. This is another sentence."
+        \n CONTEXT:\n\n{recent_post_data}"""
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
