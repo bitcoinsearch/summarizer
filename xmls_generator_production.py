@@ -16,17 +16,17 @@ import tiktoken
 import os
 from dotenv import load_dotenv
 import sys
+import ast
+from loguru import logger
 import warnings
 from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
 
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
-from src.logger import LOGGER, setup_logger
 
 warnings.filterwarnings("ignore")
 load_dotenv()
 
-logger = setup_logger()
 
 TOKENIZER = tiktoken.get_encoding("cl100k_base")
 
@@ -367,7 +367,18 @@ class GenerateXML:
 
         emails_df = pd.DataFrame(df_dict)
 
+        emails_df['authors'] = emails_df['authors'].apply(self.convert_to_tuple)
+        emails_df = emails_df.drop_duplicates()
+        logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
+
+    def convert_to_tuple(self, x):
+        try:
+            if isinstance(x, str):
+                x = ast.literal_eval(x)
+            return tuple(x)
+        except ValueError:
+            return (x,)
 
     def start(self, dict_data, url):
         if len(dict_data) > 0:
@@ -416,7 +427,6 @@ class GenerateXML:
                     return link
 
                 # combine_summary_xml
-                # Get the operating system name
                 os_name = platform.system()
                 logger.info(f"Operating System: {os_name}")
                 titles = emails_df.sort_values('created_at')['title'].unique()
@@ -479,8 +489,10 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
                                          es_password=ES_PASSWORD)
-    dev_urls = ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-                "https://lists.linuxfoundation.org/pipermail/lightning-dev/"]
+    dev_urls = [
+        "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
+        "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+    ]
 
     # current_date_str = "2017-02-02"
     current_date_str = None
