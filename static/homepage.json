@@ -1,5 +1,5 @@
 {
-    "header_summary": "Jonas suggests a method to mitigate attacks on statechains by recording certain values with messages.Blocking inscriptions on the Bitcoin network is debated due to concerns about censorship and effectiveness.Existing solutions for inscriptions, such as Luke Dashjr's patch, are considered ineffective.The discussions cover issues like unconfirmed inputs in coinjoins and security risks in the Lightning Network.",
+    "header_summary": "Jonas suggests verifying previous challenges to mitigate potential attacks on statechains.Blocking inscriptions on the Bitcoin network is debated due to concerns of censorship.Taproot is mentioned as a solution to handle large amounts of data on the blockchain.Discussions cover unconfirmed inputs in coinjoin transactions, package relay, and `keysend` protocol.",
     "recent_posts": [
         {
             "id": "021822",
@@ -9,7 +9,7 @@
                 "Tom Trevethan"
             ],
             "published_at": "2023-07-27T13:25:33+00:00",
-            "summary": "- @Jonas suggests verifying the construction of previous challenges to mitigate an attack on statechains.\n- According to @Jonas, the sender records specific values along with the coin and message.\n- The receiver verifies previous values and checks for correct formation to determine coin validity.",
+            "summary": "- @Jonas suggests verifying previous challenges to mitigate potential attacks on the statechains scheme.\n- The sender records specific values along with the message and sends them to the receiver.\n- The receiver verifies the values received and checks for any inconsistencies to ensure validity.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -23,7 +23,7 @@
                 "vjudeu at gazeta.pl"
             ],
             "published_at": "2023-07-27T05:10:32+00:00",
-            "summary": "- Inscriptions as spam on the Bitcoin network generate discussions about censorship and future blocking criteria.\n- Blocking inscriptions without solving underlying issues may lead to alternative methods of data uploading.\n- Proposed solutions include standardization options and addressing larger problems of IBD time and UTXO size.",
+            "summary": "- Spam attacks on the Bitcoin network through inscriptions are a topic of discussion.\n- Blocking inscriptions may not effectively solve the underlying problems of the network.\n- The issue requires addressing the larger challenges of download time and UTXO size.",
             "n_threads": 4,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -39,13 +39,27 @@
                 "Andrew Chow"
             ],
             "published_at": "2023-07-06T17:24:47+00:00",
-            "summary": "- A user expressed concerns about accepting unconfirmed inputs in a coinjoin transaction.\n- The user warned about the potential for invalidation and suggested not accepting zero-fee transactions.\n- They also discussed the benefits of package relay and upcoming RBF proposals for coinjoin transactions.",
+            "summary": "- In an email on 07/06/2023, a user raised concerns about accepting unconfirmed inputs in coinjoin.\n- The user mentioned risks of allowing unconfirmed inputs and suggested coordinator B should not accept them.\n- They also discussed the benefits of package relay and upcoming RBF proposals for coinjoin transactions.",
             "n_threads": 2,
             "dev_name": "bitcoin-dev",
             "contributors": [
                 "alicexbt"
             ],
             "file_path": "static/bitcoin-dev/July_2023/021785_Denial-of-Service-using-Package-Relay.xml"
+        },
+        {
+            "id": "004028",
+            "title": "Multipath Keysend",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004028.html",
+            "authors": [
+                "ZmnSCPxj"
+            ],
+            "published_at": "2023-07-27T17:13:59+00:00",
+            "summary": "- Proposed scheme allows for multipath payments by using a `keysend` protocol with TLV 5482373484.\n- Sender splits `keysend` into two parts, one with `a` and the other with `a ^ p`.\n- Receiver holds the payment until all parts arrive, XORs preimages to claim funds.",
+            "n_threads": 1,
+            "dev_name": "lightning-dev",
+            "contributors": [],
+            "file_path": "static/lightning-dev/July_2023/004028_Multipath-Keysend.xml"
         },
         {
             "id": "004025",
@@ -55,7 +69,7 @@
                 "Carla Kirk-Cohen"
             ],
             "published_at": "2023-07-27T13:05:34+00:00",
-            "summary": "- Our team has been diligently recording and transcribing specification meetings since the beginning of the year.\n- The transcripts are now available for all to access at [https://btctranscripts.com/lightning-specification].\n- Gurwinder at Chaincode has played a crucial role in reviewing and ensuring the accuracy of these transcripts.",
+            "summary": "- Our team has been recording and transcribing specification meetings since the beginning of the year.\n- Transcripts of these meetings are now available for everyone to access.\n- Gurwinder from Chaincode ensured the accuracy of the transcripts and maintained their quality.",
             "n_threads": 1,
             "dev_name": "lightning-dev",
             "contributors": [],
@@ -69,7 +83,7 @@
                 "Anthony Towns"
             ],
             "published_at": "2023-07-26T08:05:23+00:00",
-            "summary": "- Participants discussed Bitcoin network policies and proposed solutions to address certain issues.\n- Topics included the \"top of mempool\" assumption, lightning unilateral closes, zero-fee transactions, and trimmed HTLCs.\n- A hybrid approach to channel jamming mitigation was proposed, and concerns about fees and market influence were discussed.",
+            "summary": "- Participants discussed Bitcoin network policies and potential solutions to address issues.\n- Multiple goals were identified, including fair transaction selection without monopolistic advantages.\n- Various proposals were made, such as implementing monetary measures to mitigate channel jamming.",
             "n_threads": 5,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -78,22 +92,6 @@
                 "ZmnSCPxj"
             ],
             "file_path": "static/lightning-dev/July_2023/004020_LN-Summit-2023-Notes.xml"
-        },
-        {
-            "id": "004019",
-            "title": "Equalizing Packet Size",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004019.html",
-            "authors": [
-                "Antoine Riard"
-            ],
-            "published_at": "2023-07-26T01:30:20+00:00",
-            "summary": "- Third-party eavesdroppers can deduce message content in the Lightning Network despite Noise encryption.\n- Implementing a buffer in BOLT8 tunnel encrypter objects can ensure fixed-size packets.\n- Randomized timers and alignment of buffer size with packet size can enhance privacy and security.",
-            "n_threads": 2,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "ZmnSCPxj"
-            ],
-            "file_path": "static/lightning-dev/July_2023/004019_Equalizing-Packet-Size.xml"
         }
     ],
     "active_posts": [
@@ -105,7 +103,7 @@
                 "Joost Jager"
             ],
             "published_at": "2023-06-02T15:00:37+00:00",
-            "summary": "- The current taproot annex is valid but non-standard, and standardization discussions favor a flexible TLV format.\n- Defining any annex starting with '0' as free-form allows immediate utilization, future flexibility, and chainspace efficiency.\n- This approach broadens annex utilization, preserves the option for a structured format, and offers short and long-term benefits.",
+            "summary": "- The taproot annex is currently non-standard, and standardization discussions lean towards a flexible TLV format.\n- A proposal suggests allowing non-structured taproot annex to facilitate immediate utilization, future flexibility, and chainspace efficiency.\n- This approach broadens the scope of taproot annex usage while preserving the possibility of a structured format in the future.",
             "n_threads": 30,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -124,7 +122,7 @@
                 "Tom Trevethan"
             ],
             "published_at": "2023-07-24T07:46:11+00:00",
-            "summary": "- The implementation discusses a blinded server (party 1) that holds a private key but remains uninformed of specific information.\n- In blinded statechains, the security relies on the statechain server reporting the number of partial signatures generated.\n- The 2-of-2 musig2 protocol involves generating private and public keys, aggregating them, and signing messages.",
+            "summary": "- A version of 2-of-2 Schnorr Musig2 for statechains is being discussed.\n- The server (party 1) needs to be fully blinded to certain information.\n- The security of blinded statechains relies on trusting the server's report of partial signatures.",
             "n_threads": 26,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -146,7 +144,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-07-18T20:18:49+00:00",
-            "summary": "- The failure of CTV and covenant proposals led to a new community process for covenants.\n- Various initiatives were undertaken, including the bitcoin-inquisition fork and the Contracting Primitives WG.\n- The author decided not to pursue the covenant process further but encouraged others to continue.",
+            "summary": "- The failure of the CTV speedy trial led to the introduction of a new community process to specify covenants.\n- Various initiatives were undertaken, including the bitcoin-inquisition fork and archiving covenant proposals.\n- The author prioritizes Lightning development but encourages others to continue working on covenant changes proposals.",
             "n_threads": 6,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -163,7 +161,7 @@
                 "Carla Kirk-Cohen"
             ],
             "published_at": "2023-04-28T18:48:40+00:00",
-            "summary": "- The email discusses updates on channel jamming and the details for the next call.\n- The group plans to gather data on HTLC endorsement and local reputation tracking for jamming mitigation.\n- The email proposes a reputation scheme and binary endorsement field to experiment with local reputation tracking.",
+            "summary": "- The email updates on channel jamming and announces the next call on May 1st.\n- The group plans to gather data on HTLC endorsement and local reputation tracking for jamming mitigation.\n- They propose a reputation scheme and endorse HTLCs as the first step in mitigating channel jamming.",
             "n_threads": 18,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -183,7 +181,7 @@
                 "callebtc"
             ],
             "published_at": "2023-06-19T15:26:05+00:00",
-            "summary": "- LNbits team discovered an exploit allowing attackers to create balances by exploiting how invoices are handled.\n- LNbits version 0.10.5 has patched the exploit, urging users to update as soon as possible.\n- Attack highlights the need for additional checks and a deep understanding of bolt-11 by developers.",
+            "summary": "- LNbits team patched an exploit that allowed attackers to create balances through invoice manipulation.\n- Users are advised to update to LNbits version 0.10.5 to protect against the exploit.\n- Developers should take precautions with internal payment lookups and invoice tampering.",
             "n_threads": 9,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -204,7 +202,7 @@
                 "Ben Carman"
             ],
             "published_at": "2023-07-25T18:18:12+00:00",
-            "summary": "- Blinded paths in the Lightning Network offer privacy benefits but limit payment options.\n- Routing payments through regulated hubs bypasses smaller nodes, affecting decentralization and privacy.\n- Concerns raised about pressure from \"chain analysis\" companies and the trade-off for receiver privacy.",
+            "summary": "- Blinded paths in the Lightning Network offer privacy benefits to receiving nodes.\n- Payments can only be made through given paths, potentially favoring compliant nodes.\n- This approach impacts decentralization and compromises sender-side privacy in the network.",
             "n_threads": 7,
             "dev_name": "lightning-dev",
             "contributors": [
