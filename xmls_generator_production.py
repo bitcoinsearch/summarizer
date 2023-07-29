@@ -335,6 +335,10 @@ class GenerateXML:
         except ValueError:
             return (x,)
 
+    def preprocess_authors_name(self, author_tuple):
+        author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
+        return author_tuple
+
     def generate_new_emails_df(self, dict_data, dev_url):
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
@@ -344,7 +348,7 @@ class GenerateXML:
         current_directory = os.getcwd()
 
         if "lightning-dev" in dev_url:
-            files_list = glob.glob(os.path.join(current_directory, "static", "lightning-dev","**/*.xml"), recursive=True)
+            files_list = glob.glob(os.path.join(current_directory, "static", "lightning-dev", "**/*.xml"), recursive=True)
         else:
             files_list = glob.glob(os.path.join(current_directory, "static", "bitcoin-dev", "**/*.xml"), recursive=True)
 
@@ -375,6 +379,7 @@ class GenerateXML:
 
         emails_df['authors'] = emails_df['authors'].apply(self.convert_to_tuple)
         emails_df = emails_df.drop_duplicates()
+        emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
         logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
 
