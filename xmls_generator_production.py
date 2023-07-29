@@ -87,8 +87,6 @@ class ElasticSearchClient:
 
             # Dump the documents into the json file
             logger.info(f"Starting dumping of {es_index} data in json...")
-            # output_data_path = f'{data_path}/{es_index}.json'
-            # with open(output_data_path, 'w') as f:
             while len(results) > 0:
                 # Save the current batch of results
                 for result in results:
@@ -329,6 +327,14 @@ class GenerateXML:
                 summary = root.find('atom:entry/atom:summary', namespace).text
                 df_dict["body"].append(summary)
 
+    def convert_to_tuple(self, x):
+        try:
+            if isinstance(x, str):
+                x = ast.literal_eval(x)
+            return tuple(x)
+        except ValueError:
+            return (x,)
+
     def generate_new_emails_df(self, dict_data, dev_url):
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
@@ -371,14 +377,6 @@ class GenerateXML:
         emails_df = emails_df.drop_duplicates()
         logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
-
-    def convert_to_tuple(self, x):
-        try:
-            if isinstance(x, str):
-                x = ast.literal_eval(x)
-            return tuple(x)
-        except ValueError:
-            return (x,)
 
     def start(self, dict_data, url):
         if len(dict_data) > 0:
@@ -494,7 +492,6 @@ if __name__ == "__main__":
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
     ]
 
-    # current_date_str = "2017-02-02"
     current_date_str = None
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
