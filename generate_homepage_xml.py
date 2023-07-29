@@ -205,7 +205,7 @@ class ElasticSearchClient:
 
     def fetch_contributors_and_threads(self, title, domain, df):
         df_filtered = df.loc[(df['title'] == title) & (df['domain'] == domain)]
-        df_filtered = df_filtered.drop_duplicates()  # id
+        # df_filtered = df_filtered.drop_duplicates()  # id
         counts = len(df_filtered)
         df_filtered['authors'] = df_filtered['authors'].apply(tuple)
         contributors = df_filtered['authors'].tolist()
