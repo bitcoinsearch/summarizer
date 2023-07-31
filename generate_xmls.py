@@ -192,6 +192,12 @@ class GenerateXML:
     def get_id(self, id):
         return str(id).split("-")[-1]
 
+    def convert_to_utc_zulo_timestamp(self, date_str):
+        datetime_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+        timezone = pytz.UTC
+        datetime_obj = datetime_obj.replace(tzinfo=timezone)
+        return datetime_obj
+
     def start(self, dict_data, url):
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
@@ -212,7 +218,7 @@ class GenerateXML:
         logger.info(f"Shape of emails_df: {emails_df.shape}")
 
         emails_df['created_at_org'] = emails_df['created_at']
-        emails_df['created_at'] = pd.to_datetime(emails_df['created_at'], format="%Y-%m-%dT%H:%M:%S.%fZ")
+        emails_df['created_at'] = emails_df['created_at'].apply(self.convert_to_utc_zulo_timestamp)
 
         def generate_local_xml(cols, combine_flag, url):
             month_name = self.month_dict[int(cols['created_at'].month)]
@@ -351,9 +357,10 @@ class GenerateXML:
 
     def add_utc_if_not_present(self, datetime_str):
         try:
-            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S%z")
+            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+            datetime_obj = datetime_obj.replace(tzinfo=pytz.UTC)
         except ValueError:
-            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
             timezone = pytz.UTC
             datetime_obj = datetime_obj.replace(tzinfo=timezone)
         return datetime_obj.isoformat(" ")
@@ -367,7 +374,7 @@ if __name__ == "__main__":
     dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
-    data_list = data_list[:15]
+    # data_list = data_list[:15]
 
     delay = 5
 
@@ -376,6 +383,6 @@ if __name__ == "__main__":
             gen.start(data_list, dev_url)
             break
         except Exception as ex:
-            print(ex)
+            logger.error(ex)
             time.sleep(delay)
 
