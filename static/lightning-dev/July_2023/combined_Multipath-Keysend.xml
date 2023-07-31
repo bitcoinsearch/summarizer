@@ -2,42 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Multipath Keysend</title>
-  <updated>2023-07-30T02:05:20.137657+00:00</updated>
+  <updated>2023-07-31T02:10:01.985625+00:00</updated>
   <author>
-    <name>ZmnSCPxj  + 2023-07-27 17:13:59+00:00</name>
+    <name>Matt Corallo 2023-07-29 16:37:26+00:00</name>
   </author>
   <author>
-    <name>Thomas HUET 2023-07-28 10:43:34+00:00</name>
+    <name>Thomas HUET  + 2023-07-28 10:43:34+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj  + 2023-07-27 17:13:59+00:00</name>
+    <name>Olaoluwa Osuntokun  + 2023-07-29 00:28:23+00:00</name>
   </author>
   <author>
-    <name>Matt Morehouse 2023-07-28 22:10:11+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj  + 2023-07-27 17:13:59+00:00</name>
-  </author>
-  <author>
-    <name>Olaoluwa Osuntokun 2023-07-29 00:28:23+00:00</name>
+    <name>Matt Morehouse  + 2023-07-28 22:10:11+00:00</name>
   </author>
   <author>
     <name>ZmnSCPxj  + 2023-07-27 17:13:59+00:00</name>
   </author>
-  <link href="lightning-dev/July_2023/004028_Multipath-Keysend.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2023/004032_Multipath-Keysend.xml" rel="alternate"/>
   <link href="lightning-dev/July_2023/004029_Multipath-Keysend.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2023/004028_Multipath-Keysend.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2023/004030_Multipath-Keysend.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2023/004028_Multipath-Keysend.xml" rel="alternate"/>
   <link href="lightning-dev/July_2023/004031_Multipath-Keysend.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2023/004030_Multipath-Keysend.xml" rel="alternate"/>
   <link href="lightning-dev/July_2023/004028_Multipath-Keysend.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Multipath Keysend</title>
-    <updated>2023-07-30T02:05:20.137755+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004028.html" rel="alternate"/>
-    <summary>A scheme for creating a `keysend` protocol that allows for multipath payments is proposed. In this scheme, the preimage is embedded as TLV 5482373484 with a length of 32. The goal in the multipath case is to ensure that the receiver can only claim the payment once all parts have arrived.To achieve this, the sender splits the `keysend` into two parts. They select a true preimage `p` at random and generate the payment hash `h = SHA256(p)`. Then, they generate a new 256-bit scalar, `a`. For one part, the sender sends `a` as TLV 5482373484, and for the second part, they send `a ^ p`, where `^` represents XOR. It's important to note that all parts use the same payment hash `h`.When the receiver receives either part, it realizes that the supposed preimage does not match the actual HTLC payment hashes. However, instead of failing, the receiver holds the payment using the usual basic multipath payment rules.Once the receiver receives another part, it XORs together the supposed preimages. In the example mentioned earlier, it would XOR `a` and `a ^ p` to get `a ^ a ^ p` or `p`, which is now the correct preimage. This allows the receiver to claim the entire complete funds.This technique can be extended to any number of parts. For instance, if we split into `n` parts, we generate `n - 1` additional random scalars and use them for the first `n - 1` parts. Then, we XOR all of them with the scalar-to-be-split for the `n`th part. This scheme also works for dynamic splitting, meaning that if a part was already split off from another part, it can still be split further.To detect if the receiver supports multipath `keysend`, the sender can check if a part reaches the receiver and it errors with `incorrect_or_unknown_payment_details`. If the receiver is aware of multipath `keysend`, it will hold onto the incoming HTLCs until MPP timeout and instead error with `mpp_timeout`. Therefore, support for this feature on the receiver side does not need to be specially announced via a new feature bit. The same feature bit 55 can be reused.Overall, this proposed scheme provides a simple method for implementing a `keysend` protocol that allows for multipath payments without requiring additional feature bits or announcements.</summary>
-    <published>2023-07-27T17:13:59+00:00</published>
+    <updated>2023-07-31T02:10:01.985693+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004032.html" rel="alternate"/>
+    <summary>The proposed scheme aims to implement a `keysend` protocol that facilitates multipath payments without the need for additional feature bits or announcements. This technique involves splitting the payment into multiple parts, with each part containing a random scalar. These random scalars are used to XOR with the scalar-to-be-split for each subsequent part. This process allows the receiver to claim the complete funds by XORing the preimages together.To extend this technique to any number of parts, the sender generates additional random scalars for the first `n-1` parts and XORs them with the scalar-to-be-split for the `n`th part. This approach also supports dynamic splitting, meaning that if a part was already split off from another part, it can still be further split.To determine if the receiver supports multipath `keysend`, the sender can check if a part reaches the receiver and results in an error with `incorrect_or_unknown_payment_details`. If the receiver supports multipath `keysend`, it will hold onto the incoming HTLCs until the MPP timeout and then error with `mpp_timeout`. Therefore, there is no need for the receiver to specifically announce support for this feature via a new feature bit. The existing feature bit 55 can be reused.In conclusion, the proposed scheme provides a simple method for implementing a `keysend` protocol that enables multipath payments without requiring additional feature bits or announcements. This approach offers flexibility in splitting payments and does not require explicit support announcement from the receiver. It is important to assess the user need before implementing this scheme, as it adds complexity to the keysend protocol. It is worth noting that the BOLT 12 specification already supports multipath payments and provides a proof of payment.</summary>
+    <published>2023-07-29T16:37:26+00:00</published>
   </entry>
 </feed>
