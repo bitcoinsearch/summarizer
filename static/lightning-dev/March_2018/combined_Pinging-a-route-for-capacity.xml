@@ -2,46 +2,46 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Pinging a route for capacity</title>
-  <updated>2023-05-24T21:27:36.206972+00:00</updated>
+  <updated>2023-07-31T19:48:40.137983+00:00</updated>
   <author>
-    <name>Jim Posen 2018-03-01 14:45:16</name>
+    <name>Christian Decker 2018-03-04 22:18:56+00:00</name>
   </author>
   <author>
-    <name>gb 2018-03-01 21:16:02</name>
+    <name>Rusty Russell 2018-03-04 02:46:46+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2018-03-04 22:18:56</name>
+    <name>Jim Posen 2018-03-02 14:42:09+00:00</name>
   </author>
   <author>
-    <name>René Pickhardt 2018-03-01 15:26:22</name>
+    <name>ZmnSCPxj 2018-03-02 07:53:46+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-03-02 07:53:46</name>
+    <name>gb 2018-03-01 21:16:02+00:00</name>
   </author>
   <author>
-    <name>Jim Posen 2018-03-02 14:42:09</name>
+    <name>René Pickhardt 2018-03-01 15:26:22+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2018-03-04 02:46:46</name>
+    <name>René Pickhardt 2018-03-01 15:13:43+00:00</name>
   </author>
   <author>
-    <name>René Pickhardt 2018-03-01 15:13:43</name>
+    <name>Jim Posen 2018-03-01 14:45:16+00:00</name>
   </author>
-  <link href="lightning-dev/March_2018/001058_Pinging-a-route-for-capacity.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001060_Pinging-a-route-for-capacity.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001068_Pinging-a-route-for-capacity.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001059_Pinging-a-route-for-capacity.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001062_Pinging-a-route-for-capacity.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2018/001063_Pinging-a-route-for-capacity.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001067_Pinging-a-route-for-capacity.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001063_Pinging-a-route-for-capacity.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001062_Pinging-a-route-for-capacity.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001060_Pinging-a-route-for-capacity.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001059_Pinging-a-route-for-capacity.xml" rel="alternate"/>
   <link href="lightning-dev/March_2018/001066_Pinging-a-route-for-capacity.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2018/001058_Pinging-a-route-for-capacity.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Pinging a route for capacity</title>
-    <updated>2023-05-24T21:27:36.208002+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-March/001058.html" rel="alternate"/>
-    <summary>The Lightning Network is a second-layer solution for Bitcoin that aims to improve scalability and transaction speed. One area of focus for the Lightning development team is payment routing optimization. Jim Posen proposed the idea of sending a ping over an onion route to check if every hop has the capacity to send a certain amount, which could prevent payment failures and reduce inefficiency.However, there are concerns about DoS attacks and information leakage regarding channel capacities. Rusty Russell suggested using fees and fast failure mechanisms instead of the full HTLC commitment handshake on each hop. More analysis is needed on reliable ways to mask active channel capacity. Another suggestion was to use IP fragmentation techniques to allow for dynamic fragmentation of payments and still work if a channel runs out of funds while routing payment. Rene Pickhardt suggested dynamically splitting payments into smaller parts and rerouting them through different channels as necessary.A proposal has been made on the Lightning-dev mailing list to create a new feature that would allow users to test payment routes without actually sending payments. The proposal suggests that this would be quicker and more efficient than sending actual payments since latency would be lower and the sender could ping all possible routes in parallel. However, the downside is that it could also make it faster and cheaper for someone to extract information about channel capacities on the network with a binary search. The proposal includes the idea that hops could respond with the latest fee rate in case channel updates are slow to propagate.Overall, the Lightning network is still testing and refining its routing strategies to optimize payment routing. While there are various ideas and proposals being discussed, more analysis and testing are needed to determine the most effective and secure solutions for payment routing optimization.</summary>
-    <published>2018-03-01T14:45:16+00:00</published>
+    <updated>2023-07-31T19:48:40.137983+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-March/001068.html" rel="alternate"/>
+    <summary>In a recent discussion on the Lightning Network mailing list, the topic of preventing payment failures was addressed. Jim Posen suggested pinging a channel for capacity as a solution, but Rusty Russell disagreed, citing privacy concerns. Christian Decker also expressed agreement with Russell and warned against the privacy risks associated with pinging channels. Instead, Russell proposed using fees as a signaling mechanism when capacity gets low. Posen offered two possible solutions: making `temporary_channel_failure` return a `channel_update` with disabled flags or implementing fast failure to reduce latency.Posen also discussed the strategy for choosing a route to send funds over. He suggested determining all possible routes, ranking them by estimated fees based on channel announcements and number of hops, and trying them successively until one works. This approach aims to prevent payment failures caused by bandwidth being locked up in HTLCs that are about to fail anyway. However, others argued that failure is not common enough to warrant designing for it yet. The use of fees as a means of signaling low capacity and adjusting them accordingly was also suggested as a potential solution. Additionally, the `temporary_channel_failure` returns a `channel_update` that implies the disabled flag, which should be made true if the request asks for it. These solutions may prove sufficient for preventing payment failures caused by lack of capacity.Another topic of discussion was flood pinging and its potential solutions. One suggestion was to include a small proof-of-work with the ping, similar to BIP 154. However, some argued that this could counteract the purpose of the ping, which is meant to be a cheaper way to collect routing information. It was noted that there are better ways to disrupt the network than using the proposed ping mechanism. For example, someone can send payments along any circuit with a randomly generated payment hash and force a payment failure at the end of the route. The benefits of the ping mechanism include quicker payments due to lower latency and the ability to ping all possible routes in parallel. However, it is also faster and cheaper for someone to extract information about channel capacities on the network with a binary search.In a separate discussion on AMP (atomic multi-path), the issue of splitting a payment into multiple smaller payments was addressed. It was noted that only the source (payer) has the ability to split a payment, as intermediaries may decide to send it to a channel with high fees. One suggestion was to use IP-Fragmentation techniques to solve this problem. The idea was to encapsulate the second part of the fragmented payment in a new onion routed package that goes on a detour to the original "next" hop. However, concerns were raised about the impact on HTLC and the handling of timeouts.Overall, the discussions highlighted the importance of considering potential security risks and implementing effective safeguards in the Lightning Network to prevent payment failures and protect privacy. Jim Posen's proposal for pinging channels for capacity and determining the best route based on estimated fees received mixed responses, with some expressing concern over privacy and others suggesting alternative solutions like using fees as a signaling mechanism. The topic of flood pinging also raised questions about its effectiveness and potential for extracting channel capacity information. The discussion on AMP focused on the issue of splitting payments and proposed solutions involving IP-Fragmentation techniques, but concerns were raised about the impact on HTLC and timeouts.</summary>
+    <published>2018-03-04T22:18:56+00:00</published>
   </entry>
 </feed>

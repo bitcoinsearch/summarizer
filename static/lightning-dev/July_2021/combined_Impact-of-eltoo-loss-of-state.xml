@@ -2,22 +2,54 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Impact of eltoo loss of state</title>
-  <updated>2023-05-23T15:26:40.690785+00:00</updated>
+  <updated>2023-07-31T23:35:49.246651+00:00</updated>
   <author>
-    <name>Anthony Towns 2021-07-12 08:17:49</name>
+    <name>Jeremy 2021-07-27 18:21:48+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2021-07-21 06:39:13</name>
+    <name>ZmnSCPxj 2021-07-27 16:53:14+00:00</name>
   </author>
-  <link href="lightning-dev/July_2021/003127_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <author>
+    <name>ZmnSCPxj 2021-07-27 11:44:21+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-07-21 06:39:13+00:00</name>
+  </author>
+  <author>
+    <name>Christian Decker 2021-07-20 10:57:17+00:00</name>
+  </author>
+  <author>
+    <name>Martin Habovštiak 2021-07-15 10:28:17+00:00</name>
+  </author>
+  <author>
+    <name>Christian Decker 2021-07-14 14:44:24+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy 2021-07-12 22:20:41+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy 2021-07-12 22:16:43+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-07-12 08:17:49+00:00</name>
+  </author>
+  <link href="lightning-dev/July_2021/003141_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003140_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003139_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
   <link href="lightning-dev/July_2021/003137_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003136_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003134_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003133_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003131_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003130_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003127_Impact-of-eltoo-loss-of-state.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Impact of eltoo loss of state</title>
-    <updated>2023-05-23T15:26:40.690785+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-July/003127.html" rel="alternate"/>
-    <summary>The context describes a scenario where payments are made through eltoo channels from Alice to Bob to Carol, but Bob's lightning node crashes and he recovers from an old backup. As a result, Alice and Carol end up dropping newer channel states onto the blockchain while the timeout for the payments is a few hours away. The author identifies four issues arising from this scenario. First, Carol will reveal the point preimages on-chain via adaptor signatures, but Bob won't be able to decode those adaptor signatures because those signatures will need to change for each state. Second, even if Bob knows the point preimages, he won't be able to claim the PTLC payments on-chain, as he needs newer adaptor signatures that he'll have lost with the state update. Third, for any payments that timeout, Carol doesn't have any particular incentive to make it easy for Bob to claim the refund, and Bob won't have the adaptor signatures for the latest state to do so. Fourth, Alice will be able to claim refunds easily. The author proposes some solutions to these problems. To fix the third issue, Carol should be given the ability to steal funds meant to have been refunded, provided she gives Bob the option of claiming them first. However, fixing the first and second issues aren't going against Alice or Carol's interests, so the author suggests that Carol loses nothing by allowing Bob to claim funds from Alice, and Alice has already indicated that knowing P is worth more to her than the PTLC's funds.The author also provides some general recommendations to mitigate such issues in the future. These include sharing state on reconnection, negotiating a mutual/cooperative close if possible, setting the channel state index based on real-time, accepting that losing connectivity to a channel partner may have financial consequences, and limiting the total value of inbound PTLCs that one is willing to accept at any one time.Finally, the author discusses the idea of layered commitments and its implications for channel factories. While there is no known way to avoid layered commitments, the author suggests that it may make channel factories complicated.</summary>
-    <published>2021-07-12T08:17:49+00:00</published>
+    <updated>2023-07-31T23:35:49.246651+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-July/003141.html" rel="alternate"/>
+    <summary>In a discussion about the size of a resolution during a contested close scenario, a user suggests encoding the necessary state in an op_return or similar method to ensure availability of the closing transaction data. The user also proposes cooperating with a contesting party to replace the transaction with something smaller. Removing the mempool absolute fee increase rule for RBF is suggested to make the process cheaper.The article discusses the issue of forgetting state in Lightning Network and its potential consequences. To prevent obsolete state from being passed off on-chain, nodes can provide a "will remember for you" flag. A secret distance measurement can be used to locate the nearest node and contact it to remember the memento. However, the anonymous nature of client requesting data storage poses vulnerability to abuse and DDoS attacks.The discussion focuses on storing data with multiple peers using erasure coding to ensure reliable data storage while limiting the amount of data stored. The objection that forgetting some state cannot be reliably hidden is acknowledged. Barrier Escrow is proposed as a possible solution where both parties provide data before the other withholds it. Barrier Escrow services need Lightning connectivity and require payment for their service.Christian Decker and AJ discuss the safety of restoring an eltoo channel from an out-of-date backup. It is noted that loss-of-state in eltoo channels only impacts funds in a PTLC at the time of the loss. Suggestions are made to use peer-storage to deposit encrypted bundles with peers and to hide the fact that they forgot some state until the data has been exchanged.In a discussion on the Lightning-dev mailing list, Christian Decker proposes options to deal with loss-of-state on eltoo channels after node crashes. One option is to do nothing and maintain the incentive for up-to-date backups. The other option involves using peer-storage, where encrypted bundles are deposited with peers. Anthony Towns raises concerns about eltoo channels and suggests sharing state on reconnection, negotiating mutual/cooperative close, and limiting the total value of inbound PTLCs for forwarding.Anthony Towns discusses a scenario where Bob's lightning node crashes during payments in eltoo channels. He explains the challenges faced by Bob in claiming funds due to loss of state. Suggestions are made to share state on reconnection, negotiate mutual/cooperative close, and set channel state index based on real-time. It is acknowledged that layered commitments make channel factories complicated.Jeremy Rubin proposes solutions to fix the lost state issue in blockchain, such as encrypting data in an OP_RETURN or modifying scripts. These solutions ensure data availability but may result in double publishing of txdata on the chain.The context describes a scenario where payments in eltoo channels are disrupted due to a node crash. The implications of this scenario are discussed, including the inability to claim refunds and the need for negotiation of cooperative closes. Recommendations are made to share state on reconnection, limit inbound PTLCs, and prioritize mutual/cooperative closes over on-chain transactions. Layered commitments are noted as a complicating factor in channel factories.</summary>
+    <published>2021-07-27T18:21:48+00:00</published>
   </entry>
 </feed>

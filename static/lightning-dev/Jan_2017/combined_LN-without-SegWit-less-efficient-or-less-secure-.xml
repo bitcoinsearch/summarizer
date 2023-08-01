@@ -2,26 +2,54 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - LN without SegWit: less efficient or less secure?</title>
-  <updated>2023-05-19T15:58:52.906304+00:00</updated>
+  <updated>2023-07-31T19:15:16.645879+00:00</updated>
   <author>
-    <name>Anthony Towns 2017-01-16 22:12:25</name>
+    <name>Anthony Towns 2017-01-16 22:12:25+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2017-01-16 06:31:38</name>
+    <name>Christian Decker 2017-01-16 12:46:06+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2017-01-16 07:32:43</name>
+    <name>Andrés G. Aragoneses 2017-01-16 08:26:15+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2017-01-16 07:32:43+00:00</name>
+  </author>
+  <author>
+    <name>Andrés G. Aragoneses 2017-01-16 06:44:43+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2017-01-16 06:31:38+00:00</name>
+  </author>
+  <author>
+    <name>Andrés G. Aragoneses 2017-01-16 04:57:49+00:00</name>
+  </author>
+  <author>
+    <name>Stefano Pepe 2017-01-16 03:06:07+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2017-01-16 02:30:48+00:00</name>
+  </author>
+  <author>
+    <name>Andrés G. Aragoneses 2017-01-14 10:17:40+00:00</name>
   </author>
   <link href="lightning-dev/Jan_2017/000662_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2017/000658_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000661_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000660_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2017/000659_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000657_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000658_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000656_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000654_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000653_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2017/000652_LN-without-SegWit-less-efficient-or-less-secure-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - LN without SegWit: less efficient or less secure?</title>
-    <updated>2023-05-19T15:58:52.906304+00:00</updated>
+    <updated>2023-07-31T19:15:16.645879+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-January/000662.html" rel="alternate"/>
-    <summary>The three levels from the Scaling Bitcoin Hong Kong talk are not tightly defined, and it's not worth reading too much into them. However, level 1 has CLTV only, no CSV, channels have a fixed end date, and every commitment has a fixed must-spend/obsolete-by date as well. Level 2 has CLTV and CSV, but second and third party malleability is still possible. The current state of affairs can only fund channels on one side or second-party malleability messes you over and may need to do something clever to avoid third party malleability. Level 3(a) has CLTV, CSV, and segwit. Outsourcing of channel monitoring is inelegant since you need to provide whoever does the monitor with signed penalty txns for every possible transaction. Level 3(b) has CLTV, CSV, and SIGHASH_NOINPUT (with or without segwit). All the benefits of 3(a), and you can cheaply get someone else to monitor the blockchain for you, making a "lite" lightning node feasible.Outsourcing is the main problem in lightning network, and it's not really ready yet. Rusty Russell proposed an idea to overcome this problem. This idea includes having only one side pay into the funding transaction, so that the other side couldn't malleate it and prevent the initial refund. In this scenario, if any third party malleability is possible, and happens to Alice's original tx, then Bob's signature on the refund tx is no longer useful, and unless Bob is kind enough to sign a new refund tx, Alice has lost her money. To avoid this scenario, they came up with another solution where two outputs and zero fee are used. The first being the funding output, and the second just being a P2PKH to yourself. In a second transaction, pay the entire second output as a fee, which will allow the unmalleated funding transaction to be propagated and mined via CPFP. This solution seems sufficient to get lightning working reliably on today's bitcoin blockchain, even prior to segwit activating.The approach described in a Bitcoin stack exchange link is to have a channel timeout. The lightning spec doesn't currently do that. Lightning uses CLTV and CSV to make the HTLC steps work, which is to make the channel bidirectional, rather than being limited to having one end take the role of customer sending money to the merchant on the other end. It's not a 100% solution on its own though because the "merchant" in this scenario can choose not to provide the second signature back to the customer ever, in which case the customer can't access their funds again until the refund time arrives.</summary>
+    <summary>In an email conversation, Andrés G. Aragoneses quoted a paragraph from the Lightning paper discussing a stop-gap solution mentioned in another paper by Rusty Russell. The three levels of the Lightning Network were discussed, with level 1 using CLTV only, level 2 using CLTV and CSV, and level 3(a) adding segwit. Level 3(b) adds SIGHASH_NOINPUT. Andrés suggests that everyone has been focused on 3(a), but variations of level 2 may exist.Andrés G. Aragoneses suggests that miners may be afraid of losing their fee-gathering monopoly with the introduction of layer 2 payment hubs. However, this is a misconception as Lightning does not reduce miner fees, but instead increases their reach into transactions they couldn't serve before. Lightning requires higher fees for setup and settlement, but coins on these channels can be transferred multiple times, amortizing the high on-chain fees. With the extension of Bitcoin's reach, miners will have a net gain when Lightning rolls out. Andrés suggests running layer 2 solutions despite technical difficulties with SegWit non-activation, as miners will likely realize they need to give up blocking progress.Andrés also asks if an alternative Lightning-Level2 without SegWit but with CSV is possible. He references shorter locktimes like those used in Spillman-style payment channels. He wonders if OP_CLTV/OP_CSV-style channels can be created without using revocation methods. The Duplex Micropayment Channels protocol does this, but it assumes a malleability fix.In a discussion about Lightning Network's channel timeouts, Anthony Towns explains that Lightning uses CLTV and CSV for HTLC steps. This differs from the approach described on Bitcoin Stack Exchange, which adds a channel timeout. However, Towns notes that this approach alone is not foolproof, as the merchant can choose not to provide the second signature back to the customer, preventing them from accessing their funds until the refund time arrives.Andrés G. Aragoneses asks about using OP_CLTV/OP_CSV-style channels instead of Spillman-style ones. The Lightning spec currently uses CLTV and CSV for HTLC steps in a bidirectional manner. While not a complete solution, it is still an improvement over the current method without segwit, which can result in funds being inaccessible due to malleability issues.In a discussion on Bitcoin Stack Exchange, the issue of outsourcing blockchain monitoring as a security solution is raised. Anthony Towns responds that outsourcing is not yet viable due to the problem of setting up channels with strangers who could coordinate with miners to prevent fund reclamation. Another user suggests using OP_CLTV/OP_CSV-style channels instead of Spillman-style ones to address this problem.Rusty Russell raises concerns over outsourcing as a security solution. Setting up channels with strangers while coordinating with miners remains an unsolved problem. He proposes a solution involving one party paying into the funding transaction and the other signing a refund transaction. However, third-party malleability could cause issues. Russell suggests having two outputs in the funding transaction to mitigate this scenario.In a discussion about the inactivity of a mailing list, Rusty Russell suggests that most activity has shifted to the Github repository. He notes that if SegWit doesn't activate, there is something wrong with Bitcoin. Some miners are hesitant due to fears of losing fee-gathering monopoly. Security concerns related to watching the blockchain are discussed, and the possibility of an alternative LN-Level2 without SegWit but with CSV is raised.Stefano Pepe expresses interest in helping with the evolution of Lightning Network and SegWit. Andrés G. Aragoneses raises concerns about the lack of activity on the lightning-dev mailing list and questions the feasibility of LN without SegWit. Rusty Russell responds that if SegWit does not activate, there is something seriously wrong with Bitcoin. Outsourcing blockchain monitoring is deemed unfeasible due to the inability to hand over a penalty transaction signature.The Lightning Network mailing list has been relatively inactive, with most activity on the Github repository. The feasibility of LN without SegWit is discussed, with Rusty Russell stating that if SegWit doesn't activate, there is something wrong with Bitcoin. Security issues related to watching the blockchain are raised, and outsourcing as a solution is deemed problematic.The writer inquires about the state of SegWit activation and its impact on the feasibility of Lightning Network. They seek clarification on the three levels of LN and the security concerns involved. They also question if outsourcing channel monitoring could address the security concerns.</summary>
     <published>2017-01-16T22:12:25+00:00</published>
   </entry>
 </feed>

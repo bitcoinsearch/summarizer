@@ -2,46 +2,46 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Probing final receiver with refund timeout</title>
-  <updated>2023-05-23T22:41:33.601164+00:00</updated>
+  <updated>2023-07-31T18:53:02.788514+00:00</updated>
   <author>
-    <name>Rusty Russell 2016-03-09 00:30:47</name>
+    <name>Rusty Russell 2016-03-22 01:14:15+00:00</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2016-03-21 09:42:35</name>
+    <name>Mats Jerratsch 2016-03-21 09:42:35+00:00</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2016-03-02 11:29:39</name>
+    <name>Rusty Russell 2016-03-15 01:01:38+00:00</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2016-03-09 09:49:23</name>
+    <name>Mats Jerratsch 2016-03-09 09:49:23+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-03-15 01:01:38</name>
+    <name>Rusty Russell 2016-03-09 00:30:47+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-03-22 01:14:15</name>
+    <name>Mats Jerratsch 2016-03-08 15:36:21+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-03-05 09:28:36</name>
+    <name>Rusty Russell 2016-03-05 09:28:36+00:00</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2016-03-08 15:36:21</name>
+    <name>Mats Jerratsch 2016-03-02 11:29:39+00:00</name>
   </author>
-  <link href="lightning-dev/March_2016/000481_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2016/000497_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2016/000452_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2016/000484_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2016/000490_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
   <link href="lightning-dev/March_2016/000499_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2016/000454_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000497_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000490_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000484_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000481_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
   <link href="lightning-dev/March_2016/000472_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000454_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000452_Probing-final-receiver-with-refund-timeout.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Probing final receiver with refund timeout</title>
-    <updated>2023-05-23T22:41:33.602163+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-March/000481.html" rel="alternate"/>
-    <summary>Mats Jerratsch, a Blockchain backend engineer, has discovered a vulnerability in the onion routing system. He suggests that probing too short of an absolute CLTV refund timeout can be used to attack the network. Mats proposes a solution to this issue where the onion object should include the timeout the previous node should have sent and the timeout the next node should use.He also talks about another potential attack vector for attacking the network with unroutable payments. In addition, he discusses the possibility of linking multiple HTLCs from one R value over the same route and how it can be barricaded by using timestamps in the onion object.Mats proposes a plan where each node will publish its MIN_TIMEOUT along with other information. The payer will sum the MIN_TIMEOUT to the payee and add some random value, keeping it under the max value allowed by protocol, to give the initial HTLC timeout. The payer puts the 'expected_timeout' in each layer of the onion by subtracting the last hops' MIN_TIMEOUT from the initial timeout. This proposal combats the analysis of the originator of HTLCs when A sends many HTLCs through B, B can simply plot what the timeouts are and know that A is likely originating the HTLCs rather than relaying them for someone else.During a Lightning Dev mailing list discussion, Rusty Russell suggested remembering the onion and always failing an identical one as a mitigation for the particular attack mentioned by Mats. He also suggested randomizing the timeout for the next hop by subtracting MIN_TIMEOUT to MIN_TIMEOUT*2. However, the question remains as to what HTLC timeout should be set initially. To prevent revealing patterns over time, Mats proposed using MAX_HOPS * MAX_OVERLAY * MIN_TIMEOUT as the initial timeout value.</summary>
-    <published>2016-03-09T00:30:47+00:00</published>
+    <updated>2023-07-31T18:53:02.788514+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-March/000499.html" rel="alternate"/>
+    <summary>In the Lightning Network, Mats Jerratsch proposes a solution to prevent nodes from knowing if a payment is originating from another source or being relayed. The proposal involves each node publishing its MIN_TIMEOUT, which is then used to calculate the initial HTLC timeout for payments. The payer adds some random value to the timeout and subtracts the last hops' MIN_TIMEOUT for subsequent layers of the onion routing packet. This prevents nodes from detecting patterns in payment timeouts.The context also discusses a potential attack vector where an intermediary node can determine if a sender is generating all their payments or relaying payments for someone else. To address this, randomized timestamps are suggested in the onion object to prevent explicit information on the number of previous hops. The sender deducts MIN_TIMEOUT * MIN_OVERLAY * RANDOM from the initial value to further randomize the refund time.Mats Jerratsch also suggests adding complexity to prevent free payments and potential blocking of future features involving multiple payments to one R value over the same route. He proposes using bitwise identical onion routing information to prevent malicious nodes from manipulating the routing onion. However, he acknowledges that there may be patterns that clever individuals could exploit.Furthermore, there is a vulnerability in the onion routing of Bitcoin's lightning network discovered by Mats Jerratsch. It allows an attacker to initiate a probing attack by setting too short of an absolute CLTV refund timeout. Rusty Russell suggests mitigating this attack by remembering the onion and always failing an identical one. Randomizing the timeout for the next hop is also suggested, at least subtracting MIN_TIMEOUT to MIN_TIMEOUT*2. The appropriate HTLC timeout is still under discussion.Overall, these proposals aim to enhance the security and privacy of the Lightning Network by preventing detection of payment sources, randomizing timeouts, and addressing vulnerabilities in the onion routing mechanism.</summary>
+    <published>2016-03-22T01:14:15+00:00</published>
   </entry>
 </feed>

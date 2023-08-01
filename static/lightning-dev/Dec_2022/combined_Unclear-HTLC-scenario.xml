@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Unclear HTLC scenario</title>
-  <updated>2023-06-04T04:33:48.401029+00:00</updated>
+  <updated>2023-08-01T00:56:43.738411+00:00</updated>
   <author>
-    <name>SomberNight 2022-12-13 15:53:51</name>
+    <name>Benjamin Weintraub 2022-12-13 20:36:02+00:00</name>
   </author>
   <author>
-    <name>Benjamin Weintraub 2022-12-13 14:51:17</name>
+    <name>SomberNight 2022-12-13 15:53:51+00:00</name>
   </author>
   <author>
-    <name>Benjamin Weintraub 2022-12-13 20:36:02</name>
+    <name>Benjamin Weintraub 2022-12-13 14:51:17+00:00</name>
   </author>
+  <link href="lightning-dev/Dec_2022/003804_Unclear-HTLC-scenario.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2022/003803_Unclear-HTLC-scenario.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2022/003802_Unclear-HTLC-scenario.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2022/003804_Unclear-HTLC-scenario.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Unclear HTLC scenario</title>
-    <updated>2023-06-04T04:33:48.401029+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-December/003803.html" rel="alternate"/>
-    <summary>A user named Benjamin Weintraub asked the Lightning-dev mailing list for clarification on how update_fail_htlcs are handled in cases where a node forwards an HTLC along a channel that cannot support the payment size. BOLT #2 states that nodes must not send an `update_fulfill_htlc`, `update_fail_htlc`, or `update_fail_malformed_htlc` until the corresponding HTLC is irrevocably committed in both sides' commitment transactions. This raised a question for Weintraub about whether nodes still need to commit to a payment that cannot be supported. However, SomberNight explained that this scenario is handled earlier than update_fail_htlc. When the recipient sees the update_add_htlc, some sanity checks will fail and it won't commit it to the commitment tx.BOLT #2 also specifies that when receiving an `amount_msat` that the sending node cannot afford at the current `feerate_per_kw`, the receiving node should send a `warning` and close the connection, or send an `error` and fail the channel. There is no need to wait until an invalid transaction is received to send an update_fail_htlc. If the recipient decides to simply close the transport connection, the update_add_htlc message is forgotten, and the channel is back to a usable state. The original email from Ben is included for context.</summary>
-    <published>2022-12-13T15:53:51+00:00</published>
+    <updated>2023-08-01T00:56:43.738411+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-December/003804.html" rel="alternate"/>
+    <summary>In response to Ben's question, SomberNight explained that the scenario of forwarding an HTLC along a channel without sufficient funds is handled before the update_fail_htlc message. When the recipient node receives the update_add_htlc message, it performs sanity checks and if it detects that the payment cannot be supported, it will not commit it to the commitment transaction. In this case, the recipient has the option to simply close the transport connection, causing the update_add_htlc message to be forgotten and restoring the channel to a usable state.To further clarify, BOLT #2 specifies that when a node receives an amount_msat that it cannot afford at the current feerate_per_kw, while still maintaining its channel reserve and any to_local_anchor and to_remote_anchor costs, it should take appropriate action. This can involve sending a warning and closing the connection or sending an error and failing the channel. The context emphasizes that there is no need to wait for an invalid transaction to be received before sending an update_fail_htlc.Overall, the handling of update_fail_htlcs in the scenario described by Ben involves sanity checks performed by the recipient node upon receiving the update_add_htlc message. If the payment cannot be supported, the recipient node can choose to close the connection, leading to the update_add_htlc message being discarded and the channel returning to a usable state.</summary>
+    <published>2022-12-13T20:36:02+00:00</published>
   </entry>
 </feed>

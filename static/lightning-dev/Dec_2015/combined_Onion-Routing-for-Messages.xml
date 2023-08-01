@@ -2,30 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Onion-Routing for Messages</title>
-  <updated>2023-05-23T21:48:57.619294+00:00</updated>
+  <updated>2023-07-31T18:42:31.920509+00:00</updated>
   <author>
-    <name>Bryan Bishop 2015-12-08 17:53:40</name>
+    <name>Rusty Russell 2015-12-09 10:19:25+00:00</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2015-12-09 09:45:20</name>
+    <name>Mats Jerratsch 2015-12-09 09:45:20+00:00</name>
   </author>
   <author>
-    <name>Mats Jerratsch 2015-12-08 17:13:22</name>
+    <name>Bryan Bishop 2015-12-08 17:53:40+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2015-12-09 10:19:25</name>
+    <name>Mats Jerratsch 2015-12-08 17:13:22+00:00</name>
   </author>
-  <link href="lightning-dev/Dec_2015/000370_Onion-Routing-for-Messages.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2015/000371_Onion-Routing-for-Messages.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2015/000369_Onion-Routing-for-Messages.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2015/000372_Onion-Routing-for-Messages.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000371_Onion-Routing-for-Messages.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000370_Onion-Routing-for-Messages.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2015/000369_Onion-Routing-for-Messages.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Onion-Routing for Messages</title>
-    <updated>2023-05-23T21:48:57.619294+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-December/000370.html" rel="alternate"/>
-    <summary>In an email exchange, Mats Jerratsch and Bryan Bishop discuss the implementation of onion-routing process in the Lightning Network. The original plan was to have some out-of-band messaging similar to a BIP70-style payment protocol instead of a single QR code, but this increased complexity. The proposed solution is that once a path is found, the recipient would communicate over the wallet-to-wallet channel to pass over the fully-constructed onion routing information.They also discuss the idea of having wallets open up a hidden service on TOR to take payment requests on a service listening there. The use of simplified message-delivery-system where each hop costs like 1 satoshi is also considered, which would not be enforceable on the blockchain. This message passing system would reduce message passing in onion land, which could make the problem easier to think about. If it remains a problem, they might find a way to proof this behaviour or even use HTLCs for these.Mats Jerratsch from Blockchain.com discussed the concept of onion routing and its practical uses in a message to the Lightning-dev mailing list. He proposed that payments should be routed over a rendezvous point (RP) and encrypted using an onion scheme to ensure privacy. A QR code could be used to transmit payment data and should include a payment hash in case the payment goes missing. The design could also include a messaging system integrated into the routing process. However, there are concerns over spamming and security risks.Rusty Russell commented on the two ideas presented by Jerratsch, emphasizing that reinventing a p2p messaging network is outside the current scope.</summary>
-    <published>2015-12-08T17:53:40+00:00</published>
+    <updated>2023-07-31T18:42:31.920509+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-December/000372.html" rel="alternate"/>
+    <summary>In a discussion on the Lightning-dev mailing list, Mats Jerratsch and Rusty Russell addressed the issue of using onion routing for sending messages over the Lightning network. The conversation focused on determining what should be sent through onion routing and what shouldn't. The goal was to separate messaging from payments by having the vendor negotiate with a node to forward a payment and then have the buyer route to that node. However, concerns were raised about spam and payment disputes. If lightning is used for messaging, the recipient could claim the route failed and not pay for the message. Trusting nodes also raises questions about security and reliability.Mats Jerratsch proposed implementing an interactive wallet-to-wallet protocol to address these concerns. This protocol would occur while both sides are busy communicating with the onion routing network for actual payment route negotiation. Once a path is found, the recipient would then communicate over the wallet-to-wallet channel to pass over the fully-constructed onion routing information. However, defining the wallet-to-wallet channel and maintaining privacy could be challenging. Jerratsch suggested a simplified message-delivery system where each hop costs 1 satoshi, but acknowledged that increasing the load for nodes could be problematic. If necessary, they might explore using HTLCs, although this could lead to impracticality and bloated commit transactions.In a previous email conversation in 2015, Mats Jerratsch had raised the question of whether onion-routing should be one-time and one-directional. The preferences regarding what data should be sent through onion routing were unclear. There was a suggestion that an interactive wallet-to-wallet protocol could take place while both parties communicated with the onion routing network for payment route negotiation. Once a path was found, the recipient would communicate over the wallet-to-wallet channel to pass fully-constructed onion routing information back. While this would reduce message passing in the onion land, it would increase the complexity of the payment side.The proposed system for privacy in payment transactions involved using Onion Routing, which routes payments over a rendezvous point and encrypts them using an onion scheme. The sender and receiver would not learn any additional information about each other by default. However, there was a question about whether the onion-routing should be one-time and one-directional or not. In the previous design, the onion objects were filled with zeros, making it impossible for the receiver to send a message back to the sender. The author proposed integrating a message system where each node could encrypt and append the pubkey of the node it received the object from, along with the ephemeral key used initially. This would allow the receiver to send a message back by encrypting it using the designated ephemeral key included by the sender and using the onion object to send it back. The author acknowledged potential security risks if someone obtained the onion object and targeted the nodes one by one to 'hunt down' the sender. Additionally, providing reasonable DoS protection against unnecessary messages spamming the network posed a challenge. One suggestion was to assign super tiny payments to the process of sending a message to counter spam, but implementation difficulties were acknowledged.</summary>
+    <published>2015-12-09T10:19:25+00:00</published>
   </entry>
 </feed>

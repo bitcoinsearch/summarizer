@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - New BIP: Dealing with OP_IF and OP_NOTIF malleability in P2WSH</title>
-  <updated>2023-05-24T00:22:59.903544+00:00</updated>
+  <updated>2023-07-31T19:11:25.370884+00:00</updated>
   <author>
-    <name>Johnson Lau 2016-09-01 11:39:51</name>
+    <name>Rusty Russell 2016-09-05 01:32:19+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-09-05 01:32:19</name>
+    <name>Johnson Lau 2016-09-01 11:39:51+00:00</name>
   </author>
-  <link href="lightning-dev/Sept_2016/000602_New-BIP-Dealing-with-OP-IF-and-OP-NOTIF-malleability-in-P2WSH.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2016/000605_New-BIP-Dealing-with-OP-IF-and-OP-NOTIF-malleability-in-P2WSH.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2016/000602_New-BIP-Dealing-with-OP-IF-and-OP-NOTIF-malleability-in-P2WSH.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - New BIP: Dealing with OP_IF and OP_NOTIF malleability in P2WSH</title>
-    <updated>2023-05-24T00:22:59.903544+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-September/000602.html" rel="alternate"/>
-    <summary>Johnson Lau is proposing a new BIP to deal with malleability related to OP_IF and OP_NOTIF in pay-to-witness-script-hash (P2WSH) scripts. The proposed changes to the Bitcoin script validity rules apply only to P2WSH scripts described in BIP141, which has not been activated on the Bitcoin mainnet as of writing. In P2WSH, the argument for OP_IF and OP_NOTIF must be exactly an empty vector or 0x01, or the script evaluation fails immediately. This is deployed using BIP9 after segregated witness (BIP141) is activated. The rules are enforced as a relay policy by the reference client since the first release of BIP141 (v0.13.1). To avoid risks of fund loss, users must not create P2WSH scripts that are incompatible with this BIP. An OP_0NOTEQUAL may be used before OP_IF or OP_NOTIF to imitate the original behaviour (which may also re-enable the malleability vector depending on the exact script).</summary>
-    <published>2016-09-01T11:39:51+00:00</published>
+    <updated>2023-07-31T19:11:25.370884+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-September/000605.html" rel="alternate"/>
+    <summary>Johnson Lau, a user on the bitcoin-dev forum, has proposed a restriction for the segwit OP_IF argument as policy. He is looking for feedback from users of OP_IF, especially those who are using it in real-world applications like the Lightning network. Another user, Rusty, mentions that his current scripts use OP_IF and OP_NOTIF only after OP_EQUAL, except for one instance where they use OP_EQUAL...OP_EQUAL...OP_ADD OP_IF. However, he states that this does not have any impact on the c-lightning implementation.To address the malleability issue with OP_IF and OP_NOTIF in pay-to-witness-script-hash (P2WSH) scripts, a new BIP (Bitcoin Improvement Proposal) has been prepared. The proposed changes will only apply to P2WSH scripts described in BIP141, which has not yet been activated on the Bitcoin mainnet. In order to ensure that transactions using OP_IF and OP_NOTIF created before the introduction of this BIP will still be accepted by the network, the new rules will not be applied to non-segregated witness scripts.Under the new rules, in P2WSH, the argument for OP_IF and OP_NOTIF must be either an empty vector or 0x01. If the argument does not meet these criteria, the script evaluation fails immediately. This is considered a softfork on top of BIP141. The rules have been enforced as a relay policy by the reference client since the initial release of BIP141 (v0.13.1).There may be compatibility issues if your script uses the combination of "OP_SIZE OP_IF" or "OP_DEPTH OP_IF". To comply with this new policy/softfork, you will need to use "OP_SIZE OP_0NOTEQUAL OP_IF" or "OP_DEPTH OP_0NOTEQUAL OP_IF", or modify your scripts accordingly.For more in-depth discussions on this topic, you can refer to the following link: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-August/013036.html.</summary>
+    <published>2016-09-05T01:32:19+00:00</published>
   </entry>
 </feed>

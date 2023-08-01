@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Analysis: alternative DoS prevention concept</title>
-  <updated>2023-05-24T00:49:57.296263+00:00</updated>
+  <updated>2023-07-31T19:14:42.333306+00:00</updated>
   <author>
-    <name>CJP 2016-11-10 23:11:54</name>
+    <name>Rusty Russell 2016-11-14 04:08:27+00:00</name>
   </author>
   <author>
-    <name>David A. Harding 2016-11-11 12:19:07</name>
+    <name>David A. Harding 2016-11-11 12:19:07+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-11-14 04:08:27</name>
+    <name>CJP 2016-11-10 23:11:54+00:00</name>
   </author>
-  <link href="lightning-dev/Nov_2016/000648_Analysis-alternative-DoS-prevention-concept.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2016/000649_Analysis-alternative-DoS-prevention-concept.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2016/000650_Analysis-alternative-DoS-prevention-concept.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2016/000649_Analysis-alternative-DoS-prevention-concept.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2016/000648_Analysis-alternative-DoS-prevention-concept.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Analysis: alternative DoS prevention concept</title>
-    <updated>2023-05-24T00:49:57.296263+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-November/000648.html" rel="alternate"/>
-    <summary>The Lightning Network has a vulnerability that can be exploited through a DoS attack. An attacker can send large transactions to themselves over a long route and allow them to time out, which results in funds becoming locked up. Milan proposed a solution to limit the freedom in channel design, but this interferes with the vision of a heterogeneous network. Instead, an alternative solution was explored where the payer pays transaction fees at the beginning of the transaction. Two variations were considered, one with a constant fee and another where the fee depends on the time it takes for the transaction to roll back.However, the fees are much smaller than the time value of the locked-up money for a single node, and they do not significantly impact the attacker. This solution does not scale well with the length of the route, and a security solution that depends so much on market conditions is probably a bad idea if we aren't sure about these market conditions.David A. Harding responded to CJP's concern about the proposed solution limiting channel design. David argues that this DoS mitigation proposal does not require a homogeneous network because only direct peers need to receive commit, roll-back, or channel close proof. Rusty Russell points out that the proposal is incompatible with crossing networks since the information needs to be routed back to prove somebody was punished for the delay.It is unclear how nodes can be trusted when onion routing removes all information on the origin of transactions. The time value of money lost to transactions that block all the way to their HTLC time-out is enormous compared to the tx fees. The spreadsheet used to set up the solution provides insight into the expected parameters for both the occupation rate of channels and the fee rate of nodes. Investing funds in channels is still profitable even when both rates are low. However, Alice will always have to close with Bob, which increases risk for the network since the attacker does not have to close her own channels now.</summary>
-    <published>2016-11-10T23:11:54+00:00</published>
+    <updated>2023-07-31T19:14:42.333306+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-November/000650.html" rel="alternate"/>
+    <summary>In a mailing list discussion, David A. Harding and CJP were discussing a potential denial-of-service (DoS) attack on the Lightning Network. The attack involves an attacker sending large transactions to themselves over a long route and letting them time out, which locks up funds and causes significant loss to innocent nodes. To mitigate this vulnerability, one proposed solution is to require nodes to either commit or roll back transactions within a short amount of time (e.g., 30 seconds), or provide proof that another channel was closed.However, this proposal has drawbacks. It limits the freedom in channel design, as it requires a design space that can be understood by all nodes in the network. This interferes with the vision of a heterogeneous network where different nodes may have varying capabilities or protocols. Despite this limitation, David argues that the proposal does not necessarily require a homogeneous network. Only direct peers need to receive commit, roll-back, or channel close proofs. For example, if Zed routes through Alice who routes through Bob, Zed only needs to understand Alice's proofs, which could be for a different network or protocol than what Bob is using.Several examples were given during the discussion to highlight the difficulties and limitations introduced by this proposal. One such example is transparent routing between side chains, where nodes that are unaware of a particular side chain cannot verify a channel close on that side chain. Another example is trust-free decentralized exchange between different blockchains, which also faces challenges under this proposal. However, individual negotiation between peers about supported blockchains allows for heterogeneity among client implementations.Regarding channel design upgrades, peers can declare the protocol designs or versions they support. Peers only need to match the version among their direct peers, not along the entire route. This constraint would apply to any upgrades if compatible hashlock mechanisms are used.The proposed solution of requiring fast commit or roll-back within a short time frame, or proof of channel closure, was presented during a meeting in Milan. An alternative solution was suggested where the payer of the transaction pays transaction fees at the beginning to compensate intermediate nodes for potential damage caused by a DoS attack. There are two variations of this solution: one with a constant in-advance fee and another depending on the time it takes for the transaction to roll back. However, these fees cannot fully compensate intermediate nodes and do not significantly impact attackers. Additionally, there is an upper limit to the total fee, making this solution scale poorly with longer routes.In conclusion, currently, there is no alternative solution to address the vulnerability of the DoS mode on the Lightning Network. Peer relationships may need to become somewhat trusted to avoid exposing each other to long-duration transactions. The spreadsheet used to evaluate incentives for the proposed solution may be useful for further exploration and analysis of potential solutions.</summary>
+    <published>2016-11-14T04:08:27+00:00</published>
   </entry>
 </feed>

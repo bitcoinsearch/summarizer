@@ -2,42 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Witness asymmetric payment channels</title>
-  <updated>2023-06-04T00:32:26.078834+00:00</updated>
+  <updated>2023-07-31T23:01:14.572604+00:00</updated>
   <author>
-    <name>Lloyd Fournier 2020-10-08 04:58:04</name>
+    <name>Lloyd Fournier 2020-10-08 04:58:04+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2020-08-25 12:45:50</name>
+    <name>Lloyd Fournier 2020-09-10 03:56:02+00:00</name>
   </author>
   <author>
-    <name>Lloyd Fournier 2020-09-10 03:56:02</name>
+    <name>Lloyd Fournier 2020-09-01 20:27:15+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2020-08-27 01:48:13</name>
+    <name>Lloyd Fournier 2020-09-01 02:53:49+00:00</name>
   </author>
   <author>
-    <name>Lloyd Fournier 2020-08-25 11:39:11</name>
+    <name>ZmnSCPxj 2020-08-27 01:48:13+00:00</name>
   </author>
   <author>
-    <name>Lloyd Fournier 2020-09-01 02:53:49</name>
+    <name>ZmnSCPxj 2020-08-25 12:45:50+00:00</name>
   </author>
   <author>
-    <name>Lloyd Fournier 2020-09-01 20:27:15</name>
+    <name>Lloyd Fournier 2020-08-25 11:39:11+00:00</name>
   </author>
   <link href="lightning-dev/Oct_2020/002812_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002786_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2020/002795_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002789_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002785_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2020/002791_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2020/002793_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2020/002791_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002789_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002786_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002785_Witness-asymmetric-payment-channels.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Witness asymmetric payment channels</title>
-    <updated>2023-06-04T00:32:26.079823+00:00</updated>
+    <updated>2023-07-31T23:01:14.572604+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-October/002812.html" rel="alternate"/>
-    <summary>In the world of cryptocurrency transactions, punishing a particular transaction efficiently can be challenging. This is because extracting the publication secret and keeping the encrypted signature (known as an adaptor signature) for that specific commitment transaction requires O(n) storage. The current spec's method involves deriving the previously revealed revocation secret from the present one, which only requires O(1) storage. This flaw seems to be unaddressed in the original work.Lloyd Fournier proposes a new protocol for witness asymmetric channels that eliminates per-commitment publication points and enables O(1) storage for 2-of-2 multi-signatures instantiated with or without key aggregation. He uses "revocable signatures" as the main primitive, allowing for O(1) storage complexity in both key aggregated and "multisig" constructions. The proposed solution also allows efficient punishment if a party learns the secret key of the other.The proposal addresses the "simultaneous HTLC" problem while upgrading to Decker-Russell-Osuntokun in the future. The proposal involves performing a coin toss whenever simultaneous HTLC offers occur without using token-passing. The proposed protocol retains the time-lock precedence of BOLT 3 transactions, where absolute time-locks are settled before relative time-locks to avoid having to account for relative time-locks when calculating absolute time-locks.In an email exchange, Lloyd Fournier and ZmnSCPxj discuss the complexity of a new proposal for Lightning Network channel updates. Fournier believes there is an improvement in conceptual complexity over the current BOLT spec, but also notes a worse storage complexity due to the need to keep around encrypted signatures. This could be a fatal flaw unless addressed.The article also discusses the application of Scriptless Scripts to Lightning channels. Using MuSig may require storing each two-party-generated encrypted signature, but the likely way forward would be to use MuSig on an output that has a taproot hiding a discrete 2-of-2. This would make the storage issue not much of a problem.</summary>
+    <summary>Lloyd Fournier has proposed a new protocol for witness asymmetric channels that eliminates per-commitment publication points and enables O(1) storage for 2-of-2 multi-signatures instantiated with or without key aggregation. The new protocol uses "revocable signatures" as the main primitive, allowing for O(1) storage complexity in both key-aggregated and multisig constructions. The proposal suggests replacing the publication point with a static key that remains the same with each commitment transaction. This change allows parties to efficiently punish each other if they learn the secret key of the other.The balance output for Alice is structured as 2-of-2(A, Rb + B), and for Bob as 2-of-2(Ra + A, B). This structure enables immediate balance retrieval when a commitment transaction is broadcasted, as well as when a revoked commitment transaction is broadcasted. The advantage of using witness asymmetric channels is a simpler transaction structure, although there is still a measurable improvement in communication complexity when using key aggregation.Regarding key aggregation, there is a flaw in the original work that results in worse storage complexity compared to the present specification. To address this, the author proposes revealing the nonce used to the other party as a way to revoke a key-aggregated signature. However, using MuSig may still require storing each two-party generated encrypted signature. The use of MuSig on an output with a taproot that hides a discrete 2-of-2 can mitigate this storage issue.In an email exchange, Lloyd Fournier and ZmnSCPxj discuss the complexity of a new proposal for Lightning Network channel updates. Fournier believes there is an improvement in conceptual complexity, but also notes a worse storage complexity due to the need to keep around encrypted signatures. ZmnSCPxj points out that the proposed setup would not reduce storage complexity as much as expected and raises concerns about synchronization between both sides. They suggest solutions such as passing a token or having different transactions on both sides, but note that these could come with tradeoffs.The proposal also addresses the issue of simultaneous HTLC offers. It suggests performing a coin toss whenever simultaneous HTLC offers occur without using token-passing. The HTLC hashes are used to seed the random numbers for the coin toss. If both peers send `add_htlc` to each other, they perform a coin toss ritual to determine which node's HTLCs will go in the next update.In another conversation, the reduction of implementation complexity in terms of asymmetrical transactions is discussed. Although keeping a copy of the shared commitment transaction and the partial signature received from the other side may decrease complexity, storage complexity remains the same. The synchronization of the two sides with regards to forwarding HTLCs is also considered, with solutions like token-passing or having different histories for both sides proposed. However, these solutions have potential tradeoffs in terms of bandwidth and latency.The proposal also explores the application of Scriptless Scripts to Lightning channels, allowing for more efficient and private updates without on-chain transactions. There are two types of outputs: balance outputs and PTLC outputs. The article provides detailed explanations of how these outputs work and the ownership dynamics when broadcasting non-revoked or revoked commitment transactions.Overall, the proposal aims to improve the efficiency, simplicity, and privacy of Lightning Network channel updates through witness asymmetric channels, revocable signatures, and the use of Scriptless Scripts.</summary>
     <published>2020-10-08T04:58:04+00:00</published>
   </entry>
 </feed>

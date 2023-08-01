@@ -2,38 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Single channel on mobile clients</title>
-  <updated>2023-05-24T00:44:05.411874+00:00</updated>
+  <updated>2023-07-31T19:14:05.998971+00:00</updated>
   <author>
-    <name>Anton Kumaigorodskiy 2016-11-01 11:53:12</name>
+    <name>Rusty Russell 2016-11-07 22:19:48+00:00</name>
   </author>
   <author>
-    <name>Anton Kumaigorodskiy 2016-11-07 19:58:54</name>
+    <name>Anton Kumaigorodskiy 2016-11-07 19:58:54+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-11-07 22:19:48</name>
+    <name>Christian Decker 2016-11-06 18:00:26+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2016-10-30 15:46:53</name>
+    <name>Anton Kumaigorodskiy 2016-11-01 11:53:12+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2016-11-06 18:00:26</name>
+    <name>Christian Decker 2016-10-30 15:46:53+00:00</name>
   </author>
   <author>
-    <name>Anton Kumaigorodskiy 2016-10-29 18:08:27</name>
+    <name>Anton Kumaigorodskiy 2016-10-29 18:08:27+00:00</name>
   </author>
-  <link href="lightning-dev/Nov_2016/000644_Single-channel-on-mobile-clients.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2016/000646_Single-channel-on-mobile-clients.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2016/000647_Single-channel-on-mobile-clients.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2016/000643_Single-channel-on-mobile-clients.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2016/000646_Single-channel-on-mobile-clients.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2016/000645_Single-channel-on-mobile-clients.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2016/000644_Single-channel-on-mobile-clients.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2016/000643_Single-channel-on-mobile-clients.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2016/000642_Single-channel-on-mobile-clients.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Single channel on mobile clients</title>
-    <updated>2023-05-24T00:44:05.411874+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-November/000644.html" rel="alternate"/>
-    <summary>The discussion on whether a mobile Lightning Network (LN) wallet should support only a single payment channel or multiple channels was debated by Anton Kumaigorodskiy and Christian. Christian believed that multiple channels would increase fault tolerance and privacy, while Anton argued that there were many annoying details and edge cases with opening multiple channels. However, they both agreed that multiple channels could increase connectivity in the network and lower the barrier for adoption.It is suggested that a mobile LN wallet should only support a single payment channel due to several reasons, including the fact that most LN nodes on mobile devices will be offline 99% of the time and thus not be of much use in relaying payments. Additionally, having one channel with a larger amount is better than having two smaller channels. It improves UX, simplifies UI, and lowers the barrier for adoption. However, adding multiple channel support later may be necessary.The use of multiple channels for relaying 3rd party payments is problematic as it can lead to a single point of failure. Having only one channel may not be efficient and could result in the user's funds being locked in HTLC. To deal with insufficient capacity in a path, signaling that multipath transfers are acceptable and retrying with a different path can mitigate this. Adopting the Bitcoin model of having an available balance and an unconfirmed balance across all channels instead of per channel is also suggested.It is important for wallet developers to understand that most users want an app that works seamlessly and do not necessarily need to know how things work. Therefore, it is crucial to consider end-user needs and simplify the process of using a mobile LN wallet.</summary>
-    <published>2016-11-01T11:53:12+00:00</published>
+    <updated>2023-07-31T19:14:05.999976+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-November/000647.html" rel="alternate"/>
+    <summary>Anton Kumaigorodskiy proposes the establishment of a payment request protocol that allows for negotiation of routes and other details between payer and payee. This involves the use of a QR code containing server address and necessary information, rather than H(R)+routing. The QR code would include one or more routes from rendezvous points, with the payer using an alternative method to locate them without communicating with the payee. The recipient would signal acceptance of multipath transfers, allowing the client to decide whether to perform a multipath payment. In case of payment failure, the client can try again with a different path. However, the retry logic is still being developed. In situations where there are multiple paths to the payee, the client can attempt to reach the endpoints in a specific order before failing. However, if payment failures are common, this approach may not be sufficient.The concept of a special payment request protocol that enables negotiation of multiple routes and details between payer and payee is being discussed. This involves the payee's QR code containing a server address and necessary information for the payer to establish a connection. The payer can then request H(R)+routing and continue to ask for more routes or retry failed payments as needed. Maintenance servers could facilitate this process, with each coffee shop potentially having its own. While a complete retry logic for multipath transfers is not yet in place, clients may soon have the option to decide whether to perform such payments based on the recipient's acceptance.The email conversation explores the advantages and challenges of maintaining multiple channels in the Lightning Network. Having a single channel has drawbacks, such as relying on a single peer, which can be a point of failure. On the other hand, opening multiple channels offers benefits in terms of fault tolerance and privacy. However, there are several questions that need to be addressed, including the number of channels to open, the fee per channel, and the maximum funds that can be relayed. Insufficient capacity along the payment path is also an issue that needs to be addressed. Abstracting the underlying mechanics can confuse users, and it is suggested to adopt the Bitcoin model of having an available balance and an unconfirmed balance across all channels. While a single channel doesn't solve all the issues, it makes them clear to the user. Starting with a simple system and adding features gradually is proposed as a strategy for wallets.Having multiple channels on a phone that can relay third-party payments presents various challenges. If the app is not running at all times, there is a risk of a channel being unilaterally closed due to HTLC expiration. Users need to decide the number of channels to open, the fee per channel, and the maximum funds that can be relayed without interfering with their own payments. However, most users prefer not to be burdened with these decisions and simply want the app to function seamlessly. While combining multiple channels is straightforward, there seems to be an asymmetry where payees can generate multiple routes while payers cannot pay if no channel has sufficient capacity. One solution is to ensure users understand that the balance is multidimensional. Another option is to bilaterally close existing channels before creating new ones and recombine their balances. While a single channel may not solve all the issues, it makes them apparent to the user, and developers can choose between single or multiple channels based on user needs.Anton Kumaigorodskiy shares reasons why a mobile Lightning Network wallet should only support a single payment channel. It is suggested that mobile nodes will be offline most of the time, making them ineffective for relaying payments. Additionally, locking funds in HTLC for extended periods may not be beneficial for users. On the other hand, Christian argues that two channels with 50% each are better because they prevent reliance on a single peer for payments. They also suggest that combining multiple channels is straightforward and can be achieved by the endpoints. While users may not care about relaying other people's transactions, they may want to offset their own fees or earn rewards. Christian emphasizes that the number of channels does not directly affect the user experience, and the underlying connections do not have to be visible in the interface. Anton plans to design their Android LN wallet to support a single payment channel, but is open to feedback.In conclusion, supporting only a single payment channel in mobile Lightning Network wallets has several advantages. The majority of mobile nodes are likely to be offline most of the time, making them ineffective for relaying payments. Locking funds for extended periods may not be in the user's best interest. A single channel with a larger capacity allows for larger amounts to be sent and received. Additionally, having a single channel simplifies the user interface and improves user experience. Anton plans to incorporate support for a single payment channel in their Android LN wallet, but welcomes feedback on any important factors that may have been overlooked.</summary>
+    <published>2016-11-07T22:19:48+00:00</published>
   </entry>
 </feed>

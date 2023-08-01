@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Thoughts on HTLC Scripts</title>
-  <updated>2023-05-23T18:35:17.525452+00:00</updated>
+  <updated>2023-07-31T18:09:15.640478+00:00</updated>
   <author>
-    <name>Mats Jerratsch 2015-07-20 18:42:11</name>
+    <name>Rusty Russell 2015-07-25 05:04:46+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2015-07-25 05:04:46</name>
+    <name>Mats Jerratsch 2015-07-20 18:42:11+00:00</name>
   </author>
-  <link href="lightning-dev/July_2015/000055_Thoughts-on-HTLC-Scripts.xml" rel="alternate"/>
   <link href="lightning-dev/July_2015/000063_Thoughts-on-HTLC-Scripts.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2015/000055_Thoughts-on-HTLC-Scripts.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Thoughts on HTLC Scripts</title>
-    <updated>2023-05-23T18:35:17.525452+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-July/000055.html" rel="alternate"/>
-    <summary>Mats Jerratsch is working on a Lightning Implementation Client/Server in Java, building on bitcoinj. The implementation was ready but he threw it all off the ship after reading through Rusty's paper. Mats had based his implementation on some trust dependencies and channel transactions were highly asynchronous, meaning that a LN-Network would not be possible. He noticed that there is no delay for the 'HTLC Receiver Redeemscript', when redeeming the contract using R. There are four states in a channel and if the client has spent all funds in state 3, he can broadcast the channel transaction from t1 and instantly claim all outputs using R, this is especially important as clients won't be online all the time and the delay here really determines how often the client has to check back. According to Rusty, any output condition which pays to "self" must be delayed.</summary>
-    <published>2015-07-20T18:42:11+00:00</published>
+    <updated>2023-07-31T18:09:15.640478+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-July/000063.html" rel="alternate"/>
+    <summary>Mats Jerratsch is currently working on a Lightning Implementation Client/Server in Java, using bitcoinj as a basic framework. He plans to push it into GitHub within a few weeks. Mats had an implementation ready but after reading through Rusty's paper, he threw it off the ship. His previous implementation was based on some trust dependencies and channel transactions were highly asynchronous, meaning that a LN-Network would not be possible. First, Mats wanted to write up his solution for the anchor problem, but then he realized Rusty's solution makes it possible to have channels open indefinitely, while his doesn't. It is important to wait for the anchor tx of the other party otherwise the server has to pay transaction fees for releasing his funds again and again. While implementing the new redeemscripts, Mats noticed there is no delay for the 'HTLC Receiver Redeemscript', when redeeming the contract using R. In response, Rusty said that any output condition which pays to "self" must be delayed so A's HTLC output to A must be delayed, similarly B's HTLC output to B. Rusty also mentioned that he just rewrote his test-cli utils to support dual anchors. The author of the post is working on a Lightning Implementation Client/Server in Java, based on bitcoinj. They intend to push it into GitHub in a few weeks. However, after reading through a paper, they threw away an implementation that was ready and would not require any further changes for Bitcoin. The previous implementation had trust dependencies, and channel transactions were highly asynchronous, making a LN-Network impossible. The author also wanted to write up their solution for the anchor problem. Still, they realized that the new solution made it possible to have channels open indefinitely, which wasn't possible with their implementation. They noticed that there was no delay for the 'HTLC Receiver Redeemscript' when redeeming the contract using R, and this could enable the receiver to claim outputs instantly. The author suggests that OP_CSV after OP_DROP will mitigate this by ensuring some delay. It is especially important as clients won't be online all the time, and the delay here determines how often the client has to check back. In conclusion, the author praises the work done in the paper, although they have to delete and rewrite a good share of their work.</summary>
+    <published>2015-07-25T05:04:46+00:00</published>
   </entry>
 </feed>

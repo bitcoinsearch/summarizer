@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Blind Signing Considered Harmful</title>
-  <updated>2023-06-04T03:40:08.918395+00:00</updated>
+  <updated>2023-08-01T00:19:54.204636+00:00</updated>
   <author>
-    <name>ZmnSCPxj 2022-05-10 00:40:26</name>
+    <name>Devrandom 2022-05-10 08:02:35+00:00</name>
   </author>
   <author>
-    <name>Devrandom 2022-05-09 19:04:26</name>
+    <name>ZmnSCPxj 2022-05-10 00:40:26+00:00</name>
   </author>
   <author>
-    <name>Devrandom 2022-05-10 08:02:35</name>
+    <name>Devrandom 2022-05-09 19:04:26+00:00</name>
   </author>
+  <link href="lightning-dev/May_2022/003581_Blind-Signing-Considered-Harmful.xml" rel="alternate"/>
   <link href="lightning-dev/May_2022/003580_Blind-Signing-Considered-Harmful.xml" rel="alternate"/>
   <link href="lightning-dev/May_2022/003579_Blind-Signing-Considered-Harmful.xml" rel="alternate"/>
-  <link href="lightning-dev/May_2022/003581_Blind-Signing-Considered-Harmful.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Blind Signing Considered Harmful</title>
-    <updated>2023-06-04T03:40:08.918395+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-May/003580.html" rel="alternate"/>
-    <summary>The article discusses the risks associated with blind signers in the context of Lightning network. Blind signers are insecure and vulnerable to several exploits, making them an unreliable option for deployment. To address this issue, the Validating Lightning Signer project has been introduced. It is an open-source Rust library and reference implementation that aims to secure the Lightning ecosystem by performing policy checks to ensure that keys are not misused.ZmnSCPxj and devrandom discuss the requirements for a true validating Lightning signer, which would need to be a Bitcoin node with active mitigation against eclipse attacks, the ability to monitor the blockheight, and the ability to broadcast transactions. The UTXO Oracle(s) were then mentioned as an alternative option with additional properties that improve on a plain Bitcoin node.The topic of broadcast was also addressed, with the intention being to have a disaster recovery procedure in place. Routing nodes were noted as needing to be aware of the on-chain status of incoming channels to avoid an attack scenario where a compromised node lies and tells the signer that the block height is much lower than it really is. The potential exploit of an HTLC being failed and removed on the input before it is removed on the output, leading to a loss of funds, was also discussed.Heartbeats would cease and the operator would manually intervene in this scenario. There is another potential mode where the value of HTLCs in flight is limited, routing is not done, and watchtowers are used instead of the UTXO Oracle component. It was also suggested that UTXO Oracles could be embedded into the network if compact-filters or utreexo roots are committed to in the consensus and SPV-style security is used. However, it is unclear when this might be plausibly deployed.</summary>
-    <published>2022-05-10T00:40:26+00:00</published>
+    <updated>2023-08-01T00:19:54.204636+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-May/003581.html" rel="alternate"/>
+    <summary>In a conversation between ZmnSCPxj and devrandom, the requirements for a true validating Lightning signer were discussed. ZmnSCPxj suggested that such a signer would need to be a Bitcoin node with active mitigation against eclipse attacks, the ability to monitor the blockheight, and the ability to broadcast transactions. The UTXO Oracle(s) were mentioned as an alternative option with additional properties that improve on a plain Bitcoin node. These include providing compact attestations that can be checked in an isolated/hardened environment, sending out attestations on a broadcast medium, and covering the current block hash and a commitment for the UTXO set hash.To address the potential risk of compromised nodes lying to the signer and causing a loss of funds in forwarding cases, ZmnSCPxj raised concerns about the lack of active mitigation against eclipse attacks. They also asked whether the "UTXO Set Oracle" informs the lightning-signer about block height and facilitates transaction broadcast, as well as what happens if the connection between remote devices is interrupted. ZmnSCPxj described a scenario where a `lightning-signer` would need to be attached to a Bitcoin node capable of actively finding and connecting to multiple Bitcoin peers, checking the block header chain, and broadcasting unilateral closes and HTLC timelock claims for outgoing HTLCs. Without these capabilities, there is a risk of funds loss.The conversation also touched on potential exploits, including an HTLC being failed and removed on the input before it is removed on the output, leading to a loss of funds. ZmnSCPxj referred to a mitigation planned or implemented against this exploit. Moving on, the post discusses the risks associated with blind signers in the context of the Lightning network. Blind signers do not provide users with control over their funds and are vulnerable to several exploits, making them an insecure option for deployment. To address this issue, the Validating Lightning Signer (VLS) project has been introduced. It is an open-source Rust library and reference implementation that aims to secure the Lightning ecosystem by performing policy checks to ensure that keys are not misused.The VLS project is approaching beta, which will ensure that funds remain safe even if the node is completely compromised. Blind signing wallets that rely on a separate node run by a Lightning Service Provider (LSP) are not self-custodial since the LSP can unilaterally control the funds. Blind signers have two points of attack: at the node and at the signer, making it easier for attackers to steal funds. In contrast, validated signers only have one point of attack and improve security by reducing the attack surface. They perform several validation rules such as not signing a revoked commitment transaction or closing a channel to an unapproved destination.The post also provides examples of blind signing exploits, including a compromised node asking the blind signer to sign a revoked transaction or submitting a mutual closing transaction that sends funds to the attacker's address. The VLS project targets both servers and consumer devices and offers many configurations of a Lightning node, including monolithic nodes, nodes with a separate blind signer, and nodes with a separate validating signer. Overall, blind signers reduce the security of Lightning nodes, while validating signers improve it.</summary>
+    <published>2022-05-10T08:02:35+00:00</published>
   </entry>
 </feed>

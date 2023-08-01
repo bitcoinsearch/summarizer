@@ -2,30 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Concurrent sigs in BOLT #2</title>
-  <updated>2023-05-23T23:30:40.708188+00:00</updated>
+  <updated>2023-07-31T18:59:08.863894+00:00</updated>
   <author>
-    <name>Pierre 2016-04-24 19:29:22</name>
+    <name>Rusty Russell 2016-04-30 05:45:27+00:00</name>
   </author>
   <author>
-    <name>Fabrice Drouin 2016-04-28 10:39:51</name>
+    <name>Fabrice Drouin 2016-04-28 10:39:51+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-04-26 02:21:00</name>
+    <name>Rusty Russell 2016-04-26 02:21:00+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-04-30 05:45:27</name>
+    <name>Pierre 2016-04-24 19:29:22+00:00</name>
   </author>
-  <link href="lightning-dev/April_2016/000520_Concurrent-sigs-in-BOLT-2.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2016/000525_Concurrent-sigs-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/April_2016/000523_Concurrent-sigs-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/April_2016/000522_Concurrent-sigs-in-BOLT-2.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2016/000525_Concurrent-sigs-in-BOLT-2.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2016/000520_Concurrent-sigs-in-BOLT-2.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Concurrent sigs in BOLT #2</title>
-    <updated>2023-05-23T23:30:40.708188+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-April/000520.html" rel="alternate"/>
-    <summary>In a discussion thread on the Lightning-dev mailing list, Rusty Russell proposed a new approach for resolving conflicts when they occur. He suggested that instead of using an ordering system, nodes should agree that the one with the "greatest" signature should immediately resend a new signature including all pending changes if two nodes send each other a signature at the same time.Each node tracks two commitment states: its own and the state of the other side because they can run independently. Nodes must process packets in order, update their state when sending or receiving something, and sign the other side's state when signing a commit tx. When a node sends an ADD HTLC, it modifies the other side's state and only modifies its own state when it receives an ack covering that ADD HTLC. The receiver of the ADD HTLC modifies its own state and modifies the other side's state when it sends the next ack.Node A and Node B exchange HTLCs and signatures, modifying each other's state until both have outstanding changes. They can then send another SIG which acknowledges the received changes, thus modifying the other state. Processing the ACK and SIG will result in both nodes having committed to the same changes.However, there could be a risk of getting stuck in an infinite loop if A and B decide to send each other a new HTLC instead of immediately sending a new SIG after receiving an ack. Therefore, it should be specified that the only valid answer to a signature is either a signature (if there are outstanding changes) or a revocation.In conclusion, the new approach suggests that nodes should not use any ordering of some sort to resolve conflicts when they occur, such as simply comparing signatures. Instead, the nodes should adopt the approach of the one with the "greatest" signature immediately resending a new signature including all pending changes. This will ensure that the nodes can commit to the same changes without getting stuck in an infinite loop.</summary>
-    <published>2016-04-24T19:29:22+00:00</published>
+    <updated>2023-07-31T18:59:08.863894+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-April/000525.html" rel="alternate"/>
+    <summary>In a discussion about the possibility of nodes getting stuck in an infinite loop while sending each other new HTLCs instead of immediately sending a new SIG, Rusty Russell explains that as long as an HTLC is committed to by both sides, it's locked in. He also notes that until then, the receiver cannot offer it onwards. Furthermore, a node must estimate the deadline for successful redemption for each HTLC it offers and should not offer a HTLC past the deadline.With regards to whether it should be specified that the only valid answer to a signature is either a signature (if there are outstanding changes) or a revocation, Rusty believes that you should be able to pack in as many updates between signatures as you want.In an email exchange, Rusty Russell and Pierre discussed how to handle concurrent signatures. Pierre suggested using an ordering system to resolve conflicts, while Russell explained a simple rule-based approach that involves processing packets in order, updating states when sending or receiving something, and signing a commit tx based on the other side's state at the time. The diagram provided demonstrates the modification of state changes made by nodes during the process, and shows that outstanding changes are acknowledged by sending another SIG, which modifies the other state. Fabrice raised the question of what would happen if both parties decide to send each other a new HTLC instead of immediately sending a new SIG, and whether it could result in an infinite loop where both parties never converge on a commitment tx.The author of the email is discussing how concurrent updates should be handled. They suggest using an ordering system to resolve conflicts by comparing signatures. In this case, if two nodes send each other a signature at the same time, they could agree that the one that sent the "greatest" signature has to immediately resend a new signature including all pending changes.The author then provides a diagram that shows how nodes track two commitment states and the rules nodes must follow when processing packets. When a node sends an ADD HTLC, it modifies the other side's state, but only modifies its own state when it receives an ack covering that ADD HTLC. The ADD HTLC receiver modifies its own state and modifies the other side's state when it sends the next ack. Both nodes have outstanding changes, so they can send another SIG (which acks the received changes, thus modifying the other state). The minimum single-update case is still 1.5 round-trips.The author is trying to understand how to handle concurrent signatures and proposes using an ordering system to resolve conflicts when they occur. The proposed solution involves having two nodes agree on which signature is "greatest" and then having the node that sent the lesser signature immediately resend a new signature including all pending changes. An example scenario is provided where Node A and Node B have conflicting staged changes, but agree to use SIG B0 as the "greatest" signature and proceed with a new signature encompassing all changes. The example concludes with SIG A1 being sent from Node A after the conflict has been resolved.</summary>
+    <published>2016-04-30T05:45:27+00:00</published>
   </entry>
 </feed>

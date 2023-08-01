@@ -2,42 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposal for Stuckless Payment</title>
-  <updated>2023-06-03T22:05:47.379428+00:00</updated>
+  <updated>2023-07-31T21:44:19.913124+00:00</updated>
   <author>
-    <name>Hiroki Gondo 2019-06-27 09:45:13</name>
+    <name>ZmnSCPxj 2019-09-18 10:30:57+00:00</name>
   </author>
   <author>
-    <name>Hiroki Gondo 2019-06-25 08:20:12</name>
+    <name>Hiroki Gondo 2019-09-18 10:08:03+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2019-06-25 10:15:29</name>
+    <name>Hiroki Gondo 2019-06-27 09:45:13+00:00</name>
   </author>
   <author>
-    <name>Bastien TEINTURIER 2019-06-25 16:46:38</name>
+    <name>ZmnSCPxj 2019-06-26 03:19:39+00:00</name>
   </author>
   <author>
-    <name>Hiroki Gondo 2019-09-18 10:08:03</name>
+    <name>Bastien TEINTURIER 2019-06-25 16:46:38+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2019-09-18 10:30:57</name>
+    <name>ZmnSCPxj 2019-06-25 10:15:29+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2019-06-26 03:19:39</name>
+    <name>Hiroki Gondo 2019-06-25 08:20:12+00:00</name>
   </author>
-  <link href="lightning-dev/June_2019/002049_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2019/002029_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2019/002030_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2019/002034_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
-  <link href="lightning-dev/Sept_2019/002152_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2019/002153_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2019/002152_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2019/002049_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
   <link href="lightning-dev/June_2019/002039_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2019/002034_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2019/002030_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2019/002029_Proposal-for-Stuckless-Payment.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Proposal for Stuckless Payment</title>
-    <updated>2023-06-03T22:05:47.379428+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-June/002049.html" rel="alternate"/>
-    <summary>The Lightning-Dev mailing list has been discussing a proposal to add an additional round of communication to avoid wormhole attacks and decorrelate payments. The proposal is designed to reduce the possibility of payments getting stuck, allowing both the payee and the payer to provide keys to settle payments without involving intermediate nodes. However, there are concerns about security and privacy issues in the proposal, particularly relating to the anonymity of the payer.One solution proposed involves creating an ACK onion packet during the setup phase, which is embedded inside the last hop payload of the add_htlc onion packet. This way, D doesn't learn anything about A, and intermediate nodes aren't included in the ACK route so they don't learn anything either. Hiroki Gondo believes that embedding the ACK packet inside the last hop payload of the add_htlc onion packet could be an improvement, and plans to understand more precisely the limitations of the onion packet and consider combining this proposal with AMP and new routing algorithms (Trampoline, Rendezvous).In addition, ZmnSCPxj suggests that the sums used for payment decorrelation will be sent in onion packets in a new phase called Pre-Settlement, but adding the ACK-key turnaround may allow intermediate nodes to guess the payer's distance. Despite these issues, it is believed that the added communication round may allow intermediate nodes to guess the payer's identity, but this information may not be significant enough to pose a problem in practice.Hiroki Gondo explains that the proposal for Stuckless Payments can be accomplished using HTLC variants that are not compatible with BOLT 1.x HTLCs, instead of waiting for PTLCs. This change helps support cross-currency swaps without premium-free American Call Option and non-custodial escrow. Both can also be served by using points. Finally, a potential solution to the "American Call Option" problem is discussed. The proposed solution involves the exchange requiring payment of the premium immediately, with the premium encumbered only by the exchange. The exchange can force a timeout on the premium payment or require payment before performing the swap. The payer and payee can still lock the exchange funds by not paying the option premium, but the exchange can permanently delete z if it is not paid. The payer can also send a cancel message instead of key in response to ACK if necessary.</summary>
-    <published>2019-06-27T09:45:13+00:00</published>
+    <updated>2023-07-31T21:44:19.913124+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-September/002153.html" rel="alternate"/>
+    <summary>In a recent discussion, Hiroki Gondo proposes using HTLC variants that are not compatible with BOLT 1.x HTLCs to achieve Stuckless Payments. By modifying the BOLT #3 offered and received HTLC policies, the changes allow for the implementation of Stuckless Payments without relying on PTLCs. However, ZmnSCPxj and Bastien raise concerns about security and privacy issues related to the proposal. They agree that it is important to retain the property of "D does not know payer A". The addition of a new ACK-key turnaround may enable intermediate nodes to guess the payer's identity by measuring the time from sending the ACK to receiving the key.To address this concern, Hiroki suggests embedding an ACK onion packet inside the last hop payload of the add_htlc onion packet. This would prevent D and intermediate nodes from learning anything about the payer. Hiroki plans to further understand the limitations of the onion packet and consider combining this proposal with AMP and new routing algorithms such as Trampoline and Rendezvous.The email conversation also discusses a potential solution to the "American Call Option" problem in stuckless payments. The proposed solution involves requiring immediate payment of the premium by the exchange, with the premium encumbered only by the exchange. Steps involved in the payment process include requesting a public key anonymously via Tor, routing the payment via the exchange, providing proof-of-knowledge, and using signatures to validate transactions. The payer and payee can still lock the exchange funds by not paying the option premium, but the exchange has the ability to permanently delete the funds if they are not paid. Additionally, instead of sending the key in response to ACK, the payer can send a cancel message.Another topic discussed on the Lightning-dev mailing list is the proposal to add an additional round of communication to avoid wormhole attacks and decorrelate payments. While this would increase latency, it would provide a way to "cancel" stuck payments and retry them. The option to make multiple tries in parallel is also considered to help with latency. Payer anonymity is addressed by suggesting that the ACK message can be constructed by A and sent via a different route than the add_htlc onion packet.In a message to Hiroki, ZmnSCPxj suggests sending the payment decorrelation sums in onion packets in a new phase called Pre-Settlement. However, adding the ACK-key turnaround may allow intermediate nodes to guess the payer's distance. There is uncertainty about how to weigh this information as it may lead to attempts at censorship. Additionally, the added latency of payments may worsen with the use of ACK-key turnaround despite the possibility of multiple tries in parallel. Further consideration is needed to ensure correctness.The proposal aims to reduce the occurrence of stuck payments by allowing both the payee and the payer to provide keys to settle payments without involving intermediate nodes. However, it is important to note that this proposal cannot be used with BOLT 1.x and will only apply to future specifications. In cases where payments do get stuck, additional trusted operations will be required by the final node's implementation, application, or service operator. For example, if a payment gets stuck when a payer orders a cup of coffee and attempts to pay for the invoice, corrective actions need to be taken to resolve the issue. Retry attempts using different routes with the same invoice present problems as the payer may end up paying twice for the same invoice if the previously stuck payment succeeds after a successful retry. Obtaining a refund from the payee for the extra payment would require additional trusted operations dependent on the application or service operator.</summary>
+    <published>2019-09-18T10:30:57+00:00</published>
   </entry>
 </feed>

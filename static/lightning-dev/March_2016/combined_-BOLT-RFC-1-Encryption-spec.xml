@@ -2,42 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [BOLT RFC#1] Encryption spec</title>
-  <updated>2023-05-23T22:50:30.603768+00:00</updated>
+  <updated>2023-07-31T18:54:03.777150+00:00</updated>
   <author>
-    <name>Anthony Towns 2016-03-18 06:03:17</name>
+    <name>Rusty Russell 2016-06-28 02:43:09+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-06-28 01:41:05</name>
+    <name>Rusty Russell 2016-06-28 01:41:05+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-03-21 00:07:00</name>
+    <name>Peter Todd 2016-06-26 22:27:20+00:00</name>
   </author>
   <author>
-    <name>CJP 2016-06-26 11:53:11</name>
+    <name>CJP 2016-06-26 11:53:11+00:00</name>
   </author>
   <author>
-    <name>Peter Todd 2016-06-26 22:27:20</name>
+    <name>Rusty Russell 2016-03-21 00:07:00+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-06-28 02:43:09</name>
+    <name>Anthony Towns 2016-03-18 06:03:17+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-03-07 03:51:02</name>
+    <name>Rusty Russell 2016-03-07 03:51:02+00:00</name>
   </author>
-  <link href="lightning-dev/March_2016/000494_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2016/000549_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
-  <link href="lightning-dev/March_2016/000496_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2016/000547_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2016/000548_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
   <link href="lightning-dev/June_2016/000550_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2016/000549_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2016/000548_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2016/000547_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000496_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
+  <link href="lightning-dev/March_2016/000494_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
   <link href="lightning-dev/March_2016/000456_-BOLT-RFC-1-Encryption-spec.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [BOLT RFC#1] Encryption spec</title>
-    <updated>2023-05-23T22:50:30.603768+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-March/000494.html" rel="alternate"/>
-    <summary>The Lightning Technology RFC 1 specifies that all communications between lightning nodes must be encrypted and authenticated. Each node has a unique public key identifier, and the initial packet sent by a node includes length and sessionpubkey fields. Once a node receives the initial handshake, it can derive the shared secret using EC Diffie-Hellman. All packets are encrypted using keys derived from the shared secret, with the protocol using Authenticated Encryption with Additional Data using ChaCha20-Poly1305.In a conversation between Rusty Russell, Peter Todd, and Anthony Towns, they discuss how a node can derive the shared secret and encryption keys using EC Diffie-Hellman. They also suggest reusing the secp256k1 elliptic curve used in the Bitcoin protocol to avoid additional dependencies. Differences in calculation of sessionsecretkey are addressed, and wording is added for clarification. Rusty suggests handling any upgrade by adding a second key and increasing the length field to cover it.In another conversation, Joost Jager asks about using different public keys for different links and expresses concern about communication being distinguished from random data. Rusty responds that using different keys could be good for privacy but might not solve deniability issues. He suggests appending unused data to messages to make them fixed size or random size to protect against timing analysis.CJP asks questions related to the encryption layer of Amiko Pay. He first inquires about the possibility of using different public keys for different links and suggests it could be useful for privacy. He then raises concerns about traffic analysis and suggests appending unused data to messages to make them fixed size or random size. He also suggests adding a signature of sessionpubkey along with the sender's node_id key to prevent MITM attack. Finally, he asks about the meaning of the ack field in the authenticate message and its use for message re-transmission across multiple sessions. The nonce increments are mentioned as a way to prevent duplication or removal of messages.Multiple choices are possible for symmetric encryption, but it is strongly recommended that existing validated libraries be used to avoid implementation pitfalls. Feedback is welcome on the lightning-dev list. The first packet sent after exchanging the shared secret must be an authentication packet, including bitcoin_pubkey node_id and signature session_sig. There is no message type ID for the authenticate message; instead, the first message in a session is always an authenticate message.</summary>
-    <published>2016-03-18T06:03:17+00:00</published>
+    <updated>2023-07-31T18:54:03.777150+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-June/000550.html" rel="alternate"/>
+    <summary>The Chief Justice of Pakistan (CJP) is interested in implementing an encryption layer for Amiko Pay and is considering using BOLT for encryption. The CJP finds the design of BOLT appealing due to its simplicity and ease of analysis. However, the CJP has concerns about the possibility of a node using different public keys for different links and how it could impact privacy. Additionally, the CJP wonders if communication using BOLT can be distinguished from random data and if timing analysis could reveal information about the payload protocol. The CJP also seeks clarification on how the authenticate message is distinguished from other messages and the meaning of the ack field in the authenticate message.In a discussion between Peter Todd and the CJP, the CJP shares information about Jonas Schnelli's work on P2P layer encryption for Bitcoin, which uses a subset of the encryption scheme employed by OpenSSH. This approach allows Schnelli to benefit from the extensive review conducted for OpenSSH. Peter Todd suggests that using this encryption scheme would provide the same benefits as well as the review from the Bitcoin Core team.The CJP sends an email to Peter Todd, providing a link to the encryption scheme used by OpenSSH, which Jonas Schnelli is utilizing for Bitcoin's P2P layer encryption. The CJP highlights the advantage of leveraging the review conducted for OpenSSH and suggests that employing the same encryption scheme would offer the same benefits along with a review from the Bitcoin Core team. Peter Todd informs the CJP that he is about to implement an encryption layer for Amiko Pay and has some questions after reading the BOLT for encryption. The developer likes the generic and simple design of the encryption layer, making it easy to analyze. The developer is curious about the possibility of a node using different public keys for different links, the degree to which communication appears as random data, and protecting against timing analysis. The developer also inquires about distinguishing the authenticate message from other messages and suggests including a signature of the sessionpubkey to prevent MITM attacks. Furthermore, the developer seeks clarification on preventing message duplication or removal by a MITM attacker and maintaining state between encryption/authentication of different messages. Lastly, the developer questions the meaning and usefulness of the ack field in the authenticate message for asynchronous data streams in both directions.In a discussion about the derivation of shared secret and encryption keys, Anthony Towns proposes expanding on the sessionsecretkey calculation. The current implementation differs from NIST specifications, which only utilize the x coordinate of the point directly without hashing it. Although reusing the secp256k1 elliptic curve used in the Bitcoin protocol avoids additional dependencies, there are concerns about backward compatibility if it breaks or becomes deprecated. To address this, a second key can be added, and the length field can be increased to accommodate it.Rusty Russell explains the derivation of shared secret and encryption keys in an email conversation. Upon receiving the initial handshake, a node can derive the shared secret using the received sessionpubkey point and its own sessionsecretkey scalar through EC Diffie-Hellman. However, Rusty suggests calculating sessionsecretkey per libsecp256k1 instead of following the NIST specification, which only considers the x coordinate of the point and does not necessarily hash it. He has proposed changes to the wording in a GitHub pull request. Reusing the secp256k1 elliptic curve used in the Bitcoin protocol avoids additional dependencies. Nevertheless, if secp256k1 faces issues or deprecation, it could create backward compatibility problems. To handle this, the protocol could increment the high byte of the "length" field in the first message, allowing old clients to recognize it as an invalid length and refuse the connection. New clients would interpret it as a version byte.The Basis of Lightning Technology RFC 1 draft outlines the encryption and authentication of communications between lightning nodes. It recommends encrypting all communications to increase the difficulty of analysis and authenticating to prevent malicious interference. The initial handshake involves a node sending a DER-encoded compressed public EC-key as the sessionpubkey field, which is then validated by the receiver. A shared secret is derived from the handshake, and encryption keys are derived from the shared secret for data encryption. The protocol employs Authenticated Encryption with Additional Data using ChaCha20-Poly1305, employing nonces to encrypt packet headers and bodies. To authenticate peer identity, the first packet sent must be an authentication packet containing three required fields: bitcoin_pubkey node_id, signature session_sig, and a signature of the SHA256 of SHA256 of the receiver's node_id using the secret key corresponding to the sender's node_id. Public-key cryptography in this context utilizes the secp256k1 elliptic curve to avoid additional dependencies. The RFC advises utilizing existing, well-established libraries to mitigate implementation pitfalls. Rusty Russell authored the initial draft, and feedback is encouraged on the lightning-dev list. References provided include Secp256k1, RFC7539, and the libsodium documentation</summary>
+    <published>2016-06-28T02:43:09+00:00</published>
   </entry>
 </feed>

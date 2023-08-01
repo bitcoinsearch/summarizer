@@ -2,34 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Arbitrary Bitcoin Contracts over LN</title>
-  <updated>2023-05-25T02:08:27.238150+00:00</updated>
+  <updated>2023-07-31T20:26:22.984433+00:00</updated>
   <author>
-    <name>ZmnSCPxj 2018-08-01 10:36:22</name>
+    <name>ZmnSCPxj 2018-08-02 03:56:56+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-08-02 03:43:23</name>
+    <name>ZmnSCPxj 2018-08-02 03:43:23+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-08-02 03:56:56</name>
+    <name>Christian Decker 2018-08-01 12:04:47+00:00</name>
   </author>
   <author>
-    <name>Michael Folkson 2018-08-01 11:11:08</name>
+    <name>Michael Folkson 2018-08-01 11:11:08+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2018-08-01 12:04:47</name>
+    <name>ZmnSCPxj 2018-08-01 10:36:22+00:00</name>
   </author>
-  <link href="lightning-dev/Aug_2018/001383_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2018/001387_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2018/001388_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2018/001384_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2018/001387_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2018/001385_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2018/001384_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2018/001383_Arbitrary-Bitcoin-Contracts-over-LN.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Arbitrary Bitcoin Contracts over LN</title>
-    <updated>2023-05-25T02:08:27.238150+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-August/001383.html" rel="alternate"/>
-    <summary>Transporting arbitrary smart contracts via Lightning Network (LN) is theoretically possible, as long as they can be expressed as Bitcoin scripts. However, it is not practical. The only smart contract useful to transport is Hashed Time-Locked Contracts (HTLCs), which can also implement swap options and multi-step swaps.Among the channel protocols, Poon-Dryja is considered superior for transporting arbitrary contracts because it does not interfere with transported contracts' CSVs. On the other hand, Decker-Osuntokun-Russell requires SIGHASH_NOINPUT_UNSAFE soft fork in the base layer.ZmnSCPxj argues that even though eltoo is superior in terms of simplicity and use of nLockTime, it requires a CSV that may interfere with time-sensitive contracts. In contrast, Poon-Dryja only requires CSV for revocability and cannot prevent enforcement of time-sensitive contracts.However, HTLCs are sufficient for most practical transfers, and Decker-Osuntokun-Russell requires consideration of CSV on top of CLTV-deltas imposed by intermediary nodes, complicating route-finding algorithms. Moreover, Poon-Dryja has several issues like creating "toxic waste" in old revoked transactions and using symmetrical chains of transactions leading to inefficiencies compared to a single chain.Overall, arbitrary contracts are not particularly useful, and HTLCs are an essential building block for digital value transfers. While Decker-Osuntokun-Russell remains superior technology, Poon-Dryja may be preferred for arbitrary contracts.</summary>
-    <published>2018-08-01T10:36:22+00:00</published>
+    <updated>2023-07-31T20:26:22.984433+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-August/001388.html" rel="alternate"/>
+    <summary>In a recent email conversation between Michael and ZmnSCPxj, the differences between Poon-Dryja, Decker-Wattenhofer, and Decker-Osuntokun-Russell channel protocols were discussed. Poon-Dryja does not require a soft fork but has practical timeouts on unilateral closes, while Decker-Wattenhofer channels have no toxic waste but require longer timeouts on unilateral closes. Decker-Wattenhofer channels can also be extended to multi-party Burchert-Decker-Wattenhofer channel factories. The new Decker-Osuntokun-Russell protocol combines the benefits of smaller practical timeouts and lack of toxic waste but requires a SIGHASH_NOINPUT_UNSAFE softfork in the base layer.Regarding Decker-Wattenhofer's claim that funds cannot be accessed when an old state is broadcasted, ZmnSCPxj explains that as long as a node is online, old states cannot be published without the new state being published first. This is because both the old and new state consume the same UTXO, so the publishing of the new state makes it impossible for the old state to be published.In another email exchange, Christian Decker and Rusty Russell discuss the need for an `OP_CSV` guard to protect against CLTV-branches and nLocktimed spending transactions that may leak on-chain. The two-stage HTLC resolution was introduced to act as the `OP_CSV` guard and keep the second stage clean. The CSV belongs in the output script, not the input script. However, if a CLTV-branch's timeout expires before attempting on-chain mediation, both branches become valid, resulting in a race. Under Poon-Dryja, the transaction series involves the creation of symmetrical transactions that include [/*arbitrary*/, A &amp;&amp; B] -&gt; [signA signB, (revoke) || (A &amp;&amp; B &amp;&amp; C)] -&gt; [signA signB witnessCbyA, revoke || (A &amp;&amp; CSV)] /* held by A */ and [/*arbitrary*/, A &amp;&amp; B] -&gt; [signA signB, (revoke) || (A &amp;&amp; B &amp;&amp; C)] -&gt; [signA signB witnessCbyB, revoke || (B &amp;&amp; CSV)] /* held by B */.A member of the Lightning-dev community raised questions about the use of LN-penalty in Bitcoin SCRIPTs. To address this concern, a two-stage HTLC resolution was introduced, with the first stage acting as the `OP_CSV` guard and keeping the second stage clean. Poon-Dryja is considered superior for the transportation of arbitrary contracts compared to Decker-Wattenhofer or Decker-Osuntokun-Russell. However, HTLCs are an important building block for digital value transfers and are sufficient for most practical transfers.In a recent post on the Lightning-dev mailing list, ZmnSCPxj discussed the transportation of smart contracts via LN. He stated that Poon-Dryja is superior to Decker-Wattenhofer or Decker-Osuntokun-Russell for transporting arbitrary contracts. The only smart contract worth transporting is HTLC, which can be used for non-transferable swap options and multi-step swaps. Under Poon-Dryja, symmetrical series of transactions are created with an anchoring transaction on-chain. The revocation key is kept secret until both parties agree to revoke the old state. The CSV-encumbrance does not interfere with claiming the contract.On the other hand, under Decker-Osuntokun-Russell eltoo, the transaction series is simpler, but the CSV in the second transaction may interfere with the operation of the contract if it is time-sensitive. Poon-Dryja has its limitations such as not using nLockTime cleverly, having "toxic waste," and symmetrical chains of transactions. HTLCs are an important building block for digital value transfers and are sufficient for most practical transfers. Therefore, Decker-Osuntokun-Russell remains a superior technology over Poon-Dryja.In a recent discussion on an IRC channel, the transportation of smart contracts via LN was questioned. It is theoretically possible as long as the contract can be implemented as a Bitcoin SCRIPT. Poon-Dryja is considered superior to Decker-Wattenhofer or Decker-Osuntokun-Russell for transporting arbitrary contracts. The only smart contract worth transporting is HTLC, which can also be used for swap options and multi-step swaps. Decker-Osuntokun-Russell eltoo is superior to Poon-Dryja in many ways except for the transportation of arbitrary contracts.To transport an arbitrary contract C over a channel between nodes A and B under Poon-Dryja, a channel anchoring transaction on-chain is necessary. A symmetrical series of transactions is then created with only the anch</summary>
+    <published>2018-08-02T03:56:56+00:00</published>
   </entry>
 </feed>

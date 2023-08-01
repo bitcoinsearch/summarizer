@@ -2,30 +2,74 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [1.1] Proposed `funding_cancelled` message</title>
-  <updated>2023-05-20T07:54:41.128540+00:00</updated>
+  <updated>2023-07-31T19:38:02.993222+00:00</updated>
   <author>
-    <name>Matt Corallo 2018-01-15 23:25:24</name>
+    <name>ZmnSCPxj 2018-01-22 10:45:58+00:00</name>
   </author>
   <author>
-    <name>Matt Corallo 2018-01-15 01:00:20</name>
+    <name>ZmnSCPxj 2018-01-22 10:36:40+00:00</name>
   </author>
   <author>
-    <name>Matt Corallo 2018-01-08 14:42:01</name>
+    <name>7riw77 at gmail.com 2018-01-21 12:57:32+00:00</name>
   </author>
   <author>
-    <name>Matt Corallo 2018-01-15 02:33:39</name>
+    <name>ZmnSCPxj 2018-01-20 04:49:03+00:00</name>
   </author>
+  <author>
+    <name>7riw77 at gmail.com 2018-01-18 11:03:58+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-01-15 23:25:24+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-15 02:53:07+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-01-15 02:33:39+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-15 02:14:57+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-01-15 01:00:20+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-09 05:44:14+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-09 05:25:29+00:00</name>
+  </author>
+  <author>
+    <name>Pierre 2018-01-08 18:28:35+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2018-01-08 14:42:01+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-01-08 03:26:23+00:00</name>
+  </author>
+  <link href="lightning-dev/Jan_2018/000958_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000957_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000956_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000954_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000947_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000934_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000929_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
-  <link href="lightning-dev/Jan_2018/000907_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000933_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2018/000932_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000931_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000929_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000910_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000909_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000908_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000907_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
+  <link href="lightning-dev/Jan_2018/000905_-1-1-Proposed-funding-cancelled-message.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [1.1] Proposed `funding_cancelled` message</title>
-    <updated>2023-05-20T07:54:41.129501+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000934.html" rel="alternate"/>
-    <summary>ZmnSCPxj proposed a new `funding_cancelled` message to be added in the Lightning Network protocol. The purpose of this message is to inform the fundee node that the funder node is sure that the channel funding transaction can never confirm. This message allows replace-by-fee funding transactions and multi-channel funding transactions.Matt expressed his concerns regarding the addition of messages that do not result in different node behavior and only make the protocol needlessly complex. However, ZmnSCPxj argued that not having a specified timeout for funding transactions could create problems with replaceable funding transactions as all versions need to be monitored on the blockchain.ZmnSCPxj suggested adding a minimum timeout to avoid these issues and double-spending via RBF instead. They also discussed the complexity involved in implementing replace-by-fee funding transactions due to miners having the choice of mining any version of the transaction.The implementation of this message should not be onerous as it triggers the code to forget the channel after the timeout if the node software already implements it. The message lets the funder node free up resources on the fundee node, which can be made arbitrarily high by a malicious node that keeps sending `open_channel` -&gt; `funding_created` with random numbers for transaction ID.ZmnSCPxj also suggested that the cost may be trivial for single channels, but it can be limited by a malicious node. Therefore, an honest party can free up the limited resource "number of pending channel opens" by using this message without having to wait for the timeout.In conclusion, they agreed that there might be some bikeshedding involved if this proposal gets implemented.</summary>
-    <published>2018-01-15T23:25:24+00:00</published>
+    <updated>2023-07-31T19:38:02.993222+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000958.html" rel="alternate"/>
+    <summary>In a discussion on the Lightning-dev mailing list, ZmnSCPxj proposed a new message called `funding_cancelled` that would inform the fundee node that the funder node is certain that the channel funding transaction cannot be confirmed. The purpose of this message is to address the lack of a protocol-required minimum timeout for unopened channels and to allow replace-by-fee funding transactions and multi-channel funding transactions.The proposal suggests that implementing this message should not be difficult if the node software already has code to forget the channel after a timeout. To explain how the message would work, ZmnSCPxj provided examples of different scenarios. In one scenario, if the funder needs to replace a replace-by-fee (RBF) funding transaction, they would re-initiate the opening protocol and broadcast the replacement funding transaction. Once one of the transactions is confirmed deeply enough, the funder would cancel the other funding transaction using the `funding_cancelled` message.In another scenario, if the funder wants to fund multiple channels from a single transaction, they would initiate the opening protocol with each fundee separately. However, if some fundees complete the protocol up to `funding_signed` while others time out or fail to contact, the funder cannot safely broadcast the funding transaction. In this case, the funder can use the `funding_cancelled` message to free up resources on the completed fundee nodes.While the proposal suggests that the `funding_cancelled` message may not be necessary if funding timeout is implemented by the fundee node, it emphasizes that the message would allow the funder node to free up resources on the fundee node. This proposal opens a discussion for adding the `funding_cancelled` message to the v1.1 specification.A contributor to the Lightning Network's RFC repository has proposed a new message called `funding_cancelled` in a pull request. This proposed message is designed to inform the fundee node that the funder node is certain that the channel funding transaction can never confirm. The purpose of including this message is to facilitate replace-by-fee (RBF) funding transactions and multi-channel funding transactions.Implementing the `funding_cancelled` message should not be burdensome as it triggers the code that forgets the channel after a timeout if the channel funding transaction times out or if the message is received. If the funder wishes to replace an RBF funding transaction, they can re-initiate the opening protocol from `open_channel` -&gt; `accept_channel` -&gt; `funding_created` -&gt; `funding_signed`, and then broadcast the replacement funding transaction. Once one of the transactions is confirmed deeply enough, the funder cancels the other funding transaction via `funding_cancelled`.In addition to facilitating RBF funding transactions, the `funding_cancelled` message also allows for multi-channel funding transactions. In this scenario, the funder initiates the opening protocol with each node separately and must not broadcast the funding transaction until all fundees reply `funding_signed`. If some fundees complete the protocol up to `funding_signed` but others do not, the funder cannot safely broadcast the funding transaction at all. Consequently, the funder node can send `funding_cancelled` to each fundee that completed up to `funding_signed` to free up the resources of those nodes.While the `funding_cancelled` message may not be necessary if funding timeout is implemented by the fundee node, it offers benefits such as allowing the funder node to free up resources on the fundee node. On the other hand, implementing RBF funding transactions and multi-channel funding transactions is more involved compared to implementing the `funding_cancelled` message.</summary>
+    <published>2018-01-22T10:45:58+00:00</published>
   </entry>
 </feed>

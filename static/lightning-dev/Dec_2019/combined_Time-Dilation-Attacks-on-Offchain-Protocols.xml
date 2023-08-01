@@ -2,22 +2,50 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Time-Dilation Attacks on Offchain Protocols</title>
-  <updated>2023-05-23T02:38:12.722770+00:00</updated>
+  <updated>2023-07-31T22:26:51.532213+00:00</updated>
   <author>
-    <name>Matt Corallo 2019-12-16 15:29:28</name>
+    <name>Antoine Riard 2019-12-16 20:12:12+00:00</name>
   </author>
   <author>
-    <name>Matt Corallo 2019-12-10 02:05:31</name>
+    <name>Matt Corallo 2019-12-16 15:29:28+00:00</name>
   </author>
+  <author>
+    <name>David A. Harding 2019-12-16 09:10:18+00:00</name>
+  </author>
+  <author>
+    <name>Antoine Riard 2019-12-16 07:17:31+00:00</name>
+  </author>
+  <author>
+    <name>Orfeas Stefanos Thyfronitis Litos 2019-12-15 00:06:27+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2019-12-14 18:54:19+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2019-12-10 10:35:58+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-12-10 02:05:31+00:00</name>
+  </author>
+  <author>
+    <name>Antoine Riard 2019-12-09 18:04:07+00:00</name>
+  </author>
+  <link href="lightning-dev/Dec_2019/002380_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2019/002379_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002378_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002377_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002374_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002373_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002372_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2019/002370_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2019/002369_Time-Dilation-Attacks-on-Offchain-Protocols.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Time-Dilation Attacks on Offchain Protocols</title>
-    <updated>2023-05-23T02:38:12.722770+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-December/002379.html" rel="alternate"/>
-    <summary>The Lightning network is a popular off-chain protocol for Bitcoin transactions that is vulnerable to time-dilation attacks. These attacks enable attackers to steal from lightning nodes and pose a significant danger to off-chain protocols that rely on time for their security model. Eclipse attacks involve an attacker controlling the view of the blockchain from a victim's node. Various countermeasures have been implemented to prevent these attacks, but they may still be possible for an off-path attacker.In one scenario involving the Lightning Network, an attacker maintains an eclipse for a week and gains more than a day of height advance on a victim's view of the blockchain. The attacker can then broadcast a previous commitment transaction with a balance far more favorable than the legit one at the synchronized height with the rest of the network. In another scenario, an attacker can exploit the time difference in HTLC expiration heights to claim the payment while the victim is stuck.To protect against these attacks, Lightning node authors and operators are advised to ensure they have multiple, redundant, trusted methods of receiving Bitcoin block data in a timely fashion. Multiple full-nodes with multi-homing and reconciliation of blockchain views every N hour/minute, along with the use of multiple watchtowers and the control plane as a safety mechanism, can also help prevent these types of attacks.While there is currently limited risk to funds, LN implementation teams acknowledge the issue and recognize its long-term impact on processing nodes. Light clients using LN nodes should be specially considered since it would be easy for an attacker to run multiple servers and control the blockchain view of these LN nodes. Inter-layer mapping techniques could be developed to make it easier to map LN nodes to their full-nodes.</summary>
-    <published>2019-12-16T15:29:28+00:00</published>
+    <updated>2023-07-31T22:26:51.532213+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-December/002380.html" rel="alternate"/>
+    <summary>In a discussion on the Lightning-dev mailing list, concerns were raised about possible stealth attacks on the Bitcoin network that would be difficult to detect until it was too late to react. However, David A. Harding argued that these attacks could be detected by comparing the time of the latest block header to real time. He explained the difference between the normal and pathological cases when Alice requests blocks from honest nodes versus an eclipse attacker. An emergency action should be taken if the difference is too large. Harding also discussed the combination of commitment/penalty transaction censorship with plausible block delays as a possible optimal attack strategy. This strategy maximizes the chance of stealing funds without triggering an alarm. However, there is a case where miners could deliberately trigger a false positive of block delay protection by manipulating Median Time Past (MTP). This problem is partly mitigated by miners keeping MTP far in the past being unable to claim fees from recent time locked transactions.Antoine Riard expressed concern that if executed properly, attacks could stay stealth until it's too late to react. Dave responded that the attacks described are pretty easy to detect by comparing the time of the latest block header to real-time, and emergency action should be taken if the difference is too large. He further explained how this strategy applies to normal and pathological cases. Dave suggested that a possibly optimal attack strategy would be to combine commitment/penalty transaction censorship with plausible block delays, which can maximize an attacker's chance of stealing funds without triggering an alarm.The discussion also focused on the effectiveness of raising alarms in case the best-block nTime field is too far behind. Alarms should be off during Initial Block Download (IBD) to avoid false positives. The validation software needs to remember that it's out of IBD to avoid being pinned back in the past. The usefulness of this countermeasure depends on the assumption that the Bitcoin full node used is differently eclipsable from the Lightning node used. It is suggested that connections should be opened to well-known Lightning Network pubkeys to enhance connectivity and detect tampering.The discussion also touched on Time-Dilation Attacks on Offchain Protocols. The advantage of these attacks over eclipse attacks was questioned, but the details about time-dilation attacks and their workings are not provided in the given context.In another communication, the author advises Lightning node operators to have multiple, redundant, trusted methods of receiving Bitcoin block data in a timely fashion. Delivering header data over the Lightning Network wire protocol may be useful if the Bitcoin fullnode used is differently accessible from the Lightning node used. The author discusses LN error messages triggered at an abnormal rate and background probing of payments that will definitely fail. There is also a scenario where Alice is a victim of an eclipse attack and is only connected to nodes controlled by Mallory, allowing Mallory to sidestep certain protections.The Lightning Network is vulnerable to Eclipse attacks, which can result in theft of funds. Countermeasures have been implemented, but research is needed to ascertain their effectiveness. It is crucial for Lightning node authors and operators to have multiple, redundant, trusted methods of receiving Bitcoin block data in a timely fashion. The article discusses two scenarios of Eclipse attacks on the base layer of Lightning, targeting the CSV security delay and per-hop CLTV-delta, respectively. While funds may not be at risk presently, there remains a need for further research and development in this area.</summary>
+    <published>2019-12-16T20:12:12+00:00</published>
   </entry>
 </feed>

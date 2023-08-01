@@ -2,34 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposed changes to the splicing specification</title>
-  <updated>2023-06-04T04:53:46.721123+00:00</updated>
+  <updated>2023-08-01T01:07:32.844384+00:00</updated>
   <author>
-    <name>Antoine Riard 2023-04-03 17:01:39</name>
+    <name>Dustin Dettmer 2023-04-04 19:14:46+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2023-04-04 11:15:09</name>
+    <name>ZmnSCPxj 2023-04-04 12:27:50+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2023-04-04 12:27:50</name>
+    <name>ZmnSCPxj 2023-04-04 11:15:09+00:00</name>
   </author>
   <author>
-    <name>Dustin Dettmer 2023-04-04 19:14:46</name>
+    <name>Antoine Riard 2023-04-03 17:01:39+00:00</name>
   </author>
   <author>
-    <name>Bastien TEINTURIER 2023-03-31 09:04:24</name>
+    <name>Bastien TEINTURIER 2023-03-31 09:04:24+00:00</name>
   </author>
-  <link href="lightning-dev/April_2023/003897_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2023/003900_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2023/003901_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
   <link href="lightning-dev/April_2023/003902_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2023/003901_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2023/003900_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2023/003897_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
   <link href="lightning-dev/March_2023/003895_Proposed-changes-to-the-splicing-specification.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Proposed changes to the splicing specification</title>
-    <updated>2023-06-04T04:53:46.721123+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-April/003897.html" rel="alternate"/>
-    <summary>The Lightning Network team has announced changes to the splicing protocol, allowing users to add or remove funds from a channel without closing it first. The new protocol will simplify the process by using active commitments and sending one commitment_signed message per active commitment in the order that funding transactions were created. Funding amounts exchanged in splice_init and splice_ack will be relative amounts based on each peer's current channel balance. Although implementing 0-conf splicing remains problematic due to the risks of vulnerabilities, the Lightning Network developers are interested in discussing this further. ZmnSCPxj suggests a proposal for cases where an LSP is doing splice-in while the other side is a client of that LSP. This protocol can be applied to splice-in and channel factory construction with the promise that the LSP will do its best to get the transaction confirmed before a future blockheight so that the client can rely on it being confirmed later. However, this proposal is risky for the LSP because the LSP is held liable if the TXID never confirms, leading to lost funds and a destroyed reputation.</summary>
-    <published>2023-04-03T17:01:39+00:00</published>
+    <updated>2023-08-01T01:07:32.844384+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-April/003902.html" rel="alternate"/>
+    <summary>The Lightning Network team has developed a new protocol specification for splicing, aiming to simplify and strengthen the process. Splicing allows users to add or remove funds from a channel without closing it first. The new protocol utilizes active commitments, where multiple commitment transactions are sent in sequence, each containing an update. The requirement of Revoke_and_ack for signing the new commitment is eliminated, and nodes only need to store data on funding transactions once they send their commitment_signed message. Additionally, the proposed protocol suggests using relative amounts based on each peer's current channel balance during splice_init and splice_ack. However, implementing 0-conf splicing remains challenging due to the potential risks it may introduce.In a message directed to ariard and t-bast, user ZmnSCPxj presented a proposal for cases where one party, known as an LSP, performs splice-in while the other side acts as a client. This proposal, available on Github, initially targets 0-conf channel funding but can also address double-spend risk when an LSP is involved and the client wants protection. It enables the LSP to endeavor to confirm the transaction before a specified blockheight, ensuring reliability for the client. Nonetheless, ZmnSCPxj emphasized that this proposal carries risks for the LSP as they become liable if the TXID fails to confirm. Even if the client provides revocation keys for all states dependent on the previous funding txo, the client can still post and confirm a revoked state, preventing confirmation of the splice TXID. Consequently, the client loses all funds in the channel, and the LSP's reputation is compromised.ZmnSCPxj further discusses the safety of spends from swap-in-potentiam addresses, stating that they are securely 0-conf if Bob is the other signatory. However, he considers swap-in-potentiam as potentially unfair since sending to this address constitutes a channel open of a Spilman-like channel with `OP_CSV` instead of `OP_CLTV`. Swap-in-potentiam offers implicit protection against 0-conf double-spend risks for on-chain to Lightning operations, but UTXOs with swap-in-potentiam addresses must still be confirmed. ZmnSCPxj also proposes a protocol applicable to splice-in cases involving an LSP and a client. While designed for 0-conf channel funding, the protocol has broader applicability in mitigating double-spend risk from an LSP. It ensures that the LSP will make efforts to confirm the transaction before a designated blockheight, allowing the client to rely on its future confirmation.An email exchange between Antoine and Bastien delves into the complexities of implementing splicing, a feature enabling the addition or removal of funds from a Lightning channel. The email provides insights into the functioning of splicing and highlights the changes made to simplify and strengthen the protocol. It introduces the concept of adding a new commitment to the active commitments set and presents a sample flow. The email emphasizes the need for cautious implementation of 0-conf splicing due to the risks associated with double-spending. Finally, it concludes by suggesting further discussions on the topic with other implementers.In summary, the Lightning Network team has introduced a new protocol specification for splicing, aiming to enhance its simplicity and robustness. Users can now add or remove funds from a channel without closing it through active commitments and multiple commitment transactions sent in sequence. However, implementing 0-conf splicing remains challenging due to potential vulnerabilities. User ZmnSCPxj proposed a protocol for cases where an LSP performs splice-in, addressing double-spend risks, but highlighting the potential liability for the LSP. He also discussed the safety of spends from swap-in-potentiam addresses and suggested considering his proposal for 0-conf channel funding in general. An email exchange between Antoine and Bastien delved into the complexities of splicing and emphasized the importance of careful implementation.</summary>
+    <published>2023-04-04T19:14:46+00:00</published>
   </entry>
 </feed>

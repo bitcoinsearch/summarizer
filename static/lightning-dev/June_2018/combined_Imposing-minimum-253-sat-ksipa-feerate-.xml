@@ -2,30 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Imposing minimum 253 sat/ksipa feerate?</title>
-  <updated>2023-05-25T01:06:33.640426+00:00</updated>
+  <updated>2023-07-31T20:17:23.443309+00:00</updated>
   <author>
-    <name>Sjors Provoost 2018-06-15 11:39:59</name>
+    <name>ZmnSCPxj 2018-06-18 09:22:07+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-06-18 09:22:07</name>
+    <name>Sjors Provoost 2018-06-15 11:39:59+00:00</name>
   </author>
   <author>
-    <name>Olaoluwa Osuntokun 2018-06-06 01:06:13</name>
+    <name>Olaoluwa Osuntokun 2018-06-06 01:06:13+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-05-29 06:15:55</name>
+    <name>ZmnSCPxj 2018-05-29 06:15:55+00:00</name>
   </author>
-  <link href="lightning-dev/June_2018/001308_Imposing-minimum-253-sat-ksipa-feerate-.xml" rel="alternate"/>
   <link href="lightning-dev/June_2018/001309_Imposing-minimum-253-sat-ksipa-feerate-.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2018/001308_Imposing-minimum-253-sat-ksipa-feerate-.xml" rel="alternate"/>
   <link href="lightning-dev/June_2018/001299_Imposing-minimum-253-sat-ksipa-feerate-.xml" rel="alternate"/>
   <link href="lightning-dev/May_2018/001298_Imposing-minimum-253-sat-ksipa-feerate-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Imposing minimum 253 sat/ksipa feerate?</title>
-    <updated>2023-05-25T01:06:33.640426+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-June/001308.html" rel="alternate"/>
-    <summary>The Lightning Network developers are currently discussing issues related to minimum fees and fee computation. One major issue is that dynamic minimum relay fees may cause many nodes to not relay transactions if the fees are on the lower end of the permitted range. Therefore, it is recommended to keep at least a minimum of 1000 sat/kbyte in mind.C-lightning imposed a minimum of 253 sat/ksipa feerate due to the difference between how BOLT and bitcoind compute fees. As a result, C-lightning will not accept an on-chain feerate less than 253 sat/ksipa. The same solution has been implemented by Eclair and ucoin. However, lnd and lit do not appear to have this minimum imposed.In the Lightning development mailing list, ZmnSCPxj is discussing the minimum relay fee of 250 sat/ksipa (1000 sat/kbyte) which is imposed regardless of dynamic blockchain conditions. Sjors Provoost also comments on the issue, stating that at least the above minimum needs to be kept in mind when trying to get a transaction mined.There is a concern that a 250 sat/kweight feerate is too low for timely processing because it will never be put in a block, potentially leading to an attack as described in a GitHub issue. Nodes will regulate their minimum fee rate dynamically based on the size of their mempools, making a static fee floor a temporary measure.Laoluwa Osuntokun suggests utilizing a permanent op_true output as a candidate for managing these fee issues. Recently, there have been issues with C-lightning's implementation of bitcoind resulting in unilateral closures when the counterparty proposes a 250sat/ksipa feerate. This issue has been reported on GitHub by the ElementsProject/lightning team in two separate tickets, numbered 1351 and 1529. While C-lightning has increased its ranges recently, a hard limit of 253sat/ksipa still exists, causing unilateral closures if the counterparty gives an update_fee of more than this limit.</summary>
-    <published>2018-06-15T11:39:59+00:00</published>
+    <updated>2023-07-31T20:17:23.444302+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-June/001309.html" rel="alternate"/>
+    <summary>The current discussion surrounding Bitcoin transactions focuses on the minimum relay fee imposed. Currently, there is a minimum fee of 1000 sat/kbyte, regardless of dynamic blockchain conditions. This poses problems for dynamic fee-paying later on. One issue that arises is when fees are based on having a full week to close a channel, as the default minimums do not account for this. Implementing better dynamic fee systems may require a blockchain-level softfork. However, the SegWit block size increase can help maintain low fees until a more efficient system is developed.There have been instances of channel failures between lnd and c-lightning. This is due to the fact that c-lightning enforces an absolute minimum fee, which results in reduced channel failure if lnd supports the same minimum. Another concern raised in the discussion is the reluctance of nodes to relay Bitcoin transactions if the fees are too low. The Lightning Network has encountered a specific issue with the minimum fee rate of 250 sat/ksipa, which is not accepted by bitcoind nodes. This has caused problems for C-lightning, as they unilaterally close when the counterparty proposes a 250sat/ksipa feerate. Eclair has also faced this issue and has implemented the same solution as C-lightning. Ucoin has a constant of 253 somewhere. On the other hand, lnd and lit have not imposed any minimums, but it is unclear if they have experienced issues with 250 sat/ksipa transactions being propagated on the Bitcoin-level network. Nodes dynamically regulate their minimum fee rates based on the size of their mempools, and even a value of 253 may be too low if there is a large fee spike. To manage these fee issues, utilizing a permanent op_true output seems to be the most viable solution. However, dynamic minimum relay fees present a problem, as many nodes may choose not to relay transactions if the fee is too low. Even with the default 300 MB mempool setting, only about 150 blocks worth of transactions can fit. Another issue arises from the difference in fee computation between Bitcoind and the BOLT spec. C-lightning, Eclair, and ucoin have all implemented a minimum feerate of 253 sat/ksipa to avoid rejection by Bitcoind. However, lnd uses vsize internally for all fee estimation and does not impose this minimum. The current version of Satoshi's client dynamically regulates its minimum fee rate, so setting a static fee floor is only a temporary measure. Utilizing a permanent op_true output seems to be the best solution without liberal sighash flags, although it has its own issues. A feerate of 250 sat/kweight is too low for Bitcoin to broadcast and process in a timely manner. If an attack occurs or nodes have small mempools, even a value of 253 may be too low. In such cases, nodes should fail the channel if the update_fee is too low or unreasonably large. Unilateral closure not only incurs on-chain fees sweeping but also delays due to time locks.In conclusion, C-lightning has imposed a minimum feerate of 253 sat/ksipa due to differences in fee computation between BOLT specifications and bitcoind. This divergence in fee computation causes issues when the counterparty proposes a 250sat/ksipa feerate, leading to unilateral closure. Although C-lightning has recently expanded its ranges, the 253sat/ksipa limit remains a hard limit that triggers unilateral closure if the counterparty provides an update_fee below this threshold.</summary>
+    <published>2018-06-18T09:22:07+00:00</published>
   </entry>
 </feed>
