@@ -2,42 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Take 2: Removing the Dust Limit</title>
-  <updated>2023-06-04T02:45:53.185629+00:00</updated>
+  <updated>2023-07-31T23:57:20.746349+00:00</updated>
   <author>
-    <name>Jeremy 2021-12-08 01:28:42</name>
+    <name>damian at willtech.com.au 2021-12-09 06:27:04+00:00</name>
   </author>
   <author>
-    <name>Bastien TEINTURIER 2021-12-08 08:34:32</name>
+    <name>Ruben Somsen 2021-12-08 22:51:50+00:00</name>
   </author>
   <author>
-    <name>Jeremy 2021-12-08 17:41:34</name>
+    <name>Jeremy 2021-12-08 17:41:34+00:00</name>
   </author>
   <author>
-    <name>Ruben Somsen 2021-12-08 10:46:22</name>
+    <name>Jeremy 2021-12-08 17:18:49+00:00</name>
   </author>
   <author>
-    <name>Jeremy 2021-12-08 17:18:49</name>
+    <name>Ruben Somsen 2021-12-08 10:46:22+00:00</name>
   </author>
   <author>
-    <name>Ruben Somsen 2021-12-08 22:51:50</name>
+    <name>Bastien TEINTURIER 2021-12-08 08:34:32+00:00</name>
   </author>
   <author>
-    <name>damian at willtech.com.au 2021-12-09 06:27:04</name>
+    <name>Jeremy 2021-12-08 01:28:42+00:00</name>
   </author>
-  <link href="lightning-dev/Dec_2021/003383_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003384_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003391_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003388_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003390_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003392_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2021/003405_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003392_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003391_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003390_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003388_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003384_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003383_Take-2-Removing-the-Dust-Limit.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Take 2: Removing the Dust Limit</title>
-    <updated>2023-06-04T02:45:53.185629+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-December/003383.html" rel="alternate"/>
-    <summary>The Bitcoin developer Jeremy Rubin has proposed a rule to allow 0 value outputs, which must be used as intermediate outputs and spent by another transaction in order for the creating transaction to be in the mempool. The policy would require the parent to have a higher feerate after CPFP'ing the parent than the parent alone, allowing 0 value outputs to be used for Anchor Outputs while avoiding pinning and preventing their proliferation. To discourage their use, it is suggested to incentivize miners and users to save the transaction spending the 0 value output or set a flag on the UTXO to expire if not used in the block it was created. Another solution proposed is to have 0 value outputs present only for attaching fees in the mempool and treating them like an op_return otherwise, achieved through two cases: one bare segwit version and one equivalent to taproot. Ruben and Jeremy also discussed the possibility of 0 sat outputs entering the mempool and not being spent. While Jeremy argued that this is not a big problem, Ruben added that it is possible for a user to unintentionally behave in a way that causes the 0 sat output to not be spent. He proposed the idea of a UTXO with drop semantics, which would expire and become unspendable if not spent in the block it was created. Two cases could be added for this: a bare segwit version and one equivalent to Taproot. While Ruben acknowledged the potential benefits of this solution, he noted that it may require a consensus change.Furthermore, the email thread discusses the issue of Decker Channels and how anchor outputs can be problematic due to RBF pinning and at-dust outputs. A congestion-control tree setup can be used to avoid needing N of them, where log(n) data is needed for one bumper and 1.25x the data if all N want to bump. Since these could be chains of IUTXO, they don't need to carry any weight directly. The carve-out would just be to ensure that CPFP 0 values are known how to be spent. Overall, the focus should be on making 0 value outputs inconvenient enough to discourage their use and prevent bloat in the mempool.</summary>
-    <published>2021-12-08T01:28:42+00:00</published>
+    <updated>2023-07-31T23:57:20.746349+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-December/003405.html" rel="alternate"/>
+    <summary>In a discussion between Ruben Somsen and Jeremy, the possibility of 0 sat outputs entering the Bitcoin mempool and their impact is explored. Jeremy argues that creating a 0 sat output to avoid a soft fork would be uneconomical compared to creating dust outputs. He suggests that even if a 0 sat output is confirmed without being spent, it could still be spent as long as none of its inputs are spent elsewhere. Ruben acknowledges the possibility of unintentionally keeping a 0 sat output unspent but deems it unlikely. He questions whether it would be acceptable to avoid a soft fork in such cases.Jeremy believes that 0 value outputs are not a significant problem as long as they are eventually spent. He proposes that miners and users who care about bloat should save the transaction spending the 0 sat output to resurrect it if necessary. However, he agrees that if it is more expensive to create a 0 sat output than a dust output, it would not be economically rational to do so. The discussion then shifts to exploring the idea of a UTXO with drop semantics, where an output expires and becomes unspendable if not used in the block it was created. This would allow for 0 value outputs to be present in the mempool for attaching fees but be treated like an op_return otherwise. Two cases are suggested: one bare segwit version and one equivalent to taproot. While Ruben acknowledges the potential benefits of this solution, he notes that it may require a consensus change.Another proposal by Jeremy involves a carve-out rule allowing 0 value outputs to be used as Intermediate Outputs. These outputs would need to be spent by another transaction in order for the transaction creating them to be in the mempool. The parent transaction would also need to have a higher feerate after CPFP'ing the parent than the parent alone. This would enable the use of 0 value outputs for anchor outputs and prevent pinning issues related to Decker Channels. Ruben points out that certain rules would need to be in place to ensure the 0 sat output is the only spendable output. However, this may conflict with standardness rules for transactions.In a conversation between Bastien and Jeremy, the topic of lightning anchor outputs and their impact on the utxo set is discussed. Currently, each commitment transaction has two outputs with a 330 sats amount, but only one output is spent to help confirm the transaction. The other output remains unclaimed and contributes to utxo bloat. Jeremy suggests that allowing 0 value outputs as intermediate outputs could address this issue. However, this proposal was rejected earlier due to various reasons. With the launch of package relay, Jeremy believes that a carve-out rule for 0 value outputs can be implemented without introducing new validation rules. This would be helpful for CTV-based contracts and spacechains.In summary, Jeremy Rubin proposes allowing 0 value outputs as long as they are used as intermediate outputs required to be spent by another transaction. This rule would prevent the proliferation of 0 value UTXOs while still allowing them to be used for anchor outputs and other purposes.</summary>
+    <published>2021-12-09T06:27:04+00:00</published>
   </entry>
 </feed>

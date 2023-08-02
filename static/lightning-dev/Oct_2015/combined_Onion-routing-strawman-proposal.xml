@@ -2,38 +2,58 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Onion routing strawman proposal</title>
-  <updated>2023-05-18T20:19:14.292113+00:00</updated>
+  <updated>2023-07-31T18:23:00.080497+00:00</updated>
   <author>
-    <name>Anthony Towns 2015-10-06 14:01:34</name>
+    <name>Rusty Russell 2015-10-06 22:35:01+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-10-06 05:22:36</name>
+    <name>Anthony Towns 2015-10-06 14:01:34+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-10-05 15:02:10</name>
+    <name>Anthony Towns 2015-10-06 05:22:36+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-10-05 14:49:00</name>
+    <name>Rusty Russell 2015-10-06 01:49:14+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-10-04 05:57:17</name>
+    <name>Rusty Russell 2015-10-06 01:48:11+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-10-03 16:38:56</name>
+    <name>Anthony Towns 2015-10-05 15:02:10+00:00</name>
   </author>
+  <author>
+    <name>Anthony Towns 2015-10-05 14:49:00+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-04 05:57:17+00:00</name>
+  </author>
+  <author>
+    <name>Richard Kiss 2015-10-03 18:02:39+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-10-03 16:38:56+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-10-02 05:48:39+00:00</name>
+  </author>
+  <link href="lightning-dev/Oct_2015/000257_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000256_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000255_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000253_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000254_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000252_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000251_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000250_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000249_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2015/000248_Onion-routing-strawman-proposal.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2015/000247_Onion-routing-strawman-proposal.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Onion routing strawman proposal</title>
-    <updated>2023-05-18T20:19:14.292113+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000256.html" rel="alternate"/>
-    <summary>The email conversation revolves around the changes made to test_onion and Makefile test with regards to onion routing implementation in Lightning Network using elliptic curve cryptography. The python version of the code is also discussed along with the use of flip_key() in onion_key.c, which was disabled and 02/03 prefix was made explicit. However, it remains unclear whether the saving of a bit/byte is worth it or not.Further discussion focuses on making changes to "Message for blah..." to serialize the pubkey before turning it into hex and tweaking onion_key to avoid the for loop and cut calls, as running decoding through python is slow and needs improvement.The participants also talk about documenting lightning protocol/technology decisions and consider reducing the message size of 128 bytes to 96 or 64 bytes. They highlight that adding and dropping hops to redirect an onion routed payment messes up constant-size packets.In addition to discussing the successful decoding/forwarding of the code using pyelliptic, they mention that the python version does creation too, but it is not known if the C version can decode it.Overall, the participants discuss generating random EC key pairs for each hop, establishing shared secrets with each hop using ECDH, and deriving symmetric AES and HMAC keys based on the secret. They note that lightning nodes are identified by the full 512-bit public key used for routing, unlike in normal bitcoin pay2pubkey transactions where knowing the HASH160 of the pubkey is enough.Finally, they add comments to an existing secp256k1 pull request to use only the x value when creating secrets, which would be friendlier to alternative implementations for ECDH.</summary>
-    <published>2015-10-06T14:01:34+00:00</published>
+    <updated>2023-07-31T18:23:00.080497+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-October/000257.html" rel="alternate"/>
+    <summary>In a conversation between Anthony Towns and Rusty Russell regarding the development of the Lightning Network, several updates and changes were made to the code. Russell disabled the use of flip_key() in onion_key.c and made the 02/03 prefix explicit instead. He also modified the "Message for blah..." by serializing the public key before converting it into hex. Additionally, he made tweaks to onion_key to optimize its performance. Russell reworked the test_onion and Makefile test on Github to separate generate and decode. He suggested including the python version as well. The conversation also touched upon the need to document the Lightning protocol and technology decisions through an RFC or wiki.On October 6th, 2015, Russell posted on Github about the changes made to the test_onion and Makefile test. Anthony Towns questioned the use of flip_key() in onion_key.c and its necessity for single-use onion-msg-keys. They also discussed the usage of AES128 and agreed that using both halves of a sha for iv and pad_iv could save computational resources. They considered reducing the message size from the arbitrary 128 bytes to either 96 or 64 bytes.Anthony Towns commented on the code repository of ElementsProject/Lightning, pointing out that a significant portion of the Python lines were only used for determining y given x and ECDH with y as well as x. He also mentioned the lack of implementation of export-friendly encryption mode. However, he submitted a pull request addressing this issue, which was acknowledged and merged into the project by Rusty Russell. The conversation also revolved around the identification of lightning nodes, where they are identified by the full 512 bit or 257 bit public key used for routing. AES128 only utilizes the first half of the calculated enckey, iv, and pad_iv. The libsecp256k1 already performs a sha256 on the ecdh secret, resulting in hmac/enckey/etc being sha256'ed twice. The message size of 128 bytes and the assumption of 20 hops were deemed arbitrary and could potentially be reduced.In an email conversation in October 2015, Anthony Towns discussed his attempt at reimplementing a program in Python, expressing initial frustration but later reporting successful decoding/forwarding using pyelliptic. He provided command line outputs and noted that the Python version required fewer lines of code compared to the C version. He also made a pull request on Github for the updated code.In another email exchange, Richard Kiss and aj discussed a problem with libsec256k1, where openssl only provides the x value, making it difficult to determine the correct secret directly. Richard suggested using his open-source library pycoin to obtain Y from X. Aj implemented ECDH directly by performing a single EC_POINT_mul operation but encountered a bug when checking evenness. To make ECDH more compatible with alternative implementations, aj added a comment to an existing secp256k1 pull request suggesting the use of only the x value when creating secrets.In a separate email thread, Anthony Towns expressed frustration over an implementation issue in Python but successfully implemented the decoding/forwarding process using pyelliptic. He mentioned running the HMAC twice instead of calculating y and shared command lines for testing.The context also mentioned the Lightning Network project's implementation of test onion routing code. The current code is fixed at 3840 bytes but will be switched to a non-fixed size using protobufs. Random EC key pairs are generated for each hop, and the public key for each hop is included in plaintext. ECDH is used to establish a shared secret with each hop, and symmetric AES &amp; HMAC keys are derived based on the secret. Lightning nodes are identified by their full 512-bit or 257-bit public keys used for routing. The code also implements encryption methods such as AES128 counter mode, HMAC using SHA256, and Bitcoin's EC with ECDH.</summary>
+    <published>2015-10-06T22:35:01+00:00</published>
   </entry>
 </feed>

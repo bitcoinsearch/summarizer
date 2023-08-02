@@ -2,26 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Eltoo / Anyprevout &amp; Baked in Sequences</title>
-  <updated>2023-05-23T15:23:16.224698+00:00</updated>
+  <updated>2023-07-31T23:35:02.828653+00:00</updated>
   <author>
-    <name>Anthony Towns 2021-07-12 05:01:15</name>
+    <name>Anthony Towns 2021-07-14 03:32:00+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2021-07-14 03:32:00</name>
+    <name>Jeremy 2021-07-12 22:07:29+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2021-07-08 08:44:16</name>
+    <name>Anthony Towns 2021-07-12 05:01:15+00:00</name>
   </author>
-  <link href="lightning-dev/July_2021/003126_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <author>
+    <name>Jeremy 2021-07-08 15:48:14+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-07-08 08:44:16+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy 2021-07-08 01:00:20+00:00</name>
+  </author>
   <link href="lightning-dev/July_2021/003132_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003129_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003126_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003115_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
   <link href="lightning-dev/July_2021/003114_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2021/003112_Eltoo-Anyprevout-Baked-in-Sequences.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Eltoo / Anyprevout &amp; Baked in Sequences</title>
-    <updated>2023-05-23T15:23:16.224698+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-July/003126.html" rel="alternate"/>
-    <summary>In a series of emails between Jeremy and AJ, they discuss different aspects of Bitcoin's scripting system. They suggest that sequencing restrictions should be obvious from a simple parsing of the transaction, and that evaluating a script should only return one bit of information: whether the transaction is invalid or not. They also discuss a new CSV type called 'eltoo sequences' which would give a per-input sequence but cannot be used with a sequence tag. Additionally, they talk about how adding a per-input absolute locktime to the annex could be used to cheaply add a commitment to an historical block hash, which could help disambiguate which branch of a chain split or reorg a transaction is valid for. Finally, they mention that it is already impossible to simultaneously spend two inputs if one requires a locktime specified by mediantime and the other by block height, and adding per-input locktimes would satisfy both concerns.</summary>
-    <published>2021-07-12T05:01:15+00:00</published>
+    <updated>2023-07-31T23:35:02.828653+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-July/003132.html" rel="alternate"/>
+    <summary>Jeremy suggests that only one bit of information should be returned from the script evaluation process, specifically whether the transaction is invalid or not. He argues that all other relevant information such as fees, transaction finality, and currency forks should be easily parsed from the transaction itself. However, he notes that the current system does not have this property and provides an example of a transaction that fails due to a specific rule. When asked how to determine if a transaction can be included without running the script, it is explained that while the script must be run at some point, it is not necessary to do so in order to differentiate between the transaction being valid on one chain versus another. Additionally, it is noted that transactions cannot go from valid to invalid, which limits the number of cases where transactions must be removed from the mempool.In an email conversation between Anthony Towns and Jeremy, they discussed the use of relative locktime and absolute locktime for the same input in Bitcoin transactions. There was a disagreement over whether it should be disallowed or not. Towns suggested using nSequence for a per-input absolute locktime, but Jeremy clarified that he meant disallowing a relative locktime and a sequence locktime. The conversation then moved on to the topic of sequence tagged keys and sequencing restrictions. Towns shared his opinion that sequencing restrictions should be obvious from a simple parsing of the transaction, without the need to evaluate scripts/signatures to determine if a transaction is final. He proposed a general principle where evaluating a script should only return one bit of info, while all other information should already be evident from parsing the transaction. Jeremy pointed out that they don't currently have this property in Bitcoin transactions and provided an example. They both agreed that sequence tagged keys have the property of a transaction being either valid or invalid, without the need for external information. Finally, they expressed their desire to separate all locktime types per input to eliminate any weirdness or overlap.In another email conversation between Jeremy and AJ, they discussed the use of relative locktime and absolute locktime for the same input. While Jeremy believed there was no use case for it, AJ argued against ruling it out. However, AJ later realized that overloading the nSequence for a per-input absolute locktime could cause issues with reusing the same input's nSequence for a per-input relative locktime. AJ mentioned a specific use case involving cut-through of PTLC refunds. He also suggested that sequencing restrictions should be evident from a simple combination of locktime/nsequence/annex, without the need to evaluate scripts/signatures. AJ proposed a general principle where evaluating a script should only return one bit of information, while all other details should be apparent from parsing the transaction.The discussion revolves around the use of relative locktime and absolute locktime for the same input in a given scenario. The author states that disallowing such a use case seems suboptimal, but they have not come across any relevant use case yet. Another participant in the discussion corrects the term to disallowing a relative locktime and a sequence locktime. The author agrees with this correction and asks for opinions on the use of sequence tagged keys.In a Bitcoin development mailing list, Jeremy raises concerns about using Eltoo and absolute lock time simultaneously due to overloading of the CLTV clause. He suggests using per-input locktimes to address the issue. This would allow satisfying both concerns but disallow the use of a relative locktime and an absolute locktime for the same input. To tackle this, a new CSV type called 'eltoo sequences' is proposed. However, this technique cannot be used with a sequence tag. An alternative solution is adding a per-input absolute locktime to the annex, which could also be used to add a commitment to an historical block hash to determine the validity of a transaction in a chain split or reorg.The author comments on a Github pull request related to the use of anyprevout for eltoo. They note that the current script overloads the CLTV clause, making it impossible to use Eltoo and an absolute lock time, as well as limiting the number of sequences that can be used. The author suggests several options, including defining a new CSV type or using a sequenced signature, to better serve the eltoo use case. They also mention the possibility of adding something in the annex or doing nothing at all, but express partiality towards option 3 as it seems to be the closest to supporting Eltoo with ANYPREVOUT.</summary>
+    <published>2021-07-14T03:32:00+00:00</published>
   </entry>
 </feed>

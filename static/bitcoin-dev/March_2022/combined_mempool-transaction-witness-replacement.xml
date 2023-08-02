@@ -2,38 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - mempool transaction witness-replacement</title>
-  <updated>2023-06-15T18:21:52.064177+00:00</updated>
+  <updated>2023-08-02T05:56:15.070778+00:00</updated>
   <author>
-    <name>darosior 2022-03-22 19:57:23</name>
+    <name>darosior 2022-03-22 19:57:23+00:00</name>
   </author>
   <author>
-    <name>darosior 2022-03-22 19:57:23</name>
-  </author>
-  <author>
-    <name>darosior 2022-03-22 19:57:23</name>
-  </author>
-  <author>
-    <name>Larry Ruane 2022-03-22 19:04:26</name>
-  </author>
-  <author>
-    <name>Larry Ruane 2022-03-22 19:04:26</name>
-  </author>
-  <author>
-    <name>Larry Ruane 2022-03-22 19:04:26</name>
+    <name>Larry Ruane 2022-03-22 19:04:26+00:00</name>
   </author>
   <link href="bitcoin-dev/March_2022/020168_mempool-transaction-witness-replacement.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2022/020168_mempool-transaction-witness-replacement.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2022/020168_mempool-transaction-witness-replacement.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2022/020167_mempool-transaction-witness-replacement.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2022/020167_mempool-transaction-witness-replacement.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020167_mempool-transaction-witness-replacement.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - mempool transaction witness-replacement</title>
-    <updated>2023-06-15T18:21:52.064177+00:00</updated>
+    <updated>2023-08-02T05:56:15.070778+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020168.html" rel="alternate"/>
-    <summary>Larry Ruane's proposal to change the Bitcoin Core mempool would allow an existing transaction to be replaced by one with a smaller witness and higher feerate. This change is miner-incentive compatible, however, concerns around code complexity cost and transaction-relay DoS need to be considered. Witness replacement could defend against a mempool pinning attack, and Bip125 allows incoming transactions to replace conflicting ones if certain DoS-mitigation conditions are met. Witness-replacement is similar to RBF but differs in that it doesn't require evicting mempool descendant transactions and signaling isn't required since outputs can't change. The proposal may be implemented as a per-node setting, but it's preferable for the node network to agree on relay policies. Question 2 highlights a potential DoS tradeoff between rebroadcasting slightly smaller witness transactions many times or not being able to replace a transaction with a beneficially-smaller one.</summary>
+    <summary>A proposal has been made by Larry Ruane to modify the Bitcoin Core mempool by allowing the replacement of existing transactions with ones that have the same transaction ID (txid), but a smaller witness and higher feerate. This change is miner-incentive compatible, meaning that miners would be more motivated to mine transactions with higher feerates. However, there are complications with Replace-By-Fee (RBF) that need to be considered before merging the proposed change. One concern is the code complexity cost, as well as the potential for transaction-relay Denial-of-Service (DoS) attacks. To address these concerns, a per-node setting could be implemented.One advantage of this change is that it may provide a defense against a mempool pinning attack. In scenarios where applications use same-txid-different-witness transactions shared between counterparties, this change would make those applications safer. Additionally, the proposal addresses the issue of DoS tradeoff. If the new transaction only has a slightly smaller witness, an attacker could repeatedly rebroadcast it, consuming significant amounts of relay bandwidth and CPU resources. On the other hand, if the new transaction must have a significantly smaller witness, it may not be possible to replace a transaction with a beneficially-smaller one.The proposed change, known as witness-replacement, is similar to RBF but differs in several ways. One key difference is that witness-replacement does not require evicting mempool descendant transactions because the inputs' txid references to their parent, who is being replaced, remain valid. Another distinction is that signaling is not required for witness-replacement since the outputs cannot be changed.While this proposal could be implemented as a per-node setting, it is desirable for the node network to reach a consensus on relay policies. Ultimately, the proposal aims to improve the efficiency and incentives for miners while addressing potential vulnerabilities and concerns associated with replacing transactions in the Bitcoin Core mempool.</summary>
     <published>2022-03-22T19:57:23+00:00</published>
   </entry>
 </feed>

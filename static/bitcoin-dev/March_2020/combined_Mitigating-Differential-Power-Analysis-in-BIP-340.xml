@@ -2,50 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Mitigating Differential Power Analysis in BIP-340</title>
-  <updated>2023-06-14T00:13:14.214854+00:00</updated>
+  <updated>2023-08-02T01:56:36.603022+00:00</updated>
   <author>
-    <name>Lloyd Fournier 2020-03-24 13:00:45</name>
+    <name>Lloyd Fournier 2020-03-25 15:07:48+00:00</name>
   </author>
   <author>
-    <name>Pieter Wuille 2020-03-24 18:56:38</name>
+    <name>Pieter Wuille 2020-03-24 18:56:38+00:00</name>
   </author>
   <author>
-    <name>Lloyd Fournier 2020-03-24 13:00:45</name>
+    <name>Lloyd Fournier 2020-03-24 13:00:45+00:00</name>
   </author>
-  <author>
-    <name>Pieter Wuille 2020-03-24 18:56:38</name>
-  </author>
-  <author>
-    <name>Lloyd Fournier 2020-03-25 15:07:48</name>
-  </author>
-  <author>
-    <name>Lloyd Fournier 2020-03-25 15:07:48</name>
-  </author>
-  <author>
-    <name>Lloyd Fournier 2020-03-24 13:00:45</name>
-  </author>
-  <author>
-    <name>Lloyd Fournier 2020-03-25 15:07:48</name>
-  </author>
-  <author>
-    <name>Pieter Wuille 2020-03-24 18:56:38</name>
-  </author>
-  <link href="bitcoin-dev/March_2020/017709_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2020/017711_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2020/017709_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2020/017711_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2020/017715_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2020/017715_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
-  <link href="bitcoin-dev/March_2020/017709_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2020/017715_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2020/017711_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
+  <link href="bitcoin-dev/March_2020/017709_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Mitigating Differential Power Analysis in BIP-340</title>
-    <updated>2023-06-14T00:13:14.215854+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-March/017709.html" rel="alternate"/>
-    <summary>The post discusses a new PR to change BIP-340, which aims to make it more secure against "differential power analysis" (DPA) attacks by adding random auxiliary data into the nonce derivation function. However, the author questions the claim that this new approach is more secure than the simpler and more efficient method currently being used. The post provides an explanation of DPA attacks and how they work, as well as two papers that may have been the origin of the idea for the new approach.In an email exchange between Pieter Wuille and Lloyd Fournier, they discuss the issue of using secret keys for hashing in Bitcoin. Pieter suggests using XOR instead of hashing secret keys to prevent potential leakage of information through interactions between bits inside the hash operation that all come from the key itself. They also discuss the potential for DPA attacks on BIP32 child index derivation, which may be far-fetched due to the need for physical access to the device and accurate measurement of power consumption. The discussion concludes with the suggestion to revise advice on adding randomness unless an anti-covert channel scheme is used and the acknowledgement that there may be more than one way to approach this issue.The original nonce derivation in BIP-340 was vulnerable to DPA attacks because the SHA256 compression function run on (sec_key || message) may leak information about sec_key. The new approach adds secret randomness before each sensitive operation and then strips off the secret randomness afterwards to fix this problem. However, the author argues that this new approach does not provide any extra protection over the current method. The post concludes that the current method is preferable because it is simpler and more efficient, and no less secure against DPA attacks. In summary, the post and email exchange provide insight into the debate surrounding the security of the new PR to change BIP-340, with arguments made both for and against the inclusion of random auxiliary data in the nonce derivation function. The post also provides links to relevant papers and sources for further reading.</summary>
-    <published>2020-03-24T13:00:45+00:00</published>
+    <updated>2023-08-02T01:56:36.603022+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-March/017715.html" rel="alternate"/>
+    <summary>On March 24, 2020, Lloyd Fournier posted a message to the bitcoin-dev mailing list regarding proposed changes to BIP-340. These changes included adding random auxiliary data into the nonce derivation function to enhance security against "differential power analysis" (DPA) attacks. However, Pieter Wuille responded to the email, expressing agreement with Lloyd but also providing a summary of the discussion that led to the decision to use a non-standard scheme.Pieter pointed out an issue that Lloyd may have overlooked in a BIP32/Taproot scenario. The private key used in the signing algorithm functions as both a secret and something known to the attacker. This means that interactions between bits inside the hash operation, which all come from the private key, can potentially leak bit-level information. To address this, Pieter suggested XORing the private key with another value before passing it to the hash function. This would prevent the leakage of bit-level information.However, Pieter acknowledged that DPA issues are challenging to reason about, as finding a realistic attack model that only leaks some information without immediately exposing the entire key is difficult. The discussion also touched upon concerns such as efficiency, the risk of midstate leakage in the hash function, and the presence of public keys from an attacker in the signing algorithm.The proposed solution discussed in the thread, H(priv XOR H(aux) || pub || msg), seemed to satisfy most of the requirements. Pieter emphasized that different prioritizations might lead to different conclusions. He welcomed further input and suggestions on the matter.In summary, the post on the mailing list delves into the security of a proposed change to BIP-340 involving the addition of random auxiliary data to prevent DPA attacks. The author questions whether this new approach offers any significant advantages over the current simpler and more efficient method. They argue that the current method is already secure against DPA attacks and provide explanations of how DPA attacks work, along with relevant papers and sources for further reading. The author suggests that if there are justifications for the new approach that they do not understand, these should be documented.</summary>
+    <published>2020-03-25T15:07:48+00:00</published>
   </entry>
 </feed>

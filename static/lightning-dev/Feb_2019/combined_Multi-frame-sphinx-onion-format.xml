@@ -2,34 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Multi-frame sphinx onion format</title>
-  <updated>2023-06-03T21:39:31.252194+00:00</updated>
+  <updated>2023-07-31T21:27:48.279408+00:00</updated>
   <author>
-    <name>Christian Decker 2019-02-24 17:59:04</name>
+    <name>Christian Decker 2019-02-24 17:59:04+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2019-02-18 18:39:25</name>
+    <name>ZmnSCPxj 2019-02-24 00:53:03+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2019-02-24 00:53:03</name>
+    <name>Christian Decker 2019-02-22 15:53:50+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2019-02-22 03:50:59</name>
+    <name>Rusty Russell 2019-02-22 03:50:59+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2019-02-22 15:53:50</name>
+    <name>Christian Decker 2019-02-18 18:39:25+00:00</name>
   </author>
   <link href="lightning-dev/Feb_2019/001884_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2019/001875_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2019/001883_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
-  <link href="lightning-dev/Feb_2019/001880_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
   <link href="lightning-dev/Feb_2019/001882_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2019/001880_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
+  <link href="lightning-dev/Feb_2019/001875_Multi-frame-sphinx-onion-format.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Multi-frame sphinx onion format</title>
-    <updated>2023-06-03T21:39:31.252194+00:00</updated>
+    <updated>2023-07-31T21:27:48.279408+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-February/001884.html" rel="alternate"/>
-    <summary>During a spec meeting in Adelaide, it was decided to extend the current onion-routing capabilities with new features such as rendezvous routing, spontaneous payments, multi-part payments and more. To achieve this, Christian Decker proposed extending the per-hop payload from the current 65 bytes to multiples and using variable shifts for both the payload serialization and filler generation, depending on the payload size. The proposal suggests calling the 65 byte segment a frame to differentiate it from a hop in the route, hence the name multi-frame onion. The realm byte encodes both the payload format and how many additional frames were used to encode the payload. The decoding of an onion packet pretty much stays the same - the receiving node generates the shared secret, then generates the ChaCha20 stream, and decrypts the packet (and additional padding that matches the filler the sender generated for HMACs). It can then read the realm byte, and knows how many frames to read, and how many frames it needs to left-shift to derive the next onion. This is a competing proposal with the proposal by roasbeef on the lightning-onion repo but Christian thinks it is superior in a number of ways. In a message to Christian and Rusty, ZmnSCPxj proposed a new way to encode the realm 0 byte by creating a special type "0" with a fixed length of 1299 bytes. He also suggested using a TLV-set for the entire payload and using the old payload format as a single TLV-value with 20 bytes of size. ZmnSCPxj also proposes another special type 255, which declares the next 32 bytes as HMAC and the rest of the onion packet as the data for the next hop. However, he notes that this is not a serious proposal. Another participant in the discussion disagreed with the proposal, stating that it would blur the separation of payload encoding and onion encoding. In the discussion about how to add Type-Length-Value (TLV) to the onion, Rusty Russell presents two options. The first option involves leaving the existing fields and putting TLV in the padding: short_channel_id, amt_to_forward, outgoing_cltv_value, and padding. The second option is to replace the existing fields with TLV and flag the new format using realm &gt; 0. Russell suggests voting for making the entire payload a TLV (option 2) since it allows complete redefinition of the payload. There is also a third option of making the entire payload a TLV-set and using the old payload format as a single TLV-value with 20 bytes of size, which would result in only 2 bytes of overhead compared to the old v0 format.</summary>
+    <summary>In a discussion about the Lightning Network protocol, ZmnSCPxj proposed a new way to encode the realm 0 byte by creating a special type "0" with a fixed length of 1299 bytes. This would remove the overhead of the realm byte and define the next 1299 bytes as the "V", consisting of 64 bytes of the current hop format and encrypted form data for the next hop. Another participant disagreed, suggesting dropping the concept of 65-byte "frames" and using a special length-not-encoded type 255 to declare the HMAC and the rest of the onion packet as the data for the next hop. However, the proposal was not taken seriously.ZmnSCPxj presented a proposal for the Lightning Network's onion packet format, suggesting using a Type-Length-Value (TLV) set for the entire payload and using the old payload format as a single TLV value with 20 bytes of size. This reduces overhead by two bytes compared to the old v0 format. The proposal also suggests making the realm 0 byte into a special type "0" with a fixed length of 1299 bytes, defining the next 1299 bytes as the "V" with the format of 64 bytes of the current hop format and encrypted form data. Additionally, another special type 255 is proposed to declare the next 32 bytes as HMAC and the rest of the onion packet as the data for the next hop. However, this proposal is not considered serious.Rusty Russell presented two options for adding TLV to the onion in a discussion. The first option involves leaving the existing fields and putting TLV in the padding, while the second option replaces the existing fields with TLV and flags the new format using realm &gt; 0. Russell suggests voting for making the entire payload a TLV since it allows complete redefinition of the payload and argues that the overhead argument doesn't apply due to existing payload waste. There is also a third option of making the entire payload a TLV-set and using the old payload format as a single TLV-value with 20 bytes of size, resulting in only 2 bytes of overhead compared to the old v0 format.Christian Decker proposed extending the per-hop payload from 65 bytes to multiples to accommodate new features. He suggested shifting by a single 65 byte frame, serializing the payload, and encrypting it using the ChaCha20 stream when constructing the onion. Variable shifts for both payload serialization and filler generation are proposed based on the payload size, with additional frames used until it fits. The realm byte encodes the payload format and the number of additional frames used. The decoding process remains similar, with the receiving node generating the shared secret, ChaCha20 stream, and decrypting the packet. Christian implemented this proposal in c-lightning and lnd, highlighting advantages such as contiguous memory region after decryption, zero-copy processing of data, avoiding multiple decryption steps, and not wasting space on useless HMACs.During a spec meeting, it was decided to extend the current onion-routing capabilities with new features, requiring bigger per-hop payloads and TLV encoding. The proposal suggests extending the per-hop payload size and using the name "multi-frame onion" to differentiate it from a hop in the route. The sender right-shifts by a single 65 byte frame, serializes the payload, and encrypts it using the ChaCha20 stream. Variable shifts are introduced based on payload size, and the realm byte encodes the payload format and the number of additional frames used. The decoding process involves generating the shared secret, ChaCha20 stream, and decrypting the packet. This proposal is considered superior due to advantages such as contiguous memory region after decryption, zero-copy processing, and avoidance of multiple decryption steps and useless HMACs. The author has implemented this proposal in c-lightning and lnd, with most code changes preparing for variable-sized payloads alongside the old v0 payloads.Overall, these proposals aim to enhance the Lightning Network's onion packet format by introducing TLV encoding, reducing overhead, and accommodating new features with larger per-hop payloads.</summary>
     <published>2019-02-24T17:59:04+00:00</published>
   </entry>
 </feed>

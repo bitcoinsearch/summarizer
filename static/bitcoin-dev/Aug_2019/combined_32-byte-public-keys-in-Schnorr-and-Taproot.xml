@@ -2,50 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - 32-byte public keys in Schnorr and Taproot</title>
-  <updated>2023-06-13T21:00:10.067622+00:00</updated>
+  <updated>2023-08-02T01:16:16.596719+00:00</updated>
   <author>
-    <name>Christopher Allen 2019-08-09 18:37:13</name>
+    <name>Karl-Johan Alm 2019-08-11 06:08:48+00:00</name>
   </author>
   <author>
-    <name>Karl-Johan Alm 2019-08-11 06:08:48</name>
+    <name>Christopher Allen 2019-08-09 18:37:13+00:00</name>
   </author>
   <author>
-    <name>Pieter Wuille 2019-08-09 18:16:29</name>
+    <name>Pieter Wuille 2019-08-09 18:16:29+00:00</name>
   </author>
-  <author>
-    <name>Karl-Johan Alm 2019-08-11 06:08:48</name>
-  </author>
-  <author>
-    <name>Christopher Allen 2019-08-09 18:37:13</name>
-  </author>
-  <author>
-    <name>Karl-Johan Alm 2019-08-11 06:08:48</name>
-  </author>
-  <author>
-    <name>Pieter Wuille 2019-08-09 18:16:29</name>
-  </author>
-  <author>
-    <name>Christopher Allen 2019-08-09 18:37:13</name>
-  </author>
-  <author>
-    <name>Pieter Wuille 2019-08-09 18:16:29</name>
-  </author>
-  <link href="bitcoin-dev/Aug_2019/017249_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2019/017253_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Aug_2019/017247_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Aug_2019/017253_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Aug_2019/017249_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Aug_2019/017253_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Aug_2019/017247_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2019/017249_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2019/017247_32-byte-public-keys-in-Schnorr-and-Taproot.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - 32-byte public keys in Schnorr and Taproot</title>
-    <updated>2023-06-13T21:00:10.067622+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-August/017249.html" rel="alternate"/>
-    <summary>In a Bitcoin developer mailing list, Pieter Wuille suggested that if changes are to be made regarding public keys, it should be done cleanly and the extra byte should be dropped. Christopher Allen proposed considering a non-binary format for sharing public keys, such as using bech32, to provide a usable encoding format for emerging protocols that may utilize Schnorr public keys in new ways. Meanwhile, a suggestion has been made to drop the Y oddness bit in the witness program for Taproot outputs. Jonas Nick found that it seems cleanest to introduce a type of 32-byte public keys in bip-schnorr, with associated signing and verification logic that are distinct from the 33-byte variant. This makes one question if we need 33-byte public keys at all. Opinions are being sought about modifying bip-schnorr to only define 32-byte public keys. The implications of this change are that bip-schnorr public keys wouldn't be exactly the same as ECDSA public keys, however, all derivation logic would still apply. The Q point in bip-taproot would just follow the 32-byte pubkey encoding, rather than needing a 33rd byte. The P point in bip-taproot would become just a 32-byte public key. In order to permit batch verification of the P to Q tweaking for script-path spending, another control block bit is now needed. All public keys inside bip-tapscript would also become 32-bytes. If desired, the "upgradable public key" construction in bip-tapscript can be kept by triggering based on the length of public keys. One question is whether it's worth such a change to bip-schnorr at this point. It's possible to keep verification compatible, but if we're going to change things, it's best to do it as cleanly as possible and also drop that byte. The writer seeks opinions about modifying bip-schnorr to only define 32-byte public keys. In conclusion, this is a discussion in the Bitcoin developer community about modifying bip-schnorr to only define 32-byte public keys and its implications on Taproot outputs and bip-tapscript.</summary>
-    <published>2019-08-09T18:37:13+00:00</published>
+    <updated>2023-08-02T01:16:16.596719+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-August/017253.html" rel="alternate"/>
+    <summary>In a Bitcoin developer mailing list, a suggestion has been made to drop the Y oddness bit in the witness program for Taproot outputs. This change would not affect security and would prevent Taproot outputs from being more expensive than v0 P2WSH. It would also allow for future changes that may still require the additional byte. As part of exploring this option, it has been found that introducing a type of 32-byte public keys in bip-schnorr would be the cleanest approach. This raises the question of whether 33-byte public keys are necessary at all. While bip-schnorr public keys would not be exactly the same as ECDSA public keys if this change is implemented, all derivation logic would still apply. Under this modification, the Q point in bip-taproot (the one going in the scriptPubKey) would follow the 32-byte pubkey encoding instead of needing a 33rd byte. The P point in bip-taproot (the internal key revealed during the script path) would become a 32-byte public key. All public keys inside bip-tapscript would also be 32-bytes long. If desired, the "upgradable public key" construction in bip-tapscript can be retained by triggering based on the length of public keys. However, opinions are being sought about whether it is worth making this change to bip-schnorr at this stage, considering that it has already been in use for some time. While it is possible to keep verification compatible by hashing the implied "even" byte inside the scheme, which commits to the pubkey, if changes are to be made, it is best to do so as cleanly as possible and drop that byte as well. In conclusion, this is a discussion within the Bitcoin developer community about modifying bip-schnorr to only define 32-byte public keys and how it would impact Taproot outputs and bip-tapscript. Pieter Wuille suggests making the change cleanly and dropping the extra byte, while Christopher Allen proposes considering a non-binary format for sharing public keys.</summary>
+    <published>2019-08-11T06:08:48+00:00</published>
   </entry>
 </feed>

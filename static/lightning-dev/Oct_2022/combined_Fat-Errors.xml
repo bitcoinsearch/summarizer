@@ -2,46 +2,46 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Fat Errors</title>
-  <updated>2023-06-04T04:15:20.291776+00:00</updated>
+  <updated>2023-08-01T00:46:59.886099+00:00</updated>
   <author>
-    <name>Thomas HUET 2022-11-03 15:12:00</name>
+    <name>Joost Jager 2022-11-10 15:24:28+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2022-11-04 06:53:53</name>
+    <name>Joost Jager 2022-11-04 06:53:53+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2022-10-20 15:45:16</name>
+    <name>Thomas HUET 2022-11-03 15:12:00+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2022-10-19 11:12:26</name>
+    <name>Joost Jager 2022-11-01 21:09:27+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2022-11-01 21:09:27</name>
+    <name>Rusty Russell 2022-10-24 22:32:52+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2022-11-10 15:24:28</name>
+    <name>Joost Jager 2022-10-20 15:45:16+00:00</name>
   </author>
   <author>
-    <name>Bastien TEINTURIER 2022-10-20 15:36:03</name>
+    <name>Bastien TEINTURIER 2022-10-20 15:36:03+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2022-10-24 22:32:52</name>
+    <name>Joost Jager 2022-10-19 11:12:26+00:00</name>
   </author>
-  <link href="lightning-dev/Nov_2022/003739_Fat-Errors.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2022/003741_Fat-Errors.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2022/003725_Fat-Errors.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2022/003723_Fat-Errors.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2022/003734_Fat-Errors.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2022/003750_Fat-Errors.xml" rel="alternate"/>
-  <link href="lightning-dev/Oct_2022/003724_Fat-Errors.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2022/003741_Fat-Errors.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2022/003739_Fat-Errors.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2022/003734_Fat-Errors.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2022/003727_Fat-Errors.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2022/003725_Fat-Errors.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2022/003724_Fat-Errors.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2022/003723_Fat-Errors.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Fat Errors</title>
-    <updated>2023-06-04T04:15:20.292773+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-November/003739.html" rel="alternate"/>
-    <summary>In the Lightning Network, there was a vulnerability in error attribution that needed to be addressed. To tackle this issue, Joost Jager proposed a new failure message format that includes a chain of HMACs. This ensures the integrity of the message and makes it impossible for any node to modify the failure message without revealing their involvement. The proposed solution is seen as justified despite its size, which can be up to 12 KB due to the maximum of 27 hops and the inclusion of 378 HMACs of 32 bytes each.To maintain backward compatibility, signaling is used to determine what algorithm should be run to generate or transform the failure message through a tlv onion field. Advertising intermediate nodes' capability to transform the new format through a feature bit is also necessary. Furthermore, successes can be delayed, and adding the same payloads and HMACs blocks to the update_fulfill_htlc message could be an option.Another proposal from Rusty suggests using a pre-pay scheme where N sats and a secp point are sent, and every chained secret returned earns the forwarder 1 sat. The answers are placed in each layer of the onion, and the distance traveled by the onion is determined based on how much money is received back on failure. However, the error message may be corrupted. Rusty suggests truncating the point to a new secret key as the simplest solution, with each node applying a tweak for decorrelation. The best scheme would be where payment is only received if the next node decrypts, but this requires more thought. Finally, Rusty proposes reducing the number of hops to 16, which is the closest power of 2 to the legacy hop limit, and makes this 4.5k for payloads and hmacs.Overall, these proposals aim to improve the reliability and security of the Lightning Network. Several links to relevant sources are provided as references, including a link to a code repository on GitHub for the Lightning Network project. The context appears to be related to development work being done on the Lightning Network, with discussion potentially taking place on a mailing list called "lightning-dev" hosted by the Linux Foundation.</summary>
-    <published>2022-11-03T15:12:00+00:00</published>
+    <updated>2023-08-01T00:46:59.886099+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-November/003750.html" rel="alternate"/>
+    <summary>Joost Jager has proposed a solution to the long-standing issue of gaps in error attribution in the Lightning Network. This issue arises when nodes on a payment route hide themselves and return random data as the failure message, making it difficult for senders to pinpoint the source of the failure. Joost's solution involves a new format for the failure message that includes HMACs added by each node on the route. These HMACs commit the nodes to the failure message and prevent them from modifying it without revealing their involvement.The new failure message format consists of three parts: the message, payloads, and HMACs. The message is the standard onion failure message, while the payloads are a fixed-length array that allows each node to add data to be returned to the sender. The HMACs are also a fixed-length array that contains the HMACs added by each node as the failure message travels back to the sender. Each HMAC corresponds to a presumed position in the path.To keep the size of the failure message manageable, each hop deletes some of the previous HMACs that are no longer useful. This reduces the number of HMACs and the overall size of the failure message. Joost has developed a Go implementation of the new failure message format and has shared it on GitHub. His goal is to make the Lightning Network more reliable by preventing nodes from hiding themselves and allowing senders to pinpoint delays down to a pair of nodes.However, there is still a vulnerability in the Lightning Network where a malicious node can modify a byte of the failure message. The sender can determine the pair of nodes that the offending node is part of, but this scheme increases the size of the failure message. Rusty Russell suggests using 16 hops as the limit, which would result in a smaller payload and HMACs size.In terms of backwards compatibility, nodes need to signal what algorithm they should run to generate or transform the failure message via a tlv onion field. Intermediate nodes also need to advertise their capability to transform the new format through a feature bit. It is also suggested to add the same payloads and HMACs blocks to the update_fulfill_htlc message to address delays in the path.Overall, Joost Jager's proposed solution aims to improve error attribution in the Lightning Network by introducing a new format for the failure message that includes HMACs added by each node on the route. This solution will help prevent nodes from hiding themselves and allow senders to pinpoint delays down to a pair of nodes. However, there are still considerations regarding the size of the failure message and potential vulnerabilities that need to be addressed.The Lightning Network, a protocol for faster and cheaper transfers, has been found to have two vulnerabilities. The first vulnerability involves gaps in error attribution, where certain nodes on the route can hide themselves by returning random data as the failure message. This makes it difficult for the sender to determine where the failure occurred and penalize the responsible node(s). To address this weakness, a new failure message format has been proposed.The proposed solution allows each node on the route to append a timestamp and HMAC (Hash-based Message Authentication Code) to the failure message without revealing their position in the path. The new failure message consists of three parts: `message`, `payloads`, and `hmacs`. This ensures that the sender can verify the integrity of the message and determine the longest chain of HMACs until it encounters a hop_payload with is_final set. If any byte of the failure message is modified, the sender can identify a pair of nodes that the offending node is part of.The second vulnerability involves delayed failure messages that can be exploited by an attacker to steal funds. A proposed solution is to increase the size of the failure message to include HMACs for all possible routes up to 27 hops. Alternatively, reducing the maximum number of hops to 10 would decrease the message size significantly. This would also contribute to reducing latency and capital lock up.To ensure backwards compatibility, nodes need to signal what algorithm they should run to generate or transform the failure message via a TLV (Type-Length-Value) onion field. Intermediate nodes also need to advertise their capability to transform the new format through a feature bit. Additionally, successes can also be delayed, and it may be an option to add the same `payloads` and `hmacs` blocks to the `update_fulfill_htlc` message.The downside of the proposed scheme to address the first vulnerability is its size. With a maximum of 27 hops, the `hmacs` block contains 378 HMACs of 32 bytes each, resulting in a total size of 12 KB. However, this size is seen as justified to fix the vulnerability in Lightning. If failures are expected to become more rare in the future, the size becomes less relevant to the overall operation of the network.In conclusion, the Lightning Network has vulnerabilities related to error attribution and delayed failure messages. Proposed solutions involve adding a new failure message format with HMACs, increasing the</summary>
+    <published>2022-11-10T15:24:28+00:00</published>
   </entry>
 </feed>

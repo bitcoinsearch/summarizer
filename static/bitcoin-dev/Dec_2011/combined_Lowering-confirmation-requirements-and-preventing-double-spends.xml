@@ -2,50 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lowering confirmation requirements and preventing double spends</title>
-  <updated>2023-06-04T21:49:40.201543+00:00</updated>
+  <updated>2023-08-01T02:42:05.874947+00:00</updated>
   <author>
-    <name>Andy Parkins 2011-12-08 10:47:08</name>
+    <name>Andy Parkins 2011-12-09 09:50:03+00:00</name>
   </author>
   <author>
-    <name>Stefan Thomas 2011-12-08 22:43:24</name>
+    <name>Stefan Thomas 2011-12-08 22:43:24+00:00</name>
   </author>
   <author>
-    <name>Andy Parkins 2011-12-09 09:50:03</name>
+    <name>Andy Parkins 2011-12-08 10:47:08+00:00</name>
   </author>
-  <author>
-    <name>Stefan Thomas 2011-12-08 22:43:24</name>
-  </author>
-  <author>
-    <name>Andy Parkins 2011-12-09 09:50:03</name>
-  </author>
-  <author>
-    <name>Stefan Thomas 2011-12-08 22:43:24</name>
-  </author>
-  <author>
-    <name>Andy Parkins 2011-12-09 09:50:03</name>
-  </author>
-  <author>
-    <name>Andy Parkins 2011-12-08 10:47:08</name>
-  </author>
-  <author>
-    <name>Andy Parkins 2011-12-08 10:47:08</name>
-  </author>
-  <link href="bitcoin-dev/Dec_2011/000806_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Dec_2011/000807_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2011/000808_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2011/000807_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Dec_2011/000808_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Dec_2011/000807_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Dec_2011/000808_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Dec_2011/000806_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2011/000806_Lowering-confirmation-requirements-and-preventing-double-spends.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Lowering confirmation requirements and preventing double spends</title>
-    <updated>2023-06-04T21:49:40.201543+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-December/000806.html" rel="alternate"/>
-    <summary>Dr. Andy Parkins proposed a new idea where a transaction should include the hash of the block it wants to appear after, which he calls the basis block. The miners would then add a condition that the transaction's outputs must be before the new transaction's basis block. This allows miners to add a condition where the transaction output must be claimed before the new transaction's basis block. The proposed change would avoid the problem of financial connections without bitcoin connection.For example, MyBitcoin debacle could have been prevented by the suggestion. Dr. Parkins explained that if MyBitcoin had broadcasted the withdrawal transactions based on the same chain as the deposit, even though it was not using transactions in that chain, then the attack would have failed. Furthermore, this change would only need storing for the pending transactions; hence no incompatible change is needed to the block format. Finally, Dr. Parkins also mentioned that the basis block would be optional and implied by input transactions if it is not present.Stefan Thomas responded by saying that Bitcoin already does something similar where if a transaction is reversed, any transactions based on its outputs are rejected. Hosted wallets can use this but it can get tricky depending on the service. Stefan also pointed out that he has trouble thinking of a good example where an explicit block dependency is necessary. He suggests that if you can clearly and easily associate the money, you might as well relate the transactions.Stefan agrees with Andy Parkins that hosted wallets should keep each account as separate public keys to gain better risk isolation. However, Stefan suggests an algorithm where Mt.Gox prefers to spend outputs from own deposits as the inputs for withdrawals. Depending on the service, it can get tricky. For example, what if one exchanges the money to USD and back before withdrawing? There is certainly a case for both types of correspondence between address and account.</summary>
-    <published>2011-12-08T10:47:08+00:00</published>
+    <updated>2023-08-01T02:42:05.874947+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2011-December/000808.html" rel="alternate"/>
+    <summary>In a conversation between Stefan Thomas and Dr. Andy Parkins, they discussed the issue of Bitcoin transactions being reversed based on outputs. They also talked about the problems with hosted wallets that rely on services, using the MyBitcoin debacle as an example. Hosted wallets were suggested to use separate public keys for each account to mitigate risk, but Dr. Parkins raised concerns about the traceability of addresses. In an email exchange, Dr. Parkins proposed a new idea for Bitcoin transactions. He suggested that when a transaction is broadcasted, it should include the hash of the block it wants to appear after, which he called the "basis block". This would allow miners to add a condition where any transactions outputting new transactions must appear before the new transaction's basis block. The purpose of this change is to prevent scenarios where a withdrawal from a pooled-account online wallet appears in different blocks, causing inconveniences for honest users. Stefan mentioned that hosted wallets can use bitcoin inputs from personal deposits as outputs for withdrawals, but this method has security concerns. He argued that keeping each account as separate public keys would provide better risk isolation and enable instant deposits. While the proposal was considered thought-provoking, it seems that the implementation of this specific idea has not been widely adopted in the cryptocurrency world. However, Dr. Parkins' idea of including the basis block when broadcasting a transaction could potentially eliminate the possibility of attackers arranging reorganizations and causing loss. It would ensure that transactions based on specific blocks would never make it into subsequent blocks. Dr. Parkins explained this concept using an example involving transferring coins from address A to Mt.Gox in block 2 and transferring credit from address A to address B in block 1. With the proposed change, if a chain at block 3 becomes dominant over block 5, a withdrawal made by Mt.Gox in block 3 cannot make it into block 4 because it is based on block 2. This change would be optional and implied by input transactions if not explicitly stated, and it would only need to be stored for pending transactions without requiring changes to the block format.Although the example of Mt.Gox may not be ideal due to their fiat-related issues, this change could benefit other online wallet accounts by allowing faster acceptance of received funds without the risk of loss. Overall, while Dr. Parkins' idea has not seen widespread adoption, it presents an interesting solution to address the challenges associated with Bitcoin transactions.</summary>
+    <published>2011-12-09T09:50:03+00:00</published>
   </entry>
 </feed>

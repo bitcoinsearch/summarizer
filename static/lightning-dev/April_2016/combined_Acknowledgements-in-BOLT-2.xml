@@ -2,34 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Acknowledgements in BOLT #2</title>
-  <updated>2023-05-23T23:24:30.878787+00:00</updated>
+  <updated>2023-07-31T18:57:54.230091+00:00</updated>
   <author>
-    <name>Fabrice Drouin 2016-04-01 14:57:37</name>
+    <name>Rusty Russell 2016-04-04 02:04:34+00:00</name>
   </author>
   <author>
-    <name>Pierre 2016-04-01 13:32:15</name>
+    <name>Joseph Poon 2016-04-01 19:38:50+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-04-04 02:04:34</name>
+    <name>Fabrice Drouin 2016-04-01 14:57:37+00:00</name>
   </author>
   <author>
-    <name>Joseph Poon 2016-04-01 19:38:50</name>
+    <name>Pierre 2016-04-01 13:32:15+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2016-03-31 23:49:26</name>
+    <name>Rusty Russell 2016-03-31 23:49:26+00:00</name>
   </author>
-  <link href="lightning-dev/April_2016/000508_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2016/000507_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/April_2016/000512_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/April_2016/000510_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2016/000508_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2016/000507_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <link href="lightning-dev/March_2016/000506_Acknowledgements-in-BOLT-2.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Acknowledgements in BOLT #2</title>
-    <updated>2023-05-23T23:24:30.878787+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-April/000508.html" rel="alternate"/>
-    <summary>A discussion among members of the Lightning Network community has revealed that HTLC IDs are not enough to establish a secure system. The problem with using only the IDs is that in some cases, an acknowledge field must be taken into account. For example, if A sends ADD HTLC X, ADD HTLC Y, ADD HTLC Z and B sends FAIL Y before A has received this message, then SIG Z will be invalid. In such a scenario, B has no way of knowing whether A received the "FAIL Y" message or not without checking the 'acknowledge' field. Therefore, it would make sense to include the ID in the update_commit msg as well, instead of relying on the acknowledge field. However, acknowledge fields should still be relied on at the transport level (including the reconnect scenario) to know which messages should be replayed. Odd/even HTLC IDs have been discussed as a means of quickly distinguishing between incoming and outgoing htlcs and to catch bugs.</summary>
-    <published>2016-04-01T14:57:37+00:00</published>
+    <updated>2023-07-31T18:57:54.230091+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-April/000512.html" rel="alternate"/>
+    <summary>In a recent discussion, the introduction of htlc ids in Rusty has been highlighted. These 64-bit unique identifiers are being used to distinguish between two HTLCs with the same R value and make it easier to detect if an attacker has probed. The use of keypair-based contracts is also simplifying the process. Different levels of cases can be handled, but using the acknowledge field may not be optimal as it could lead to redundancy. Instead, using the HTLC id at the protocol level would make more sense. At the transport level, the acknowledge field can still be relied upon to determine which messages should be replayed.The purpose of odd/even HTLC IDs was discussed in an email exchange dated April 1, 2016. Joseph Poon explained that the original idea behind unique IDs for each HTLC was for identification purposes. The direction of the HTLC could be understood through the positive/negative amount, and the ID would mainly be used for debugging.However, it has been realized that in certain scenarios, htlc ids alone are not sufficient and the acknowledge field needs to be taken into account. This is because there are situations where messages may be sent out of order, leading to mismatches in signatures and potential channel closures without knowing if certain messages were received. In such cases, checking the 'acknowledge' field becomes necessary to ensure proper communication.The recent introduction of htlc ids in Rusty is seen as a positive change. The new absolute "lnd-like 64 bits unique id" is preferred over the previous relative "order-I-added-them-in" id. This update allows for better tracking of received messages and restarting conversations after a reconnect. The writer suggests that these two cases should be handled differently as they occur at different levels. At the protocol level, only the htlc id should be used instead of relying on the acknowledge field. However, at the transport level, the acknowledge field should be relied upon to determine which messages should be replayed. This approach separates the transport from the protocol and makes testing easier.Pierre's concerns about the placement of acknowledgements in BOLT #2 are agreed upon by Rusty, who wants to document them. The current draft includes an "acknowledge" field in the header, indicating the number of non-"authenticate" messages received and processed so far. However, this requirement for acks to never go backwards means that implementations need to persistently write to disk before sending new packets. To avoid this, Rusty suggests moving the "ack" back into the update_commit/authenticate messages. This change would allow retransmission from previously received update_revocation messages on reconnect, and fee updates should work as well. Rusty plans to implement this change and will report back if any issues arise.</summary>
+    <published>2016-04-04T02:04:34+00:00</published>
   </entry>
 </feed>

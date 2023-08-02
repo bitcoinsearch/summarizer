@@ -2,38 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stale Factory (and channel) problem</title>
-  <updated>2023-06-03T21:51:54.416097+00:00</updated>
+  <updated>2023-07-31T21:35:49.988569+00:00</updated>
   <author>
-    <name>ZmnSCPxj 2019-04-17 03:39:09</name>
+    <name>Alejandro Ranchal Pedrosa 2019-04-21 02:38:23+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2019-04-16 07:39:48</name>
+    <name>ZmnSCPxj 2019-04-17 03:39:09+00:00</name>
   </author>
   <author>
-    <name>Alejandro Ranchal Pedrosa 2019-04-16 08:30:27</name>
+    <name>ZmnSCPxj 2019-04-16 11:31:23+00:00</name>
   </author>
   <author>
-    <name>Alejandro Ranchal Pedrosa 2019-04-21 02:38:23</name>
+    <name>Alejandro Ranchal Pedrosa 2019-04-16 08:30:27+00:00</name>
   </author>
   <author>
-    <name>Alejandro Ranchal Pedrosa 2019-04-15 23:59:07</name>
+    <name>ZmnSCPxj 2019-04-16 07:39:48+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2019-04-16 11:31:23</name>
+    <name>Alejandro Ranchal Pedrosa 2019-04-15 23:59:07+00:00</name>
   </author>
-  <link href="lightning-dev/April_2019/001981_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2019/001978_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2019/001979_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
   <link href="lightning-dev/April_2019/001984_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2019/001974_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2019/001981_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
   <link href="lightning-dev/April_2019/001980_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2019/001979_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2019/001978_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2019/001974_Stale-Factory-and-channel-problem.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Stale Factory (and channel) problem</title>
-    <updated>2023-06-03T21:51:54.416097+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-April/001981.html" rel="alternate"/>
-    <summary>In an email exchange on the Lightning-Dev mailing list, Alejandro Ranchal Pedrosa and ZmnSCPxj discuss the potential of using `SIGHASH_NOINPUT` to address issues with stale offchain systems. The problem arises when one participant in a multiparticipant offchain system advances the protocol but is then unable to receive further signatures from other participants to continue the protocol, causing a stall. For payment channels, this issue can be fixed by exchanging signatures of the most recent state upon re-establishing communication. However, for channel factories, it is unclear whether on-factory channels should be rooted from the old state or the new state if a participant drops out. It is suggested that `SIGHASH_NOINPUT` may help resolve this issue.ZmnSCPxj proposes a mechanism for factories to be single-funded, where the funder of the factory is the operator, allowing a node to open multiple channels to multiple other nodes using a single UTXO. The only factory-level operation allowed is a cooperative close. This mechanism requires a simple n-of-n at the factory level and offers some scaling boost until they can determine how best to implement factory-level changes.The discussion also touches on non-interactive aggregation signature schemes and how they are required for Lightning Factories to add support for "transaction fragments" dynamically, but this requires a deeper level of mathematical knowledge. The proposal suggests that signatures could be distributed via node gossip. The issue of stale factories and channels is also discussed, and ways to go around this situation include creating a new refunding or allocation transaction or publishing it on the blockchain.Overall, the emails provide insight into the current state of construction of Lightning Factories, highlighting potential issues and proposing solutions to improve scalability.</summary>
-    <published>2019-04-17T03:39:09+00:00</published>
+    <updated>2023-07-31T21:35:49.988569+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-April/001984.html" rel="alternate"/>
+    <summary>In an email exchange on the Lightning-Dev mailing list, Alejandro Ranchal Pedrosa and ZmnSCPxj discuss the potential of using `SIGHASH_NOINPUT` to address issues with stale offchain systems. Stale offchain systems occur when one participant in a multiparticipant offchain system sends a signature that advances the protocol but is then unable to receive further signatures from other participants to continue the protocol. For two-participant offchain systems (payment channels), the issue can be fixed by allowing the exchange of signatures of the most recent state upon re-establishing a communication channel. However, for multiparticipant offchain systems that host other offchain systems (channel factories), it is unknown whether or not dropped participants are able to construct the new state, making it ambiguous if on-factory channels should be rooted from the old state or the new state.ZmnSCPxj suggests that `SIGHASH_NOINPUT` could help address this issue, as on-factory channels not affected by a channel reorganization operation at the factory level can continue to operate by use of `SIGHASH_NOINPUT`. In an example provided, if channel states use `SIGHASH_NOINPUT` in signatures, then unaffected channels can continue operation even if a factory-level operation is in an indeterminate state. However, Alejandro Ranchal Pedrosa notes that while `SIGHASH_NOINPUT` offers similar functionality to what he suggests in his paper, there may be some variants to `SIGHASH_NOINPUT` that could affect the no-lock property of offchain layers. Nonetheless, with minor variants listed in the paper, `SIGHASH_NOINPUT` could work well as a solution.A multiparticipant offchain system can experience a stale off-chain system, where one participant sends a signature to advance the protocol but is unable to receive signatures from other participants, causing a stall in the protocol. This issue requires some timeout and a backoff path, aborting the protocol, and performing corrective action on-chain. The more participants involved in the offchain system, the higher the chances of this disruption occurring.For payment channels, this issue can be fixed by exchanging signatures of the most recent state upon re-establishing communication, as required by BOLT. However, for channel factories, it is unclear whether on-factory channels should be rooted from the old state or the new state if a participant drops out. It is suggested that `SIGHASH_NOINPUT` may help resolve this issue. If an on-factory channel is not affected by a channel reorganization operation at the factory level, it can continue to operate using `SIGHASH_NOINPUT`. Unaffected channels can continue operating even if a factory-level operation is in an indeterminate state, such as when a participant drops out.ZmnSCPxj, a Bitcoin Core developer, has suggested the idea of having a "factory operator" to provide scalability while more long-lasting options are discussed. He proposes that this factory be created from a single node doing the funding, which would be a single transaction funding multiple channels with the switchover to factories being "seamless" to users of the C-lightning API once this kind of factory is standardized. ZmnSCPxj also discusses the use of non-interactive aggregation signature schemes and how they are required for Lightning Factories to add support for "transaction fragments" dynamically. However, he notes that this requires a deeper level of mathematical knowledge. The proposal suggests that signatures could be distributed via node gossip, where third parties would not consider a "change in channels in factory" gossip message as complete until it receives all signatures from all factory members but would still gossip such fragments around. Lastly, ZmnSCPxj considers the issue of stale factories and how it might be mitigated without fixing it through similar constructions used on a Chaumian CoinJoin.ZmnScpXj and Alejandro discussed the proposal of having a factory operator for Lightning Factories to provide scalability while other long-lasting options are being discussed. They also mentioned that Lightning Factories require support for "transaction fragments" to be added dynamically, which is only possible when using non-interactive aggregation signature schemes. ZmnScpXj proposed a simplified factory mechanism where the funder of the factory is the factory operator, and other nodes contact the factory operator if they wish to create some change at the factory level. The only factory-level operation allowed is a cooperative close. This construction requires a simple n-of-n at the factory level, as there is no update.Alejandro discussed the situation of a stale factory or channel and its implications. Ways to go around this situation include creating a new refunding or allocation transaction or publishing it on the blockchain. In an upcoming email, he will explain what he sees as the biggest problem associated with this situation. Links to related papers were also provided.In an email to the Lightning-dev mailing list, Alejandro Ranchal Pedrosa discusses the situation of a</summary>
+    <published>2019-04-21T02:38:23+00:00</published>
   </entry>
 </feed>

@@ -2,38 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [PROPOSAL] Removal of proposal to make CSV delay symmetric</title>
-  <updated>2023-06-03T22:17:35.731792+00:00</updated>
+  <updated>2023-07-31T21:49:39.369023+00:00</updated>
   <author>
-    <name>Rusty Russell 2019-07-19 06:12:51</name>
+    <name>Pierre 2019-07-24 12:20:03+00:00</name>
   </author>
   <author>
-    <name>Pierre 2019-07-23 14:44:28</name>
+    <name>Rusty Russell 2019-07-24 00:37:51+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2019-07-24 00:37:51</name>
+    <name>Pierre 2019-07-23 14:44:28+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2019-07-17 01:33:27</name>
+    <name>Rusty Russell 2019-07-19 06:12:51+00:00</name>
   </author>
   <author>
-    <name>Pierre 2019-07-18 08:12:57</name>
+    <name>Pierre 2019-07-18 08:12:57+00:00</name>
   </author>
   <author>
-    <name>Pierre 2019-07-24 12:20:03</name>
+    <name>Rusty Russell 2019-07-17 01:33:27+00:00</name>
   </author>
-  <link href="lightning-dev/July_2019/002089_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2019/002090_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2019/002092_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2019/002086_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
-  <link href="lightning-dev/July_2019/002087_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
   <link href="lightning-dev/July_2019/002093_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2019/002092_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2019/002090_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2019/002089_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2019/002087_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
+  <link href="lightning-dev/July_2019/002086_-PROPOSAL-Removal-of-proposal-to-make-CSV-delay-symmetric.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [PROPOSAL] Removal of proposal to make CSV delay symmetric</title>
-    <updated>2023-06-03T22:17:35.731792+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-July/002089.html" rel="alternate"/>
-    <summary>The conversation between Rusty and Pierre discusses the difference between bruteforcing on the CSV delay and a BIP32 wallet with look ahead keys. The number of variants to look for can be significant in the case of CSV since it can be specified by the counterparty, which could result in a large multiplier per key. However, restricting CSV delays to be multiples of 144 between 144 and 2016 would only be 14 variants. The issue of normal bitcoin wallets not being able to deal with this is also mentioned. It is suggested that funds are still recoverable with just the seed, which is a significant improvement compared to the current situation.In addition, the proposal in Adelaide for symmetric CSV delays is discussed. While the idea was to avoid confusing situations, Roasbeef pointed out that it undermines the usefulness of option_static_remotekey, which allows for easy disaster recovery using only a master seed. Rusty suggests abandoning the proposal altogether and asks for thoughts on the matter.The discussion also covers lightning network commitments, where it is suggested that one out of the given options is more than enough. Local commitments may not be in play most of the time, but remote commitments will come into effect if the node drops out. Refund delay after a local commitment creates an opportunity for users to do unexpected things. The idea of having a recovery tool to rescue funds from a pre-lightning wallet is considered a good approach, and the Electrum team could help in supporting this heuristic. However, there is some uncertainty with this method as it depends on the close's exact nature and whether it will appear in the user's wallet.</summary>
-    <published>2019-07-19T06:12:51+00:00</published>
+    <updated>2023-07-31T21:49:39.369023+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-July/002093.html" rel="alternate"/>
+    <summary>The discussion focuses on the number of choices needed for lightning network commitments. It is suggested that having multiple options may not be necessary, and one choice could be sufficient. Local commitments are not typically used, but remote commitments come into effect when a node drops out. However, there is an opportunity for unexpected actions due to refund delays after a local commitment. The idea of a recovery tool to retrieve funds from a pre-lightning wallet is considered beneficial, with the possibility of support from the Electrum team. Nonetheless, uncertainty remains regarding the specifics of the close and whether it will appear in the user's wallet.In a conversation about bruteforcing on the CSV delay, Pierre raises a question about its difference from a BIP32 wallet with look ahead keys. He suggests trying the most probable values first. The response clarifies that the use of CSV can be determined by the counterparty, leading to a significant increase in the number of variants to search for per key. However, restricting CSV delays to specific multiples between 144 and 2016 would reduce the variants to only 14. It is recommended that choices like 6, 36, 144, 432, or 1008 would likely be adequate. The discussion then addresses the unfortunate limitation of normal bitcoin wallets in dealing with this situation. Nevertheless, Rusty highlights the improvement of recoverability with just the seed compared to the current scenario. While local commitments are not commonly used, remote commitments become important if a node goes offline. Finally, it is acknowledged that the ability to retrieve some funds from a pre-lightning wallet is valuable at present but may have reduced utility in the future.The conversation between Pierre and Rusty revolves around the distinction between bruteforcing on the CSV delay and a BIP32 wallet with look ahead keys. The multiplier effect of CSV, which can be determined by the counterparty, significantly increases the number of variants to search for per key. The example of accepting up to 1024 and offering 144 results in 880 variants per key. However, this issue can be mitigated by restricting CSV delays to specific multiples between 144 and 2016, resulting in only 14 variants. Notably, regular bitcoin wallets do not possess the capability to handle such scenarios. Rusty emphasizes that funds can still be recovered with just the seed, representing a substantial improvement compared to the current situation.The conversation between Pierre and Rusty delves into the difference between bruteforcing on the CSV delay and a BIP32 wallet with look ahead keys. Pierre queries how these methods differ, particularly when prioritizing the most probable values. Rusty explains that the multiplier factor associated with bruteforcing on the CSV delay is significant because it can be specified by the counterparty. For instance, if the counterparty accepts up to 1024 and offers 144, there would be 880 variants to consider per key. Unfortunately, regular bitcoin wallets are incapable of handling this type of bruteforcing. However, the effectiveness of trying the most probable values first is not addressed. The discussion concludes without reaching a definitive conclusion regarding the superiority of either method.In an email exchange between Rusty and Pierre, the focus is on the distinction between bruteforcing on the CSV delay and a BIP32 wallet with look ahead keys. Specifically, Pierre seeks clarification on how these approaches differ, especially when considering the most likely values first. Bruteforcing on the CSV delay involves repeatedly guessing a password until the correct one is found, while a BIP32 wallet with look ahead keys generates a sequence of public keys in advance for transactions without revealing the private key. Pierre's suggestion of prioritizing the most probable values aims to expedite the bruteforcing process, but whether this strategy would be effective is not addressed. The conversation ends without a definitive consensus on which method is superior.The discussion touches upon the proposal in Adelaide to make CSV delays symmetric. The rationale behind this was to avoid confusion where both parties wait for each other to close. However, Roasbeef points out that this undermines the usefulness of option_static_remotekey, which allows for easy disaster recovery using only a master seed. Some individuals may delete everything except their seed, and they could still use the maximum value of the two sides' CSV. Rusty suggests abandoning the proposal entirely and seeks input on this matter.</summary>
+    <published>2019-07-24T12:20:03+00:00</published>
   </entry>
 </feed>

@@ -2,34 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Preliminary Hidden Lightning Network Analysis</title>
-  <updated>2023-06-04T03:43:26.867716+00:00</updated>
+  <updated>2023-08-01T00:21:51.521762+00:00</updated>
   <author>
-    <name>Tony Giorgio 2022-06-08 02:05:01</name>
+    <name>Tony Giorgio 2022-06-13 16:58:31+00:00</name>
   </author>
   <author>
-    <name>Tony Giorgio 2022-06-08 04:12:54</name>
+    <name>René Pickhardt 2022-06-08 05:42:57+00:00</name>
   </author>
   <author>
-    <name>René Pickhardt 2022-06-08 05:42:57</name>
+    <name>Tony Giorgio 2022-06-08 04:12:54+00:00</name>
   </author>
   <author>
-    <name>alicexbt 2022-06-08 03:36:51</name>
+    <name>alicexbt 2022-06-08 03:36:51+00:00</name>
   </author>
   <author>
-    <name>Tony Giorgio 2022-06-13 16:58:31</name>
+    <name>Tony Giorgio 2022-06-08 02:05:01+00:00</name>
   </author>
-  <link href="lightning-dev/June_2022/003599_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2022/003602_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2022/003603_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
-  <link href="lightning-dev/June_2022/003601_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
   <link href="lightning-dev/June_2022/003604_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003603_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003602_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003601_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
+  <link href="lightning-dev/June_2022/003599_Preliminary-Hidden-Lightning-Network-Analysis.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Preliminary Hidden Lightning Network Analysis</title>
-    <updated>2023-06-04T03:43:26.867716+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-June/003599.html" rel="alternate"/>
-    <summary>Over the past few months, Tony Giorgio has been working on an LDK probing project that searches for unannounced channels on the Lightning Network. He found nearly 445 unannounced channels, totalling 1,076,077,750 satoshis locked across three nodes he probed. These results have been made public on Github. The use of verbose error messages and channel IDs based on UTXOs have made it possible to exploit channel privacy. To address this issue, Tony suggests migrating to alias SCIDs and avoiding error messages that reveal private information. In a conversation with René Pickhardt, they discuss the possibility of probabilistically learning which nodes tend to have unannounced channels by looking at wallets' poor utxo management and on-chain signals. They agree that these strategies can reduce the number of tested nodes and make it feasible to probe the network as new blocks come in.Tony emphasizes the need for alias SCIDs to improve privacy, causing nodes to request a channel by a random value rather than the value derived from the on-chain transaction. He encourages every active unannounced channel holder to close, coinjoin, and reopen with an alias. Until this migration happens, it would be beneficial to stop being so specific about errors. Tony plans to continue his probing project while fixing efficiency bugs and narrowing down the other channel partner. It is important to note that Rene mentions the exploit with short_channel_ids has been known since 2019 and highlights the use of error codes of onions. For more information on this project and viewing the dataset, visit http://hiddenlightningnetwork.com.</summary>
-    <published>2022-06-08T02:05:01+00:00</published>
+    <updated>2023-08-01T00:21:51.521762+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-June/003604.html" rel="alternate"/>
+    <summary>In a conversation between Tony and René Pickhardt, they discuss the issue of exploiting channel privacy in Lightning Network. Tony suggests parsing through the data from https://github.com/lnresearch/topology to get a link between every unspent p2wsh transaction up to 6 hops from the opening transaction between two nodes. He plans to keep a list of every node and their possible p2wsh transactions and probe with those. René agrees with this approach and adds that probing ACINQ's node one could probabilistically learn which nodes tend to have unannounced channels and gain some speedup by probing those nodes first. René also mentions that wallets tend to have poor utxo management, and looking at the on-chain signal, one can probably guess for a p2wsh to which two nodes it might belong and try them first. They both agree that these strategies should reduce the number of tested nodes for a newly seen p2wsh output significantly and probably make it feasible to probe the network as new blocks come in. René also points out that the exploit with short_channel_ids is known since 2019 and mentions the use of error codes of onions.In an email to Tony, Rene Pickhardt discusses the possibility of exploiting Lightning Network channel privacy. The exploit is possible because channel IDs are currently based on UTXOs, and using error codes of onions like `unknown_next_peer`, `invalid_onion_hmac`, `incorrect_cltv_expiry`, and `amount_below_minimum` have been helpful in exploiting channel privacy. Although the exploit with short_channel_ids has been known since 2019, Rene emphasizes the use of error codes of onions. Creating a probe that guesses the Channel ID based on unspent p2wsh transactions results in a `m * n` problem to probe the entire network, where `m` is utxos and `n` is nodes. This is the main reason why Rene didn't do this. However, one could probabilistically learn which nodes tend to have unannounced channels and gain some speedup by probing those nodes first. Wallets tend to have poor utxo management, so it might be possible to guess for a p2wsh to which two nodes it might belong and try them first by looking at the on-chain signal. These two strategies should reduce the number of tested nodes for a newly seen p2wsh output significantly and probably make it feasible to probe the network as new blocks come in.Tony Giorgio has been working on an LDK probing project for the past few months that searches for unannounced channels on the Lightning Network. In the past week, he has been probing on mainnet and has found nearly 445 unannounced channels totaling 1,076,077,750 satoshis locked across three nodes he has probed. The reason this is possible is because probing is a free operation on the Lightning Network after a channel is opened, and error reasons given are way too verbose. Currently, channel IDs are based on UTXOs. He believes that it is necessary to move to SCIDs, and that error messages alone can't fix it completely. SCID aliases may be the biggest benefit for privacy as they allow a node to request a channel by a random value instead of the value derived from the on-chain transaction. Tony warns that if you have any unannounced channels that you assumed were private and need them to be, close them now on the off chance they get revealed. He suggests that alias SCIDs would be better for privacy, and that error messages revealing information that is meant to be "private" should be avoided in the future.He also mentions that in addition to LDK implementing it, LND is currently working on it. With regards to analytic firms using this, he assumes so, but it's probably easy to tell whether this is happening to your node or not if someone was watching their HTLC routing failure reasons. For more about this project and viewing the dataset, go to http://hiddenlightningnetwork.com.Tony Giorgio has been working on an LDK probing project for the past few months that searches for unannounced channels on the Lightning Network. He found near 445 unannounced channels totaling 1,076,077,750 satoshi's locked across three nodes he probed. The exact results are publicized here: https://github.com/BitcoinDevShop/hidden-lightning-network/blob/master/data/results/results.json. Probing is a free operation on the Lightning Network after a channel is opened, and currently, channel IDs are based on UTXOs, which allows guessing the Channel ID based on unspent p2wsh transactions. Therefore, error reasons such as `unknown_next_peer`, `invalid_onion_hmac`, `incorrect_cltv_expiry`, and `amount_below_minimum` have been the biggest helpers in exploiting channel privacy.Alias SCIDs may be the biggest benefit to fix the problem of channel privacy</summary>
+    <published>2022-06-13T16:58:31+00:00</published>
   </entry>
 </feed>

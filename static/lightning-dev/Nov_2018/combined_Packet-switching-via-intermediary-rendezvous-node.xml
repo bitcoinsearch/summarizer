@@ -2,22 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Packet switching via intermediary rendezvous node</title>
-  <updated>2023-05-20T09:03:06.196623+00:00</updated>
+  <updated>2023-07-31T20:40:28.094086+00:00</updated>
   <author>
-    <name>Anthony Towns 2018-11-16 15:31:59</name>
+    <name>Anthony Towns 2018-11-16 15:31:59+00:00</name>
   </author>
   <author>
-    <name>Olaoluwa Osuntokun 2018-11-16 03:24:29</name>
+    <name>Olaoluwa Osuntokun 2018-11-16 03:24:29+00:00</name>
+  </author>
+  <author>
+    <name>Christian Decker 2018-11-13 04:06:23+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-11-09 16:10:56+00:00</name>
   </author>
   <link href="lightning-dev/Nov_2018/001628_Packet-switching-via-intermediary-rendezvous-node.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2018/001617_Packet-switching-via-intermediary-rendezvous-node.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001574_Packet-switching-via-intermediary-rendezvous-node.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2018/001553_Packet-switching-via-intermediary-rendezvous-node.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Packet switching via intermediary rendezvous node</title>
-    <updated>2023-05-20T09:03:06.196623+00:00</updated>
+    <updated>2023-07-31T20:40:28.094086+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001628.html" rel="alternate"/>
-    <summary>The Lightning-dev mailing list discussed the possibility of packet switching as part of their agenda. Although it was deferred to a later version of BOLT spec, it has become possible due to three features that were not deferred: multi-hop onion packets, identifying "next" by node-id instead of short-channel-id, and onion ephemeral key switching required by rendezvous routing. Different scenarios were discussed where the node-id can be identified through a channel with capacity, without capacity, or without a channel at all. The case where there is no channel can build up packet switching. This also allows some uncertainty about the destination and increases anonymity set of rendezvous routing. The switch-ephemeral-key packet type can be used to forward the packettype 4 to a peer, which might know the destination specified but with some amount of uncertainty. Finally, some issues with creating an arbitrarily long route were discussed.</summary>
+    <summary>In a discussion on the Lightning Network mailing list, the possibility of spontaneous ephemeral key switches while forwarding a payment was brought up. It was noted that if this were possible, nodes could create unbounded path lengths and bypass the 20 hop limit by controlling multiple nodes in a route. However, this would have undesirable consequences, including the potential for null-routing attacks to be amplified. Additionally, locking up additional funds each time a node routes through itself, even in a circular routing scenario, was highlighted as a drawback.A discussion on the Lightning-dev mailing list further explored the topic, with the conclusion that spontaneous ephemeral key switches while forwarding a payment would not be feasible. This limitation would prevent nodes from creating excessively long routes and sidestepping the hop limit, which is crucial in preventing null-routing attacks. However, a suggestion was made to utilize packet switching as an alternative method for routing payments through multiple channels. This approach would offer increased anonymity and enhance the network's capacity.The proposed packet switching method, presented by ZmnSCPxj, involves using onion packets with different packet types. These packet types include identifying the next node by node-id and using ephemeral key switching. By employing this approach, it would be possible to route payments through multiple channels, even when one channel has no capacity. Furthermore, this method can expand the anonymity set of rendezvous routing, making it difficult to discriminate nodes with certain enabled features. The use of packet switching also allows for uncertainty about the destination, allowing for flexibility in routing decisions.In the BOLT specification, ZmnSCPxj proposed incorporating packet switching via multi-hop onion packets and the introduction of a new packettype for identifying the "next" node by its node-ID. While the implementation of packet switching in the BOLT specification has been deferred, these features that could enable packet switching were not deferred. The inclusion of an onion ephemeral key switch packettype would facilitate the desired functionalities. This approach would not only increase the anonymity set of rendezvous routing but also allow mapless Lightning nodes to seek a pathfinding provider with some uncertainty. Additionally, multiple features having a single feature bit could be justified with this method.It should be noted that there is a minor complication with rendezvous routing, as spontaneous ephemeral key switches while forwarding a payment are not possible unless the sender or recipient knows the switchover points in their respective parts of the onion. Despite the deferral of packet switching implementation in the BOLT specification, the suggested features still hold potential for enhancing the Lightning Network. By enabling packet switching, the network would benefit from increased anonymity, expanded routing options, and the ability to handle situations where channels have no capacity or lack a direct connection with the node.</summary>
     <published>2018-11-16T15:31:59+00:00</published>
   </entry>
 </feed>

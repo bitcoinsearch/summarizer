@@ -2,30 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Miners Dust Inflation attacks on Lightning Network</title>
-  <updated>2023-06-04T00:21:06.494196+00:00</updated>
+  <updated>2023-07-31T22:56:07.840590+00:00</updated>
   <author>
-    <name>Antoine Riard 2020-05-18 10:28:21</name>
+    <name>ZmnSCPxj 2020-05-20 03:26:54+00:00</name>
   </author>
   <author>
-    <name>Antoine Riard 2020-05-19 22:03:02</name>
+    <name>Antoine Riard 2020-05-19 22:03:02+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2020-05-20 03:26:54</name>
+    <name>ZmnSCPxj 2020-05-19 00:52:09+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2020-05-19 00:52:09</name>
+    <name>Antoine Riard 2020-05-18 10:28:21+00:00</name>
   </author>
-  <link href="lightning-dev/May_2020/002714_Miners-Dust-Inflation-attacks-on-Lightning-Network.xml" rel="alternate"/>
-  <link href="lightning-dev/May_2020/002716_Miners-Dust-Inflation-attacks-on-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/May_2020/002717_Miners-Dust-Inflation-attacks-on-Lightning-Network.xml" rel="alternate"/>
+  <link href="lightning-dev/May_2020/002716_Miners-Dust-Inflation-attacks-on-Lightning-Network.xml" rel="alternate"/>
   <link href="lightning-dev/May_2020/002715_Miners-Dust-Inflation-attacks-on-Lightning-Network.xml" rel="alternate"/>
+  <link href="lightning-dev/May_2020/002714_Miners-Dust-Inflation-attacks-on-Lightning-Network.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Miners Dust Inflation attacks on Lightning Network</title>
-    <updated>2023-06-04T00:21:06.494196+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002714.html" rel="alternate"/>
-    <summary>The Lightning protocol allows for a floating dust output selection at channel creation, with each party declaring a dust parameter applying to its local transactions. However, the current specification does not enforce or recommend any bound on this value beyond being lower than `channel_reserve_satoshis`. An attack scenario is presented in which Mallory announces a channel to Alice with a dust-limit-satoshi set to 20% of channel value. This allows Mallory to route four dust-HTLCs through Alice and claim ~80% of the channel value, with Mallet claiming the whole set of HTLCs by revealing the corresponding preimage for each. To mitigate this attack, negotiating a new `max_dust_htlc_value_in_flight_msat` enforced by the HTLC recipient can express maximum trust tolerance with regards to dust.It is suggested that setting up an `htlc_minimum_msat` higher than remote's `dust_limit_satoshis` can forbid dust HTLC, but also outlaw low-value payments. Negotiating a new `max_dust_htlc_value_in_flight_msat` enforced by HTLC recipient can mitigate attacks, but it will lead to reduced reliability on micropayments. Even without a spec change, such a setting may be enforced by a forwarding node by refusing to forward an HTLC once a certain level of incoming dust HTLCs are currently in-flight. Adding this to the spec has the advantage that an honest forwarder can hold an HTLC for a while once it notices that the next hop has a bunch of dusty HTLCs in-flight that are beyond the negotiated `max_dust_htlc_value_in_flight_msat`, which might help reliability of micropayments slightly. In a recent message exchange, ZmnSCPxj suggests that state machine shenanigans do not work in preventing irrevocable removal of HTLCs in the incoming channel. The miner can recover funds by closing the outgoing channel. Despite the suggested solution, it seems reliability is still reduced, as the micropayment bandwidth can easily be saturated. A cost on the HTLC holder would make the attack more expensive, but a different order of magnitude may be needed for spam-protection efficiency.</summary>
-    <published>2020-05-18T10:28:21+00:00</published>
+    <updated>2023-07-31T22:56:07.840590+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002717.html" rel="alternate"/>
+    <summary>In a recent message exchange, the discussion revolves around the issue of preventing irrevocable removal of HTLCs in the incoming channel. ZmnSCPxj suggests that state machine shenanigans are not effective in addressing this problem, as the miner can recover funds by closing the outgoing channel. One proposed solution is to set up the `htlc_minimum_msat` higher than the remote's `dust_limit_satoshis`. However, this approach has drawbacks as it prohibits low-value payments and reduces reliability.The conversation explores the idea that an honest forwarder may hold an HTLC for a while if the next hop has a large number of dusty HTLCs beyond the negotiated `max_dust_htlc_value_in_flight_msat`. This could potentially improve micropayment reliability to some extent. It is suggested that adding a limit to the specification could be beneficial in this regard. Nevertheless, even with negotiation, the reliability of micropayments remains reduced due to the possibility of easily saturating the micropayment bandwidth.Another aspect of the discussion focuses on negotiating a new `max_dust_htlc_value_in_flight_msat` enforced by the HTLC recipient. This would express the recipient's maximum trust tolerance concerning dust and help mitigate attacks. However, it is noted that implementing such a change would lead to reduced reliability for micropayments. Additionally, enforcing this setting by a forwarding node, even without a spec change, can be achieved by refusing to forward an HTLC once a certain level of incoming dust HTLCs is in-flight.The message also highlights the potential mitigation of an attack on the Lightning Network. The suggested solution involves negotiating a new `max_dust_htlc_value_in_flight_msat` enforced by the HTLC recipient to express their maximum trust tolerance for dust. This would increase the cost for the attacker and make the attack more expensive. However, the order of magnitude for cost increase may need to be adjusted for spam-protection efficiency. Implementing this mitigation, either through a spec change or by the forwarding node's refusal to forward HTLCs with excessive dust, would provide some improvement in micropayment reliability.The Lightning protocol allows for a floating dust output selection at channel creation, where each party declares a dust parameter applicable to their local transactions. The current specification does not impose any bound on this value, except that it must be lower than the `channel_reserve_satoshis`. When an HTLC is routed through the channel but its value falls below the local party's dust limit, it is burned as fees and not added to the commitment transaction. While this makes the Lightning Network compliant with Bitcoin blockchain requirements, it also introduces a higher level of trust in the counterparty.The conversation presents an attack scenario where Mallory sets a channel with a dust limit significantly lower than the channel's value. By routing multiple dust-HTLCs through Alice, Mallory can claim a large portion of the channel's value with the collusion of Mallet. Mallory then broadcasts a commitment transaction without any HTLCs, rendering them unclaimable by Alice on-chain. This attack may seem economically irrational at first, considering the dust-HTLCs are committed as fees. However, if Mallory can collude with a mining pool, the economics change as fees go back to the miner. By keeping the commitment transaction in the miner pool until a block is found, the attack can remain hidden, especially if the block is not signed.To mitigate this type of attack, negotiating a new `max_dust_htlc_value_in_flight_msat` enforced by the HTLC recipient is suggested. This would express the maximum trust tolerance for dust and enhance security against such attacks.</summary>
+    <published>2020-05-20T03:26:54+00:00</published>
   </entry>
 </feed>

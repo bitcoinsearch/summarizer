@@ -1,19 +1,22 @@
 import os
 import re
 import traceback
-import time
 import pandas as pd
 from feedgen.feed import FeedGenerator
 from tqdm import tqdm
 from elasticsearch import Elasticsearch
 import time
+import ast
+import pytz
 import platform
 import shutil
 from datetime import datetime
 import xml.etree.ElementTree as ET
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
-from src.logger import LOGGER
+from loguru import logger
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class ElasticSearchClient:
@@ -32,8 +35,7 @@ class ElasticSearchClient:
         start_time = time.time()
 
         if self._es_client.ping():
-            LOGGER.info("connected to the ElasticSearch")
-            # Update the query to filter by domain
+            logger.info("connected to the ElasticSearch")
             query = {
                 "query": {
                     "match_phrase": {
@@ -49,9 +51,7 @@ class ElasticSearchClient:
             results = scroll_response['hits']['hits']
 
             # Dump the documents into the json file
-            LOGGER.info(f"Starting dumping of {es_index} data in json...")
-            # output_data_path = f'{data_path}/{es_index}.json'
-            # with open(output_data_path, 'w') as f:
+            logger.info(f"Starting dumping of {es_index} data in json...")
             while len(results) > 0:
                 # Save the current batch of results
                 for result in results:
@@ -62,12 +62,12 @@ class ElasticSearchClient:
                 scroll_id = scroll_response['_scroll_id']
                 results = scroll_response['hits']['hits']
 
-            LOGGER.info(
+            logger.info(
                 f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
 
             return output_list
         else:
-            LOGGER.info('Could not connect to Elasticsearch')
+            logger.info('Could not connect to Elasticsearch')
             return None
 
 
@@ -179,8 +179,6 @@ class GenerateXML:
 
         # generate the feed XML
         feed_xml = fg.atom_str(pretty=True)
-        # convert the feed to an XML string
-        # write the XML string to a file
         with open(xml_file, 'wb') as f:
             f.write(feed_xml)
 
@@ -193,6 +191,12 @@ class GenerateXML:
 
     def get_id(self, id):
         return str(id).split("-")[-1]
+
+    def convert_to_utc_zulo_timestamp(self, date_str):
+        datetime_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+        timezone = pytz.UTC
+        datetime_obj = datetime_obj.replace(tzinfo=timezone)
+        return datetime_obj
 
     def start(self, dict_data, url):
         columns = ['_index', '_id', '_score']
@@ -208,8 +212,13 @@ class GenerateXML:
             df_list.append(df_dict)
         emails_df = pd.DataFrame(df_list)
 
+        emails_df['authors'] = emails_df['authors'].apply(self.convert_to_tuple)
+        emails_df = emails_df.drop_duplicates()
+        emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
+        logger.info(f"Shape of emails_df: {emails_df.shape}")
+
         emails_df['created_at_org'] = emails_df['created_at']
-        emails_df['created_at'] = pd.to_datetime(emails_df['created_at'], format="%Y-%m-%dT%H:%M:%S.%fZ")
+        emails_df['created_at'] = emails_df['created_at'].apply(self.convert_to_utc_zulo_timestamp)
 
         def generate_local_xml(cols, combine_flag, url):
             month_name = self.month_dict[int(cols['created_at'].month)]
@@ -283,6 +292,7 @@ class GenerateXML:
             # if title_idx == 50:
             #     break
             title_df = emails_df[emails_df['title'] == title]
+            title_df = title_df.sort_values(by='created_at', ascending=False)
             if len(title_df) < 1:
                 continue
             if len(title_df) == 1:
@@ -320,7 +330,7 @@ class GenerateXML:
                     'authors': combined_authors,
                     'url': title_df.iloc[0]['url'],
                     'links': combined_links,
-                    'created_at': title_df.iloc[0]['created_at_org'],
+                    'created_at': self.add_utc_if_not_present(title_df.iloc[0]['created_at_org']),
                     'summary': combined_summary
                 }
                 if not flag:
@@ -333,6 +343,28 @@ class GenerateXML:
                     elif os_name == "Linux":
                         os.system(f"cp {std_file_path} {file_path}")
 
+    def convert_to_tuple(self, x):
+        try:
+            if isinstance(x, str):
+                x = ast.literal_eval(x)
+            return tuple(x)
+        except ValueError:
+            return (x,)
+
+    def preprocess_authors_name(self, author_tuple):
+        author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
+        return author_tuple
+
+    def add_utc_if_not_present(self, datetime_str):
+        try:
+            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+            datetime_obj = datetime_obj.replace(tzinfo=pytz.UTC)
+        except ValueError:
+            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
+            timezone = pytz.UTC
+            datetime_obj = datetime_obj.replace(tzinfo=timezone)
+        return datetime_obj.isoformat(" ")
+
 
 if __name__ == "__main__":
     gen = GenerateXML()
@@ -342,13 +374,15 @@ if __name__ == "__main__":
     dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
     data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url)
 
-    delay = 50
+    # data_list = data_list[:15]
+
+    delay = 5
 
     while True:
         try:
             gen.start(data_list, dev_url)
             break
         except Exception as ex:
-            print(ex)
+            logger.error(ex)
             time.sleep(delay)
 

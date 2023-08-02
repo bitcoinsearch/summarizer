@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Closing Transaction Cut-through as a Generalization of Splice-in/Splice-out</title>
-  <updated>2023-05-24T23:10:38.659274+00:00</updated>
+  <updated>2023-07-31T19:59:03.911572+00:00</updated>
   <author>
-    <name>ZmnSCPxj 2018-04-10 09:44:15</name>
+    <name>ZmnSCPxj 2018-04-13 13:10:56+00:00</name>
   </author>
   <author>
-    <name>Christian Decker 2018-04-11 17:38:47</name>
+    <name>Christian Decker 2018-04-11 17:38:47+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2018-04-13 13:10:56</name>
+    <name>ZmnSCPxj 2018-04-10 09:44:15+00:00</name>
   </author>
-  <link href="lightning-dev/April_2018/001153_Closing-Transaction-Cut-through-as-a-Generalization-of-Splice-in-Splice-out.xml" rel="alternate"/>
-  <link href="lightning-dev/April_2018/001165_Closing-Transaction-Cut-through-as-a-Generalization-of-Splice-in-Splice-out.xml" rel="alternate"/>
   <link href="lightning-dev/April_2018/001176_Closing-Transaction-Cut-through-as-a-Generalization-of-Splice-in-Splice-out.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001165_Closing-Transaction-Cut-through-as-a-Generalization-of-Splice-in-Splice-out.xml" rel="alternate"/>
+  <link href="lightning-dev/April_2018/001153_Closing-Transaction-Cut-through-as-a-Generalization-of-Splice-in-Splice-out.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Closing Transaction Cut-through as a Generalization of Splice-in/Splice-out</title>
-    <updated>2023-05-24T23:10:38.659274+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001153.html" rel="alternate"/>
-    <summary>A proposal has been made to implement a "cut-through" transaction instead of implementing a splice-in/splice-out ("channel top-up", etc.) for a channel close transaction. Both sides would provide signed normal transactions that spend the outputs, then they could cooperatively create a new close transaction that cuts through the original close transaction and the additional normal transactions. This generalization is useful if we want to "reseat" a channel to one peer to another peer. A reseat operation could use the closing transaction cut-through to close the channel and open to another peer in a single onchain transaction. Such a reseat operation also seems like a reasonable primitive for Burchert-Decker-Wattenhofer channel factories to offer; reseats can be done offchain if both the reseat-form peer and the reseat-to peer and the node belong to the same channel factory. The connection to channel factories is not necessary, as long as we have an invalidation scheme that allows us to invalidate a prior funding transaction we can reseat without needing a cut-through, just invalidate the funding tx of the old channel and add the funding tx for the new one in the new state. The proposal was presented as an operation to wallet implementers (or advanced users).</summary>
-    <published>2018-04-10T09:44:15+00:00</published>
+    <updated>2023-07-31T19:59:03.911572+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-April/001176.html" rel="alternate"/>
+    <summary>ZmnSCPxj and Christian discuss the connection between channel factories and propose alternative methods for channel reseating. ZmnSCPxj suggests that if there is a way to invalidate a prior funding transaction without needing a cut-through, the connection between channel factories is unnecessary. ZmnSCPxj proposes introducing a `reseatchannel` command at the c-lightning RPC level, which would transfer the remaining funds of a channel from one peer to a new channel with another peer. This can be achieved using current operations before the deployment of Burchert-Decker-Wattenhofer channel factories.The proposal also introduces the idea of implementing a more general "cut-through" for a channel close transaction. Instead of splice-in/splice-out, both parties would provide signed normal transactions that spend the outputs and create a new close transaction that cuts through the original close transaction and additional normal transactions. Incomplete and unsigned stubs could also be provided, which would be applied to the closing transaction. Inputs in the stubs would be added to the closing transaction as inputs, while outputs would be added to the closing transaction, drawing from the balance of the party adding the new output. This allows for multiple splice-in/-out operations in a single reseat operation.The proposed cut-through generalization is useful for "reseating" a channel from one peer to another. For example, if a node notices that a channel with one peer has a high probability of failing to forward payments, it could decide to close that channel and open a channel with another peer. This reseat operation could be done off-chain if the reseat-form peer, reseat-to peer, and the node belong to the same channel factory.It is noted that the connection to channel factories is not essential if there is an invalidation scheme that allows for the invalidation of a prior funding transaction. To simplify the process, the proposal suggests using tx formatted messages to transport the intent, reconnecting to the idea of cut-through and combining multiple transactions into one. Although this may complicate state tracking, it is believed that transactions will eventually assume multiple roles.In summary, the proposal suggests an alternative to splice-in/splice-out by implementing a "cut-through" for channel close transactions. This allows for the closing of a channel and opening of another in a single on-chain transaction using the closing transaction cut-through. The proposed reseat operation is useful for reseating a channel from one peer to another, and can be done off-chain if the peers and node belong to the same channel factory.</summary>
+    <published>2018-04-13T13:10:56+00:00</published>
   </entry>
 </feed>

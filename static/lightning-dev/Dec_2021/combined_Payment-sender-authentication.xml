@@ -2,38 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Payment sender authentication</title>
-  <updated>2023-06-04T02:49:37.671341+00:00</updated>
+  <updated>2023-07-31T23:58:56.841722+00:00</updated>
   <author>
-    <name>fiatjaf 2021-12-20 16:06:41</name>
+    <name>fiatjaf 2021-12-20 16:06:41+00:00</name>
   </author>
   <author>
-    <name>Peter Todd 2021-12-18 17:56:09</name>
+    <name>Peter Todd 2021-12-20 12:56:28+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2021-12-20 08:01:37</name>
+    <name>Joost Jager 2021-12-20 08:01:37+00:00</name>
   </author>
   <author>
-    <name>Peter Todd 2021-12-20 12:56:28</name>
+    <name>Peter Todd 2021-12-18 17:56:09+00:00</name>
   </author>
   <author>
-    <name>Joost Jager 2021-12-17 10:37:12</name>
+    <name>fiatjaf 2021-12-18 13:07:56+00:00</name>
   </author>
   <author>
-    <name>fiatjaf 2021-12-18 13:07:56</name>
+    <name>Joost Jager 2021-12-17 10:37:12+00:00</name>
   </author>
   <link href="lightning-dev/Dec_2021/003432_Payment-sender-authentication.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003428_Payment-sender-authentication.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003430_Payment-sender-authentication.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2021/003431_Payment-sender-authentication.xml" rel="alternate"/>
-  <link href="lightning-dev/Dec_2021/003422_Payment-sender-authentication.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003430_Payment-sender-authentication.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003428_Payment-sender-authentication.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2021/003427_Payment-sender-authentication.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2021/003422_Payment-sender-authentication.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Payment sender authentication</title>
-    <updated>2023-06-04T02:49:37.671341+00:00</updated>
+    <updated>2023-07-31T23:58:56.841722+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-December/003432.html" rel="alternate"/>
-    <summary>A temporary solution for adding identification information in BOLT11 payment requests was suggested in a discussion between fiatjaf, Peter Todd, and Joost Jager. The solution can be found in the lnurl-rfc repository and involves providing a lone pubkey, a domain-specific pubkey along with a signature of a challenge provided by the receiver, or an unauthenticated name or email within the BOLT11 payment request using the 'h' tag. However, concerns were raised about the privacy implications of using signatures in payment requests as they could allow the receiver to prove to a third party that the payment was made. In terms of sender authentication in Lightning, Peter Todd argued that diffie-hellman is unnecessary once a secure channel is established as providing the sender with payment information is sufficient for authentication. He also warned against creating the ability to prove to a third party who made a particular payment, citing potential issues in cases like government raids. Joost Jager proposed deriving a shared secret using ECDH with the sender and receiver node keys and attaching a custom record to the payment containing the sender node key and an HMAC of the payment hash using the shared secret as a key as an alternative approach to sender authentication. While sender authentication is not a requirement in the Lightning network, it may be useful in some cases such as chat over lightning or donation payments where a donor may want to reveal themselves. An ECDSA signature or deriving a shared secret using ECDH with the sender and receiver node keys and attaching a custom record to the payment were suggested as ways of implementing opt-in sender authentication. Technical opinions are being sought on the best way to implement sender authentication while considering cryptographic authentication and non-repudiation issues.</summary>
+    <summary>In a recent email exchange, Joost Jager, fiatjaf, and Peter Todd discussed the implementation of sender authentication in Lightning. Fiatjaf suggested using the lnurl-rfc repository to add identification information in BOLT11 payment requests, which can include a lone pubkey, domain-specific pubkey with a signature, or an unauthenticated name/email. Joost expressed concerns about privacy implications, but fiatjaf clarified that the signature method does not compromise privacy due to the specific key generation process. In another email exchange between Joost and Peter, Joost proposed a solution for sender authentication within the Lightning protocol without using an additional channel. However, Peter argued that once a secure channel is established, diffie-hellman is unnecessary and sender authentication can be achieved through providing payment information. Peter also warned against creating the ability to prove payment details to third parties, citing potential issues with government raids. Joost mentioned that routing nodes already learn pre-image hash, but this is addressed by the payment secret included in the invoice.The discussion continued with fiatjaf, Peter, and Joost exploring a temporary solution for adding more information to BOLT11 payment requests. The lnurl-rfc repository was identified as a source of a solution, specifically in its 18th file. This involved including a lone pubkey, domain-specific pubkey with a signature, or an unauthenticated name/email within the payment request using the 'h' tag. Privacy concerns were raised regarding the use of signatures, as they could potentially allow receivers to prove payments to third parties. Peter pointed out that Lightning already provides sender authentication through pre-image hash over authenticated channels. Joost clarified his preference for a protocol-based solution without an additional channel and proposed using diffie-hellman to generate a shared secret, rendering proofs useless to third parties.Joost Jager sought opinions on implementing opt-in sender authentication in Lightning. He emphasized the need to protect sender identity while allowing certain use cases. However, Peter Todd highlighted that Lightning already provides sender authentication through pre-image hash over authenticated channels and going beyond this could lead to serious problems. Joost's inquiry was shared on the Lightning-dev mailing list to gather technical insights on implementing opt-in sender authentication with considerations for cryptographic authentication and non-repudiation.Sender authentication is not mandatory in the Lightning network, but there are scenarios where it can be useful. For example, in chat over lightning, knowing the sender of a message is important. To address this, a custom record containing an ECDSA signature over `sender | recipient | timestamp | msg` has been added to whatsat, a chat protocol on Lightning. Sender authentication can also benefit regular payments, particularly for donations where donors may want to reveal themselves. Additionally, sender authentication offers a field for retrieving lost payment information and enhances protection for receivers, enabling invoices locked to specific source nodes. However, the current method using an ECDSA signature has limitations in terms of non-repudiation and data reuse risks. Joost suggested an alternative approach involving deriving a shared secret using ECDH with sender and receiver node keys and attaching a custom record with the sender node key and an HMAC of the payment hash. Joost sought expert opinions on the best technical implementation for sender authentication considering cryptographic aspects.</summary>
     <published>2021-12-20T16:06:41+00:00</published>
   </entry>
 </feed>

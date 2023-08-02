@@ -2,30 +2,50 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Onion routing design.</title>
-  <updated>2023-05-18T20:13:43.429512+00:00</updated>
+  <updated>2023-07-31T18:18:52.884541+00:00</updated>
   <author>
-    <name>Anthony Towns 2015-09-22 05:25:44</name>
+    <name>Rusty Russell 2015-09-22 10:38:08+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-09-22 01:22:57</name>
+    <name>Anthony Towns 2015-09-22 05:25:44+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-09-19 01:44:18</name>
+    <name>Zooko Wilcox-OHearn 2015-09-22 01:27:03+00:00</name>
   </author>
   <author>
-    <name>Anthony Towns 2015-09-19 01:27:16</name>
+    <name>Anthony Towns 2015-09-22 01:22:57+00:00</name>
   </author>
+  <author>
+    <name>Rusty Russell 2015-09-20 21:05:58+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-09-20 20:48:37+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-09-19 01:44:18+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2015-09-19 01:27:16+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2015-09-18 23:39:44+00:00</name>
+  </author>
+  <link href="lightning-dev/Sept_2015/000208_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000205_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000207_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000204_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000198_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000196_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000194_Onion-routing-design-.xml" rel="alternate"/>
   <link href="lightning-dev/Sept_2015/000193_Onion-routing-design-.xml" rel="alternate"/>
+  <link href="lightning-dev/Sept_2015/000191_Onion-routing-design-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Onion routing design.</title>
-    <updated>2023-05-18T20:13:43.430546+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000205.html" rel="alternate"/>
-    <summary>The discussion revolves around the security of routing in Bitcoin, with a particular focus on probing attacks. There is a concern that these attacks could reveal the length of the chain, which would compromise its security. To address this issue, the sender can use two R values: one known only by the recipient and one by the sender. The recipient needs to present both R and S to redeem payment. The plaintext routing message received by the payee is denoted as X. Its hash H is prefixed to the plaintext, and then S=sha256(H+X) is set. Both S and R are required for payment redemption. Initially, there was a suggestion to add padding to the plaintext message by adding random bytes at the end. However, this approach is vulnerable to probing attacks. If the attack succeeds despite the corruption of the packet, it means that those bytes were not used. To overcome this vulnerability, OFB or CTR mode is recommended for the symmetric cipher. D_KD() of all the padding can be calculated and used to work out the hash H of the plaintext message. CBC mode is not suitable since it requires knowing E_KD(grbg) to know D_KD(padding), but grbg is needed to know H, and E_KD(H + ...) is needed to work out E_KD(grbg). Sum cannot be used for Kx because Kx needs to be known before working out the sum.Another context relates to a crypto protocol for nodes to create routes for transactions in the lightning network. Nodes create the route backwards, calculate the size of the route, and pick a random size between 1024 and 4096 bytes, which they pad with random bytes. The required bytes route is encrypted with hop_key, and the sum of the whole thing after decryption is sha256_hash sum. The next node can be either the last one or another lightning node with an int32 fee that can be taken. The remainder (route blob for the next node) is required bytes.However, there is a weakness in this protocol because it lacks a MAC, which allows a nosy node to replace the routing entirely without corrupting it beyond the next hop. There is no general solution for this issue, but one could use two R values, one known only by the recipient and the other by the sender, to rule out probing.</summary>
-    <published>2015-09-22T05:25:44+00:00</published>
+    <updated>2023-07-31T18:18:52.884541+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-September/000208.html" rel="alternate"/>
+    <summary>Zooko Wilcox-OHearn requested notes about the requirements/desiderata for a source routing network, and Rusty provided the necessary information. The network works on an onion routing-style setup where each node only knows the previous and next nodes for financial privacy reasons. Rusty is working on test code that includes one node hop and a full route description in the onion structure. The receiving node uses ECDH to extract the secret key and derives encryption keys, HMAC keys, and initialization vectors. After verifying the HMAC and decrypting the onion structure, the first struct hop is forwarded and padding is added to maintain the total length. Unused hops are filled with random garbage.In the email exchange, Anthony Towns suggests using OFB or CTR mode for the symmetric cipher. Rusty proposes a method involving two R values, known by the recipient and sender, respectively. Including S encrypted to the final recipient in the onion payload makes misrouting the HTLC irredeemable. Anthony suggests combining both approaches and reveals that S should be sha256(H+X), where X is the plaintext routing message and H is its hash. Revealing both S and R is required for payment redemption. This combined approach ensures that attempts to garble the padding render the payment unredeemable without relying on verification from others on the network.Rusty explains the format of a route for onion routing, including required bytes of data decrypted by each node using their pubkey. The route is created backward to calculate the size and randomly picks a total size between 1024 and 4096, padding it with at least 32 bytes of random padding. Probing the route to guess the final destination is possible, but there is no general fix for this issue. To prevent errors from leaking information, signing errors and using the 'sum' field as a secret key is suggested. However, onion routing only provides limited protection against correlating HTLCs by R value.The email conversation between Rusty Russell and Anthony Towns discusses the vulnerability of Tor to probing attacks that reveal the length of the chain. Adding random bytes or letting nodes add padding introduces probing attacks where corrupted packets can still succeed. Rusty suggests including a pubkey and encrypting 0 padding to address this problem. However, the solution is missing a step in generating symmetric keys for each step in an onion route. It is suggested that the format of a route should include required bytes hop_key encrypted with the public key and required bytes route encrypted with hop_key.Rusty discusses methods to protect transaction routes from being guessed and exploited. Nodes create the route backward, calculate its size, randomly pick a total size, and pad it with random bytes. Storing the expected balance to be forwarded rather than the fee allows the next node to abort the transaction if someone takes too much. Re-padding the onion blob when forwarding prevents it from revealing the end of the chain. Including a pubkey and using it to encrypt 0 padding is suggested. Rusty acknowledges that flaws or simplifications may be present in his suggestions due to lack of coffee.In a thread on the Lightning Network mailing list, Rusty Russell discusses the weakness of the network's security against route probing attacks. Without a MAC, nodes can replace routing entirely and probe by guessing the final destination right. He believes there is no general fix for this issue. Parallel probes and probabilistic backoff have limitations, and surveillance through cheap hubs is considered unlikely to scale. To rule out probing, Rusty suggests having two R values known by the recipient and sender, making HTLCs payable on presentation of both R and S. The combined approach makes misrouting HTLCs irredeemable.Rusty shares code for creating a route backward and calculating its size. The total size is randomly picked between 1024 and 4096 and padded with random bytes. This offers protection against guessing the route length. Suggestions are made to store the expected balance instead of the fee and to re-pad the onion blob when forwarding. Rusty admits that flaws or simplifications may be present due to lack of coffee.In an email conversation, Rusty Russell discusses the possibility of Route Probing Attacks on the R values of HTLCs in the Lightning Network. Without a MAC, nodes can replace routing entirely and probe by guessing the final destination right. One defense is to fail two HTLCs with the same R value, but this enables probing back to the source. Parallel probes have limitations, and probing may not be plausible on a mass scale. Having two R values known only by the recipient and sender could completely rule out probing. Munging the payload makes misrouted HTLCs irredeemable.</summary>
+    <published>2015-09-22T10:38:08+00:00</published>
   </entry>
 </feed>

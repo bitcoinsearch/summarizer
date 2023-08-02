@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - How to exchange of Revocation preimage atomically ?</title>
-  <updated>2023-05-23T21:41:36.755079+00:00</updated>
+  <updated>2023-07-31T18:40:41.917667+00:00</updated>
   <author>
-    <name>Nicolas Dorier 2015-11-24 02:36:20</name>
+    <name>Rusty Russell 2015-11-24 03:55:04+00:00</name>
   </author>
   <author>
-    <name>Tadge Dryja 2015-11-24 03:14:16</name>
+    <name>Tadge Dryja 2015-11-24 03:14:16+00:00</name>
   </author>
   <author>
-    <name>Rusty Russell 2015-11-24 03:55:04</name>
+    <name>Nicolas Dorier 2015-11-24 02:36:20+00:00</name>
   </author>
-  <link href="lightning-dev/Nov_2015/000334_How-to-exchange-of-Revocation-preimage-atomically-.xml" rel="alternate"/>
-  <link href="lightning-dev/Nov_2015/000335_How-to-exchange-of-Revocation-preimage-atomically-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2015/000336_How-to-exchange-of-Revocation-preimage-atomically-.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000335_How-to-exchange-of-Revocation-preimage-atomically-.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2015/000334_How-to-exchange-of-Revocation-preimage-atomically-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - How to exchange of Revocation preimage atomically ?</title>
-    <updated>2023-05-23T21:41:36.755079+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000334.html" rel="alternate"/>
-    <summary>Nicolas Dorier, who was learning about the Lightning Network, noticed a potential attack when reviewing bip 112. He pointed out that when both parties want to revoke a commitment, they need to send one another the revocation preimage, but if not done atomically, Alice intentionally not sending her revocation after receiving Bob's would prevent Bob from withdrawing his funds. He wondered if he was missing something or if requiring a third party is the only way of fixing this, expecting he does not collude, which defeats the purpose. Tadge replied that all payments are "push" payments, and in practice, every update of a channel state has an initiator. He explained how the process works and said it’s not atomic so payer goes first. Therefore, if Alice doesn't do the second step, Bob still has the new commit tx he can drop on the blockchain.</summary>
-    <published>2015-11-24T02:36:20+00:00</published>
+    <updated>2023-07-31T18:40:41.917667+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000336.html" rel="alternate"/>
+    <summary>Nicolas Dorier, a Bitcoin developer, has raised concerns about a possible attack on the Lightning Network protocol. While reviewing bip 112, he discovered a vulnerability in HLTC. The issue arises when both parties involved in a transaction want to revoke their previous commitment. In order to do so, they need to exchange the revocation preimage. However, if this process is not done atomically, Alice can deliberately withhold her revocation, thereby preventing Bob from withdrawing his funds.The process of revoking a commitment involves exchanging new commit tx signatures followed by the revocation of old commit tx. If Alice fails to perform the second step, Bob still holds the new commit tx, which he can drop on the blockchain. Rusty, another Bitcoin developer, acknowledged the problem and proposed a solution.In response to Nicolas Dorier's concerns, Tadge explained that there isn't really an attack scenario because every update of a channel state in the Lightning Network has an initiator. All payments are "push" payments, meaning that if Alice wants to allocate more funds to Bob, she initiates the transaction, and if Bob wants to allocate more funds to Alice, he initiates it. When it comes to revocations, the user initiating the channel state change goes first. The process is not atomic, so the payer goes first.To illustrate the steps involved, if Alice sends more coins to Bob, Alice signs the new state and sends half-signed transaction to Bob. Bob then signs the new state and sends the half-signed transaction back to Alice. After that, Alice revokes the old state by sending the preimage to Bob, and Bob revokes the old state by sending the preimage to Alice. If Bob fails to complete the final step, the payment can be considered as not having gone through. However, Bob doesn't have much incentive to fail in this last step because leaving the channel in an indeterminate state would be worse for him than having a fully determined state where he has more money.In conclusion, while there is a potential vulnerability in the Lightning Network protocol regarding revocations, the current design of the system ensures that the user initiating the state change goes first. This helps prevent intentional withholding of revocations and provides a mechanism for resolving payment disputes. The proposed solution by Rusty addresses this issue and further enhances the security of the Lightning Network.</summary>
+    <published>2015-11-24T03:55:04+00:00</published>
   </entry>
 </feed>

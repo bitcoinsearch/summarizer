@@ -2,38 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [was BIP OP_CHECKTEMPLATEVERIFY] Fee Bumping Operation</title>
-  <updated>2023-06-14T02:18:01.045392+00:00</updated>
+  <updated>2023-08-02T02:21:36.279244+00:00</updated>
   <author>
-    <name>Jeremy 2020-06-08 06:43:39</name>
+    <name>Dmitry Petukhov 2020-06-08 07:15:11+00:00</name>
   </author>
   <author>
-    <name>Dmitry Petukhov 2020-06-08 07:15:11</name>
+    <name>Jeremy 2020-06-08 06:43:39+00:00</name>
   </author>
-  <author>
-    <name>Jeremy 2020-06-08 06:43:39</name>
-  </author>
-  <author>
-    <name>Dmitry Petukhov 2020-06-08 07:15:11</name>
-  </author>
-  <author>
-    <name>Jeremy 2020-06-08 06:43:39</name>
-  </author>
-  <author>
-    <name>Dmitry Petukhov 2020-06-08 07:15:11</name>
-  </author>
-  <link href="bitcoin-dev/June_2020/017938_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2020/017940_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2020/017938_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
-  <link href="bitcoin-dev/June_2020/017940_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
-  <link href="bitcoin-dev/June_2020/017938_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
-  <link href="bitcoin-dev/June_2020/017940_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - [was BIP OP_CHECKTEMPLATEVERIFY] Fee Bumping Operation</title>
-    <updated>2023-06-14T02:18:01.045392+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017938.html" rel="alternate"/>
-    <summary>On the bitcoin-dev mailing list, a proposal was made for a new type of transaction called PFN (Parent Fixing Nonce) to fix stuck transactions by modifying their parent transactions. However, concerns were raised about the feasibility and complexity of implementing this proposal due to the need for a new index of all past transactions for consensus. As an alternative solution, a Fee Bump transaction was suggested that could target a list of TXIDs or one TXID representing all ancestors it wished to be included in a block with. This would make it similar to normal transactions for inclusion and could have some minimums for mempool inclusion.Another potential solution to application-DoS (pinning and other attacks) in the mempool beyond CTV is a "Pay for Neighbor" transaction where a transaction can pay the fee for another transaction(s). This creates a 'ghost child' transaction that cannot be mined unless its 'ghost parents' are confirmed as well. This method is similar to CPFP but guarantees that the link being examined is always exactly one hop away, which gets rid of most of the CPFP graph traversal issues. However, the extant CPFP logic is somewhat brittle and doesn't work as expected. To make fee bumping work nicely, it may require removing CPFP entirely, although nothing concrete has been determined yet.A Fee Bump transaction can name a list of TXIDs or one TXID that implies all ancestors of that transaction that it wishes to be included in a block with. It must be included in that block and may have no unconfirmed ancestors nor any children. Transactions in the mempool may set a flag that opts out of CPFP for descendants/blocks any descendants. Channel protocols should set this bit to prevent pinning and then use the Fee Bump to add fees to whatever transactions need to go through. Additionally, there is a suggestion to use the annex or anyone-can-spend output for this purpose.If done right, a coinswap protocol could also be layered with the fee-bumping transactions change so that there is a privacy benefit at the same time. While this idea originally required a hardfork, it could potentially be made into a soft fork past-taproot by putting the txids of 'ghost parents' into taproot annex. However, creating a new index of all past transactions for consensus would be problematic and cannot be done. Overall, there are multiple potential solutions being considered to address application-DoS and fix stuck transactions in the mempool.</summary>
-    <published>2020-06-08T06:43:39+00:00</published>
+    <updated>2023-08-02T02:21:36.279244+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017940.html" rel="alternate"/>
+    <summary>A proposal was made on the bitcoin-dev mailing list to introduce a new type of transaction called PFN (Parent Fixing Nonce) that aims to fix stuck transactions by modifying their parent transactions. However, concerns were raised about the feasibility and complexity of implementing this proposal due to the requirement of a new index of all past transactions for consensus.In response to these concerns, another proposal was suggested for a Fee Bump transaction. This transaction would target a list of TXIDs or a single TXID representing all ancestors it wants to include in a block. The goal is to make it similar to normal transactions for inclusion, with potential minimums for mempool inclusion. However, there are still questions regarding whether the sender of a PFN transaction could Replace-By-Fee (RBF) it or increase the fee for its parent transactions without being able to replace any other transactions besides their own.To address application-DoS attacks in the mempool beyond CTV (CheckTemplateVerify), a potential solution is proposed: the "Pay for Neighbor" transaction. With this approach, a transaction can specify that it wants to pay the fee for another transaction(s). This creates a 'ghost child' transaction that can only be mined if its 'ghost parents' are confirmed as well. This method is essentially Child-Pays-for-Parent (CPFP) but ensures that the examined link is always one hop away, reducing CPFP graph traversal issues. However, the existing CPFP logic is not working as expected, and it may be necessary to remove CPFP entirely to make fee bumping work smoothly.A Fee Bump transaction can name a list of TXIDs or a single TXID that represents all ancestors it wishes to include in a block. It must be included in that block and should have no unconfirmed ancestors or children. Transactions in the mempool can set a flag to opt out of CPFP for descendants/blocks to prevent pinning. Channel protocols should use this feature to prevent pinning and then use the Fee Bump transaction to add fees to transactions that need to be processed.There is also a suggestion to use the annex or anyone-can-spend output for this purpose. If implemented correctly, a coinswap protocol could be layered with the fee-bumping transactions change, providing privacy benefits. Initially, this idea required a hardfork, but it could potentially be achieved as a soft fork past-taproot by including the txids of 'ghost parents' in the taproot annex. However, creating a new index of all past transactions for consensus would be problematic and cannot be done.</summary>
+    <published>2020-06-08T07:15:11+00:00</published>
   </entry>
 </feed>

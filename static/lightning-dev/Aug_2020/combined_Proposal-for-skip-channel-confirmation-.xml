@@ -2,42 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposal for skip channel confirmation.</title>
-  <updated>2023-06-04T00:31:15.615562+00:00</updated>
+  <updated>2023-07-31T23:00:51.250592+00:00</updated>
   <author>
-    <name>Roei Erez 2020-08-24 08:16:44</name>
+    <name>ZmnSCPxj 2020-08-27 01:29:55+00:00</name>
   </author>
   <author>
-    <name>Antoine Riard 2020-08-25 18:16:56</name>
+    <name>Antoine Riard 2020-08-25 18:16:56+00:00</name>
   </author>
   <author>
-    <name>Antoine Riard 2020-08-24 19:56:50</name>
+    <name>Roei Erez 2020-08-25 10:01:53+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2020-08-25 02:38:15</name>
+    <name>ZmnSCPxj 2020-08-25 02:38:15+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2020-08-27 01:29:55</name>
+    <name>Antoine Riard 2020-08-24 19:56:50+00:00</name>
   </author>
   <author>
-    <name>Matt Corallo 2020-08-24 19:22:33</name>
+    <name>Matt Corallo 2020-08-24 19:22:33+00:00</name>
   </author>
   <author>
-    <name>Roei Erez 2020-08-25 10:01:53</name>
+    <name>Roei Erez 2020-08-24 08:16:44+00:00</name>
   </author>
-  <link href="lightning-dev/Aug_2020/002780_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002787_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002782_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002783_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2020/002788_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
-  <link href="lightning-dev/Aug_2020/002781_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002787_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2020/002784_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002783_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002782_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002781_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2020/002780_Proposal-for-skip-channel-confirmation-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Proposal for skip channel confirmation.</title>
-    <updated>2023-06-04T00:31:15.615562+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-August/002780.html" rel="alternate"/>
-    <summary>The discussion revolves around the ability to skip a channel funding transaction confirmation and create a zero-conf channel. This channel requires trust between the parties until it's confirmed, and there are different implementations that support it in different ways. The proposed changes to support this flow include accepting the channel message and sending minimum_depth=0 if the fundee wants to skip confirmation. The funding_locked message is sent from both parties, with the channel_id derived using a convention agreed upon by both. In a conversation between Antoine and Zeeman, they discuss the security of such channels and suggest methods to increase their security. They conclude that while 0-conf channels involve some level of trust, once a channel is confirmed, it becomes perfectly safe. Matt Corallo adds notes to the discussion, stating that gossip messages will be rejected by many nodes if no on-chain transaction exists, and unidirectional 0-conf is not captured in this protocol.</summary>
-    <published>2020-08-24T08:16:44+00:00</published>
+    <updated>2023-07-31T23:00:51.250592+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-August/002788.html" rel="alternate"/>
+    <summary>Antoine and Zeeman discuss the security of zero-confirmation channels. Zeeman suggests sending a high-fee RBF-enabled transaction to Antoine while simultaneously sending a conflicting low-fee RBF-disabled transaction to all available miners to increase security. Antoine argues that mapping miner nodes could provide added security, but also points out that any timelock-based higher layer is at risk for anyone powerful enough to reorg. Zeeman counters that this method is only necessary if double-spending becomes a real issue. They conclude that once a channel is deeply confirmed, it becomes safe and most 0-conf mechanisms involve fiat-to-Bitcoin exchanges, which require trust.The conversation revolves around lowering trust in zero-conf channel openers. Antoine suggests broadcasting the funding transaction and accepting incoming payments on the zero-conf channel. Zeeman points out that double-broadcasting using RBF is easy and suggests mapping miners' mempools as a security improvement. However, they agree that this scheme is not worth pursuing unless double-spending becomes a real issue.Roei Erez proposes the ability to skip channel funding transaction confirmation, creating zero-conf channels. Different implementations have their own way of agreeing on a short_channel_id before confirmation. Erez suggests changes to the funding flow, including accepting the channel message with minimum_depth=0 to skip confirmation, sending funding_locked with a convention-derived channel_id agreed upon by both parties. Matt Corallo adds that gossiping should be avoided until the funding transaction has confirmations, but invoices carrying last-hop hints should still be accepted. He highlights that unidirectional 0-conf is not captured in the protocol.Antoine suggests a mechanism to lower trust in zero-conf channel openers by broadcasting the funding transaction and accepting incoming payments. This would provide game-theory security. It's important to note that there is no global mempool and full nodes only see transactions with higher fees.The email thread discusses the ability to skip channel funding confirmation, creating zero-conf channels. Different implementations have their own way of agreeing on a short_channel_id before confirmation. Changes to the funding flow are suggested, including accepting the channel message with minimum_depth=0 if skipping confirmation is desired, sending funding_locked with a convention-derived channel_id, and re-broadcasting gossip messages after confirmation. Unidirectional 0-conf is not captured in this protocol.The author discusses the ability to skip channel funding confirmation and create zero-conf channels. This requires trust between parties until confirmation, but can be useful in certain cases. Different implementations have different ways of supporting zero-conf channels. Changes to the funding flow are proposed, including accepting the channel message, sending minimum_depth=0 if skipping confirmation, no change in the funding_signed message, and sending funding_locked messages with a convention-derived channel_id. The author has created a pull request in LND to implement these changes.</summary>
+    <published>2020-08-27T01:29:55+00:00</published>
   </entry>
 </feed>

@@ -2,26 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BOLT3: Commitment Transaction Outputs is weak to malleability</title>
-  <updated>2023-05-24T03:20:07.042605+00:00</updated>
+  <updated>2023-07-31T19:29:46.275724+00:00</updated>
   <author>
-    <name>Nicolas Dorier 2017-11-29 07:11:33</name>
+    <name>Olaoluwa Osuntokun 2017-11-29 09:22:22+00:00</name>
   </author>
   <author>
-    <name>Olaoluwa Osuntokun 2017-11-29 09:22:22</name>
+    <name>Nicolas Dorier 2017-11-29 07:40:13+00:00</name>
   </author>
   <author>
-    <name>Nicolas Dorier 2017-11-29 07:40:13</name>
+    <name>Nicolas Dorier 2017-11-29 07:11:33+00:00</name>
   </author>
-  <link href="lightning-dev/Nov_2017/000808_BOLT3-Commitment-Transaction-Outputs-is-weak-to-malleability.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2017/000810_BOLT3-Commitment-Transaction-Outputs-is-weak-to-malleability.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2017/000809_BOLT3-Commitment-Transaction-Outputs-is-weak-to-malleability.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2017/000808_BOLT3-Commitment-Transaction-Outputs-is-weak-to-malleability.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - BOLT3: Commitment Transaction Outputs is weak to malleability</title>
-    <updated>2023-05-24T03:20:07.042605+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-November/000808.html" rel="alternate"/>
-    <summary>The Commitment Transaction Output script is vulnerable to malleability, which can delay the confirmation of revocation. The penalty transaction can be delayed by an attacker through malleating it, leading to bad outcomes as Lightning is dependent on time locks. This vulnerability can create a problem in which Eve can malleate OP_1 into a positive, huge number, leading to filling of mempool of nodes/miners with the malleated version, which has higher fee rates, delaying the confirmation of the penalty transaction. A policy rule called SCRIPT_VERIFY_MINIMALIF was merged into v0.15.1, fixing the situation with 2 bytes overhead. To fix this issue, RBF can be enabled for Penalty Transaction so that Eve's transaction would be replaced by the initial one. Laolu recommends implementing a scorched earth policy when responding to on-chain contract breach event, gradually bleeding away the funds of the violator while bumping up the fee on the transaction using RBF. This policy addresses Dorier's malleability concern and further stacks the incentives against attempting a contract breach.</summary>
-    <published>2017-11-29T07:11:33+00:00</published>
+    <updated>2023-07-31T19:29:46.275724+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-November/000810.html" rel="alternate"/>
+    <summary>According to bitnodes tracker, most upgraded nodes are running a bitcoind version &gt;= 0.14 with segwit widely deployed. This indicates that most miners are likely running with the standard malleability reducing policy that shipped in that version. However, there is still a possibility of a contract breach if certain conditions are met. Lnd, a Lightning Network implementation, plans to address this issue by implementing a scorched earth policy. This policy involves gradually increasing the fee on the justice transaction, which punishes the violator of the contract, for each block it doesn't confirm in. The additional fee would be drawn from the violator's settled balance. Assuming rational miners accept the higher fee transaction, the justice transaction will make it into the block before the transaction breaching the contract.To counteract this strategy, the violator may attempt to use Child-Pays-For-Parent (CPFP) to anchor the transaction into the chain with a more attractive fee package. However, in order to beat this strategy, they would have to spend a total amount of fees greater than the current cumulative fee rate on the justice transaction. This could result in a net negative outcome or a failure to profit.The vindication strategy described above requires the justice transaction to signal Replace-By-Fee (RBF). This serves as another reason to signal RBF in justice transactions, as it addresses Dorier's malleability concern and further discourages attempting a contract breach. Dorier had raised concerns about the Commitment Transaction Output script being weak to malleability, which can be used to delay confirmation of the revocation. However, enabling RBF of the Penalty transaction, as suggested by Dorier, would fix the situation without requiring extensive development work. A policy rule called SCRIPT_VERIFY_MINIMALIF, created by jl2012, was merged into v0.15.1 to fix this vulnerability.In conclusion, while the Commitment Transaction Output script vulnerability to malleability has been addressed by policy rules and the adoption of v0.15.1, ensuring that Lightning Network transactions are not manipulated remains a concern for some individuals. However, enabling RBF in Penalty transactions can provide an additional layer of protection against contract breaches.</summary>
+    <published>2017-11-29T09:22:22+00:00</published>
   </entry>
 </feed>
