@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Signing CHECKSIG position in Tapscript</title>
+  <updated>2023-08-02T01:41:18.154125+00:00</updated>
+  <author>
+    <name>Anthony Towns 2019-12-06 04:51:53+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2019-12-05 20:24:46+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-12-03 08:35:38+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2019-12-01 16:09:54+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2019-11-28 08:06:59+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2019-11-27 21:29:32+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Dec_2019/017511_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2019/017509_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2019/017506_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2019/017500_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017497_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2019/017495_Signing-CHECKSIG-position-in-Tapscript.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Signing CHECKSIG position in Tapscript</title>
+    <updated>2023-08-02T01:41:18.154125+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-December/017511.html" rel="alternate"/>
+    <summary>In an email thread, Russell O'Connor and gmaxwell discuss potential amendments to the CODESEPARATOR's behavior in Bitcoin's scripting language. The proposed amendment aims to update an accumulator with a running hash value to ensure that all executed CODESEPARATOR positions are covered by the signature. Gmaxwell suggests using the name "OP_BREADCRUMB" for this new functionality. However, aj cautions against proposing this idea too soon, citing concerns about practical need and whether opcode or sighash flag functionality is more appropriate. Aj also suggests a policy that would allow signatures to cover some function of witness value and proposes a replacement for CODESEPARATOR's behavior that pushes a stack item into the accumulator rather than pushing the CODESEPARATOR position. Aj also notes that the annex may not be general enough to accommodate these changes and proposes committing to a hash of all witness data as a possible solution. They propose an "OP_DATACOMMIT" opcode that pops an element from the stack, does hash_"DataCommit", and later signatures commit to that value. Aj suggests implementing CODESEP at position "x" in the script as equivalent to "DATACOMMIT," but acknowledges that this approach warrants something better. Overall, aj suggests that this proposal needs further exploration before it can be coded into consensus.After discussing and considering the concern of other users masquerading pubkeys in complex scripts, it is determined that this is a non-issue because any policy expressed in a script is logically equivalent to a set of conditions and signatures on pubkeys that can be expressed in disjunctive normal form. However, there is still an issue with pubkey reuse within a single script, as it can allow someone to take a signature intended for one condition and transplant it to redeem under another. To avoid this, it is important for Alice to ensure she doesn't reuse pubkeys that she considers under her control for different conditions when she wants her signature to distinguish between them. While avoiding pubkey reuse within a script should be easier than avoiding it for different UTXOs, converting a policy to disjunctive normal form can involve an exponential blowup. Additionally, there may be cases where a policy requires an exponential number of pubkeys, which isn't tractable to do in Script. Taproot's MAST (Merklized Alternative Script Tree) can provide a solution for certain cases.The email conversation revolves around the vulnerability of signature copying attacks, particularly pertaining to the use of CODESEPARATOR in the Taproot script version. The issue is that signing the CODESEPARATOR position without signing the script code is considered nonsensical as it is signing a piece of data without an interpretation of its meaning. However, the current implementation includes an index to the digest being signed, so signatures at different indexes are distinct. Participants discuss various techniques such as miniscript and fixed templates to allow limited safe changes to policy and prevent signature reuse in different scripts. The proposed solution, ANYPREVOUTANYSCRIPT, would not sign the script code but would continue signing the CODESEPARATOR position, allowing for restricted signature reuse. This means users can prevent their funds from going to certain addresses without compromising security.While the concept of CODESEPARATOR in taproot is discussed as a possible solution, some argue that it would not be widely used or sufficient. There are only two known use cases for CODESEPARATOR, one being the reveal-a-secret-key-by-forced-nonce-reuse script, which requires pubkey recovery and does not work with bip-schnorr, and the other is ntumblebit's escrow script. It is ultimately agreed that analyzing scripts before collaborating is necessary to prevent vulnerability to signature copying attacks. Although the proposal to eliminate CODESEPARATOR opcode in the Taproot script version is seen as effective enough to save most people most of the time, it may not save everyone all the time. Some participants suggest that CODESEP is a marginally more efficient/general fix than the proposal made.In an email exchange, Anthony Towns shares a link to a discussion on Taproot BIP review. The conversation revolves around signing the position of the enclosing OP_IF/OP_NOTIF/OP_ELSE of the OP_IF/OP_NOTIF/OP_ELSE block that the checksig is within, or signing the byte offset instead of the opcode number offset. It is suggested that signing the enclosing OP_IF... would allow sharing of the hashed signed data in a normal multisig sequence of operations. A sighash flag could control whether or not the signature covers the CHECKSIG position or not, with SIGHASH_ALL including the CHECKSIG position.Russell O'Connor proposed an amendment to the current tapscript proposal, which requires a signature on the last executed CODESEPRATOR position. He suggested that instead of signing the last executed CODESEPRATOR position, we should sign the position of the CHECKSIG (or other signing opcode) being executed. There is a discussion about this topic at http://www.erisian.com</summary>
+    <published>2019-12-06T04:51:53+00:00</published>
+  </entry>
+</feed>

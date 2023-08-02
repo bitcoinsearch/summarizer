@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - assumeutxo and UTXO snapshots</title>
+  <updated>2023-08-02T00:41:44.233181+00:00</updated>
+  <author>
+    <name>James O'Beirne 2019-04-23 14:17:06+00:00</name>
+  </author>
+  <author>
+    <name>Dave Scotese 2019-04-15 00:44:51+00:00</name>
+  </author>
+  <author>
+    <name>Omar Shibli 2019-04-14 13:16:53+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2019-04-13 19:09:25+00:00</name>
+  </author>
+  <author>
+    <name>James O'Beirne 2019-04-04 14:36:53+00:00</name>
+  </author>
+  <author>
+    <name>Kulpreet Singh 2019-04-04 10:27:02+00:00</name>
+  </author>
+  <author>
+    <name>Jim Posen 2019-04-04 05:59:32+00:00</name>
+  </author>
+  <author>
+    <name>Ethan Scruples 2019-04-04 03:04:58+00:00</name>
+  </author>
+  <author>
+    <name>Luke Dashjr 2019-04-04 03:01:00+00:00</name>
+  </author>
+  <author>
+    <name>Luke Dashjr 2019-04-04 02:48:33+00:00</name>
+  </author>
+  <author>
+    <name>Jim Posen 2019-04-03 23:03:12+00:00</name>
+  </author>
+  <author>
+    <name>Dave Scotese 2019-04-03 21:39:32+00:00</name>
+  </author>
+  <author>
+    <name>James O'Beirne 2019-04-03 19:51:32+00:00</name>
+  </author>
+  <author>
+    <name>Ethan Scruples 2019-04-03 15:39:29+00:00</name>
+  </author>
+  <author>
+    <name>Luke Dashjr 2019-04-03 09:55:26+00:00</name>
+  </author>
+  <author>
+    <name>Nicolas Dorier 2019-04-03 07:51:04+00:00</name>
+  </author>
+  <author>
+    <name>Jonas Schnelli 2019-04-03 06:37:31+00:00</name>
+  </author>
+  <author>
+    <name>James O'Beirne 2019-04-02 20:43:11+00:00</name>
+  </author>
+  <link href="bitcoin-dev/April_2019/016891_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016868_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016867_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016863_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016847_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016846_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016844_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016842_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016841_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016840_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016837_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016836_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016834_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016833_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016832_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016830_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016829_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2019/016825_assumeutxo-and-UTXO-snapshots.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - assumeutxo and UTXO snapshots</title>
+    <updated>2023-08-02T00:41:44.233181+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-April/016891.html" rel="alternate"/>
+    <summary>The propose of assumeutxo is to provide an alternative to SPV modes for clients with resource constraints. These clients, running on modest hardware and limited bandwidth, face challenges during initial block download. Currently, they rely on the SPV trust model due to the unrealistic nature of having fully validating clients. Assumeutxo aims to address this issue by allowing nodes to initialize using a serialized version of the UTXO set rendered by another node at a predetermined height.By syncing the headers chain from the network and loading one of these UTXO snapshots, the initializing node can quickly reconstruct its chainstate. It then compares the resulting UTXO set's hash to a preordained hash hard-coded in the software, similar to assumevalid. This process provides a security model that closely resembles full validation within minutes instead of hours or days.However, there are practical security risks associated with assumeutxo. If an attacker convinces a user to accept a malicious `-assumeutxo` parameter and provides them with a false UTXO snapshot, the user could be tricked into transacting under a false history. To mitigate this risk, it is recommended not to allow the specification of assumeutxo via a command-line argument.There have been discussions and proposals regarding the use of memorable features in the Bitcoin consensus to provide anti-sybil-attack checking. Some suggest tying these features to work-intensive results, such as the ratio of the hash to the target. However, others argue against using hash size as a basis for identification, as it may confuse people about how the Bitcoin consensus works. Similarly, there have been suggestions to use the ratio of block hash to difficulty requirement as a way to identify "special" blocks, but this idea is also met with skepticism.The feasibility and implications of assumeutxo and UTXO commitments have been discussed on the Bitcoin-dev mailing list. While assumeutxo could enable mobile devices to function as fully validating nodes, providing faster startup using a small accumulator instead of a multi-GB snapshot, there are significant security implications involved. Some propose soft forking mandatory UTXO commitments into Bitcoin to avoid a growing Initial Block Download (IBD), but others disagree, emphasizing the dangers and arguing against adding UTXO commitments to Bitcoin.In addition to these technical discussions, there have been suggestions about learning C++ and auditing the Bitcoin Core codebase to ensure the security of assumeutxo. The author also mentions their involvement in various projects and provides links related to Bitcoin development.Overall, these discussions and proposals aim to improve the usability, security, and efficiency of the Bitcoin network, particularly in terms of validation processes and mobile device integration. However, there are important considerations and risks that need to be addressed before implementing these changes. Concrete plans for deployment steps are expected to be discussed in the Github issue related to assumeutxo's implementation.</summary>
+    <published>2019-04-23T14:17:06+00:00</published>
+  </entry>
+</feed>

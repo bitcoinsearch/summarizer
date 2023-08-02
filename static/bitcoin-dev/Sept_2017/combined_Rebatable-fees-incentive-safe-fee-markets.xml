@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Rebatable fees &amp; incentive-safe fee markets</title>
+  <updated>2023-08-01T21:58:19.103704+00:00</updated>
+  <author>
+    <name>Gregory Maxwell 2017-09-30 08:54:57+00:00</name>
+  </author>
+  <author>
+    <name>Jorge Timón 2017-09-30 03:55:58+00:00</name>
+  </author>
+  <author>
+    <name>Jorge Timón 2017-09-30 03:53:00+00:00</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2017-09-30 00:47:54+00:00</name>
+  </author>
+  <author>
+    <name>Mark Friedenbach 2017-09-29 15:22:14+00:00</name>
+  </author>
+  <author>
+    <name>Alex Morcos 2017-09-29 12:50:20+00:00</name>
+  </author>
+  <author>
+    <name>Daniele Pinna 2017-09-29 10:43:22+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2017-09-29 04:45:56+00:00</name>
+  </author>
+  <author>
+    <name>Mark Friedenbach 2017-09-29 03:30:27+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2017-09-29 03:02:25+00:00</name>
+  </author>
+  <author>
+    <name>Mark Friedenbach 2017-09-29 02:45:02+00:00</name>
+  </author>
+  <author>
+    <name>Nathan Wilcox 2017-09-29 02:17:05+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2017-09-29 02:10:33+00:00</name>
+  </author>
+  <author>
+    <name>Nathan Wilcox 2017-09-29 02:09:13+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2017-09-29 02:02:27+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2017-09-29 01:53:55+00:00</name>
+  </author>
+  <author>
+    <name>Mark Friedenbach 2017-09-29 01:06:29+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Sept_2017/015132_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015130_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015129_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015128_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015117_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015115_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015111_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015108_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015107_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015103_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015106_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015105_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015100_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015104_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015098_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015097_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2017/015093_Rebatable-fees-incentive-safe-fee-markets.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Rebatable fees &amp; incentive-safe fee markets</title>
+    <updated>2023-08-01T21:58:19.103704+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-September/015132.html" rel="alternate"/>
+    <summary>The article "Redesigning Bitcoin's fee market" argues that the current auction model for transaction fees in bitcoin is not effective in achieving the maximum clearing price and preventing strategic bidding behavior. The authors propose a shift to a "pay lowest winning bid" model, where all transactions would pay only the smallest fee rate paid by any transaction in the block.This proposed model could be implemented through a soft-fork and offers several benefits. It would eliminate the need for fee estimation mechanisms and adjust transaction fees accordingly. Additionally, it would allow for pre-signed transactions to provide sufficient fees for confirmation without overpaying. It would also enable explicit fees in multi-party transaction creation protocols and allow applications with expensive network access to pay reasonable fees.In this new model, transactions would have the option to specify an implicit fee as well as one or more explicit rebateable fees. The fee rate of a transaction would be calculated as the combined implicit and rebateable fee divided by the size/weight of the transaction. The smallest fee rate of any non-coinbase transaction in the block would be considered the marginal fee rate.For each transaction or transaction group, the required fee would be calculated based on the marginal fee rate and the size/weight of the transaction. Any excess implicit fee would be added to the miner's fee tally, while the remaining dust would be added to the implicit fee tally. Rebateable fees would contribute proportionally towards meeting the marginal fee requirement if the implicit fee falls short. If there is still a remaining balance equal to or greater than the dust threshold in a specific rebateable fee, an output is required in the coinbase to pay the remaining fee to a scriptPubKey.The miner would build a transaction claiming all explicit fees and include a zero-valued null/data output to forward the fees to the coinbase. The miner would be allowed to claim the subsidy, the miner's fee tally, and the explicit fee tally for themselves in the coinbase. The coinbase would also need to contain all rebated fees above the dust threshold.A variant of this proposal suggests carrying forward the excess non-rebateable fees from block to block and allowing the miner to claim some average of past fees. This feature, called "rebateable fees," has the potential to improve the efficiency and fairness of Bitcoin's transaction fee market.Overall, this proposal aims to redesign bitcoin's fee market by implementing a "pay lowest winning bid" model and introducing rebateable fees. It would establish the marginal fee rate for each block and provide smoother fee adjustments or other incentives for efficient and fair transaction processing. However, there are still concerns and questions that need to be addressed regarding the user experience and simplicity of implementation.</summary>
+    <published>2017-09-30T08:54:57+00:00</published>
+  </entry>
+</feed>

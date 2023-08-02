@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Taproot Fields for PSBT</title>
+  <updated>2023-08-02T04:12:43.924281+00:00</updated>
+  <author>
+    <name>Pieter Wuille 2021-11-24 16:08:18+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2021-11-24 16:00:42+00:00</name>
+  </author>
+  <author>
+    <name>Sjors Provoost 2021-11-24 12:44:46+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy 2021-07-08 20:06:08+00:00</name>
+  </author>
+  <author>
+    <name>Salvatore Ingala 2021-06-28 19:56:37+00:00</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2021-06-28 16:04:19+00:00</name>
+  </author>
+  <author>
+    <name>Salvatore Ingala 2021-06-28 10:03:42+00:00</name>
+  </author>
+  <author>
+    <name>Andrew Chow 2021-06-22 21:22:28+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Nov_2021/019607_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2021/019606_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2021/019605_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/July_2021/019245_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2021/019144_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2021/019136_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2021/019132_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2021/019095_Taproot-Fields-for-PSBT.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Taproot Fields for PSBT</title>
+    <updated>2023-08-02T04:12:43.924281+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-November/019607.html" rel="alternate"/>
+    <summary>In a recent email exchange on the bitcoin-dev mailing list, Sjors Provoost expressed confusion regarding the inclusion of the tapleaf merkle path in the PSBT_IN_TAP_BIP32_DERIVATION and PSBT_OUT_TAP_BIP32_DERIVATION fields. Pieter Wuille responded by explaining that these additional fields are necessary for signers who may not have prior knowledge of the script being signed. The inclusion of the derivation path and tapleaf merkle path allows signers to sign without fully understanding the script or needing to parse it. However, the actual script information is still included for those who wish to analyze or factor it into their decision whether to sign.The confusion arose from Andrew Chow's proposal of a BIP that defines new fields for Taproot support in PSBT. These fields include the Taproot Key BIP32 Derivation Path for both PSBT_IN_TAP_BIP32_DERIVATION and PSBT_OUT_TAP_BIP32_DERIVATION. The fields contain the 32-byte X-only public key, a compact size unsigned integer representing the number of leaf hashes, followed by a list of leaf hashes, and then the master key fingerprint concatenated with the derivation path of the public key. These fields provide the necessary information about which keys are present in which leaves and how those keys are derived for signers to sign the transaction.Furthermore, Jeremy Rubin has suggested allowing different keys to specify different sighash flags, which would provide greater flexibility in specifying signature requirements. This would allow for more specific and granular signature requirements, such as chaperone signatures with anyprevout. Currently, the sighashtype key is per-input, and if a sighash type is not provided, the signer should sign using SIGHASH_ALL but may use any sighash type they wish. Rubin has requested this change to be implemented in order to enhance flexibility.Salvatore Ingala thanked Andrew for clarifying that more than one leaf can be added to the Partially Signed Bitcoin Transaction (PSBT). Additionally, Ingala suggested labeling key types that are present multiple times with different keydata in order to assist less experienced readers.Ingala also proposed a change regarding the Taproot Leaf Script as specified in BIP 341. The current control block for this leaf can be up to 4129 bytes long, which is larger than other defined PSBT types. Ingala suggested splitting it into two PSBT types, PSBT_IN_TAP_LEAF_SCRIPT and PSBT_IN_TAP_LEAF_CONTROL_BLOCK, both with no keydata. However, Andrew Chow pointed out that a taproot tree can have multiple leaf scripts and the actual script to be used may not be known at the time of adding them to the PSBT. Therefore, using only two fields with no keydata would not allow for the specification of multiple leaf scripts. Furthermore, the same leaf script can appear multiple times in the tree, so using the leaf hash as keydata would not be sufficient. To enable multiple different leaf scripts and the same leaf script to appear multiple times, the control block itself needs to be used as keydata.The proposal for Taproot support in PSBT introduces several new fields, including Taproot Key Spend Signature, Taproot Script Spend Signature, Taproot Leaf Script, Taproot Key BIP 32 Derivation Path, Taproot Internal Key, and Taproot Merkle Root. These fields are necessary to carry the information required for signing Taproot inputs. The proposal also recommends using PSBT_IN_WITNESS_UTXO for Taproot inputs instead of PSBT_IN_NON_WITNESS_UTXO to prevent potential attacks involving an updater lying about the amounts in an output. The proposal is designed to be compatible with the existing PSBT format, ensuring that old software will ignore the new fields. Test vectors are yet to be determined.</summary>
+    <published>2021-11-24T16:08:18+00:00</published>
+  </entry>
+</feed>

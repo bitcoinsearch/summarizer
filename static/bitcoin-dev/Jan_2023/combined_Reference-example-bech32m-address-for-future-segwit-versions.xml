@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Reference example bech32m address for future segwit versions</title>
+  <updated>2023-08-02T08:52:43.448743+00:00</updated>
+  <author>
+    <name>Anthony Towns 2023-02-01 01:13:49+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2023-02-01 00:37:06+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2023-01-31 23:33:13+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2023-01-31 14:30:34+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2023-01-31 00:02:51+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Feb_2023/021386_Reference-example-bech32m-address-for-future-segwit-versions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2023/021385_Reference-example-bech32m-address-for-future-segwit-versions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2023/021384_Reference-example-bech32m-address-for-future-segwit-versions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2023/021381_Reference-example-bech32m-address-for-future-segwit-versions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2023/021379_Reference-example-bech32m-address-for-future-segwit-versions.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Reference example bech32m address for future segwit versions</title>
+    <updated>2023-08-02T08:52:43.448743+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-February/021386.html" rel="alternate"/>
+    <summary>In a recent email exchange on the bitcoin-dev mailing list, David A. Harding raised a question about the best practice for wallets when it comes to spending to the output indicated by any valid bech32m address. The response from aj was that it depends on whether the wallet is custodial or non-custodial. If it's a non-custodial wallet that may not be upgraded by the time witness v2 addresses are in use, then sending to such addresses now makes sense and is worth testing. However, if it's a custodial wallet, then there's a strong argument against allowing sending to such addresses until they're actually in use.The reason for this is two-fold: firstly, nobody will be running old software since the custodian can just force everyone to upgrade. Secondly, signing a transaction to send bitcoins held on behalf of someone else to an address that will get them stolen could be considered negligence, forcing the custodian to make the user whole again. Therefore, there's no point in testing a scenario that's likely years away for custodial wallets.On the other hand, for non-custodial wallets, it's worth testing as they might not be able to find compatible software in the future to move their private keys and have to resort to using the current software. However, in that case, they should be able to capture the transaction it generates before broadcasting it, and don't need to publish it on-chain. It's a different matter for libraries and non-wallet software like block explorers or alternate node implementations.In an email exchange, Greg Sanders predicts that most custodians may be hesitant to whitelist a witness version that they know is insecure. David A. Harding questions whether wallets should only send to outputs they know can be secured or if they should spend to the output indicated by any valid bech32m address. He finds the more restrictive approach to be sad and believes that there is a benefit to testing it when proprietary software is involved. However, he wants the testing to use the address least likely to cause problems for protocol developers in the future.David asks Greg and others on the list if they have any reason to believe that OP_16 OP_PUSH2 0000 would be a problematic script or if they can think of a better one. The email also references BIP350, which recommends ensuring that wallet implementations support sending to v1 and higher versions.In an email conversation between Greg Sanders and David, the topic of sending funds to future segwit versions was discussed. Greg suggested that most exchanges would not enable sends to future segwit versions due to the risk involved in doing so. However, David argued that wallets should spend to any valid bech32m address and that the more restrictive approach of only sending to secured outputs seemed unnecessary. He explained that withdrawing to a witness program for which there is no solution could result in bigger problems. David also suggested that testing the best practice of sending to secured outputs could benefit protocol developers in the future if they need to test other best practices that cannot be easily tested for. However, he wanted to use the address least likely to cause problems for protocol developers in the future. He sought suggestions from others on the list regarding what script to use. The email conversation references BIP350, which recommends supporting sending to v1 and higher versions.In a discussion on the Bitcoin-dev mailing list, David A. Harding proposed having a reserved address space for future segwit versions that are unlikely to interfere with future soft forks but can still exercise wallets supporting bech32m. He suggested using the following addresses: HRP (Human-readable part) "bc" for mainnet and "tb" for testnet, witness version 16 (the last segwit version), and witness program 0x0000. This would help developers of future soft forks deal with existing outputs paid to templates used in the proposed soft fork.Greg, in response, noted that most exchanges will not enable sends to future segwit versions due to the risk perspective of sending funds there. However, updating to new versions should be straightforward as long as the checksum is not changed again and popular open-source libraries support it. Testing this behavior in production can create an annoyance for developers of future soft forks. Therefore, having a canonical example of future segwit addresses that are unlikely to interfere with future soft forks could be useful.A proposal has been made for a canonical example of future segwit addresses that are designed to be very unlikely to interfere with future soft forks but which would still reasonably exercise wallets supporting bech32m. This is equivalent to the RFC2606 domain "example.com" which has been reserved for examples in documentation. The proposed addresses include one each for mainnet and testnet. The Witness version is 16, which is the last segwit version, while the Witness program is 0x0000; two bytes is the minimum allowed by BIP141, but it's far too small to make any sort of</summary>
+    <published>2023-02-01T01:13:49+00:00</published>
+  </entry>
+</feed>

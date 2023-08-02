@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - [PROPOSAL] Emergency RBF (BIP 125)</title>
+  <updated>2023-08-02T00:59:12.387101+00:00</updated>
+  <author>
+    <name>Rusty Russell 2019-06-14 05:50:17+00:00</name>
+  </author>
+  <author>
+    <name>rhavar at protonmail.com 2019-06-10 16:34:33+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2019-06-09 14:07:36+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2019-06-09 04:21:19+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-06-06 05:16:54+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-06-06 03:08:50+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2019-06-03 12:56:42+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2019-06-03 09:48:31+00:00</name>
+  </author>
+  <author>
+    <name>rhavar at protonmail.com 2019-06-03 01:49:15+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2019-06-02 04:41:39+00:00</name>
+  </author>
+  <link href="bitcoin-dev/June_2019/017028_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017024_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017020_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017017_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017016_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017015_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017003_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017002_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/017004_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2019/016998_-PROPOSAL-Emergency-RBF-BIP-125-.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - [PROPOSAL] Emergency RBF (BIP 125)</title>
+    <updated>2023-08-02T00:59:12.387101+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-June/017028.html" rel="alternate"/>
+    <summary>In a recent discussion on the Bitcoin-dev mailing list, there was a debate over proposed changes to the Replace-By-Fee (RBF) system. Rusty Russell stated that he didn't believe the proposed changes would make things worse, while David A. Harding disagreed and provided a scenario demonstrating the potential negative impact of the proposal. Harding argued that the current rules were insufficient and changes needed to be made. He expressed concern about the constraints of the proposal, which could result in high feerates. Rusty countered by explaining that without RBF changes, a lightning wallet would need to assume it needs to replace a specific transaction, but with RBF changes, it would only need to replace at a certain feerate. He also mentioned that fees required for the next block can be estimated when a block is seen.The discussion focused on proposed changes to the rules for replacing unconfirmed transactions with fee-bumped replacements. One proposal suggested storing a relay bandwidth used (RBU) value with each transaction in the mempool. The replacement would only be valid if its feerate is higher than the transaction it's evicting and its fee is greater than minRelayFee multiplied by RBU. The thread included a scenario where an attacker creates two transactions, one small and one large. Under the new proposed rule, the cost for the attacker to get the small transaction near the top of the mempool would be reduced. There was also a discussion about the limit on the number of unconfirmed transactions accepted by bitcoind, with the BIP125 limit being 100 and Bitcoin Core's current default being 25. These proposed changes could make it harder for wallet software, especially LN wallets, to determine if transactions have been successfully relayed. Overall, the proposed changes add complexity and may result in high feerates.Bitcoin developer Matt Corallo expressed concerns about a proposal to replace Bitcoin's relay fee system with an alternative. He was worried about the potential for "very, very bad" results. Rusty Russell responded by explaining that the new rule would actually reduce costs for attackers and save bandwidth per node.On June 8, 2019, a discussion took place on the Bitcoin development mailing list regarding a new "emergency RBF" rule proposed by Rusty Russell. The rule stated that if the original transaction was not in the top 4,000,000 weight units of the fee-ordered mempool and the replacement transaction is, certain rules would not apply. Concerns were raised about the possibility of someone spamming the mempool by repeatedly using this feature to push transactions down the queue. A suggestion was made to amend the proposal to mitigate this potential issue. It was debated whether it would be practical to execute such a spamming strategy across multiple non-direct peers.Matt Corallo also raised concerns about the implementation of a Bitcoin proposal related to child-pays-for-parent (CPFP) for replacing-by-fee (RBF). He pointed out areas where improvement and clarification were needed, such as calculations for evicted transactions, benchmarks for DoS attacks, and protections for time-critical transactions. Rusty Russell clarified that there would be no issues if miners have conflicting transactions in the top 4MSipa.In another discussion on the bitcoin-dev mailing list, Rusty Russell proposed an "emergency RBF" rule for Bitcoin transactions. This rule would allow users to replace unconfirmed transactions with higher fee ones. Concerns were raised about the possibility of spamming the mempool by using this feature repeatedly. Rusty acknowledged the potential annoyance for recipients but questioned the practicality of executing such a strategy across multiple non-direct peers.Rusty Russell proposed a modification to BIP 125 rules 3, 4, and 5. The "emergency RBF" rule would enable RBF in conditions like lightning unilateral closes. However, concerns were raised about potential issues with evicted transactions and vague protections for time-critical transactions. The proposal was deemed to require more client-side knowledge and complexity than previous proposals but should not be dismissed solely because it may not be the optimal solution.The proposal to modify BIP 125 rules 3, 4, and 5 was made by Rusty Russell. The "emergency RBF" rule would allow for the replacement of unconfirmed transactions if certain conditions are met. It could be used in adversarial conditions like lightning unilateral closes. Concerns were raised about potential spamming and suggestions were made to amend the proposal. Rusty acknowledged the possible issues but believed there might be ways to mitigate them.</summary>
+    <published>2019-06-14T05:50:17+00:00</published>
+  </entry>
+</feed>

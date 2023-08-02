@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Wallet vaults with pre-signed transactions but no ephemeral keys</title>
+  <updated>2023-08-02T08:50:11.357112+00:00</updated>
+  <author>
+    <name>Billy Tetrud 2023-01-31 15:02:51+00:00</name>
+  </author>
+  <author>
+    <name>darosior 2023-01-26 14:30:56+00:00</name>
+  </author>
+  <author>
+    <name>Billy Tetrud 2023-01-23 17:39:41+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Jan_2023/021382_Wallet-vaults-with-pre-signed-transactions-but-no-ephemeral-keys.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2023/021368_Wallet-vaults-with-pre-signed-transactions-but-no-ephemeral-keys.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2023/021365_Wallet-vaults-with-pre-signed-transactions-but-no-ephemeral-keys.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Wallet vaults with pre-signed transactions but no ephemeral keys</title>
+    <updated>2023-08-02T08:50:11.357112+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-January/021382.html" rel="alternate"/>
+    <summary>In the discussion around James' OP_VAULT proposal, a simple way to create a wallet vault without deleting any keys has been proposed. The proposal suggests using an N-of-N multisig address and pre-signing transactions from it with N-1 keys to an address with timelocked spend paths. This allows for immediate spending if all the keys are used, but any usage of the pre-signed transactions triggers a clawback within a specific time window.However, there are some challenges to this approach. Firstly, all watchtowers need to receive the cancel signature before signing the Unvault transaction. Additionally, there is no ability to have policies on the Spend transaction. These issues can be resolved by implementing covenants. It was noted that this design is similar to Revault, which utilizes cosigning servers as anti-replay oracles to enforce spend policies. Further information on Revault can be found at https://github.com/revault.Although this proposal offers advantages over traditional pre-signed vaults, such as flexibility in fee handling and the potential for unvaulting partial amounts, there are downsides to consider. These include the need to backup transactions for each vaulting, complications related to fee flexibility, and the requirement to unvault the entire utxo without any change.Another concern is the risk of stolen keys being used to steal funds from the interim address by racing the owner's transaction once the necessary delay has passed. However, James' OP_VAULT opcode does not have this vulnerability.The discussion also highlighted the absence of a wallet vault proposal that does not require ephemeral keys. The proposed method provides a solution by creating an N-of-N multisig address and pre-signing transactions from it to enable immediate spending while ensuring a clawback mechanism within a specified timeframe.To implement this method, a 3-of-3 Vault Address and an Interim Address are created. The Interim Address allows spending with 1, 2, or all 3 keys depending on the timelock. The process involves sending an output to the Vault Address, spending that output to the Interim Address, and pre-signing copies of the transaction for each combination of two keys.To unvault, one of the pre-signed transactions with the missing signature is signed and broadcasted. After waiting for the appropriate timelock, a transaction is created to send funds from the Interim Address and then broadcasted. To recover after unvaulting, the utxo can be signed with all three keys and sent to any destination, or it can be signed with two keys and waited for one week before broadcasting.Despite its limitations, the proposed method provides an alternative approach to wallet vaults without requiring the deletion of keys. It offers increased security and flexibility compared to previous proposals.</summary>
+    <published>2023-01-31T15:02:51+00:00</published>
+  </entry>
+</feed>

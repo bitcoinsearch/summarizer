@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - CTV dramatically improves DLCs</title>
+  <updated>2023-08-02T05:25:02.224690+00:00</updated>
+  <author>
+    <name>Jeremy Rubin 2022-03-15 17:28:05+00:00</name>
+  </author>
+  <author>
+    <name>Thibaut Le Guilly 2022-02-07 02:30:32+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy Rubin 2022-02-06 17:56:12+00:00</name>
+  </author>
+  <author>
+    <name>Lloyd Fournier 2022-02-06 07:18:11+00:00</name>
+  </author>
+  <author>
+    <name>Alex Schoof 2022-01-28 21:14:12+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy Rubin 2022-01-28 19:38:29+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy 2022-01-28 17:21:09+00:00</name>
+  </author>
+  <author>
+    <name>Lloyd Fournier 2022-01-24 08:01:17+00:00</name>
+  </author>
+  <link href="bitcoin-dev/March_2022/020129_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2022/019864_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2022/019861_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Feb_2022/019859_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2022/019832_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2022/019831_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2022/019830_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2022/019808_CTV-dramatically-improves-DLCs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - CTV dramatically improves DLCs</title>
+    <updated>2023-08-02T05:25:02.224690+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020129.html" rel="alternate"/>
+    <summary>Jeremy has developed a prototype of a protocol in Sapio and shared the link to it on GitHub. He invites others to test and tweak the protocol using the provided benchmark. Jeremy tested one oracle with 100,000 different payouts and observed it taking around 13 seconds on a release build. He intends to experiment more with the protocol, but acknowledges that Sapio Studio may not be able to handle a GUI for 100,000 nodes.In a discussion thread, several points were raised regarding the use of CSFS and its effectiveness in providing privacy benefits. It was noted that while CSFS could be used in both the oracle and transaction restriction parts of the DLC, it does not provide the same model as DLC. Additionally, there was discussion about the performance benefits of the CTV approach, which allows for computation of oracle anticipation points without signing or verification. A benchmark comparison was made between the current approach with signing and verification and only computing the anticipation points, resulting in a performance improvement of roughly 24x for the serial case and 10x for the parallel case. The benchmarks are available on GitHub. One potential concern raised was the impact of having a large taproot tree on the size of witness data when spending script paths that are low in the tree and how it would affect transaction fees. Finally, there was a discussion about the Y axis being the dependent variable represented by the CTV hashes in a contract, and how this affects the cheaper part of the DLC in lightning channels that might be updated between parties frequently.The email exchange discusses the benefits and features of Discreet Log Contracts (DLCs) with CheckTemplateVerify (CTV). The author explains that CTV enables a trustless timeout branch, which can have a failover claim that returns funds to both sides. Additionally, CTV DLCs are non-interactive asynchronously third-party unilaterally creatable, which means it is possible for a single party to create a DLC on behalf of another user. This enables use cases like pay-to-DLC addresses, which can also be constructed and sent to a third party service to create DLCs without requiring the third party service to do anything other than make the payment as requested.The email also discusses how CTV DLCs can be composed in interesting ways. Options over DLCs open up many exciting types of instrument where Alice can create an option expiring in 1 week where Bob can add funds to pay a premium and "Open" a DLC on an outcome closing in 1 year. There are also opportunities for perpetual-like contracts where you could combine into one logical DLC 12 DLCs closing 1 per month that can either be paid out all at once at the end of the year or profit pulled out partially at any time earlier.Lastly, the email mentions an additional performance improvement that can be had for iterative DLCs in Lightning where you might trade over a fixed set of attestation points with variable payout curves. However, the author is not entirely clear on what is meant concretely by this. Overall, the discussion highlights the potential benefits and uses of CTV DLCs.The email thread discusses the benefits of using OP_CTV with Discreet Log Contracts (DLCs) on the Bitcoin network. OP_CTV simplifies and improves the performance of DLCs by enabling non-interactive asynchronously third-party unilaterally creatable contracts. With this, each party can compute all outcomes on their own in parallel, making multi-party DLCs easier to execute. Additionally, OP_CTV enables a "trustless timeout" branch where failover claims return funds to both sides, and DLCs can be composed in interesting ways. For example, Options over DLCs can be created, perpetual-like contracts can be combined, and iterative DLCs can be traded over a fixed set of attestation points with variable payout curves. Lastly, OP_CTV allows for pay-to-DLC addresses to be constructed and sent to third-party services, enabling the creation of DLCs without requiring the service to do anything other than make the payment as requested.Jeremy Rubin proposes a way to make the close portion of a DLC be an "optimistic" execution with a choice of justice scheme, enabling closing a DLC somewhat securely without exposing the oracles on-chain at all. Assuming honest oracles, the only cost of this mechanism over previous is that you have to do a script path spend (but it can be a top-level branch, since it's the "most likely" one). For every DLC branch add two branches allowing Alice or Bob to "lock in" a redemption of the contract that becomes spendable by them after CET-hash-* should include a nLockTime/nSequence such that it is at the same time as the attestation points should be known. Justice with punishment seems to be the better option since T is actively choosing this resolution (the CTV transition is signed), but justice with no punishment might be better if one thinks the oracles might collude to steal.</summary>
+    <published>2022-03-15T17:28:05+00:00</published>
+  </entry>
+</feed>

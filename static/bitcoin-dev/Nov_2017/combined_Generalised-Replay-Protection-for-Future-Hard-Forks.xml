@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Generalised Replay Protection for Future Hard Forks</title>
+  <updated>2023-08-01T22:07:26.488981+00:00</updated>
+  <author>
+    <name>Jacob Eliosoff 2017-11-15 05:02:48+00:00</name>
+  </author>
+  <author>
+    <name>Mats Jerratsch 2017-11-14 13:49:56+00:00</name>
+  </author>
+  <author>
+    <name>Spartacus Rex 2017-11-13 17:02:07+00:00</name>
+  </author>
+  <author>
+    <name>Jacob Eliosoff 2017-11-13 15:31:55+00:00</name>
+  </author>
+  <author>
+    <name>Mats Jerratsch 2017-11-13 10:03:04+00:00</name>
+  </author>
+  <author>
+    <name>Jacob Eliosoff 2017-11-11 05:18:11+00:00</name>
+  </author>
+  <author>
+    <name>Mats Jerratsch 2017-11-10 11:28:06+00:00</name>
+  </author>
+  <author>
+    <name>Sjors Provoost 2017-11-09 21:01:10+00:00</name>
+  </author>
+  <author>
+    <name>Jacob Eliosoff 2017-11-09 20:45:43+00:00</name>
+  </author>
+  <author>
+    <name>Mats Jerratsch 2017-11-08 16:45:01+00:00</name>
+  </author>
+  <author>
+    <name>Jacob Eliosoff 2017-11-06 19:21:28+00:00</name>
+  </author>
+  <author>
+    <name>Mats Jerratsch 2017-11-05 23:48:43+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Nov_2017/015291_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015289_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015290_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015282_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015280_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015278_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015275_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015272_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015271_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015269_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015264_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2017/015258_Generalised-Replay-Protection-for-Future-Hard-Forks.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Generalised Replay Protection for Future Hard Forks</title>
+    <updated>2023-08-01T22:07:26.488981+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-November/015291.html" rel="alternate"/>
+    <summary>The email thread discusses a proposal for creating fork-specific addresses to enhance transaction safety and enable light clients to differentiate between multiple forks. The proposal suggests assigning a unique 'nForkId' to each leaf, which must match the 'nForkId' of the validating software for a transaction to be considered valid.However, there is a dilemma with LN commitment transactions where they either need to have a specific 'nForkId' or 'nForkId 0'. To address this, incorporating Luke's OP_CHECKBLOCKATHEIGHT and using solutions like SIGHASH_BLOCKCOMMIT are suggested.The proposed solution not only adds replay protection but also improves overall transaction safety by utilizing a dedicated address format per fork. This helps prevent issues like sending BCH to a BTC address. Every leaf must have a unique 'nForkId', and transactions are only deemed valid if their 'nForkId' matches exactly the 'nForkId' of the validating software.The discussion also touches on the use of nForkId in Lightning Network (LN) transactions. It is recommended to set 'nForkId&gt;=1' for the funding transaction to protect it from replay attacks on past forks. For commitment transactions, 'nForkId=0' can be used, making it valid on all chains. However, users should be aware that the parent transaction it tries to spend (the funding transaction) only exists on two chains - the original one and the forked one.The conversation emphasizes the importance of implementing a generic replay protection scheme in advance to avoid breaking old transactions on one of the chains. It is suggested that 'nForkId=0' should be valid on all future forks. Additionally, different choices can be made in scenarios involving forks, such as creating commitment transactions with 'nForkId=0' or closing the payment channel on the new token after the fork.The proposal also considers using the human-readable part of the standard as the fork id and discusses potential limitations. It highlights the benefits of incorporating fork IDs into new address formats to provide comprehensive replay protection during hard forks.The proposed solution aims to address the issue of 'mis-sends' that could occur due to non-upgraded wallet software during hard forks. By including the token identifier in the address itself, mis-sends are made fundamentally impossible. However, there is a possibility of 'mis-receiving' if the receiving wallet is not aware of a newer chain and creates an address for the old token. This proposal allows wallets to distinguish between different tokens, enabling different implementations.The proposal advocates integrating replay protection into the protocol to prevent ad-hoc solutions and support non-hostile forks. It suggests utilizing a fork-specific incompatible address space to protect users from sending coins on the wrong chain. Light clients can enforce the use of 'nForkId' in the coinbase/block header or utilize a new P2P message type for sending transactions. The proposal also discusses the potential of allowing signatures with 'nForkId=1' through a soft fork by adjusting the script version of SegWit.In conclusion, the proposed solution provides a comprehensive approach to replay protection during hard forks and encourages developers to incorporate fork IDs into new address formats. It aims to enhance transaction safety, prevent mis-sends, and enable light clients to differentiate between multiple forks.The proposal suggests a solution for introducing forks without breaking existing clients by incrementing the script version of SegWit, ensuring full backwards compatibility. This approach can be generalized in software to include replay protection and a new address space. By implementing this method, forks can be introduced while maintaining the functionality of existing clients. The proposal highlights the potential for this approach to be applied across various software systems.</summary>
+    <published>2017-11-15T05:02:48+00:00</published>
+  </entry>
+</feed>

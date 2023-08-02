@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP draft: Extended block header hardfork</title>
+  <updated>2023-08-01T20:12:53.998107+00:00</updated>
+  <author>
+    <name>Tom Zander 2017-04-04 16:17:02+00:00</name>
+  </author>
+  <author>
+    <name>Jean-Paul Kogelman 2017-04-04 16:03:51+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2017-04-04 15:44:40+00:00</name>
+  </author>
+  <author>
+    <name>Tom Zander 2017-04-04 15:32:47+00:00</name>
+  </author>
+  <author>
+    <name>James Hilliard 2017-04-04 14:59:12+00:00</name>
+  </author>
+  <author>
+    <name>Tom Zander 2017-04-04 11:47:57+00:00</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-04-03 03:36:13+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2017-04-02 20:39:13+00:00</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-04-02 20:13:23+00:00</name>
+  </author>
+  <link href="bitcoin-dev/April_2017/013976_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013979_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013975_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013974_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013973_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013972_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013968_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013965_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/013964_BIP-draft-Extended-block-header-hardfork.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP draft: Extended block header hardfork</title>
+    <updated>2023-08-01T20:12:53.998107+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-April/013976.html" rel="alternate"/>
+    <summary>In a communication on the Bitcoin-dev mailing list, a developer named Tom Zander asked for clarification on where a specific rule is enforced in Bitcoin's code. James Hilliard responded by providing a link to BIP-0034, which outlines the consensus rule in question. Russell O'Connor suggested moving nHeight from the coinbase script to the coinbase locktime, but Tom Zander pointed out that this change would not require a consensus change and could be made at any time. Throughout the conversation, various links to relevant code were shared.The discussion centers around a consensus rule in Bitcoin, with Tom Zander trying to find where this rule is enforced in the code. However, he only finds code that checks for unknown or fully spent transaction IDs. This leads him to believe that a proposed change by Russell O'Connor, which moves nHeight from the coinbase script to the coinbase locktime, would not be rejected by a full client. James Hilliard responds with a link to BIP-0034, confirming that the current protocol operates under a consensus rule specified in the BIP. Any changes to this rule would require consensus among network participants.Russell O'Connor suggests moving nHeight from the coinbase script to the coinbase locktime, stating that it would be more natural. However, Tom Zander argues that such a change does not require consensus and can be implemented at any time. It is important to note that the current protocol operates under a consensus rule detailed in BIP-0034, which mandates the inclusion of a merkle root of all transactions in the block, including the coinbase transaction, in the block headers. Changes to this rule necessitate consensus among network participants.Russell O'Connor proposes a new approach to the coinbase transaction input, suggesting the use of the hash of the previous block instead of a hash of all zeroes in the coinbase script. He believes this change would enable payments to be made to a child of a specific block using a new SIGHASH design. O'Connor has already implemented this in his spoonnet2 branch and plans to describe it with a BIP soon. However, this proposal is separate from his goal of allowing people to know the height of a block through the extended header. The current proposal states that the witness of the first input of the coinbase transaction should contain bytes 0 to 3, representing the nHeight of the block in signed little endian format. While a suggestion is made to move nHeight to the coinbase locktime, O'Connor is exploring a different approach.On April 2, 2017, Johnson Lau sent an email to the bitcoin-dev mailing list discussing a proposed change to the Bitcoin protocol. The proposal suggests that the witness of the first input of the coinbase transaction should have exactly one stack item, referred to as the "extended header." This extended header would include data consisting of bytes 0 to 3, with nHeight representing the height of the block in signed little endian format. While someone suggests moving nHeight from the coinbase script to the coinbase locktime, Johnson Lau does not directly address this suggestion in their email.The proposed hardfork, called "spoonnet," aims to fulfill requested features for bitcoin businesses, including deterministic activation logic, strong and simple 2-way replay protection, wipe-out protection, and predictable resource use. The activation is based on flag day, as measuring community consensus on-chain is challenging. A reference implementation for consensus codes can be found at https://github.com/jl2012/bitcoin/tree/spoonnet2. The extended block header hardfork proposal seeks to provide a flexible and upgradable header format through a hardfork. The current Bitcoin protocol has a fixed 80-byte block header with no reserved space for additional data, which is not ideal for light clients. The proposed extended block header format aims to be easily upgradeable with softforks, compatible with the Stratum mining protocol, and have a deterministic hardfork activation. The hardfork employs a simple flag day deployment based on the median timestamp of previous blocks, ensuring a deterministic and permanent departure from the original rules. The witness field of the coinbase input is used to store the extended header, minimizing changes in the peer-to-peer protocol between full nodes. Committing to the block height allows determining the value before obtaining all parental headers. This hard forking change breaks compatibility with old full nodes and light nodes and should not be deployed without widespread consensus. Old full nodes consider the block header nVersion invalid, while light nodes may consider the hardfork chain as the best chain if it has the most total proof-of-work, but they will not see any transactions in the chain. The proposed hardfork specifies requirements such as signaling the most significant bit in the nVersion of the block header, enabling segregated witness, and replacing bytes 36 to 67 in the block header with the double SHA256 hash of the extended header. The special extheader softfork allows future</summary>
+    <published>2017-04-04T16:17:02+00:00</published>
+  </entry>
+</feed>

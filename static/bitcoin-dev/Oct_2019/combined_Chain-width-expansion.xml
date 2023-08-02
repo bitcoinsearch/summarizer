@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Chain width expansion</title>
+  <updated>2023-08-02T01:27:12.173907+00:00</updated>
+  <author>
+    <name>Braydon Fuller 2019-10-16 19:25:31+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-16 19:07:25+00:00</name>
+  </author>
+  <author>
+    <name>Tier Nolan 2019-10-15 18:30:58+00:00</name>
+  </author>
+  <author>
+    <name>Joachim Strömbergson 2019-10-15 15:50:29+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-15 08:12:09+00:00</name>
+  </author>
+  <author>
+    <name>Joachim Strömbergson 2019-10-15 07:20:07+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-15 00:42:06+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-15 00:38:55+00:00</name>
+  </author>
+  <author>
+    <name>Tier Nolan 2019-10-12 20:46:40+00:00</name>
+  </author>
+  <author>
+    <name>Joachim Strömbergson 2019-10-12 17:56:51+00:00</name>
+  </author>
+  <author>
+    <name>Tier Nolan 2019-10-12 16:27:42+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-11 21:24:27+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-10 16:16:16+00:00</name>
+  </author>
+  <author>
+    <name>Tier Nolan 2019-10-04 23:31:18+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-04 19:51:26+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2019-10-04 08:20:31+00:00</name>
+  </author>
+  <author>
+    <name>Braydon Fuller 2019-10-04 00:38:36+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Oct_2019/017402_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017401_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017399_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017398_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017397_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017396_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017394_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017393_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017389_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017390_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017387_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017386_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017380_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017366_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017365_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017359_Chain-width-expansion.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2019/017354_Chain-width-expansion.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Chain width expansion</title>
+    <updated>2023-08-02T01:27:12.173907+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-October/017402.html" rel="alternate"/>
+    <summary>Joachim Strömbergson proposed a method to generate longer chains with a slow timestamp increase without increasing difficulty. However, this approach is not applicable during a time warp attack where fake timestamps can be created for all blocks except those relevant to the retarget calculation. The Bitcoin-dev community has not yet discussed the timewarp attack.To address this issue, Tier Nolan suggests implementing a soft fork that limits the maximum difference between the timestamp for the first header in a period and the last header in the previous period. This solution is part of a draft proposal called "The Great Consensus Cleanup" and would need to be effective for both the main chain and any future forked chains.Braydon Fuller points out that using the block height in the coinbase for validation purposes is not feasible as it requires previous headers. Instead, it is suggested that the lowest digest for a blockchain represents the total chainwork, and a formula to estimate the total hash count is provided. Producing a fake set of 10 headers with higher work than the main chain would require as much effort as building an alternative chain. However, tracing back to the genesis block for one of those headers would require following the actual chain.The complexity of generating longer chains with a slow timestamp increase while keeping the difficulty at a minimum level is discussed. It is explained that such a chain would result in a reduced time between blocks, about 7 minutes instead of 10 minutes, and the difficulty would adjust accordingly. However, this calculation does not apply during a time warp attack where fake timestamps can be created for all blocks except the first and last block in the 2016 block window. This is in reference to the non-overlapping difficulty calculation and off-by-one bug.In an email exchange, Joachim Strömbergson proposes a method for generating a longer blockchain with a slow timestamp increase without increasing difficulty. However, it is clarified that this calculation does not apply during a time warp attack, where timestamps can be faked for all blocks except those relevant to the retarget calculation. The discussion also addresses the vulnerability of nodes during initial sync when joining the network until the minimum chainwork is achieved.A proposal is made for a "seed" based system to prevent dishonest peers from disrupting chains. This system would require each peer to provide proof of the header with the lowest digest on their main chain, and chains ending at the strongest seeds would be kept preferentially when discarding chains. It is suggested that nodes should stay "headers-only" until they hit a minimum chainwork threshold to mitigate vulnerabilities during initial sync when joining the network. However, there are concerns that this could also be used to prevent nodes from joining the network.Another proposal suggests creating a succinct chainwork proof for all cases in the Bitcoin network. This would involve using a "seed" based system where a header with a very low digest is defined as a seed. Chains ending at the strongest seeds would be kept preferentially when discarding chains. However, this would require a way to download chains backwards, which the protocol currently does not support.David A. Harding discusses a proposed solution for DoS attacks that does not require enabling or maintaining checkpoints. The proposal suggests implementing a new consensus rule to not fork or accept headers below a minimum difficulty once the best chain work is achieved at the release time of the software. However, there are challenges with this approach, including the vulnerability of nodes during initial sync when joining the network until the minimum chainwork is achieved, and the potential for a contentious hardfork leaving minority hash power without the ability to softfork away without agreeing on a hardfork.In an email thread, Tier Nolan discusses the need for peers to prove their total chain proof-of-work (POW). He suggests limiting things by peer rather than globally and tracking the unrequested header rate per peer. Honest peers with more chainwork would have a time advantage over dishonest peers with less chainwork. Nolan gives an example of how this system works, highlighting its susceptibility to Sybil attacks.Overall, the context explores various proposals and discussions related to generating longer chains with a slow timestamp increase without increasing difficulty, preventing time warp attacks, validating block height, and addressing vulnerabilities and security concerns in the Bitcoin network. These discussions highlight the ongoing development and evolution of the network to address new challenges and threats.</summary>
+    <published>2019-10-16T19:25:31+00:00</published>
+  </entry>
+</feed>

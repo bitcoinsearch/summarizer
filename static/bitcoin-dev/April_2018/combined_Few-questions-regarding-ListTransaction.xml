@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Few questions regarding ListTransaction</title>
+  <updated>2023-08-01T22:52:47.537604+00:00</updated>
+  <author>
+    <name>Maksim Solovjov 2018-04-11 19:58:45+00:00</name>
+  </author>
+  <author>
+    <name>Karl-Johan Alm 2018-04-11 10:00:45+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2018-04-11 09:48:39+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2018-04-11 09:37:24+00:00</name>
+  </author>
+  <author>
+    <name>Karl-Johan Alm 2018-04-11 08:10:43+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2018-04-11 07:52:25+00:00</name>
+  </author>
+  <author>
+    <name>Karl-Johan Alm 2018-04-11 05:22:42+00:00</name>
+  </author>
+  <author>
+    <name>Karl-Johan Alm 2018-04-11 05:21:10+00:00</name>
+  </author>
+  <author>
+    <name>Joseph Gleason ⑈ 2018-04-10 20:41:07+00:00</name>
+  </author>
+  <author>
+    <name>Maksim Solovjov 2018-04-10 20:29:23+00:00</name>
+  </author>
+  <link href="bitcoin-dev/April_2018/015893_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015891_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015892_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015890_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015889_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015888_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015887_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015886_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015885_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2018/015884_Few-questions-regarding-ListTransaction.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Few questions regarding ListTransaction</title>
+    <updated>2023-08-01T22:52:47.537604+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-April/015893.html" rel="alternate"/>
+    <summary>In a recent discussion on the bitcoin-dev mailing list, it was clarified that miners can ignore nSequence when adding transactions to blocks. This means that if there are conflicting transactions with different fees, miners can include the one with the higher fee even if they learned about the other one first. As a result, "full replace-by-fee" is expected to become the norm, where nSequence is ignored for replace-by-fee purposes. The convention of nSequence=0xFFFFFFFF meaning opt-out of RBF is only followed by full nodes running standard bitcoind. Miners can run patched bitcoind that ignores this rule and connect with similar peers who also ignore it.Peter Todd, a member of the bitcoin-dev mailing list, mentioned that his full-replace-by-fee tree ignores nSequence=0xFFFFFFFF and does preferential peering to ensure it's well connected with like-minded peers and the whole network. In an email conversation between ZmnSCPxj and Karl-Johan Alm, it was clarified that miners can completely ignore nSequence when putting transactions in blocks. Therefore, "full replace-by-fee" is expected to become the norm, and wallets should be designed to only trust transactions with confirmations.Furthermore, Peter Todd stated that his full-replace-by-fee tree ignores the convention of nSequence=0xFFFFFFFF. He also mentioned that full replace-by-fee appears to be used by a significant minority of miners. Todd's system uses preferential peering to ensure it is well connected with like-minded peers on the network.Additionally, the email conversation between Karl-Johan Alm and Peter Todd discussed the possibility of using full replace-by-fee, which is allegedly used by a significant minority of miners. Alm questioned whether final transactions with sequence=0xffffffff could be replaced using RBF, but Todd's full-replace-by-fee tree ignores this rule. Todd also noted that his system uses preferential peering to ensure it is well connected with like-minded peers on the network.In another email exchange between Karl-Johan Alm and Peter Todd, Todd mentioned that a significant minority of miners are using full replace-by-fee (RBF). However, he was unsure if final transactions with a sequence of 0xffffffff could be replaced using RBF. Todd's GitHub includes information about RBF in Bitcoin version 0.16.0, and replacing transactions via RBF is reportedly easy.The discussion also touched on the topic of transaction confirmations. A transaction is considered trusted if it is final, not in a block that was reorged out, has the 'spend zero conf change' option set, is in the mempool, and all inputs are from the sender. However, it is always possible to replace an unconfirmed transaction by asking a miner to mine a conflicting transaction directly. Full replace-by-fee (RBF) can be used by a significant minority of miners to replace any transaction. Therefore, wallets should be designed to only trust transactions that have confirmations, making it difficult for malicious actors to exploit the replace-by-fee feature.There were also discussions about the trustworthiness of transactions with zero confirmations. A transaction is considered trusted if it meets certain criteria, including being final, not in a reorged block, and having all inputs from the sender. It is important to note that having zero confirmations does not necessarily mean a transaction is untrustworthy, but rather its trustworthiness depends on the criteria mentioned above.Another conversation focused on questions related to the ListTransaction RPC call. One question asked about the meaning of a transaction being "trusted" or not, particularly in the case of transactions with zero confirmations. The response suggested that nothing in bitcoin is trusted without a certain number of confirmations. Another question asked about when the "confirmations" field can be -1 (conflicted) and what it means to have a conflicted transaction. The response clarified that -1 does not mean conflicted but rather indicates that the transaction is unconfirmed and depends on another unconfirmed transaction. There was also a question about adding a watch-only address to bitcoind and whether a first transaction will appear in walletconflicts if a second transaction occurs due to Transaction Malleability, but no response was provided to this question.Overall, these discussions shed light on the use of full replace-by-fee by miners, the importance of transaction confirmations, and the criteria for trusting transactions with zero confirmations. It also highlighted the possibility of replacing unconfirmed transactions through RBF and the potential vulnerabilities associated with this feature.</summary>
+    <published>2018-04-11T19:58:45+00:00</published>
+  </entry>
+</feed>

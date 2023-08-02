@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Compressed block headers</title>
+  <updated>2023-08-02T02:11:54.560330+00:00</updated>
+  <author>
+    <name>Richard Myers 2020-05-20 13:06:11+00:00</name>
+  </author>
+  <author>
+    <name>Robin Linus 2020-05-11 12:26:54+00:00</name>
+  </author>
+  <author>
+    <name>Richard Myers 2020-05-11 11:46:04+00:00</name>
+  </author>
+  <author>
+    <name>Will Clark 2020-05-08 12:31:06+00:00</name>
+  </author>
+  <link href="bitcoin-dev/May_2020/017881_Compressed-block-headers.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2020/017845_Compressed-block-headers.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2020/017844_Compressed-block-headers.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2020/017834_Compressed-block-headers.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Compressed block headers</title>
+    <updated>2023-08-02T02:11:54.560330+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017881.html" rel="alternate"/>
+    <summary>The proposed specification includes a new data type called `block_header2` which compresses some fields completely and others under certain conditions. The Version field will usually be identical to one referenced in one of the previous 7 unique versions, as indicated by bits 0,1,2 of the Bitfield. The previous block hash will always be the `SHA256(SHA256())`, so it is redundant if the previous header is known. The timestamp (in seconds) can be represented as an offset from the previous headers' timestamp using a 2-byte signed short int. NBits can also be transmitted according to the proposed specification. Txn_count is included to make parsing of these messages compatible with parsing of `block` messages but can be removed for transmission of compact headers.The proposal also includes a bitfield to make parsing of header messages easier and further increase header compression, which adds 1 byte for every block in the chain. A new service bit would be required so that nodes can advertise their ability to supply compact headers. Three new messages would be used by nodes that enable compact block header support: `getheaders2`, `sendheaders2`, and `headers2`. The first header in the first `block_header2[]` vector to a newly-connected client must contain the full `nBits`, `timestamp`, `version`, and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.The proposed scheme could save up to 49% of bandwidth required for a continuous header sync from genesis. However, there are potential drawbacks to implementing this compression scheme. It may require higher computation and memory for caching the last few versions, and there could be complexity and bugs associated with its implementation. Additionally, the use of low-bandwidth light clients should not be encouraged.The `headers2` message is returned in response to a `getheaders2` or at new header announcement following a `sendheaders2` request. It contains both `length` and `headers` fields, where the `headers` field contains compressed block headers in the specified format. The first header in the first `block_header2[]` vector to a newly-connected client must contain the full `nBits`, `timestamp`, `version`, and `prev_block_hash` fields, along with a correctly populated `bitfield` byte. Subsequent headers in a contiguous vector should follow the compressed format. If subsequent compressed headers are supplied to an already-connected client requesting compressed headers, they should also follow the compressed format.This proposal by Will Clark aims to provide significant bandwidth savings for low bandwidth nodes during IBD and block announcements. By compressing block headers, the size can be reduced from 81 bytes to as little as 39 bytes, resulting in a saving of 49% of the required bandwidth. The proposed specification includes a new data type, service bit, and three new messages to enable compact block header support. However, there are potential drawbacks to consider, such as increased computation and memory requirements, complexity in implementation, and the need to discourage the use of low-bandwidth light clients.</summary>
+    <published>2020-05-20T13:06:11+00:00</published>
+  </entry>
+</feed>

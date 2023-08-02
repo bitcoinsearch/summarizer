@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Safety of committing only to transaction outputs</title>
+  <updated>2023-08-02T00:55:06.284765+00:00</updated>
+  <author>
+    <name>Johnson Lau 2019-05-25 07:53:34+00:00</name>
+  </author>
+  <author>
+    <name>Jeremy 2019-05-24 20:59:03+00:00</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2019-05-23 20:54:01+00:00</name>
+  </author>
+  <link href="bitcoin-dev/May_2019/016975_Safety-of-committing-only-to-transaction-outputs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016978_Safety-of-committing-only-to-transaction-outputs.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2019/016963_Safety-of-committing-only-to-transaction-outputs.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Safety of committing only to transaction outputs</title>
+    <updated>2023-08-02T00:55:06.284765+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-May/016975.html" rel="alternate"/>
+    <summary>Jeremy Rubin proposed several mechanisms to enhance witness replay-ability and improve safety in blockchain transactions. One of his suggestions is to salt the taproot key or taproot leaf script at the last stage of a congestion control tree. However, he acknowledged that this salt would not be effective if the address is reused. Additionally, he recommended making chaperone signatures optional, as there may be cases where they are unnecessary.Rubin also mentioned that OP_COSHV is compatible with an additional checksig operation. This compatibility allows for more flexibility in implementing security measures. Furthermore, he proposed two other mechanisms: OP_CHECKINPUTSHASHVERIFY and OP_CHECKFEEVERIFY. OP_CHECKINPUTSHASHVERIFY enables the checking of the hash of inputs to ensure they match a specific value. This mechanism has broader applications beyond witness replay-ability. On the other hand, OP_CHECKFEEVERIFY allows for an explicit commitment to the exact amount of fee, limiting replays to transactions funded with the same amount as the previous one. However, it is important to note that transactions using OP_CHECKFEEVERIFY must have all inputs and outputs set.In a separate discussion initiated by Johnson Lau, the topic revolves around enabling witnesses to commit only to transaction outputs, but not inputs. Currently, the bitcoin script system offers three options: committing to both inputs and outputs, committing to only inputs, or not committing to any input or output. However, not committing to any input or output is deemed unsafe as it allows relay/mining nodes to redirect payment to any output they choose. It also makes the witness/scriptSig easily replayable, allowing future payments to be swept immediately.To address this issue, three active proposals have been put forward: CAT and CHECKSIGFROMSTACK (CSFS), ANYPREVOUT (aka NOINPUT), and CHECKOUTPUTSHASHVERIFY (COHV). These proposals ensure that payment redirection is impossible. However, not committing to any input means that the witness can be replayed without the consent of the address owner. The ANYPREVOUT proposal aims to solve this problem by requiring a chaperone signature that commits to the input.It is worth noting that if the rationale for a chaperone signature holds, it should apply to all the proposals mentioned above. A more general approach would be to always require a "safe" signature that commits to at least one input. However, this approach interacts poorly with the unknown public key type upgrade path described in bip-tapscript, as it would require a hardfork to turn an unknown type signature into a safe signature. Nevertheless, a new leaf version could be used for every new sighash type introduced to establish a new definition for a "safe sig". Additionally, customized sighash policies could be implemented with CAT/CSFS.</summary>
+    <published>2019-05-25T07:53:34+00:00</published>
+  </entry>
+</feed>

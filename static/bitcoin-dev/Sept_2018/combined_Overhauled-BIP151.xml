@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Overhauled BIP151</title>
+  <updated>2023-08-01T23:53:00.951443+00:00</updated>
+  <author>
+    <name>Tim Ruffing 2018-09-07 13:00:08+00:00</name>
+  </author>
+  <author>
+    <name>Jonas Schnelli 2018-09-07 08:34:13+00:00</name>
+  </author>
+  <author>
+    <name>Gregory Maxwell 2018-09-07 02:31:15+00:00</name>
+  </author>
+  <author>
+    <name>Tim Ruffing 2018-09-06 23:23:21+00:00</name>
+  </author>
+  <author>
+    <name>Eric Voskuil 2018-09-04 01:37:30+00:00</name>
+  </author>
+  <author>
+    <name>Jonas Schnelli 2018-09-03 12:16:19+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Sept_2018/016377_Overhauled-BIP151.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2018/016378_Overhauled-BIP151.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2018/016380_Overhauled-BIP151.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2018/016372_Overhauled-BIP151.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2018/016357_Overhauled-BIP151.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2018/016355_Overhauled-BIP151.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Overhauled BIP151</title>
+    <updated>2023-08-01T23:53:00.951443+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-September/016377.html" rel="alternate"/>
+    <summary>In a discussion about improving the confidentiality of Tor, Gregory Maxwell suggested that the current implementation provides "no confidentiality at all." He proposed using BIP151 to add some long-term confidentiality hedge. The conversation then turned to the potential adoption of NewHope, with concerns raised over its difficulty to implement. However, people already make claims regarding Bitcoin's post-quantum security and this should not be an argument against improving security.The participants discussed the proposed BIP151 encryption for Bitcoin peer-to-peer protocol. They agree that obfuscating the key exchange is important but achieving DPI robustness is out of scope. They suggest using TOR with OBFS4 and deterministic rekeying rules to address all-or-none censorship situations. The proposed encryption adds robustness to the threat model at low costs and low risks. They also discuss the use of chacha20-poly1305 and padding to hide message length without much overhead. They suggest using short IDs instead of ASCII commands for small messages that are used often. The conversation highlights the need for clearer specifications in the BIP, including what to do if MAC verification fails, how to handle even keys, and how to form a 64-bit nonce from one or two uint32. Pseudocode could help clarify some of these issues.In a bitcoin-dev discussion, the topic of improving privacy and security in Bitcoin's peer-to-peer (p2p) connections was brought up. One suggestion was to use an ECDH key exchange with an encoding of public keys that provides indistinguishability from random bitstrings. However, this would require writing new cryptographic code and may not actually improve security as Bitcoin traffic is easily identifiable by its traffic patterns. Another proposal was to enhance BIP151, which currently does not add any long-term confidentiality for p2p connections running over Tor. This could be achieved by adding some level of confidentiality hedge. The discussion also touched on the need to improve key derivation to prevent an attacker from creating a situation where two peers think they're in the same session, but they're not. Finally, there was disagreement over whether improving security would hinder adoption or give people a false sense of security.In a discussion about the Bitcoin protocol, the idea of using a shared secret to avoid issues with signaling re-keying in the length field was proposed. The contributory key model was also discussed, but it was determined that an attack form was not possible. There was debate around the use of deterministic rekeying rules versus different policies, which could lead to fingerprinting implementations. It was suggested that using a cipher suite that effectively "rekeyed" every message would be preferable, but there are no well-analyzed authenticated encryption modes with this property. When it comes to choosing between AES-GCM and ChaCha20/Poly1305, both are reasonable choices, but on devices without hardware AES/clmul constant time AES-GCM is very slow compared to ChaCha20/Poly1305. The possibility of padding to hide message length without too much overhead was suggested, but it was noted that it could only be done at the message level. Writing things in stone to avoid complexity and fingerprinting was deemed impractical, as new proposals for messages where the overhead matters are upcoming. "May negotiate" was introduced to avoid a debate about who assigned numbers from the limited space in the future. Encryption can kill external analyzers, but logging traffic is still possible. Lastly, there was a debate about whether the re-keying must be done after every 1GB of data sent or received, with the consensus being that it should just read "sent" instead of "sent or received."The author of the message has commented on various aspects of Bitcoin's security and suggested improvements. The post-quantum key exchange is considered overkill and may hinder adoption. Instead, it is suggested to have a simple ECDH key exchange with an encoding of public keys that provides indistinguishability from random bitstrings. A better key derivation method is proposed to avoid issues such as an attacker rerandomizing public keys. Deterministic rekeying rules are preferred over signaling re-keying in the length field as signal bits can be flipped by attackers. The lack of clarity in some areas of the protocol is pointed out, and suggestions for improvement are provided. Pseudocode is suggested to help understand the protocol better.Jonas Schnelli has proposed an overhaul of the BIP151 specification for Bitcoin, which he believes could be further optimized. A new proposal draft is available on GitHub and includes several changes, such as a pure 32-byte-per-side "pseudorandom" key exchange that happens before anything else, the removal of the multi-message envelope, and the introduction of a NODE_ENCRYPTED service bit. The length of a packet now uses a 3-byte integer with 23 available bits, and there is an introduction of short-command-ID, which results in some v2 messages requiring less bandwidth than v1. Schnelli has also suggested</summary>
+    <published>2018-09-07T13:00:08+00:00</published>
+  </entry>
+</feed>

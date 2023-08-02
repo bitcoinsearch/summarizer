@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Segwit v2</title>
+  <updated>2023-08-01T20:31:14.548610+00:00</updated>
+  <author>
+    <name>praxeology_guy 2017-04-27 02:18:57+00:00</name>
+  </author>
+  <author>
+    <name>Russell O'Connor 2017-04-26 21:34:29+00:00</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-04-26 20:09:34+00:00</name>
+  </author>
+  <author>
+    <name>Luke Dashjr 2017-04-26 20:01:10+00:00</name>
+  </author>
+  <author>
+    <name>Johnson Lau 2017-04-26 19:31:38+00:00</name>
+  </author>
+  <author>
+    <name>praxeology_guy 2017-04-26 08:51:51+00:00</name>
+  </author>
+  <author>
+    <name>Luke Dashjr 2017-04-20 20:28:52+00:00</name>
+  </author>
+  <link href="bitcoin-dev/April_2017/014240_Segwit-v2.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014239_Segwit-v2.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014238_Segwit-v2.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014237_Segwit-v2.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014236_Segwit-v2.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014233_Segwit-v2.xml" rel="alternate"/>
+  <link href="bitcoin-dev/April_2017/014220_Segwit-v2.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Segwit v2</title>
+    <updated>2023-08-01T20:31:14.548610+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-April/014240.html" rel="alternate"/>
+    <summary>In a recent discussion on the Bitcoin-dev mailing list, Luke Dashjr proposed some minor tweaks to BIP 141's version bit assignment for SegWit v2. The first suggested change is to replace the dummy marker with 0xFF instead of 0. This change aims to avoid ambiguity with incomplete zero-input transactions that has been a source of confusion for raw transaction APIs. The second proposed change involves relaxing the consensus rules on when witness data is allowed for an input.Currently, witness data is only allowed when the scriptSig is null and the scriptPubKey being spent matches a specific pattern. Luke suggests allowing witness data in combination with scriptSig and with any scriptPubKey, considering these cases to be "upgrade-safe" policy ignoring. This change would make the system more flexible to future softforks.Johnson Lau also proposed a change in commitment structure that is backwards compatible. He suggested merging two arrays to create a simpler format, but noted that it would be harder to compress. The new format includes OP_RETURN, Push the following 36 bytes, Commitment header, Commitment hash, Extension roots, and optional data. The extension roots consist of an array of extension identifier, extension root length, and extension root.Luke Dashjr and Johnson Lau had an email exchange discussing the use of a dummy marker and scriptSig in Bitcoin. Johnson Lau expressed his preference to keep the dummy marker and not change the commitment structure as suggested by another post. Luke Dashjr argued that the dummy marker could be non-consensus critical as long as hashing replaces it with a 0. They also debated the use of scriptSig and witness, with Luke suggesting that scriptSig should not be obsoleted just yet since there are things it can do that witness cannot currently.In a separate discussion, Praxeology Guy proposed a more future-proof Commitment Extension Methodology that uses fewer bytes and eliminates arbitrary storage locations for the "witness reserved value." This methodology includes a variable length array of extension identifiers and roots. Additionally, he suggests implementing the Policy ID 'replay attack" prevention that increases each wtx length by 1 byte and can be reduced in a block by clustering Policy ID ranges in the coinbase or guessing the Policy ID. Finally, witness data would sign on the Policy ID, preventing replay if at least one branch adopted a new Policy ID.Overall, these proposed changes aim to improve the functionality and flexibility of the Bitcoin system, particularly in relation to scriptSig, witness data, and commitment structure. The suggestions have been shared with the Bitcoin-dev mailing list for further discussion and feedback from participants.</summary>
+    <published>2017-04-27T02:18:57+00:00</published>
+  </entry>
+</feed>
