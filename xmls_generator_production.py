@@ -131,7 +131,7 @@ class GenerateXML:
         chunks = self.split_prompt_into_chunks(body, tokens_per_sub_body)
         summaries = []
 
-        print(f"Total chunks: {len(chunks)}")
+        logger.info(f"Total chunks: {len(chunks)}")
 
         for chunk in chunks:
             count_gen_sum = 0
@@ -155,11 +155,11 @@ class GenerateXML:
 
         summary_length = sum([len(TOKENIZER.encode(s)) for s in summaries])
 
-        print(f"Summary length: {summary_length}")
-        print(f"Max length: {max_length}")
+        logger.info(f"Summary length: {summary_length}")
+        logger.info(f"Max length: {max_length}")
 
         if summary_length > max_length:
-            print("entering in recursion")
+            logger.info("entering in recursion")
             return self.recursive_summary("".join(summaries), tokens_per_sub_body, max_length)
         else:
             return summaries
@@ -170,7 +170,7 @@ class GenerateXML:
         summaries = self.recursive_summary(body, tokens_per_sub_body, body_length_limit)
 
         if len(summaries) > 1:
-            print("Consolidate summary generating")
+            logger.info("Consolidate summary generating")
             summary_str = "\n".join(summaries)
             count_api = 0
             while True:
@@ -188,7 +188,7 @@ class GenerateXML:
             return consolidated_summaries
 
         else:
-            print("Individual summary generating")
+            logger.info("Individual summary generating")
             return "\n".join(summaries)
 
     def create_summary(self, body):
@@ -339,6 +339,16 @@ class GenerateXML:
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
         return author_tuple
 
+    def add_utc_if_not_present(self, datetime_str):
+        try:
+            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S%z")
+            datetime_obj = datetime_obj.replace(tzinfo=pytz.UTC)
+        except ValueError:
+            datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
+            timezone = pytz.UTC
+            datetime_obj = datetime_obj.replace(tzinfo=timezone)
+        return datetime_obj.isoformat(" ")
+
     def generate_new_emails_df(self, dict_data, dev_url):
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
@@ -436,6 +446,10 @@ class GenerateXML:
                 logger.info(f"Total titles in data: {len(titles)}")
                 for title_idx, title in tqdm(enumerate(titles)):
                     title_df = emails_df[emails_df['title'] == title]
+                    title_df['authors'] = title_df['authors'].apply(self.convert_to_tuple)
+                    title_df = title_df.drop_duplicates()
+                    title_df['authors'] = title_df['authors'].apply(self.preprocess_authors_name)
+                    title_df = title_df.sort_values(by='created_at', ascending=False)
                     logger.info(f"length of title_df: {len(title_df)}")
                     if len(title_df) < 1:
                         continue
@@ -470,7 +484,7 @@ class GenerateXML:
                             'authors': combined_authors,
                             'url': title_df.iloc[0]['url'],
                             'links': combined_links,
-                            'created_at': title_df.iloc[0]['created_at_org'],
+                            'created_at': self.add_utc_if_not_present(title_df.iloc[0]['created_at_org']),
                             'summary': combined_summary
                         }
                         if not flag:
