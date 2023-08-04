@@ -195,13 +195,6 @@ if __name__ == "__main__":
     # if production is set to False, elasticsearch will fetch all the docs in the index
     PRODUCTION = True
 
-    # logs
-    os.makedirs("logs", exist_ok=True)
-    log_file_path = "logs/push_summary_to_es.log"
-    if os.path.exists(log_file_path):
-        os.remove(log_file_path)
-    logger.add(log_file_path)
-
     # workflow
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
@@ -219,7 +212,7 @@ if __name__ == "__main__":
             current_date_str = None
             if not current_date_str:
                 current_date_str = datetime.now().strftime("%Y-%m-%d")
-            start_date = datetime.now() - timedelta(days=2)
+            start_date = datetime.now() - timedelta(days=15)
             start_date_str = start_date.strftime("%Y-%m-%d")
             logger.info(f"start_date: {start_date_str}")
             logger.info(f"current_date_str: {current_date_str}")

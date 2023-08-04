@@ -1,8 +1,8 @@
-name: Daily Push Summary From XML Files to ES INDEX
+name: Daily Python Homepage Update Script Execution
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 2 * * *"
   workflow_dispatch:
   repository_dispatch:
 
@@ -35,7 +35,7 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Execute Python script
-      run: python push_summary_to_es.py
+      run: python generate_homepage_xml.py
 
     - name: Configure Git
       run: |
@@ -48,6 +48,6 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Updated ES Index with a summary"
+          git commit -m "Updated homepage.json file"
           git push
         fi
