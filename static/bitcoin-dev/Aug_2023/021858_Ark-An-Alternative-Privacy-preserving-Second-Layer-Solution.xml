@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Ark: An Alternative Privacy-preserving Second Layer Solution</title>
+  <updated>2023-08-07T22:24:17.973587+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-08-06 22:43:55+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Ark: An Alternative Privacy-preserving Second Layer Solution</title>
+    <updated>2023-08-07T22:24:17.973587+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021858.html" rel="alternate"/>
+    <summary>Antoine raises concerns about a potential weakness in the Ark proposal discussed with Burak. He explains that there are three types of transactions involved: pool_tx, ATLC-connection_tx, and ATLC-refund_tx. The pool_tx has three outputs: commitment output, connector output, and change output. The receiver vTXO scriptpubkey on pool_tx N includes a pseudo-script that allows multisig(receiver, ASP) or ((pk(receiver)+24h) or (pk(ASP)+4weeks)).Antoine further explains that from the perspective of the next pool_tx state, the receiver becomes the sender. An ATLC-connection_tx associated with pool_tx N spends vTXOs outputs from the receiver at pool_tx N-1 and connector outputs from pool_tx N. The initial uplifting ATLC-connection_tx spends an on-chain input from the initial sender.Antoine then describes a scenario involving Alice as the sender, Bob as the receiver, and the ASP at state N. Alice owns a vTXO on pool_tx N, which can be unilaterally spent after 24 hours using only her own signature. She engages with the ASP to construct a new pool_tx N+1, paying a vTXO to Bob with the same relative locktime of 24 hours. She reveals her signature to the ASP for the ATLC-connection_tx N+1, spending her vTXO at state N and the connector output at state N+1. The ASP broadcasts the pool_tx N+1, and it is pending in network mempools.Alice then broadcasts her ATLC refund tx using the mature unilateral exit path, replacing any pending ATLC-connection tx in network mempools. Both the ATLC refund tx for the vTXO at state N and the pool_tx at state N+1 confirm. After waiting for 24 hours, Bob can unilaterally spend the vTXO at state N+1.Antoine points out that Alice and Bob colluded to "double-spend" the ASP without the service provider earning compensation for the pool_tx state N+1 funding input. He suggests that adding another round of interactivity between the sender and the ASP, like disclosing a revocation secret for the ATLC-refund transaction, may fix this weakness. However, he raises concerns about the ASP potentially stalling the next pool_tx N+1 broadcast and waiting for the 4-week timelock expiration.Antoine acknowledges that any mistakes, confusion, or misunderstanding in his explanation are his own and requests more details about transactions, scripts, and protocol phases.</summary>
+    <published>2023-08-06T22:43:55+00:00</published>
+  </entry>
+</feed>
