@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP-352 Silent Payments addresses should have an expiration time</title>
+  <updated>2023-08-07T22:29:55.743850+00:00</updated>
+  <author>
+    <name>Brandon Black 2023-08-05 14:46:52+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP-352 Silent Payments addresses should have an expiration time</title>
+    <updated>2023-08-07T22:29:55.743850+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021854.html" rel="alternate"/>
+    <summary>In response to a proposal, the granularity of encoding expiration dates is not determined by when it is applied but rather by the encoding itself. For instance, the binary representation `0b00000001` corresponds to an expiration date one year from the system's epoch, while `0b10000000 10000000` represents an expiration date 128 weeks from the epoch. When decoding, the position of the highest `0` bit in the expiration determines both the byte-length and the granularity. If the highest bit of the expiration is `0`, it indicates a 1-byte length and the bits following the highest `0` represent the number of years. On the other hand, if the second highest bit is the first `0`, then it signifies a 2-byte length and the bits following the highest `0` encode the number of weeks. This pattern continues for different levels of granularity. The proposal acknowledges that over time, as the expiration date extends further into the future, there is a degradation in the sense that more bytes are required for encoding. For example, after 128 years of use, users will have to employ at least 2 bytes instead of 1, even if they only need year granularity. Similarly, after 315 years, users will need to use at least 3 bytes, even if they only require week granularity.However, the suggestion is to allow users to encode their expiration dates in 1 or 2 bytes currently, with the flexibility to degrade in the future by requiring additional bytes. This approach avoids the immediate requirement of using 3 bytes and provides a more efficient encoding scheme now. Overall, the proposal aims to offer users the ability to encode their expiration dates with varying levels of granularity, while also considering the potential increase in byte usage over time.</summary>
+    <published>2023-08-05T14:46:52+00:00</published>
+  </entry>
+</feed>
