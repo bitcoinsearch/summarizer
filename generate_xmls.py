@@ -12,6 +12,7 @@ import platform
 import shutil
 from datetime import datetime
 import xml.etree.ElementTree as ET
+from src.utils import preprocess_email
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 from loguru import logger
@@ -216,6 +217,7 @@ class GenerateXML:
         emails_df = emails_df.drop_duplicates()
         emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
         logger.info(f"Shape of emails_df: {emails_df.shape}")
+        emails_df['body'] = emails_df['body'].apply(preprocess_email)
 
         emails_df['created_at_org'] = emails_df['created_at']
         emails_df['created_at'] = emails_df['created_at'].apply(self.convert_to_utc_zulo_timestamp)

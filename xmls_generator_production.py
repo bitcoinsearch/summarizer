@@ -20,7 +20,7 @@ import ast
 from loguru import logger
 import warnings
 from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
-
+from src.utils import preprocess_email
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 
@@ -390,6 +390,7 @@ class GenerateXML:
         emails_df['authors'] = emails_df['authors'].apply(self.convert_to_tuple)
         emails_df = emails_df.drop_duplicates()
         emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
+        emails_df['body'] = emails_df['body'].apply(preprocess_email)
         logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
 
