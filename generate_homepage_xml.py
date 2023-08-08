@@ -309,7 +309,7 @@ class GenerateJSON:
         return str(id).split("-")[-1]
 
     def create_n_bullets(self, body_summary, n=3):
-        bullets_prompt = f"""Summarize the following context into {n} distinct sentences based on the guidelines 
+        bullets_prompt = f"""Summarize the following email into {n} distinct sentences based on the guidelines 
         mentioned below. 
             1. Each sentence you write should not exceed fifteen words. 
             2. Each sentence should begin on a new line and should start with a hyphen (-) and you must add space after hyphen (-).
@@ -375,7 +375,7 @@ class GenerateJSON:
                 body_summ = self.create_summary(body)
                 recent_post_data += body_summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"""Summarize the following context into 3 or 4 distinct sentences based on the guidelines 
+        summ_prompt = f"""Summarize the following email into 3 or 4 distinct sentences based on the guidelines 
         mentioned below.
             1. Each sentence you write should not exceed fifteen words.
             2. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
