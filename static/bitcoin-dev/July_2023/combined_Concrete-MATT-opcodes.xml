@@ -2,22 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Concrete MATT opcodes</title>
-  <updated>2023-08-07T22:28:28.877817+00:00</updated>
+  <updated>2023-08-09T02:06:52.722047+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-08-07 11:37:07+00:00</name>
+  </author>
+  <author>
+    <name>Salvatore Ingala 2023-08-07 08:31:40+00:00</name>
+  </author>
   <author>
     <name>David A. Harding 2023-08-06 20:13:25+00:00</name>
   </author>
   <author>
     <name>Salvatore Ingala 2023-07-30 21:37:49+00:00</name>
   </author>
+  <link href="bitcoin-dev/Aug_2023/021862_Concrete-MATT-opcodes.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Aug_2023/021861_Concrete-MATT-opcodes.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2023/021856_Concrete-MATT-opcodes.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2023/021827_Concrete-MATT-opcodes.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Concrete MATT opcodes</title>
-    <updated>2023-08-07T22:28:28.877817+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021856.html" rel="alternate"/>
-    <summary>Salvatore Ingala has presented a complete proposal for the core opcodes of MATT, which includes the implementation of OP_CHECKCONTRACTVERIFY. The proposal can be found in the bitcoin-inquisition repo fork. The diff in the repo provides detailed information about the implementation and includes basic functional tests. The main changes in this proposal compared to the previous draft include replacing OP_CHECK{IN, OUT}CONTRACTVERIFY with a single opcode, OP_CHECKCONTRACTVERIFY (CCV). Additionally, an additional `flags` parameter is introduced to specify whether the opcode operates on an input or an output. The default behavior for outputs includes a deferred checks mechanism for amounts, where the input amounts with CCV towards the same output are summed and act as a lower bound for that output's amount. However, this behavior can be disabled with a flag.The order of parameters is also modified for better script writing. The new OP_CHECKCONTRACTVERIFY takes five parameters from the stack and checks if the -th input/output's scriptPubKey is a P2TR with a public key obtained from optionally tweaked wit and optionally tap-tweaked with. Special values are defined for the parameters, such as using a fixed NUMS point if  is empty, using the current input's taproot internal key if  is -1, and using the current input's index if  is -1. There are also defined flags, including CCV_FLAG_CHECK_INPUT and CCV_FLAG_IGNORE_OUTPUT_AMOUNT. After evaluating all inputs, it is verified that each output's amount is greater than or equal to the total amount in the bucket of that output, validating the deferred checks. The author notes that while some special values may not be useful in applications, they were included for flexibility.With the introduction of the new opcode, the full generality of MATT can be achieved with just two opcodes: OP_CHECKCONTRACTVERIFY and OP_CAT. However, the author acknowledges that additional opcodes and introspection may benefit certain applications. The author is open to receiving comments and starting a BIP proposal.For more information, you can refer to the following references:[1] - Merkle.fun (https://merkle.fun/)[2] - Bitcoin-dev Mailing List November 2022 (https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-November/021182.html)[3] - Bitcoin-dev Mailing List April 2023 (https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-April/021588.html)[4] - Diff in the bitcoin-inquisition repo fork (https://github.com/bitcoin-inquisition/bitcoin/compare/24.0..Merkleize:bitcoin:checkcontractverify)</summary>
-    <published>2023-08-06T20:13:25+00:00</published>
+    <updated>2023-08-09T02:06:52.722101+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021862.html" rel="alternate"/>
+    <summary>Salvatore Ingala has presented a complete proposal for the core opcodes of MATT, making the opcode functionally complete with revised and improved implementation. The code is implemented in the bitcoin-inquisition repo fork, which includes OP_CHECKTEMPLATEVERIFY. The diff provides details on the implementation and includes basic functional tests. The changes compared to the previous draft include replacing OP_CHECK{IN, OUT}CONTRACTVERIFY with a single opcode, OP_CHECKCONTRACTVERIFY (CCV), and introducing an additional `flags` parameter to specify if the opcode operates on an input or an output. The default behavior for outputs includes a deferred checks mechanism for amounts, where the input amounts with CCV towards the same output are summed and act as a lower bound for that output's amount. A flag can disable this behavior. The order of parameters is also modified for better script writing. The new OP_CHECKCONTRACTVERIFY takes five parameters from the stack and checks if the -th input/output's scriptPubKey is a P2TR with a public key obtained fro optionally tweaked wit and optionally tap-tweaked with . Special values of the parameters are defined, such as using a fixed NUMS point if is empty, using the current input's taproot internal key if is -1, and using the current input's index if is -1. There are also defined flags, including CCV_FLAG_CHECK_INPUT and CCV_FLAG_IGNORE_OUTPUT_AMOUNT. After evaluating all inputs, it is verified that each output's amount is greater than or equal to the total amount in the bucket of that output, validating the deferred checks. The author notes that while some special values may not be useful in applications, they were included for flexibility. With the new opcode, the full generality of MATT, including fraud proofs, can be achieved with just two opcodes: OP_CHECKCONTRACTVERIFY and OP_CAT. However, additional opcodes and introspection may benefit certain applications. The author looks forward to comments and starting a BIP proposal.References:[1] - https://merkle.fun/[2] - https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-November/021182.html[3] - https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-April/021588.html[4] - https://github.com/bitcoin-inquisition/bitcoin/compare/24.0..Merkleize:bitcoin:checkcontractverify</summary>
+    <published>2023-08-07T11:37:07+00:00</published>
   </entry>
 </feed>
