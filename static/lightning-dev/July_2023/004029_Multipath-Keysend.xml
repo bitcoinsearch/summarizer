@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Multipath Keysend</title>
-  <updated>2023-07-30T02:04:15.557931+00:00</updated>
+  <updated>2023-08-11T15:56:41.546565+00:00</updated>
   <author>
     <name>Thomas HUET 2023-07-28 10:43:34+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Multipath Keysend</title>
-    <updated>2023-07-30T02:04:15.557972+00:00</updated>
+    <updated>2023-08-11T15:56:41.546565+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004029.html" rel="alternate"/>
-    <summary>The motivation behind the concept of multipath keysend is to enable the receiver to claim the payment only when all parts of the payment have been received. This approach adds complexity to the keysend protocol, so it is important to determine if there is a user need before implementing it. It is worth noting that the BOLT 12 specification already supports multipath payments and provides a proof of payment.In the proposed scheme for multipath keysend, the preimage is embedded as TLV 5482373484 with a length of 32. To split the keysend into multiple parts, a true preimage 'p' is randomly selected, and the payment hash 'h' is generated using SHA256(p). To create two parts, a new 256-bit scalar 'a' is generated. For one part, 'a' is sent as TLV 5482373484, and for the second part, 'a ^ p' is sent, where '^' denotes XOR. Both parts use the same payment hash 'h'. Upon receiving either part, the receiver realizes that the supposed preimage does not match the actual HTLC payment hashes. Instead of failing, the receiver holds the payment following the basic multipath payment rules. When the receiver receives another part, it XORs the supposed preimages together. In the given example, XORing 'a' and 'a ^ p' results in 'p', which is now the correct preimage, allowing the receiver to claim the complete funds.This technique can be extended to any number of parts by generating 'n - 1' additional random scalars and using them for the first 'n - 1' parts. The last part is XORed with the scalar-to-be-split. This approach also works for dynamic splitting, where a part is split multiple times.A sender can detect if the receiver supports multipath keysend by observing the error response. If a part reaches the receiver and it errors with 'incorrect_or_unknown_payment_details,' it indicates that the receiver does not support multipath keysend. However, if the receiver is aware of multipath keysend, it will hold onto the incoming HTLCs until the Multipath Payment (MPP) timeout and then error with 'mpp_timeout.' This means that support for multipath keysend on the receiver side does not require a new feature bit; an MPP-capable sender can attempt to split the payment and interpret the error response accordingly. The same feature bit 55 can be reused.Overall, the proposed scheme offers a way to implement multipath keysend by splitting the preimage and using XOR operations to combine the parts at the receiver's end.</summary>
+    <summary>The motivation for multipath keysend is questioned. Instead of making multiple independent keysend payments with different payment hashes, it is important to determine if there is a user need before adding complexity to keysend. This is particularly relevant considering the ongoing work on BOLT 12, which supports multipath and offers a proof of payment [1]. [1] Link: BOLT 12 (https://example.com/bolt12)</summary>
     <published>2023-07-28T10:43:34+00:00</published>
   </entry>
 </feed>

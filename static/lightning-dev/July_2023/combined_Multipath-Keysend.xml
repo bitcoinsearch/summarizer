@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Multipath Keysend</title>
-  <updated>2023-08-01T01:19:42.255255+00:00</updated>
+  <updated>2023-08-11T15:57:07.665462+00:00</updated>
   <author>
     <name>Matt Corallo 2023-07-29 16:37:26+00:00</name>
   </author>
@@ -27,9 +27,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Multipath Keysend</title>
-    <updated>2023-08-01T01:19:42.255255+00:00</updated>
+    <updated>2023-08-11T15:57:07.665462+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004032.html" rel="alternate"/>
-    <summary>ZmnSCPxj's proposal aims to enhance the functionality of the `keysend` protocol by enabling multipath payments. This allows for more flexibility in how payments are split and claimed. However, it is important to note that implementing this scheme adds complexity to the keysend protocol, so it is crucial to determine if there is a user need before proceeding with its implementation.In summary, the proposed scheme for multipath keysend involves splitting the preimage and using XOR operations to combine the parts at the receiver's end. It supports any number of parts and dynamic splitting. To check if the receiver supports multipath keysend, a sender can observe the error response when a part reaches the receiver. Overall, this proposal offers a way to implement multipath keysend and enhance the functionality of the protocol.In the context provided, it is stated that the receiver side does not require any special announcement through a new feature bit. Instead, the same feature bit 55 can be reused for this purpose. This scheme proposes a straightforward approach to implementing a `keysend` protocol, which enables the use of multipath payments without the need for additional feature bits or announcements. By reusing feature bit 55, this method offers a simple and efficient way to facilitate multipath payments.</summary>
+    <summary>The email discusses the idea of implementing a multipath keysend protocol, which would allow for multipath payments. In this scheme, the preimage is embedded as TLV 5482373484 with a length of 32. The sender would split the keysend into multiple parts, each using the same payment hash. The receiver would only be able to claim the payment once all parts have arrived. The receiver holds the payment when it receives a part and finds that the supposed preimage does not match the actual HTLC payment hashes. When it receives another part, it XORs the supposed preimages together until it gets the correct preimage and can claim the entire funds. This scheme can work with any number of parts and even supports dynamic splitting. If a part reaches a receiver that doesn't support multipath keysend, it will error with "incorrect_or_unknown_payment_details", while an MPP-capable receiver will hold onto the incoming HTLCs until the MPP timeout and error with "mpp_timeout". The same feature bit 55 can be reused for this purpose.</summary>
     <published>2023-07-29T16:37:26+00:00</published>
   </entry>
 </feed>

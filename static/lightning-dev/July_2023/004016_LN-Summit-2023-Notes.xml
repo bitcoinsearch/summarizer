@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>LN Summit 2023 Notes</title>
-  <updated>2023-07-26T02:15:04.252285+00:00</updated>
+  <updated>2023-08-11T15:53:20.822625+00:00</updated>
   <author>
     <name>ZmnSCPxj 2023-07-24 08:13:49+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>LN Summit 2023 Notes</title>
-    <updated>2023-07-26T02:15:04.252334+00:00</updated>
+    <updated>2023-08-11T15:53:20.822625+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004016.html" rel="alternate"/>
-    <summary>A proposal has been made to not use MuSig2 signing for commitment transactions, but instead add a tapscript branch and use that for unilateral closes. MuSig2 signing would only be used for mutual closes after negotiating closing fees. This approach reduces the need for nonce storage as only mutual closes require it. Nonces can be kept in volatile RAM for continuous connectivity and removed on disconnection. The hope is that mutual closes will dominate over unilateral closes.Unconditional fees are seen as the simplest monetary solution for pricing scarce resources. They only need to be small compared to success case fee budgets, and even with high failure rates, success is still possible with enough retries. However, some argue that unconditional fees should be dynamic rather than static, as rational economic actors price their liquidity based on demand.Setting a failure threshold to prevent attacks is difficult because attackers can aim to fall just below that threshold and attack individual channels through multiple channels. Reputation-based solutions also have limitations as they can be gamed. If reputation accumulation matches the regular operation of nodes on the network, reputation will naturally build up over time. However, if it deviates, attackers can gain more reputation than regular nodes by performing certain actions.Jamming, in the context of node appreciation of local resources, refers to a subjective valuation. It depends on the characteristics of a forwarding node and how it deviates from a stereotypical one.The ideal solution would be to pay for the amount of time an HTLC is held in flight. However, proving time when things go wrong is challenging without a universal clock, which Bitcoin's chain height advances do not provide due to their coarsely grained nature.A NACK (negative acknowledgment) indicates that all updates have been ignored, and the channel is progressing to the next commitment. However, using a NACK to halt channel progress without reputation downgrade may be considered a layer violation issue.Overall, these discussions explore various aspects of taproot/musig2, pricing fees, failure thresholds, reputation-based solutions, jamming, and the challenges of implementing an ideal payment system.</summary>
+    <summary>The proposal made in the Signal group after the summit suggests not using MuSig2 signing for commitment transactions. Instead, a tapscript branch consisting of `OP_CHECKSIGVERIFY OP_CHECKSIG` should be added and used for unilateral closes. MuSig2 should only be used for mutual closes after negotiating closing fees. This approach eliminates the need for storing nonces in persistent storage and instead keeps them in volatile RAM. If a disconnection occurs, the nonces are removed from volatile RAM and the mutual close negotiation restarts upon reconnection. The goal is to have mutual closes dominate over unilateral closes. Conditional fees on the Lightning Network are already dynamic, so there is no reason for unconditional fees to be necessarily static. The subjective valuation of a "stereotypical" forwarding node is likely to be the most relevant. Deviations from the stereotypical forwarding node would determine how it differs from the typical one. The Bitcoin clock's coarse granularity, with chain height advances sometimes taking several hours, can cause problems. Halting channel progress could be considered a reason for reputation downgrade.</summary>
     <published>2023-07-24T08:13:49+00:00</published>
   </entry>
 </feed>

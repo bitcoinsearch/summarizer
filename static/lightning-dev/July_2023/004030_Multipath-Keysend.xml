@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>1</id>
   <title>Multipath Keysend</title>
-  <updated>2023-07-30T02:04:32.097436+00:00</updated>
+  <updated>2023-08-11T15:56:36.106562+00:00</updated>
   <author>
     <name>Matt Morehouse 2023-07-28 22:10:11+00:00</name>
   </author>
@@ -10,9 +10,9 @@
   <entry>
     <id>1</id>
     <title>Multipath Keysend</title>
-    <updated>2023-07-30T02:04:32.097471+00:00</updated>
+    <updated>2023-08-11T15:56:36.106562+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-July/004030.html" rel="alternate"/>
-    <summary>Hi Matt,ZmnSCPxj has shared a scheme for creating a `keysend` protocol that allows for multipath payments. This scheme is similar to AMP (https://docs.lightning.engineering/lightning-network-tools/lnd/amp). However, ZmnSCPxj does not explicitly mention any improvements over AMP.In the proposed `keysend` scheme, the preimage is embedded as TLV 5482373484 with a length of 32. The goal in the multipath case is to ensure that the receiver can only claim the payment once all parts have arrived at the receiver.To illustrate how this works, let's consider splitting the `keysend` into 2 parts. First, a true preimage `p` is randomly selected. Then, the payment hash `h` is generated using SHA256(p).Next, a new 256-bit scalar, `a`, is generated. For one part, `a` is sent for TLV 5482373484, and for the second part, `a ^ p` (where `^` represents XOR) is sent. Both parts use the same payment hash `h`.When the receiver receives either part, it realizes that the supposed preimage does not match the actual HTLC payment hashes. Instead of failing, the receiver holds the payment, following the basic multipath payment rules.As more parts arrive, the receiver XORs the supposed preimages together. In the example given, XORing `a` and `a ^ p` results in `a ^ a ^ p`, which simplifies to `p`. At this point, the receiver has the correct preimage and can claim the entire complete funds.This technique can be extended to any number of parts. If splitting into `n` parts, `n - 1` additional random scalars are generated and used for the first `n - 1` parts. The scalar-to-be-split for the `n`th part is XORed with all the previous scalars. This scheme also supports dynamic splitting, allowing for splitting of previously split parts.To determine if the receiver supports multipath `keysend`, a sender can observe the response when a part reaches the receiver. If the receiver errors with `incorrect_or_unknown_payment_details`, it indicates that the receiver does not support multipath `keysend`. On the other hand, if the receiver holds onto the incoming HTLCs until MPP timeout and errors with `mpp_timeout`, it signifies that the receiver is aware of multipath `keysend`.It's worth noting that support for this on the receiver side does not need to be specifically announced via a new feature bit. An MPP-capable sender can simply attempt to split, and if it encounters an `incorrect_or_unknown_payment_details` error, it knows that the receiver does not support multipath `keysend`. The same feature bit 55 can be reused in this context.Best regards,ZmnSCPxj</summary>
+    <summary>Matt is comparing the scheme mentioned by ZmnSCPxj to AMP and asking if it offers any improvements over AMP.</summary>
     <published>2023-07-28T22:10:11+00:00</published>
   </entry>
 </feed>

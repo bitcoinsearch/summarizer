@@ -14,6 +14,7 @@ import warnings
 import pytz
 import json
 
+from src.utils import preprocess_email
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 
@@ -372,6 +373,7 @@ class GenerateJSON:
 
             if xml_summ is None:
                 body = data['_source']['body']
+                body = preprocess_email(body)
                 body_summ = self.create_summary(body)
                 recent_post_data += body_summ
         recent_post_data = self.create_summary(recent_post_data)
