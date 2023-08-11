@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Blinded 2-party Musig2</title>
+  <updated>2023-08-11T15:36:38.318913+00:00</updated>
+  <author>
+    <name>Tom Trevethan 2023-07-25 16:05:48+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Blinded 2-party Musig2</title>
+    <updated>2023-08-11T15:36:38.318913+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021804.html" rel="alternate"/>
+    <summary>The email discusses various aspects of the v=2 nonces signing protocol of musig2 and its implications. It mentions that this protocol prevents the Wagner attack and emphasizes the need to blind the challenge value c from the server to protect the signature's confidentiality. Additionally, it highlights the requirement of setting the key aggregation coefficient to 1 for each key in order to update the server's keyshare during a statecoin transfer. The purpose of this coefficient is to prevent rogue key attacks, which can be mitigated by producing a proof of knowledge of the private key corresponding to the supplied public key. This proof can be in the form of a signature. The modified protocol presented in the email consists of two main steps: Keygen and Signing. In the Keygen step, the server generates a private key x1 and sends the corresponding public key X1 to the user (party 2). The user generates their own private key x2, as well as a blinding nonce z, and computes the aggregate public key X using z, X1, and X2. The server remains unaware of X, X2, or z.In the Signing step, the server generates nonces r11 and r12 and sends R11 and R12 to the user. The user also generates nonces r21 and r22 and computes R1, R2, b, R, and c based on the received values and the previously computed ones. The user then sends y and b to the server, who computes s1 and sends it back to the user. The user calculates s2 and s, resulting in the final signature (s, R).For a statecoin transfer, the email suggests a verification process to ensure the correct sharing of the coin address between the previous owner and the server. The client needs to retrieve the current public key X1 from the server and verify that z.X1 + X2 equals the address of the statecoin. Furthermore, the sender's possession of the private key used to generate X2 can be verified by checking the statechain signature over the receiver public key X3 derived from X2. This proves that the address P was generated and aggregated with the server's cooperation.To update key shares during a transfer, the suggested protocol involves the server generating a random blinding nonce e, which is sent to the user. The user adds their private key x2 to the nonce, resulting in t1. The client then sends t1 and z (encrypted with the receiver public key X3) as part of the transfer message. The receiver decrypts t1, subtracts their private key x3, and obtains t2. Finally, the receiver sends t2 to the server. The server updates its private key share x1_2 using t2 and e, ensuring that x1_2 + x3 equals x1 + x2. The server then deletes x1.</summary>
+    <published>2023-07-25T16:05:48+00:00</published>
+  </entry>
+</feed>

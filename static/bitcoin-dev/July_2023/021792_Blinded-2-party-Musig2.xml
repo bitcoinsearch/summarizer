@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Blinded 2-party Musig2</title>
+  <updated>2023-08-11T15:37:38.551772+00:00</updated>
+  <author>
+    <name>Tom Trevethan 2023-07-24 07:46:11+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Blinded 2-party Musig2</title>
+    <updated>2023-08-11T15:37:38.551772+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021792.html" rel="alternate"/>
+    <summary>We are implementing a version of 2-of-2 Schnorr Musig2 for statechains. The server (party 1) will be fully 'blinded' and will not learn the aggregate public key, aggregate signature, or the message being signed. In the model of blinded statechains, the security relies on trusting the statechain server to report the number of partial signatures generated for a particular key. The full set of signatures is verified client-side.The 2-of-2 musig2 protocol operates as follows:- Party 1 generates private key x1 and public key X1 = x1G.- Party 2 generates private key x2 and public key X2 = x2G.- The set of pubkeys is L = {X1,X2}.- The key aggregation coefficient is KeyAggCoef(L,X) = H(L,X).- The shared (aggregate) public key X = a1X1 + a2X2, where a1 = KeyAggCoef(L,X1) and a2 = KeyAggCoef(L,X2).- To sign a message m:  - Party 1 generates nonce r1 and R1 = r1G.  - Party 2 generates nonce r2 and R2 = r2G.  - These are aggregated into R = R1 + R2.  - Party 1 computes 'challenge' c = H(X||R||m) and s1 = c.a1.x1 + r1.  - Party 2 computes 'challenge' c = H(X||R||m) and s2 = c.a2.x2 + r2.  - The final signature is (R,s1+s2).In the case of blinding for party 1:1) Key aggregation is performed by party 2. Party 1 sends X1 to party 2.2) Nonce aggregation is performed by party 2. Party 1 sends R1 to party 2.3) Party 2 computes c = H(X||R||m) and sends it to party 1 to compute s1 = c.a1.x1 + r1.Party 1 never learns the final value of (R,s1+s2) or m.For more details, refer to this link: [https://github.com/commerceblock/mercury/blob/master/doc/merc_blind.mdblinding-considerations](https://github.com/commerceblock/mercury/blob/master/doc/merc_blind.mdblinding-considerations)Tom would appreciate any comments or feedback on this approach or potential issues.</summary>
+    <published>2023-07-24T07:46:11+00:00</published>
+  </entry>
+</feed>
