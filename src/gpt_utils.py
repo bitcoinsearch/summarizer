@@ -6,13 +6,14 @@ openai.api_key = config.OPENAI_API_KEY
 
 
 def generate_summary(prompt):
-    summarization_prompt = f"""Generate a detailed summary from below email text factually without missing any important information based on the guidelines mentioned below:
-    1. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
-        Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
-    2. Please adhere to all English grammatical rules while writing the sentences, maintaining formal tone and employing proper spacing.
-    3. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
-        E.g., Incorrect: "This is a sentence.This is another sentence." Correct: "This is a sentence. This is another sentence."
-    4. Try to retain all the links provided and use them in proper manner at proper place.
+    summarization_prompt = f"""Suppose you are a programmer and you are enriched by programming knowledge. You will be going through other programmers mail sent to you and you will be extracting all the important information out of the mail and composing a blog post. Even if the mail is divided into parts and parts, your extraction summary should not be in bullet points. It should be in multiple paragraphs. I repeat, never in bullet points. You have to follow some rules while giving a detailed summary. 
+    The rules are below:
+        1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
+        2. The summary tone should be formal and full of information.
+        3. Add spaces after using punctuation and follow all the grammatical rules.
+        4. Try to retain all the links provided and use them in proper manner at proper place.
+        5. The farewell part of the email should be completely ignored.
+        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.Completion.create(
         model=config.COMPLETION_MODEL,
@@ -28,13 +29,14 @@ def generate_summary(prompt):
 
 
 def consolidate_summary(prompt):
-    consolidate_prompt = f"""Consolidate below context based on the guidelines mentioned below. 
-    1. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
-        Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
-    2. Please adhere to all English grammatical rules while writing the sentences, maintaining formal tone and employing proper spacing.
-    3. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
-        E.g., Incorrect: "This is a sentence.This is another sentence." Correct: "This is a sentence. This is another sentence."
-    4. Try to retain all the links provided and use them in proper manner at proper place.
+    consolidate_prompt = f"""Suppose you are a programmer and you are enriched by programming knowledge. You have to consolidate below text based on the rules.
+    The rules are below:
+        1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
+        2. The summary tone should be formal and full of information.
+        3. Add spaces after using punctuation and follow all the grammatical rules.
+        4. Try to retain all the links provided and use them in proper manner at proper place.
+        5. The farewell part of the email should be completely ignored.
+        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.Completion.create(
         model=config.COMPLETION_MODEL,
@@ -65,13 +67,14 @@ def generate_title(prompt):
 
 
 def generate_chatgpt_summary(prompt):
-    summarization_prompt = f"""Generate a detailed summary from below email text factually without missing any important information based on the guidelines mentioned below:
-    1. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
-        Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
-    2. Please adhere to all English grammatical rules while writing the sentences, maintaining formal tone and employing proper spacing.
-    3. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
-        E.g., Incorrect: "This is a sentence.This is another sentence." Correct: "This is a sentence. This is another sentence."
-    4. Try to retain all the links provided and use them in proper manner at proper place.
+    summarization_prompt = f"""Suppose you are a programmer and you are enriched by programming knowledge. You will be going through other programmers mail sent to you and you will be extracting all the important information out of the mail and composing a blog post. Even if the mail is divided into parts and parts, your extraction summary should not be in bullet points. It should be in multiple paragraphs. I repeat, never in bullet points. You have to follow some rules while giving a detailed summary. 
+    The rules are below:
+        1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
+        2. The summary tone should be formal and full of information.
+        3. Add spaces after using punctuation and follow all the grammatical rules.
+        4. Try to retain all the links provided and use them in proper manner at proper place.
+        5. The farewell part of the email should be completely ignored.
+        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -90,13 +93,14 @@ def generate_chatgpt_summary(prompt):
 
 
 def consolidate_chatgpt_summary(prompt):
-    consolidate_prompt = f"""Consolidate below context based on the guidelines mentioned below. 
-    1. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
-        Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
-    2. Please adhere to all English grammatical rules while writing the sentences, maintaining formal tone and employing proper spacing.
-    3. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
-        E.g., Incorrect: "This is a sentence.This is another sentence." Correct: "This is a sentence. This is another sentence."
-    4. Try to retain all the links provided and use them in proper manner at proper place.
+    consolidate_prompt = f"""Suppose you are a programmer and you are enriched by programming knowledge. You have to consolidate below text based on the rules.
+    The rules are below:
+        1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
+        2. The summary tone should be formal and full of information.
+        3. Add spaces after using punctuation and follow all the grammatical rules.
+        4. Try to retain all the links provided and use them in proper manner at proper place.
+        5. The farewell part of the email should be completely ignored.
+        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
