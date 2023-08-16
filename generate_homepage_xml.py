@@ -14,6 +14,10 @@ import warnings
 import pytz
 import json
 
+import nltk
+nltk.download('punkt')
+from nltk.tokenize import sent_tokenize
+
 from src.utils import preprocess_email
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
@@ -399,7 +403,7 @@ class GenerateJSON:
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
         return response_str
 
-    def create_single_entery(self, data, is_active=False):
+    def create_single_entry(self, data, is_active=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -449,14 +453,14 @@ class GenerateJSON:
 
         recent_page_data = []
         for data in recent_dict_list:
-            entry_data = self.create_single_entery(data)
+            entry_data = self.create_single_entry(data)
             recent_page_data.append(entry_data)
 
         json_string["recent_posts"] = recent_page_data
 
         active_page_data = []
         for data in active_data_list:
-            entry_data = self.create_single_entery(data, is_active=True)
+            entry_data = self.create_single_entry(data, is_active=True)
             active_page_data.append(entry_data)
 
         json_string["active_posts"] = active_page_data
@@ -487,6 +491,13 @@ class GenerateJSON:
             logger.warning(f"No existing homepage.json file found: {full_path}")
             return []
 
+    def is_body_text_long(self, data, sent_threshold=2):
+        body_text = data['_source']['body']
+        body_text = preprocess_email(body_text)
+        body_token = sent_tokenize(body_text)
+        logger.info(f"Body sentence token length: {len(body_token)}")
+        return len(body_token) > sent_threshold
+
 
 if __name__ == "__main__":
 
@@ -515,6 +526,7 @@ if __name__ == "__main__":
         logger.info(f"Total threads received for {dev_name}: {len(data_list)}")
 
         seen_titles = set()
+
         # top active posts
         active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=10,
                                                                    all_data_df=all_data_df)
@@ -523,6 +535,7 @@ if __name__ == "__main__":
         for data in active_posts_data:
             if active_posts_data_counter >= 3:
                 break
+
             title = data['_source']['title']
             if title in seen_titles:
                 continue
@@ -536,7 +549,9 @@ if __name__ == "__main__":
             original_post = df_title.iloc[0].to_dict()
 
             for i in all_data_list:
-                if i['_source']['title'] == original_post['title'] and i['_source']['domain'] == original_post['domain'] and i['_source']['authors'] == original_post['authors'] and i['_source']['created_at'] == original_post['created_at'] and i['_source']['url'] == original_post['url']:
+                if i['_source']['title'] == original_post['title'] and i['_source']['domain'] == original_post[
+                    'domain'] and i['_source']['authors'] == original_post['authors'] and i['_source']['created_at'] == \
+                        original_post['created_at'] and i['_source']['url'] == original_post['url']:
                     for author in i['_source']['authors']:
                         contributors.remove(author)
                     i['_source']['n_threads'] = counts
@@ -555,6 +570,12 @@ if __name__ == "__main__":
         #     recent_posts_data = recent_posts_data[:3]
 
         for data in recent_posts_data:
+
+            # if preprocess body text not longer than token_threshold, skip that post
+            if not gen.is_body_text_long(data=data, sent_threshold=2):
+                logger.info(f"skipping: {data['_source']['title']} - {data['_source']['url']}")
+                continue
+
             title = data['_source']['title']
             if title in seen_titles:
                 continue
