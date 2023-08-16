@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Resumable channels using OP_CHECKSIGFROMSTACK</title>
+  <updated>2023-08-16T01:51:14.317084+00:00</updated>
+  <author>
+    <name>Thomas Voegtlin 2023-08-14 12:59:16+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Resumable channels using OP_CHECKSIGFROMSTACK</title>
+    <updated>2023-08-16T01:51:14.317126+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004043.html" rel="alternate"/>
+    <summary>The proposal suggests a new way to make lightning channels resumable from a wallet seed. It addresses the issue of channel backups and the inability to resume channel operations with static backups. The proposal introduces a new type of channel funding transaction with an additional spending path that accepts a fraud proof. This requires two opcodes that are currently not available in Bitcoin: OP_CAT and OP_CHECKSIGFROMSTACK.The roles in this channel are asymmetric, with Alice as the client and Bob as the server who stores Alice's state. During channel reestablishment, Bob sends Alice her latest state using an extra field in the channel_reestablish message. Alice must not let Bob know if she still has her state, so she never sends channel_reestablish first.The state of the channel includes all the information Alice needs to resume channel operations. With every new commitment, Alice sends her current state along with her signature. Similarly, Bob sends a signed tuple (ctn, timestamp) with every new commitment. The private key used by Bob to sign the tuples is constant over the lifetime of the channel and must not be reused in other channels. Alice verifies Bob's signature and checks the received timestamps for reasonableness.The proposal also introduces fraud proofs to detect revoked states. If Bob tries to send a revoked state to Alice, she can use OP_CAT and OP_CHECKSIGFROMSTACK to build a script that verifies the fraud proof and allows her to unilaterally spend the channel funding output. The script includes witness and witness_script sections.To keep things simple, some details have been omitted, such as sending both local and remote ctns in Bob's signed tuples and splitting commitment numbers and timestamps into multiple integers. Alice and Bob may have different clocks, so Alice compares Bob's timestamps to her own time to determine if they are reasonable.The proposal also discusses saving bandwidth by not sending Alice's channel state with every commitment if it is known by both parties. Instead, Alice only needs to send her signature of the current state. The state should not include private information or payment_hash preimages known by Alice.In conclusion, the proposal outlines a method for making lightning channels resumable from a wallet seed, addressing issues with channel backups and providing a solution for fraud proofs. It also suggests ways to save bandwidth and includes some concluding remarks about device usage and alternative options without OP_CHECKSIGFROMSTACK.</summary>
+    <published>2023-08-14T12:59:16+00:00</published>
+  </entry>
+</feed>
