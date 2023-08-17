@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Resumable channels using OP_CHECKSIGFROMSTACK</title>
+  <updated>2023-08-17T01:50:55.365218+00:00</updated>
+  <author>
+    <name>Peter Todd 2023-08-16 13:16:23+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2023-08-16 07:56:21+00:00</name>
+  </author>
+  <author>
+    <name>Thomas Voegtlin 2023-08-14 12:59:16+00:00</name>
+  </author>
+  <link href="lightning-dev/Aug_2023/004046_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2023/004045_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2023/004043_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Resumable channels using OP_CHECKSIGFROMSTACK</title>
+    <updated>2023-08-17T01:50:55.365275+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004046.html" rel="alternate"/>
+    <summary>The email conversation discusses various aspects related to lightning channels and proposes a new method to make them resumable from a wallet seed. The sender raises concerns about the need for fraud proofs and suggests that they are not necessary and can be dangerous, as they impose a hard penalty on Lightning Service Providers (LSPs). They also mention the potential desynchronization caused by connection issues, especially with flaky mobile connections.The recipient agrees with the sender and supports Peter Todd's viewpoint that the mobile wallet can check the state of the returned backup at every connection request, making it highly unlikely for LSPs to cheat. They mention the existence of a BOLT PR (Bitcoin Over Lightning) that deals with backups and suggests moving it to a "blip" instead of a BOLT once the proposed version is implemented.The proposal itself introduces a new type of channel funding transaction that includes an additional spending path accepting a fraud proof. This requires two opcodes, OP_CAT and OP_CHECKSIGFROMSTACK, which are currently not available in Bitcoin. The roles in the channel are asymmetric, with Alice as the client and Bob as the server who stores Alice's state. During channel reestablishment, Bob sends Alice her latest state using an extra field in the channel_reestablish message. Alice must not let Bob know if she still has her state, so she never sends channel_reestablish first.The state of the channel includes all the necessary information for Alice to resume channel operations. Both Alice and Bob send signed tuples (ctn, timestamp) with every new commitment. Bob's private key used for signing remains constant throughout the channel's lifetime. Fraud proofs are introduced to detect revoked states, allowing Alice to unilaterally spend the channel funding output if Bob tries to send a revoked state. The proposal includes the use of OP_CAT and OP_CHECKSIGFROMSTACK to build a script that verifies the fraud proof.To save bandwidth, the proposal suggests not sending Alice's channel state with every commitment if it is already known by both parties. Instead, Alice only needs to send her signature of the current state. The state should not include private information or payment_hash preimages known by Alice.In conclusion, the proposal outlines a method for making lightning channels resumable from a wallet seed, addressing issues with channel backups and providing a solution for fraud proofs. It also discusses saving bandwidth and includes some concluding remarks about device usage and alternative options without OP_CHECKSIGFROMSTACK.[Link to Peter Todd's website](https://petertodd.org)</summary>
+    <published>2023-08-16T13:16:23+00:00</published>
+  </entry>
+</feed>
