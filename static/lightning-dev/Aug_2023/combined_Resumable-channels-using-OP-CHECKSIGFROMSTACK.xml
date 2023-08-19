@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Resumable channels using OP_CHECKSIGFROMSTACK</title>
-  <updated>2023-08-18T01:50:58.255257+00:00</updated>
+  <updated>2023-08-19T01:46:16.351540+00:00</updated>
+  <author>
+    <name>Thomas Voegtlin 2023-08-18 11:54:55+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2023-08-18 07:30:19+00:00</name>
+  </author>
+  <author>
+    <name>SomberNight 2023-08-17 18:43:22+00:00</name>
+  </author>
   <author>
     <name>Bastien TEINTURIER 2023-08-17 14:20:38+00:00</name>
   </author>
@@ -21,6 +30,9 @@
   <author>
     <name>Thomas Voegtlin 2023-08-14 12:59:16+00:00</name>
   </author>
+  <link href="lightning-dev/Aug_2023/004055_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2023/004053_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
+  <link href="lightning-dev/Aug_2023/004052_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2023/004050_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2023/004049_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
   <link href="lightning-dev/Aug_2023/004047_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml" rel="alternate"/>
@@ -31,9 +43,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Resumable channels using OP_CHECKSIGFROMSTACK</title>
-    <updated>2023-08-18T01:50:58.255329+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004050.html" rel="alternate"/>
-    <summary>The email discusses various topics related to lightning channels and backups. The sender expresses their opinion that fraud proofs are not necessary and can be dangerous for Lightning Service Providers (LSPs). They argue that fraud proofs impose a hard penalty on LSPs for something that should be best effort, and could also get desynchronized by connection issues. However, they agree with Peter Todd's viewpoint that the mobile wallet can check the state of the returned backup at every connection request, making it highly unlikely for the LSP to cheat.The sender mentions a proposal by Thomas regarding a generic "latest state backup" oracle scheme that could be useful for applications outside of Lightning. They suggest forwarding this idea to bitcoin-dev to reach a wider audience.The email also raises questions about Phoenix, a centralized entity, and whether they inform users when an issue occurs. The desired outcome would be for people to become aware of any problems and share their concerns on social media. The sender argues that having clients loudly shut down their usage of Phoenix temporarily in response to these mistakes can ultimately protect Phoenix from its own errors. Although this may have a negative impact on Phoenix's reputation in the short term, it is believed to be beneficial in the long run.The email concludes with a link to Peter Todd's website (https://petertodd.org) and his email address (peter@petertodd.org).In terms of the proposal itself, it suggests a new way to make lightning channels resumable from a wallet seed. It addresses the issue of channel backups and the inability to resume channel operations with static backups. The proposal introduces a new type of channel funding transaction with additional spending paths that accept fraud proofs. This requires two opcodes that are currently not available in Bitcoin: OP_CAT and OP_CHECKSIGFROMSTACK.The roles in this channel are asymmetric, with Alice as the client and Bob as the server who stores Alice's state. During channel reestablishment, Bob sends Alice her latest state using an extra field in the channel_reestablish message. Alice must not let Bob know if she still has her state, so she never sends channel_reestablish first.The state of the channel includes all the information Alice needs to resume channel operations. With every new commitment, Alice sends her current state along with her signature. Similarly, Bob sends a signed tuple (ctn, timestamp) with every new commitment. The proposal also introduces fraud proofs to detect revoked states. If Bob tries to send a revoked state to Alice, she can use OP_CAT and OP_CHECKSIGFROMSTACK to build a script that verifies the fraud proof and allows her to unilaterally spend the channel funding output.To keep things simple, some details have been omitted in the proposal. For example, sending both local and remote ctns in Bob's signed tuples and splitting commitment numbers and timestamps into multiple integers. Alice and Bob may have different clocks, so Alice compares Bob's timestamps to her own time to determine if they are reasonable.The proposal also discusses saving bandwidth by not sending Alice's channel state with every commitment if it is known by both parties. Instead, Alice only needs to send her signature of the current state. The state should not include private information or payment_hash preimages known by Alice.In conclusion, the proposal outlines a method for making lightning channels resumable from a wallet seed, addressing issues with channel backups and providing a solution for fraud proofs. It also suggests ways to save bandwidth and includes some concluding remarks about device usage and alternative options without OP_CHECKSIGFROMSTACK.</summary>
-    <published>2023-08-17T14:20:38+00:00</published>
+    <updated>2023-08-19T01:46:16.351619+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004055.html" rel="alternate"/>
+    <summary>The email discusses methods to save bandwidth, particularly focusing on the absence of OP_CHECKSIGFROMSTACK. The writer suggests alternatives to reduce its usage and emphasizes the need for optimizing code to improve performance. They also mention the importance of efficient device usage, such as minimizing background processes and disabling automatic updates. A link to a resource discussing strategies for reducing data usage on specific devices is provided. The email also mentions exploring alternative cryptographic techniques and algorithms that are more bandwidth-friendly. The goal is to achieve better efficiency and reduce network overhead. Overall, the email provides information and suggestions to assist programmers in improving network performance and reducing bandwidth consumption.</summary>
+    <published>2023-08-18T11:54:55+00:00</published>
   </entry>
 </feed>
