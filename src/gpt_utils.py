@@ -13,7 +13,8 @@ def generate_summary(prompt):
         3. Add spaces after using punctuation and follow all the grammatical rules.
         4. Try to retain all the links provided and use them in proper manner at proper place.
         5. The farewell part of the email should be completely ignored.
-        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
+        6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
+        7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.Completion.create(
         model=config.COMPLETION_MODEL,
@@ -36,7 +37,8 @@ def consolidate_summary(prompt):
         3. Add spaces after using punctuation and follow all the grammatical rules.
         4. Try to retain all the links provided and use them in proper manner at proper place.
         5. The farewell part of the email should be completely ignored.
-        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
+        6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
+        7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.Completion.create(
         model=config.COMPLETION_MODEL,
@@ -74,7 +76,8 @@ def generate_chatgpt_summary(prompt):
         3. Add spaces after using punctuation and follow all the grammatical rules.
         4. Try to retain all the links provided and use them in proper manner at proper place.
         5. The farewell part of the email should be completely ignored.
-        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
+        6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
+        7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -100,7 +103,8 @@ def consolidate_chatgpt_summary(prompt):
         3. Add spaces after using punctuation and follow all the grammatical rules.
         4. Try to retain all the links provided and use them in proper manner at proper place.
         5. The farewell part of the email should be completely ignored.
-        6. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
+        6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
+        7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
