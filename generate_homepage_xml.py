@@ -381,11 +381,11 @@ class GenerateJSON:
                 body_summ = self.create_summary(body)
                 recent_post_data += body_summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"""Summarize the following email into 3 or 4 distinct sentences based on the guidelines 
-        mentioned below.
+        summ_prompt = f"""Suppose you are a programmer and you are enriched by programming knowledge. You have to consolidate below text into three or four distinct sentences based on the rules.
+    The rules are below:
             1. Each sentence you write should not exceed fifteen words.
             2. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
-                Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..."
+                Do not introduce sentences with phrases like: "The context discusses...", "In this context...", "The context covers...", "The email discusses...", "In this email..." or "The email covers..."
             3. Please adhere to all English grammatical rules while writing the sentences, 
                 maintaining formal tone and employing proper spacing.
             4. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
