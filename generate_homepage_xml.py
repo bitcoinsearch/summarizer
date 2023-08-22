@@ -244,7 +244,7 @@ class GenerateJSON:
         chunks = self.split_prompt_into_chunks(body, tokens_per_sub_body)
         summaries = []
 
-        print(f"Total chunks: {len(chunks)}")
+        logger.info(f"Total chunks: {len(chunks)}")
 
         for chunk in chunks:
             count = 0
@@ -265,11 +265,11 @@ class GenerateJSON:
 
         summary_length = sum([len(TOKENIZER.encode(s)) for s in summaries])
 
-        print(f"Summary length: {summary_length}")
-        print(f"Max length: {max_length}")
+        logger.info(f"Summary length: {summary_length}")
+        logger.info(f"Max length: {max_length}")
 
         if summary_length > max_length:
-            print("entering in recursion")
+            logger.info("entering in recursion")
             return self.recursive_summary("".join(summaries), tokens_per_sub_body, max_length)
         else:
             return summaries
@@ -280,7 +280,7 @@ class GenerateJSON:
         summaries = self.recursive_summary(body, tokens_per_sub_body, body_length_limit)
 
         if len(summaries) > 1:
-            print("Consolidate summary generating")
+            logger.info("Consolidate summary generating")
             summary_str = "\n".join(summaries)
             count = 0
             while True:
@@ -296,7 +296,7 @@ class GenerateJSON:
             return consolidated_summaries
 
         else:
-            print("Individual summary generating")
+            logger.info("Individual summary generating")
             return "\n".join(summaries)
 
     def create_summary(self, body):
@@ -381,20 +381,18 @@ class GenerateJSON:
                 body_summ = self.create_summary(body)
                 recent_post_data += body_summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"""Suppose you are a programmer and you are enriched by programming knowledge. You have to consolidate below text into three or four distinct sentences based on the rules.
-    The rules are below:
-            1. Each sentence you write should not exceed fifteen words.
-            2. While summarizing, avoid using phrases referring to the context. Instead, directly present the information or points covered. 
-                Do not introduce sentences with phrases like: "The context discusses...", "In this context...", "The context covers...", "The email discusses...", "In this email..." or "The email covers..."
-            3. Please adhere to all English grammatical rules while writing the sentences, 
-                maintaining formal tone and employing proper spacing.
-            4. Add a single space after a period (or any punctuation mark) at the end of a sentence before the start of a new sentence.
-                E.g., Incorrect: "This is a sentence.This is another sentence." Correct: "This is a sentence. This is another sentence."
+        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed discussions between various Bitcoin developers. Transform the following extracted text from mailing lists into a brief summary composed of three to four significant sentences, adhering to these important criteria:
+    Guidelines:
+        1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
+        2. The summarization must have a formal tone and be high in informational content.
+        3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
+        4. Any links given within the text should be retained and appropriately incorporated.
+        5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
         \n CONTEXT:\n\n{recent_post_data}"""
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an intelligent."},
+                {"role": "system", "content": "You are an intelligent agent with an exceptional skills in writing."},
                 {"role": "user", "content": f"{summ_prompt}"},
             ],
             temperature=0.7,
