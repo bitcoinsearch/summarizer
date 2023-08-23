@@ -1,6 +1,22 @@
 {
-    "header_summary": "The email discusses the inefficiency of secret key schemes like ECDSA for users. It mentions compromised hardware key exfiltration attacks. Ruben disagrees with the idea of everyone choosing their own set of validators. The email introduces a note on covenants in the Bitcoin ecosystem and proposes UASF as an alternative approach. It discusses a new proposal for Lightning multipeer payment channels. The concept of probability in anonymity is discussed, emphasizing the need for further exploration. Finally, the sender clarifies their goal for their previous comments on monetary-based denial of service deterrence.",
+    "header_summary": "Bitcoin developers discuss various topics including proposed changes to opcode usage, taproot malleability bugs, secret key schemes, transmission of invalid transactions, Lightning multipeer payment channels, and the concept of probability in anonymity. They propose a new approach for multipeer channels that improves capital efficiency and liveness without relying on penalty mechanisms or atomic swaps. The discussion also touches on the implications of probability in attacks and clarifies the goal of monetary-based denial of service deterrence. The developers suggest experimenting with these ideas on platforms like Liquid, despite the setup challenges.",
     "recent_posts": [
+        {
+            "id": "021908",
+            "title": "Combined CTV+APO to minimal TXHASH+CSFS",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021908.html",
+            "authors": [
+                "Greg Sanders"
+            ],
+            "published_at": "2023-08-22T19:22:18+00:00",
+            "summary": "- Greg suggests sending \"OP_2\" to \"OP_4\" instead and mentions BIP118 for taproot inner pubkey.\n- Adding \"OP_INNER_PUBKEY\" as an opcode could achieve the same effect for taproot.\n- BIP118 addresses malleability bugs by allowing additional data in non-APO signatures.",
+            "n_threads": 2,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "Brandon Black"
+            ],
+            "file_path": "static/bitcoin-dev/Aug_2023/021908_Combined-CTV-APO-to-minimal-TXHASH-CSFS.xml"
+        },
         {
             "id": "021906",
             "title": "Concern about \"Inscriptions\"",
@@ -9,7 +25,7 @@
                 "symphonicbtc"
             ],
             "published_at": "2023-08-21T22:34:03+00:00",
-            "summary": "- Secret key schemes like ECDSA may be inefficient in terms of data usage and costly.\n- Reusing k values in ECDSA allows for data encoding in both k and secret key.\n- Brute-forcing k values or public keys can be used to encode data.",
+            "summary": "- Secret key schemes like ECDSA are inefficient and costly compared to allowing arbitrary data.\n- Reusing k values in ECDSA can encode data in both k and the secret key.\n- Brute-forcing keys in compromised hardware key attacks can also encode data in signatures.",
             "n_threads": 7,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -30,27 +46,13 @@
                 "Ruben Somsen"
             ],
             "published_at": "2023-08-21T22:32:18+00:00",
-            "summary": "- Ruben disputes Ryan's claim that invalid transactions or blocks are transmitted, deeming it unsafe.\n- He argues against relying on a set of trusted entities and emphasizes consensus.\n- Ruben warns that differing sets of validators could jeopardize the mainchain's consensus failure.",
+            "summary": "- Ruben challenges Ryan's claim of transmitting invalid transactions or blocks, citing safety concerns.\n- He argues against relying on a set of trusted entities and decentralized validation.\n- Ruben highlights the potential consequences of conflicting validators on Bitcoin block acceptance and consensus.",
             "n_threads": 4,
             "dev_name": "bitcoin-dev",
             "contributors": [
                 "ryan at breen.xyz"
             ],
             "file_path": "static/bitcoin-dev/Aug_2023/021905_Sentinel-Chains-A-Novel-Two-Way-Peg.xml"
-        },
-        {
-            "id": "021899",
-            "title": "BIP-119 UASF",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021899.html",
-            "authors": [
-                "alicexbt"
-            ],
-            "published_at": "2023-08-20T17:46:01+00:00",
-            "summary": "- The email discusses covenant proposals, including a comparison in a Google spreadsheet.\n- Controversy surrounding general and recursive covenants is addressed, with a link explaining why.\n- The sender expresses a preference for CTV and proposes UASF as an alternative to MASF.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Aug_2023/021899_BIP-119-UASF.xml"
         },
         {
             "id": "004057",
@@ -60,7 +62,7 @@
                 "Atomic Mr Nuclear"
             ],
             "published_at": "2023-08-20T14:25:07+00:00",
-            "summary": "- The new proposal for Lightning multipeer payment channels improves capital efficiency and liveness.\n- It eliminates the need for inbound liquidity and allows channels to continue operating despite offline peers.\n- The proposal offers a more efficient and flexible approach compared to traditional methods.",
+            "summary": "- The proposal for Lightning multipeer payment channels eliminates the need for inbound liquidity.\n- It allows peers to join the channel without locking funds in advance, enhancing capital efficiency.\n- The proposal ensures liveness by allowing the channel to operate even if some peers go offline.",
             "n_threads": 1,
             "dev_name": "lightning-dev",
             "contributors": [],
@@ -74,7 +76,7 @@
                 "GamedevAlice"
             ],
             "published_at": "2023-08-18T09:51:50+00:00",
-            "summary": "- The discussion explores probability in relation to anonymity and vulnerability in attacks.\n- The writer emphasizes the importance of considering anonymity when discussing probability in attacks.\n- The email raises questions about attacks and the vulnerability of individuals, emphasizing the need for further exploration.",
+            "summary": "- The discussion focuses on probability in the context of anonymity and raises important questions.\n- Probability makes sense only if peers are fully anonymous, which is currently not the case.\n- The attack begins before an open channel, targeting victims who are unaware of their vulnerability.",
             "n_threads": 4,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -91,7 +93,7 @@
                 "Anthony Towns"
             ],
             "published_at": "2023-08-03T03:29:50+00:00",
-            "summary": "- The sender clarifies the value of monetary-based denial of service (DoS) deterrence.\n- They express concern about misinterpretation of their previous comments on monetary approaches.\n- The sender explains the suggested scheme and differentiates between reputation-based and monetary-based approaches.",
+            "summary": "- The sender clarifies that monetary-based denial of service deterrence is worth researching.\n- They provided a proof-of-work example, not to pursue, but as an illustration.\n- The sender explains the scheme's requirement for clock synchronization and commitment transaction updates.",
             "n_threads": 7,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -112,7 +114,7 @@
                 "Tom Trevethan"
             ],
             "published_at": "2023-07-24T07:46:11+00:00",
-            "summary": "- A blinded statechains implementation of 2-of-2 Schnorr Musig2 is being implemented.\n- The server will be blinded and won't learn public key, signature, or message.\n- Party 1 generates x1G, Party 2 generates x2G, and signatures are verified client-side.",
+            "summary": "- Party 1 and Party 2 generate private and public keys for the Schnorr Musig2 protocol.\n- The key aggregation and signature generation are performed by Party 2.\n- Party 1 remains blinded and does not have access to the aggregate public key or signature.",
             "n_threads": 32,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -134,7 +136,7 @@
                 "Burak Keceli"
             ],
             "published_at": "2023-05-22T07:54:03+00:00",
-            "summary": "- Ark is a new second-layer protocol design that provides an alternative to the Lightning network.\n- It allows users to send and receive funds without liquidity constraints, using virtual UTXOs.\n- An untrusted intermediary called the Ark Service Provider enables anonymous, off-chain payments.",
+            "summary": "- Ark is a new second-layer protocol design that enables users to send and receive funds without liquidity constraints.\n- The protocol uses virtual UTXOs (vTXOs) that live off-chain and must be spent within four weeks.\n- An untrusted intermediary called the Ark Service Provider (ASP) provides anonymity and enables off-chain payments.",
             "n_threads": 19,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -157,7 +159,7 @@
                 "Salvatore Ingala"
             ],
             "published_at": "2023-07-30T21:37:49+00:00",
-            "summary": "- Salvatore Ingala has presented a complete proposal for the core opcodes of MATT.\n- The proposal includes replacing OP_CHECK{IN, OUT}CONTRACTVERIFY with OP_CHECKCONTRACTVERIFY and introducing a `flags` parameter.\n- The new opcode, OP_CHECKCONTRACTVERIFY, enables the full generality of MATT with just two opcodes.",
+            "summary": "- Salvatore Ingala has proposed core opcodes for MATT, making it functionally complete.\n- The proposal includes replacing OP_CHECK{IN, OUT}CONTRACTVERIFY with OP_CHECKCONTRACTVERIFY (CCV) and introducing a `flags` parameter.\n- The new opcode, OP_CHECKCONTRACTVERIFY, allows for P2TR scriptPubKey checks and deferred checks for amounts.",
             "n_threads": 10,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -176,7 +178,7 @@
                 "Thomas Voegtlin"
             ],
             "published_at": "2023-08-14T12:59:16+00:00",
-            "summary": "- The proposal suggests a new way to make lightning channels resumable from a wallet seed by introducing new opcodes.\n- It addresses issues with channel backups and provides a solution for fraud proofs.\n- The proposal also suggests methods to save bandwidth and discusses alternative options without OP_CHECKSIGFROMSTACK.",
+            "summary": "- The proposal suggests a new method for making lightning channels resumable from a wallet seed.\n- It introduces a new type of channel funding transaction with additional spending paths.\n- The proposal discusses fraud proofs, bandwidth savings, and device usage in lightning channels.",
             "n_threads": 9,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -187,24 +189,6 @@
             "file_path": "static/lightning-dev/Aug_2023/combined_Resumable-channels-using-OP-CHECKSIGFROMSTACK.xml"
         },
         {
-            "id": "003994",
-            "title": "LN Summit 2024 Organization",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003994.html",
-            "authors": [
-                "Antoine Riard"
-            ],
-            "published_at": "2023-06-23T09:39:18+00:00",
-            "summary": "- Antoine proposes organizing the LN Summit in Africa in June 2024.\n- He emphasizes the need for announcement in advance due to potential complexities.\n- Antoine invites objections and feedback, highlighting his commitment to transparency and accountability.",
-            "n_threads": 8,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "Bernard Parah",
-                "Matt Corallo",
-                "Peter Todd"
-            ],
-            "file_path": "static/lightning-dev/June_2023/combined_LN-Summit-2024-Organization.xml"
-        },
-        {
             "id": "004034",
             "title": "Jamming Mitigation Dry Run",
             "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004034.html",
@@ -212,7 +196,7 @@
                 "Carla Kirk-Cohen"
             ],
             "published_at": "2023-08-01T18:44:57+00:00",
-            "summary": "- We will conduct a \"dry run\" of HTLC endorsement and reputation tracking using real-world data.\n- The plan includes collecting forwarding data, propagating experimental TLV, and implementing reputation algorithms.\n- Privacy and data protection are prioritized, and node operators' participation is encouraged.",
+            "summary": "- We will perform a \"dry run\" of HTLC endorsement and local reputation tracking.\n- The plan includes collecting forwarding data, propagating an experimental TLV, and implementing reputation algorithms.\n- Privacy is prioritized, and node operators are encouraged to participate in data collection.",
             "n_threads": 8,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -221,6 +205,24 @@
                 "Vincenzo Palazzo"
             ],
             "file_path": "static/lightning-dev/Aug_2023/combined_Jamming-Mitigation-Dry-Run.xml"
+        },
+        {
+            "id": "003994",
+            "title": "LN Summit 2024 Organization",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003994.html",
+            "authors": [
+                "Antoine Riard"
+            ],
+            "published_at": "2023-06-23T09:39:18+00:00",
+            "summary": "- Antoine proposes organizing the LN Summit in Africa in June 2024.\n- He highlights the need for early announcement due to potential complexities in Africa.\n- Antoine invites objections or feedback and encourages Lightning Network developers to participate.",
+            "n_threads": 8,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Bernard Parah",
+                "Matt Corallo",
+                "Peter Todd"
+            ],
+            "file_path": "static/lightning-dev/June_2023/combined_LN-Summit-2024-Organization.xml"
         }
     ]
 }
