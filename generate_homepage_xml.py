@@ -361,7 +361,10 @@ class GenerateJSON:
             root = tree.getroot()
             summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
             summ = "\n".join([summ.text for summ in summ_list])
-            return summ
+            author_list = root.findall(".//atom:author", namespaces)
+            author_ = "\n".join([a.find('atom:name', namespaces).text for a in author_list])
+            author_ = " ".join(author_.split(" ")[:-2])
+            return f"{author_}:{summ}\n"
         else:
             logger.warning(f"No xml file found: {full_path}")
             return None
@@ -377,17 +380,21 @@ class GenerateJSON:
 
             if xml_summ is None:
                 body = data['_source']['body']
+                author_ = data['_source']['authors']
+                author_ = ", ".join([a for a in author_])
                 body = preprocess_email(body)
                 body_summ = self.create_summary(body)
-                recent_post_data += body_summ
+                summ = f"{author_}:{body_summ}\n"
+                recent_post_data += summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed discussions between various Bitcoin developers. Transform the following extracted text from mailing lists into a brief summary composed of three to four significant sentences, adhering to these important criteria:
+        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of three to four significant sentences, adhering to these important criteria:
     Guidelines:
         1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
         2. The summarization must have a formal tone and be high in informational content.
         3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
         4. Any links given within the text should be retained and appropriately incorporated.
         5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
+        6. Mention full names (both the first name and last name) of the authors if applicable.
         \n CONTEXT:\n\n{recent_post_data}"""
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
