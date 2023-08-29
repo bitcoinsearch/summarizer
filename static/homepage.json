@@ -1,6 +1,37 @@
 {
-    "header_summary": "Recent discussions on various mailing lists have covered a range of topics in the Bitcoin ecosystem. Brandon Black expresses gratitude for a fix and updates a specification for a feature. Ruben Somsen raises concerns about the transmission of invalid transactions and the potential impact on consensus. Alicexbt discusses covenant proposals and expresses a preference for CheckTemplateVerify (CTV) over AnyPrevOut (APO). Ren\u00e9 Pickhardt discusses a dynamic proof-of-work system and auction mechanism for bandwidth in the TOR project. Atomic Mr Nuclear responds to an analysis, highlighting the proposal's advantages and suggesting mitigation strategies. Vincenzo Palazzo seeks feedback on the lnprototest framework for implementing new features in Bitcoin.",
+    "header_summary": "- Private collaborative custody services for Bitcoin can ensure user privacy with multiparty computation multisignatures like FROST, allowing blind signing of transactions by custodians.- Mainchain nodes do not validate sidechain blocks, but instead, sidechain nodes known as sentinels monitor Bitcoin for invalid withdrawals and publish attestations for accountability.- A fix and specification update for a feature involves replacing \"OP_0 as pubkey\" with the taproot internal key, with consideration for the proposed feature's hash contents.- Investigating anonymous credentials as a defense against botnets is suggested, along with anticipation for a game-theory formalization of the system dynamics.- PoW requires continuous hashpower per node to resist sybil attacks, while Lightning Network needs a sybil-resistance mechanism for trust-minimized offchain mechanisms.- Finding issues and protecting p2p networks against DoS vectors is highlighted, emphasizing the need for more contributors.",
     "recent_posts": [
+        {
+            "id": "021917",
+            "title": "Private Collaborative Custody with FROST",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021917.html",
+            "authors": [
+                "Nick Farrow"
+            ],
+            "published_at": "2023-08-28T19:35:22+00:00",
+            "summary": "- Private collaborative custody services for Bitcoin can ensure privacy through multiparty computation multisignatures.\n- Collaborative custodians using FROST can hold a multisig key without knowledge of the public key or wallet.\n- The process of enrolling a custodian involves generating a shared polynomial point and blind collaborative signing.",
+            "n_threads": 1,
+            "dev_name": "bitcoin-dev",
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Aug_2023/021917_Private-Collaborative-Custody-with-FROST.xml"
+        },
+        {
+            "id": "021916",
+            "title": "Sentinel Chains: A Novel Two-Way Peg",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021916.html",
+            "authors": [
+                "ryan at breen.xyz"
+            ],
+            "published_at": "2023-08-28T14:35:30+00:00",
+            "summary": "- ZmnSCPxj asked two questions about mainchain nodes and malicious code in sentinel chain software.\n- Mainchain nodes do not validate sidechain blocks; sentinels monitor Bitcoin for invalid withdrawals.\n- Sidechain developers introducing malicious code would impact sidechain users, but not Sentinel chains.",
+            "n_threads": 6,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "Ruben Somsen",
+                "ZmnSCPxj"
+            ],
+            "file_path": "static/bitcoin-dev/Aug_2023/021916_Sentinel-Chains-A-Novel-Two-Way-Peg.xml"
+        },
         {
             "id": "021910",
             "title": "Combined CTV+APO to minimal TXHASH+CSFS",
@@ -9,7 +40,7 @@
                 "Brandon Black"
             ],
             "published_at": "2023-08-22T20:23:09+00:00",
-            "summary": "- Grateful for the fix, the sender updates the specification by replacing \"OP_0 as pubkey\" with taproot internal key.\n- The sender will consider hash contents for each mode if proposed feature proceeds, as per table.\n- Possibility of having mode 0commit to spend_type and annex; sender concludes with thanks.",
+            "summary": "- Thank you for the fix and updating the feature specification with taproot internal key.\n- The proposed feature will include careful consideration of hash contents for each mode.\n- The possibility of mode 0 committing to spend_type and annex is discussed.",
             "n_threads": 4,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -18,78 +49,56 @@
             "file_path": "static/bitcoin-dev/Aug_2023/021910_Combined-CTV-APO-to-minimal-TXHASH-CSFS.xml"
         },
         {
-            "id": "021905",
-            "title": "Sentinel Chains: A Novel Two-Way Peg",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021905.html",
-            "authors": [
-                "Ruben Somsen"
-            ],
-            "published_at": "2023-08-21T22:32:18+00:00",
-            "summary": "- Ruben raises concerns about Ryan's mention of transmitting invalid transactions or blocks.\n- Ruben argues that this assumes the availability of data and is an unsafe assumption.\n- Ruben disagrees with the idea of users choosing their own validators, as it goes against consensus.",
-            "n_threads": 4,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "ryan at breen.xyz"
-            ],
-            "file_path": "static/bitcoin-dev/Aug_2023/021905_Sentinel-Chains-A-Novel-Two-Way-Peg.xml"
-        },
-        {
-            "id": "021899",
-            "title": "BIP-119 UASF",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021899.html",
-            "authors": [
-                "alicexbt"
-            ],
-            "published_at": "2023-08-20T17:46:01+00:00",
-            "summary": "- The email discusses covenant proposals and provides various links and comparisons.\n- It explains the controversy around general and recursive covenants and expresses a preference for CTV.\n- UASF is suggested as an alternative approach to enforcing consensus rules over MASF.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Aug_2023/021899_BIP-119-UASF.xml"
-        },
-        {
-            "id": "004070",
+            "id": "004077",
             "title": "TOR enabled dynamic Proof of Work defense for onion services",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004070.html",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004077.html",
             "authors": [
-                "Ren\u00e9 Pickhardt"
+                "Antoine Riard"
             ],
-            "published_at": "2023-08-27T07:24:23+00:00",
-            "summary": "- The email discusses TOR's dynamic proof of work system and market-based auction for bandwidth.\n- The sender suggests investigating anonymous credentials and expresses surprise at TOR's method.\n- Instead of dynamic proof of work, the sender proposes using the amount of bitcoin units offered.",
-            "n_threads": 1,
-            "dev_name": "lightning-dev",
-            "contributors": [],
-            "file_path": "static/lightning-dev/Aug_2023/004070_TOR-enabled-dynamic-Proof-of-Work-defense-for-onion-services.xml"
-        },
-        {
-            "id": "004069",
-            "title": "Nucleus: Capital-efficient multipeer Lightning payment channels",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004069.html",
-            "authors": [
-                "Atomic Mr Nuclear"
-            ],
-            "published_at": "2023-08-26T21:20:25+00:00",
-            "summary": "- The proposal design relies on honest majority assumption but doesn't limit usability.\n- Similar assumptions are seen in other distributed system consensuses like bitcoin's Proof of Work.\n- Only safety of funds received during operations requires honest majority; risks can be controlled.",
+            "published_at": "2023-08-28T19:27:43+00:00",
+            "summary": "- Antoine discusses defending against a botnet and suggests investigating anonymous credentials.\n- The idea of bip154 was discussed but discarded due to constraints in real-world scenarios.\n- Antoine is working on implementing Staking Credentials using elliptic curve-based cryptosystems.",
             "n_threads": 3,
             "dev_name": "lightning-dev",
             "contributors": [
-                "David A. Harding"
+                "Pavol Rusnak",
+                "Ren\u00e9 Pickhardt"
             ],
-            "file_path": "static/lightning-dev/Aug_2023/004069_Nucleus-Capital-efficient-multipeer-Lightning-payment-channels.xml"
+            "file_path": "static/lightning-dev/Aug_2023/004077_TOR-enabled-dynamic-Proof-of-Work-defense-for-onion-services.xml"
         },
         {
-            "id": "004066",
-            "title": "lnprototest: Gather feedback on the usage of 'lnprototest' in the implementation",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004066.html",
+            "id": "004076",
+            "title": "Nucleus: Capital-efficient multipeer Lightning payment channels",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004076.html",
             "authors": [
-                "Vincenzo Palazzo"
+                "ZmnSCPxj"
             ],
-            "published_at": "2023-08-24T23:10:25+00:00",
-            "summary": "- Vincent is re-writing lnprototest and wants feedback from implementers and users.\n- He believes involving other implementations in the design process would be beneficial.\n- Vincent has created a GitHub issue for feedback and shared an experimental design link.",
-            "n_threads": 1,
+            "published_at": "2023-08-28T13:34:44+00:00",
+            "summary": "- Proof of Work (PoW) and Lightning Network differ in sybil attacks prevention methods.\n- In PoW, sybil attacks are impossible due to continuous hashpower requirement for each node.\n- Lightning Network lacks sybil-resistance, allowing someone to run multiple nodes and manipulate funds.",
+            "n_threads": 4,
             "dev_name": "lightning-dev",
-            "contributors": [],
-            "file_path": "static/lightning-dev/Aug_2023/004066_lnprototest-Gather-feedback-on-the-usage-of-lnprototest-in-the-implementation.xml"
+            "contributors": [
+                "Atomic Mr Nuclear",
+                "David A. Harding"
+            ],
+            "file_path": "static/lightning-dev/Aug_2023/004076_Nucleus-Capital-efficient-multipeer-Lightning-payment-channels.xml"
+        },
+        {
+            "id": "004075",
+            "title": "Disclosure: Fake channel DoS vector",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-August/004075.html",
+            "authors": [
+                "Bastien TEINTURIER"
+            ],
+            "published_at": "2023-08-28T07:14:21+00:00",
+            "summary": "- Matt is praised for finding an issue and conducting thorough testing.\n- The email stresses the need for more people to contribute and find issues.\n- Protecting p2p networks against DoS vectors is challenging, more involvement is valuable.",
+            "n_threads": 7,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Antoine Riard",
+                "Matt Corallo",
+                "Matt Morehouse"
+            ],
+            "file_path": "static/lightning-dev/Aug_2023/004075_Disclosure-Fake-channel-DoS-vector.xml"
         }
     ],
     "active_posts": [
@@ -101,7 +110,7 @@
                 "Tom Trevethan"
             ],
             "published_at": "2023-07-24T07:46:11+00:00",
-            "summary": "- The implementation of 2-of-2 Schnorr Musig2 for statechains is being discussed.\n- Blinded statechains require trusting the server to report partial signature counts.\n- The musig2 protocol involves key and nonce aggregation to generate aggregate signatures.",
+            "summary": "- A blinded statechains implementation of 2-of-2 Schnorr Musig2 is being implemented.\n- Party 1 remains fully 'blinded' and does not receive certain key or signature information.\n- The 2-of-2 musig2 protocol involves key and nonce aggregation to generate the final signature.",
             "n_threads": 32,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -123,7 +132,7 @@
                 "Burak Keceli"
             ],
             "published_at": "2023-05-22T07:54:03+00:00",
-            "summary": "- A new second-layer protocol called Ark has been released as an alternative to Lightning.\n- Ark allows users to send and receive funds without liquidity constraints using virtual UTXOs.\n- Ark's anonymous payments are enabled through an intermediary called the Ark Service Provider.",
+            "summary": "- Ark is a new second-layer protocol design that offers an alternative to Lightning network.\n- It uses virtual UTXOs and doesn't require opening and closing channels.\n- Ark enables anonymous, off-chain payments through an untrusted intermediary called the Ark Service Provider.",
             "n_threads": 19,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -139,23 +148,26 @@
             "file_path": "static/bitcoin-dev/May_2023/combined_Ark-An-Alternative-Privacy-preserving-Second-Layer-Solution.xml"
         },
         {
-            "id": "021827",
-            "title": "Concrete MATT opcodes",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021827.html",
+            "id": "021837",
+            "title": "Concern about \"Inscriptions\"",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021837.html",
             "authors": [
-                "Salvatore Ingala"
+                "GamedevAlice"
             ],
-            "published_at": "2023-07-30T21:37:49+00:00",
-            "summary": "- Salvatore Ingala has proposed an updated and improved implementation for the core opcodes of MATT.\n- The changes include introducing a new opcode, OP_CHECKCONTRACTVERIFY (CCV), and modifying the parameters for better script writing.\n- The new opcode, along with OP_CAT, enables the full generality of MATT, and the author welcomes comments and starting a BIP proposal.",
+            "published_at": "2023-08-02T11:07:27+00:00",
+            "summary": "- Storage for blockchain is not an issue due to factors like growth potential and affordable hardware.\n- A 5TB hard drive costing less than $150 can provide storage for 21 years.\n- Ongoing optimization efforts can further reduce the amount of space required by individual nodes.",
             "n_threads": 10,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Antoine Riard",
-                "David A. Harding",
-                "Johan Tor\u00e5s Halseth",
+                "Erik Aronesty",
+                "John Tromp",
+                "Luke Dashjr",
+                "Russell O'Connor",
+                "martl.chris at proton.me",
+                "rot13maxi",
                 "symphonicbtc"
             ],
-            "file_path": "static/bitcoin-dev/July_2023/combined_Concrete-MATT-opcodes.xml"
+            "file_path": "static/bitcoin-dev/Aug_2023/combined_Concern-about-Inscriptions-.xml"
         },
         {
             "id": "003994",
@@ -165,7 +177,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-06-23T09:39:18+00:00",
-            "summary": "- Antoine Riard proposes organizing the LN Summit in Africa in June 2024.\n- He emphasizes the need for transparency and fairness in the multi-stakeholder approach.\n- Countries like Algeria, Ghana, Senegal, and Nigeria are being considered as potential host locations.",
+            "summary": "- Antoine Riard proposes organizing the LN Summit in Africa in June 2024.\n- Africa's rich culture, fragmented financial systems, and growing number of Lightning developers make it an ideal location.\n- Antoine seeks objections or feedback and plans to survey countries for suitable hosting options.",
             "n_threads": 9,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -183,7 +195,7 @@
                 "Thomas Voegtlin"
             ],
             "published_at": "2023-08-14T12:59:16+00:00",
-            "summary": "- The proposal introduces a new way to make lightning channels resumable from a wallet seed.\n- It addresses channel backup issues and provides a solution for fraud proofs.\n- The proposal also discusses saving bandwidth and alternative options without OP_CHECKSIGFROMSTACK.",
+            "summary": "- The proposal introduces a new way to make lightning channels resumable from a wallet seed.\n- It addresses the issue of channel backups and provides a solution for fraud proofs.\n- The proposal also suggests saving bandwidth and discusses alternative options without OP_CHECKSIGFROMSTACK.",
             "n_threads": 9,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -201,7 +213,7 @@
                 "Carla Kirk-Cohen"
             ],
             "published_at": "2023-08-01T18:44:57+00:00",
-            "summary": "- We will conduct a \"dry run\" of HTLC endorsement and local reputation tracking.\n- The plan involves collecting forwarding data, propagating an experimental TLV, and implementing local reputation algorithms.\n- Privacy is prioritized, and node operators are encouraged to participate in data collection.",
+            "summary": "- We will conduct a \"dry run\" to validate local reputation algorithms using real-world data.\n- Anonymized forwarding data will be collected in a CSV file format with specific fields.\n- Local reputation algorithms will be implemented and data collection will prioritize privacy.",
             "n_threads": 8,
             "dev_name": "lightning-dev",
             "contributors": [
