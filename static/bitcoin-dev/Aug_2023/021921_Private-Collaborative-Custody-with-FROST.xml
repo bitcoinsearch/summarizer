@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Private Collaborative Custody with FROST</title>
+  <updated>2023-08-31T01:57:36.552252+00:00</updated>
+  <author>
+    <name>Nick Farrow 2023-08-30 12:16:28+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Private Collaborative Custody with FROST</title>
+    <updated>2023-08-31T01:57:36.552286+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021921.html" rel="alternate"/>
+    <summary>The email discusses a draft scheme that aims to explain the process of blinding and FROST (Flexible Round-Optimized Schnorr Threshold) compatibility in a clearer manner. The scheme starts by obtaining a public nonce 'D' from the collaborative signing server, which is used to create a nonce pair `(D, 0)` for FROST. This pair is then used to construct an aggregate FROST nonce 'R', which will be signed under by the signer set 'S'.To further enhance security, the aggregate FROST nonce is blinded with contributions from other signers, ensuring that the collaborative custodian remains unaware of the nonces used by other participants.Next, using the FROST public key 'X', the aggregate nonce 'R', and a message 'm' representing the planned Bitcoin transaction input, a challenge 'c' is calculated. Similar to blind schnorr, this challenge is also blinded to prevent the signing server from recognizing it on the blockchain. The challenge is blinded with a factor that includes the necessary Lagrange coefficient, allowing the partial signature to combine correctly with other FROST signatures from the signing quorum.It is important to note that if the sole challenge blinding factor 'λ_i_S' is used, it is crucial to assign the collaborative custodian a non-trivial participant index to prevent them from matching the challenge they signed with on-chain challenges multiplied by common Lagrange coefficients.Once the challenge is formed, the server signs it using the FROST secret share 's_i' and nonce secret 'd_i' according to the regular Schnorr signing equation. This results in a partial signature 'z_i'. For binonce commitment, where the nonce is `(D, 0)`, the signing equation becomes `d_i + s_i * c'`.After obtaining this partial signature, the other participants (t - 1) perform FROST signing. The collaborative custodian's signature is combined with the other partial signatures to create a complete Schnorr signature that is valid under the group's FROST key.It is emphasized that security needs thorough assessment, particularly due to the exclusion of the binding factor in the collaborative custodian's nonce. It is recommended to conduct collaborative signing sessions sequentially and sign transaction inputs one at a time to mitigate potential risks.In conclusion, the email provides an explanation of the ideas behind blinding and FROST compatibility, highlighting the steps involved in the scheme and addressing the need for security assessment.</summary>
+    <published>2023-08-30T12:16:28+00:00</published>
+  </entry>
+</feed>

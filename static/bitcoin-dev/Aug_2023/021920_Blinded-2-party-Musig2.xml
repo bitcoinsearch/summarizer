@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Blinded 2-party Musig2</title>
+  <updated>2023-08-31T01:54:53.470050+00:00</updated>
+  <author>
+    <name>Tom Trevethan 2023-08-30 10:52:05+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Blinded 2-party Musig2</title>
+    <updated>2023-08-31T01:54:53.470249+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021920.html" rel="alternate"/>
+    <summary>The email provides an update on the progress of the development of the blinded two-party Schnorr scheme for statechains. The objective of this scheme is to mitigate one-more-signature and Wagner attacks by having the client commit the values of the blinding nonce (f) and the value of R2 used in a signing session, to the server before receiving the server's value of R1.When verifying a generated signature (in this case, for a new statecoin owner), the verifier retrieves the commitments and blinded challenge value from the server (c, SHA256(f), and SHA256(R2)), as well as f and R2 from the co-signer. The verifier then checks that the blinded challenge value satisfies the equation c = f + SHA256(X, R1 + R2 + f.X, m) and that the commitments match f and R2. This ensures that the signer cannot choose the values of f and R2 after the server randomly generates the value of R1.To implement this scheme, a forked version of the secp256k1-zkp library has been used. A new function, secp256k1_blinded_musig_nonce_process, has been added to the library, which is required for the client to generate the blinded challenge value. Additionally, an issue regarding the evenness of the curve point R had to be resolved. In MuSig2, if R is odd, the secret nonce is negated when f.X is added. A complete explanation of this issue will be included in the updated specification.The scheme has been implemented in both a blind server and a client. The blind server can be found at https://github.com/ssantos21/blinded-musig-sgx-server, while the client can be found at https://github.com/ssantos21/blinded-musig2-client.The sender welcomes any comments or questions regarding the progress or implementation of the scheme.</summary>
+    <published>2023-08-30T10:52:05+00:00</published>
+  </entry>
+</feed>
