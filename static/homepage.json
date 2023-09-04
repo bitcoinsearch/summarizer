@@ -1,5 +1,5 @@
 {
-    "header_summary": "Tom Briar is updating his code to align with the documentation and plans to add a compressrawtransaction RPC endpoint that includes a limit on uncompressed TxId. ZmnSCPxj suggests focusing on Lightning as a scaling solution instead of sidechains and proposes using a federated sidechain for developing features. Nick Farrow discusses a draft scheme for blinding and FROST compatibility, emphasizing the need for security assessment. David Stainton suggests improving the performance of the Sphinx cryptographic packet format by reducing public key operations and combining different KEMs. Atomic Mr Nuclear clarifies the permissionless nature of Bitcoin and the permissioned nature of the Lightning channel. Antoine Riard discusses defending against a botnet and suggests investigating anonymous credentials as a technique. They are working on a Rust implementation for the Lightning Network.",
+    "header_summary": "Tom Briar is updating code based on historical data and fuzz tests, adding a compressrawtransaction RPC endpoint with a limit and warning system. ZmnSCPxj suggests Lightning as a scaling solution and integrating sidechain features into Bitcoin. Nick Farrow explains a scheme for blinding and FROST compatibility, while David Stainton raises performance concerns about the Sphinx cryptographic packet format. Atomic Mr Nuclear clarifies the permissionless nature of the Bitcoin blockchain and the permissioned nature of the Lightning channel. Antoine Riard investigates anonymous credentials for defending against botnets.",
     "recent_posts": [
         {
             "id": "021931",
@@ -9,7 +9,7 @@
                 "Tom Briar"
             ],
             "published_at": "2023-09-01T17:05:17+00:00",
-            "summary": "- Tom is updating the code to match the documentation, which will be done this week.\n- The safe number of blocks is estimated to be 100, including spending coin base transactions.\n- Tom adds a compressrawtransaction RPC endpoint in the PR and plans to update the documentation.",
+            "summary": "- Tom informs Jonas about his progress in obtaining numbers from historical data and fuzz tests.\n- He mentions updating the code to align with documentation and expects to finish by week's end.\n- Tom adds a compressrawtransaction RPC endpoint in the pull request and plans to update the documentation.",
             "n_threads": 8,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -27,7 +27,7 @@
                 "ZmnSCPxj"
             ],
             "published_at": "2023-08-31T00:16:25+00:00",
-            "summary": "- The sender expresses initial interest in sidechains as a scaling solution for blockchains.\n- They turn their attention to Lightning as a non-blockchain mechanism for scaling blockchains.\n- The sender suggests a federated sidechain and an old idea called \"mainstake\" as alternatives.",
+            "summary": "- The sender expresses initial interest in sidechains as a scaling solution for blockchains.\n- Sidechains are considered impractical, and Lightning is suggested as an alternative mechanism.\n- The sender proposes a federated sidechain for developing and prototyping new features.",
             "n_threads": 8,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -44,7 +44,7 @@
                 "Nick Farrow"
             ],
             "published_at": "2023-08-30T12:16:28+00:00",
-            "summary": "- The email discusses a draft scheme that explains blinding and FROST compatibility.\n- The scheme involves obtaining a public nonce, constructing an aggregate nonce, and calculating a challenge.\n- Security measures are emphasized, such as blinding the challenge and conducting sequential signing sessions.",
+            "summary": "- The email discusses a draft scheme that explains blinding and FROST compatibility.\n- The scheme involves obtaining a public nonce, constructing an aggregate FROST nonce, and calculating a challenge.\n- The email emphasizes the importance of security assessment and conducting signing sessions sequentially.",
             "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -60,7 +60,7 @@
                 "David Stainton"
             ],
             "published_at": "2023-08-31T17:22:26+00:00",
-            "summary": "- David Stainton raises concerns about Sphinx's performance, suggesting improvements by eliminating certain operations.\n- He suggests combining NIKE adapted KEM with a Post Quantum KEM like Kyber1024.\n- David discusses bandwidth overhead and references a paper on security preserving KEM combiners.",
+            "summary": "- David Stainton raises concerns about Sphinx's performance, suggesting improvements by eliminating operations and combining KEMs.\n- He highlights the bandwidth overhead of Kyber KEM Sphinx and refers to a paper on security preserving KEM combiners.\n- David's email emphasizes the need for better performance and presents ideas for improvement.",
             "n_threads": 1,
             "dev_name": "lightning-dev",
             "contributors": [],
@@ -74,7 +74,7 @@
                 "Atomic Mr Nuclear"
             ],
             "published_at": "2023-08-30T19:39:46+00:00",
-            "summary": "- The Bitcoin blockchain is permissionless, but the Lightning channel is fully permissioned.\n- Participants in the Lightning channel require authorization from each other.\n- The permissioned system provides protection against Sybil attacks and includes trustworthy participants.",
+            "summary": "- The email clarifies that the Bitcoin blockchain is permissionless, while the Lightning channel is not.\n- The Lightning channel requires authorization from all participants, providing protection against Sybil attacks.\n- Reputation mechanisms can ensure inclusion of trustworthy participants in the Lightning channel.",
             "n_threads": 6,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -91,7 +91,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-08-28T19:27:43+00:00",
-            "summary": "- Antoine discusses defending against a botnet and suggests investigating anonymous credentials.\n- During the Zurich lightning event, the bip154 idea was discussed but discarded.\n- Antoine is implementing Staking Credentials using elliptic curve-based cryptosystems for Lightning Network.",
+            "summary": "- Antoine discusses defending against a botnet and suggests investigating anonymous credentials.\n- During the Zurich event, a discarded idea was bip154 due to botnet capabilities.\n- Antoine implemented Staking Credentials, replacing cryptosystems with elliptic curve-based ones.",
             "n_threads": 3,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -110,7 +110,7 @@
                 "Tom Trevethan"
             ],
             "published_at": "2023-07-24T07:46:11+00:00",
-            "summary": "- We are implementing a version of 2-of-2 Schnorr Musig2 for statechains.\n- The server will be fully 'blinded' and will not learn the aggregate public key or signature.\n- The security relies on trusting the statechain server to report the number of partial signatures.",
+            "summary": "- The implementation of 2-of-2 Schnorr Musig2 for statechains ensures full privacy.\n- The process involves generating private and public keys, aggregating pubkeys, and signing.\n- Party 1 is blinded and doesn't learn final signatures or the message being signed.",
             "n_threads": 33,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -132,7 +132,7 @@
                 "Burak Keceli"
             ],
             "published_at": "2023-05-22T07:54:03+00:00",
-            "summary": "- A new second-layer protocol called Ark has been released as an alternative to Lightning.\n- Ark utilizes virtual UTXOs to enable off-chain, anonymous payments and requires spending within four weeks.\n- Users can acquire vTXOs or lift their on-chain UTXOs, and ASPs provide liquidity and charge fees.",
+            "summary": "- Ark is a new second-layer protocol design that offers an alternative to Lightning network.\n- It uses virtual UTXOs (vTXOs) that live off-chain and must be spent within four weeks.\n- Ark enables anonymous, off-chain payments through an untrusted intermediary called the Ark Service Provider.",
             "n_threads": 19,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -148,23 +148,27 @@
             "file_path": "static/bitcoin-dev/May_2023/combined_Ark-An-Alternative-Privacy-preserving-Second-Layer-Solution.xml"
         },
         {
-            "id": "021827",
-            "title": "Concrete MATT opcodes",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-July/021827.html",
+            "id": "021837",
+            "title": "Concern about \"Inscriptions\"",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021837.html",
             "authors": [
-                "Salvatore Ingala"
+                "GamedevAlice"
             ],
-            "published_at": "2023-07-30T21:37:49+00:00",
-            "summary": "- Salvatore Ingala has presented a complete proposal for the core opcodes of MATT.\n- The proposal includes a revised and improved implementation in the bitcoin-inquisition repo fork.\n- The new opcode, OP_CHECKCONTRACTVERIFY, replaces previous opcodes and offers enhanced functionality.",
-            "n_threads": 10,
+            "published_at": "2023-08-02T11:07:27+00:00",
+            "summary": "- The growth potential of blockchain storage is significant, with a potential growth of 210.24GB per year.\n- However, affordable hardware and ongoing optimization efforts make storage sufficient for practical usage.\n- Initiatives like Floresta reduce the amount of space required by individual nodes.",
+            "n_threads": 11,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Antoine Riard",
-                "David A. Harding",
-                "Johan Tor\u00e5s Halseth",
-                "symphonicbtc"
+                "Erik Aronesty",
+                "John Tromp",
+                "Luke Dashjr",
+                "Russell O'Connor",
+                "martl.chris at proton.me",
+                "rot13maxi",
+                "symphonicbtc",
+                "vjudeu at gazeta.pl"
             ],
-            "file_path": "static/bitcoin-dev/July_2023/combined_Concrete-MATT-opcodes.xml"
+            "file_path": "static/bitcoin-dev/Aug_2023/combined_Concern-about-Inscriptions-.xml"
         },
         {
             "id": "004043",
@@ -174,7 +178,7 @@
                 "Thomas Voegtlin"
             ],
             "published_at": "2023-08-14T12:59:16+00:00",
-            "summary": "- The proposal introduces a new type of channel funding transaction using OP_CAT and OP_CHECKSIGFROMSTACK.\n- During channel reestablishment, Bob sends Alice her latest state using an extra field.\n- Fraud proofs are introduced to detect revoked states and allow unilateral spending.",
+            "summary": "- The proposal suggests resumable lightning channels from a wallet seed, addressing backup issues.\n- A new type of channel funding transaction with fraud proof acceptance is introduced.\n- Fraud proofs are used to detect revoked states and save bandwidth.",
             "n_threads": 10,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -192,7 +196,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-06-23T09:39:18+00:00",
-            "summary": "- Antoine Riard proposes organizing the LN Summit in Africa in June 2024.\n- Africa's cultural richness, fragmented financial systems, and growing Lightning developers make it an ideal location.\n- Antoine invites objections or feedback and suggests surveying suitable countries for hosting the summit.",
+            "summary": "- Antoine, a Lightning Network developer, proposes organizing the LN Summit in Africa in June 2024.\n- Africa is chosen for its rich culture, fragmented financial systems, and growing number of Lightning developers.\n- Antoine invites objections and feedback, emphasizing transparency and plans to survey suitable countries.",
             "n_threads": 9,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -210,7 +214,7 @@
                 "Carla Kirk-Cohen"
             ],
             "published_at": "2023-08-01T18:44:57+00:00",
-            "summary": "- The plan discussed at the summit will involve a \"dry run\" of HTLC endorsement and local reputation tracking.\n- The plan includes collecting forwarding data, propagating an experimental TLV, and implementing local reputation algorithms.\n- Node operators are encouraged to participate in data collection and ask for assistance if needed.",
+            "summary": "- We are proceeding with the plan to conduct a \"dry run\" of HTLC endorsement and local reputation tracking.\n- The plan includes collecting forwarding data, propagating an experimental TLV, and implementing local reputation algorithms.\n- We prioritize privacy and encourage participation from node operators in the data collection.",
             "n_threads": 8,
             "dev_name": "lightning-dev",
             "contributors": [
