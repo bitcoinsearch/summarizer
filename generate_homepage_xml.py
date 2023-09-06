@@ -280,7 +280,7 @@ class GenerateJSON:
         summaries = self.recursive_summary(body, tokens_per_sub_body, body_length_limit)
 
         if len(summaries) > 1:
-            logger.info("Consolidate summary generating")
+            logger.info("generating consolidate summary...")
             summary_str = "\n".join(summaries)
             count = 0
             while True:
@@ -296,7 +296,7 @@ class GenerateJSON:
             return consolidated_summaries
 
         else:
-            logger.info("Individual summary generating")
+            logger.info("generating individual summary...")
             return "\n".join(summaries)
 
     def create_summary(self, body):
@@ -330,7 +330,7 @@ class GenerateJSON:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an intelligent."},
+                {"role": "system", "content": "You are an intelligent assistant."},
                 {"role": "user", "content": f"{bullets_prompt}"},
             ],
             temperature=1,
@@ -387,7 +387,7 @@ class GenerateJSON:
                 summ = f"{author_}:{body_summ}\n"
                 recent_post_data += summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of three to four significant sentences, adhering to these important criteria:
+        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of only three or four significant sentences, adhering to these important criteria:
     Guidelines:
         1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
         2. The summarization must have a formal tone and be high in informational content.
@@ -406,6 +406,8 @@ class GenerateJSON:
             max_tokens=500
         )
         response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
+        if response_str.startswith("Summary:"):
+            response_str = response_str[8:].strip()
         return response_str
 
     def create_single_entry(self, data, is_active=False):
