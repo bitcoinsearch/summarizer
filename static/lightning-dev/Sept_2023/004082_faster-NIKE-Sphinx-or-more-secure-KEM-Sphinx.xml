@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>faster NIKE Sphinx or more secure KEM Sphinx</title>
+  <updated>2023-09-06T01:56:42.829459+00:00</updated>
+  <author>
+    <name>Olaoluwa Osuntokun 2023-09-04 23:54:45+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>faster NIKE Sphinx or more secure KEM Sphinx</title>
+    <updated>2023-09-06T01:56:42.829610+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-September/004082.html" rel="alternate"/>
+    <summary>In the email, the sender discusses the use of mixnets and mentions a time-space tradeoff related to eliminating an extra Diffie-Hellman (DH) operation by including a self-contained group element in the packet. The onion packet format for Lightning Network (LN) previously included the group element directly in the packet but switched to Sphinx for compactness and being a peer-reviewed scheme.The sender also mentions a basic versioning scheme in the packet format but acknowledges that the initial version doesn't include this data in the per-hop HMAC, which should be fixed in the next version. To adopt a CPU optimization, the version can be bumped, and a new p2p feature bit can be introduced to indicate support for the new format.The sender brings up a past update to the per-hop payload from a fixed format to a more flexible canonical protobuf style encoding called the "TLV" format, although no updates have been made to the crypto bits yet. In terms of tangible benefit, forwarding payments on the network is limited by I/O bandwidth rather than CPU utilization. Nodes need to write bookkeeping information to disk for each batch before forwarding packets to ensure robust packet forwarding.While there may not be much tangible benefit for the payment packet forwarding case, the sender suggests that if the packet size is reduced by targeting a lower number of hops (e.g., 14 hops), the trick of including the self-contained group element would not increase the packet size significantly for each payment.The sender mentions the deployment of a slightly repurposed Sphinx packet format called "onion messaging" for payment-related notifications or requests. This protocol extension resembles a traditional mixnet and targets a low-latency use case. Unlike normal payment forwarding, onion messages do not require nodes to write to disk, but they should still retain shared secrets for proper replay protection.The sender then asks about the current state of production-ready implementations for Kyber. They mention that most of the popular LN implementations today are written in C, Go, Rust, or Scala/Kotlin. They also mention that libsecp256k1 is widely used in the Bitcoin community for EC-crypto-related tasks and is well tested and trusted.If there is an investigation into switching to a post-quantum (PQ) scheme like Kyber for the mixnet NIKE, updating BOLT-09 (spec for p2p network link encryption in the network) to use a PQ Key Encapsulation Mechanism (KEM) such as Noise_XK would be necessary. It's important to note that switching to Kyber derived schemes would protect against future post-quantum attackers at the network level, but Bitcoin itself would still be vulnerable to a quantum adversary. The email concludes by mentioning that updating Bitcoin to be post-quantum secure is an active area of research.</summary>
+    <published>2023-09-04T23:54:45+00:00</published>
+  </entry>
+</feed>
