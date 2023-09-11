@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Lightning With Simple Covenants</title>
+  <updated>2023-09-11T01:54:10.322858+00:00</updated>
+  <author>
+    <name>Anthony Towns 2023-09-11 00:56:40+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Lightning With Simple Covenants</title>
+    <updated>2023-09-11T01:54:10.322904+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-September/021943.html" rel="alternate"/>
+    <summary>The email discusses a tradeoff between trust and capital efficiency in the context of Lightning Network. The scenario presented involves a single UTXO (unspent transaction output) that can be claimed by "B" at a future time. However, at the current time, this UTXO holds funds belonging to both "B" and millions of casual users ("C_1" through "C_1000000").If "B" cheats by not signing any further lightning updates before the claim time, each casual user would need to drop their channel to the chain or risk losing their funds. This situation leads to a "thundering herd" problem, where instead of the expected one-in/one-out transaction, there would be between 1 million and 2 million on-chain transactions as everyone tries to recover their funds.The impact of these additional transactions depends on the timeframe over which they occur. If spread over a day or two, it may be impossible to handle, but if spread over a year or more, it may not be noticeable. Casual users can calculate the expected number of extra transactions per block based on their factor preference. For example, if they want to ensure only 100 extra transactions per block, they can estimate the required timeout period.The email also highlights that capital efficiency is reduced when casual users follow a rollover policy and delay accessing their funds for a certain period. The total lifetime of a UTXO is split into an active lifetime (LA) and an inactive lifetime (LI). LI is typically set to 5 months, during which users would recover their funds if normal rollovers were blocked. The reduction in capital efficiency is determined by the ratio of LA to LI.Furthermore, the email notes that casual users cannot easily reduce their LI timeout by splitting into different UTXOs because cheating/failure by the provider would likely affect all their UTXOs. Collusion among different providers can also cause problems, increasing the number of transactions.To illustrate these concepts, an example is provided involving a provider with a million casual users, issuing a new UTXO every week, and targeting LA of 16 weeks. The analysis shows that only 30% of the working capital dedicated to Lightning Network routing is actually available.The email suggests possible ways to optimize capital usage, such as varying the timeout at different layers of the internal tree or peering with a dedicated node. However, these approaches may introduce additional complexity.In summary, the email raises concerns about the potential impact on-chain if the scalable path of Lightning Network fails and a large number of transactions have to be processed. It presents calculations and scenarios to measure and understand this concern.</summary>
+    <published>2023-09-11T00:56:40+00:00</published>
+  </entry>
+</feed>
