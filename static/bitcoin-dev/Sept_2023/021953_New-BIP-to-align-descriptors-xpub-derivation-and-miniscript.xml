@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>New BIP to align descriptors, xpub derivation and miniscript</title>
+  <updated>2023-09-12T01:52:40.319072+00:00</updated>
+  <author>
+    <name>Antoine Poinsot 2023-09-11 12:03:59+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>New BIP to align descriptors, xpub derivation and miniscript</title>
+    <updated>2023-09-12T01:52:40.319100+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-September/021953.html" rel="alternate"/>
+    <summary>Greetings Antoine,I have reviewed your email and would like to provide a detailed summary of the points you raised.Firstly, you mentioned that some wallets supporting descriptors maintain vague BIP44 compatibility. However, it is important to note that the derivation path does not "commit to" specific output types such as P2WSH or P2TR. The whole purpose of descriptors is to provide standardized paths for Taproot keyspend and unusual multisig P2WSH templates. It is not feasible to maintain an infinite list of BIP44 templates for all possible scripts under these output types.Moving on, you highlighted the reasons for keeping BIP44 compatibility in certain wallets. One reason is that it makes sense for some output types to remain compatible with non-descriptor wallets. For example, the Bitcoin Core wallet utilizes BIP86 for Taproot keyspend, despite being descriptor-based [0]. Additionally, some signing devices restrict the extraction of xpubs without user confirmation. This is the case with Ledger and the reason why legacy BIP48-derived paths are used in Liana.You also mentioned that using legacy standards within descriptors is pointless. While that may be true, it does not warrant the creation of another unscalable legacy standard. It is simply a matter of choosing not to use it if it can be avoided. In fact, I would suggest using `m/network'/account'//*` instead of your proposed `m/89'/network'/account'/branch//*`, if Ledger permits it.Next, you addressed the issue of reusing public keys across spending paths within a Miniscript. While it is true that you cannot reuse the same public key, you can still reuse the same signer. One approach is to derive a different hardened xpub from the signing device for each occurrence, which can be cumbersome. Alternatively, you can query a single xpub from the device and then append an unhardened derivation step. To minimize the number of steps, you can even reuse the multipath step (`xpub//*` for the first appearance, followed by `xpub//*`, `xpub//*`, and so on). Additionally, I noticed a small correction regarding the Miniscript duplicate key check. You mentioned that it does not apply under the Taproot context, but it actually does. It is important to consider that you can have multiple spending paths within a single leaf.Lastly, you mentioned that your client-side validation project introduces some "descriptor-level concepts" that are not covered by current standards. Instead of trying to convince existing wallets to become aware of your new standard, I would suggest fixing any incompatibilities with descriptors.Thank you for your insightful email.Best regards,Maxim[0] - Link to Bitcoin Core wallet: [insert link here]</summary>
+    <published>2023-09-11T12:03:59+00:00</published>
+  </entry>
+</feed>
