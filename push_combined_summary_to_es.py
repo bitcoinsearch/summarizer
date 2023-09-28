@@ -1,14 +1,12 @@
+import tqdm
 import re
 from elasticsearch import Elasticsearch
-import time
-from datetime import datetime, timedelta
+import traceback
+from datetime import datetime, timezone
 from loguru import logger
 import xml.etree.ElementTree as ET
-# import os
 from dotenv import load_dotenv
 import warnings
-# import pytz
-# import tqdm
 import glob
 
 from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
@@ -34,14 +32,6 @@ class ElasticSearchClient:
 
 
 class XMLReader:
-    def __init__(self) -> None:
-        self.month_dict = {
-            1: "Jan", 2: "Feb", 3: "March", 4: "April", 5: "May", 6: "June",
-            7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
-        }
-
-    def get_id(self, id):
-        return str(id).split("-")[-1]
 
     def clean_title(self, xml_name):
         special_characters = ['/', ':', '@', '#', '$', '*', '&', '<', '>', '\\', '?']
@@ -54,26 +44,27 @@ class XMLReader:
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
         tree = ET.parse(full_path)
         root = tree.getroot()
-        title = root.findall(".//atom:entry/atom:title", namespaces)
-        summary = root.findall(".//atom:entry/atom:summary", namespaces)
-        published = root.findall(".//atom:entry/atom:published", namespaces)
-        link = root.findall(".//atom:entry/atom:link", namespaces)
+        title = root.findall(".//atom:entry/atom:title", namespaces)[0].text
+        title_for_id = title.replace('Combined summary - ', '')
+        id = 'combined_' + self.clean_title(title_for_id)
+        summary = root.findall(".//atom:entry/atom:summary", namespaces)[0].text
+        published = root.findall(".//atom:entry/atom:published", namespaces)[0].text
+        link = root.findall(".//atom:entry/atom:link", namespaces)[0].get('href')
         authors = root.findall('atom:author/atom:name', namespaces)
         author_list = [author.text for author in authors]
-        domain = '/'.join(str(link[0].get('href')).split("/")[:-2])
-        # indexed_at = datetime.
-        # published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        # published_at = pytz.UTC.localize(published_at)
+        domain = '/'.join(str(link).split("/")[:-2])
+        indexed_at = ((datetime.now(timezone.utc)).replace(microsecond=0)).isoformat()
         return {
-            'id': self.clean_title(title[0].text),
-            'title': title[0].text if title else None,
-            'summary': summary[0].text if summary else None,
-            'body': summary[0].text if summary else None,
-            'url': link[0].get('href') if link else None,
+            'id': id if id else None,
+            'title': title if title else None,
+            'summary': summary if summary else None,
+            'body': summary if summary else None,
+            'url': link if link else None,
             'author_list': author_list if author_list else None,
-            'created_at': published[0].text if published else None,
+            'created_at': published if published else None,
             'body_type': "combined-summary",
-            'domain': domain if domain else None
+            'domain': domain if domain else None,
+            'indexed_at': indexed_at if indexed_at else None
         }
 
 
@@ -91,19 +82,36 @@ if __name__ == "__main__":
         total_combined_files.extend(combined_files)
     logger.info(f"Total combined files: {(len(total_combined_files))}")
 
-    # get unique combined files and it's full path
-    total_combined_files_dict = {i.split("\\")[-1]: i for i in total_combined_files}
+    # get unique combined file paths
+    total_combined_files_dict = {i.split("\\")[-1][:-4]: i for i in total_combined_files}
     logger.info(f"Total unique combined files: {len(total_combined_files_dict)}")
 
-    for file_name, full_path in total_combined_files_dict.items():
-        logger.info(full_path)
+    for file_name, full_path in tqdm.tqdm(total_combined_files_dict.items()):
+        try:
+            # get data from xml file
+            xml_file_data = xml_reader.read_xml_file(full_path)
 
-        xml_file_data = xml_reader.read_xml_file(full_path)
-        # from pprint import pprint
-        # pprint(xml_file_data)
+            # check if doc exist in ES index
+            doc_exists = elastic_search.es_client.exists(index=ES_INDEX, id=file_name)
 
-        # update data to es index
-        res = elastic_search.es_client.index(index=ES_INDEX, id=3, body=xml_file_data)
-        logger.success(res)
+            # insert the doc in ES index if it does not exist, else update it
+            if not doc_exists:
+                res = elastic_search.es_client.index(
+                    index=ES_INDEX,
+                    id=file_name,
+                    body=xml_file_data
+                )
+                logger.success(res)
+            else:
+                res = elastic_search.es_client.update(
+                    index=ES_INDEX,
+                    id=file_name,
+                    body={'doc': xml_file_data}
+                )
+                logger.success(res)
 
-        break
+        except Exception as ex:
+            error_message = f"Error occurred: {ex} \n{traceback.format_exc()}"
+            logger.error(error_message)
+
+    logger.success(f"Process complete.")
