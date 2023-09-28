@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
 import warnings
 import glob
-
+import os
 from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
 
 warnings.filterwarnings("ignore")
@@ -83,7 +83,8 @@ if __name__ == "__main__":
     logger.info(f"Total combined files: {(len(total_combined_files))}")
 
     # get unique combined file paths
-    total_combined_files_dict = {i.split("\\")[-1][:-4]: i for i in total_combined_files}
+    total_combined_files_dict = {os.path.splitext(os.path.basename(i))[0]: i for i in total_combined_files}
+
     logger.info(f"Total unique combined files: {len(total_combined_files_dict)}")
 
     for file_name, full_path in tqdm.tqdm(total_combined_files_dict.items()):
