@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Solving CoinPool high-interactivity issue with cut-through update of Taproot leaves</title>
+  <updated>2023-10-15T01:58:46.066241+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-10-12 09:31:26+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Solving CoinPool high-interactivity issue with cut-through update of Taproot leaves</title>
+    <updated>2023-10-15T01:58:46.066276+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/021994.html" rel="alternate"/>
+    <summary>Johan provides an update to Antoine regarding the creation of a demo script for the unilateral exit of participants in a Coinpool using OP_CCV. The script demonstrates how pubkeys and balances can be committed, data traversal and modification can be performed, and signatures for exiting users can be validated. The size of the script is 142 bytes, which can likely be optimized further by 20-30%. The witness, including the script, is 647 bytes, with most of the size coming from merkle inclusion proofs. It is expected that the size will grow by O(m logn) for m users exiting a pool of n participants.In cooperative settings, N participants would collectively create a coinpool using the provided exit scripts and a cooperative keyspend path. If a user goes offline, the remaining online users can use the unilateral exit clause to exit into a new coinpool and continue operations once the transaction confirms. There is an interesting possibility of performing the above exit off-chain. When the offline user comes back online, it would be possible to revert back to the original coinpool output, updating the balances according to the updates that occurred while they were offline. Assuming APO (Assumption of Params Obfuscation), this approach could work since the only requirement for the off-chain transactions to remain valid is that the committed balances and keys remain compatible. If the offline user is able to unilaterally spend the original output where the remaining users had built their off-chain coinpool construction on top, the only change needed is to update the merkle inclusion proofs in their jointly signed transactions. All signatures remain valid.Johan asks Antoine if this functionality aligns with what he was looking for.</summary>
+    <published>2023-10-12T09:31:26+00:00</published>
+  </entry>
+</feed>
