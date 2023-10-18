@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-10-18T01:57:10.194035+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-10-17 19:10:40+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:17:04+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2023-10-17 17:10:42+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:04:06+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2023-10-17 13:03:05+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Oct_2023/022014_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022009_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022008_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022007_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022006_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-10-18T01:57:10.194101+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022014.html" rel="alternate"/>
+    <summary>In this email conversation, several topics related to Bitcoin and Lightning Network are discussed. The first email from Antoine raises concerns about the robustness of secure fee-bumping in multi-party transactions and covenant-enable constructions under usual risk models. He shares a test on GitHub for reference. Antoine seeks input from experts who understand both lightning and core mempool.ZmnSCPxj responds to Antoine's email and points out a potential risk related to unexpected increase in mempool usage. He explains that if a splice transaction is not confirming, it is possible for a previous splice transaction to confirm instead of the subsequent splice. ZmnSCPxj also mentions that part of the splice proposal is to avoid splicing a channel while it is being spliced, which seems to be violated in Antoine's proposal.Greg replies to ZmnSCPxj's email and agrees with his concerns. He mentions that batched splicing can be risky unless all splice implementations follow certain rules. Greg suggests that as long as an implementation decides to splice again when a prior splice isn't confirming, the issue will self-resolve once a subsequent splice is confirmed.In another email, ZmnSCPxj discusses the core risk associated with batched splicing. He explains that if a participant broadcasts an old state and convinces miners to confirm it before the batched splice, it can disrupt the splice. Therefore, any batched splicing mechanism should have a backout option where the splice transaction can no longer be confirmed due to posting an old commitment transaction. In such cases, either a subset of the splice should be re-created or the channels should revert back to pre-splice state. ZmnSCPxj suggests that existing splice implementations should perform a check to ensure that the splicing transaction cannot be confirmed.Bastien starts a new topic in the email thread regarding designing a protocol for users to withdraw funds from exchanges directly into their lightning wallets in an efficient way. He suggests that some form of covenants, such as `SIGHASH_ANYPREVOUT`, would be necessary to achieve this goal. Bastien explains the issue with the naive approach of making users provide a lightning invoice, which often requires a splice transaction due to lack of inbound liquidity. He proposes batching multiple channels into a single transaction without introducing any intermediate transactions. However, he highlights the challenge of obtaining signatures from multiple users who may not be online at the same time. Bastien suggests a workaround where each user provides a signature using `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` to create a new funding output. But this approach has a fatal issue as the wallet provider can blackmail the user and force them to pay to get their funds back. Bastien concludes that with `SIGHASH_ANYPREVOUT`, this issue can be fixed by exchanging anyprevout signatures for the commitment transaction.Overall, the email conversation covers topics such as secure fee-bumping, batched splicing, and designing a protocol for lightning withdrawals from exchanges using covenants. The participants raise concerns, suggest solutions, and share their insights on these topics.</summary>
+    <published>2023-10-17T19:10:40+00:00</published>
+  </entry>
+</feed>

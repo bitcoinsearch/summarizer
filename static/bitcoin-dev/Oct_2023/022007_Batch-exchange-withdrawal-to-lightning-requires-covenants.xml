@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-10-18T01:56:47.709719+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:04:06+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-10-18T01:56:47.709753+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022007.html" rel="alternate"/>
+    <summary>In an email from ZmnSCPxj to Bastien, the author discusses the core risk associated with batched splicing mechanisms in Lightning Network. The risk arises when there are no funds in a channel or if the channel is newly single-funded with an old state. In such cases, if the participant engages in a batched splice and broadcasts the old state, they can convince miners to confirm it before the batched splice, thus disrupting the process.To mitigate this risk, the author emphasizes the importance of having a backout mechanism in any batched splicing mechanism. This backout mechanism would allow for either recreating a subset of the splice or reverting the channels back to their pre-splice state, knowing that the post-splice state can no longer be confirmed.The author acknowledges that current splicing technology runs both the pre-splice and post-splice states simultaneously until the splicing transaction is confirmed. However, they argue that it is also necessary to check if the splicing transaction cannot be confirmed by verifying if the other inputs to the splice transaction have already been consumed by transactions that have deeply confirmed. In such cases, the post-splice state should be dropped, and the channels should revert to the pre-splice state.It is unclear whether existing splice implementations perform this check, and the author raises concerns about the potential risks involved in batched splicing if this check is not performed universally. The email concludes with a request to verify if all splice implementations incorporate this check to ensure safer batched splicing.Overall, the email highlights the need for a backout mechanism and a thorough check of the splicing transaction's confirmation status to minimize risks associated with batched splicing in Lightning Network.</summary>
+    <published>2023-10-17T17:04:06+00:00</published>
+  </entry>
+</feed>
