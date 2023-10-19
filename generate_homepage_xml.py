@@ -519,7 +519,7 @@ if __name__ == "__main__":
     if not current_date_str:
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=30)
+    start_date = datetime.now() - timedelta(days=7)
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
