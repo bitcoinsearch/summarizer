@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-10-19T01:54:52.447877+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-10-18 14:35:40+00:00</name>
+  </author>
+  <author>
+    <name>Antoine Riard 2023-10-17 19:10:40+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:17:04+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2023-10-17 17:10:42+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:04:06+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2023-10-17 13:03:05+00:00</name>
+  </author>
+  <link href="lightning-dev/Oct_2023/004138_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/004133_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/004129_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/004128_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/004127_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/004126_Batch-exchange-withdrawal-to-lightning-requires-covenants.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-10-19T01:54:52.447950+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004138.html" rel="alternate"/>
+    <summary>The email discusses the sender's efforts to design a protocol for allowing users to withdraw funds from exchanges and deposit them directly into their lightning wallet with minimal on-chain footprint. The current method of enabling lightning withdrawals shifts the burden of making an on-chain transaction to the user's wallet provider, which often requires multiple separate splice transactions if multiple users withdraw funds from an exchange. To address this, the sender suggests batching these transactions into a single transaction without introducing any intermediate transactions.However, a challenge arises as signatures are required from each wallet user for each channel. The availability problem arises as these users may not be online simultaneously, and if one user fails to complete the protocol, the whole batch must be discarded. To overcome this, each wallet user can provide a signature using `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` to create a new funding output with the expected amount. This allows users to sign before knowing the final transaction, which the exchange can create by batching pairs of inputs and outputs.Nevertheless, this approach has a fatal flaw as the wallet user cannot spend the new funding output since it is also a 2-of-2 between the wallet user and the wallet provider. This opens the possibility of the wallet provider blackmailing the user to retrieve their funds. In the Lightning Network, this issue is resolved by exchanging signatures for a commitment transaction that returns the funds to their owners before signing the parent funding/splice transaction. However, in this scenario, the `txid` of the batch transaction is unknown, preventing the use of this solution.The sender mentions that they couldn't find a clever workaround for this problem and believes there might not be one. However, the `SIGHASH_ANYPREVOUT` covenant resolves this issue by allowing anyprevout signatures for the commitment transaction, making them valid to spend from the batch transaction. The sender also suggests that other forms of covenants likely address this problem as well.Overall, the email discusses the challenges faced in designing a protocol for lightning withdrawals from exchanges and proposes using covenants, specifically `SIGHASH_ANYPREVOUT`, to overcome these challenges.</summary>
+    <published>2023-10-18T14:35:40+00:00</published>
+  </entry>
+</feed>
