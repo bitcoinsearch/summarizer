@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-10-21T01:53:37.938993+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-10-18 14:35:40+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-10-21T01:53:37.939019+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022017.html" rel="alternate"/>
+    <summary>In the email, the sender acknowledges the feedback and responds to a point made by Z-man. The sender clarifies that batched splices cannot use 0-conf (zero confirmation), as the transaction must be confirmed to avoid double spends. However, with the protocol drafted, the LSP (Lightning Service Provider) can finalize and broadcast the batched splice transaction while users are offline. When the users reconnect, the transaction will already be confirmed, providing a "feel" of 0-conf.The sender also agrees with Z-man's description of the mechanism needed to detect double-spent splice transactions. This mechanism is not exclusive to batched transactions but applies to 2-party splice transactions as well. The sender mentions that the specification doesn't include a way to abort a splice after exchanging signatures but suggests using Replace-By-Fee (RBF) as an alternative.The sender addresses ariard's comment about RBF on batched transactions and states that RBF may not be applicable, so they would need to rely on Child Pays for Parent (CPFP) and potentially package relay. They also mention that the ability to splice a channel multiple times as an RBF attempt is an important feature, but it can result in double-spending other unconfirmed splice attempts.ariard questions the difference between multi-party and non-multi-party transactions in this context and provides a link to a commit in the Bitcoin repository. They argue that the situation described is different from the standard replacement cycling attack because in this protocol, wallet users can only unilaterally double-spend with a commit transaction, on which they cannot set the feerate. The exchange, being the only participant with the ability to easily double-spend, wouldn't have an incentive to do so since users are only withdrawing funds, eliminating any opportunity for stealing funds.Overall, the email discusses the limitations of batched splices, the need for a mechanism to detect double-spent transactions, the use of RBF as an alternative to aborting splices, and the difference in context between multi-party and non-multi-party transactions.</summary>
+    <published>2023-10-18T14:35:40+00:00</published>
+  </entry>
+</feed>

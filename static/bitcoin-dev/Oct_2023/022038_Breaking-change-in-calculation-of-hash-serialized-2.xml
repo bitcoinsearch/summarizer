@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Breaking change in calculation of hash_serialized_2</title>
+  <updated>2023-10-21T01:54:42.870928+00:00</updated>
+  <author>
+    <name>Fabian 2023-10-20 17:19:19+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Breaking change in calculation of hash_serialized_2</title>
+    <updated>2023-10-21T01:54:42.870955+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022038.html" rel="alternate"/>
+    <summary>A potential malleability issue was discovered in the UTXO set dump files used by assumeutxo. The issue was caused by a bug in the serialization of UTXOs for the calculation of hash_serialized_2, which is used by Bitcoin Core to check if the UTXO set loaded from a dump file matches the expected value. The bug was identified and a fix is being worked on for inclusion in v26.0, which is scheduled for release in November.As a result of the fix, the serialization will change and all historical UTXO set hash results will also change after upgrading to v26.0. In addition, the version number returned in gettxoutset will be renamed to hash_serialized_3. The decision to switch the serialization completely was made due to additional potentially problematic issues found during fuzz testing.If you are currently using hash_serialized_2 for any security critical purposes, it is recommended to check if the bugs in the serialization code could cause issues for you. Switching to hash_serialized_3 or considering using MuHash is advised. For projects that rely on hash_serialized_2 and require time to upgrade and adapt to the changes, it is requested to inform the team. While breaking changes in APIs without deprecation warning are typically avoided, it is currently believed that keeping the buggy hash_serialized_2 is not necessary as there are no known substantial use cases and its usage may even pose security risks.The team is open to reconsidering the decision if keeping hash_serialized_2 holds serious value for downstream projects. Contact can be made directly with Fabian or through commenting on the PR or the mailing list.</summary>
+    <published>2023-10-20T17:19:19+00:00</published>
+  </entry>
+</feed>

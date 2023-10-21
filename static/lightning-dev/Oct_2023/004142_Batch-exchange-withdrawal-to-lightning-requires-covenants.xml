@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-10-21T01:56:35.170667+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-10-18 18:03:48+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-10-21T01:56:35.170694+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004142.html" rel="alternate"/>
+    <summary>The email is from Antoine, who is responding to Bastien's previous answer. Antoine understands that the protocol described by Bastien aims to enable batched withdrawals, where a list of users are sent funds from an exchange directly in a list of channel funding outputs (referred to as "splice-out"). These channel funding outputs are 2-of-2, meaning they require cooperation between two lambda users or between a lambda user and a LSP. Antoine raises a concern about malicious cooperation between two users against the batch withdrawal transactions. He explains that these users could re-sign a CPFP (Child-Pays-For-Parent) transaction from the 2-of-2 output and broadcast the batch withdrawal as a higher-feerate package, then evicting out the CPFP. In case the batch withdrawal has been signed with a 0-fee thanks to the nversion=3 policy exemption, it will be evicted out of the mempool. This attack can be seen as a variant of a replacement cycling attack.To support his point, Antoine refers to a specific test related to non-deployed package acceptance code, which can be found at this link: https://github.com/ariard/bitcoin/commit/19d61fa8cf22a5050b51c4005603f43d72f1efcfAntoine asks Bastien to correct him if he misunderstood or missed any assumptions. He agrees with Bastien on the assumptions that the exchange does not have an incentive to double-spend its own withdrawal transactions and that if all the batched funding outputs are shared with a LSP (Lightning Service Provider), malicious collusion becomes less plausible.Overall, Antoine's email highlights a potential vulnerability in the described protocol for batched withdrawals and provides a specific example to support his concerns.</summary>
+    <published>2023-10-18T18:03:48+00:00</published>
+  </entry>
+</feed>
