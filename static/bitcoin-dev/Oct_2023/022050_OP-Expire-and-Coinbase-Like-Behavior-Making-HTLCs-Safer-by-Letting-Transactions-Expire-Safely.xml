@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-10-22T01:59:21.725878+00:00</updated>
+  <author>
+    <name>David A. Harding 2023-10-21 08:58:32+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-10-22T01:59:21.725902+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022050.html" rel="alternate"/>
+    <summary>The email discusses a proposal to ensure the HTLC-preimage is mined before an upstream HTLC-timeout becomes mineable without requiring a consensus change. The suggestion is to make the HTLC-preimage claimable by anyone some time after the HTLC-timeout becomes mineable. An example scenario is presented where Alice offers Bob an HTLC with a timeout at block t+200, and Bob offers Carol an HTLC with a timeout at block t+100. The HTLC script allows Carol to spend the output by releasing the preimage at any time, Bob to spend the output after t+100, and anyone with the preimage to spend the output after t+150.The wider context of a forwarded payment from Alice to Bob to Carol is considered. If Carol tries to spend the output by releasing the preimage but pays a low feerate, Bob can spend the output in block t+101. In case Carol releases the preimage to the network but prevents Bob from using it, anyone who saw the preimage can take Carol's output at t+150 and put the preimage in the blockchain, allowing Bob to learn about it within 49 blocks.The concern about the effect on the Lightning Network (LN) from replacement cycling is addressed. Potential complications are discussed, including the scenario where all miners act together to not mine Carol's preimage transaction before t+150 due to lower fees compared to the HTLC value they can receive. This level of miner centralization would likely result in a failure for LN. Additionally, deployment considerations are mentioned, such as no changes required for full nodes or mining Bitcoin nodes, but at least one well-connected Bitcoin relay node needs to be updated to store preimages and related data.The proposal is presented as an alternative to Peter's proposal and is inspired by a previous suggestion made by the author. The email concludes with a mention of selfish mining by a sub-majority to rewrite malleable transactions to pay themselves, but it is not further discussed or connected to the main proposal.</summary>
+    <published>2023-10-21T08:58:32+00:00</published>
+  </entry>
+</feed>

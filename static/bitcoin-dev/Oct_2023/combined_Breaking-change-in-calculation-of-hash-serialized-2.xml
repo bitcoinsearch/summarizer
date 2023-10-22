@@ -2,22 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Breaking change in calculation of hash_serialized_2</title>
-  <updated>2023-10-21T01:54:51.006620+00:00</updated>
+  <updated>2023-10-22T01:59:07.871656+00:00</updated>
+  <author>
+    <name>Fabian 2023-10-20 22:01:40+00:00</name>
+  </author>
   <author>
     <name>Peter Todd 2023-10-20 17:34:28+00:00</name>
   </author>
   <author>
     <name>Fabian 2023-10-20 17:19:19+00:00</name>
   </author>
+  <link href="bitcoin-dev/Oct_2023/022052_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022039_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022038_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Breaking change in calculation of hash_serialized_2</title>
-    <updated>2023-10-21T01:54:51.006662+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022039.html" rel="alternate"/>
-    <summary>In a recent email, James raised a question regarding the use of the sha256 hash in the UTXO (Unspent Transaction Output) set dump files. He suggested that using the hash of the snapshot file itself as the canonical hash could eliminate any malleability issues. James also mentioned that the 'gettxoutsetinfo' function already calculates the hash by walking through the entire UTXO set.Addressing this concern, Fabian explained that a potential malleability issue was identified in the UTXO set dump files used by assumeutxo. The cause of this issue was traced back to a bug in the serialization of UTXOs for the calculation of 'hash_serialized_2', which is the value used by Bitcoin Core to verify the UTXO set loaded from a dump file.To resolve this issue, a fix is currently being developed and is expected to be included in the v26.0 release of Bitcoin Core, scheduled for November. As part of the fix, the serialization format will be changed, resulting in a change in all historical UTXO set hash results when nodes are upgraded to v26.0. Additionally, the version value returned in 'gettxoutset' will also be renamed to 'hash_serialized_3'.Fabian further mentioned that during fuzz testing conducted by dergoegge, additional potentially problematic issues were discovered. Due to these findings, it was decided to switch the serialization format completely, rather than implementing a minimal fix. The new serialization format will be aligned with the one used by MuHash.Fabian highlighted two important points for users to consider. Firstly, if they are currently using 'hash_serialized_2' for any security critical purposes, they should assess whether the serialization code bugs could cause issues, and consider switching to 'hash_serialized_3' or even using MuHash. Secondly, if users rely on 'hash_serialized_2' for critical purposes in their projects and require time to adapt to the upcoming changes, they were encouraged to reach out and provide feedback. While breaking changes are typically avoided without deprecation warnings, the Bitcoin Core team believes it may not be necessary to keep 'hash_serialized_2' due to the absence of substantial use cases and potential security risks.In conclusion, Fabian invited users to contact him directly or comment on the relevant pull request or mailing list thread if they have any concerns or input regarding these changes.</summary>
-    <published>2023-10-20T17:34:28+00:00</published>
+    <updated>2023-10-22T01:59:07.871709+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022052.html" rel="alternate"/>
+    <summary>A recent email discussion raised the question of using the SHA256 hash in a snapshot file. James suggested that instead of hashing the snapshot file separately, it would be more efficient to use the hash of the file itself as the canonical hash. This approach would eliminate any malleability issues. James argued that since the function "gettxoutsetinfo" already requires walking through the entire UTXO set to calculate the hash, it makes sense for this function to generate the actual contents of the dump file and calculate the hash of it. He provided a link to Peter Todd's website (https://petertodd.org), although the content of the linked resource was not included in the email.It is important to note that a potential malleability issue was discovered in the UTXO set dump files used by assumeutxo. The issue was caused by a bug in the serialization of UTXOs for the calculation of hash_serialized_2, which is used by Bitcoin Core to check if the UTXO set loaded from a dump file matches the expected value. A fix for this bug is currently being worked on and is scheduled for release in v26.0 in November. As a result of the fix, the serialization will change and all historical UTXO set hash results will also change after upgrading to v26.0. The version number returned in gettxoutset will be renamed to hash_serialized_3.The decision to switch the serialization completely was made due to additional potentially problematic issues found during fuzz testing. If anyone is currently using hash_serialized_2 for any security critical purposes, it is recommended to check if the bugs in the serialization code could cause issues. Switching to hash_serialized_3 or considering using MuHash is advised. For projects that rely on hash_serialized_2 and require time to upgrade and adapt to the changes, it is requested to inform the team. Although breaking changes in APIs without deprecation warning are typically avoided, it is currently believed that keeping the buggy hash_serialized_2 is not necessary as there are no known substantial use cases and its usage may even pose security risks.The team is open to reconsidering the decision if keeping hash_serialized_2 holds serious value for downstream projects. Contact can be made directly with Fabian or through commenting on the PR or the mailing list.</summary>
+    <published>2023-10-20T22:01:40+00:00</published>
   </entry>
 </feed>
