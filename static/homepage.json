@@ -1,51 +1,55 @@
 {
-    "header_summary": "Peter Todd suggests addressing the issue of spendability in the HTLC-preimage path by introducing the concept of expiring the path using OP_Expire and the Coinbase Bit soft-fork upgrade. This approach ensures compatibility with existing nodes. James proposes using the hash of the file itself as the canonical hash in a snapshot file, eliminating malleability issues. Brandon Black suggests considering the benefits of OP_CAT or OP_2SHA256 for BitVM instead of OP_UNVAULT and proposes using OP_TAGGEDCATHASH. ZmnSCPxj explains a core attack on the Lightning Network involving nodes A, B, and C, detailing the steps and implications for each node's ability to claim the HTLC funds.",
+    "header_summary": "Emails from Ethan Heilman, Peter Todd, Fabian, and ZmnSCPxj cover opcode limitations in tapscript, a proposed solution to prevent attacks on the Lightning Network, considerations for unexplored options in a proposal, and details of a core attack on the network involving nodes A, B, and C. Ethan clarifies the limit in tapscript, Peter discusses the limitations of the proposed solution, Fabian suggests exploring an unconsidered option, and ZmnSCPxj explains a step-by-step attack scenario.",
     "recent_posts": [
         {
-            "id": "022042",
-            "title": "OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022042.html",
+            "id": "022057",
+            "title": "Proposed BIP for OP_CAT",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022057.html",
             "authors": [
-                "Peter Todd"
+                "Ethan Heilman"
             ],
-            "published_at": "2023-10-21T00:09:16+00:00",
-            "summary": "- The email suggests addressing the problem of spendability in HTLC paths.\n- One proposed solution is to introduce OP_Expire and the Coinbase Bit soft-fork upgrade.\n- Another option is to encode expiration height as a delta against a block-height nLockTime.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Oct_2023/022042_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
-        },
-        {
-            "id": "022039",
-            "title": "Breaking change in calculation of hash_serialized_2",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022039.html",
-            "authors": [
-                "Peter Todd"
-            ],
-            "published_at": "2023-10-20T17:34:28+00:00",
-            "summary": "- James questioned the use of separate hashing for snapshot file and proposed an alternative.\n- He suggested using the hash of the file itself to eliminate malleability issues.\n- James argued that generating dump file contents and calculating its hash is more efficient.",
-            "n_threads": 2,
+            "published_at": "2023-10-21T20:24:29+00:00",
+            "summary": "- The tapscript opcode enforces a 520 byte element size, preventing large stack elements.\n- The limit on tapscript is not unique and relates to the removal of OP_CAT opcode.\n- Ethan expresses gratitude to Greg for pointing out the limit and other changes.",
+            "n_threads": 5,
             "dev_name": "bitcoin-dev",
             "contributors": [
+                "Andrew Poelstra",
+                "Greg Sanders",
+                "alicexbt"
+            ],
+            "file_path": "static/bitcoin-dev/Oct_2023/022057_Proposed-BIP-for-OP-CAT.xml"
+        },
+        {
+            "id": "022051",
+            "title": "OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022051.html",
+            "authors": [
+                "Peter Todd"
+            ],
+            "published_at": "2023-10-21T10:31:05+00:00",
+            "summary": "- The proposed solution does not effectively address a specific attack involving replacement cycling.\n- Implementation of the \"anyone-can-spend\" branch allows multiple individuals, including miners, to perform the attack.\n- The solution is considered inferior to OP_Expire due to strict deadlines and lack of flexibility.",
+            "n_threads": 3,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "David A. Harding"
+            ],
+            "file_path": "static/bitcoin-dev/Oct_2023/022051_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
+        },
+        {
+            "id": "022052",
+            "title": "Breaking change in calculation of hash_serialized_2",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022052.html",
+            "authors": [
                 "Fabian"
             ],
-            "file_path": "static/bitcoin-dev/Oct_2023/022039_Breaking-change-in-calculation-of-hash-serialized-2.xml"
-        },
-        {
-            "id": "022037",
-            "title": "Examining ScriptPubkeys in Bitcoin Script",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022037.html",
-            "authors": [
-                "Brandon Black"
-            ],
-            "published_at": "2023-10-20T14:19:06+00:00",
-            "summary": "- The email proposes an alternative to the OP_UNVAULT method with specific benefits.\n- The sender suggests considering OP_CAT or OP_2SHA256 for BitVM.\n- The sender personally recommends using OP_TAGGEDCATHASH and Brandon Black signs off.",
-            "n_threads": 2,
+            "published_at": "2023-10-20T22:01:40+00:00",
+            "summary": "- The email suggests considering an option not previously discussed in the proposal.\n- Reasons for not considering this option could be the effectiveness of the existing hash.\n- Further optimization and alternative strategies for peer-to-peer sharing are mentioned as well.",
+            "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Rusty Russell"
+                "Peter Todd"
             ],
-            "file_path": "static/bitcoin-dev/Oct_2023/022037_Examining-ScriptPubkeys-in-Bitcoin-Script.xml"
+            "file_path": "static/bitcoin-dev/Oct_2023/022052_Breaking-change-in-calculation-of-hash-serialized-2.xml"
         },
         {
             "id": "004125",
@@ -55,7 +59,7 @@
                 "ZmnSCPxj"
             ],
             "published_at": "2023-10-17T10:34:04+00:00",
-            "summary": "- ZmnSCPxj explains a core attack on the Lightning Network involving nodes A, B, and C.\n- The attack exploits the timelocks of HTLCs, causing signed transactions to become \"stuck\" at feerates.\n- Node C takes advantage by broadcasting an HTLC-success transaction with high feerates, benefiting from RBF.",
+            "summary": "- ZmnSCPxj explains a core attack on the Lightning Network, involving nodes A, B, and C.\n- The attack exploits expired timelocks and the ability to change feerates for transactions.\n- Node C has an advantage in feebumping transactions, making it easier to claim the value of HTLCs.",
             "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -73,14 +77,15 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- Replacement cycling, a new attack on lightning channels, can lead to fund loss.\n- Major lightning implementations like LDK, Eclair, LND, and Core-Lightning have implemented mitigations.\n- Other bitcoin applications using timelocks or multi-party transactions may be affected by these attacks.",
-            "n_threads": 24,
+            "summary": "- A new attack called replacement cycling targets lightning channels, posing a threat of fund loss.\n- Major lightning implementations such as LDK, Eclair, LND, and Core-Lightning have implemented mitigations.\n- The attack involves replacing HTLC-timeout transactions, but no attacks have been observed yet.",
+            "n_threads": 29,
             "dev_name": "bitcoin-dev",
             "contributors": [
                 "Bastien TEINTURIER",
                 "Jochen Hoenicke",
                 "Matt Corallo",
                 "Matt Morehouse",
+                "Nagaev Boris",
                 "Olaoluwa Osuntokun",
                 "Peter Todd"
             ],
@@ -94,7 +99,7 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-10-17T13:03:05+00:00",
-            "summary": "- The email proposes a protocol to allow users to withdraw funds from exchanges to their lightning wallet efficiently.\n- The current method of lightning withdrawals shifts the burden of on-chain transactions to the user's wallet provider.\n- A workaround using `SIGHASH_ANYPREVOUT` allows batch transactions, but introduces potential security issues.",
+            "summary": "- The email discusses the design of a protocol for lightning wallet withdrawals from exchanges.\n- The current method burdens the user's wallet provider and sometimes requires splice transactions.\n- The proposed solution is to batch transactions and use `SIGHASH_ANYPREVOUT` to address signatures and security.",
             "n_threads": 9,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -112,7 +117,7 @@
                 "Robin Linus"
             ],
             "published_at": "2023-10-09T13:46:24+00:00",
-            "summary": "- BitVM is a computing paradigm for expressing Turing-complete Bitcoin contracts within consensus rules.\n- Computation is verified off-chain, enabling collaboration for complex stateful off-chain computation.\n- The on-chain execution is minimal and only required in case of dispute. Refer to https://bitvm.org/bitvm.pdf for more information.",
+            "summary": "- BitVM is a computing paradigm for Turing-complete Bitcoin contracts without changing consensus rules.\n- Computations are verified, akin to optimistic rollups, by making claims with fraud proofs.\n- Off-chain collaboration allows complex computation without on-chain footprint, with on-chain execution for disputes.",
             "n_threads": 6,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -132,7 +137,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- The replacement cycling attack on lightning channels poses a risk to fund security.\n- Lightning implementations have taken measures to prevent this attack, but other Bitcoin applications may also be affected.\n- Developers and operators of Bitcoin applications should investigate potential disruptions caused by these attacks.",
+            "summary": "- A new attack called the replacement cycling attack poses a risk to lightning channels.\n- Major lightning implementations have implemented mitigations against this attack.\n- Bitcoin applications using timelocks or multi-party transactions could also be affected.",
             "n_threads": 16,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -152,7 +157,7 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-10-17T13:03:05+00:00",
-            "summary": "- The sender discusses using covenants, specifically `SIGHASH_ANYPREVOUT`, to enable lightning withdrawals.\n- Current method of lightning withdrawals shifts burden to user's wallet provider, requiring splice transactions.\n- To overcome challenges, sender suggests batching transactions into a single transaction using covenants.",
+            "summary": "- The sender proposes using `SIGHASH_ANYPREVOUT` covenants to enable lightning withdrawals from exchanges.\n- The current method of lightning withdrawals shifts the burden to the user's wallet provider.\n- Batching transactions into a single transaction can be a solution but introduces other challenges.",
             "n_threads": 9,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -170,7 +175,7 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-10-18T13:51:11+00:00",
-            "summary": "- The email discusses removing the channel reserve requirement for mobile wallet users and service providers.\n- Benefits include reduced capital inefficiency and improved user experience.\n- Service providers would pay on-chain fees and risk reputation damage if they cheat.",
+            "summary": "- The email discusses removing channel reserve requirements for channels between mobile wallet users and service providers.\n- The author highlights drawbacks, including capital efficiency and user experience, and argues for removal.\n- Removing the reserve allows service providers to pay on-chain fees and grief users if they cheat.",
             "n_threads": 8,
             "dev_name": "lightning-dev",
             "contributors": [
