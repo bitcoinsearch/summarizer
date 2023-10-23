@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-  <updated>2023-10-22T01:59:28.945601+00:00</updated>
+  <updated>2023-10-23T01:56:38.233399+00:00</updated>
+  <author>
+    <name>vjudeu at gazeta.pl 2023-10-22 08:30:01+00:00</name>
+  </author>
   <author>
     <name>Peter Todd 2023-10-21 10:31:05+00:00</name>
   </author>
@@ -12,6 +15,7 @@
   <author>
     <name>Peter Todd 2023-10-21 00:09:16+00:00</name>
   </author>
+  <link href="bitcoin-dev/Oct_2023/022061_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022051_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022050_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022042_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
@@ -19,9 +23,9 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-    <updated>2023-10-22T01:59:28.945644+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022051.html" rel="alternate"/>
-    <summary>The email discusses a problem related to the spendability of the HTLC-timeout path and the HTLC-preimage path. The issue is that after the HTLC-timeout path becomes spendable, the HTLC-preimage path remains spendable as well, which is not desired.To address this problem, the email suggests introducing the concept of expiring the HTLC-preimage path. Traditionally, transactions are designed to remain valid forever to prevent them from becoming impossible to mine in the event of a large reorganization. However, the email proposes using OP_Expire and the Coinbase Bit soft-fork upgrade to make the HTLC-preimage path expire.By redefining a bit of the nVersion field, similar to how coinbase outputs work in Bitcoin, the outputs of such transactions would only become spendable after 100 more blocks have been mined. This approach ensures compatibility with existing nodes in a soft-fork upgrade.OP_Expire is introduced as an opcode that terminates script evaluation with an error under certain conditions. It requires the Coinbase Bit to be set and prevents a txout from being spent in a particular way. The reorg security of transactions using OP_Expire is no worse than transactions spending miner coinbases.The email also explains how HTLCs (Hashed Time Lock Contracts) would use OP_Expire. Whenever revealing the preimage on-chain is necessary for the secure functioning of the HTLC-using protocol, an appropriate OP_Expire is added to the pre-image branch of the script. This sets a deadline for the party receiving the preimage to get a transaction spending the preimage mined. If they fail to do so in time, control reverts to the other party who can spend the HTLC output without strict time constraints.Additionally, the email mentions the possibility of encoding the expiration height as a delta against a block-height nLockTime, instead of using a specific Coinbase Bit. In this variant, OP_Expire would check that the absolute expiration height is met.Overall, the email proposes solutions to address the problem of spendability in HTLC paths by introducing OP_Expire and the Coinbase Bit soft-fork upgrade or using delta encoding for expiration heights. These approaches ensure compatibility with existing nodes and provide a way to enforce time constraints for certain transactions.</summary>
-    <published>2023-10-21T10:31:05+00:00</published>
+    <updated>2023-10-23T01:56:38.233468+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022061.html" rel="alternate"/>
+    <summary>The email discusses a proposal to address a specific attack known as the replacement cycling attack. The proposed solution aims to prevent multiple individuals, including miners, from performing this attack and benefiting from it. However, it is pointed out that the proposed solution does not effectively address the attack. The situation is explained using an example involving two individuals named Carol and Bob. Previously, only Carol could perform the replacement cycling attack. However, with the implementation of the "anyone-can-spend" branch, multiple individuals, including miners, can now perform the attack and benefit from it. From Bob's perspective, this new situation poses a risk of not being able to learn about the preimage in time and consequently failing to redeem the received HTLC output. On the other hand, Carol's viewpoint remains relatively unchanged. They still have the opportunity to successfully spend the offered HTLC output after the redeemed HTLC output times out, or they may fail. It is not relevant to Carol whether the failure occurs because Bob received their refund or if someone else spent the offered HTLC output via the anyone-can-spend path.Additionally, the proposed solution is deemed inferior to another method called OP_Expire for several reasons. One important drawback is that the anyone-can-spend branch imposes a strict deadline for Bob. In contrast, with OP_Expire, once the HTLC preimage branch has expired, Bob has the flexibility to spend the offered HTLC output at their convenience, as they are the only party with the ability to do so. However, it is noted that with full-RBF (Replace-By-Fee), anyone can execute the code on behalf of miners, except in cases where the replacement is not possible due to the RBF anti-Denial-of-Service rules. The email also mentions that people are already utilizing this approach to manipulate signature-less ordinal transactions.For more information, you can visit Peter Todd's website at [https://petertodd.org](https://petertodd.org) or contact him at peter@petertodd.org.</summary>
+    <published>2023-10-22T08:30:01+00:00</published>
   </entry>
 </feed>
