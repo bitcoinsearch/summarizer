@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-10-24T15:06:01.004484+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-10-23 11:10:56+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-10-24T15:06:01.004509+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004173.html" rel="alternate"/>
+    <summary>The email discusses an alternate design proposal for the taproot annex, which was partially discussed on a previous platform (formerly known as Twitter). The proposed design includes the addition of an `nExpiryTime` field in the taproot annex. This field indicates that the transaction must not exist in a block at or above the specified height.
+
+To implement this design, the mempool should organize transactions into buckets based on their `nExpiryTime`. When a block is reached, all buckets with an `nExpiryTime` less than that block height should be dropped.
+
+Additionally, the proposal suggests adding an `OP_CHECKEXPIRYTIMEVERIFY` opcode, which has similar behavior to the `OP_EXPIRE` opcode proposed by Peter Todd. This new opcode would check if the `nExpiryTime` field exists and has a value equal to or less than the top of the stack.
+
+The main difference between the two proposals is that the email's author suggests adding an explicit field for the `nExpiryTime` value in the taproot annex, whereas Peter Todd's proposal suggests an implicit field within the `CTransaction`.
+
+The author hopes that by making the use of transaction buckets explicit through the `nExpiryTime` field, the design will be better implemented by non-Bitcoin-core implementations. The principle of "explicit is better than implicit" is cited as the rationale behind this choice.
+
+Overall, the email presents an alternative design for the taproot annex, outlining the addition of an `nExpiryTime` field, organizing transactions using buckets, and proposing a new opcode for checking expiry times.</summary>
+    <published>2023-10-23T11:10:56+00:00</published>
+  </entry>
+</feed>

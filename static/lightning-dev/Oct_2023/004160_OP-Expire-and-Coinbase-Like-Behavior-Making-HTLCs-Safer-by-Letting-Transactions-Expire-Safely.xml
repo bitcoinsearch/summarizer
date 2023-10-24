@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-10-24T15:06:26.749472+00:00</updated>
+  <author>
+    <name>vjudeu at gazeta.pl 2023-10-22 08:30:01+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-10-24T15:06:26.749506+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004160.html" rel="alternate"/>
+    <summary>In a recent email conversation between Peter Todd and Antoine Riard, the topic of discussion revolves around a potential attack in the Lightning Network called the replacement cycling attack. This attack involves a malicious channel counterparty broadcasting a higher fee HTLC preimage transaction, triggering a replacement and causing conflicts with the victim lightning node's HTLC timeout.
+
+To address this issue, the suggestion is made to make the HTLC preimage path expire. Traditionally, transactions are designed to remain valid forever, but in this case, it is desirable to attach urgency to spending the HTLC preimage before the previous HTLC timeout is mined. To achieve this, two proposals are introduced: OP_Expire and the Coinbase Bit soft fork upgrade.
+
+The Coinbase Bit proposal involves redefining a bit of the nVersion field to apply coinbase-like txout handling to arbitrary transactions. These transactions' outputs would be treated similarly to coinbase transactions and become spendable only after 100 more blocks have been mined. This ensures compatibility with existing nodes in a soft fork upgrade.
+
+The OP_Expire proposal suggests redefining an existing OP_Nop opcode to terminate script evaluation with an error under certain conditions. These conditions include checking if the Coinbase Bit is set, if the stack is empty, or if the top item on the stack is greater than or equal to the block height of the containing block. OP_Expire serves as an AntiCheckLockTimeVerify, preventing a txout from being spent in a particular way.
+
+To implement OP_Expire in the context of HTLCs (Hash Time Locked Contracts), an appropriate OP_Expire is added to the preimage branch of the script. This introduces a deadline for the party receiving the preimage. They must get a transaction spending the preimage mined within the deadline, or control reverts to the other party who can spend the HTLC output without time constraints. The transaction spending the HTLC expired branch does not need to set the Coinbase Bit and can be spent in a normal transaction.
+
+Another suggestion mentioned is encoding the expiration height as a delta against a block height nLockTime, rather than using a specific Coinbase Bit. This variant of OP_Expire would check if the absolute expiration height is reached, similar to how OP_CheckLockTimeVerify works.
+
+In conclusion, the email discussion explores potential solutions to address the replacement cycling attack in the Lightning Network. The proposals include the use of OP_Expire and the Coinbase Bit soft fork upgrade to introduce expiration and time constraints for certain transactions, particularly HTLCs. These proposals aim to improve the security and functionality of the Lightning Network.</summary>
+    <published>2023-10-22T08:30:01+00:00</published>
+  </entry>
+</feed>
