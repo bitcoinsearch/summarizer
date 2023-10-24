@@ -367,7 +367,7 @@ class GenerateJSON:
             return f"{author_}:{summ}\n"
         else:
             logger.warning(f"No xml file found: {full_path}")
-            return None
+            return ""
 
     def generate_recent_posts_summary(self, dict_list):
         logger.info("working on recent post's summary")
