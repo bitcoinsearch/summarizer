@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposed BIP for OP_CAT</title>
-  <updated>2023-10-24T14:58:28.315695+00:00</updated>
+  <updated>2023-10-25T01:56:58.518637+00:00</updated>
+  <author>
+    <name>Steven Roose 2023-10-24 19:47:23+00:00</name>
+  </author>
+  <author>
+    <name>Andrew Poelstra 2023-10-24 13:05:56+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2023-10-24 03:45:49+00:00</name>
+  </author>
+  <author>
+    <name>Andrew Poelstra 2023-10-24 01:17:28+00:00</name>
+  </author>
   <author>
     <name>Rusty Russell 2023-10-24 00:48:24+00:00</name>
   </author>
@@ -36,6 +48,10 @@
   <author>
     <name>Ethan Heilman 2023-10-21 05:08:03+00:00</name>
   </author>
+  <link href="bitcoin-dev/Oct_2023/022085_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022084_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022082_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022080_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022079_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022070_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022069_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
@@ -51,24 +67,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Proposed BIP for OP_CAT</title>
-    <updated>2023-10-24T14:58:28.315793+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022079.html" rel="alternate"/>
-    <summary>A draft Bitcoin Improvement Proposal (BIP) has been published suggesting the reintroduction of the OP_CAT opcode in Tapscript. The proposal aims to address the limitation of Tapscript lacking a general-purpose method for combining objects on the stack. By enabling OP_CAT, the functionality and expressive power of tapscript can be expanded, including the ability to construct and evaluate merkle trees and other hashed data structures. This opcode would allow for the concatenation of two values on the stack, pushing the concatenated result back onto the stack.
+    <updated>2023-10-25T01:56:58.518779+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022085.html" rel="alternate"/>
+    <summary>The email discusses a proposal by Ethan to introduce a new opcode called OP_CONCAT in tapscript. The purpose of this opcode is to concatenate the top two stack elements and push the result back onto the stack, providing more flexibility and simplifying certain script implementations. Feedback and suggestions are requested on this proposal.
 
-The motivation behind introducing OP_CAT is to enable various use cases such as tree signatures, which allow for multisignature scripts with a logarithmic size in the number of public keys, and the encoding of generalized logical spend conditions. Other potential use cases include non-equivocation contracts that penalize double spending in Bitcoin payment channels, as well as the implementation of vaults that prevent theft in compromised outputs.
+The main topic of the email is the limitations of the OP_CAT opcode in tapscript and potential solutions to overcome them. Currently, tapscript enforces a maximum stack element size of 520 Bytes. The author questions whether there is a new limit related to tapscript, as initially there was no limit but a 5k limit was implemented, which was later reduced to 520 in the same commit where OP_CAT was disabled.
 
-Previously, concerns about potential memory usage exponential in size led to the removal of the OP_CAT opcode. However, with the recent enforcement of a maximum stack element size of 520 Bytes in Tapscript, this concern is no longer relevant. The proposed implementation of OP_CAT involves checking the stack size, concatenating the values, and pushing the resulting value onto the stack.
+The sender expresses gratitude to Ethan for writing up the BIP (Bitcoin Improvement Proposal) text. They believe that introducing CAT (CheckTemplateVerify) would not only have the listed use cases but also open up possibilities for Bitcoin script research, allowing experimentation before proposing dedicated opcodes. The value of CAT is emphasized as being simple yet valuable. The sender suggests sticking with "just CAT" instead of adding a list of opcodes, as additional opcodes tend to invite endless debate and controversy.
 
-For more detailed information and references related to OP_CAT and its proposed implementation, please refer to the provided links:
+A draft BIP has been proposed to enable OP_CAT as a Tapscript opcode. The opcode allows the concatenation of two values on the stack. It pops the top two values off the stack, concatenates them together, and pushes the concatenated value back onto the stack. It fails if there are less than two values on the stack or if the concatenated value would exceed the maximum script element size of 520 Bytes.
 
-- Draft BIP: [https://github.com/EthanHeilman/op_cat_draft/blob/main/cat.mediawiki](https://github.com/EthanHeilman/op_cat_draft/blob/main/cat.mediawiki)
-- Unix Environment paper: [https://harmful.cat-v.org/cat-v/unix_prog_design.pdf](https://harmful.cat-v.org/cat-v/unix_prog_design.pdf)
-- CheckSigFromStack for Arithmetic Values: [https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-July/019233.html](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-July/019233.html)
-- Penalizing Equivocation by Loss of Bitcoins: [https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.727.6262&amp;rep=rep1&amp;type=pdf](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.727.6262&amp;rep=rep1&amp;type=pdf)
-- Merkle Trees and Generalized Consensus: [http://fc16.ifca.ai/bitcoin/papers/MES16.pdf](http://fc16.ifca.ai/bitcoin/papers/MES16.pdf)
-- CAT and Schnorr Tricks II: [https://www.wpsoftware.net/andrew/blog/cat-and-schnorr-tricks-ii.html](https://www.wpsoftware.net/andrew/blog/cat-and-schnorr-tricks-ii.html)
-- CAT and Schnorr Tricks I: [https://medium.com/blockstream/cat-and-schnorr-tricks-i-faf1b59bd298](https://medium.com/blockstream/cat-and-schnorr-tricks-i-faf1b59bd298)
-- Covenants with ECDSA: [https://gist.github.com/RobinLinus/9a69f5552be94d13170ec79bf34d5e85file-covenants_cat_ecdsa-md](https://gist.github.com/RobinLinus/9a69f5552be94d13170ec79bf34d5e85file-covenants_cat_ecdsa-md)</summary>
-    <published>2023-10-24T00:48:24+00:00</published>
+The motivation behind introducing OP_CAT is to overcome the limitation of tapscript lacking a general-purpose way of combining objects on the stack. This restricts the expressiveness and power of tapscript. OP_CAT aims to expand the functionality of tapscript by providing a simple, modular, and useful opcode. It enables various use cases, including tree signatures for multisignature scripts, encoding generalized logical spend conditions, and implementing non-equivocation contracts in tapscript to prevent double spending in Bitcoin payment channels.
+
+The email provides several links for further details and references related to OP_CAT and its proposed implementation. These include the draft BIP, a Unix Environment paper, a discussion on CheckSigFromStack for Arithmetic Values, papers on penalizing equivocation by loss of Bitcoins and merkle trees and generalized consensus, and articles on CAT and Schnorr Tricks.</summary>
+    <published>2023-10-24T19:47:23+00:00</published>
   </entry>
 </feed>

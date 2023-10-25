@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Proposed BIP for OP_CAT</title>
+  <updated>2023-10-25T01:55:56.849678+00:00</updated>
+  <author>
+    <name>Rusty Russell 2023-10-24 03:45:49+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Proposed BIP for OP_CAT</title>
+    <updated>2023-10-25T01:55:56.849711+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022082.html" rel="alternate"/>
+    <summary>In an email from Andrew Poelstra, he mentions that the diff being discussed is even smaller than the OP_CAT diff. He also expresses the need for refactoring the interpreter code, stating that using a class for the stack would be beneficial. The email includes a code snippet for the interpreter.cpp file, which shows modifications made to the EvalChecksig and EvalScript functions.
+
+The first modification is the addition of a function called effective_size, which calculates the effective size of the stack. It takes into account that the first 520 bytes are free, but any additional bytes consume an extra slot in the stack. This function is used later in the EvalScript function.
+
+The EvalScript function is responsible for evaluating a script. It takes a vector stack, a CScript script, flags, a BaseSignatureChecker checker, a SigVersion sigversion, a ScriptExecutionData execdata, and a ScriptError serror. 
+
+Within the EvalScript function, there is a check for size limits. Previously, the check was based on the total size of the stack and altstack combined being greater than the MAX_STACK_SIZE. Now, with the use of the effective_size function, the check takes into account the effective size of both the stack and altstack. If the effective size exceeds the MAX_STACK_SIZE, an error is returned.
+
+Overall, this email discusses the small size of the diff compared to the OP_CAT diff and suggests refactoring the interpreter code by using a class for the stack. It also provides a code snippet showing modifications made to the EvalChecksig and EvalScript functions, including the addition of the effective_size function to calculate the effective size of the stack.</summary>
+    <published>2023-10-24T03:45:49+00:00</published>
+  </entry>
+</feed>
