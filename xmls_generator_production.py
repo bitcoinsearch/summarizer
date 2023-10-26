@@ -229,6 +229,9 @@ class GenerateXML:
             xml_name = xml_name.replace(sc, "-")
         return xml_name
 
+    def remove_multiple_whitespaces(self, text):
+        return re.sub('\s+', ' ', text).strip()
+
     def get_id(self, id):
         return str(id).split("-")[-1]
 
@@ -391,6 +394,7 @@ class GenerateXML:
         emails_df = emails_df.drop_duplicates()
         emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
         emails_df['body'] = emails_df['body'].apply(preprocess_email)
+        emails_df['title'] = emails_df['title'].apply(self.remove_multiple_whitespaces)
         logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
 
