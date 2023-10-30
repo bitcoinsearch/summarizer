@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+  <updated>2023-10-30T15:18:29.716766+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-10-26 16:52:03+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+    <updated>2023-10-30T15:18:29.716766+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022093.html" rel="alternate"/>
+    <summary>The email discusses the concept of HTLC (Hashed Timelock Contract) output aggregation and its potential impact on transaction recycling and slot jamming. The sender shares research findings on how using the right covenant can create more efficient and secure HTLC outputs.
+
+Currently, the transaction recycling attack is possible due to the change made to HTLC second level transactions for the anchor channel type. This change allows fees to be added to the transaction by adding inputs without violating the signature. However, for the legacy channel type, this attack was not possible as all fees were taken from the HTLC outputs themselves. The idea of HTLC output aggregation is to collapse all HTLC outputs on the commitment to a single one, which offers several benefits. One such benefit is the ability for the spender to claim the portion of the output they're entitled to, deciding how much should go to fees. Implementing this requires a covenant.
+
+Currently, each forwarded HTLC results in an output that needs to be manifested on the commitment transaction, limiting the number of active HTLCs. This limitation makes it possible to jam the channel with small amounts of capital. By using covenants, it is possible to create a single aggregated output on the commitment, with the output amount being the sum of the active HTLCs. When spending this output, the spender would only be entitled to the fraction of the amount corresponding to the HTLCs they have the preimage for or that have timed out.
+
+Implementing HTLC output aggregation has implications for both transaction recycling and slot jamming. Depending on the capabilities of the covenant, the transaction spending the aggregated HTLC output can be self-sustained, allowing the spender to claim what is theirs and send it to any output they want, while the remainder goes back into a covenant restricted output with the leftover HTLCs. This most likely requires Eltoo to prevent fee siphoning.
+
+Regarding slot jamming, with an aggregated output, the nature of slot jamming changes significantly. Instead of allocating a commitment output for each HTLC up to a hardcoded limit, an aggregated output removes the need for such allocation. This means that the number of active HTLCs may no longer be limited, but there are still considerations related to chain fees and economic feasibility.
+
+The email also mentions the need for a new covenant primitive on Layer 1 and explores the possibility of using PTLCs (Partial Timelock Contracts) to create a compact proof showing knowledge of the preimage for a specific number of satoshis in the output. This could potentially eliminate the slot jamming issue entirely.
+
+In terms of covenant primitives, a recursive covenant is needed to achieve HTLC output aggregation. The sender suggests OP_CHECKCONTRACTVERIFY together with OP_CAT and amount inspection as interesting options for this use case. They have also implemented a rough demo using OP_CHECKCONTRACTVERIFY to spend an HTLC output, committing to all active HTLCs in a merkle tree and providing merkle proofs for claiming the sum into a new output.
+
+Overall, HTLC output aggregation has the potential to improve efficiency, security, and scalability in channel transactions, but it requires further exploration and development of covenant primitives.</summary>
+    <published>2023-10-26T16:52:03+00:00</published>
+  </entry>
+</feed>

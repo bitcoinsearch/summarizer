@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Examining ScriptPubkeys in Bitcoin Script</title>
-  <updated>2023-10-24T14:55:13.603549+00:00</updated>
+  <updated>2023-10-30T18:18:18.099212+00:00</updated>
+  <author>
+    <name>James O'Beirne 2023-10-30 16:20:32+00:00</name>
+  </author>
+  <author>
+    <name>Rusty Russell 2023-10-28 04:49:30+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2023-10-27 07:00:36+00:00</name>
+  </author>
   <author>
     <name>Rusty Russell 2023-10-22 04:16:33+00:00</name>
   </author>
@@ -12,6 +21,9 @@
   <author>
     <name>Rusty Russell 2023-10-20 03:40:37+00:00</name>
   </author>
+  <link href="bitcoin-dev/Oct_2023/022104_Examining-ScriptPubkeys-in-Bitcoin-Script.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022103_Examining-ScriptPubkeys-in-Bitcoin-Script.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022099_Examining-ScriptPubkeys-in-Bitcoin-Script.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022063_Examining-ScriptPubkeys-in-Bitcoin-Script.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022037_Examining-ScriptPubkeys-in-Bitcoin-Script.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022031_Examining-ScriptPubkeys-in-Bitcoin-Script.xml" rel="alternate"/>
@@ -19,15 +31,27 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Examining ScriptPubkeys in Bitcoin Script</title>
-    <updated>2023-10-24T14:55:13.603603+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022063.html" rel="alternate"/>
-    <summary>The email discusses the sender's exploration of validating Taproot outputs in Bitcoin Script. They emphasize the need for such functionality in order to create usable vaults. The sender provides a link to a blog post where they have documented their findings on examining scriptPubkey in script.
+    <updated>2023-10-30T18:18:18.100217+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022104.html" rel="alternate"/>
+    <summary>The email from Anthony Towns discusses multiple variants of vaults and their functionalities. He mentions that vaults are a concrete example that he can understand, although he believes they may not be widely used. He expresses difficulty in understanding the vault BIP (Bitcoin Improvement Proposal) and suggests that it should be a new address format rather than using script opcodes. He believes that spelling it out in script is not much more complex to use. He mentions the use of templates and thinks that, except for consolidation, the vault BIP works well. He also mentions oracles as a use case for CSFS (Commitment Schemes For Signatures), which does not involve abusing signatures to do hashing. Lastly, Anthony acknowledges that there is room for improvement in the current script system, but he believes that comparing it with an alternative is challenging due to the limitations of the current system.
 
-Additionally, the sender mentions that they are open to collaboration and invite others to join in producing a prototype and debugging their script examples. They suggest adding operations like OP_MULTISHA256, OP_KEYADDTWEAK, and OP_LESS, along with weakening the OP_SUCCESSx rule, to prove a two-leaf tapscript tree in approximately 110 bytes of Script. This approach enables useful spending constraints based on a template approach.
+The email discusses two reasons for considering a specific approach in programming. The first reason is to perform vault operations effectively, which requires a balance between easy implementation and use. The second reason is to make bitcoin more programmable, allowing for contracting experiments directly in wallet software without the need for new soft forks for each experiment. This approach provides a good balance between opening up a wide range of experiments, understanding their scope and consequences, and being easy to implement and use.
 
-The sender also proposes an alternative direction to the OP_UNVAULT method, which replaces a specific leaf in the taptree in a specific way. They highlight the benefits of OP_UNVAULT, such as the ability to unvault multiple inputs sharing the same scriptPubkey to the same output. However, the sender agrees that a more generic construction is needed and suggests considering the benefits of OP_CAT or OP_2SHA256 for BitVM.
+The author expresses skepticism about the proposed approach for vault operations due to its complexity and difficulty of use compared to the OP_VAULT proposal. They believe that the proposed approach does not work well even after significant effort to make it functional. However, in the context of enabling experimentation more generally, the approach becomes more interesting. It allows for various constraints on signatures and the inclusion of authenticated data in a script.
 
-In conclusion, the email focuses on the sender's research on validating Taproot outputs in Bitcoin Script and their interest in collaborating with others to further develop and test their ideas.</summary>
-    <published>2023-10-22T04:16:33+00:00</published>
+The author suggests that using a Lisp variant would be a promising solution to enhance the programming language. By replacing script's "two stacks of byte-strings" with "(recursive) lists of byte-strings," the language can become more complete. They have been experimenting with this idea and believe that a fairly effective language can be created with around 43 opcodes. Additionally, they propose an example of adding an OP_TX opcode to select information about a transaction, allowing for the experimentation of new SIGHASH modes.
+
+The author acknowledges that the example provided is not easy to read, as it resembles programming in assembler. They mention the need for a higher-level macro-enabled Lisp variation or a parser that allows for comments. The current implementation is an eager interpreter with some tail call optimizations, but they suggest that a properly lazy interpreter would be better for memory efficiency. They also mention other potential improvements such as encoding/decoding lists as a byte stream, providing additional crypto operations, and handling exceptions and allocations.
+
+In conclusion, the author believes that the proposed approach offers a more promising solution for experimentation compared to trying to fit everything into the limitations of script. They find that a Lisp-like language with OP_TX, OP_CAT, OP_CSFS, and other opcodes can work effectively for various use cases.
+
+The email from Brandon Black discusses the use of scripts in programming and the need for proper evaluation. Brandon mentions that he feels uncomfortable because he has not tested the scripts he has written so far. He also points out that writing scripts without iteration makes it difficult to evaluate N-input, but it would be useful to attempt this in order to gain insights into OP_TXHASH input selection. For example, there could be a mode where all inputs except one are considered.
+
+Brandon also mentions that dealing with satoshi amounts is possible but messy, which will be discussed in his next post. Based on some examples provided, he believes that OP_MULTISHA256 is almost as powerful as OP_CAT, but without the stack limit problems. Additionally, Brandon states that OP_2SHA256 is not sufficient for CScriptNum generation in general, which suggests that using it to save two opcodes would be a premature optimization.
+
+The email discusses a proposed alternative direction to the OP_UNVAULT method, which replaces a specific leaf in the taptree in a specific way. The sender highlights the benefits of OP_UNVAULT, such as the ability to unvault multiple inputs sharing the same scriptPubkey to the same output. However, the sender agrees that a more generic construction is needed and suggests considering the benefits of OP_CAT or OP_2SHA256 for BitVM. The sender personally suggests using OP_TAGGEDCATHASH, which pops a tag and a number of elements to hash, then tagged-hashes the following 'n' elements from the stack.
+
+In this email, the sender discusses their exploration of what would be required to usefully validate Taproot outputs in Bitcoin Script. They mention that such functionality is necessary for usable vaults. The sender provides a link to a blog post where they have documented their findings on examining scriptPubkey in script. The sender also mentions that they are open to collaboration and invite others to join in producing a prototype and debugging their script examples.</summary>
+    <published>2023-10-30T16:20:32+00:00</published>
   </entry>
 </feed>

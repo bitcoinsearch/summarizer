@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Fwd: HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+  <updated>2023-10-30T15:18:51.796377+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-10-26 19:58:48+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Fwd: HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+    <updated>2023-10-30T15:18:51.796377+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004181.html" rel="alternate"/>
+    <summary>In an email forwarded to the Bitcoin Protocol Discussion group, Johan Torås Halseth shares his research on HTLC (Hash Time-Locked Contract) output aggregation as a potential solution to transaction recycling, jamming, and on-chain efficiency issues. Transaction recycling refers to an attack that takes advantage of the ability to add fees to HTLC second level transactions without violating the signature. With HTLC output aggregation, all HTLC outputs on the commitment can be collapsed into a single one, allowing the spender to claim their portion of the output and decide how much should go to fees. However, this requires the implementation of a covenant.
+
+Currently, every forwarded HTLC results in an output that needs to be manifested on the commitment transaction, which limits the number of active HTLCs and makes it possible to jam a channel with small amounts of capital. By implementing HTLC output aggregation with covenants, a single aggregated output can be created on the commitment, representing the sum of all active HTLCs. When spending this output, the spender would only be entitled to the fraction corresponding to the HTLCs they have knowledge of (preimage or timeout). This approach has implications for both transaction recycling and slot jamming.
+
+With the ability to spend the aggregated HTLC output based on the covenant capabilities, the spender can claim what is theirs and send it to the desired output or fees. The remainder would go back into a covenant restricted output with the leftover HTLCs. This self-sustained transaction would prevent fee siphoning but may require the implementation of Eltoo. Additionally, slot jamming, which involves filling a channel with small HTLCs, becomes less feasible with aggregated outputs because the number of active HTLCs no longer affects the commitment size. This suggests that the limit on the number of active HTLCs could potentially be lifted or at least mitigated.
+
+However, even with these improvements, there are still challenges to consider. An attacker could send a large number of non-dust HTLCs across a channel, resulting in high chain fees for claiming them on-chain. While the commitment transaction size would not be impacted, there is a limit to how many uneconomical HTLCs can be claimed due to unpredictable future chain fees. Therefore, some sort of limit on the number of active HTLCs may still be necessary.
+
+Despite these challenges, aggregating HTLC outputs brings several benefits. It reduces the commitment transaction size while the channel is open and operational, lowers the cost of claiming HTLCs with a preimage on-chain, and eliminates the extra footprint of timeout and success transactions. However, implementing this approach would require a new covenant primitive on Layer 1. Johan suggests exploring ideas now to guide the effort towards a covenant primitive that can be fully utilized on Layer 2. Additionally, he poses an open question regarding PTLCs (Probabilistic Time-Locked Contracts) and whether it is possible to create a compact proof showing knowledge of the preimage for a certain number of satoshis in the output, which could potentially eliminate the slot jamming issue.
+
+Johan mentions that a recursive covenant is needed to achieve HTLC output aggregation. While OP_CTV (CheckTemplateVerify) and OP_APO (Atomic Path Oracles) may not be sufficient due to the potential combinatorial blowup in the number of spending transactions, other proposals such as OP_CHECKCONTRACTVERIFY, OP_CAT, OP_TX, or similar inspection methods could potentially work. He also provides a proof-of-concept demo of spending an HTLC output using OP_CHECKCONTRACTVERIFY, where all active HTLCs are committed to in a merkle tree, and the spender provides merkle proofs to claim the sum into a new output while removing the claimed HTLCs from the merkle tree. However, he notes that this demo is still experimental and not ready for real-world use.</summary>
+    <published>2023-10-26T19:58:48+00:00</published>
+  </entry>
+</feed>

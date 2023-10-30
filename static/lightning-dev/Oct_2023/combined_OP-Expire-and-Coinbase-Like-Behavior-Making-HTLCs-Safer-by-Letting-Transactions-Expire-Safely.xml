@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-  <updated>2023-10-24T15:08:18.053922+00:00</updated>
+  <updated>2023-10-30T14:43:38.398334+00:00</updated>
   <author>
     <name>Peter Todd 2023-10-23 15:45:44+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2023-10-23 15:45:44+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2023-10-23 11:10:56+00:00</name>
   </author>
   <author>
     <name>ZmnSCPxj 2023-10-23 11:10:56+00:00</name>
@@ -22,6 +28,8 @@
     <name>Peter Todd 2023-10-21 00:09:16+00:00</name>
   </author>
   <link href="lightning-dev/Oct_2023/004174_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022073_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022068_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/004173_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/004160_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/004170_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
@@ -31,17 +39,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-    <updated>2023-10-24T15:08:18.053988+00:00</updated>
+    <updated>2023-10-30T14:43:38.399333+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004174.html" rel="alternate"/>
-    <summary>The email exchange discusses a proposed design change in Bitcoin regarding transaction expiration. The proposal suggests introducing an `nExpiryTime` field and an `OP_CHECKEXPIRYTIMEVERIFY` opcode to prevent transactions from existing in blocks beyond a specified height. There are two implementation options, one with an implicit field in `CTransaction` and the other with an explicit field in the taproot annex.
+    <summary>The email proposes using the "nExpiryHeight" approach instead of time-based expiration in programming. The sender argues that relying on time-based expiration can lead to miners manipulating the current time, so using "nExpiryHeight" would be more secure. They also suggest redefining an opcode, either "OP_Expire" or "OP_CheckExpiryTime," which would eliminate the need for the "_Verify" behavior. The sender acknowledges a mistake in a previous proposal and suggests adding a separate field like "nExpiryHeight" instead of reusing part of "nVersion." This separate field could be useful, especially when a signature covering the field is sufficient. The email includes a link to https://petertodd.org for more information on these topics.
 
-The email also explores using existing opcodes like `OP_RESERVED` or `OP_IF OP_RESERVED OP_ENDIF` to mark transactions as invalid under certain conditions. The suggestion is to incorporate these opcodes and soft-fork a condition on the stack.
+In another email, an alternate design proposal for the taproot annex is discussed. The proposal suggests adding an "nExpiryTime" field in the taproot annex, indicating that a transaction must not exist in a block at or above the specified height. The mempool should organize transactions into buckets based on their "nExpiryTime," and when a block is reached, all buckets with an "nExpiryTime" less than that block height should be dropped. Additionally, the proposal introduces an "OP_CHECKEXPIRYTIMEVERIFY" opcode, similar to the "OP_EXPIRE" opcode proposed by Peter Todd. This new opcode would check if the "nExpiryTime" field exists and has a value equal to or less than the top of the stack. The email suggests adding an explicit field for the "nExpiryTime" value in the taproot annex to make the use of transaction buckets explicit. The sender hopes this will improve implementation by non-Bitcoin-core implementations.
 
-Another topic discussed is preventing attacks related to HTLCs in the Lightning Network. Suggestions include making the HTLC preimage path expire to enhance security. Different approaches are considered, such as redefining an existing opcode or allowing the preimage to be claimable by anyone after a certain time.
+A different email conversation discusses potential solutions to address the replacement cycling attack in the Lightning Network. The proposals include the use of "OP_Expire" and the Coinbase Bit soft fork upgrade. The Coinbase Bit proposal involves redefining a bit of the "nVersion" field to apply coinbase-like txout handling to arbitrary transactions, making their outputs spendable only after 100 more blocks have been mined. This ensures compatibility with existing nodes in a soft fork upgrade. The "OP_Expire" proposal suggests redefining an existing "OP_Nop" opcode to terminate script evaluation under certain conditions, serving as an AntiCheckLockTimeVerify. For HTLCs, an appropriate "OP_Expire" is added to the preimage branch of the script, introducing a deadline for the party receiving the preimage. If they fail to get a transaction spending the preimage mined within the deadline, control reverts to the other party who can spend the HTLC output without time constraints. The email also mentions encoding the expiration height as a delta against a block height instead of using a specific Coinbase Bit.
 
-The advantages and disadvantages of each proposed solution are compared, emphasizing the importance of considering potential complications and compatibility with existing nodes. The goal is to find efficient and secure solutions while avoiding unnecessary consensus changes.
+There is another email discussing a clever idea proposed to prevent a specific attack but pointing out that it does not actually prevent the attack. The sender explains that this idea creates a situation where multiple individuals can perform the attack, potentially leading to failure for one party. The sender concludes that another method called "OP_Expire" is superior, allowing the HTLC output to be spent at the sender's leisure once the HTLC preimage branch has expired. The email also mentions people already using the proposed solution to exploit signature-less ordinal transactions.
 
-Overall, the email exchange delves into various ideas and proposals for transaction expiration and securing HTLCs in the Bitcoin network. The focus is on enhancing security and control while maintaining compatibility with the existing system.</summary>
+The last email explores a proposal to ensure that the HTLC-preimage is mined before an upstream HTLC-timeout becomes mineable. The sender suggests attaching urgency to spending the HTLC preimage before the previous HTLC timeout is mined. They propose two solutions: the use of "OP_Expire" and the Coinbase Bit soft-fork upgrade. By redefining a bit of the "nVersion" field, transactions' outputs would only become spendable after 100 more blocks have been mined. The "OP_Expire" opcode would terminate script evaluation under certain conditions, preventing a txout from being spent in a particular way. In the context of HTLCs, an appropriate "OP_Expire" is added to the preimage branch of the script, introducing a deadline for the party receiving the preimage. If they fail to get a transaction spending the preimage mined within the deadline, control reverts to the other party who can spend the HTLC output without time constraints. The email discusses potential complications and deployment considerations for these proposals.
+
+In summary, these emails discuss various proposals and ideas related to programming and Bitcoin. They address issues such as time-based expiration, alternative opcode definitions, taproot annex design, replacement cycling attack in the Lightning Network, and solutions for HTLC-related challenges. The discussions provide insights into potential improvements and security measures for these systems.</summary>
     <published>2023-10-23T15:45:44+00:00</published>
   </entry>
 </feed>
