@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Proposed BIP for OP_CAT</title>
+  <updated>2023-11-01T21:16:05.056926+00:00</updated>
+  <author>
+    <name>Ethan Heilman 2023-10-21 05:08:03+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Proposed BIP for OP_CAT</title>
+    <updated>2023-11-01T21:16:05.056926+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022049.html" rel="alternate"/>
+    <summary>A draft BIP has been posted proposing the enabling of the OP_CAT opcode in Tapscript. OP_CAT was previously available in early versions of Bitcoin but was disabled due to the potential for script evaluations with exponential memory usage. However, this is no longer a concern as Tapscript now enforces a maximum stack element size of 520 Bytes.
+
+The proposed OP_CAT opcode allows for the concatenation of two values on the stack. When evaluated, it pops the top two values off the stack, concatenates them together, and pushes the concatenated value back onto the stack. The opcode will fail if there are less than two values on the stack or if the concatenated value would exceed the maximum script element size.
+
+The motivation behind introducing OP_CAT is to overcome the limitation of Tapscript's lack of a general-purpose way to combine objects on the stack. This restriction currently limits the expressiveness and power of Tapscript, preventing the construction and evaluation of merkle trees and other hashed data structures. By adding a general-purpose concatenation opcode, OP_CAT aims to greatly increase the functionality of Tapscript.
+
+OP_CAT enables various use cases, including tree signatures that provide multisignature scripts with logarithmic size in the number of public keys, allowing for generalized logical spend conditions. It also enables the implementation of Post-Quantum Lamport Signatures in Bitcoin transactions and non-equivocation contracts in Tapscript, which punish equivocation/double spending in Bitcoin payment channels by enforcing rules on the spending transaction's nonce. Additionally, OP_CAT can be used to build vaults, specialized covenants that protect against theft in case of compromised secret keys, and replicate CheckSigFromStack, which simplifies the creation of advanced contracts without the need for presigned spending transactions.
+
+The specification for implementing OP_CAT involves checking the stack size, concatenating the top two values on the stack, and pushing the concatenated value back onto the stack. The maximum script element size is defined as 520 Bytes.
+
+The blog post includes several references, including the draft BIP on GitHub, a reference to the Unix philosophy as inspiration for OP_CAT's simplicity and usefulness, and various papers and articles discussing the potential applications and benefits of OP_CAT in Bitcoin transactions and protocols.
+
+Overall, the introduction of the OP_CAT opcode in Tapscript addresses the limitation of not being able to concatenate stack values, opening up new possibilities for complex scripts and improving the functionality and expressiveness of Bitcoin transactions.</summary>
+    <published>2023-10-21T05:08:03+00:00</published>
+  </entry>
+</feed>

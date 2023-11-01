@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-01T21:14:37.808591+00:00</updated>
+  <author>
+    <name>Peter Todd 2023-10-21 00:09:16+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-01T21:14:37.808591+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022042.html" rel="alternate"/>
+    <summary>The email discusses the problem of the HTLC-preimage path remaining spendable even after the HTLC-timeout path becomes spendable. The author suggests that this is undesirable because they want to prioritize spending the HTLC-preimage before the previous HTLC-timeout is mined. They propose the idea of making the HTLC-preimage path expire to address this issue.
+
+Traditionally, transactions are designed to remain valid forever to prevent them from becoming impossible to mine in the event of a large reorganization. The author mentions Bitcoin's rules around coinbase outputs as an example of this design philosophy. Coinbase outputs only become spendable after 100 more blocks have been found, reducing the risk of reorgs.
+
+To address the expiration issue, the author introduces two concepts: OP_Expire and the Coinbase Bit soft-fork upgrade. By redefining a bit of the nVersion field, arbitrary transactions can be treated similarly to coinbase transactions. These transactions would only be spendable after 100 more blocks have been mined, ensuring compatibility with existing nodes in a soft-fork upgrade.
+
+OP_Expire is described as an opcode that terminates script evaluation with an error under certain conditions. These conditions include the Coinbase Bit not being set, the stack being empty, or the top item on the stack being greater than or equal to the block height of the containing block. This conceptually functions as an AntiCheckLockTimeVerify, preventing a txout from being spent in a particular way.
+
+The author explains how HTLCs (Hashed Time-Locked Contracts) could utilize OP_Expire. When revealing the preimage on-chain is necessary for the secure functioning of the HTLC protocol, an appropriate OP_Expire can be added to the pre-image branch of the script. This allows the party receiving the pre-image to have a deadline for getting a transaction spending the preimage mined. If they fail to meet the deadline, control reverts to the other party who can spend the HTLC output without time constraints.
+
+The email also mentions the possibility of encoding the expiration height as a delta against a block-height nLockTime instead of using a specific Coinbase Bit. In this variant, OP_Expire would function similarly to OP_CheckLockTimeVerify by checking the absolute expiration height.
+
+Overall, the email proposes the use of OP_Expire and the Coinbase Bit soft-fork upgrade to address the issue of the HTLC-preimage path remaining spendable after the HTLC-timeout path becomes spendable in a secure and compatible manner.</summary>
+    <published>2023-10-21T00:09:16+00:00</published>
+  </entry>
+</feed>

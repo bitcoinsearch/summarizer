@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposed BIP for OP_CAT</title>
-  <updated>2023-10-30T14:46:13.016783+00:00</updated>
+  <updated>2023-11-01T21:17:05.251898+00:00</updated>
   <author>
     <name>Anthony Towns 2023-10-27 18:32:13+00:00</name>
   </author>
@@ -45,6 +45,24 @@
   <author>
     <name>Rusty Russell 2023-10-23 02:13:10+00:00</name>
   </author>
+  <author>
+    <name>vjudeu at gazeta.pl 2023-10-22 08:58:07+00:00</name>
+  </author>
+  <author>
+    <name>Ethan Heilman 2023-10-21 20:24:29+00:00</name>
+  </author>
+  <author>
+    <name>Greg Sanders 2023-10-21 16:10:00+00:00</name>
+  </author>
+  <author>
+    <name>Andrew Poelstra 2023-10-21 15:03:07+00:00</name>
+  </author>
+  <author>
+    <name>alicexbt 2023-10-21 05:49:59+00:00</name>
+  </author>
+  <author>
+    <name>Ethan Heilman 2023-10-21 05:08:03+00:00</name>
+  </author>
   <link href="lightning-dev/Oct_2023/022101_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/022094_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/022092_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
@@ -59,13 +77,51 @@
   <link href="lightning-dev/Oct_2023/022069_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/022066_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/022064_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022062_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022057_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022056_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022055_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022053_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022049_Proposed-BIP-for-OP-CAT.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Proposed BIP for OP_CAT</title>
-    <updated>2023-10-30T14:46:13.017779+00:00</updated>
+    <updated>2023-11-01T21:17:05.252894+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022101.html" rel="alternate"/>
-    <summary>The email discusses the implementation of OP_CAT and its potential use cases in Bitcoin. The sender suggests adding support for CSFS as well. There is a discussion about the effectiveness and necessity of a "just CAT" softfork, with the sender expressing confusion about its value without compelling examples. Support is expressed for OP_CAT, along with reasonable resource-consumption limiters. Another participant agrees that using OP_SUCCESS126 instead of OP_SUCCESS80 would be preferable. The performance impact of a loop and the refactoring of interpreter code are also mentioned. A suggestion is made to consider rolling sha2 opcodes in addition to OP_CAT, and the need for larger tapscripts is explained. The correct order of concatenation using OP_CAT and potential backward compatibility issues are discussed. Ethan Heilman raises concerns about the small limit of 520 bytes and suggests considering the total stack size as the real limit. He acknowledges the possibility of increasing this limit in future tapscript versions and thanks Rusty for clarifying details.</summary>
+    <summary>The email discusses the availability of patches for the inquisition project on GitHub, along with the need to update and add tests for these patches. The sender suggests comparing these patches with similar commits from APO/CTV PRs. Additionally, the sender proposes incorporating support for CSFS instead of separate script-verify flags and deployments.
+
+Another email focuses on the behavior of OP_CAT, a programming concept used to concatenate strings. It mentions that if the combined size of the strings is greater than or equal to 520 bytes, OP_CAT reverts to the behavior of OP_SUCCESSx. The sender suggests increasing the maximum size in a subsequent soft fork and acknowledges that additional opcodes may be needed to validate non-constant arguments.
+
+The confusion surrounding a "just CAT" softfork is discussed in another email. The author questions its effectiveness and suggests that more advanced features like introspection opcodes and/or CHECKSIGFROMSTACK would be needed for interesting covenants. They argue that a CAT-based approach may be more circuitous than alternative solutions and mention the limitations of CAT in handling certain features.
+
+Support for OP_CAT and reasonable resource-consumption limiters is discussed in another email. The sender suggests implementing OP_CAT as a UASF to build confidence. They express support for other opcodes as long as they are known to be safe and maintainable, mentioning introspection, transaction unpinning, and vaults as potential use cases.
+
+The possibility of enabling OP_CAT on Bitcoin is discussed in another email, with a preference for using OP_SUCCESS126 instead of OP_SUCCESS80. The sender seeks input from others regarding this choice.
+
+The use of OP_SUCCESS126 opcode is discussed in another email, highlighting its similarity to the original opcode 0x7e. The sender agrees that there is no reason not to use OP_SUCCESS126 and mentions potential confusion caused by duplicate OP_CAT constants in certain codebases.
+
+An email expresses surprise at the performance implications of a looping technique involving adding numbers. The sender acknowledges the negligible impact on performance but still feels uneasy about refactoring the associated file.
+
+Andrew Poelstra's email discusses a diff in the code, the need for refactoring the interpreter code, and the suggestion to use a class for the stack instead of macros. Specific changes made to the "interpreter.cpp" file are mentioned, including the addition of an "effective_size" function and modifications to the "EvalScript" function.
+
+An old limit predating segwit and P2SH is mentioned in another email, with hesitation towards replacing the stack interpreter data structure. The sender appreciates minimal differences in BIPs and includes a lighthearted quote.
+
+Another email from Andrew Poelstra discusses the use of rolling sha2 and OP_MULTISHA256 in templating investigations. The sender suggests counting each stack entry as (1 + /520) entries and modifying the `stack` and `altstack` objects in interpreter.cpp accordingly.
+
+The limitation of 520 bytes and the absence of rolling sha2 opcodes are discussed in another email. The sender suggests the need for constructing a full transaction on the stack and mentions the possibility of maintaining the existing stack element limit or considering larger limits.
+
+The topic of script size limits in Bitcoin is discussed in another email, highlighting the possibility of constructing larger scripts by bypassing the 520-byte limit. Examples of larger tapscripts are provided.
+
+Overall, these emails cover various aspects related to programming concepts like OP_CAT, opcode support, script size limits, and code modifications. They provide insights into different perspectives, proposals, and concerns within the programming community.
+
+Ethan Heilman expresses appreciation for a recent implementation related to script templates but raises a query regarding the order of concatenation and suggests increasing the current limit of 520 bytes for script templates. Rusty clarifies that the implementation is not as straightforward as indicated and mentions a peculiar detail in the code.
+
+The use of OP_SUCCESS80 instead of OP_SUCCESS126 is questioned in another email, along with proposals for reusing existing opcodes and considering the behavior of OP_RESERVED. Links to related resources are provided.
+
+Ethan Heilman shares a draft BIP proposing the activation of OP_CAT as a Tapscript opcode, highlighting its potential to expand the functionality of Tapscript in various ways. The maximum stack element size in Tapscript is now limited to 520 bytes, addressing memory usage concerns.
+
+Overall, the discussion revolves around enabling OP_CAT as a Tapscript opcode, the current byte limit for script templates, reusing existing opcodes, and backward compatibility considerations.</summary>
     <published>2023-10-27T18:32:13+00:00</published>
   </entry>
 </feed>
