@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Examining ScriptPubkeys in Bitcoin Script</title>
+  <updated>2023-11-01T21:12:27.046079+00:00</updated>
+  <author>
+    <name>Anthony Towns 2023-10-31 13:05:01+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Examining ScriptPubkeys in Bitcoin Script</title>
+    <updated>2023-11-01T21:12:27.046079+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022105.html" rel="alternate"/>
+    <summary>The email discusses the importance of not changing consensus to support toy examples and instead focusing on useful consensus changes. The sender argues that designing an API without expecting it to be used for anything important will result in a poor API. They provide links to articles on API design that they find useful.
+
+Regarding specific examples, the sender suggests that there is no point in having certain approaches unless they allow for consolidation transactions. They argue that two approaches proposed have the same fundamental flaw as a previously posted model. The flaw is that once someone compromises the "normal key," they can wait for the legitimate owner to trigger a spend and steal the funds. The sender believes that the two variants mentioned are worse than the previous model because waiting for the vault utxo to age allows for immediate fund theft.
+
+To address this flaw, the sender proposes setting up a vault using BIP 345 along the lines of a design presented by kanzure. The proposal involves creating two addresses, A and B, with different tapscripts and block delays. Funds can be put into the vault using address A, and then various actions can be taken using the master key or triggering an unvault via the normal key to move funds to address B. Address B has a delay before funds can be spent via the normal key.
+
+To avoid the flaw, the sender suggests using BIP 119's CTV to force a precommitment to the spend. This involves modifying the tapscripts of the two addresses and including a CTV hash in the spendcommit. Funds can be spent directly via a key path spend with the master private key or recovered to the master key via the OP_VAULT_RECOVER path. After a day, the CTV path can be used to complete the vault withdrawal.
+
+The sender mentions that the concept of oracles is listed as the third item on the optech topic page for CSFS. They also mention discreet log contracts as a scriptless way to achieve similar functionality.
+
+The email ends with links to resources on discreet log contracts and making on-chain contracts using adaptor signatures.
+
+Source: Email from aj</summary>
+    <published>2023-10-31T13:05:01+00:00</published>
+  </entry>
+</feed>

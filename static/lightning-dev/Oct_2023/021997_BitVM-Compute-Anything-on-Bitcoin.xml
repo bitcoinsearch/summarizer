@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BitVM: Compute Anything on Bitcoin</title>
+  <updated>2023-11-01T21:01:11.514442+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-10-15 15:15:49+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BitVM: Compute Anything on Bitcoin</title>
+    <updated>2023-11-01T21:01:11.515449+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/021997.html" rel="alternate"/>
+    <summary>In the email, ZmnSCPxj proposes the idea of Scriptless Script BitVM, which involves replacing hashes and preimages with points and scalars. The concept is illustrated through examples of using bit commitments and logic gate commitments. 
+
+For bit commitments, ZmnSCPxj suggests that the prover can put a slashable fund behind a pubkey `P` (which is a point) and provide a bit-0 point commitment `B`. If the prover wants to assert that the bit is 0, they need to provide `b` such that `B = b * G`. If the prover wants to assert that the bit is 1, they need to provide `b + p` such that `B = b * G` and `P = p * G`. By choosing `b` randomly, if the prover makes exactly one assertion, it does not reveal `p`. However, if the prover equivocates and asserts both, it reveals `b` and `b + p`, allowing the verifier to get the scalar `p` and access the fund `P &amp;&amp; V`.
+
+Regarding logic gate commitments, the prover and verifier would provide public keys for each input-possibility and output-possibility of a logic gate, and MuSig would be used to combine them. An example is given for a NAND gate with inputs I, J, and output K. Different public keys `P[I=0]`, `V[I=0]`, `P[I=1]`, `V[I=1]`, etc., are used depending on the input value. The actual SCRIPT would utilize these public keys and duplicate the necessary operations for each input and output. Adaptor signatures are provided by the verifier, allowing the prover to complete the signature by revealing the appropriate scalar for a specific input.
+
+ZmnSCPxj also mentions the possibility of simplifying the Taproot tree by using only the wires between NAND gates as tapleaves instead of NAND gates themselves. In this case, the prover would provide bit commitments for each input and output, and the tapleaves would be just the bit commitment SCRIPTs. The verifier would compute the output based on the inputs and provide only the adaptor signature for `MuSig(P[K=], V[K=])`, depending on whether K is 0 or 1. This approach would reduce the need for Tapleaves, making BitVM invisible on the blockchain.
+
+ZmnSCPxj concludes the email with uncertainty about the helpfulness of the proposed ideas and acknowledges that hashes are computationally less expensive. They suggest exploring the possibility of having Tapleaves be solely the wires between NAND gates. 
+
+Overall, ZmnSCPxj presents an innovative approach to Scriptless Script BitVM, demonstrating the potential for using points and scalars instead of hashes and preimages in various scenarios.</summary>
+    <published>2023-10-15T15:15:49+00:00</published>
+  </entry>
+</feed>

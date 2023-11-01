@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Removing channel reserve for mobile wallet users</title>
+  <updated>2023-11-01T20:43:44.062872+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-10-18 13:51:11+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Removing channel reserve for mobile wallet users</title>
+    <updated>2023-11-01T20:43:44.062872+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004136.html" rel="alternate"/>
+    <summary>The email discusses the channel reserve requirement in the context of channels between mobile wallet users and their service providers. The sender argues that it should be fine to get rid of the channel reserve for these types of channels, despite it being a security parameter.
+
+The purpose of the channel reserve is to ensure that both peers always have an output in the commit transaction. This has two important consequences: firstly, if a malicious node publishes a revoked commitment, they will always have some funds in it that the honest node can claim, thus risking losing money. Secondly, nodes are disincentivized from force-closing channels because they would need to pay on-chain fees to retrieve their funds.
+
+The sender believes that these properties are important for channels between normal routing nodes but may not be necessary for channels between mobile wallet users and their service providers. If the channel reserve is removed and one node has nothing at stake in the channel, they may be incentivized to broadcast a revoked commit transaction to potentially gain money without any risk.
+
+However, there are drawbacks to having a channel reserve. Firstly, it leads to capital inefficiency as the reserve represents unused liquidity. This is acceptable for routing nodes that actively manage their channels, but for wallet providers, it becomes a problem as they need to keep at least one channel open with each user, resulting in unused liquidity proportional to the number of users and the total amount of funds owned.
+
+The second drawback is related to user experience (UX). Users rely on their channel state to determine how much they can receive off-chain. The presence of a large gap between what users expect to receive and what they actually can receive creates confusion and is difficult to explain.
+
+In the specific setting of channels between mobile wallet users and their service providers, the sender argues that it is acceptable to remove the channel reserve on both sides. The service provider pays the on-chain fees for the commit transaction, even if they don't have an output in the transaction when publishing a revoked commit. This means they still lose something. For the wallet user, their funds can still be retrieved using penalty transactions without additional cost. The service provider cannot steal funds but may experience reputation damage if they are found to have published a revoked commitment.
+
+Removing the channel reserve on the wallet user's side is a risk that the wallet provider takes to ensure a good user experience. The user has already paid fees to the wallet provider and can publicly expose any attempted cheating by the service provider. This trade-off is considered acceptable for service providers.
+
+Lastly, it is argued that LN-penalty without channel reserves is similar to LN-symmetry (Eltoo). In Eltoo, a cheating node can always publish a previous commitment, and the honest node can simply replay the latest state on top of that commitment. The penalty for the cheating node is the on-chain fees they paid for that commit transaction. Similarly, when the service provider tries to cheat in the discussed context, they pay the on-chain fees for the commit transaction. Thus, the absence of channel reserves can be seen as an acceptable trade-off.
+
+In conclusion, the email presents arguments for removing the channel reserve requirement for channels between mobile wallet users and their service providers. It highlights the drawbacks of having a channel reserve and explains why it may not be necessary in this specific setting. The sender emphasizes the importance of maintaining a good user experience and suggests that the risk associated with removing the channel reserve is acceptable for service providers.</summary>
+    <published>2023-10-18T13:51:11+00:00</published>
+  </entry>
+</feed>

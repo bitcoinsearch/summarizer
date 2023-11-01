@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-11-01T20:41:50.809522+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:04:06+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-11-01T20:41:50.809522+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004127.html" rel="alternate"/>
+    <summary>In an email exchange, ZmnSCPxj raises concerns about the risk associated with batched splicing mechanisms in Lightning Network channels. The core of the risk lies in two conditions: 1) having no funds in a channel or dealing with a newly-singlefunded channel, and 2) possessing an old state, such as being `update_fee`d. In this scenario, if a participant engages in a batched splice, they can disrupt it by broadcasting the old state and convincing miners to confirm it before the batched splice transaction. To mitigate this risk, ZmnSCPxj emphasizes the importance of having a backout mechanism in any batched splicing implementation. This mechanism would either recreate a subset of the splice or revert the channels back to their pre-splice state if the batched splice transaction cannot be confirmed due to disruption caused by posting an old commitment transaction.
+
+Currently, the common approach to splicing is to run both the pre-splice and post-splice states simultaneously until the splicing transaction is confirmed. However, ZmnSCPxj suggests that it is necessary to also check if the splicing transaction cannot be confirmed. This can be done by verifying if the other inputs to the splice transaction have already been consumed by transactions that have deeply confirmed. If this is the case, the post-splice state should be dropped, and the channels should revert to the pre-splice state. It is unclear whether existing splice implementations perform this check.
+
+Overall, ZmnSCPxj highlights the importance of implementing a backout mechanism in batched splicing to address the risk of disruptions caused by old commitment transactions. Without such a mechanism, any kind of batched splicing can be considered risky.</summary>
+    <published>2023-10-17T17:04:06+00:00</published>
+  </entry>
+</feed>

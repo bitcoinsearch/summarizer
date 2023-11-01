@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Breaking change in calculation of hash_serialized_2</title>
+  <updated>2023-11-01T21:13:46.388115+00:00</updated>
+  <author>
+    <name>Fabian 2023-10-20 22:01:40+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2023-10-20 17:34:28+00:00</name>
+  </author>
+  <author>
+    <name>Fabian 2023-10-20 17:19:19+00:00</name>
+  </author>
+  <link href="lightning-dev/Oct_2023/022052_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022039_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/022038_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Breaking change in calculation of hash_serialized_2</title>
+    <updated>2023-11-01T21:13:46.388115+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022052.html" rel="alternate"/>
+    <summary>In the email exchange, Fabian addresses a potential malleability issue in the UTXO set dump files used by assumeutxo. He mentions that the sha256 hash of the snapshot file itself could be considered as the canonical hash to eliminate any malleability issues. However, he points out that this option was not previously considered and may have been viewed as additional overhead. 
+
+Fabian also suggests optimizing the serialization of data to file by adding compression or using other file hashing strategies that are more optimized for P2P sharing of the UTXO snapshots. He mentions that P2P sharing of the UTXO set has always been part of the assumeutxo idea but hasn't been explored deeply. He provides links [2][3] to a conversation on IRC where this topic was discussed further.
+
+James, in response to Fabian's email, questions why the sha256 hash of the snapshot file itself is not the canonical hash. He suggests that generating the actual contents of the dump file and calculating the hash of it would be the obvious way to implement this. He provides a link to Peter Todd's website [1] where this issue is further discussed.
+
+Fabian then provides an update on the issue, stating that the cause of the malleability issue has been found - a bug in the serialization of UTXOs for the calculation of hash_serialized_2. He mentions that a fix is being worked on and aims to include it in v26.0, which is scheduled to be released in November. He notes that the serialization format will change, causing all historical UTXO set hash results to change after upgrading to v26.0. The value returned in gettxoutset will also be renamed to hash_serialized_3. 
+
+Fabian mentions that there were additional potentially problematic issues found from fuzz testing and that they decided to switch the serialization completely instead of implementing a minimal fix. The serialization format will now be the same as used by MuHash.
+
+Fabian provides two points of concern for users. Firstly, if they are using hash_serialized_2 for any security critical purposes, they should check if the bugs in the serialization code could cause issues and consider switching to hash_serialized_3 or using MuHash. Secondly, if they are utilizing hash_serialized_2 for anything critical in their project and require time to upgrade and adapt to the change, they should let them know. Fabian mentions that they don't think it is necessary to keep the buggy hash_serialized_2 around, as they don't know of any substantial use cases and using it may pose security risks. However, they are open to reconsidering if keeping hash_serialized_2 holds serious value for downstream projects. He encourages direct communication or commenting on the PR [3] or the email thread to discuss these concerns.
+
+In summary, Fabian discusses a potential malleability issue in UTXO set dump files and suggests various options and considerations to address it. James raises a question about using the sha256 hash of the snapshot file itself as the canonical hash. Fabian provides an update on the issue, mentioning the cause, the planned fix, and the changes to serialization in v26.0. He also highlights concerns for users and invites discussion and feedback.</summary>
+    <published>2023-10-20T22:01:40+00:00</published>
+  </entry>
+</feed>

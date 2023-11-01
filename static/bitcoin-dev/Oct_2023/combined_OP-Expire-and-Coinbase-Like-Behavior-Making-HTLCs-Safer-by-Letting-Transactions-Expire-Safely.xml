@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-  <updated>2023-10-30T10:08:03.514072+00:00</updated>
+  <updated>2023-11-01T20:45:09.949961+00:00</updated>
   <author>
     <name>Peter Todd 2023-10-23 15:45:44+00:00</name>
   </author>
@@ -19,7 +19,16 @@
     <name>vjudeu at gazeta.pl 2023-10-22 08:30:01+00:00</name>
   </author>
   <author>
+    <name>vjudeu at gazeta.pl 2023-10-22 08:30:01+00:00</name>
+  </author>
+  <author>
     <name>Peter Todd 2023-10-21 10:31:05+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2023-10-21 10:31:05+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2023-10-21 08:58:32+00:00</name>
   </author>
   <author>
     <name>David A. Harding 2023-10-21 08:58:32+00:00</name>
@@ -27,33 +36,28 @@
   <author>
     <name>Peter Todd 2023-10-21 00:09:16+00:00</name>
   </author>
-  <link href="bitcoin-dev/Oct_2023/022073_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <author>
+    <name>Peter Todd 2023-10-21 00:09:16+00:00</name>
+  </author>
   <link href="bitcoin-dev/Oct_2023/004174_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022073_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/004173_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022068_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022061_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/004160_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022051_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/004170_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/004159_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022050_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022042_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/004163_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-    <updated>2023-10-30T10:08:03.514447+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022073.html" rel="alternate"/>
-    <summary>In summary, the email discusses various proposals and ideas related to programming. It suggests using "nExpiryHeight" instead of time-based expiration to avoid potential issues with miners manipulating the current time. The sender recommends redefining an opcode and proposes alternative names for it, such as OP_Expire or OP_CheckExpiryTime. They highlight the importance of having an explicit field for the value in the taproot annex and discuss the usefulness of a nExpiryHeight field in cases where a signature covering the field is sufficient.
-
-Another topic addressed in the email is an alternate design proposal for taproot annex. This includes adding an `nExpiryTime` field to indicate that the transaction must not exist in a block at or above the specified height. The mempool should categorize transactions based on their `nExpiryTime`, and when a block is reached, buckets with `nExpiryTime` less than that block height should be dropped. The proposal also suggests adding an `OP_CHECKEXPIRYTIMEVERIFY` opcode to check if the `nExpiryTime` exists and has a value equal to or less than the top of the stack.
-
-The email further discusses the use of OP_CHECKSEQUENCEVERIFY in Bitcoin transactions and proposes building a soft-fork around this existing opcode. It suggests using reserved opcodes, such as OP_RESERVED, to mark a transaction as invalid under certain conditions. The sender proposes using OP_Expire, a redefined version of an existing opcode, to create an expiration mechanism for certain transaction paths. This would allow for urgency in spending the HTLC preimage before the previous HTLC timeout is mined. The email also mentions encoding the expiration height as a delta against a block height nLockTime, similar to OP_CheckLockTimeVerify.
-
-Furthermore, the email presents a situation involving an attack called the replacement cycling attack and discusses the proposed solution's limitations. It explains how the attack can benefit multiple individuals, including miners, and highlights the risk of not being able to redeem the received HTLC output in time. The sender compares the proposed solution to OP_Expire and mentions the utilization of full-RBF for execution by anyone on behalf of miners.
-
-Another topic covered in the email is a proposal to ensure the HTLC-preimage is mined before an upstream HTLC-timeout becomes mineable. The suggestion involves making the HTLC-preimage claimable by anyone after the HTLC-timeout becomes mineable. It provides an example scenario and discusses potential complications and deployment considerations.
-
-Lastly, the email addresses the issue of spendability in the HTLC-timeout path and the HTLC-preimage path. It suggests introducing the concept of expiring the HTLC-preimage path using OP_Expire and the Coinbase Bit soft-fork upgrade. This would make the outputs of such transactions only spendable after a certain number of blocks have been mined. The email explains how OP_Expire works and its application in HTLCs, as well as the possibility of encoding the expiration height as a delta against a block-height nLockTime.
-
-Overall, the email presents various proposals and ideas related to programming, addressing topics such as alternative designs, opcodes, expiration mechanisms, and securing transaction paths.</summary>
+    <updated>2023-11-01T20:45:09.951005+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004174.html" rel="alternate"/>
+    <summary>The email discusses the use of the OP_Expire opcode in Bitcoin programming and its application in HTLC protocols. It suggests that OP_Expire can be added to the pre-image branch of the script in HTLC protocols to set a deadline for transactions requiring the preimage to be revealed on-chain. The email also mentions the option of encoding expiration heights as a delta against a block-height nLockTime, instead of using a specific Coinbase Bit. This alternative approach would involve checking the absolute expiration height with OP_Expire. Overall, the email emphasizes the flexibility and security provided by OP_Expire in enforcing time constraints for certain transactions in HTLC protocols.</summary>
     <published>2023-10-23T15:45:44+00:00</published>
   </entry>
 </feed>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BitVM: Compute Anything on Bitcoin</title>
+  <updated>2023-11-01T21:01:23.578216+00:00</updated>
+  <author>
+    <name>Anthony Towns 2023-10-10 01:27:08+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BitVM: Compute Anything on Bitcoin</title>
+    <updated>2023-11-01T21:01:23.578334+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/021985.html" rel="alternate"/>
+    <summary>The email discusses a concept related to using a NAND circuit to validate an N-bit claim. In this example, N is equal to 4. The goal is to determine whether the claim is valid or not by constructing a circuit that can be challenged. The model involves a prover and a verifier, where the prover claims to have a solution and the verifier issues challenges. If the prover fails to meet the challenge, they lose the funds.
+
+The circuit consists of C individual assertions, each with two inputs and a single output. The inputs can be selected from either the N input bits or the output of a previous assertion. Each assertion is encoded as a tapleaf, which allows spending a transaction via that tapleaf to validate the individual assertion. Additionally, there is an extra tapleaf per input/assertion that allows the verifier to claim the funds immediately if the prover provides inconsistent values for an input or the result of an assertion.
+
+If the prover tries to cheat, the verifier can run the circuit offline to identify the invalidity and trace back the error. The email provides an example of how the circuit can be traversed to establish the error. It suggests that enough challenges should be provided to cover the longest circuit path (referred to as P) in order to reliably invalidate cheating attempts.
+
+The email also mentions the possibility of optimizing the circuit by skipping back to a point where two "unknown" inputs are NAND'ed, allowing for binary search and reducing the number of transactions required for larger circuits. The approach of using a unique preimage revealed by a challenge enables interesting work to be done in the witness, leading to the generation of 2-of-2 signatures to ensure protocol adherence without requiring CTV/APO.
+
+Different approaches to reducing the amount of data transfer are discussed. One approach involves exchanging hashes for challenge and commitment hashes, limiting the setup to a certain size (e.g., 20GB) for a maximum number of gates (e.g., 24M). Another approach involves using APO/CTV to construct challenge and response transactions, reducing the need for challenge hashes but still requiring commitment hashes. The email also mentions CSFS-ish behavior as a way to make commitments by signature, eliminating the need for transferring hashes in advance.
+
+Overall, the email explores the concept of using a NAND circuit for validating claims, discusses the structure of the circuit, and proposes different approaches to optimize and reduce data transfer in the process.</summary>
+    <published>2023-10-10T01:27:08+00:00</published>
+  </entry>
+</feed>

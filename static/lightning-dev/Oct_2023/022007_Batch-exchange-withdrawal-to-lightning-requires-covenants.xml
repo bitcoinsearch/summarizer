@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-11-01T21:10:48.409668+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-10-17 17:04:06+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-11-01T21:10:48.409668+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022007.html" rel="alternate"/>
+    <summary>Bastien received an email from ZmnSCPxj discussing the core risk associated with batched splicing in payment channels. The risk arises when there are no funds available in a channel or when the channel is newly single-funded with an old state. In such cases, if a participant engages in a batched splice and broadcasts the old state, they can convince miners to confirm it before the batched splice, thereby disrupting the process. To mitigate this risk, any batched splicing mechanism should have a backout option. If the batched splice transaction cannot be confirmed due to an old commitment transaction being posted by a participant, either a subset of the splice is re-created or the channels revert back to the pre-splice state. It is important to check if the splicing transaction cannot be confirmed by verifying if the other inputs to the splice transaction were already consumed by transactions that have deeply confirmed. If this is the case, the post-splice state should be dropped and the channels should revert to the pre-splice state. The author is unsure if existing splice implementations perform this check and emphasizes that without this safeguard, any kind of batched splicing is risky.</summary>
+    <published>2023-10-17T17:04:06+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Solving CoinPool high-interactivity issue with cut-through update of Taproot leaves</title>
+  <updated>2023-11-01T21:00:15.386686+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-10-12 09:31:26+00:00</name>
+  </author>
+  <author>
+    <name>Johan Torås Halseth 2023-10-05 07:38:24+00:00</name>
+  </author>
+  <author>
+    <name>Antoine Riard 2023-10-05 01:13:06+00:00</name>
+  </author>
+  <author>
+    <name>Johan Torås Halseth 2023-10-03 11:24:20+00:00</name>
+  </author>
+  <link href="lightning-dev/Oct_2023/021994_Solving-CoinPool-high-interactivity-issue-with-cut-through-update-of-Taproot-leaves.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/021981_Solving-CoinPool-high-interactivity-issue-with-cut-through-update-of-Taproot-leaves.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/021979_Solving-CoinPool-high-interactivity-issue-with-cut-through-update-of-Taproot-leaves.xml" rel="alternate"/>
+  <link href="lightning-dev/Oct_2023/021978_Solving-CoinPool-high-interactivity-issue-with-cut-through-update-of-Taproot-leaves.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Solving CoinPool high-interactivity issue with cut-through update of Taproot leaves</title>
+    <updated>2023-11-01T21:00:15.386686+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/021994.html" rel="alternate"/>
+    <summary>Johan provides an update on a demo script he created for the unilateral exit of participants in a Coinpool using OP_CCV. The script demonstrates how pubkeys and balances can be committed, data can be traversed and modified, and signatures can be validated for exiting users. The script is 142 bytes in size and the witness, including the script, is 647 bytes. Johan expects the size to grow by O(m logn) for m users exiting a pool of n participants, with most of the growth coming from merkle inclusion proofs. Despite the potential growth in size, Johan believes it would not matter in most cooperative settings.
+
+Johan proposes that N participants jointly create a coinpool using the exit scripts mentioned earlier, along with a cooperative keyspend path. If a user goes offline, the remaining online users can use the unilateral exit clause to exit into a new coinpool and continue operations once the transaction confirms. Johan finds it interesting to explore the possibility of performing the exit off-chain, so that when the offline user comes back online, they can revert back to the original coinpool output and update the balances according to the updates that occurred while they were offline. Johan believes this could work as long as the committed balances and keys remain compatible. The only change needed would be updating the merkle inclusion proofs in the jointly signed transactions since they now spend from an output where the offline user exited, but all signatures would remain valid.
+
+Antoine raises a question about how the participants' pubkeys and balances can be disaggregated for a partial subset push on the stack and verifying the validity of corresponding signatures. Antoine suggests that one requirement for a cut-through update of taproot leaves is to verify the authentication of the fan-out balances and pubkeys towards the "online" partition. This subset is not known at pool setup, even though the contract or tree construct can be equilibrated with some expectation. Antoine speculates that OP_CHECKCONTRACTVERIFY could be used to architect the proposed design of the coinpool and its cut-through mechanism. One challenge Antoine identifies is the efficient traversal, inspection, and modification of the contract.
+
+Johan responds by suggesting that OP_CHECKCONTRACTVERIFY may achieve what Antoine is looking for. Johan points to a Bitcoin-dev mailing list post that discusses using OP_CHECKCONTRACTVERIFY. By committing the participants' pubkeys and balances in the dynamic data instead of the taptree, a subset of online users can agree to pool their aggregated balances in a new output, while the offline users' funds remain inaccessible to them in a second output. Johan explains that this would work by spending the coinpool utxo with a transaction that has two outputs: one for the "remainder" of the previous coinpool (the offline users) and the second for the new coinpool among the online users. Johan mentions the assumption of using Eltoo in case an offline user comes back online and attempts to double spend the UTXO.</summary>
+    <published>2023-10-12T09:31:26+00:00</published>
+  </entry>
+</feed>

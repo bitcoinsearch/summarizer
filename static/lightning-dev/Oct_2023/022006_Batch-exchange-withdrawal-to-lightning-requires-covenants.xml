@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Batch exchange withdrawal to lightning requires covenants</title>
+  <updated>2023-11-01T21:11:01.228506+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-10-17 13:03:05+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Batch exchange withdrawal to lightning requires covenants</title>
+    <updated>2023-11-01T21:11:01.228506+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022006.html" rel="alternate"/>
+    <summary>In this email, the sender discusses their attempts to design a protocol that allows users to withdraw funds from exchanges directly into their lightning wallets in an efficient manner. They propose using covenants, specifically mentioning `SIGHASH_ANYPREVOUT`, as a way to achieve this goal with the smallest on-chain footprint possible. The sender explains that the current approach of having the user provide a lightning invoice for the exchange to pay over lightning simply shifts the burden of making an on-chain transaction to the user's wallet provider.
+
+The issue arises when the user's wallet does not have enough inbound liquidity, requiring a splice transaction. If multiple users withdraw funds from an exchange, separate splice transactions would be needed, resulting in inefficiency. To address this, the sender suggests batching these multiple channels into a single transaction without introducing any intermediate transactions. However, a signature from each corresponding wallet user is required for each channel since they are spending the current funding output, which is a 2-of-2 multisig between the user and the wallet provider.
+
+The problem is that signatures are needed from N users who may not be online at the same time. If one user never comes online or doesn't complete the protocol, the whole batch must be discarded. To overcome this challenge, the sender proposes a workaround. Each wallet user can provide a signature using `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` that spends their current funding output to create a new funding output with the expected amount. This allows users to sign before knowing the final transaction, which the exchange can create by batching pairs of inputs and outputs.
+
+However, a fatal issue arises at this point. The wallet user has no way of spending the new funding output since it is also a 2-of-2 between the user and the wallet provider. The wallet provider could potentially blackmail the user and force them to pay in order to get their funds back. In the Lightning Network, this issue is normally resolved by exchanging signatures for a commitment transaction that sends the funds back to their owners before signing the parent funding/splice transaction. But in this case, it is impossible because the `txid` of the batch transaction is not yet known.
+
+The sender admits to not finding a clever way to work around this issue and believes there may not be one. However, with `SIGHASH_ANYPREVOUT`, this problem is immediately fixed. They can exchange anyprevout signatures for the commitment transaction, and these signatures will be valid to spend from the batch transaction. Signature reuse is not a concern because funding keys are rotated at each splice, ensuring that another output using the same 2-of-2 script will never be created.
+
+The sender concludes by mentioning that they have not explored other forms of covenants extensively but believes that most of them likely address this problem as well.</summary>
+    <published>2023-10-17T13:03:05+00:00</published>
+  </entry>
+</feed>

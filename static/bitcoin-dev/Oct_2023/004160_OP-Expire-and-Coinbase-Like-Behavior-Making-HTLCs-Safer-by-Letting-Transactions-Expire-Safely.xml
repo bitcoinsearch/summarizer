@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-01T20:44:14.419127+00:00</updated>
+  <author>
+    <name>vjudeu at gazeta.pl 2023-10-22 08:30:01+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-01T20:44:14.419127+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004160.html" rel="alternate"/>
+    <summary>The email discusses the concept of using OP_CHECKSEQUENCEVERIFY as a means to have a system with no coinbase transactions. It suggests setting sequence numbers to create a relative locktime of 100 blocks. The email also recommends building any necessary soft-fork around the existing OP_CHECKSEQUENCEVERIFY opcode rather than reinventing the wheel.
+
+Another topic discussed is the use of reserved opcodes, such as OP_RESERVED, to mark transactions as invalid under certain conditions. By utilizing conditional statements like "OP_IF OP_RESERVED OP_ENDIF", the whole transaction can be marked as invalid if the condition is triggered. However, if the condition is false, the transaction can continue executing normally.
+
+The email then introduces the idea of a replacement cycling attack in the context of lightning network channels. It explains how a malicious counterparty can trigger a replacement by broadcasting an HTLC preimage transaction with higher fees and feerate than the victim node's honest HTLC timeout. This leads to a discussion on the issue of the HTLC preimage path remaining spendable even after the timeout path becomes spendable.
+
+To address this issue, the email suggests making the HTLC preimage path expire. Traditionally, transactions are designed to remain valid forever, but by introducing an OP_Expire opcode, script evaluation can be terminated with an error if certain conditions are not met. This conceptually acts as an AntiCheckLockTimeVerify, preventing a txout from being spent in a particular way. The reorg security of OP_Expire using transactions is no worse than transactions spending miner coinbases.
+
+The email then explains how HTLCs can utilize OP_Expire by adding it to the preimage branch of the script. This creates a deadline for the party receiving the preimage, either they get a transaction spending the preimage mined or control reverts to the other party who can spend the HTLC output without time constraints. The transaction spending the HTLC expired branch does not need to set the Coinbase Bit and can be spent in a normal transaction.
+
+Lastly, the email briefly mentions the possibility of encoding expiration height as a delta against a block height nLockTime instead of using a specific Coinbase Bit. In this variant, OP_Expire would function similarly to OP_CheckLockTimeVerify by checking the absolute expiration height.</summary>
+    <published>2023-10-22T08:30:01+00:00</published>
+  </entry>
+</feed>

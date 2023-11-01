@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-01T20:44:34.863974+00:00</updated>
+  <author>
+    <name>David A. Harding 2023-10-21 08:58:32+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-01T20:44:34.863974+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004159.html" rel="alternate"/>
+    <summary>The email discusses a potential solution to ensure that the HTLC-preimage is mined before an upstream HTLC-timeout becomes mineable. The suggestion is to make the HTLC-preimage claimable by anyone after a certain time, such as the HTLC-timeout becoming mineable. An example scenario is provided where Alice offers Bob an HTLC with a timeout at block t+200, and Bob offers Carol an HTLC with a timeout at block t+100.
+
+The proposed script for the Bob-Carol HTLC includes conditions for spending the output based on whether Carol has the preimage or if someone else has it after a specific time. If Carol has the preimage, she can spend the output at any time. If not, Bob is allowed to refund after t+100, and after t+150, anyone with the preimage can spend the output.
+
+In the wider context of a forwarded payment from Alice to Bob to Carol, several scenarios are addressed. If Carol attempts to spend the output but pays too low of a feerate, Bob can spend the output and settle the Alice-Bob HTLC offchain within 99 blocks. If Carol releases the preimage but prevents Bob from using it, anyone who saw the preimage can take Carol's output at t+150 and put the preimage in the blockchain, giving Bob 49 blocks to settle the HTLC offchain.
+
+The concern about the effect on Lightning Network (LN) from replacement cycling is deemed to be adequately satisfied by this proposal. Potential complications are also discussed, including the possibility of miner centralization and the need for taproot scripts and merkle nodes to be included in the preimage transaction. RBF pinning and full RBF are mentioned as potential issues.
+
+Deployment considerations include no changes required to full nodes or mining Bitcoin nodes. However, at least one well-connected Bitcoin relay node would need to be updated to store preimages and related data. LN nodes would need to update to new HTLC scripts, but it should be possible without closing/re-opening channels.
+
+The proposed solution is compared to OP_EXPIRE, highlighting that OP_EXPIRE requires consensus and policy changes, while this proposal does not. It is also noted that OP_EXPIRE does not depend on special software, whereas this proposal requires at least one person running special software.
+
+The email concludes by mentioning that the proposed solution is an alternative to Peter's proposal and is inspired by a previous suggestion made by the sender.
+
+(Note: The farewell part of the email has been ignored as per the given rules.)</summary>
+    <published>2023-10-21T08:58:32+00:00</published>
+  </entry>
+</feed>

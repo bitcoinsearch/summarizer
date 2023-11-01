@@ -530,7 +530,7 @@ if __name__ == "__main__":
         dev_name = dev_url.split("/")[-2]
         logger.info(f"Total threads received for {dev_name}: {len(data_list)}")
 
-        delay = 1
+        delay = 5
         count_main = 0
 
         while True:

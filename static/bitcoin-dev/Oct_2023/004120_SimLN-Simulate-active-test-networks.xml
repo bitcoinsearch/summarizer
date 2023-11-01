@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>SimLN: Simulate active test networks</title>
+  <updated>2023-11-01T20:33:20.347232+00:00</updated>
+  <author>
+    <name>Carla Kirk-Cohen 2023-10-10 17:03:55+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>SimLN: Simulate active test networks</title>
+    <updated>2023-11-01T20:33:20.347232+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004120.html" rel="alternate"/>
+    <summary>SimLN is a tool that simulates random payment activity on any test lightning network setup. It aims to facilitate the testing of applications and proposals against networks that are actively processing payments. The tool is setup agnostic and can run on any test environment, such as local dev, signet, polar, scaling lightning, etc. To use SimLN, you need a network with open channels where you have execution access on some of the nodes, a config file providing the simulator with node details, and a Rust compiler installed. 
+
+SimLN allows you to control the activity it generates by configuring specific payment flows, such as sending a certain amount from one node to another at regular intervals. While SimLN does not match the mainnet exactly, it provides a tool for testing against "busy" networks, allowing for more rigorous testing of changes and proposals.
+
+The random activity in SimLN is generated using two magic numbers: the capacity multiplier and the expected payment amount. The capacity multiplier represents how frequently a node sends its full balance/capacity over a calendar month, while the expected payment amount is the average payment amount in the network. 
+
+To generate random activity, SimLN follows three steps. In the first step, the payment frequency for each sending node is determined using an exponential distribution. The time between payments is sampled from this distribution, aiming to hit the desired capacity * multiplier for the expected payment size. In the second step, payment destinations are selected using a weighted uniform distribution based on node capacity. Larger nodes are more likely to be selected as destinations. Finally, the payment amount is determined using a log normal distribution with the expected payment amount as the mean. The variance in this distribution is related to the size of the sending and receiving nodes, introducing more varied payment sizes for larger nodes and less variation for smaller nodes.
+
+While SimLN has its limitations, such as assigning the same capital efficiency to every node and biasing towards generating payments between large nodes, it also has its advantages. It saves users from manual generation or complex bash scripts, works in any environment, can produce NPC background noise for specific tests, and makes deploying to production less intimidating.
+
+Overall, SimLN is a new prototype tool that aims to simplify testing against active lightning networks by simulating random payment activity. Users are encouraged to provide feedback and report bugs through the GitHub repository.</summary>
+    <published>2023-10-10T17:03:55+00:00</published>
+  </entry>
+</feed>

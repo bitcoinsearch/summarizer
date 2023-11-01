@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Breaking change in calculation of hash_serialized_2</title>
+  <updated>2023-11-01T21:13:32.356065+00:00</updated>
+  <author>
+    <name>Fabian 2023-10-20 17:19:19+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Breaking change in calculation of hash_serialized_2</title>
+    <updated>2023-11-01T21:13:32.356065+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022038.html" rel="alternate"/>
+    <summary>A potential malleability issue in the UTXO set dump files generated for and used by assumeutxo was discovered. The cause of the issue was identified as a bug in the serialization of UTXOs for the calculation of hash_serialized_2. This value is used by Bitcoin Core to check if the UTXO set loaded from a dump file matches what is expected. The value of hash_serialized_2 expected for a particular block is hardcoded into the chainparams of each chain.
+
+To address this issue, a fix for the serialization is being worked on and is planned to be included in v26.0, which is scheduled for release in November. It should be noted that after upgrading to v26.0, all historical UTXO set hash results will change due to the serialization change. Additionally, the version returned in gettxoutset will be renamed to hash_serialized_3.
+
+In addition to the malleability issue, other potentially problematic issues were found through fuzz testing. As a result, it was decided to switch the serialization completely rather than implementing a minimal fix. The serialization format now aligns with MuHash.
+
+For those using hash_serialized_2 for any security critical purposes, it is advised to check if the bugs in the serialization code could cause issues. Consider switching to using hash_serialized_3 or even considering using MuHash. If hash_serialized_2 is utilized for anything critical in a project and more time is needed to upgrade and adapt to the serialization change, it is recommended to inform the team. While breaking changes in APIs without deprecation warning are generally avoided, it is currently believed that keeping the buggy hash_serialized_2 around is not necessary, as there are no substantial use cases known and using it may pose security risks. However, the decision to keep hash_serialized_2 will be reconsidered if it holds serious value for downstream projects.
+
+For further inquiries or comments, individuals can reach out directly to Fabian or comment in the PR [3] or on the list.
+
+[1] - Link to assumeutxo: [assumeutxo link]
+[2] - Link to the cause of the issue: [cause of the issue link]
+[3] - Link to the fix for the serialization: [fix for serialization link]</summary>
+    <published>2023-10-20T17:19:19+00:00</published>
+  </entry>
+</feed>
