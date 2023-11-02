@@ -1,5 +1,5 @@
 {
-    "header_summary": "Johan Tor\u00e5s Halseth explores the concept of HTLC output aggregation as a solution to transaction recycling, jamming, and on-chain efficiency. By implementing HTLC output aggregation with covenants, a single output can represent all active HTLCs on the commitment, addressing both recycling and jamming issues. The spender can claim their portion and send it to the desired output or fees, while the remainder is held in a covenant restricted output. Challenges remain, such as the potential for high chain fees and the need for a limit on active HTLCs. Implementing this approach requires a new covenant primitive on Layer 1. Johan also raises the possibility of using PTLCs to eliminate slot jamming.",
+    "header_summary": "Bitcoin Development Discussions: Penalty of Actuary, API Design, Full-RBF Implementation, and HTLC Output AggregationProgrammers engage in an email exchange discussing various Bitcoin development topics. AdamISZ addresses the penalty of the actuary in PathCoin, proposing a solution involving CTV/covenant and scriptPubKey conditions. Anthony Towns emphasizes the importance of designing a good API, suggesting alternative approaches using BIP 345 and BIP 119's CTV. Peter Todd announces Bitcoin Core v25.1 with full-rbf peering code, highlighting its benefits. Johan Tor\u00e5s Halseth explores HTLC output aggregation as a solution to transaction issues and suggests the implementation of a covenant primitive. These discussions offer valuable insights and resources for Bitcoin development.",
     "recent_posts": [
         {
             "id": "022106",
@@ -9,7 +9,7 @@
                 "AdamISZ"
             ],
             "published_at": "2023-10-31T22:12:20+00:00",
-            "summary": "- The sender discusses the penalty of the actuary and the linear dependence of total fidelity bond.\n- They explain the method used in PathCoin to avoid the linear dependence but mention restrictions.\n- The sender suggests that this approach may provide a clue for finding a direction forward.",
+            "summary": "- The sender discusses addressing the penalty of the actuary and the linear dependence.\n- They explain the method used in PathCoin to avoid linear dependence but mention restrictions.\n- The sender suggests that this approach could provide a clue but mentions challenges faced with reusing fidelity bonds and APO as a possible solution.",
             "n_threads": 5,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -26,7 +26,7 @@
                 "Anthony Towns"
             ],
             "published_at": "2023-10-31T13:05:01+00:00",
-            "summary": "- The email discusses the importance of creating a good API, even for non-important cases.\n- Specific examples related to Bitcoin development are mentioned, with flaws in certain approaches.\n- Two different designs for creating a vault using BIP 345 are explained, emphasizing precommitment and alternative approaches.",
+            "summary": "- The email discusses the importance of creating a good API, even for non-important use cases.\n- Examples related to Bitcoin transactions and vaults are mentioned, highlighting flaws in certain approaches.\n- Two different designs for creating a vault using BIP 345 are introduced, with alternative approaches using BIP 119's CTV mentioned.",
             "n_threads": 8,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -44,7 +44,7 @@
                 "Peter Todd"
             ],
             "published_at": "2023-10-26T22:20:21+00:00",
-            "summary": "- Bitcoin Core v25.1 with full-rbf peering code is available on GitHub.\n- Running full-RBF has advantages and at least 31% of hash power is dedicated to it.\n- For more information and resources, visit the provided links or contact Peter Todd.",
+            "summary": "- Bitcoin Core v25.1 with full-rbf peering code, including minor updates, is available on GitHub.\n- Running full-rbf ensures reliable propagation of full-rbf replacements among core nodes.\n- Peter Todd recommends running mempoolfullrbf for its advantages and shares related resources.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -58,7 +58,7 @@
                 "Anthony Towns"
             ],
             "published_at": "2023-10-31T13:05:01+00:00",
-            "summary": "- The email emphasizes the importance of useful consensus changes rather than supporting toy examples.\n- It suggests that certain proposed approaches have a fundamental flaw that allows for fund theft.\n- The sender proposes using BIP 345 and BIP 119 to address the flaw and provides additional resources for reference.",
+            "summary": "- Consensus should not be changed to support toy examples; focus on useful changes.\n- Two proposed approaches have the same flaw as a previously posted model.\n- To address the flaw, propose setting up a vault using BIP 345 along with BIP 119's CTV.",
             "n_threads": 6,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -76,7 +76,7 @@
                 "Peter Todd"
             ],
             "published_at": "2023-10-26T22:20:21+00:00",
-            "summary": "- Bitcoin Core v25.1, with Antoine Riard's full-rbf peering code, is available on GitHub.\n- This version advertises a FULL_RBF service bit and connects to additional FULL_RBF peers.\n- Running full-rbf provides benefits explained in Peter Todd's blog post at https://petertodd.org/2023/why-you-should-run-mempoolfullrbf.",
+            "summary": "- Bitcoin Core v25.1, with Antoine Riard's full-rbf peering code, is now on GitHub.\n- Running full-rbf provides benefits and is being used by at least 31% of hash power and 4 mining pools.\n- More information and related merchandise can be found on Peter Todd's website and Twitter.",
             "n_threads": 1,
             "dev_name": "lightning-dev",
             "contributors": [],
@@ -90,7 +90,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-10-26T19:58:48+00:00",
-            "summary": "- Johan Tor\u00e5s Halseth shares research on HTLC output aggregation as a solution to transaction recycling, jamming, and on-chain efficiency issues.\n- HTLC output aggregation with covenants collapses all HTLC outputs into a single one, improving efficiency and preventing slot jamming.\n- Implementing a covenant primitive on Layer 1 is necessary for fully utilizing HTLC output aggregation.",
+            "summary": "- Johan Tor\u00e5s Halseth discusses the potential solution of HTLC output aggregation to address transaction recycling, jamming, and efficiency issues.\n- By implementing HTLC output aggregation with covenants, all HTLC outputs can be collapsed into a single one, allowing the spender to decide how much should go to fees.\n- Implementing this approach requires a new covenant primitive on Layer 1 and has implications for transaction recycling and slot jamming.",
             "n_threads": 1,
             "dev_name": "lightning-dev",
             "contributors": [],
@@ -99,14 +99,14 @@
     ],
     "active_posts": [
         {
-            "id": "021999",
+            "id": "004122",
             "title": "Full Disclosure: CVE-2023-40231 / CVE-2023-40232 / CVE-2023-40233 / CVE-2023-40234 \"All your mempool are belong to us\"",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/021999.html",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004122.html",
             "authors": [
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- A new transaction-relay jamming attack affecting lightning channels was discovered.\n- Mitigations have been implemented and deployed by major lightning implementations.\n- Other Bitcoin applications may also be affected and need investigation for disruption.",
+            "summary": "- A new transaction-relay jamming attack called replacement cycling was discovered in December 2022.\n- Major lightning implementations have implemented mitigations to protect against replacement cycling attacks.\n- Bitcoin developers and operators should investigate the impact of replacement cycling attacks on their applications.",
             "n_threads": 63,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -130,7 +130,7 @@
                 "Ethan Heilman"
             ],
             "published_at": "2023-10-21T05:08:03+00:00",
-            "summary": "- A draft BIP proposes enabling OP_CAT as a Tapscript opcode, overcoming stack element size limitations.\n- OP_CAT allows concatenation of two values on the stack, expanding the functionality of tapscript.\n- Use cases enabled by OP_CAT include tree signatures, logical spend conditions, and non-equivocation contracts.",
+            "summary": "- A draft BIP proposes enabling OP_CAT as a Tapscript opcode to overcome limitations.\n- OP_CAT allows concatenation of values on the stack, expanding tapscript functionality.\n- The opcode's implementation involves checking stack size, concatenating values, and pushing the result.",
             "n_threads": 20,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -155,7 +155,7 @@
                 "Casey Rodarmor"
             ],
             "published_at": "2023-10-21T05:38:01+00:00",
-            "summary": "- The sender requests clarification and feedback regarding the nine-month-old Ordinals BIP PR.\n- They express frustration and lack of communication from the BIP editors.\n- The sender seeks feedback on the suitability of the BIP and guidance on necessary changes.",
+            "summary": "- The sender requests clarification and feedback on the Ordinals BIP PR after nine months.\n- They express frustration over the lack of response from the BIP editors.\n- Examples of existing BIPs are provided to support the request for feedback.",
             "n_threads": 16,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -173,14 +173,14 @@
             "file_path": "static/bitcoin-dev/Oct_2023/combined_Ordinals-BIP-PR.xml"
         },
         {
-            "id": "004122",
+            "id": "021999",
             "title": "Full Disclosure: CVE-2023-40231 / CVE-2023-40232 / CVE-2023-40233 / CVE-2023-40234 \"All your mempool are belong to us\"",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004122.html",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/021999.html",
             "authors": [
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- A new transaction-relay jamming attack has been discovered, affecting lightning channels' funds.\n- Lightning implementations have implemented mitigations, but other bitcoin applications may also be affected.\n- Concerns about package malleability pinning attacks and the need for further research and development.",
+            "summary": "- A new transaction-relay jamming attack in lightning channels poses security risks.\n- Major lightning implementations have mitigations to prevent the attack, evicting honest transactions.\n- Further research is needed to address package malleability pinning attacks and vulnerabilities in bitcoin applications.",
             "n_threads": 63,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -204,7 +204,7 @@
                 "Ethan Heilman"
             ],
             "published_at": "2023-10-21T05:08:03+00:00",
-            "summary": "- A draft BIP proposes enabling the OP_CAT opcode in Tapscript, overcoming previous memory concerns.\n- OP_CAT concatenates values on the stack, increasing the expressiveness and power of Tapscript.\n- The opcode enables various use cases, including tree signatures and Post-Quantum Lamport Signatures.",
+            "summary": "- A draft BIP proposes enabling the OP_CAT opcode in Tapscript to concatenate stack values.\n- OP_CAT aims to overcome the limitation of Tapscript's lack of a general-purpose concatenation method.\n- It enables various use cases and increases the functionality and expressiveness of Tapscript.",
             "n_threads": 20,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -229,7 +229,7 @@
                 "Casey Rodarmor"
             ],
             "published_at": "2023-10-21T05:38:01+00:00",
-            "summary": "- Casey Rodarmor expresses frustration at lack of response to Ordinals BIP PR after nine months.\n- There seems to be a misunderstanding about the BIP process, clarified by Casey.\n- Casey seeks feedback on whether Ordinals BIP is within scope and guidance for acceptance.",
+            "summary": "- Casey Rodarmor expresses frustration over the lack of response to the Ordinals BIP PR.\n- Casey clarifies that BIPs are not guaranteed inclusion and provides examples of accepted BIPs.\n- Despite understanding, Casey seeks feedback on whether the Ordinals BIP meets criteria.",
             "n_threads": 16,
             "dev_name": "lightning-dev",
             "contributors": [
