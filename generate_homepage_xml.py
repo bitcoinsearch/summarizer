@@ -79,7 +79,7 @@ class ElasticSearchClient:
 
             # Initialize the scroll
             scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
-                                                     scroll='1m')
+                                                     scroll='5m')
             scroll_id = scroll_response['_scroll_id']
             results = scroll_response['hits']['hits']
 
@@ -93,7 +93,7 @@ class ElasticSearchClient:
                     output_list.append(result)
 
                 # Fetch the next batch of results
-                scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='1m')
+                scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='5m')
                 scroll_id = scroll_response['_scroll_id']
                 results = scroll_response['hits']['hits']
 
@@ -181,7 +181,7 @@ class ElasticSearchClient:
 
             # Initialize the scroll
             scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
-                                                     scroll='1m')
+                                                     scroll='5m')
             scroll_id = scroll_response['_scroll_id']
             results = scroll_response['hits']['hits']
 
@@ -194,7 +194,7 @@ class ElasticSearchClient:
                     output_list.append(result['_source'])
 
                 # Fetch the next batch of results
-                scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='1m')
+                scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='5m')
                 scroll_id = scroll_response['_scroll_id']
                 results = scroll_response['hits']['hits']
 
@@ -387,15 +387,19 @@ class GenerateJSON:
                 summ = f"{author_}:{body_summ}\n"
                 recent_post_data += summ
         recent_post_data = self.create_summary(recent_post_data)
-        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of only three or four significant sentences, adhering to these important criteria:
-    Guidelines:
-        1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
-        2. The summarization must have a formal tone and be high in informational content.
-        3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
-        4. Any links given within the text should be retained and appropriately incorporated.
-        5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
-        6. Mention full names (both the first name and last name) of the authors if applicable.
-        \n CONTEXT:\n\n{recent_post_data}"""
+
+        summ_prompt = f"""Your task is to distil the essential points from a series of recent discussions, merging them into a concise summary composed of three or four significant sentences. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on. 
+        Directly mentioning the author's name (both first and last) followed by their key points, emphasizing no use of phrases like "The context discusses...", "The email discusses...", "In this context...", "The email covers..." and similar phrases.
+
+        Here are further considerations to apply when creating the summary:
+            Guidelines:
+                1. The summarization should be in a formal tone and rich with informational content.
+                2. Punctuation should be followed by a space, and all syntax rules should be adhered to.
+                3. If there are any links presented within the text, they should be preserved and appropriately incorporated.
+                4. The summary should be more than a simple rewording of the original content - it should restructure and simplify the main points.
+                6. The summary should be broken down into neat, compact paragraphs, with each paragraph capturing a unique aspect or viewpoint from the original text.
+        Context:\n\n{recent_post_data}"""
+
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -405,7 +409,7 @@ class GenerateJSON:
             temperature=0.7,
             max_tokens=500
         )
-        response_str = response['choices'][0]['message']['content'].replace("\n", "").strip()
+        response_str = response['choices'][0]['message']['content'].strip()
         if response_str.startswith("Summary:"):
             response_str = response_str[8:].strip()
         return response_str
@@ -455,6 +459,8 @@ class GenerateJSON:
 
     def create_json_feed(self, recent_dict_list, active_data_list, file_name="homepage.json"):
         recent_post_summ = self.generate_recent_posts_summary(recent_dict_list)
+
+        logger.success(recent_post_summ)
 
         json_string = {"header_summary": recent_post_summ}
 
