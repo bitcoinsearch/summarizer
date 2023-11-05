@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-05T02:06:47.766862+00:00</updated>
+  <author>
+    <name>Matt Morehouse 2023-11-02 17:07:39+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-05T02:06:47.766899+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022113.html" rel="alternate"/>
+    <summary>The email discusses a potential attack on the commitment transaction in a cycling scenario involving Mallory1, Alice, and Mallory2. The attack focuses on the commitment transaction itself, not the HTLC transactions. The concept of package relay is introduced, where commitment transaction fees are eliminated, and fees are always paid via CPFP (Child Pays For Parent) on the anchor output.
+
+In the scenario described, Mallory2 claims an HTLC from Alice off-chain using the preimage. However, when Alice attempts to claim the corresponding HTLC from Mallory1, Mallory1 refuses to cooperate. In response, Alice publishes her commitment transaction along with a CPFP on the anchor output. Mallory1 counters by publishing her competing commitment transaction with a higher CPFP fee on the anchor output, effectively replacing Alice's package in the mempool.
+
+To further disrupt Alice's commitment transaction, Mallory1 performs a replacement-cycle on the anchor output child transaction. This causes Mallory1's commitment transaction to lose its CPFP, resulting in the package feerate dropping to zero, which is below the minimum relay fee. As a result, Mallory1's commitment transaction is evicted from the mempool.
+
+Mallory1 repeats this process every time Alice broadcasts her commitment, continuously replacing her transaction until the HTLC timeout expires. Once the timeout occurs, the preimage path becomes unspendable, allowing Mallory1 to claim the HTLC via timeout at her convenience.
+
+This attack highlights the vulnerability of commitment transactions in a cycling scenario, particularly in the context of package relay. By manipulating CPFP fees and repeatedly replacing commitment transactions, an attacker can exploit the system and claim HTLCs through timeout.</summary>
+    <published>2023-11-02T17:07:39+00:00</published>
+  </entry>
+</feed>

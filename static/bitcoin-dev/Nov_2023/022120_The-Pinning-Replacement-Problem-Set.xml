@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>The Pinning &amp; Replacement Problem Set</title>
+  <updated>2023-11-05T02:08:13.969630+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-03 19:57:35+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>The Pinning &amp; Replacement Problem Set</title>
+    <updated>2023-11-05T02:08:13.969670+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022120.html" rel="alternate"/>
+    <summary>In the email, Antoine discusses the issues related to lightning and other second time-sensitive layers being hit by safety issues when the blocks are full. He mentions that this issue is described in a paper under the "forced expiration spam" issues arising within an environment with high block space demand. He also mentions that there are variants of these issues with the "flood &amp; loot" style scenarios.
+
+Antoine points out a new problem with the novel replacement issues which lies in the fact that the counterparty channel might always defer the confirmation of honest on-chain spend, in a way that is compatible with miners' incentives. He explains that while this ability has been commonized by the wide deployment of bip-125-style RBF over network mempools, it has always been available to any party reaching out directly to miners out-of-band with consensus-valid transactions.
+
+Antoine believes that in a world where miners are pseudonymous, miners motivated by maximizing their satoshi-denominated income is a reasonable assumption. He also agrees with the recipient (John) that as an ecosystem beyond core to fix sustainably pinning and replacement problems, they are stuck with a serious safety issue.
+
+Antoine suggests several options to address this issue:
+
+1. Revert to a static world with no replacement-by-fee mechanism as a widely deployed network policy. In a competitive mining world, one can always reach out to miners with out-of-band higher fee packages than available in their local mempool.
+
+2. Design, implement, and deploy policies to better capture transaction-issuer intent on how future spend candidates are allowed (or not) to replace the current in-mempool transaction. However, Antoine points out that with lightning and other second time-sensitive layers, there is no "single" transaction-issuer intent, as there may be multiple intents depending on the counterparties involved.
+
+3. Remove all policy and let the network of nodes and the economic ecosystem evolve on its own. Antoine notes that many mempool policies in place are actually anti-DoS measures, but they also contribute to the issues of pinning.
+
+4. Do nothing and let a fragmented mempool environment exist, where large lightning and bitcoin businesses have out-of-band relationships with miners and pools to support their packages, along with some service-level safety agreements. Antoine mentions that this option was considered by the lightning community years ago as a way to solve pinning issues at the commitment and second-state level, but it was dismissed due to concerns about centralization.
+
+5. Design and implement some magical consensus-change or alter the processing requirements (bandwidth, CPU perf, I/O disk) of full-nodes on the peer-to-peer network to align incentives between miners and lightning and time-sensitive second-layers. Antoine suggests that this option aligns with the trade-offs discussed in the "reverse locktime" new bitcoin script opcode idea or replacement cache at the mempool-level in core.
+
+Antoine concludes the email by signing off as Best, Antoine.</summary>
+    <published>2023-11-03T19:57:35+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-05T02:14:09.632687+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-02 05:24:36+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-05T02:14:09.632721+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004184.html" rel="alternate"/>
+    <summary>In the email, Antoine discusses a potential solution for advanced replacement cycling attacks in the context of lightning spending paths. He mentions the concept of a reverse time-lock, where a lightning spending path becomes invalid after a block height or epoch point. Antoine believes that this solution not only applies to the expiration of htlc-preimage spending paths, but also to channel commitment ones.
+
+Antoine points out a specific attack scenario that is exposed in a GitHub commit (https://github.com/ariard/bitcoin/commits/2023-10-test-mempool-2). He explains that in this scenario, a malicious commitment transaction replaces an honest commitment transaction, and the child-pay-for-parent of the malicious transaction is further replaced by the attacker. This leads to the automatic trimming of the malicious commitment transaction.
+
+Antoine acknowledges that under the lightning protocol semantics, both channel commitments can be legitimately valid. This creates a difficulty as both counterparties cannot trust each other to timely broadcast a commitment state to subsequently claim time-sensitive HTLCs (Hash Time-Locked Contracts).
+
+Antoine suggests that using the new reverse time-lock semantic may safeguard the time-sensitive HTLCs. However, he believes that this would simply shift the security risk from one counterparty to the other. In this case, the forwarding node could receive the preimage off-chain from the payee and block any attempt by the payee to broadcast its commitment transaction before the reverse time-lock expires.
+
+Additionally, Antoine proposes another solution to remove counterparty malleability by setting a package total fees and pre-committing fee-bumping reserves. However, he notes that this approach may require a high level of total reserve for each channel.
+
+In conclusion, Antoine raises important considerations regarding the need for solutions to address advanced replacement cycling attacks and the challenges associated with lightning spending paths and channel commitments.</summary>
+    <published>2023-11-02T05:24:36+00:00</published>
+  </entry>
+</feed>
