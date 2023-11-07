@@ -1,5 +1,5 @@
 {
-    "header_summary": "The first email introduces the concept of \"PathCoin\" and its potential for transferring coins. It discusses the use of \"Cold channels\" and \"CTLCs\" to control the flow of money, providing an example of how chaining participants works. Optimistic PathCoin and its limitations are also mentioned, along with the idea of using multiple channels simultaneously to improve routing.\n\nIn the second email, Antoine addresses safety issues faced by lightning and other second-layer protocols when blocks are full. He suggests different options to address these issues, including reverting to a static world with no replacement-by-fee mechanism or implementing policies to capture transaction-issuer intent. Antoine also mentions the possibility of allowing a fragmented mempool environment or making consensus changes to align incentives.\n\nThe third email announces the availability of Bitcoin Core version v26.0rc2 for download. The previous release candidate had packaging issues with macOS binaries, but they have been resolved in the current release candidate. Once thoroughly tested without critical problems, it will be tagged as the official release of Bitcoin Core v26.0, indicating its stability and readiness for public use.",
+    "header_summary": "AdamISZ introduces innovative concepts for Bitcoin's second-layer solutions, emphasizing the development of PathCoin and its variants. Notably, he proposes \"Cold channels,\" which would enable payments to offline receivers and discusses \"Optimistic PathCoin\" for more spontaneous transactions, albeit with privacy limitations. He also suggests using multiple channels to overcome fixed denomination issues in transactions and highlights the potential of private PathCoin for improved privacy, focusing on the practical applications of these off-chain methods.\n\nAntoine Riard raises critical safety concerns for lightning and similar protocols, especially under block congestion conditions. He discusses the risks of \"forced expiration spam\" and \"flood & loot\" attacks and the complications arising from RBF policies and miner incentives. Riard outlines several strategies to mitigate these issues, ranging from policy changes to consensus modifications, highlighting the importance of aligning the incentives of miners with the needs of second-layer network operators.\n\nMichael Ford announces the release of Bitcoin Core version v26.0rc2 for community testing, with the aim of finalizing it as a stable release. Anthony Towns stresses the need for deliberate consensus changes for security, critiquing suboptimal vault transaction designs and advocating for more secure alternatives through BIP 345 and CTV. He underscores the role of oracles and discreet log contracts as scriptless methods for achieving on-chain contract functionality, directing interested parties to further resources. Together, these discussions underscore the ongoing innovation and security considerations in the Bitcoin ecosystem, reflecting a diverse range of technical insights and proposals.",
     "recent_posts": [
         {
             "id": "022123",
@@ -9,7 +9,7 @@
                 "AdamISZ"
             ],
             "published_at": "2023-11-04T16:16:35+00:00",
-            "summary": "- The email discusses concepts related to PathCoin, including CTLCs, chaining participants, and Cold channels.\n- Different tradeoffs and limitations of these concepts are explored, highlighting their potential benefits.\n- Optimistic PathCoin and off-chain channels are considered the most interesting concepts.",
+            "summary": "- The email details the development of \"PathCoin,\" focusing on \"Cold channels\" and CTLCs.\n- Optimistic PathCoin simplifies transactions, enabling spontaneous payments without requiring penalties.\n- Cold channels allow offline transactions and minimize the need for active wallet involvement post-setup.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -23,7 +23,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-11-03T19:57:35+00:00",
-            "summary": "- Antoine discusses lightning and other time-sensitive layers being hit by safety issues.\n- He points out the problem with the counterparty channel deferring confirmation of on-chain spend.\n- Antoine suggests options to address the issue, including reverting to a static world or implementing policies.",
+            "summary": "- Antoine addresses safety issues in second-layer networks due to full blocks and high block space demand.\n- He discusses miners' incentives aligning with the potential to defer confirmations, which impacts safety.\n- Antoine suggests multiple solutions, including policy changes and node evolution, to mitigate these issues.",
             "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -40,11 +40,29 @@
                 "Michael Ford"
             ],
             "published_at": "2023-11-03T17:21:24+00:00",
-            "summary": "- Bitcoin Core version v26.0rc2 binaries are available for download from their official website.\n- Detailed information about this release can be found on the Bitcoin Core GitHub page.\n- Previous release candidate had packaging issues, which have been resolved in v26.0rc2.",
+            "summary": "- Bitcoin Core version v26.0rc2 binaries are now ready for download.\n- The v26.0rc1 was abandoned due to issues, now resolved in v26.0rc2.\n- Thorough testing of v26.0rc2 will lead to the official v26.0 Bitcoin Core release.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
             "file_path": "static/bitcoin-dev/Nov_2023/022118_Bitcoin-Core-26-0-release-candidate-2-available.xml"
+        },
+        {
+            "id": "022105",
+            "title": "Examining ScriptPubkeys in Bitcoin Script",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022105.html",
+            "authors": [
+                "Anthony Towns"
+            ],
+            "published_at": "2023-10-31T13:05:01+00:00",
+            "summary": "- Consensus should focus on valuable changes, not just toy examples; API design must be practical.\n- Proposed models have security flaws; compromised keys could allow fund theft during spend triggers.\n- BIP 345 and BIP 119 can create secure vaults with precommitment to prevent unauthorized spending.",
+            "n_threads": 6,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Brandon Black",
+                "James O'Beirne",
+                "Rusty Russell"
+            ],
+            "file_path": "static/lightning-dev/Oct_2023/022105_Examining-ScriptPubkeys-in-Bitcoin-Script.xml"
         }
     ],
     "active_posts": [
@@ -56,7 +74,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- A new transaction-relay jamming attack called replacement cycling was discovered in December 2022.\n- Mitigations have been implemented in major lightning implementations to address this attack.\n- Other bitcoin applications using bitcoin script timelocks or multi-party transactions may also be affected.",
+            "summary": "- A new jamming attack, replacement cycling, threatens lightning channels' fund security.\n- Major lightning implementations have deployed mitigation measures for the attack.\n- Bitcoin application developers must vigilantly defend against these potential disruptions.",
             "n_threads": 64,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -80,7 +98,7 @@
                 "Ali Sherief"
             ],
             "published_at": "2023-05-07T17:22:23+00:00",
-            "summary": "- The Bitcoin network faces congestion due to side projects like BRC-20, affecting transactions.\n- Possible solutions include implementing BIPs or pruning non-standard Taproot transactions.\n- Critics argue against limiting freedom, but congestion prevention measures are necessary.",
+            "summary": "- Bitcoin network faces congestion from BRC-20 projects, affecting transaction processing.\n- Suggestions for action include BIPs and changes to Bitcoin Core to address BIP 342 issues.\n- Debate arises over node-level \"censorship\" versus maximum freedom amidst Taproot congestion.",
             "n_threads": 25,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -107,7 +125,7 @@
                 "Peter Todd"
             ],
             "published_at": "2023-10-21T00:09:16+00:00",
-            "summary": "- The email addresses the issue of the spendability of the HTLC-preimage path even after the HTLC-timeout path is available.\n- The proposal suggests using OP_Expire and the Coinbase Bit soft-fork upgrade to solve the problem.\n- OP_Expire can be added to the pre-image branch of the script to create a deadline for the receiving party in HTLCs.",
+            "summary": "- HTLC issues arise with the preimage path remaining spendable post HTLC-timeout.\n- OP_Expire and Coinbase Bit proposed, utilizing nVersion for soft-fork upgrades.\n- OP_Expire creates spending deadlines, failing which control shifts to the other party.",
             "n_threads": 18,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -127,7 +145,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- A new transaction-relay jamming attack found in lightning channels poses security risks.\n- Lightning implementations have introduced mitigations to prevent the attack and loss of funds.\n- Further research is needed to address package malleability pinning attacks and vulnerabilities in bitcoin applications.",
+            "summary": "- A new attack threatens security in lightning channels by jamming HTLC traffic.\n- Mitigations involve rebroadcasting and mempool monitoring to prevent transaction replacement.\n- Further research on package malleability attacks and lightning security is emphasized.",
             "n_threads": 64,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -151,8 +169,8 @@
                 "Peter Todd"
             ],
             "published_at": "2023-10-21T00:09:16+00:00",
-            "summary": "- The email discusses the issue of spendability of HTLC-preimage path and HTLC-timeout path.\n- A solution proposed is using OP_Expire and Coinbase Bit soft-fork upgrade to address the issue.\n- Another solution is to utilize OP_Expire in the HTLC protocol for secure functioning.",
-            "n_threads": 17,
+            "summary": "- The email proposes using OP_Expire and Coinbase Bit to enforce HTLC preimage urgency.\n- Suggested methods include modifying the nVersion field and employing OP_Expire opcode conditions.\n- HTLC protocol could employ OP_Expire, giving recipients a deadline to reveal the preimage.",
+            "n_threads": 18,
             "dev_name": "lightning-dev",
             "contributors": [
                 "Antoine Riard",
@@ -164,22 +182,22 @@
             "file_path": "static/lightning-dev/Oct_2023/combined_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
         },
         {
-            "id": "022031",
-            "title": "Examining ScriptPubkeys in Bitcoin Script",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/022031.html",
+            "id": "003994",
+            "title": "LN Summit 2024 Organization",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003994.html",
             "authors": [
-                "Rusty Russell"
+                "Antoine Riard"
             ],
-            "published_at": "2023-10-20T03:40:37+00:00",
-            "summary": "- The sender explores the requirements to validate Taproot outputs in Bitcoin Script.\n- They share a link to a blog post discussing this exploration in detail.\n- The sender invites collaboration on producing a prototype and debugging script examples.",
-            "n_threads": 6,
+            "published_at": "2023-06-23T09:39:18+00:00",
+            "summary": "- Antoine Riard proposes organizing the LN Summit in Africa in June 2024 due to its unique advantages.\n- He encourages feedback on his organizational role, stressing transparency and a collective approach.\n- Suggestions for hosting include Algeria, Ghana, Senegal, Nigeria; a communication endpoint is established.",
+            "n_threads": 10,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Anthony Towns",
-                "Brandon Black",
-                "James O'Beirne"
+                "Bernard Parah",
+                "Matt Corallo",
+                "Peter Todd"
             ],
-            "file_path": "static/lightning-dev/Oct_2023/combined_Examining-ScriptPubkeys-in-Bitcoin-Script.xml"
+            "file_path": "static/lightning-dev/June_2023/combined_LN-Summit-2024-Organization.xml"
         }
     ]
 }
