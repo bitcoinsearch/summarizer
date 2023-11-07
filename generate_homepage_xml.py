@@ -496,7 +496,7 @@ class GenerateJSON:
 
         active_page_data = []
         for data in active_data_list:
-            entry_data = self.create_single_entry(data, is_active=True)
+            entry_data = self.create_single_entry(data, look_for_combined_summary=True)
             active_page_data.append(entry_data)
 
         json_string["active_posts"] = active_page_data
