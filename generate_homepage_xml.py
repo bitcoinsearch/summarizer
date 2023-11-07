@@ -27,7 +27,7 @@ import numpy as np
 warnings.filterwarnings("ignore")
 load_dotenv()
 
-# if set to True, it will use chatgpt model ("gpt-3.5-turbo") for all the completions
+# if set to True, it will use chatgpt model ("gpt-4-1106-preview") for all the completions
 CHATGPT = True
 
 # COMPLETION_MODEL - only applicable if CHATGPT is set to False
@@ -328,7 +328,7 @@ class GenerateJSON:
         CONTEXT:\n\n{body_summary}"""
 
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-1106-preview",
             messages=[
                 {"role": "system", "content": "You are an intelligent assistant."},
                 {"role": "user", "content": f"{bullets_prompt}"},
@@ -401,7 +401,7 @@ class GenerateJSON:
         \n CONTEXT:\n\n{recent_post_data}"""
         
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-1106-preview",
             messages=[
                 {"role": "system", "content": "You are an intelligent agent with an exceptional skills in writing."},
                 {"role": "user", "content": f"{summ_prompt}"},
