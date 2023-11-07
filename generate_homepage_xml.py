@@ -54,7 +54,7 @@ class ElasticSearchClient:
         start_time = time.time()
 
         if self._es_client.ping():
-            logger.info("connected to the ElasticSearch")
+            logger.success("connected to the ElasticSearch")
             query = {
                 "query": {
                     "bool": {
@@ -163,7 +163,7 @@ class ElasticSearchClient:
 
         return unique_results
 
-    def fetch_all_data_for_url(self, es_index, url):
+    def fetch_all_data_for_url(self, es_index, url, start_date_str=None, end_date_str=None):
         logger.info(f"fetching all the data")
         output_list = []
         raw_output_list = []
@@ -171,13 +171,36 @@ class ElasticSearchClient:
 
         if self._es_client.ping():
             logger.info("connected to the ElasticSearch")
-            query = {
-                "query": {
-                    "match_phrase": {
-                        "domain": str(url)
+            if start_date_str and end_date_str:
+                query = {
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "prefix": {
+                                        "domain.keyword": str(url)
+                                    }
+                                },
+                                {
+                                    "range": {
+                                        "created_at": {
+                                            "gte": f"{start_date_str}T00:00:00.000Z",
+                                            "lte": f"{end_date_str}T23:59:59.999Z"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
                     }
                 }
-            }
+            else:
+                query = {
+                    "query": {
+                        "match_phrase": {
+                            "domain.keyword": str(url)
+                        }
+                    }
+                }
 
             # Initialize the scroll
             scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
@@ -370,7 +393,7 @@ class GenerateJSON:
             return ""
 
     def generate_recent_posts_summary(self, dict_list):
-        logger.info("working on recent post's summary")
+        logger.info("working on given post's summary")
 
         recent_post_data = ""
 
@@ -414,7 +437,7 @@ class GenerateJSON:
             response_str = response_str[8:].strip()
         return response_str
 
-    def create_single_entry(self, data, is_active=False):
+    def create_single_entry(self, data, look_for_combined_summary=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -427,7 +450,7 @@ class GenerateJSON:
         xml_name = self.clean_title(title)
         month_name = self.month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
-        if is_active:
+        if look_for_combined_summary:
             if os.path.exists(f"./static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"):
                 file_path = f"static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
             else:
@@ -484,10 +507,10 @@ class GenerateJSON:
             logger.success(f"saved file: {f_name}")
         return f_name
 
-    def start_process(self, recent_post_data, active_post_data):
+    def start_process(self, data_list_1, data_list_2):
         logger.info("Creating Homepage.json file ... ")
-        if len(recent_post_data) > 0 or len(active_post_data) > 0:
-            _ = self.create_json_feed(recent_post_data, active_post_data)
+        if len(data_list_1) > 0 or len(data_list_2) > 0:
+            _ = self.create_json_feed(data_list_1, data_list_2)
         else:
             logger.error(f"Data list empty! Please check the data again.")
 
@@ -627,7 +650,7 @@ if __name__ == "__main__":
                 gen.start_process(recent_data_list, active_data_list)
                 break
             except Exception as ex:
-                logger.error(ex)
+                logger.error(f"Error occurred: {ex} \n{traceback.format_exc()}")
                 time.sleep(delay)
                 count += 1
                 if count > 5:
