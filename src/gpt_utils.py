@@ -83,7 +83,7 @@ def generate_chatgpt_summary(prompt):
         8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text. 
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
-        model="gpt-4-1106-preview",
+        model=config.CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
             {"role": "user", "content": f"{summarization_prompt}"},
@@ -111,7 +111,7 @@ def consolidate_chatgpt_summary(prompt):
         8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
-        model="gpt-4-1106-preview",
+        model=config.CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
             {"role": "user", "content": f"{consolidate_prompt}"},
@@ -129,7 +129,7 @@ def consolidate_chatgpt_summary(prompt):
 def generate_chatgpt_title(prompt):
     title_generation_prompt = f"Generate an appropriate title for below context.\n\n CONTEXT:\n\n{prompt}"
     response = openai.ChatCompletion.create(
-        model="gpt-4-1106-preview",
+        model=config.CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
             {"role": "user", "content": f"{title_generation_prompt}"},
