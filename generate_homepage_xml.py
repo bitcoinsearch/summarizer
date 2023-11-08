@@ -13,24 +13,21 @@ import sys
 import warnings
 import pytz
 import json
-
+import numpy as np
 import nltk
+
 nltk.download('punkt')
 from nltk.tokenize import sent_tokenize
 
 from src.utils import preprocess_email
 from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
-from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE
+from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE, \
+    CHAT_COMPLETION_MODEL
 
-import numpy as np
 
 warnings.filterwarnings("ignore")
 load_dotenv()
 
-# if set to True, it will use chatgpt model ("gpt-4-1106-preview") for all the completions
-CHATGPT = True
-
-# COMPLETION_MODEL - only applicable if CHATGPT is set to False
 OPENAI_ORG_KEY = os.getenv("OPENAI_ORG_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -54,7 +51,7 @@ class ElasticSearchClient:
         start_time = time.time()
 
         if self._es_client.ping():
-            logger.info("connected to the ElasticSearch")
+            logger.success("connected to the ElasticSearch")
             query = {
                 "query": {
                     "bool": {
@@ -140,7 +137,7 @@ class ElasticSearchClient:
                 counts, contributors = self.fetch_contributors_and_threads(title=title,
                                                                            domain=result['_source']['domain'],
                                                                            df=all_data_df)
-                thread_dict[title] = counts
+                thread_dict[title] = counts  # add counts as value to thread_dict with key as title
                 result['_source']['n_threads'] = counts  # add thread count to source
                 seen_titles.add(title)
 
@@ -163,7 +160,7 @@ class ElasticSearchClient:
 
         return unique_results
 
-    def fetch_all_data_for_url(self, es_index, url):
+    def fetch_all_data_for_url(self, es_index, url, start_date_str=None, end_date_str=None):
         logger.info(f"fetching all the data")
         output_list = []
         raw_output_list = []
@@ -171,13 +168,36 @@ class ElasticSearchClient:
 
         if self._es_client.ping():
             logger.info("connected to the ElasticSearch")
-            query = {
-                "query": {
-                    "match_phrase": {
-                        "domain": str(url)
+            if start_date_str and end_date_str:
+                query = {
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "prefix": {
+                                        "domain.keyword": str(url)
+                                    }
+                                },
+                                {
+                                    "range": {
+                                        "created_at": {
+                                            "gte": f"{start_date_str}T00:00:00.000Z",
+                                            "lte": f"{end_date_str}T23:59:59.999Z"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
                     }
                 }
-            }
+            else:
+                query = {
+                    "query": {
+                        "match_phrase": {
+                            "domain.keyword": str(url)
+                        }
+                    }
+                }
 
             # Initialize the scroll
             scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
@@ -328,7 +348,7 @@ class GenerateJSON:
         CONTEXT:\n\n{body_summary}"""
 
         response = openai.ChatCompletion.create(
-            model="gpt-4-1106-preview",
+            model=CHAT_COMPLETION_MODEL,
             messages=[
                 {"role": "system", "content": "You are an intelligent assistant."},
                 {"role": "user", "content": f"{bullets_prompt}"},
@@ -370,7 +390,7 @@ class GenerateJSON:
             return ""
 
     def generate_recent_posts_summary(self, dict_list):
-        logger.info("working on recent post's summary")
+        logger.info("working on given post's summary")
 
         recent_post_data = ""
 
@@ -399,9 +419,9 @@ class GenerateJSON:
         7. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text, provided it should be no longer than three or four sentences.
         8. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on.
         \n CONTEXT:\n\n{recent_post_data}"""
-        
+
         response = openai.ChatCompletion.create(
-            model="gpt-4-1106-preview",
+            model=CHAT_COMPLETION_MODEL,
             messages=[
                 {"role": "system", "content": "You are an intelligent agent with an exceptional skills in writing."},
                 {"role": "user", "content": f"{summ_prompt}"},
@@ -414,7 +434,7 @@ class GenerateJSON:
             response_str = response_str[8:].strip()
         return response_str
 
-    def create_single_entry(self, data, is_active=False):
+    def create_single_entry(self, data, look_for_combined_summary=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -427,13 +447,10 @@ class GenerateJSON:
         xml_name = self.clean_title(title)
         month_name = self.month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
-        if is_active:
-            if os.path.exists(f"./static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"):
-                file_path = f"static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
-            else:
-                file_path = f"static/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
-        else:
-            file_path = f"static/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
+        combined_summ_file_path = ""
+        if look_for_combined_summary:
+            combined_summ_file_path = f"./static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
+        file_path = f"static/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
 
         # fetch the summary from xml if exist
         xml_summary = self.get_xml_summary(data)
@@ -453,7 +470,8 @@ class GenerateJSON:
             "n_threads": data["_source"]["n_threads"],
             "dev_name": local_dev_name,
             "contributors": contributors,
-            "file_path": file_path
+            "file_path": file_path,
+            "combined_summ_file_path": combined_summ_file_path if os.path.exists(combined_summ_file_path) else ""
         }
         return entry_data
 
@@ -473,7 +491,7 @@ class GenerateJSON:
 
         active_page_data = []
         for data in active_data_list:
-            entry_data = self.create_single_entry(data, is_active=True)
+            entry_data = self.create_single_entry(data, look_for_combined_summary=True)
             active_page_data.append(entry_data)
 
         json_string["active_posts"] = active_page_data
@@ -484,10 +502,10 @@ class GenerateJSON:
             logger.success(f"saved file: {f_name}")
         return f_name
 
-    def start_process(self, recent_post_data, active_post_data):
-        logger.info("Creating Homepage.json file ... ")
-        if len(recent_post_data) > 0 or len(active_post_data) > 0:
-            _ = self.create_json_feed(recent_post_data, active_post_data)
+    def start_process(self, data_list_1, data_list_2):
+        logger.info("Creating homepage.json file ... ")
+        if len(data_list_1) > 0 or len(data_list_2) > 0:
+            _ = self.create_json_feed(data_list_1, data_list_2)
         else:
             logger.error(f"Data list empty! Please check the data again.")
 
@@ -627,10 +645,10 @@ if __name__ == "__main__":
                 gen.start_process(recent_data_list, active_data_list)
                 break
             except Exception as ex:
-                logger.error(ex)
+                logger.error(f"Error occurred: {ex} \n{traceback.format_exc()}")
                 time.sleep(delay)
                 count += 1
-                if count > 5:
+                if count >= 3:
                     sys.exit(ex)
     else:
         logger.success("No change in recent posts, no need to update homepage.json file")
