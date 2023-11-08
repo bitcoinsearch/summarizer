@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-08T17:09:29.540287+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-07 15:44:21+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-08T17:09:29.540319+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022136.html" rel="alternate"/>
+    <summary>The email from Antoine addresses a technical issue related to the handling of commitment transactions in the context of Bitcoin's blockchain dynamics. Specifically, it discusses a vulnerability concerning single-input commitment transactions that require a signature from the transaction initiator. Antoine explains a scenario where an attacker could potentially exploit the system by engaging in replacement cycling on the commitment transaction spend. This process is distinct from any secondary stage transactions, which remain locked until a specified block.
+
+Antoine elaborates on a mechanism where the commitment transaction is pre-signed with a zero satoshi per virtual byte (sat/vb) fee rate. The necessary fees are instead provided by a Child Pays for Parent (CPFP) transaction linked to one of the anchor outputs. Furthermore, Antoine points out that if the CPFP transaction is replaced, the overall package fee rate for the commitment transaction would also become zero sat/vb. Under these conditions, the commitment transaction may be evicted from the mempool due to its low fee rate, especially if the mempool's minimum fee threshold is set higher than that of the pre-signed commitment transaction. This creates a safety concern and potential attack vector.
+
+This particular circumstance has been tested in a non-deployed branch of code found at the provided GitHub link, which reflects a new mempool policy for nversion = 3. Antoine raises concerns about how this behavior might be exploited by attackers in the current environment and how it could pose problems for the dynamic fee-bumping of pre-signed transactions in the future, particularly after the introduction of package relay functionality. The implications of such vulnerabilities are significant, as they could allow for strategic manipulation by those looking to disrupt network operations or compromise transaction security.</summary>
+    <published>2023-11-07T15:44:21+00:00</published>
+  </entry>
+</feed>

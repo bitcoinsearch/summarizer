@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Implementing Blake3 in Bitcoin Script</title>
+  <updated>2023-11-08T17:16:37.364519+00:00</updated>
+  <author>
+    <name>Robin Linus 2023-11-07 23:22:44+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Implementing Blake3 in Bitcoin Script</title>
+    <updated>2023-11-08T17:16:37.364556+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022154.html" rel="alternate"/>
+    <summary>In a recent development within the BitVM ecosystem, the integration of a hash function to verify Merkle inclusion proofs has been successfully implemented. This advancement allows for an effectively unlimited memory capacity within the Bitcoin Script without necessitating expensive bit commitments. Demonstrating this capability, a Bitcoin transaction has been executed featuring an on-chain Blake3 hash lock, which is subsequently unlocked by providing the preimage in the unlocking script. The step-by-step process and the actual transaction can be viewed at Blockstream's website.
+
+The hash function chosen for this implementation is Blake3, selected for its simplicity in terms of instruction count among modern hash functions. The implementation involved executing a single round over a 64-byte message, which meets the requirements for verifying Merkle paths. The approach taken represents u32 words as four separate bytes on the stack, which was determined to be the optimal way to implement u32 addition, bitwise XOR, and rotations necessary for Blake3.
+
+To facilitate the construction of complex programs from relatively simple opcodes, JavaScript was employed as a templating language. The u32 opcode implementations are publicly accessible, with particular attention to the innovative use of a lookup table for a helper function in the bitwise XOR implementation. Alongside these technical strides, a basic memory management system was introduced. This feature enables variable identifiers that can be read and written to while also being tracked as they move across the stack—greatly simplifying operations like permutations of the Blake state by merely relabeling variable identifiers instead of physically moving them.
+
+The current script size is approximately 100kB or 25k vBytes, which serves well for the initial prototype phase of BitVM. However, there are plans to refine this further by dividing the Blake code. The goal is to allow both verifiers and provers to minimize the data required on the blockchain significantly. This would be achieved by using a challenge-response model to bisect the execution process rather than performing full execution.
+
+For those interested in a deeper dive into the technical specifics or to review the source code, all relevant resources and documentation have been made available on GitHub. Additionally, further information about ZeroSync and updates can be found on their official website and Twitter page.</summary>
+    <published>2023-11-07T23:22:44+00:00</published>
+  </entry>
+</feed>

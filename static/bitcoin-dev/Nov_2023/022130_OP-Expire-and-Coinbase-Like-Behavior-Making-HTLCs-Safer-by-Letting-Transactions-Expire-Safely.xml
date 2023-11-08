@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-08T17:09:53.843309+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-06 18:45:21+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-08T17:09:53.843342+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022130.html" rel="alternate"/>
+    <summary>Understanding the intricacies of the OP_Expire proposal within the context of the Lightning Network is crucial for maintaining network security and ensuring fair transactions. There are concerns that this proposal may not fully prevent adversarial techniques such as replacement cycling, which could be exploited by a malicious forwarding node. A scenario was presented to illustrate this issue, involving three participants: Alice, Bob, and Caroll, who share lightning channels.
+
+In the example, Alice sends 1 BTC to Caroll through Bob. The HTLC expires at block 100 on the Bob-Caroll link. Ideally, Caroll should not be able to claim the htlc-preimage spend on this link after block 100. However, if Bob, acting as the routing node, delays the process deliberately, he could potentially exploit the system. When Caroll releases the preimage to Bob off-chain, Bob refrains from sending his signature for the updated channel state. If Caroll tries to claim the inbound HTLC output on-chain before block 100, Bob can interfere with her transaction's inclusion in the blockchain through "replace-by-fee" tactics, effectively preventing her from claiming the payment.
+
+As block 100 arrives without Caroll's successful claim due to Bob's interference, she loses the ability to claim the payment sent by Alice. Bob then exploits both the htlc-refund path on the Bob-Caroll link and the htlc-preimage path on the Alice-Bob link, profiting by 1 BTC. The risk is heightened when considering that Caroll might use a mobile client, making it easier for Bob to attribute the failure of the signature exchange to an alleged error on her part.
+
+Given this advanced scenario, there is skepticism about whether the OP_Expire proposal can resolve all potential adversarial replacement cycling situations within the Lightning Network. This concern underlines the necessity for further examination and possible refinement of the OP_Expire mechanism to ensure it can withstand such tactics and provide robust protection against these forms of attack.</summary>
+    <published>2023-11-06T18:45:21+00:00</published>
+  </entry>
+</feed>

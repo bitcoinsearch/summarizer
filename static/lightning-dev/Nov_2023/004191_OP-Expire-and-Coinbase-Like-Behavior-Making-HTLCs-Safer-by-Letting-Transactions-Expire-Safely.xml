@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-08T17:17:52.614386+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-06 18:45:21+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-08T17:17:52.614441+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004191.html" rel="alternate"/>
+    <summary>Understanding the security of blockchain transactions is crucial, particularly when it comes to the Lightning Network and its associated risks. The email conversation in question raises concerns about the OP_Expire proposal's ability to prevent adversarial tactics such as replacement cycling within the network. 
+
+The scenario presented involves three participants: Alice, Bob, and Caroll, who share lightning channels. Alice sends a payment to Caroll through Bob, with an expiration at block 100 on the Bob-Caroll link. Although OP_Expire suggests that Caroll cannot claim the funds after this block, there is an identified vulnerability where Bob, as the forwarding node, can exploit the system. By not sending his signature for the updated channel state after receiving the preimage off-chain from Caroll, Bob can delay Caroll's transaction until the expiry block, preventing her from claiming her payment. Subsequently, Bob can collect the refund from the Bob-Caroll link and also claim the original payment sent by Alice through the Alice-Bob link, thereby profiting unjustly.
+
+This example illustrates a significant issue, showing that the OP_Expire solution may not fully address the sophisticated adversarial strategies that can occur within the network. If Caroll operates a mobile client, the difficulty in updating channel states due to these "liveliness mistakes" could be falsely attributed to her, allowing malicious actors like Bob to deflect blame while engaging in fraudulent activities.
+
+It is evident from this discussion that while the OP_Expire proposal has merits, further consideration is needed to ensure it effectively mitigates all potential attack vectors, including those involving uncooperative forwarding nodes within the Lightning Network.</summary>
+    <published>2023-11-06T18:45:21+00:00</published>
+  </entry>
+</feed>
