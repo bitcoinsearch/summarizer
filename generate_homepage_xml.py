@@ -434,7 +434,7 @@ class GenerateJSON:
             response_str = response_str[8:].strip()
         return response_str
 
-    def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False):
+    def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False, remove_xml_extension=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -447,10 +447,13 @@ class GenerateJSON:
         xml_name = self.clean_title(title)
         month_name = self.month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
+
         combined_summ_file_path = ""
+        base_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}"
+        file_extension = "" if remove_xml_extension else ".xml"
         if look_for_combined_summary:
-            combined_summ_file_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
-        file_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
+            combined_summ_file_path = f"{base_path}/combined_{xml_name}{file_extension}"
+        file_path = f"{base_path}/{number}_{xml_name}{file_extension}"
 
         # fetch the summary from xml if exist
         xml_summary = self.get_xml_summary(data)

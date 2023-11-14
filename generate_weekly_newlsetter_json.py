@@ -152,12 +152,16 @@ if __name__ == "__main__":
 
                     new_threads_page_data = []
                     for data in new_threads_list:
-                        entry_data = gen.create_single_entry(data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True)
+                        entry_data = gen.create_single_entry(
+                            data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True
+                        )
                         new_threads_page_data.append(entry_data)
 
                     active_page_data = []
                     for data in active_data_list:
-                        entry_data = gen.create_single_entry(data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True)
+                        entry_data = gen.create_single_entry(
+                            data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True
+                        )
                         active_page_data.append(entry_data)
 
                     json_string = {
