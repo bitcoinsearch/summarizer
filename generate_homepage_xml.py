@@ -434,7 +434,7 @@ class GenerateJSON:
             response_str = response_str[8:].strip()
         return response_str
 
-    def create_single_entry(self, data, look_for_combined_summary=False):
+    def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -449,8 +449,8 @@ class GenerateJSON:
         str_month_year = f"{month_name}_{int(published_at.year)}"
         combined_summ_file_path = ""
         if look_for_combined_summary:
-            combined_summ_file_path = f"./static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
-        file_path = f"static/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
+            combined_summ_file_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml"
+        file_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}/{number}_{xml_name}.xml"
 
         # fetch the summary from xml if exist
         xml_summary = self.get_xml_summary(data)
@@ -471,7 +471,7 @@ class GenerateJSON:
             "dev_name": local_dev_name,
             "contributors": contributors,
             "file_path": file_path,
-            "combined_summ_file_path": combined_summ_file_path if os.path.exists(combined_summ_file_path) else ""
+            "combined_summ_file_path": combined_summ_file_path if os.path.exists(f"static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml") else ""
         }
         return entry_data
 

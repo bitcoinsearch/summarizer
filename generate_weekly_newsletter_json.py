@@ -40,7 +40,7 @@ if __name__ == "__main__":
     end_date = datetime.now() - timedelta(days=1)
     end_date_str = end_date.strftime("%Y-%m-%d")
 
-    logger.info(f"current_date_str: {current_date_str}")
+    logger.info(f"Newsletter publish date: {current_date_str}")
     logger.info(f"Gathering data for newsletter from {start_date_str} to {end_date_str}")
 
     active_data_list = []
@@ -150,12 +150,12 @@ if __name__ == "__main__":
 
                     new_threads_page_data = []
                     for data in new_threads_list:
-                        entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
+                        entry_data = gen.create_single_entry(data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True)
                         new_threads_page_data.append(entry_data)
 
                     active_page_data = []
                     for data in active_data_list:
-                        entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
+                        entry_data = gen.create_single_entry(data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True)
                         active_page_data.append(entry_data)
 
                     json_string = {
