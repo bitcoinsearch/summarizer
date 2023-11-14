@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-14T02:01:24.061845+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-13 02:18:16+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-14T02:01:24.061891+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022166.html" rel="alternate"/>
+    <summary>The recent correspondence highlights several technical considerations and potential vulnerabilities within multi-party off-chain constructions, specifically concerning outdated states in the context of the Lightning Network (LN). It is pointed out that consensus-valid states, once revoked or updated, can still be exploited through tactics such as replacement cycling or pinning. This can disrupt the most recently agreed-upon off-chain states.
+
+In terms of financial implications for LN channel participants, there is a detailed analysis of the cost associated with Replace-by-Fee (RBF) mechanisms. The communication includes calculations based on current transaction sizes and fee rates, suggesting that for any payment below the value of $13, High Threshold Lightweight Contracts (HTLCs) must be trimmed. However, this trimming process introduces new risks, as these HTLCs could become susceptible to theft by attackers with low hash rate capabilities, as discussed in a referenced post on the Linux Foundation's mailing list (https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002714.html).
+
+To mitigate the risk of fee griefing—where one party may deliberately increase transaction fees to disadvantage another—it is suggested that both parties maintain their own fee-bumping reserves. This would ensure safety but at the cost of making channel usage less capital efficient compared to drawing from a common reserve. Furthermore, the issue of pre-signing RBF replacements is examined. Due to the symmetry of LN channels, every state needs to have attached fee values, potentially leading to a situation where states could spend one another on-chain. Without some form of covenant to manage fee values, users might need to hold an impractical amount of fee-bumping reserves.
+
+Lastly, the possibility of an advanced replacement cycling attack is demonstrated through a test case where Bob can double-spend Alice's commitment transaction with his own, followed by a Child Pays for Parent (CPFP) transaction. This exploits the system by ensuring Bob's transaction package has a better feerate and absolute fee, contradicting claims that such a strategy would be ineffective. This underscores the necessity for careful consideration of on-chain transactions and fee management in the design of off-chain protocols like the Lightning Network.</summary>
+    <published>2023-11-13T02:18:16+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-14T02:08:10.229224+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-13 02:18:16+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-14T02:08:10.229263+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004199.html" rel="alternate"/>
+    <summary>In recent discussions, there has been a focus on the challenges associated with the management of outdated states in multi-party off-chain constructions, such as those encountered in the Lightning Network. One significant issue is the potential for these outdated or revoked states to cause disruptions by being cyclically replaced or pinned, thus undermining the consensus on the latest agreed state off-chain.
+
+A detailed analysis reveals that, under the assumption that the maximum Replace-by-Fee (RBF) replacement is preset at 200 satoshis per virtual byte (sats/vb), the calculation of fee-bumping reserves becomes critical. For instance, a commitment transaction averaging around 268 vbytes and a second-stage Hash Time-Locked Contract (HTLC) transaction of approximately 175 vbytes (including witness size) would necessitate a counterparty to maintain, at a minimum, a reserve of 35,268 sats for fee-bumping purposes. This requirement makes it inefficient for smaller payments, specifically any payment below $13, which must utilize trimmed HTLCs. These trimmed HTLCs pose their own set of problems, including susceptibility to theft by attackers with low hash rate capabilities, as highlighted in a May 2020 Lightning Development mailing list post (https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002714.html).
+
+To mitigate the issues arising from fee griefing strategies between channel counterparties, it has been proposed that each party should hold individual fee-bumping reserves, instead of relying on a common reserve. This approach, however, decreases capital efficiency when utilizing channels.
+
+Another technical challenge identified involves the pre-signing of RBF replacements in combination with the symmetry inherent to the Lightning Network's protocol. Each state must have predetermined fee values, potentially leading to situations where multiple states could spend against each other on the blockchain. This creates a scenario where one might need an excessively large amount of fee-bumping reserves unless a method is devised to dynamically adjust fee values through specialized covenant mechanisms.
+
+Moreover, the possibility of advanced replacement cycling attacks has been demonstrated, where one party can double-spend another's commitment transaction using Child Pays for Parent (CPFP) if it offers a higher ancestor feerate and absolute fee package. Such tactics invalidate claims that sophisticated replacement cycling attacks are not feasible, underscoring the need for further research and development in this area to enhance the security and robustness of off-chain protocols.</summary>
+    <published>2023-11-13T02:18:16+00:00</published>
+  </entry>
+</feed>
