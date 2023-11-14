@@ -42,6 +42,9 @@ if __name__ == "__main__":
     logger.info(f"Newsletter publish date: {current_date_str}")
     logger.info(f"Gathering data for newsletter from {start_date_str} to {end_date_str}")
 
+    month_name = gen.month_dict[int(current_date.month)]
+    str_month_year = f"{month_name}_{int(current_date.year)}"
+
     active_data_list = []
     new_threads_list = []
 
@@ -110,7 +113,8 @@ if __name__ == "__main__":
         logger.info(f"number of active posts collected: {len(active_data_list)}")
 
     # gather ids of docs from json file
-    json_file_path = r"static/newsletter.json"
+    json_file_path = fr"static/newsletters/{str_month_year}/{current_date_str}-newsletter.json"
+
     current_directory = os.getcwd()
     json_full_path = os.path.join(current_directory, json_file_path)
     json_xml_ids = set()
@@ -144,7 +148,6 @@ if __name__ == "__main__":
 
                 logger.info("creating newsletter.json file ... ")
                 if len(active_data_list) > 0 or len(new_threads_list) > 0:
-                    json_file_name = "newsletter.json"
                     new_threads_summary = gen.generate_recent_posts_summary(new_threads_list)
 
                     new_threads_page_data = []
@@ -163,10 +166,11 @@ if __name__ == "__main__":
                         "active_posts_this_week": active_page_data
                     }
 
-                    f_name = f"static/{json_file_name}"
-                    with open(f_name, 'w') as f:
+                    os.makedirs(f"{'/'.join(json_file_path.split('/')[:-1])}", exist_ok=True)
+
+                    with open(json_file_path, 'w') as f:
                         f.write(json.dumps(json_string, indent=4))
-                        logger.success(f"json saved file: {f_name}")
+                        logger.success(f"json saved file: {json_file_path}")
 
                 else:
                     logger.error(f"Data list empty! Please check the data again.")
