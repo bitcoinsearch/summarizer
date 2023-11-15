@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-  <updated>2023-11-14T02:02:54.808367+00:00</updated>
+  <updated>2023-11-15T02:05:08.292575+00:00</updated>
+  <author>
+    <name>Peter Todd 2023-11-14 19:50:04+00:00</name>
+  </author>
   <author>
     <name>Antoine Riard 2023-11-13 02:18:16+00:00</name>
   </author>
@@ -75,6 +78,7 @@
   <author>
     <name>Peter Todd 2023-10-21 00:09:16+00:00</name>
   </author>
+  <link href="bitcoin-dev/Nov_2023/022171_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Nov_2023/022166_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Nov_2023/022157_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Nov_2023/022155_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
@@ -89,10 +93,10 @@
   <link href="bitcoin-dev/Nov_2023/022110_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022073_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/004174_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Oct_2023/022068_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/004173_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Oct_2023/022061_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022068_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/004160_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022061_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022051_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/004170_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/004159_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml" rel="alternate"/>
@@ -103,31 +107,25 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
-    <updated>2023-11-14T02:02:54.808611+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022166.html" rel="alternate"/>
-    <summary>Multi-party off-chain constructions face challenges with outdated states disrupting consensus through attacks like replacement cycling or pinning. Fee-bumping reserves for each channel counterparty are necessary due to fee griefing games, but this affects capital efficiency. A solution suggests individual reserves for fee bumping, yet it brings complexities such as the need for significant reserves and vulnerability to commitment transactions spending each other on the chain.
+    <updated>2023-11-15T02:05:08.292807+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022171.html" rel="alternate"/>
+    <summary>The discussion addresses technical challenges within the Lightning Network, such as managing outdated states and transaction fees. It is recognized that while security could be improved, keeping transaction fees to a minimum relative to the channel's total value is essential for economic viability.
 
-Package relay's third version alters handling of zero value outputs and enforces policy changes where anchors must be spent within the same transaction package, potentially inviting new attack forms. The timely revelation of a preimage in blockchain transactions is a concern, with Carol possibly preventing Bob from learning the preimage while still being able to use it. OP_Expire is proposed to ensure preimage disclosure or render it useless, offering an alternative to RBF without anchor outputs and suggesting SIGHASH_NOINPUT or covenants as future solutions.
+Miners benefit from the increase in feerate over discarded transactions when mining HTLC commitment transactions. Consequently, the need to minimize the proportion of channel value allocated to fees is highlighted, with suggestions to amend implementations that currently do not follow this principle.
 
-Antoine's email addresses vulnerabilities in single-input commitment transactions, highlighting risks of exploitation through replacement cycling and safety concerns when mempool fees exceed pre-signed rates, challenging dynamic fee-bumping and network stability. HTLC mechanics protect against certain attacks by enforcing timelocks.
+The conversation also touches on Replace-by-Fee (RBF) mechanics, suggesting that increased channel fees could be extracted from the party broadcasting the commitment transaction to alleviate substantial fees upon closing channels.
 
-Skepticism exists around the effectiveness of OP_Expire in combating adversarial tactics within the Lightning Network. Scenarios involving routing nodes exploiting signature exchange delays for profit are noted, prompting reevaluation of OP_Expire's comprehensive protection against attacks. Despite these concerns, OP_Expire could simplify monitoring processes for Lightning nodes by setting a definitive window for preimage usage.
+SIGHASH_NOINPUT is proposed as a solution to sign HTLC refund transactions, which could simplify handling multiple fee rates. However, LN-Symmetry is considered insecure without a degree of trust between parties.
 
-A key vulnerability discussed is multiple pre-signed commitment transactions with an RBF range above zero, which attackers could manipulate using CPFP. Programmers are urged to address this security issue.
+Package relay version 3 is introduced, changing how zero-value outputs are managed to prevent UTXO set growth. Anchor outputs must now be spent within the same package, impacting defensive strategies against double-spend attacks.
 
-The discussions highlight technical issues and proposals for securing off-chain transactions, resource optimization, and effective adversarial action prevention in the blockchain space. 
+OP_Expire is presented, ensuring timely revelation of preimages in blockchain transactions and making them useless if not revealed promptly. This mechanism is critiqued for potentially enabling RBF without anchor outputs, leading to more efficient use of block space compared to CPFP with package relay.
 
-Advanced replacement techniques threaten commitment transactions in the Lightning Network, with anchor outputs providing contrast in fee management. Reverse time-locks and fee-bumping reserve pre-commitment are potential solutions, though they come with trade-offs.
+Antoine's email highlights vulnerabilities in single-input commitment transactions and suggests pre-signing these with zero fees and using CPFP for necessary fee adjustments. However, there's a risk that replacement by CPFP could lead to eviction from the mempool.
 
-An nExpiryHeight field is preferred over time-based expiration to prevent miner timestamp manipulation. A taproot annex redesign proposes an nExpiryTime field to categorize transactions for block inclusion, introducing an OP_CHECKEXPIRYTIMEVERIFY opcode to enforce this. Soft-fork considerations for OP_CHECKSEQUENCEVERIFY are discussed, with OP_Expire functioning similarly to AntiCheckLockTimeVerify, enabling normal transaction of expired HTLC branches.
+An HTLC scenario explains how OP_EXPIRE can secure funds against potential attacks by enforcing timelocks. The ability of OP_Expire to prevent adversarial tactics like replacement cycling is questioned, indicating the need for further evaluation.
 
-These conversations aim to enhance Bitcoin transactions and Lightning Network security, fee structures, and functionality, reflecting the programming community's effort to tackle challenges and innovate.
-
-The discussion explores replacement cycling attacks and secure HTLC redemption. An "anyone-can-spend" branch increases risk, allowing multiple actors to exploit vulnerabilities. OP_Expire offers flexibility but may not fully mitigate risks associated with full-RBF. A new proposal suggests making the HTLC-preimage claimable by anyone post-HTLC-timeout to guarantee mining before expiration. This method considers miner centralization and relay node updates, proposing no changes for Bitcoin nodes.
-
-Complexities arise with spendability of HTLC paths, where both timeout and preimage paths remain spendable after timeout. OP_Expire combined with a Coinbase Bit soft-fork upgrade could resolve this, treating transactions similarly to coinbase transactions with a 100-block maturation period. An alternative approach uses delta encoding against block-height nLockTime.
-
-For more details, [Peter Todd's website](https://petertodd.org) is recommended as a resource.</summary>
-    <published>2023-11-13T02:18:16+00:00</published>
+Overall, these discussions explore enhancements to the Lightning Network and smart contract scripting to improve security and efficiency. They address HTLCs and propose significant changes, such as introducing the OP_Expire opcode and considering soft fork upgrades for better transaction management and protection against attacks.</summary>
+    <published>2023-11-14T19:50:04+00:00</published>
   </entry>
 </feed>
