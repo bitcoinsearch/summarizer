@@ -7,12 +7,14 @@ TOKENIZER = tiktoken.get_encoding("cl100k_base")
 
 # if set to True, it will use chatgpt model ("gpt-4-1106-preview") for all the completions
 CHATGPT = True
+# COMPLETION_MODEL is for chatgpt
+COMPLETION_MODEL = "text-davinci-003"  # "text-ada-001"
 
-# COMPLETION_MODEL - only applicable if CHATGPT is set to False
-COMPLETION_MODEL = "text-davinci-003"  # "text-ada-001",
+# used in generation of xmls production, homepage, newsletter etc.
+CHAT_COMPLETION_MODEL = "gpt-4-1106-preview"  # "gpt-3.5-turbo", "gpt-4"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-ES_CLOUD_ID= os.getenv("ES_CLOUD_ID")
+ES_CLOUD_ID = os.getenv("ES_CLOUD_ID")
 ES_USERNAME = os.getenv("ES_USERNAME")
 ES_PASSWORD = os.getenv("ES_PASSWORD")
 ES_INDEX = os.getenv("ES_INDEX")
