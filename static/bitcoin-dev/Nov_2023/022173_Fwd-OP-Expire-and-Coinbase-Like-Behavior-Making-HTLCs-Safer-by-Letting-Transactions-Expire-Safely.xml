@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Fwd: OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-16T02:04:59.169656+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-15 17:53:57+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Fwd: OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-16T02:04:59.169691+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022173.html" rel="alternate"/>
+    <summary>In the realm of blockchain and cryptocurrency, specifically concerning the Lightning Network (LN), there are intricate details that can impact security and efficiency. One issue discussed is the problem of on-chain inclusion of "expired" off-chain output spends, such as HTLC-preimage, and the challenge posed by the use of revoked or updated states to obstruct the confirmation of a valid off-chain state. It's suggested that by ensuring a counterparty cannot exploit an "expired" off-chain output, one could essentially mitigate both issues. However, simply using an operation like op_expire might not be sufficient; it's necessary to also consider the expiration of the validity of off-chain revealed witness secrets, employing short-lived proofs to ensure their worthiness over time.
+
+Separately, the operation op_expire holds merit beyond resolving security concerns. For instance, in Discreet Log Contracts, it can facilitate a time-bound sequential claim of the same output fund among multiple counterparties. This leads to a broader consideration of how lightning nodes must estimate the highest possible transaction fees to maintain probabilistic security, given the unpredictability of mempool fee rates during the timelock duration of payments. In this light, an attack vector is identified where commitment transactions with trimmed HTLCs due to high fees become more appealing to miners than regular transactions, leveraging asymmetries in block space demand and information regarding fee rates.
+
+This dynamic market for block space and the resulting information asymmetries pose real challenges when determining reasonable transaction fees and predicting mempool fee rates at the time of broadcast. A proposed consensus change suggests that trimmed HTLCs, which are not deemed worthy due to fee rates in the last blocks, could be automatically aggregated or discarded, possibly using a median-time-past mechanism for calculating median fee rates over a set number of blocks.
+
+Additionally, when evaluating the risks associated with channel value being consumed by fees, the difficulty lies in assessing the percentage of channel value that could be lost in a worst-case scenario. While concrete attacks with significant testing have not been presented, there is a theoretical understanding of the potential vulnerabilities.
+
+Lastly, the concept of LN-symmetry is brought up, where maintaining the ability to penalize is vital. Yet concerns remain, especially if the counterparty is a miner, even one with low-hashrate capability, as they may still have a chance to mine a block while an HTLC-output is committed only known among off-chain parties. For further insights into these discussions on the Lightning Network's technical challenges, refer to the Linux Foundation's mailing list archive: [Lightning-dev mailing list](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-July/002064.html).</summary>
+    <published>2023-11-15T17:53:57+00:00</published>
+  </entry>
+</feed>

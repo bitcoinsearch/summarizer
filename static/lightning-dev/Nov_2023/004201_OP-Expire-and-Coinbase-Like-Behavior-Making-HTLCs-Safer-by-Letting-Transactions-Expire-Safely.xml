@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+  <updated>2023-11-16T02:06:05.285248+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-15 17:50:56+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely</title>
+    <updated>2023-11-16T02:06:05.285283+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004201.html" rel="alternate"/>
+    <summary>The discourse focuses on two critical issues within the realm of blockchain technology and the Lightning Network (LN). The first issue involves dealing with "expired" off-chain output spends, such as HTLC-preimage, which have been included on-chain. The second, and possibly more complex, issue pertains to the exploitation of revoked, updated, or asymmetric states that can hinder the confirmation of a valid off-chain state. It is posited that addressing the second issue may concurrently resolve the first by ensuring that counterparts cannot misuse an "expired" off-chain output for personal gain.
+
+The conversation suggests that simply implementing an operation like op_expire might not be sufficient to resolve these problems; a more comprehensive approach would be required. This could involve expiring the validity of off-chain revealed witness secrets or utilizing short-lived proofs where the persuasiveness of evidence diminishes after a certain period. Despite these concerns, the utility of op_expire is recognized for its potential applications, such as constructing time-bound sequential claims on output funds in Discreet Log Contracts among multiple parties.
+
+Further discussion raises concerns about the security of lightning nodes, particularly in the context of transaction fees. Due to fluctuating mempool fee rates and the probabilistic nature of securing payment confirmations, nodes are forced to make educated guesses on potential fee levels. An attack vector is identified in scenarios where commitment transactions containing HTLCs become more economically viable for miners than other transactions due to high fees. Such a situation could arise if there is a continuous demand for block space and informational asymmetries exist.
+
+One proposed mitigation strategy involves consensus changes that would automatically aggregate or trim HTLCs deemed unworthy based on the median fee rates over a certain number of blocks. Evaluating the percentage of channel value consumed by fees at the point of committing an off-chain state remains challenging without concrete attacks and thorough testing.
+
+Regarding Replace-by-Fee (RBF) mechanisms, it's mentioned that they could provide robust solutions, assuming commitment transactions cannot be used to obstruct the revelation of an HTLC-preimage until the corresponding HTLC-refund transaction becomes valid under nLocktime. However, this applies specifically to LN-symmetry states rather than second-stage transactions built upon them.
+
+An underpinning concern is whether low-hashrate miners pose a significant threat, given their non-zero chance of mining a block while an HTLC-output is committed to an off-chain state only known to the involved parties. This is especially worrisome when considering counterparty risk where one party is also a miner. For further insights into the discussion on maintaining punishment capabilities within the LN symmetry model and concerns about fee manipulation by counterparts who may be miners, readers can refer to the July 2019 archives of the Linux Foundation mailing list on the Lightning Dev forum, available at https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-July/002064.html.</summary>
+    <published>2023-11-15T17:50:56+00:00</published>
+  </entry>
+</feed>
