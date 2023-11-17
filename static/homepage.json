@@ -1,5 +1,5 @@
 {
-    "header_summary": "Recent discussions within the Bitcoin development community have centered on enhancing the security and efficiency of Layer 2 solutions, with a focus on the non-interactive, UTXO-efficient, and robust Lightning Network (LN). Developers are addressing challenges such as the secure handling of low-value payments, support for multi-party off-chain transactions, and optimized script semantics to reduce witness size, all while avoiding potential miner manipulations. There is a push for real-world testing of proposed solutions to assess their effectiveness in maintaining a reliable fee market and ensuring the longevity of a decentralized mining ecosystem, in the face of concerns like ordinal transactions.\n\nTechnical efforts are underway to tackle issues such as the on-chain inclusion of expired off-chain outputs and the exploitation of outdated states, with proposed safeguards like op_expire and short-lived proofs for witness secrets being discussed. The Lightning Network also faces challenges in fee estimation for maintaining security during timelock durations, and a consensus change proposal aims to address the problem of HTLC trimming due to fluctuating fee rates by using a median-time-past fee rate calculation. Moreover, maintaining LN-symmetry is essential to penalize any potential security breaches, including those posed by miners with lower hash rates.\n\nFor a detailed examination of these topics, developers and researchers are referred to the Bitcoin Development Mailing List Archive, and for further technical discussion on the Lightning Network, the Linux Foundation's Lightning-dev mailing list archive is available as a resource.",
+    "header_summary": "Recent debates within the Bitcoin development community have focused on advancing Layer 2 solutions, notably improvements to the Lightning Network, to enhance security and efficiency. A primary goal is to design a consensus-change resolution that safeguards low-value lightning payments and optimizes multi-party off-chain constructions without unfairly benefiting miners with smaller hash rates. Proposed strategies include non-interactive processes to minimize reserves for fee-bumping and locked UTXOs, while averting adversarial tactics like pinning or replacement cycling.\n\nSecurity measures against the exploitation of outdated off-chain states are also under scrutiny, with the introduction of short-lived proofs and sequential time windows to validate off-chain states. To address the unpredictable transaction fee landscape, a median-time-past mechanism could refine the handling of HTLCs and fee estimation. Concurrently, proposals to refine the lightning address protocol aim to bolster user experience, privacy, and security by allowing anonymous acquisition of `node_id` and payment details through DNS records and onion messages.\n\nThere is a consensus on the importance of practical testing for these initiatives, particularly to validate their performance on the Lightning Network. The research community is invited to examine issues such as pinning, replacement cycling, and miner incentives to ensure a robust fee market and a decentralized mining structure, especially relevant as mining subsidies diminish. Advocates suggest that ethical mainnet trials could yield valuable insights. For a more in-depth analysis, interested parties can refer to the discussions archived on the [Bitcoin Development Mailing List Archive](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/018011.html) and the [Lightning-dev mailing list](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-July/002064.html).",
     "recent_posts": [
         {
             "id": "022174",
@@ -9,7 +9,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-11-15T18:14:28+00:00",
-            "summary": "- Solutions for Bitcoin Layer 2 aim for non-interactive, efficient, and secure transactions.\n- Proposed changes must protect against manipulative fee games and mass force-closures.\n- Collaboration and real-world trials are essential to validate and refine these solutions.",
+            "summary": "- Solutions must be non-interactive, minimize reserves and UTXOs, and prevent malicious activities.\n- Must ensure low-value payment security, optimize script efficiency, and avoid miner manipulation.\n- Compatibility with current approaches and further research by the community are imperative.",
             "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -24,15 +24,66 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-11-15T17:53:57+00:00",
-            "summary": "- Security and efficiency in the Lightning Network hinge on managing \"expired\" off-chain outputs.\n- High transaction fees and block space demand create an attack vector via trimmed HTLCs.\n- Concerns about fees eroding channel values and the risks of miner counterparties persist.",
+            "summary": "- Security in Lightning Network is challenged by expired off-chain outputs and revoked states.\n- Op_expire operation aids in managing block space demand and fee rate asymmetries.\n- LN-symmetry and risks of miner counterparties highlight complexity in maintaining penalties.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
             "file_path": "static/bitcoin-dev/Nov_2023/022173_Fwd-OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml",
             "combined_summ_file_path": ""
+        },
+        {
+            "id": "004204",
+            "title": "Lightning Address in a Bolt 12 world",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004204.html",
+            "authors": [
+                "Bastien TEINTURIER"
+            ],
+            "published_at": "2023-11-16T13:51:26+00:00",
+            "summary": "- The lightning address protocol improvements focus on privacy and security enhancements.\n- DNS `TXT` records may link domains to nodes, preserving sender privacy.\n- The author plans a bLIP post-community feedback, with simplified implementation of selected options.",
+            "n_threads": 1,
+            "dev_name": "lightning-dev",
+            "contributors": [],
+            "file_path": "static/lightning-dev/Nov_2023/004204_Lightning-Address-in-a-Bolt-12-world.xml",
+            "combined_summ_file_path": ""
+        },
+        {
+            "id": "004202",
+            "title": "On solving pinning, replacement cycling and mempool issues for bitcoin second-layers",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004202.html",
+            "authors": [
+                "Antoine Riard"
+            ],
+            "published_at": "2023-11-15T18:14:28+00:00",
+            "summary": "- Key Layer 2 solutions must address security, scalability, and minimize locked UTXOs.\n- Solutions should maintain competitiveness and prevent miner fee manipulation.\n- Further research is necessary to assess solutions' effectiveness on the Lightning Network.",
+            "n_threads": 3,
+            "dev_name": "lightning-dev",
+            "contributors": [],
+            "file_path": "static/lightning-dev/Nov_2023/004202_On-solving-pinning-replacement-cycling-and-mempool-issues-for-bitcoin-second-layers.xml",
+            "combined_summ_file_path": ""
         }
     ],
     "active_posts": [
+        {
+            "id": "004163",
+            "title": "OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004163.html",
+            "authors": [
+                "Peter Todd"
+            ],
+            "published_at": "2023-10-21T00:09:16+00:00",
+            "summary": "- The email addresses a flaw where HTLC-preimage paths don't expire, impacting urgency.\n- OP_Expire is suggested as a solution, with mechanisms like the Coinbase Bit for soft forking.\n- An alternative proposal uses nLockTime for expiration, similar to OP_CheckLockTimeVerify.",
+            "n_threads": 25,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "Antoine Riard",
+                "David A. Harding",
+                "Matt Morehouse",
+                "ZmnSCPxj",
+                "vjudeu at gazeta.pl"
+            ],
+            "file_path": "static/bitcoin-dev/Oct_2023/004163_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
+        },
         {
             "id": "022134",
             "title": "Future of the bitcoin-dev mailing list",
@@ -41,7 +92,7 @@
                 "Bryan Bishop"
             ],
             "published_at": "2023-11-07T15:37:22+00:00",
-            "summary": "- The bitcoin-dev mailing list needs a new host due to Linux Foundation's decision.\n- Proposals include decentralized archives with blockchain data insertion for continuity.\n- Alternatives like Google Groups are considered, balancing features against self-hosting challenges.",
+            "summary": "- The Bitcoin-dev mailing list must move since the Linux Foundation is ending its hosting.\n- Moderators suggest decentralized archiving and improved tools for content moderation.\n- Community feedback is sought on alternatives like Google Groups for future hosting.",
             "n_threads": 25,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -69,52 +120,25 @@
             "combined_summ_file_path": "static/bitcoin-dev/Nov_2023/combined_Future-of-the-bitcoin-dev-mailing-list.xml"
         },
         {
-            "id": "004163",
-            "title": "OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/004163.html",
+            "id": "021941",
+            "title": "Scaling Lightning With Simple Covenants",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-September/021941.html",
             "authors": [
-                "Peter Todd"
+                "jlspc"
             ],
-            "published_at": "2023-10-21T00:09:16+00:00",
-            "summary": "- HTLC-preimage paths should expire to promote timely spending before HTLC-timeout.\n- OP_Expire and Coinbase Bit soft-fork can enable transaction expiration after 100 blocks.\n- Alternative to Coinbase Bit, encoding expiration with delta against block-height nLockTime is possible.",
-            "n_threads": 25,
+            "published_at": "2023-09-08T18:54:46+00:00",
+            "summary": "- Simple covenants could enable mass creation of Lightning channels without user signatures.\n- Timeout-trees avoid constant user action for rolling over off-chain bitcoin.\n- Incorporating CTV or APO into consensus rules could significantly scale the Lightning Network.",
+            "n_threads": 15,
             "dev_name": "bitcoin-dev",
             "contributors": [
+                "Anthony Towns",
                 "Antoine Riard",
-                "David A. Harding",
-                "Matt Morehouse",
-                "ZmnSCPxj",
-                "vjudeu at gazeta.pl"
+                "Erik Aronesty",
+                "Rusty Russell",
+                "ZmnSCPxj"
             ],
-            "file_path": "static/bitcoin-dev/Oct_2023/004163_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
-        },
-        {
-            "id": "022065",
-            "title": "Ordinals BIP PR",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022065.html",
-            "authors": [
-                "Casey Rodarmor"
-            ],
-            "published_at": "2023-10-21T05:38:01+00:00",
-            "summary": "- The email reports unaddressed queries on the Ordinals BIP PR's status, having been unreacted to for months.\n- BIPs serve as technical documentation without promising implementation or communal consensus.\n- The sender seeks definitive editorial feedback on the Ordinals BIP's relevance and necessary amendments.",
-            "n_threads": 18,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Alexander F. Moser",
-                "Andrew Poelstra",
-                "Christopher Allen",
-                "Claus Ehrenberg",
-                "Luke Dashjr",
-                "L\u00e9o Haf",
-                "Olaoluwa Osuntokun",
-                "Peter Todd",
-                "Ryan Breen",
-                "Tim Ruffing",
-                "alicexbt"
-            ],
-            "file_path": "static/bitcoin-dev/Oct_2023/022065_Ordinals-BIP-PR.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_Ordinals-BIP-PR.xml"
+            "file_path": "static/bitcoin-dev/Sept_2023/021941_Scaling-Lightning-With-Simple-Covenants.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Sept_2023/combined_Scaling-Lightning-With-Simple-Covenants.xml"
         },
         {
             "id": "004163",
@@ -124,7 +148,7 @@
                 "Peter Todd"
             ],
             "published_at": "2023-10-21T00:09:16+00:00",
-            "summary": "- The sender proposes OP_Expire and a soft-fork for HTLC urgency and reorg safety.\n- Coinbase-like handling is suggested, making outputs spendable after 100 new blocks.\n- OP_Expire could give HTLC pre-images a deadline, enhancing protocol security.",
+            "summary": "- The sender proposes using OP_Expire and Coinbase Bit soft-fork to enforce HTLC urgency.\n- They suggest redefining the nVersion field for coinbase-like txout handling post-100 blocks.\n- HTLC protocols could utilize OP_Expire, giving receivers a deadline to act before losing control.",
             "n_threads": 27,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -139,6 +163,28 @@
             "combined_summ_file_path": "static/lightning-dev/Oct_2023/combined_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
         },
         {
+            "id": "004092",
+            "title": "Scaling Lightning With Simple Covenants",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-September/004092.html",
+            "authors": [
+                "jlspc"
+            ],
+            "published_at": "2023-09-08T18:54:46+00:00",
+            "summary": "- Implementing simple covenants improves the Lightning Network's scalability for casual users.\n- Timeout-trees enable channels to operate off-chain with periodic on-chain balance updates.\n- The email advocates for Bitcoin consensus changes to facilitate widespread Lightning adoption.",
+            "n_threads": 17,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Anthony Towns",
+                "Antoine Riard",
+                "David A. Harding",
+                "Erik Aronesty",
+                "Rusty Russell",
+                "ZmnSCPxj"
+            ],
+            "file_path": "static/lightning-dev/Sept_2023/004092_Scaling-Lightning-With-Simple-Covenants.xml",
+            "combined_summ_file_path": "static/lightning-dev/Sept_2023/combined_Scaling-Lightning-With-Simple-Covenants.xml"
+        },
+        {
             "id": "003977",
             "title": "Proposal: Bundled payments",
             "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-June/003977.html",
@@ -146,7 +192,7 @@
                 "Thomas Voegtlin"
             ],
             "published_at": "2023-06-13T08:10:29+00:00",
-            "summary": "- ThomasV proposes extending BOLT-11 to include two-payment invoices for service prepayments.\n- The extension would help services like submarine swaps avoid both DoS attacks and legal issues.\n- The proposal seeks to level the playing field for all lightning service providers.",
+            "summary": "- ThomasV suggests adding bundled payments to BOLT-11 for non-custodial services' prepayments.\n- The proposal includes waiting for all HTLCs before fulfilling prepayments and handling main payments.\n- Implementation would aid non-custodial services like ACINQ and alleviate regulatory and attack risks.",
             "n_threads": 14,
             "dev_name": "lightning-dev",
             "contributors": [
