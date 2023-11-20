@@ -554,6 +554,9 @@ if __name__ == "__main__":
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
 
+    month_name = gen.month_dict[int(current_date.month)]
+    str_month_year = f"{month_name}_{int(current_date.year)}"
+
     recent_data_list = []
     active_data_list = []
     random_flashback_data_list = []  # Randomly look back X years, summarize and surface a combined summary discussion with 5+ replies
@@ -710,7 +713,9 @@ if __name__ == "__main__":
 
         logger.info(f"No. of 'Today in history' posts collected: {len(today_in_history_data_list)}")
 
-    json_file_path = r"static/homepage.json"
+    json_file_path = fr"static/homepage/{str_month_year}/{current_date_str}-homepage.json"
+    dirname = os.path.dirname(json_file_path)
+    os.makedirs(dirname, exist_ok=True)
 
     xml_ids = gen.get_existing_json_ids(file_path=json_file_path)
     recent_post_ids = [gen.get_id(data['_source']['title']) for data in recent_data_list]
