@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Liquidity Ads: Updated Spec Posted, please review</title>
+  <updated>2023-11-21T02:11:37.658807+00:00</updated>
+  <author>
+    <name>niftynei 2023-11-20 17:48:56+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Liquidity Ads: Updated Spec Posted, please review</title>
+    <updated>2023-11-21T02:11:37.658837+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004217.html" rel="alternate"/>
+    <summary>The Liquidity Ads specification, initially posted a few years ago and implemented in core-lightning's v0.10.1 release in August 2021, has undergone revisions to refine its design based on community feedback. Notably, the mechanism for locking leasor funds has been transitioned from using CheckSequenceVerify (CSV) to CheckLockTimeVerify (CLTV), addressing issues related to anchor outputs dependency and the complexity of commitment transaction updates. The updated approach uses a CLTV lock on all outputs going to the leasor to prevent premature access to funds, especially in scenarios where HTLCs are involved in the leasee's commitment transactions.
+
+A significant change introduced is the concept of "lease locked" transactions, which resemble HTLC transactions but are unique to commitment transactions where the leasor is remote. These transactions ensure that the leasor cannot access their funds before the end of the lease period. This solution was credited to @morehouse, who identified potential vulnerabilities and contributed to the proposed fix. For a comprehensive understanding of this modification, readers are encouraged to review the associated commit.
+
+Another enhancement is the introduction of variable lease terms, allowing nodes to request leases of different lengths instead of the previous fixed duration of approximately one month. This flexibility enables sellers to adjust lease rates via `accept_tlv.lease_rates` based on the requested lease length, likely leading to higher prices for longer leases. Alongside this, channel fee caps have been revised to cater to a range of block durations for each commitment.
+
+Feedback from the community has also led to an adjustment in channel fee cap increments, moving from 1000 parts per million (ppm) to more granular 100 ppm increments, better aligning with basis points. Additionally, a discussion is ongoing about whether to keep the base milli-satoshi (msat) cap fixed at 500 sats or make it variable as suggested by @t-bast.
+
+The proposal further includes a fraud proof mechanism within channel fee commitments. If a leasor commits to certain fee caps and later publishes a channel update with fees exceeding those caps, the leasee would possess evidence of this breach. While there is interest in implementing a bond or similar punitive measure for violators, creating cryptographic commitments for ranges of values poses challenges. Input from the community on how to use signed commitments to trigger a bond release is sought.
+
+In conclusion, these updates aim to improve the robustness and flexibility of the Liquidity Ads system. The contributions of various community members during the CLN hack week and beyond, including insights into node fee behavior and rapid review and suggestions, have been instrumental in progressing the proposal. For a detailed examination, the draft and commits can be accessed through the provided links.</summary>
+    <published>2023-11-20T17:48:56+00:00</published>
+  </entry>
+</feed>

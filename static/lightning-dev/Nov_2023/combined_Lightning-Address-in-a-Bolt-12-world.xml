@@ -2,7 +2,25 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lightning Address in a Bolt 12 world</title>
-  <updated>2023-11-18T02:17:56.879130+00:00</updated>
+  <updated>2023-11-21T02:11:07.158421+00:00</updated>
+  <author>
+    <name>Matt Corallo 2023-11-20 16:23:03+00:00</name>
+  </author>
+  <author>
+    <name>Andy Schroder 2023-11-20 14:56:41+00:00</name>
+  </author>
+  <author>
+    <name>Andy Schroder 2023-11-20 14:53:54+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2023-11-20 09:40:24+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2023-11-18 21:27:47+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2023-11-18 21:19:35+00:00</name>
+  </author>
   <author>
     <name>Andy Schroder 2023-11-17 18:07:15+00:00</name>
   </author>
@@ -21,6 +39,12 @@
   <author>
     <name>Bastien TEINTURIER 2023-11-16 13:51:26+00:00</name>
   </author>
+  <link href="lightning-dev/Nov_2023/004216_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2023/004215_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2023/004214_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2023/004213_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2023/004212_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2023/004211_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004209_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004208_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004207_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
@@ -31,15 +55,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lightning Address in a Bolt 12 world</title>
-    <updated>2023-11-18T02:17:56.879218+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004209.html" rel="alternate"/>
-    <summary>The discourse centers on the optimization of the lightning address protocol, which has garnered attention for its positive user experience but also criticism for privacy and security shortcomings. The primary concerns highlighted include the exposure of users' IP addresses upon payment initiation, potential risks of invoice manipulation by domain owners, and the dependency on an HTTP stack and DNS server from the sender's side. To address these issues, two main solutions are proposed: one for privately obtaining a domain's associated `node_id` and another for securing recipient payment details without sacrificing privacy.
+    <updated>2023-11-21T02:11:07.158510+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004216.html" rel="alternate"/>
+    <summary>The email discussion addresses the implementation of DNS and Lightning Node communications within the Lightning Network. A concern is to enable Lightning nodes to retrieve DNSSEC information across platforms without using direct UDP communication. The RFC 9102 CHAIN serialization format is suggested as a solution, but the absence of client software for serialized CHAIN validation presents an obstacle, with further development needed.
 
-A suggested approach involves using DNS to establish a connection between domains and nodes. Domain owners would insert a DNS `TXT` record that either contains a blinded path or directly points to the `node_id`. This method would enable payment senders like Alice to conduct a DNS query to retrieve the necessary information while maintaining anonymity and not disclosing their payment intentions to both the LSP and the domain manager. An illustrative example in the discussion demonstrates how Alice could inquire about the TXT record to obtain the blinded path and then use an onion message to request Bob's payment details.
+Various options for implementation are evaluated for their practicality and impact. The conversation stresses the need for clear specifications on DNS record usage and checks for offer and DNS record expiration alignment. Issues such as redundancy through multiple records, increased latency from switching to TCP, and user scalability with subdomains are discussed.
 
-Despite presenting three separate design options in the shared gist, the author advocates for the adoption of options 1 and 3, arguing for simplicity in implementation and practicality. The recommendation is for clients to initially try option 3 (DNS request) and, if that fails, to default to option 1. Domain owners should opt for just one of the two options based on their DNS capabilities.
+Tony Giorgio emphasizes the need to clarify the roles of "Bob" and "domain owner" and to ease developers' transition to new systems. He supports the single DNS entry system idea if feasibility concerns for all users and simplicity for semi-technical users are addressed.
 
-The intent is to further develop these concepts into a bLIP (Bitcoin Improvement Proposal) after soliciting community input. The exchange acknowledges Rusty and Matt's contributions through reviews of initial drafts. Ultimately, the aim is to refine the lightning address protocol to strike a more favorable balance between user experience and heightened privacy/security measures.</summary>
-    <published>2023-11-17T18:07:15+00:00</published>
+A potential dual approach combining options 1 and 3 is debated, allowing flexibility based on domain owners' capabilities. Risks of centralization with DoH are noted, and privacy at the IP level is preferred over HTTPS. Clients should have discretion over DNS querying methods, and variability in blinded paths should be accommodated to support personal lightning nodes.
+
+Bastien TEINTURIER clarifies aspects of the design document, including terminology about "domain owner," offer longevity, and subdomains for sharding users. The discussion reflects the technical challenges in creating a robust specification that secures usability and developer convenience amid complex internet services.
+
+Privacy issues with the lightning address protocol, such as payment sender IP exposure and invoice swapping, are acknowledged. Proposed solutions include privately obtaining the `node_id` and retrieving payment details without compromising sender privacy. A DNS `TXT` record could provide a blinded path or `node_id`, as demonstrated by Alice's actions to retain privacy when requesting payment details.
+
+The author prefers options 1 and 3 for their simplicity and advises clients to start with option 3 then switch to option 1 if necessary. Domain owners should choose an option based on their DNS capability. The goal is to refine these ideas into a bLIP with community feedback, acknowledging Rusty and Matt for their reviews.
+
+Tony's email addresses bolt12 integration within LNURL, noting scalability and privacy challenges. Oblivious HTTP is proposed for privacy concerns, and he seeks a practical demonstration of bolt12 with LNURL to understand its integration better. The dialogue is part of a collaborative effort to enhance LNURL for scalability and privacy.</summary>
+    <published>2023-11-20T16:23:03+00:00</published>
   </entry>
 </feed>
