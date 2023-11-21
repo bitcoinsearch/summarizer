@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import sys
 import warnings
 import json
+import shutil
 
 from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX
 from generate_homepage_xml import ElasticSearchClient, GenerateJSON
@@ -113,7 +114,7 @@ if __name__ == "__main__":
         logger.info(f"number of active posts collected: {len(active_data_list)}")
 
     # gather ids of docs from json file
-    json_file_path = fr"static/newsletters/{str_month_year}/{current_date_str}-newsletter.json"
+    json_file_path = fr"static/newsletters/newsletter.json"
 
     current_directory = os.getcwd()
     json_full_path = os.path.join(current_directory, json_file_path)
@@ -170,11 +171,19 @@ if __name__ == "__main__":
                         "active_posts_this_week": active_page_data
                     }
 
-                    os.makedirs(f"{'/'.join(json_file_path.split('/')[:-1])}", exist_ok=True)
+                    json_dirname = os.path.dirname(json_file_path)
+                    os.makedirs(json_dirname, exist_ok=True)
 
                     with open(json_file_path, 'w') as f:
                         f.write(json.dumps(json_string, indent=4))
                         logger.success(f"json saved file: {json_file_path}")
+
+                    # store the file in archive as well
+                    archive_json_file_path = fr"static/newsletters/{str_month_year}/{current_date_str}-newsletter.json"
+                    archive_json_dirname = os.path.dirname(archive_json_file_path)
+                    os.makedirs(archive_json_dirname, exist_ok=True)
+                    shutil.copy(json_file_path, archive_json_file_path)
+                    logger.success(f'archive updated with file: {archive_json_file_path}')
 
                 else:
                     logger.error(f"Data list empty! Please check the data again.")
