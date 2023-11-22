@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+  <updated>2023-11-22T02:06:41.738900+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-21 02:39:45+00:00</name>
+  </author>
+  <author>
+    <name>Johan Torås Halseth 2023-10-26 16:52:03+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Nov_2023/022180_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2023/022093_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+    <updated>2023-11-22T02:06:41.738946+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022180.html" rel="alternate"/>
+    <summary>Transaction recycling and slot jamming are critical issues that can arise in the context of Lightning Network's (LN) channel types, primarily due to the structure of Hash Time Locked Contracts (HTLCs). A notable change in HTLC second-level transactions for the anchor channel type has inadvertently enabled transaction recycling attacks. This modification allows additional inputs to be added for fee adjustment without compromising the transaction's signature. In legacy channel types, this attack vector is not present as fees are extracted directly from the HTLC outputs, which require mutual agreement upon signing.
+
+An advanced technique suggested to mitigate these concerns involves HTLC output aggregation. This method proposes combining multiple HTLC outputs into a singular aggregated output on the commitment transaction, representing the totality of active HTLCs. When a participant wishes to claim their share, they would only access the portion corresponding to HTLCs for which they possess preimages or which have expired. This approach could significantly enhance chain efficiency and lower the risk of transaction recycling by allowing participants to claim their respective portions while returning unclaimed HTLCs back into the covenant-restricted output.
+
+The adoption of HTLC output aggregation could profoundly influence slot jamming strategies. By consolidating HTLCs into one aggregated output instead of individual commitment outputs for each HTLC, we circumvent the fixed limit issue, enabling more active HTLCs without expanding the size of the commitment transaction. Consequently, this reduces the capital requirement for channel jamming. Nonetheless, there remains a threshold where the cost of claiming HTLCs on-chain may become prohibitive due to elevated chain fees, potentially stranding HTLCs until fees diminish.
+
+Aggregated HTLC outputs also face challenges, such as the necessity for new covenant primitives at the first layer to function effectively. Even with these covenants, the fundamental requirement persists—placing the preimage on-chain, potentially pricing out HTLCs at certain fee rates, and suggesting the need for some form of limitation.
+
+A pivotal question raised is whether Probabilistic Time Locked Contracts (PTLCs) could facilitate a compact proof for knowledge of the preimage corresponding to a specified sum within the output, which would address the slot jamming problem entirely. To actualize HTLC output aggregation, a recursive covenant mechanism is required. The author references several potential covenant primitives, like OP_CHECKCONTRACTVERIFY, OP_CAT, and amount inspection, which could serve as foundational components for implementing this concept.
+
+A proof-of-concept demonstration utilizing OP_CHECKCONTRACTVERIFY has been created to spend an HTLC output while achieving aggregation. This concept entails committing all active HTLCs into a Merkle tree and using Merkle proofs to substantiate claims to specific HTLCs. The remaining HTLCs are then re-allocated to a new output minus the claimed ones. Organizing HTLCs by expiry facilitates batching timeout claims and minimizing witness size.
+
+In summary, HTLC output aggregation presents promising resolutions to the predicaments of transaction recycling and slot jamming within channel types, offering increased chain efficiency, reduced impact on commitment transaction size, and diminished costs associated with on-chain HTLC claims. However, the full realization of this concept requires further exploration and development of covenant primitives.</summary>
+    <published>2023-11-21T02:39:45+00:00</published>
+  </entry>
+</feed>

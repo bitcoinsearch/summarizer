@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+  <updated>2023-11-22T02:05:59.169363+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-11-21 02:39:45+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+    <updated>2023-11-22T02:05:59.169396+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022180.html" rel="alternate"/>
+    <summary>The blog post today focuses on a range of technical advancements and challenges within the domain of cryptocurrency transactions, particularly addressing concerns related to the Lightning Network (LN) and potential transaction attacks. One such attack is the transaction recycling attack which has become possible due to changes in HTLC second-level transactions for anchor channel types. This alteration allows additional fees to be added to a transaction by inserting inputs without invalidating the signature, a method not feasible with legacy channels where fees were sourced directly from the HTLC outputs and required mutual consent during the signing process.
+
+HTLC output aggregation offers benefits, including reduced fee-bumping reserve requirements for channel participants. The aggregation allows sharing of common fields like nVersion and nLocktime between second-stage HTLC transactions. However, there remains a concern regarding the extent of malleability available to the counterparty, potentially allowing them to deplete the value promised through accumulated HTLCs by paying excessive miners' fees. A proposed solution to mitigate this risk is segregating HTLC claims into separate outputs, utilizing covenants to manage aggregated claims based on witness satisfaction and chain state conditions corresponding to time locks.
+
+Furthermore, the current protocol limit of 483 impacts long-term payment throughput on the LN, yet aggregated claims could provide a more dynamic margin for tangible and trust-minimized HTLC payments. Introducing sliding windows for claim periods could freeze the HTLC-timeout path, but this would necessitate an off-chain consensus on the feerate threshold activating these windows among all routing nodes in the HTLC payment path.
+
+In the context of PTLCs (Point Time-Locked Contracts), creating an aggregate curve point for sub-combinations of plausible scalar values is considered. Taproot branches could facilitate near-constant size for claimed offered HTLCs. Such covenant mechanisms might also extend to withdrawal phases in payment pools, enabling concurrent confirmations of non-competing transactions by numerous participants while still requiring verification of each associated unlocking secret.
+
+Emerging Layer 2 solutions might address the N-inputs-to-M-outputs pattern with advanced locking scripts that meet specific conditions. Efficiency simulation frameworks are suggested as a means to evaluate the trade-offs between different covenant constructions, emphasizing the importance of understanding their game-theoretical implications to avoid potential "malicious" contracts.
+
+Lastly, the post contemplates whether advanced cryptosystems, relying on assumptions beyond the Discrete Logarithm problem, could significantly enhance the scalability of LN payment throughput. The goal would be to decouple the number of off-chain payments from the growth of on-chain witness size needed to claim them without compromising security, despite concerns over trimmed HTLCs due to dust limits.
+
+For further technical details and test results, references have been made to resources such as a Github repository concerning lightning network specifications, a commit demonstrating the recycling attack test, and various scholarly and technical discussions surrounding Bitcoin and smart contract behaviors.
+
+This summary reflects upon Antoine's comprehensive insights into ongoing developments and conceptual considerations within the realm of cryptocurrency protocols, specifically targeting the optimization and security of transaction processes on the Lightning Network.</summary>
+    <published>2023-11-21T02:39:45+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Liquidity Ads: Updated Spec Posted, please review</title>
+  <updated>2023-11-22T02:11:37.280382+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-11-21 10:33:13+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Liquidity Ads: Updated Spec Posted, please review</title>
+    <updated>2023-11-22T02:11:37.280409+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004219.html" rel="alternate"/>
+    <summary>In a recent communication regarding the evolution of network protocols, the transition from using CSV to CLTV was endorsed as a strategic improvement. However, concerns were raised about the implementation of 2nd-stage lease locked transactions. The critical issue identified is the lack of opportunity to obtain signatures for these transactions with the current message flow structure. When a `commit_sig` is sent, the remote node acquires a new commitment transaction capable of immediate broadcast, but without obtaining their signatures, the original party cannot claim leased HTLC outputs.
+
+The problem bears similarity to issues previously encountered with PTLCs, which were addressed by introducing new messages to the protocol flow. However, it is considered excessive to apply the same solution in this case. A potential workaround could involve structuring the 2nd-stage transaction in a way that doesn't necessitate a signature from the remote peer or incorporating the additional CLTV constraints directly into the output, thus eliminating the need for a 2nd-stage transaction. Nevertheless, the feasibility of these alternatives remains uncertain.
+
+Another significant topic of discussion is the behavior of Replace-By-Fee (RBF) attempts and whether they should adhere to previous rates. It's proposed that RBF attempts should be viewed as renegotiations of potential liquidity purchases, separate from the terms of prior attempts. To facilitate this, the introduction of new funding tlv fields to RBF messages (`tx_init_rbf` and `tx_ack_rbf`) has been suggested. Such an approach would mesh well with splicing, where an RBF attempt might lead to a substantially different liquidity allocation compared to other pending splice transactions. This perspective is further elaborated upon in a comment made on the spec PR [1], which is currently being integrated into the eclair implementation due to its perceived importance for the network's functionality.</summary>
+    <published>2023-11-21T10:33:13+00:00</published>
+  </entry>
+</feed>

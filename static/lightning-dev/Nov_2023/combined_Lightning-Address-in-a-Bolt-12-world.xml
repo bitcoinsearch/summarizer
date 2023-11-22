@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lightning Address in a Bolt 12 world</title>
-  <updated>2023-11-21T02:11:07.158421+00:00</updated>
+  <updated>2023-11-22T02:11:19.844652+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-11-21 10:57:46+00:00</name>
+  </author>
   <author>
     <name>Matt Corallo 2023-11-20 16:23:03+00:00</name>
   </author>
@@ -39,6 +42,7 @@
   <author>
     <name>Bastien TEINTURIER 2023-11-16 13:51:26+00:00</name>
   </author>
+  <link href="lightning-dev/Nov_2023/004220_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004216_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004215_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004214_Lightning-Address-in-a-Bolt-12-world.xml" rel="alternate"/>
@@ -55,23 +59,21 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lightning Address in a Bolt 12 world</title>
-    <updated>2023-11-21T02:11:07.158510+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004216.html" rel="alternate"/>
-    <summary>The email discussion addresses the implementation of DNS and Lightning Node communications within the Lightning Network. A concern is to enable Lightning nodes to retrieve DNSSEC information across platforms without using direct UDP communication. The RFC 9102 CHAIN serialization format is suggested as a solution, but the absence of client software for serialized CHAIN validation presents an obstacle, with further development needed.
+    <updated>2023-11-22T02:11:19.844749+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004220.html" rel="alternate"/>
+    <summary>The recent programming discussions have been concentrated on enhancing the user experience and scalability of Lightning node operations and DNS record management, while also focusing on security and efficiency. A key topic is the handling of DNS records for payment systems, debating whether clients should verify the expiration of offers against DNS record expirations and requesting new records proactively to avoid discrepancies. It's proposed that prohibiting duplicate DNS records could simplify systems and reduce latency from TCP fallbacks. The usage of subdomains for scaling was considered but raised concerns over complex addresses affecting user experience.
 
-Various options for implementation are evaluated for their practicality and impact. The conversation stresses the need for clear specifications on DNS record usage and checks for offer and DNS record expiration alignment. Issues such as redundancy through multiple records, increased latency from switching to TCP, and user scalability with subdomains are discussed.
+Discussions also explored the potential for users to establish blinded paths under a single domain to improve scalability and autonomy without advanced messaging systems. This approach favors manual setup for simplicity and emphasizes maintaining a straightforward user experience despite technical complexities. The importance of delv in local DNSSEC validation was highlighted, with references to its manual page on Ubuntu Manpages for the Jammy distribution, underscoring the need to utilize such tools to secure internet infrastructure.
 
-Tony Giorgio emphasizes the need to clarify the roles of "Bob" and "domain owner" and to ease developers' transition to new systems. He supports the single DNS entry system idea if feasibility concerns for all users and simplicity for semi-technical users are addressed.
+In terms of payment system design, a structure was proposed allowing for a single DNS record to associate a domain with a lightning node, aiming for long-lived and compact offers. The necessity for consistent terminology and addressing trust-on-first-use issues were noted. Privacy concerns with DoH resolvers and limitations in standard OS libraries querying TXT records directly were acknowledged, suggesting reliance on DoH queries and personal DNSSEC validation.
 
-A potential dual approach combining options 1 and 3 is debated, allowing flexibility based on domain owners' capabilities. Risks of centralization with DoH are noted, and privacy at the IP level is preferred over HTTPS. Clients should have discretion over DNS querying methods, and variability in blinded paths should be accommodated to support personal lightning nodes.
+Service providers are advised to adopt flexible DNS setups, integrating both manual TXT record addition and managing their own BIND servers, to promote user autonomy and reduce dependency on LSPs. However, companies' reluctance to manage DNS due to risks is recognized, advocating sender software support to alleviate these concerns. The efficiency, latency, and security implications of DNS-only versus webserver-based LNURL applications were debated, with a preference for a lightweight, scalable DNS-only approach.
 
-Bastien TEINTURIER clarifies aspects of the design document, including terminology about "domain owner," offer longevity, and subdomains for sharding users. The discussion reflects the technical challenges in creating a robust specification that secures usability and developer convenience amid complex internet services.
+Tony questioned the practicality of a single DNS entry supporting unlimited users and the transition from LNURL to LNDNS, emphasizing the need for scalable solutions that remain accessible to developers. Consensus leaned towards a dynamic method combining option 3 for specific user queries with a fallback to option 1. Discussions also stressed setting appropriate expiration times for paths/offers and DNS records to minimize latency and maintain accurate timings.
 
-Privacy issues with the lightning address protocol, such as payment sender IP exposure and invoice swapping, are acknowledged. Proposed solutions include privately obtaining the `node_id` and retrieving payment details without compromising sender privacy. A DNS `TXT` record could provide a blinded path or `node_id`, as demonstrated by Alice's actions to retain privacy when requesting payment details.
+Additionally, the discussions addressed the integration of blinded paths and offers into DNS records to enhance scalability and security. Personal lightning nodes independent of domain operators were recommended, along with considerations for self-hosting versus using LSPs and the role of DNSSEC validation. Mobile use could be facilitated by QR codes. Bastien highlighted privacy implications of using DNS for payment data and suggested a simplified approach for service providers to handle zonefile entries. Clients should prioritize DoH requests and use option 3 first, reverting to option 1 as necessary.
 
-The author prefers options 1 and 3 for their simplicity and advises clients to start with option 3 then switch to option 1 if necessary. Domain owners should choose an option based on their DNS capability. The goal is to refine these ideas into a bLIP with community feedback, acknowledging Rusty and Matt for their reviews.
-
-Tony's email addresses bolt12 integration within LNURL, noting scalability and privacy challenges. Oblivious HTTP is proposed for privacy concerns, and he seeks a practical demonstration of bolt12 with LNURL to understand its integration better. The dialogue is part of a collaborative effort to enhance LNURL for scalability and privacy.</summary>
-    <published>2023-11-20T16:23:03+00:00</published>
+The integration of bolt12 within the LNURL framework was considered to address DNS scalability challenges for service providers with large user bases. Oblivious HTTP was introduced as a solution to protect IP addresses and payment information. The improvement of the lightning address protocol was discussed, proposing private retrieval of `node_id` via DNS records and anonymous queries by payment senders. Two mechanisms were suggested for implementation, with encouragement to try option 3 before option 1. The community aims to develop these ideas into a bLIP (Bitcoin Improvement Proposal), seeking a balance between user experience and privacy/security in the lightning address protocol.</summary>
+    <published>2023-11-21T10:57:46+00:00</published>
   </entry>
 </feed>
