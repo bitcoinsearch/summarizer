@@ -2,30 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Liquidity Ads: Updated Spec Posted, please review</title>
-  <updated>2023-11-22T02:12:07.284988+00:00</updated>
+  <updated>2023-11-23T02:03:33.905996+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-11-22 17:13:59+00:00</name>
+  </author>
+  <author>
+    <name>niftynei 2023-11-21 18:09:41+00:00</name>
+  </author>
   <author>
     <name>Bastien TEINTURIER 2023-11-21 10:33:13+00:00</name>
   </author>
   <author>
     <name>niftynei 2023-11-20 17:48:56+00:00</name>
   </author>
+  <link href="lightning-dev/Nov_2023/004222_Liquidity-Ads-Updated-Spec-Posted-please-review.xml" rel="alternate"/>
+  <link href="lightning-dev/Nov_2023/004221_Liquidity-Ads-Updated-Spec-Posted-please-review.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004219_Liquidity-Ads-Updated-Spec-Posted-please-review.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004217_Liquidity-Ads-Updated-Spec-Posted-please-review.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Liquidity Ads: Updated Spec Posted, please review</title>
-    <updated>2023-11-22T02:12:07.285039+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004219.html" rel="alternate"/>
-    <summary>The shift from using CheckSequenceVerify (CSV) to CheckLockTimeVerify (CLTV) for locking leasor funds in the Liquidity Ads specification marks a significant refinement in its design, driven by community feedback and the need to address dependencies and complexities associated with anchor outputs. The transition to CLTV is aimed at preventing premature access to funds by the leasor, particularly in cases involving HTLCs within the leasee's commitment transactions, thus enhancing security. This update was largely influenced by @morehouse's identification of vulnerabilities and proposal of an effective solution.
+    <updated>2023-11-23T02:03:33.906057+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004222.html" rel="alternate"/>
+    <summary>The programming community is actively engaged in discussions and revisions to enhance network protocol functionalities, particularly focusing on transactional integrity and flexibility in liquidity management. One key change that has been implemented is the transition from CheckSequenceVerify (CSV) to CheckLockTimeVerify (CLTV) in locking leasor funds, a move motivated by the need to resolve complications associated with anchor outputs and updating commitment transactions. The concept of 'lease locked' transactions has been introduced to protect leasor funds from being prematurely accessed, notably when HTLCs are part of the leasee's commitment transactions. This security measure ensures that the leasor cannot claim their funds before the lease period concludes and was developed as a response to vulnerabilities highlighted by @morehouse.
 
-A new concept introduced in the specification is "lease locked" transactions, which are akin to HTLC transactions but are exclusive to scenarios where the leasor is remote. These transactions guarantee that leasors cannot prematurely claim their funds before the lease period concludes. However, there are concerns about the current message flow not allowing for the necessary signatures required for these transactions, suggesting either a revision to the protocol flow or finding a way to impose additional CLTV constraints directly in the output without needing a second-stage transaction.
+In addition to these security measures, the system now permits variable lease terms, contrasting with the previous model of fixed one-month durations. Leasors can adjust their rates based on the length of the leases they offer, likely leading to increased costs for longer commitments. Fee structures have also been refined, with more granular increments allowing for better pricing precision. Current discussions include contemplating whether to maintain a fixed base fee cap or adopt a variable approach, as suggested by @t-bast.
 
-Another notable change is the introduction of variable lease terms, providing nodes with the option to negotiate leases of varying lengths. This adaptability allows sellers to adjust lease rates based on the duration of the lease, potentially increasing prices for longer terms. To complement this flexibility, channel fee caps have been adjusted to accommodate a spectrum of block durations for each commitment, with fee cap increments refined to 100 parts per million (ppm), offering finer granularity in line with basis points.
+An issue currently at the forefront is the necessity for remote peer signatures in 2nd-stage lease locked transactions and the implementation challenges it presents. Directly incorporating additional CLTV constraints into outputs to avoid second-stage transactions altogether is being considered but remains uncertain in feasibility. A related concern involves the behavior of Replace-By-Fee (RBF) attempts, which has sparked proposals to treat RBF as independent renegotiations, distinct from prior liquidity purchase terms. The introduction of new funding tlv fields for RBF messages aligns with this approach and would be compatible with splicing methodologies.
 
-Community discussions continue regarding whether to maintain a fixed base milli-satoshi (msat) cap at 500 sats or to adopt a variable approach as proposed by @t-bast. Also under consideration is the implementation of a fraud proof mechanism within channel fee commitments to ensure compliance with agreed-upon fee caps. The proposal contemplates a bond or similar punitive action for violators; however, creating cryptographic commitments for ranges of values remains technically challenging, with community input sought on how to effectively employ signed commitments for bond release.
+The discussion extends to the concept of fraud proofs within channel fee commitments. The idea is to hold leasors accountable if they commit to specific fee caps and later exceed them. There is interest in implementing a bond or penalty for such violations, but creating cryptographic commitments for value ranges is technically challenging, and community input is sought on this matter.
 
-The integration of these updates is anticipated to significantly enhance the robustness and adaptability of the Liquidity Ads system. Contributions from the community, especially during the CLN hack week and subsequent periods, including insights into node fee behavior and prompt review and suggestions, have been critical to advancing the proposal. For those interested in delving deeper into these modifications, detailed information can be found through the links to the draft and commits provided in the original correspondence.</summary>
-    <published>2023-11-21T10:33:13+00:00</published>
+The Liquidity Ads specification itself has been revised based on community feedback since its initial release in core-lightning v0.10.1. Contributions during the CLN hack week and subsequent interactions have played a crucial role in refining this proposal. For those interested in an in-depth exploration of these updates, the draft and commits are accessible through the links provided in the correspondence.</summary>
+    <published>2023-11-22T17:13:59+00:00</published>
   </entry>
 </feed>
