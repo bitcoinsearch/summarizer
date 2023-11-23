@@ -1,5 +1,5 @@
 {
-    "header_summary": "Recent discussions on the Lightning Network (LN) have highlighted the potential transaction recycling attack due to changes in HTLC second-level transactions, prompting experts to recommend separating HTLC claims into distinct outputs with covenants to mitigate counterparty malleability risks. While this approach could reduce the channel participants' fee-bumping reserves, it raises concerns about the depletion of HTLC values through high miner fees. The current protocol limit of 483 is seen as a barrier to scaling payment throughput, and it is suggested that aggregated claims and PTLCs could provide solutions, albeit with the need for routing nodes to agree on feerate thresholds to avoid freezing the HTLC-timeout path.\n\nLayer 2 developments for Bitcoin also focus on non-interactive solutions to minimize fee-bumping reserves and locked UTXOs, aiming to fortify the security of low-value LN payments and counteract malicious activities such as fee manipulation. Researchers are called upon to contribute to a sustainable fee market and decentralized mining ecosystem, with no definitive design yet presented but a consensus on the importance of end-to-end implementation evaluations. The push for standardization within the BIP framework, particularly the concept of Silent Payments, is gaining traction, suggesting the use of signature R-values as Taproot-based public keys to forge commitments, which would support future protocol extensions without modifying the original commitment structure.\n\nIn terms of implementation, the conversations underscore the importance of ensuring bLIPs' uniqueness to avoid duplicates and explore the pros and cons of different approaches to DNS record management for LN nodes. The transition from CSV to CLTV poses signature-related challenges for 2nd-stage lease locked transactions, with possible solutions including redesign or direct CLTV output incorporation. Moreover, the treatment of Replace-By-Fee transactions is debated, with proposals for new funding tlv fields to classify them as separate liquidity renegotiations within splicing operations. These dialogues reflect the complex endeavor to balance innovation with security measures in the ever-evolving cryptocurrency space.",
+    "header_summary": "Today's blog post examines the evolving challenges in cryptocurrency, specifically within the Lightning Network's transaction processes, highlighting recent vulnerabilities to transaction recycling attacks due to changes in HTLC second-level transactions for anchor channels. These changes enable fee bumping through additional inputs without affecting existing signatures, contrasting with the mutual consent required in legacy channels. The post suggests that while the aggregation of HTLC outputs can lower fee reserves for participants, it also raises malleability issues, with potential exploitation by counterparties to unjustly increase miner's fees, thus depleting the value in HTLCs. A potential solution proposed is the segregation of HTLC claims and the use of covenants governed by specific witness conditions and chain state related to time locks.\n\nThe discussion includes Antoine's insights on the Lightning Network protocol's limit of 483 simultaneous transactions and its impact on payment throughput. He proposes aggregated claims and sliding windows for claim periods to enhance HTLC payments, though this would necessitate a network-wide off-chain consensus on fee rate thresholds. Furthermore, the blog explores the application of PTLCs, Taproot branches, and covenant mechanisms in payment pools to allow secure and concurrent transaction confirmations by multiple participants.\n\nThe post underscores the complexity of Layer 2 solutions, stressing the importance of advanced locking scripts and efficiency simulation frameworks for understanding covenant trade-offs and anticipating game-theoretical challenges to prevent malicious activities. It also ponders the potential of cryptosystems unrelated to the Discrete Logarithm problem to improve scalability by decoupling off-chain payments from on-chain witness size, without compromising security. Antoine directs readers interested in further details to resources including a Github repository on lightning network specifications, a commit on the recycling attack test, and academic discussions on Bitcoin and smart contracts.",
     "recent_posts": [
         {
             "id": "022180",
@@ -9,86 +9,13 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-11-21T02:39:45+00:00",
-            "summary": "- The blog post examines cryptocurrency advancements, focusing on Lightning Network transaction issues and attacks.\n- It discusses technical solutions to these challenges, such as HTLC output aggregation and covenant mechanisms.\n- Anticipated improvements include Layer 2 solutions and advanced cryptosystems for enhanced scalability.",
+            "summary": "- Antoine Riard examines technical advancements in cryptocurrency, focusing on Lightning Network challenges and transaction attacks.\n- Proposed solutions include HTLC output segregation and covenants to mitigate transaction malleability and fees.\n- The post analyzes Layer 2 solutions, cryptosystem scalability, and the trade-offs in advanced locking script efficiency.",
             "n_threads": 2,
             "dev_name": "bitcoin-dev",
             "contributors": [
                 "Johan Tor\u00e5s Halseth"
             ],
             "file_path": "static/bitcoin-dev/Nov_2023/022180_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "022178",
-            "title": "Purely off-chain coin colouring",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022178.html",
-            "authors": [
-                "vjudeu at gazeta.pl"
-            ],
-            "published_at": "2023-11-20T19:47:13+00:00",
-            "summary": "- Standardizing methods in the BIP framework could improve protocol interoperability.\n- Signature R-values as Taproot keys may allow flexible, nestable coin transaction commitments.\n- Commitments prefixed with OP_RETURN would remain off-chain, ensuring consistent R-value handling.",
-            "n_threads": 13,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Anthony Towns",
-                "Aymeric Vitte",
-                "Casey Rodarmor",
-                "Peter Todd",
-                "Rijndael",
-                "alicexbt"
-            ],
-            "file_path": "static/bitcoin-dev/Nov_2023/022178_Purely-off-chain-coin-colouring.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "022174",
-            "title": "On solving pinning, replacement cycling and mempool issues for bitcoin second-layers",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-November/022174.html",
-            "authors": [
-                "Antoine Riard"
-            ],
-            "published_at": "2023-11-15T18:14:28+00:00",
-            "summary": "- Antoine Riard proposes non-interactive, efficient Layer 2 solutions for Bitcoin.\n- Solutions must handle multi-party constructions and resist miner manipulation tactics.\n- Real-world testing and research are urged to refine these nascent Bitcoin enhancements.",
-            "n_threads": 3,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Nov_2023/022174_On-solving-pinning-replacement-cycling-and-mempool-issues-for-bitcoin-second-layers.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "004220",
-            "title": "Lightning Address in a Bolt 12 world",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004220.html",
-            "authors": [
-                "Bastien TEINTURIER"
-            ],
-            "published_at": "2023-11-21T10:57:46+00:00",
-            "summary": "- Option 1 allows only one DNS record, limiting user-specific blinded paths.\n- Option 3 offers individual records per user for selected blinded path autonomy.\n- Further clarification is available if the explanation of options is misunderstood.",
-            "n_threads": 13,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "Andy Schroder",
-                "Matt Corallo",
-                "Tony Giorgio"
-            ],
-            "file_path": "static/lightning-dev/Nov_2023/004220_Lightning-Address-in-a-Bolt-12-world.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "004219",
-            "title": "Liquidity Ads: Updated Spec Posted, please review",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004219.html",
-            "authors": [
-                "Bastien TEINTURIER"
-            ],
-            "published_at": "2023-11-21T10:33:13+00:00",
-            "summary": "- Transition from CSV to CLTV in network protocols is endorsed, concerns about lease locked transactions.\n- Proposed solutions include modifying the transaction structure or altering CLTV constraints to eliminate signatures.\n- New RBF protocol adjustments are suggested, aiming to separate liquidity renegotiation from previous terms.",
-            "n_threads": 2,
-            "dev_name": "lightning-dev",
-            "contributors": [
-                "niftynei"
-            ],
-            "file_path": "static/lightning-dev/Nov_2023/004219_Liquidity-Ads-Updated-Spec-Posted-please-review.xml",
             "combined_summ_file_path": ""
         },
         {
@@ -99,7 +26,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-11-21T02:39:45+00:00",
-            "summary": "- Antoine outlines a vulnerability in LN's anchor channel types allowing fee manipulation.\n- He proposes segregating HTLC outputs and using covenants to mitigate risks.\n- The email considers PTLCs, payment pools, and advanced cryptosystems for LN scalability.",
+            "summary": "- Antoine Riard highlights a transaction recycling attack risk in Lightning Network's anchor channels.\n- He proposes segregating HTLC claims and using covenants for managing aggregated claims.\n- Antoine questions if advanced cryptosystems could scale LN throughput without sacrificing security.",
             "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -118,7 +45,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- A new jamming attack, replacement cycling, threatens lightning channel security since December 2022.\n- Major lightning versions have introduced mitigations like rebroadcasting and mempool monitoring.\n- Bitcoin application developers must stay vigilant against replacement cycling's potential disruptions.",
+            "summary": "- A transaction-relay jamming attack called replacement cycling was found in December 2022.\n- Lightning implementations have adopted mitigations like Eclair v0.9.0 and LND v0.17.0-beta.\n- Bitcoin applications with script timelocks may be vulnerable; precautions are recommended.",
             "n_threads": 65,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -143,8 +70,8 @@
                 "Casey Rodarmor"
             ],
             "published_at": "2023-10-21T05:38:01+00:00",
-            "summary": "- The sender requests feedback on the unaddressed Ordinals BIP PR, open for nine months.\n- They clarify that BIP acceptance doesn't equate to implementation or community consensus.\n- Urging a response, they seek guidance on necessary changes for BIP acceptance.",
-            "n_threads": 20,
+            "summary": "- The sender requests clarification on the unresponsiveness regarding their Ordinals BIP PR.\n- They explain that BIPs serve as technical documentation and differ in their acceptance implications.\n- The sender seeks specific feedback on the scope and necessary revisions for BIP acceptance.",
+            "n_threads": 22,
             "dev_name": "bitcoin-dev",
             "contributors": [
                 "Alexander F. Moser",
@@ -165,25 +92,26 @@
             "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_Ordinals-BIP-PR.xml"
         },
         {
-            "id": "021941",
-            "title": "Scaling Lightning With Simple Covenants",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-September/021941.html",
+            "id": "021396",
+            "title": "Purely off-chain coin colouring",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-February/021396.html",
             "authors": [
-                "jlspc"
+                "Anthony Towns"
             ],
-            "published_at": "2023-09-08T18:54:46+00:00",
-            "summary": "- Simple covenants and timeout-trees can scale Lightning by removing the need for signatures.\n- Dedicated users can rollover funds for casual users, easing channel maintenance.\n- Incorporating CTV or APO into consensus rules would enhance Lightning's usability and scalability.",
-            "n_threads": 15,
+            "published_at": "2023-02-02T09:15:33+00:00",
+            "summary": "- Casey Rodarmor's ordinals track satoshis to create unique tokens without on-chain data.\n- Inscriptions for these tokens could be off-chain, reducing transaction and storage costs.\n- Nostr events can unobservably track these NFTs, while Liquid might outdo Bitcoin NFTs for semi-fungibles.",
+            "n_threads": 13,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Anthony Towns",
-                "Antoine Riard",
-                "Erik Aronesty",
-                "Rusty Russell",
-                "ZmnSCPxj"
+                "Aymeric Vitte",
+                "Casey Rodarmor",
+                "Peter Todd",
+                "Rijndael",
+                "alicexbt",
+                "vjudeu at gazeta.pl"
             ],
-            "file_path": "static/bitcoin-dev/Sept_2023/021941_Scaling-Lightning-With-Simple-Covenants.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Sept_2023/combined_Scaling-Lightning-With-Simple-Covenants.xml"
+            "file_path": "static/bitcoin-dev/Feb_2023/021396_Purely-off-chain-coin-colouring.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Feb_2023/combined_Purely-off-chain-coin-colouring.xml"
         },
         {
             "id": "004122",
@@ -193,7 +121,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-10-16T16:57:36+00:00",
-            "summary": "- A new attack threatens the safety of lightning channel funds and bitcoin applications.\n- Lightning network countermeasures include rebroadcasting and preimage monitoring.\n- Further research is vital, and community analysis and feedback are encouraged.",
+            "summary": "- A new relay-jamming attack threatens the safety of funds in lightning channels.\n- Mitigations like rebroadcasting and preimage monitoring are in place, yet risks remain.\n- Collaboration with peers and community verification is vital for network security enhancement.",
             "n_threads": 65,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -211,48 +139,40 @@
             "combined_summ_file_path": "static/lightning-dev/Oct_2023/combined_Full-Disclosure-CVE-2023-40231-CVE-2023-40232-CVE-2023-40233-CVE-2023-40234-All-your-mempool-are-belong-to-us-.xml"
         },
         {
-            "id": "004163",
-            "title": "OP_Expire and Coinbase-Like Behavior: Making HTLCs Safer by Letting Transactions Expire Safely",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-October/004163.html",
+            "id": "004204",
+            "title": "Lightning Address in a Bolt 12 world",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004204.html",
             "authors": [
-                "Peter Todd"
+                "Bastien TEINTURIER"
             ],
-            "published_at": "2023-10-21T00:09:16+00:00",
-            "summary": "- The sender proposes using OP_Expire and a soft-fork to address HTLC timing issues.\n- They suggest redefining a bit of the nVersion field for coinbase-like txout handling.\n- HTLC would utilize OP_Expire, giving a deadline for pre-image mining to secure protocols.",
-            "n_threads": 27,
+            "published_at": "2023-11-16T13:51:26+00:00",
+            "summary": "- Enhancement of the lightning address protocol seeks to balance user experience with security.\n- Proposed updates include private `node_id` retrieval and discreet payment detail acquisition.\n- The author plans to develop these proposals into a bLIP with community input.",
+            "n_threads": 13,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Antoine Riard",
-                "David A. Harding",
-                "Jorge Tim\u00f3n",
-                "Matt Morehouse",
-                "ZmnSCPxj",
-                "vjudeu at gazeta.pl"
+                "Andy Schroder",
+                "Matt Corallo",
+                "Tony Giorgio"
             ],
-            "file_path": "static/lightning-dev/Oct_2023/004163_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml",
-            "combined_summ_file_path": "static/lightning-dev/Oct_2023/combined_OP-Expire-and-Coinbase-Like-Behavior-Making-HTLCs-Safer-by-Letting-Transactions-Expire-Safely.xml"
+            "file_path": "static/lightning-dev/Nov_2023/004204_Lightning-Address-in-a-Bolt-12-world.xml",
+            "combined_summ_file_path": "static/lightning-dev/Nov_2023/combined_Lightning-Address-in-a-Bolt-12-world.xml"
         },
         {
-            "id": "004092",
-            "title": "Scaling Lightning With Simple Covenants",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-September/004092.html",
+            "id": "004217",
+            "title": "Liquidity Ads: Updated Spec Posted, please review",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004217.html",
             "authors": [
-                "jlspc"
+                "niftynei"
             ],
-            "published_at": "2023-09-08T18:54:46+00:00",
-            "summary": "- Implementing simple covenants and timeout-trees could markedly enhance Lightning's scalability.\n- Protocols for watchtower-free, one-shot, and asynchronous receives increase Lightning's usability.\n- The email advocates for CTV or APO inclusion in Bitcoin consensus to aid Lightning adoption.",
-            "n_threads": 17,
+            "published_at": "2023-11-20T17:48:56+00:00",
+            "summary": "- The Liquidity Ads' locking mechanism transitions from CSV to CLTV after community feedback.\n- Variable lease terms and revised channel fee caps enhance flexibility and pricing options.\n- A fraud proof mechanism within channel fee commitments is proposed, with community input on punitive measures.",
+            "n_threads": 4,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Anthony Towns",
-                "Antoine Riard",
-                "David A. Harding",
-                "Erik Aronesty",
-                "Rusty Russell",
-                "ZmnSCPxj"
+                "Bastien TEINTURIER"
             ],
-            "file_path": "static/lightning-dev/Sept_2023/004092_Scaling-Lightning-With-Simple-Covenants.xml",
-            "combined_summ_file_path": "static/lightning-dev/Sept_2023/combined_Scaling-Lightning-With-Simple-Covenants.xml"
+            "file_path": "static/lightning-dev/Nov_2023/004217_Liquidity-Ads-Updated-Spec-Posted-please-review.xml",
+            "combined_summ_file_path": "static/lightning-dev/Nov_2023/combined_Liquidity-Ads-Updated-Spec-Posted-please-review.xml"
         }
     ]
 }
