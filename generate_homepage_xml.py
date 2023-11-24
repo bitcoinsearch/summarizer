@@ -1,3 +1,4 @@
+import random
 import re
 import pandas as pd
 from elasticsearch import Elasticsearch
@@ -644,51 +645,54 @@ if __name__ == "__main__":
 
         # today in history posts
         logger.info(f"fetching 'Today in history' posts... ")
-        logger.info(
-            f"today is: {current_date} :: {current_date.day}-{current_date.month}, week: {current_date.isocalendar().week}")
+        random_years_ago = random.randint(3, 12)
+        logger.info(f"random years ago: {random_years_ago}")
+
+        selected_random_date = current_date - timedelta(days=365 * random_years_ago)
+        start_of_week = selected_random_date - timedelta(days=selected_random_date.weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+        logger.info(f"Start of week: {start_of_week}, End of week: {end_of_week}")
 
         all_data_df['created_at'] = pd.to_datetime(all_data_df['created_at'], errors='coerce')
-        df_today_all_posts = all_data_df[(all_data_df['created_at'].dt.day == current_date.day)
-                                         & (all_data_df['created_at'].dt.month == current_date.month)]
-        logger.info(f"No. of total threads created today: {len(df_today_all_posts)}")
+        all_data_df['created_at_'] = all_data_df['created_at'].dt.tz_convert(None)
+        df_selected_threads = all_data_df.loc[(all_data_df['created_at_'] >= start_of_week) &
+                                              (all_data_df['created_at_'] <= end_of_week)]
+        logger.info(f"Shape of df_selected_threads: {df_selected_threads.shape}")
 
-        df_today_original_posts = df_today_all_posts[df_today_all_posts['type'] == "original_post"]
-        logger.info(f"No. of original threads created today: {len(df_today_original_posts)}")
-
-        if len(df_today_original_posts) > 0:
-            past_years_to_skip = 3  # not to collect post from last 3 years
-            this_datetime_limit = current_date - timedelta(days=365 * past_years_to_skip)
-            logger.info(f"Datetime limit to skip collecting threads created after: {this_datetime_limit}")
-
-            for idx, row in df_today_original_posts.iterrows():
+        if len(df_selected_threads) > 0:
+            # seen_history_titles = set()
+            for idx, row in df_selected_threads.iterrows():
                 this_title = row['title']
                 this_created_at = row['created_at'].to_pydatetime().replace(tzinfo=None)
 
-                if this_created_at < this_datetime_limit:
-                    logger.info(f"collecting an original thread created at {this_created_at}")
-                    df_title = all_data_df.loc[(all_data_df['title'] == this_title) & (all_data_df['domain'] == dev_url)]
-                    df_title.sort_values(by='created_at', inplace=True)
+                # if this_title in seen_history_titles:
+                #     continue
+                # seen_history_titles.add(this_title)
 
-                    logger.info(f"No. of posts found for title: '{this_title}' ::: {df_title.shape}")
+                logger.info(f"collecting an original thread created at {this_created_at}")
+                df_title = all_data_df.loc[(all_data_df['title'] == this_title) & (all_data_df['domain'] == dev_url)]
+                df_title.sort_values(by='created_at', inplace=True)
+                # original_post = df_title.iloc[0].to_dict()
 
-                    for d in all_data_list:
-                        if d['_source']['title'] == this_title and d['_source']['domain'] == row['domain'] and \
-                                d['_source']['authors'] == row['authors'] and d['_source']['url'] == row['url']:
-                            counts, contributors = elastic_search.fetch_contributors_and_threads(title=this_title,
-                                                                                                 domain=dev_url,
-                                                                                                 df=df_title)
-                            if contributors:
-                                for author in d['_source']['authors']:
-                                    contributors.remove(author)
-                            d['_source']['n_threads'] = counts
-                            d['_source']['contributors'] = contributors
-                            d['_source']['dev_name'] = dev_name
-                            today_in_history_data_list.append(d)
-                            break
-                else:
-                    logger.info(f"skipping as it was created within past 3 years: {this_created_at}")
-        else:
-            logger.info(f"No original threads created in history on this day!")
+                logger.info(f"No. of posts found for title: '{this_title}' ::: {df_title.shape}")
+
+                counts, contributors = elastic_search.fetch_contributors_and_threads(title=this_title, domain=dev_url,
+                                                                                     df=df_title)
+                if counts < 5:
+                    logger.info(f"No. of replies are less than 5, skipping it... ")
+                    continue
+
+                for d in all_data_list:
+                    if d['_source']['title'] == this_title and d['_source']['domain'] == row['domain'] and \
+                            d['_source']['authors'] == row['authors'] and d['_source']['url'] == row['url']:
+                        if contributors:
+                            for author in d['_source']['authors']:
+                                contributors.remove(author)
+                        d['_source']['n_threads'] = counts
+                        d['_source']['contributors'] = contributors
+                        d['_source']['dev_name'] = dev_name
+                        today_in_history_data_list.append(d)
+                        break
 
         # add history data from yesterday's homepage.json
         if not today_in_history_data_list:
