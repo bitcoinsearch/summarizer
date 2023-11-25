@@ -436,7 +436,7 @@ class GenerateJSON:
         return response_str
 
     def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
-                            remove_xml_extension=False):
+                            remove_xml_extension=False, add_combined_summary_field=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -449,6 +449,7 @@ class GenerateJSON:
         xml_name = self.clean_title(title)
         month_name = self.month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
+        current_directory = os.getcwd()
 
         combined_summ_file_path = ""
         base_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}"
@@ -481,6 +482,21 @@ class GenerateJSON:
             "file_path": file_path,
             "combined_summ_file_path": combined_summ_file_path
         }
+
+        combined_summ_bullets = ""
+        if add_combined_summary_field:
+            combined_summ_full_path = os.path.join(current_directory, combined_summ_file_path)
+
+            if os.path.exists(combined_summ_full_path):
+                namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+                tree = ET.parse(combined_summ_full_path)
+                root = tree.getroot()
+                summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
+                combined_summ = "\n".join([summ.text for summ in summ_list])
+                combined_summ_bullets = self.create_n_bullets(combined_summ, n=3)
+
+            entry_data['combined_summary'] = combined_summ_bullets if combined_summ_bullets else ""
+
         return entry_data
 
     def get_existing_json_ids(self, file_path):
@@ -514,7 +530,7 @@ if __name__ == "__main__":
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
     ]
 
-    current_date = datetime.now()
+    current_date = datetime.now() - timedelta(days=1)
     current_date_str = current_date.strftime("%Y-%m-%d")
 
     start_date = datetime.now() - timedelta(days=7)
@@ -529,8 +545,9 @@ if __name__ == "__main__":
 
     recent_data_list = []
     active_data_list = []
-    random_flashback_data_list = []  # Randomly look back X years, summarize and surface a combined summary discussion with 5+ replies
     today_in_history_data_list = []  # Posts that were created on today's date on previous years
+
+    random_years_ago = None
 
     for dev_url in dev_urls:
         all_data_df, all_data_list = elastic_search.fetch_all_data_for_url(ES_INDEX, url=dev_url)
@@ -607,46 +624,12 @@ if __name__ == "__main__":
 
         logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
 
-        # random flashback posts - must have 5+ contributors / n_threads
-        logger.info("fetching random flashback post ... ")
-        while True:
-            random_row_data = all_data_df.sample(n=1)
-            title = random_row_data['title'].values[0]
-            if title in seen_titles:
-                logger.info(f"title already in active/recent posts, fetching another post randomly ...")
-                continue
-
-            # get the first post's info of this title
-            df_title = all_data_df.loc[(all_data_df['title'] == title) & (all_data_df['domain'] == dev_url)]
-            df_title.sort_values(by='created_at', inplace=True)
-            original_post = df_title.iloc[0].to_dict()
-
-            counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
-                                                                                 df=df_title)
-            if counts < 5:
-                logger.info(f"No. of replies are less than 5, fetching another post randomly ... ")
-                continue
-
-            for i in all_data_list:
-                if i['_source']['title'] == original_post['title'] and i['_source']['domain'] == original_post[
-                    'domain'] and i['_source']['authors'] == original_post['authors'] and i['_source'][
-                    'created_at'] == \
-                        original_post['created_at'] and i['_source']['url'] == original_post['url']:
-                    for author in i['_source']['authors']:
-                        contributors.remove(author)
-                    i['_source']['n_threads'] = counts
-                    i['_source']['contributors'] = contributors
-                    i['_source']['dev_name'] = dev_name
-                    random_flashback_data_list.append(i)
-                    break  # break for loop once we get original post of the title
-            break  # break while loop as we only need one flashback post per dev_url
-
-        logger.info(f"No. of random flashback posts collected: {len(random_flashback_data_list)}")
-
         # today in history posts
         logger.info(f"fetching 'Today in history' posts... ")
-        random_years_ago = random.randint(3, 12)
-        logger.info(f"random years ago: {random_years_ago}")
+
+        if not random_years_ago:
+            random_years_ago = random.randint(3, 12)
+            logger.info(f"random years ago: {random_years_ago}")
 
         selected_random_date = current_date - timedelta(days=365 * random_years_ago)
         start_of_week = selected_random_date - timedelta(days=selected_random_date.weekday())
@@ -660,39 +643,36 @@ if __name__ == "__main__":
         logger.info(f"Shape of df_selected_threads: {df_selected_threads.shape}")
 
         if len(df_selected_threads) > 0:
-            # seen_history_titles = set()
             for idx, row in df_selected_threads.iterrows():
                 this_title = row['title']
                 this_created_at = row['created_at'].to_pydatetime().replace(tzinfo=None)
+                this_type = row['type']
 
-                # if this_title in seen_history_titles:
-                #     continue
-                # seen_history_titles.add(this_title)
+                if this_type == 'original_post':
+                    logger.info(f"collecting an original thread created at {this_created_at}")
+                    df_title = all_data_df.loc[
+                        (all_data_df['title'] == this_title) & (all_data_df['domain'] == dev_url)]
+                    df_title.sort_values(by='created_at', inplace=True)
+                    logger.info(f"No. of posts found for title: '{this_title}' ::: {df_title.shape}")
 
-                logger.info(f"collecting an original thread created at {this_created_at}")
-                df_title = all_data_df.loc[(all_data_df['title'] == this_title) & (all_data_df['domain'] == dev_url)]
-                df_title.sort_values(by='created_at', inplace=True)
-                # original_post = df_title.iloc[0].to_dict()
+                    counts, contributors = elastic_search.fetch_contributors_and_threads(title=this_title,
+                                                                                         domain=dev_url,
+                                                                                         df=df_title)
+                    if counts < 5:
+                        logger.info(f"No. of replies are less than 5, skipping it... ")
+                        continue
 
-                logger.info(f"No. of posts found for title: '{this_title}' ::: {df_title.shape}")
-
-                counts, contributors = elastic_search.fetch_contributors_and_threads(title=this_title, domain=dev_url,
-                                                                                     df=df_title)
-                if counts < 5:
-                    logger.info(f"No. of replies are less than 5, skipping it... ")
-                    continue
-
-                for d in all_data_list:
-                    if d['_source']['title'] == this_title and d['_source']['domain'] == row['domain'] and \
-                            d['_source']['authors'] == row['authors'] and d['_source']['url'] == row['url']:
-                        if contributors:
-                            for author in d['_source']['authors']:
-                                contributors.remove(author)
-                        d['_source']['n_threads'] = counts
-                        d['_source']['contributors'] = contributors
-                        d['_source']['dev_name'] = dev_name
-                        today_in_history_data_list.append(d)
-                        break
+                    for d in all_data_list:
+                        if d['_source']['title'] == this_title and d['_source']['domain'] == row['domain'] and \
+                                d['_source']['authors'] == row['authors'] and d['_source']['url'] == row['url']:
+                            if contributors:
+                                for author in d['_source']['authors']:
+                                    contributors.remove(author)
+                            d['_source']['n_threads'] = counts
+                            d['_source']['contributors'] = contributors
+                            d['_source']['dev_name'] = dev_name
+                            today_in_history_data_list.append(d)
+                            break
 
         # add history data from yesterday's homepage.json
         if not today_in_history_data_list:
@@ -724,7 +704,6 @@ if __name__ == "__main__":
                 logger.info(
                     f"active posts: {len(active_data_list)}, "
                     f"recent posts: {len(recent_data_list)}, "
-                    f"random flashback posts: {len(random_flashback_data_list)}, "
                     f"today in history posts: {len(today_in_history_data_list)}"
                 )
                 logger.info("Creating homepage.json file ... ")
@@ -745,25 +724,17 @@ if __name__ == "__main__":
                         entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
                         active_page_data.append(entry_data)
 
-                    # random flashback data
-                    random_page_data = []
-                    if len(random_flashback_data_list) > 0:
-                        for data in random_flashback_data_list:
-                            entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
-                            random_page_data.append(entry_data)
-
-                    # today in history data
+                    # today in history
                     today_in_history_data = []
                     if len(today_in_history_data_list) > 0:
                         for data in today_in_history_data_list:
-                            entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
+                            entry_data = gen.create_single_entry(data, look_for_combined_summary=True, add_combined_summary_field=True)
                             today_in_history_data.append(entry_data)
 
                     json_string = {
                         "header_summary": recent_post_summ,
                         "recent_posts": recent_page_data,
                         "active_posts": active_page_data,
-                        "random_flashback_posts": random_page_data,
                         "today_in_history_posts": today_in_history_data
                     }
 
