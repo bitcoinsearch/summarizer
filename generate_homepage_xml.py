@@ -530,7 +530,7 @@ if __name__ == "__main__":
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
     ]
 
-    current_date = datetime.now() - timedelta(days=1)
+    current_date = datetime.now()
     current_date_str = current_date.strftime("%Y-%m-%d")
 
     start_date = datetime.now() - timedelta(days=7)
