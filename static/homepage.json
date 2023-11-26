@@ -1,5 +1,5 @@
 {
-    "header_summary": "SeedHammer's project focuses on developing a new output descriptor for metal engraved backups, drawing inspiration from the PSBT binary encoding and BIP174's encoding for extended keys. This proposed format is designed to align with BIPs 380-386 and BIP 389, utilizing a wallet-policies format and integrating Miniscript, albeit with restrictions on inline keys and the requirement to substitute pk(NAME) expressions with indexed references. The format also introduces metadata features like labels and birthdate blocks using PSBT map entries.\n\nThe community is currently engaged in a debate over the optimal encoding method for the project, with Blockchain Commons advocating for CBOR due to its established binary encoding status, while SeedHammer favors PSBT for its simplicity and existing wallet software integration. Discussions also extend to whether the format should have a distinct header and magic number or extend the existing PSBT format.\n\nSeedHammer invites community input on the preliminary proposal and suggests reviewing additional resources and an interactive playground available via provided links for those interested in the technical specifics or contributing to the proposal's refinement before it enters the Bitcoin Improvement Proposal process.",
+    "header_summary": "SeedHammer is developing a new standard for metal engraved backups using a compact output descriptor based on the PSBT binary encoding, specifically the BIP174 PSBT format's PSBT_GLOBAL_XPUB feature. The textual encoding adheres to BIPs 380-386 and BIP 389, integrating wallet-policies and Miniscript with some limitations, and includes additional metadata such as labels and birthdates.\n\nThe community has debated the choice of encoding between CBOR and PSBT, with Blockchain Commons advocating for CBOR, while SeedHammer supports PSBT for its simplicity and existing wallet software compatibility. Discussions also include considerations on whether to create a distinct header and magic number for the new format or to extend the current PSBT format.\n\nSeeking community feedback, SeedHammer has made available a set of resources for the proposed standard, which are open for review and experimentation via the following links: [proposal], [implementation], and [playground], prior to commencing the formal BIP process.",
     "recent_posts": [
         {
             "id": "022184",
@@ -9,7 +9,7 @@
                 "SeedHammer Team"
             ],
             "published_at": "2023-11-23T22:25:43+00:00",
-            "summary": "- SeedHammer is developing a self-contained metal engraved backup descriptor.\n- The descriptor uses PSBT encoding, aligning with BIPs 380-386 and 389, excluding inline keys.\n- A debate exists between using CBOR or PSBT, with SeedHammer favoring the latter.",
+            "summary": "- SeedHammer is devising a metal backup standard using PSBT binary encoding.\n- Issues include CBOR versus PSBT encoding debates and header integration.\n- Feedback is sought on their format before starting the BIP process.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -26,7 +26,7 @@
                 "Casey Rodarmor"
             ],
             "published_at": "2023-10-21T05:38:01+00:00",
-            "summary": "- The sender requests feedback on the nine-month-old Ordinals BIP PR, noting past unacknowledged comments and outreach efforts.\n- BIPs are technical documentation; acceptance doesn't ensure implementation or community consensus, as shown by various examples.\n- The sender seeks validation of the ordinals BIP's scope and asks for necessary changes for acceptance.",
+            "summary": "- The sender requests clarity and feedback on their nine-month pending Ordinals BIP PR.\n- They explain BIPs as technical documentation, citing examples of varied BIP types.\n- The sender asks for explicit criteria for acceptance or necessary revisions for the BIP.",
             "n_threads": 22,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -55,7 +55,7 @@
                 "Anthony Towns"
             ],
             "published_at": "2023-02-02T09:15:33+00:00",
-            "summary": "- Ordinals track individual satoshis, enabling non-fungible tokens creation on Bitcoin.\n- \"Inscriptions\" allow for encoding data into taproot witnesses, with potential off-chain data storage.\n- Tools for nostr ordinal assignment could enable unobservable NFT chain of custody tracking.",
+            "summary": "- Ordinals track satoshis, enabling NFT creation without on-chain inscription data.\n- Off-chain transfer of NFT ownership reduces costs and blockchain space usage.\n- Liquid's model may outperform ordinals for value-fluctuating semi-fungible tokens.",
             "n_threads": 13,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -77,7 +77,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-10-26T16:52:03+00:00",
-            "summary": "- HTLC output aggregation combines all HTLCs into one output, improving channel efficiency.\n- Aggregated outputs reduce transaction recycling and the capital required for jamming channels.\n- Implementation requires new covenant primitives and a proof-of-concept has been demonstrated.",
+            "summary": "- HTLC output aggregation combines all HTLCs into a single transaction output to improve chain efficiency.\n- Aggregated outputs reduce the risk of jamming and recycling, but demand new covenant primitives for full adoption.\n- A proof-of-concept using OP_CHECKCONTRACTVERIFY demonstrates aggregation with a merkle tree for claiming HTLCs.",
             "n_threads": 2,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -94,7 +94,7 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-11-16T13:51:26+00:00",
-            "summary": "- The lightning address protocol seeks improvements for user experience and privacy issues.\n- A DNS `TXT` record or blinded path is proposed to obtain `node_id` privately.\n- The author plans to draft a Bitcoin Improvement Proposal after community feedback.",
+            "summary": "- Proposals aim to improve the lightning address protocol's privacy and security.\n- Domain owners could use DNS `TXT` records for private node linking.\n- Only design options 1 and 3 are recommended for simplicity in implementation.",
             "n_threads": 13,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -113,7 +113,7 @@
                 "niftynei"
             ],
             "published_at": "2023-11-20T17:48:56+00:00",
-            "summary": "- The Liquidity Ads mechanism transitioned from CSV to CLTV for locking leasor funds.\n- Variable lease terms introduced, allowing different lengths and revised channel fee structures.\n- Proposal includes a fraud proof system and seeks community input on bond implementation.",
+            "summary": "- Liquidity Ads spec updated from CSV to CLTV, enhancing security for leasor funds.\n- Variable lease terms introduced, allowing for flexible durations and lease rate adjustments.\n- Community feedback prompted fine-tuning fee increments and exploring fraud proof mechanisms.",
             "n_threads": 4,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -130,7 +130,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-10-26T16:52:03+00:00",
-            "summary": "- HTLC output aggregation can mitigate transaction recycling and slot jamming in channel transactions.\n- Implementing aggregation requires covenant mechanics, enabling efficient fee allocation and output claiming.\n- Exploring new covenant primitives and PTLCs may address current limitations and improve scalability.",
+            "summary": "- HTLC output aggregation could enhance efficiency and secure transaction outputs using covenants.\n- Aggregated outputs may mitigate channel jamming and allow for more extensive active HTLCs.\n- A new Layer 1 covenant primitive and use of PTLCs might fully resolve the slot jamming issue.",
             "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
