@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Liquidity Ads and griefing subtleties</title>
+  <updated>2023-12-02T01:56:12.435524+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-12-01 17:45:18+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Liquidity Ads and griefing subtleties</title>
+    <updated>2023-12-02T01:56:12.435554+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004227.html" rel="alternate"/>
+    <summary>The concept of liquidity ads is a crucial aspect to consider in protocol design, with significant implications for both buyers and sellers. When a buyer purchases inbound liquidity, they are not merely buying a specified amount for a set duration but potentially any liquidity that may end up on the seller's side during that time frame. This introduces pricing challenges for the seller and opens up possibilities for liquidity griefing attacks.
+
+For example, if a buyer opens a large channel and requests a small amount of added liquidity, then moves all the funds through the seller to another party, the seller ends up with an undesired lock on a much larger sum than anticipated. If the channel remains inactive or the buyer goes offline, it could result in a poor investment for the seller. The current specification proposes adding a CheckLockTimeVerify (CLTV) to protect buyers from malicious sellers who might close the channel prematurely to free their funds. However, this protection can inadvertently disadvantage the seller.
+
+One proposed solution is to separate leased funds with a CLTV from regular funds in the commitment transaction. Yet, this approach has its pitfalls since it can be gamed by either party in the event of failed Hash Time-Locked Contracts (HTLCs). The question arises as to which output the funds should return to, creating opportunities for exploitation.
+
+In many instances, sellers are more reputable than buyers and have greater incentives for honest behavior. Buyers often target well-connected nodes or Lightning Service Providers (LSPs) known for reliability. Consequently, it might be more logical to protect the seller rather than the buyer, especially when the buyer is a new node with unknown incentives. Therefore, for some scenarios, not adding a CLTV and allowing the buyer to bear the risk of premature liquidity removal could be the simplest solution.
+
+The idea of making CLTV enforcement optional is introduced, allowing sellers to decide whether they want to take on the additional risk to attract buyers. Sellers should factor in this risk when setting their rates. The inclusion of splicing—joining or splitting of channels without closure—introduces further complexity. To preserve the integrity of the lease terms, sellers should be restricted from splicing out but allowed to splice in, while buyers retain the freedom to splice in or out. 
+
+However, this still leaves room for the seller to disrupt the buyer's splicing attempts, suggesting that even a strategy that involves CLTV and splicing might not fully align with the intended fairness and security of liquidity ads.
+
+In conclusion, those interested in selling liquidity must recognize the potential downsides of a CLTV lock and price accordingly. Despite these complexities, liquidity ads are heralded as a valuable component of the lightning network's development. The community is working towards integrating liquidity marketplaces into popular implementations, underscoring the protocol's potential despite the intricacies involved.</summary>
+    <published>2023-12-01T17:45:18+00:00</published>
+  </entry>
+</feed>
