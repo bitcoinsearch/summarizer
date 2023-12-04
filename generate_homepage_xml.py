@@ -24,7 +24,6 @@ from src.gpt_utils import generate_chatgpt_summary, consolidate_chatgpt_summary
 from src.config import TOKENIZER, ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX, ES_DATA_FETCH_SIZE, \
     CHAT_COMPLETION_MODEL
 
-
 warnings.filterwarnings("ignore")
 load_dotenv()
 
@@ -434,7 +433,8 @@ class GenerateJSON:
             response_str = response_str[8:].strip()
         return response_str
 
-    def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False, remove_xml_extension=False):
+    def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
+                            remove_xml_extension=False):
         number = self.get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -474,7 +474,8 @@ class GenerateJSON:
             "dev_name": local_dev_name,
             "contributors": contributors,
             "file_path": file_path,
-            "combined_summ_file_path": combined_summ_file_path if os.path.exists(f"static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml") else ""
+            "combined_summ_file_path": combined_summ_file_path if os.path.exists(
+                f"static/{local_dev_name}/{str_month_year}/combined_{xml_name}.xml") else ""
         }
         return entry_data
 
@@ -604,7 +605,6 @@ if __name__ == "__main__":
         #     recent_posts_data = recent_posts_data[:3]
 
         for data in recent_posts_data:
-
             # if preprocess body text not longer than token_threshold, skip that post
             if not gen.is_body_text_long(data=data, sent_threshold=2):
                 logger.info(f"skipping: {data['_source']['title']} - {data['_source']['url']}")
@@ -626,6 +626,32 @@ if __name__ == "__main__":
             data['_source']['dev_name'] = dev_name
             recent_data_list.append(data)
             recent_data_post_counter += 1
+
+        # logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
+
+        if not recent_data_list:
+            for data in recent_posts_data:
+                # if preprocess body text not longer than token_threshold, skip that post
+                if not gen.is_body_text_long(data=data, sent_threshold=2):
+                    logger.info(f"skipping: {data['_source']['title']} - {data['_source']['url']}")
+                    continue
+
+                title = data['_source']['title']
+                # if title in seen_titles:
+                #     continue
+                seen_titles.add(title)
+                if recent_data_post_counter >= 3:
+                    break
+                counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
+                                                                                     df=all_data_df)
+                authors = data['_source']['authors']
+                for author in authors:
+                    contributors.remove(author)
+                data['_source']['n_threads'] = counts
+                data['_source']['contributors'] = contributors
+                data['_source']['dev_name'] = dev_name
+                recent_data_list.append(data)
+                recent_data_post_counter += 1
 
         logger.info(f"Number of recent posts collected: {len(recent_data_list)}")
 
