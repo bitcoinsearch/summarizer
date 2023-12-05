@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Liquidity Ads and griefing subtleties</title>
+  <updated>2023-12-05T02:03:21.967017+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-12-04 09:48:10+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Liquidity Ads and griefing subtleties</title>
+    <updated>2023-12-05T02:03:21.967046+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004230.html" rel="alternate"/>
+    <summary>In an effort to refine the management of seller's funds within a transactional system, a strategy has been proposed to handle the funds through distinct counters, each reflecting different states of the seller's assets. The first counter, `to_local`, represents seller's funds that are not subjected to any leasing conditions. The second counter, `to_local_leased`, tracks the seller's leased funds. Lastly, `to_local_leased_owed` operates similarly to `to_local_leased`, but without accounting for pending HTLCs sent by the seller.
+
+The handling of HTLCs—Hash Time-Locked Contracts—is central to this strategy. When the seller issues HTLCs, the amounts should be deducted from the `to_local_leased` fund initially and, upon depletion, then deducted from the `to_local` fund, ensuring that `to_local_leased_owed` remains unaffected. Conversely, when HTLCs are fulfilled, the amounts are reduced from `to_local_leased_owed`. Failed HTLCs, however, cause the funds to be returned to `to_local_leased` first, and once it equals `to_local_leased_owed`, any surplus is allocated back to `to_local`.
+
+Commitment transactions must also be carefully constructed: if the `to_local_leased` balance exceeds the dust threshold, an output with a corresponding CLTV (CheckLockTimeVerify) should be created, signifying the leased nature of the funds. Similarly, if `to_local` is greater than dust, an output should be created without a CLTV lease. These processes are crucial during the sending and receiving of `commit_sig` messages, with updates being applied in a specific order: `update_fulfill_htlc` updates precede `update_fail_htlc` ones to ensure accurate updating of `to_local_leased_owed`.
+
+Moreover, the system needs to accommodate concurrent leases, allowing multiple, overlapping leases to coexist within the same transactional framework. This increases the complexity and cost due to the additional outputs required in the commitment transactions, which sellers need to consider when deciding on funding leases. It's suggested that managing these concurrent leases could involve creating distinct `to_local_leased_owed` buckets for each lease, ordering them by their respective expiry dates to maintain fairness towards the buyer.
+
+This approach is expected to address potential exploitations and maintain equitable transactions between participants. However, it requires thorough analysis to identify possible scenarios where cheating could occur, particularly concerning channel reserves and the implications of increased commitment transaction weights. The programmer invites colleagues to rigorously test this proposed system to ensure its integrity before implementation.</summary>
+    <published>2023-12-04T09:48:10+00:00</published>
+  </entry>
+</feed>
