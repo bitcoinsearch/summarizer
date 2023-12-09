@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Liquidity Ads and griefing subtleties</title>
-  <updated>2023-12-05T02:04:15.584688+00:00</updated>
+  <updated>2023-12-09T01:57:16.862868+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-12-08 15:47:55+00:00</name>
+  </author>
+  <author>
+    <name>Bastien TEINTURIER 2023-12-08 08:00:42+00:00</name>
+  </author>
+  <author>
+    <name>Matt Morehouse 2023-12-07 21:17:53+00:00</name>
+  </author>
   <author>
     <name>Bastien TEINTURIER 2023-12-04 09:48:10+00:00</name>
   </author>
@@ -15,6 +24,9 @@
   <author>
     <name>Bastien TEINTURIER 2023-12-01 17:45:18+00:00</name>
   </author>
+  <link href="lightning-dev/Dec_2023/004241_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004240_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004239_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004230_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004229_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004228_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
@@ -23,15 +35,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Liquidity Ads and griefing subtleties</title>
-    <updated>2023-12-05T02:04:15.584739+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004230.html" rel="alternate"/>
-    <summary>The correspondence delves into a sophisticated mechanism designed to manage the seller’s funds within a transactional channel, particularly focusing on the use of CheckLockTimeVerify (CLTV) leases. The proposed system involves three distinct counters for the seller's funds: `to_local` for non-leased funds, `to_local_leased` for leased funds, and `to_local_leased_owed`, which mirrors `to_local_leased` but excludes pending HTLCs sent by the seller. The strategy dictates the order in which these funds are affected by outgoing and incoming HTLCs, ensuring that leased funds are prioritized for deduction when HTLCs are sent, and that they are replenished first in the event of failed HTLCs. This precise ordering is critical, especially when dealing with commitment transactions where the evaluation must begin with `update_fulfill_htlc` updates.
+    <updated>2023-12-09T01:57:16.862933+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004241.html" rel="alternate"/>
+    <summary>The discussion revolves around the implementation of lease enforcement in a transactional system, specifically focusing on CheckLockTimeVerify (CLTV) and its role in providing equitable protection for both buyers and sellers. One perspective considers the possibility of not using CLTV enforcement and relying solely on incentives, suggesting that the concept of lease durations may become irrelevant. Instead, it proposes simply allowing the purchase of inbound liquidity with the seller having the autonomy to decide the duration of availability. This approach places the risk of early channel closure on the buyer.
 
-The intricacies of managing multiple concurrent leases are also considered. For instance, if a buyer like Alice engages in several lease purchases from a seller such as Bob over different periods, the channel initiator may face higher costs due to the necessity of creating multiple outputs in the commitment transactions. A suggestion is made to maintain separate `to_local_leased_owed` buckets for each lease and to sequence them based on their expiry dates. This method aims to prevent scenarios that could allow either party to cheat while also questioning the potential issues related to channel reserves due to increased transaction weights.
+The idea of leasing liquidity is further explored, contrasting the leasing of a channel's entire capacity versus only the initial inbound liquidity. It contemplates whether operators prefer transacting for a certain amount of inbound flow or a guaranteed open channel with an initial balance for a specified period. The notion of "liquidity ads" is introduced, where instead of leasing the channel itself, only the initial liquidity is leased, and subsequent balances returned to the seller are not encumbered, potentially creating flexibility for the seller based on bidirectional flow.
 
-Additionally, the email addresses the challenges posed by liquidity ads, which play a pivotal role in protocol design. The discussion includes the risks for sellers when buyers purchase inbound liquidity and subsequently transfer funds out, leaving the seller with an undesired lock on a larger sum than intended. The specification suggests implementing CLTV to protect buyers from premature channel closures by sellers, but this measure can be disadvantageous for the seller as well. The conversation considers the reputability of sellers versus buyers, suggesting that in some cases, it might be beneficial for sellers not to enforce CLTV, allowing buyers to assume the risk instead. The complexity further escalates with the introduction of channel splicing, which complicates the preservation of lease terms and highlights the intricate balance between security and fairness in liquidity ads.
+A technical strategy is detailed involving managing funds through three distinct counters: `to_local`, `to_local_leased`, and `to_local_leased_owed`. The importance of the correct handling of HTLCs is emphasized, specifying how they should be accounted for in each counter to maintain accurate tracking of leased and non-leased funds. Commitment transactions are also addressed, suggesting when outputs with or without CLTV should be created, based on the balance amounts. Moreover, accommodating concurrent leases within the same transaction framework adds complexity and necessitates careful consideration by sellers when funding leases.
 
-In summary, the email examines various technical strategies and considerations for improving transaction output management, specifically through the implementation of CLTV leases. It navigates through the complexities of handling leased funds, concurrent leases, and liquidity ads, with attention to the implications for both buyers and sellers in the context of the lightning network. The community’s ongoing efforts to integrate liquidity marketplaces into popular implementations underscore the significance of these discussions for the network’s advancement.</summary>
-    <published>2023-12-04T09:48:10+00:00</published>
+A concrete example explains transaction outputs regarding channel capacity and ownership, emphasizing the use of CLTV encumbrance to lock specific amounts while leaving additional funds accessible. This method balances security and liquidity within channel transactions. The email describes a policy where the first 10,000 sats from the seller are CLTV-bound, with additional amounts processed as standard transactions. It outlines the prioritization of depleting the standard output before tapping into CLTV-bound funds for outgoing HTLCs and replenishing the CLTV output in case of failed HTLCs, aiming to prevent exploitation.
+
+The potential for liquidity griefing attacks is acknowledged, highlighting challenges for sellers in pricing their offers due to unpredictable fund movements by buyers. A proposal suggests protecting sellers with a CLTV lock but recognizes that this can lead to unintended consequences and possible exploitation scenarios. The reputation disparity between sellers, often well-connected nodes, and buyers, who may be new nodes, is noted, suggesting that protecting sellers might sometimes be more logical. An optional CLTV enforcement is considered, allowing sellers to weigh the risks and set rates accordingly. The complexities of splicing channels are also examined, suggesting restrictions to maintain lease terms' integrity.
+
+In summary, the conversation examines different strategies to handle the intricacies of leasing liquidity and managing channel funds, weighing the pros and cons of enforcing CLTV and its impact on both buyers and sellers. The community continues to explore the integration of liquidity marketplaces into the lightning network, acknowledging the challenges and potential these protocols offer.</summary>
+    <published>2023-12-08T15:47:55+00:00</published>
   </entry>
 </feed>
