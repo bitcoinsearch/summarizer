@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Liquidity Ads and griefing subtleties</title>
+  <updated>2023-12-11T01:59:32.328726+00:00</updated>
+  <author>
+    <name>Matt Morehouse 2023-12-08 22:31:59+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Liquidity Ads and griefing subtleties</title>
+    <updated>2023-12-11T01:59:32.328764+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004242.html" rel="alternate"/>
+    <summary>The communication emphasizes a simplified bookkeeping method for managing leased amounts in commitment transactions. Instead of using counters, the proposal suggests encumbering the seller's first portion of sats with CLTV (Check Lock Time Verify) until the leased amount is reached. To illustrate this, the discussion provides an example where Alice leases 10k sats from Bob, and they both contribute an equal amount to balance the channel.
+
+In their initial commitment transaction, both Alice and Bob start with 10k sats each, but Bob's share is encumbered by the CLTV. When Bob sends a 2k sats HTLC (Hash Time Locked Contract) to Alice, his encumbered balance decreases to 8k sats while the HTLC value is temporarily held at 2k sats. Upon fulfillment of HTLC1, Alice's balance increases to 12k sats, while Bob remains at 8k sats encumbered. Further transactions follow this pattern where Alice sends a 4k sats HTLC to Bob, which upon fulfillment, results in any of Bob's balance over the initial 10k sats being unencumbered.
+
+As the transactions continue, the email details how HTLCs offered by Bob are always deducted from his unencumbered output first, keeping the encumbered output intact until it dips below the leased amount threshold. In the event that multiple HTLCs are active, some may be fulfilled while others fail, affecting the encumbrance of Bob's sats accordingly. The key takeaway is that Alice cannot lock up more than 10k sats on Bob's side, as that is the maximum lease amount agreed upon.
+
+The correspondence also addresses potential strategies Bob might employ, such as circular routing or force closing with outstanding HTLCs, as ways to access liquidity early. These tactics are acknowledged as common across other proposals, highlighting the necessity of limiting the value of HTLCs in flight to mitigate associated risks.</summary>
+    <published>2023-12-08T22:31:59+00:00</published>
+  </entry>
+</feed>
