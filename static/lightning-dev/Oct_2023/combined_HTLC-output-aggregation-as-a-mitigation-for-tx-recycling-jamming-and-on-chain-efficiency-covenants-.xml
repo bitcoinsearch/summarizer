@@ -2,32 +2,40 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
-  <updated>2023-11-22T02:08:52.629127+00:00</updated>
+  <updated>2023-12-12T02:03:24.917844+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-12-11 09:17:23+00:00</name>
+  </author>
   <author>
     <name>Antoine Riard 2023-11-21 02:39:45+00:00</name>
   </author>
   <author>
     <name>Johan Torås Halseth 2023-10-26 16:52:03+00:00</name>
   </author>
+  <link href="lightning-dev/Dec_2023/004243_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004218_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
   <link href="lightning-dev/Oct_2023/022093_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
-    <updated>2023-11-22T02:08:52.629178+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004218.html" rel="alternate"/>
-    <summary>The recent communication highlights the intricacies of enhancing the security and efficiency of the Lightning Network (LN) through HTLC output aggregation. The sender delves into the technical aspects of transaction recycling, a vulnerability that emerges from modifications to HTLC second-level transactions for anchor channel types. These modifications permit fee additions without infringing upon existing signatures. This particular form of attack was not feasible with legacy channels due to the requirement for fees to be extracted directly from the HTLC outputs, which necessitated mutual agreement during the signing process.
+    <updated>2023-12-12T02:03:24.917905+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004243.html" rel="alternate"/>
+    <summary>The recent correspondence delves into the intricacies of improving the Lightning Network's transaction mechanisms, particularly focusing on the vulnerabilities and potential enhancements related to Hash Time-Locked Contracts (HTLCs). The discussion begins by identifying a specific attack vector known as the 'transaction recycling attack,' which takes advantage of modifications made to HTLCs in anchor channel types. These modifications permit additional inputs to augment fees without compromising the signature's validity. This susceptibility does not apply to legacy channels since their fees are sourced from HTLC outputs and mutually agreed upon.
 
-HTLC output aggregation stands out as a potential solution to reduce fee-bumping reserve requirements and handle transaction malleability issues on the LN. The aggregation allows for common fields within second-stage HTLC transactions to potentially be shared, thereby saving costs and resources. However, this approach does not come without its challenges; it retains a certain level of malleability that could be exploited by a counterparty to deplete the value promised via HTLCs by incurring excessive miner fees. 
+A notable proposition involves the aggregation of HTLC outputs, which presents several advantages, including a reduction in the reserves required for fee-bumping. Nevertheless, this method is not devoid of challenges, such as the residual malleability that might enable a counterparty to unjustly inflate miner fees. To combat this issue, the recommendation is to bifurcate HTLC claims into two distinct outputs and employ covenants to oversee aggregated claims, contingent upon witness and chain state conditions. Despite these measures, there remains a concern regarding the protocol's inherent 483 limit, which could hinder the long-term payment throughput capabilities of the Lightning Network.
 
-The discussion further explores the concept of segregating HTLC claims into two distinct outputs, each replicating the HTLC lockscripts fully. This method would allow covenants to accept or reject aggregated claims based on the presence of a satisfying witness and chain state conditions for timelocks. There is also consideration of the protocol limit of 483 as a long-term constraint on LN's payment throughput, which could be mitigated by introducing sliding windows that regulate the claim periods for HTLCs, though this introduces complexity requiring off-chain consensus on fee rate thresholds among routing nodes.
+In search of solutions to manage HTLC claim periods, the sliding window concept was introduced, requiring an off-chain consensus on feerate thresholds among routing nodes. Furthermore, Point Time-Locked Contracts (PTLCs) are mentioned as a possible avenue for maintaining a relatively stable size for offered HTLCs through the use of aggregate curve points. Covenant mechanisms are also suggested as potentially beneficial during the withdrawal phases of payment pools, which encompass multiple participants and non-competing transactions.
 
-Further complexities are introduced when considering Partial Timelock Contracts (PTLCs) and their ability to generate aggregate curve points for plausible scalar combinations. This could potentially streamline the offered HTLCs to a near-constant size. The email suggests that covenant mechanisms may be applicable beyond HTLCs, such as in the withdrawal phase for payment pools, where many participants wish to confirm non-competing withdrawals simultaneously.
+The email touches upon the complexities of implementing multiple covenants within Bitcoin's conservative framework, cautioning about the risks of enabling 'malicious' Layer 2 contracts that have yet to be fully understood from a game-theory perspective. Previous discussions around CoinSwap's Transaction Withholding Attack are referenced, emphasizing the need for an efficiency simulation framework to evaluate different covenant structures and their respective performance trade-offs.
 
-An interesting proposal is the creation of an efficiency simulation framework to evaluate the performance trade-offs between various covenants, as the email identifies differing implications for average and worst-case witness sizes. The author warns against activating multiple complex covenants concurrently, citing concerns over insufficiently understood game-theoretic implications.
+Lastly, the email poses an intriguing question about whether advanced cryptosystems, predicated on assumptions other than the Discrete Logarithm problem, could enhance the scalability of LN payment throughput. The goal would be to decouple the quantity of off-chain payments from the on-chain witness size necessary for claiming them, without undermining security. The exploration of this subject signifies a concerted effort to strike a delicate balance between innovation and security within the Bitcoin ecosystem and its associated Layer 2 solutions.
 
-Finally, the email hints at the possibility of advanced cryptosystems, which could significantly scale LN payment throughput by decoupling the number of off-chain payments from on-chain witness size growth, all without compromising security. The communication underscores the ongoing research and development required to address these challenges and improve the scalability and robustness of the LN.</summary>
-    <published>2023-11-21T02:39:45+00:00</published>
+Moreover, the discussion extends to the ramifications of HTLC output aggregation on both transaction recycling and slot jamming. The amendment that permits adding fees to anchor channel type transactions without invalidating the signature has been pointed out as the root of the transaction recycling attack. In contrast, this issue did not affect legacy channel types. The aggregation of HTLC outputs into a single output aims to provide numerous benefits, including enabling the spender to allocate the desired amount for fees. However, this implementation hinges on the application of a covenant.
+
+The sender also highlights the limitations posed by the current system where each forwarded HTLC results in a separate output on the commitment transaction, thereby restricting the number of active HTLCs and making it feasible to jam the channel with minimal capital. Covenants could facilitate a unified aggregated output on the commitment, corresponding to the sum of active HTLCs, allowing spenders to claim only what they are entitled to. Such aggregation could significantly alter the dynamics of slot jamming by obviating the need for a commitment output for each HTLC, though questions about chain fees and economic viability remain.
+
+Additionally, the exploration of new covenant primitives on Layer 1 is proposed, alongside the consideration of PTLCs for generating a compact proof of preimage knowledge for certain satoshi amounts, potentially resolving the slot jamming issue altogether. A recursive covenant is deemed necessary for achieving HTLC output aggregation, with suggestions to explore OP_CHECKCONTRACTVERIFY, OP_CAT, and amount inspection for this purpose. A preliminary demonstration using OP_CHECKCONTRACTVERIFY has been created to spend an HTLC output by committing all active HTLCs in a merkle tree and furnishing merkle proofs for claiming the sum into a new output. HTLC output aggregation is underscored as a promising development for enhancing channel transactions' efficiency, security, and scalability, warranting further research and evolution of covenant primitives.</summary>
+    <published>2023-12-11T09:17:23+00:00</published>
   </entry>
 </feed>
