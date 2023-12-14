@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>The remote anchor of anchor channels is redundant</title>
+  <updated>2023-12-14T02:02:46.207549+00:00</updated>
+  <author>
+    <name>Peter Todd 2023-12-13 10:40:59+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>The remote anchor of anchor channels is redundant</title>
+    <updated>2023-12-14T02:02:46.207579+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004246.html" rel="alternate"/>
+    <summary>The construction of commitment transactions for the Lightning Network as outlined in BOLT 3 has been identified to contain a design flaw concerning the use of both remote and local anchor outputs. The specification indicates that if `option_anchors` is applied, the presence of `to_local` or untrimmed HTLCs necessitates the addition of a `to_local_anchor` output. Similarly, the existence of `to_remote` or untrimmed HTLCs requires a `to_remote_anchor` output. The structure of these anchor outputs is defined by a specific set of opcodes.
+
+In instances where a Child Pays for Parent (CPFP) fee bump is necessary, the `to_local` output cannot be used immediately due to a CSV delay. This delay allows the remote party time to utilize the revocation pubkey, which is not an issue with the `to_remote` output. The `to_remote` output's simplicity makes it almost suitable for CPFP usage while still unconfirmed. However, non-anchor channels bypass this complexity by utilizing a P2WPKH output that is directly spendable by the remotepubkey, making the `to_remote_anchor` output essentially redundant.
+
+The redundancy of having both remote and local anchor outputs leads to unnecessary consumption of blockchain space when employing anchor outputs. This inefficiency is compounded by the common practice among Lightning implementations to transfer the CSV-delayed `to_remote` output into a separate transaction promptly, instead of treating it like a standard wallet output.
+
+To improve upon this, there could be potential for omitting the `to_local` anchor when HTLCs are active by adding more complexity in the implementation process. Such changes would need careful analysis of the permissions associated with the ability to spend the HTLCs. This critique of the current design and suggestions for further work on the Lightning Network were discussed with Matt Corallo, who also acknowledged the aforementioned design flaw. More insights and discussions on this topic can be found at Peter Todd's website, accessible via the following link: [https://petertodd.org](https://petertodd.org). For direct communication, Peter Todd can be contacted at the email address derived from 'peter'[:-1]@petertodd.org.</summary>
+    <published>2023-12-13T10:40:59+00:00</published>
+  </entry>
+</feed>

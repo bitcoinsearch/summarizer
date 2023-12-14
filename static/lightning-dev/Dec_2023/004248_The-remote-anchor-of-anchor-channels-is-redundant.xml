@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>The remote anchor of anchor channels is redundant</title>
+  <updated>2023-12-14T02:02:17.266759+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-12-13 13:27:13+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>The remote anchor of anchor channels is redundant</title>
+    <updated>2023-12-14T02:02:17.266792+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004248.html" rel="alternate"/>
+    <summary>In the email, Bastien addresses a query regarding the possibility of eliminating the remote anchor in favor of the main remote output within the context of channel transactions between two parties, Alice and Bob. He explains why this approach is currently not feasible due to a vulnerability it would introduce. Specifically, he outlines a scenario where Alice opens a channel to Bob, who at that point does not have a main output in the commit transaction. As Alice sends HTLCs to Bob, and even after Bob sends back an `update_fulfill_htlc` and his `commit_sig`, there remains no main output for Bob in the commit transaction. If Alice then broadcasts her commit transaction without reciprocating with her `commit_sig`, Bob finds himself in a position where he must ensure the confirmation of Alice's commit transaction to claim the HTLCs before they time out.
+
+Bastien further clarifies that Bob cannot rely on broadcasting his own commit transaction using the local anchor, as the fee rate would be identical to Alice's, rendering it ineffective in overtaking Alice's transaction in the event of a mempool race. The lack of package relay contributes to this issue, as it means that Alice's transaction is more likely to confirm first across all mempools.
+
+The proposed alternative, which would involve reworking HTLCs to serve as anchors, was deemed overly complex and fraught with its own issues. Instead, Bastien expresses a preference to wait for the implementation of v3 transactions and package relay, which promises a resolution by moving to a single ephemeral anchor and thus rectifying the outlined problem. The explanation highlights the complexities involved in transaction handling and the need for further technological advancements to streamline these processes within the network.</summary>
+    <published>2023-12-13T13:27:13+00:00</published>
+  </entry>
+</feed>

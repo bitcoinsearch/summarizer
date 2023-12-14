@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>bip-0127 "Simple Proof-of-Reserves Transactions"</title>
+  <updated>2023-12-14T01:57:16.306217+00:00</updated>
+  <author>
+    <name>Ademan 2023-12-12 18:21:29+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>bip-0127 "Simple Proof-of-Reserves Transactions"</title>
+    <updated>2023-12-14T01:57:16.306256+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022190.html" rel="alternate"/>
+    <summary>Exploration into proof-of-reserves has led to the examination of BIP-0127 and its partial implementation through bdk-reserves, which has prompted several questions and comments regarding the BIP's clarity and potential improvements. There is a debate concerning the use of SHA-256 versus double SHA-256 for hashing, with the latter seemingly preferred for enhanced security despite slightly less efficiency, yet this choice demands further expert analysis in cryptographic protocol design.
+
+The specification of an output's scriptPubkey in transactions remains ambiguous. The bdk-reserves have adopted an unspendable p2wpkh script, but there's speculation on whether an empty OP_RETURN could serve equally well. This raises the question of whether it would be advantageous for the BIP to recommend a specific output scriptPubkey, possibly offering options with varying degrees of endorsement.
+
+A significant concern involves ensuring that inputs genuinely commit to the commitment input, particularly when only the final transaction is available. This validation can prove challenging, especially for non-simple cases beyond p2pkh and p2wpkh. The proposed solution involves input malleation followed by re-validation of all inputs, where successful validations are considered failures. Such an approach might exclude certain outputs like lightning anchor outputs if they were to persist on-chain, though it’s important to consider any potential false negatives this method might produce. The nature of the ideal malleation for the commitment input also remains up for discussion, with suggestions ranging from adding "MALLEATED" to the commitment string to setting the txid to a constant.
+
+Finally, there is the matter of incorporating additional data within the commitment message, such as current time and identity pubkey. While the BIP might not address this directly, the simplicity of appending base64-encoded JSON data or plain JSON data to a "Proof-of-Reserves" declaration presents an attractive option. However, the prover could also opt to communicate this data out of band, allowing the verifier to reconstruct the commitment message independently, supporting the use of an ad-hoc format.
+
+These queries point to areas within BIP-0127 that could benefit from greater elaboration or standardization to facilitate more uniform implementation practices and enhance overall transparency and security in proof-of-reserves protocols.</summary>
+    <published>2023-12-12T18:21:29+00:00</published>
+  </entry>
+</feed>

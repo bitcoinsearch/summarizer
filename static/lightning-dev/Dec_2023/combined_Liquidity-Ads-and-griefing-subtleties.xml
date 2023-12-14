@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Liquidity Ads and griefing subtleties</title>
-  <updated>2023-12-12T02:07:55.353502+00:00</updated>
+  <updated>2023-12-14T02:00:48.874121+00:00</updated>
+  <author>
+    <name>Bastien TEINTURIER 2023-12-13 12:59:02+00:00</name>
+  </author>
+  <author>
+    <name>Keagan McClelland 2023-12-13 02:23:51+00:00</name>
+  </author>
   <author>
     <name>Bastien TEINTURIER 2023-12-11 13:53:27+00:00</name>
   </author>
@@ -30,6 +36,8 @@
   <author>
     <name>Bastien TEINTURIER 2023-12-01 17:45:18+00:00</name>
   </author>
+  <link href="lightning-dev/Dec_2023/004247_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004245_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004244_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004242_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004241_Liquidity-Ads-and-griefing-subtleties.xml" rel="alternate"/>
@@ -43,23 +51,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Liquidity Ads and griefing subtleties</title>
-    <updated>2023-12-12T02:07:55.353580+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004244.html" rel="alternate"/>
-    <summary>Recent discussions among programmers have focused on the management of leased liquidity in commitment transactions, suggesting the use of CheckLockTimeVerify (CLTV) to control a seller's satoshis. For example, if Alice leases 10k sats from Bob, CLTV would encumber Bob's share until the lease amount is met or exceeded. To prevent misuse, such as circular routing or early access to liquidity through force closing by Bob, HTLCs offered by Bob would reduce his unencumbered balance first, safeguarding the encumbered output.
+    <updated>2023-12-14T02:00:48.874209+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004247.html" rel="alternate"/>
+    <summary>Programmers developing a transactional system are examining liquidity guarantees, focusing on ensuring buyers can consistently receive payments and sellers maintain minimum liquidity levels. Rapid re-provisioning of depleted liquidity is vital but challenging due to high chain fees for small transactions. Timelocks have been deemed ineffective in incentivizing sellers to preserve liquidity. Instead, routing fees and lease fees are considered better incentives, with reputation risk playing a significant role in ensuring proper behavior among those offering leases. To prevent improper conduct without tying up funds, a streaming lease payment strategy has been suggested that would allow sellers to close channels upon defaults.
 
-An alternative approach recommends dispensing with CLTV enforcement, allowing market forces and user choices to govern liquidity allocation. This perspective accepts the risk of sellers exiting agreements early and regards lease durations as less relevant, favoring flexibility and user-driven decision-making over guaranteed liquidity maintenance.
+The complexity of managing concurrent leases has sparked debate, including the introduction of quiescence sessions to synchronize commitment transaction updates and the risks of compatibility issues or forced closures. A simplification proposal recommends eliminating CLTV on the seller's side to let market dynamics naturally allocate liquidity. Examples provided suggest encumbering the seller's sats with CLTV until a set limit, allowing early access to liquidity through common strategies.
 
-One proposal seeks to protect sellers from attacks that may affect pricing due to uncertainties around locked liquidity. The community has not yet reached a consensus but shows a preference for this protective measure. Additionally, an adjustment to liquidity advertisements has been presented, where temporary one-directional transfers of liquidity are offered instead of leasing entire channel capacities. Sellers regain full control of their balance after the buyer consumes the agreed leased amount, raising questions about operator preferences for transaction types.
+Flexibility in lease durations has also been proposed, with temporary liquidity provisions for one-directional transfers until a predefined amount is reached. This model considers operators' preferences for transactions based on specific inbound liquidity amounts rather than fixed durations. An advanced fund management strategy introduces distinct counters for different states of the seller's funds (`to_local`, `to_local_leased`, `to_local_leased_owed`) and underscores the importance of HTLC fulfillment order and commitment transaction construction to handle overlapping leases effectively.
 
-To manage various states of funds within a system, a strategy involving distinct counters (`to_local`, `to_local_leased`, and `to_local_leased_owed`) has been suggested for leased funds and related HTLCs. A complex framework for handling concurrent leases is proposed, requiring careful management and testing to avoid exploitation.
+In cryptocurrency transactions, particularly lightning networks, programmers discuss creating separate `to_local_leased_owed` buckets for each lease and ordering them by expiry dates to ensure fairness and prevent exploitation. Extensive testing is needed to counter potential cheating and understand the implications of increased commitment transaction weights. Balancing channel capacity and ownership is crucial, using CLTV as a security tool. For example, Bob's purchased amount should be CLTV-encumbered, while additional funds should remain liquid. Funds not used for purchases should not be encumbered, preserving the system's integrity.
 
-Moreover, the management of transaction outputs with CLTV encumbrance is detailed, including how funds owned by entities like Bob are processed, ensuring security for certain funds while keeping others readily accessible.
+A policy is outlined where the first 10,000 satoshis from the seller are CLTV-bound, with excess processed normally. Prioritizing depletion of standard outputs over CLTV-bound funds when processing outgoing HTLCs is recommended, refilling the CLTV output before normal outputs. The discussion also includes applying lease timelocks to HTLC outputs and capping the total value of in-flight HTLCs to safeguard both parties.
 
-The email also delves into the implementation of HTLCs, addressing risks for buyers and sellers regarding liquidity ads. The potential for 'liquidity griefing attacks' exists, where sellers could be left with excess unwanted liquidity. To counteract this, a CLTV clause is suggested as a defense against premature closures by malicious sellers, although it poses risks to sellers when dealing with HTLC failures.
-
-There is consideration for prioritizing seller protection, particularly for established nodes, by potentially removing CLTV requirements. Furthermore, the topic of splicing is addressed, proposing that sellers should only splice in additional funds, while buyers retain complete splicing freedom, though this doesn't fully prevent seller interference.
-
-In conclusion, sellers must be aware of the downsides of CLTV locks and adapt their pricing strategies. Despite the complexities, liquidity ads are crucial for the lightning network's progress, with ongoing efforts to integrate liquidity marketplaces into common implementations.</summary>
-    <published>2023-12-11T13:53:27+00:00</published>
+Liquidity ads introduce protocol design challenges, such as preventing liquidity griefing attacks and addressing pricing issues. Protection against premature channel closures is considered, balancing the interests of buyers and sellers. Debates include whether to segregate leased funds in commitment transactions and the reputation impact for sellers. The possibility of sellers opting out of CLTV enforcement to attract buyers is discussed, despite risks. Channel splicing complexities are acknowledged, proposing seller restrictions on splicing out but not in, maintaining lease term integrity. Liquidity ads hold promise for the lightning network, with ongoing efforts to include liquidity marketplaces in popular implementations.</summary>
+    <published>2023-12-13T12:59:02+00:00</published>
   </entry>
 </feed>
