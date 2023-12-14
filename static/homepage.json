@@ -1,6 +1,21 @@
 {
-    "header_summary": "Recent discussions among programmers have raised security concerns about the Eltoo protocol due to the absence of a mechanism for broadcasting a revoked state, which could lead to an increase in state combinations and potential vulnerabilities. Antoine's insights prompted Johan to seek a practical example of how an attacker could exploit this flaw, underscoring the need for effective mitigation strategies to maintain the integrity of the system.\n\nPeter Todd has introduced a preventive strategy against replacement cycling attacks in Bitcoin transactions, suggesting that altruistic entities could monitor and rebroadcast replaced transactions, as they remain valid for inclusion in the blockchain. While the approach is promising and likely to be storage-efficient, there are concerns regarding the limitations of Bitcoin Core's current transaction propagation system. Proposed solutions, such as the Transaction Announcements Reconciliation BIP, are being discussed to improve network synchronization, with additional information available in references [1] and [2].\n\nThe release of Bitcoin Core version 26.0 heralds significant improvements, including support for BIP324 and stronger defenses against eclipse and partition attacks. It advances transaction management and network information access, with stricter startup protocols for configuration errors. Wallet functionality has been enhanced for better error reporting and handling of corrupt records, while GUI improvements and testnet standardization reflect ongoing efforts to refine user experience. The community's collaborative spirit is evident in these developments, and users are encouraged to adopt the new version and consult the official documentation for comprehensive guidance.",
+    "header_summary": "Recent discussions on BIP-0127's proof-of-reserves implementation have raised concerns over hashing methods, with a leaning towards double SHA-256 for enhanced security despite its lower efficiency. The specification of an output's scriptPubkey in transactions is ambiguous, prompting suggestions for the BIP to clarify the selection process between an unspendable p2wpkh script and an empty OP_RETURN script. Additionally, the challenge of verifying commitment inputs in the presence of input malleation has led to proposals for including extra data such as time and identity within the commitment message, either appended directly or communicated out-of-band.\n\nSeparately, security issues in the Eltoo protocol, including the lack of a revoked state broadcast, have been discussed with a focus on the practicality of managing a potential exponential increase in state combinations. Meanwhile, to combat replacement cycling attacks in Bitcoin transactions, a method involving altruistic parties rebroadcasting original transactions has been proposed, with the Transaction Announcements Reconciliation BIP aiming to enhance transaction propagation across the network. For a detailed analysis, references [1] and [2] are available, and further inquiries may be directed to Peter Todd via his domain.",
     "recent_posts": [
+        {
+            "id": "022190",
+            "title": "bip-0127 \"Simple Proof-of-Reserves Transactions\"",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022190.html",
+            "authors": [
+                "Ademan"
+            ],
+            "published_at": "2023-12-12T18:21:29+00:00",
+            "summary": "- Debates on hashing in BIP-0127 favor double SHA-256 for security, needing expert review.\n- Uncertainty exists over specifying output scriptPubkey in the BIP, with multiple suggestions.\n- Enhancing proof-of-reserves may require standardizing BIP-0127 to clarify implementation.",
+            "n_threads": 1,
+            "dev_name": "bitcoin-dev",
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Dec_2023/022190_bip-0127-Simple-Proof-of-Reserves-Transactions-.xml",
+            "combined_summ_file_path": ""
+        },
         {
             "id": "022189",
             "title": "HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)",
@@ -9,7 +24,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-12-11T09:17:23+00:00",
-            "summary": "- Johan and Antoine discussed Eltoo protocol's lack of revoked state broadcasts.\n- Johan requested a concrete example to understand the exploitation risks better.\n- He pondered the management of exponentially increasing state combinations.",
+            "summary": "- Johan discussed potential security issues in Eltoo protocol with Antoine.\n- He asked for examples of consequences and exploitation by attackers.\n- Johan questioned how to manage the increasing state combinations effectively.",
             "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -26,26 +41,11 @@
                 "Peter Todd"
             ],
             "published_at": "2023-12-09T10:08:56+00:00",
-            "summary": "- A novel method counters replacement cycling attacks, aiding Bitcoin transaction security.\n- Altruistic parties may rebroadcast replaced transactions, ensuring network robustness without burdening nodes.\n- Despite limitations in Bitcoin Core's propagation, new BIP improvements aim for universal transaction synchronization.",
+            "summary": "- Altruistic third-party rebroadcasting can mitigate Bitcoin replacement cycling attacks.\n- Miners might rebroadcast transactions to avoid missing profitable opportunities.\n- Improvements to Bitcoin Core's transaction propagation are proposed to ensure network-wide synchronization.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
             "file_path": "static/bitcoin-dev/Dec_2023/022188_Altruistic-Rebroadcasting-A-Partial-Replacement-Cycling-Mitigation.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "022187",
-            "title": "Bitcoin Core 26.0 released",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022187.html",
-            "authors": [
-                "Michael Ford"
-            ],
-            "published_at": "2023-12-06T12:12:34+00:00",
-            "summary": "- Bitcoin Core 26.0 introduces new features, bug fixes, and performance enhancements.\n- Compatibility extends to multiple OS; users must shut down the current version before updating.\n- GUI and wallet functionalities have been updated, with experimental support for BIP324.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Dec_2023/022187_Bitcoin-Core-26-0-released.xml",
             "combined_summ_file_path": ""
         }
     ],
@@ -58,7 +58,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-10-26T16:52:03+00:00",
-            "summary": "- HTLC output aggregation merges multiple transactions, mitigating recycling and jamming issues.\n- The aggregation requires new covenant primitives and a recursive covenant for full implementation.\n- A proof-of-concept using OP_CHECKCONTRACTVERIFY demonstrates practical HTLC output aggregation.",
+            "summary": "- HTLC output aggregation could mitigate transaction recycling and slot jamming in channel types.\n- This concept relies on covenant primitives like OP_CHECKCONTRACTVERIFY for implementation.\n- A proof-of-concept shows aggregation by committing HTLCs in a merkle tree for efficient claims.",
             "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -68,21 +68,6 @@
             "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml"
         },
         {
-            "id": "022187",
-            "title": "Bitcoin Core 26.0 released",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022187.html",
-            "authors": [
-                "Michael Ford"
-            ],
-            "published_at": "2023-12-06T12:12:34+00:00",
-            "summary": "- Bitcoin Core version 26.0 introduces new functions, bug corrections, and better performance.\n- Upgrades need shutting down the old version; wallet and network enhancements are included.\n- The release notes detail GUI updates, standardization efforts, and credit multiple contributors.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Dec_2023/022187_Bitcoin-Core-26-0-released.xml",
-            "combined_summ_file_path": ""
-        },
-        {
             "id": "022188",
             "title": "Altruistic Rebroadcasting - A Partial Replacement Cycling Mitigation",
             "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022188.html",
@@ -90,11 +75,26 @@
                 "Peter Todd"
             ],
             "published_at": "2023-12-09T10:08:56+00:00",
-            "summary": "- An innovative method counters Bitcoin replacement cycling attacks through external rebroadcasting.\n- Storage for rebroadcasting is manageable with current hardware, possibly benefiting miners.\n- Enhancing mempool synchronization in Bitcoin Core could mitigate risks of missed transactions.",
+            "summary": "- An innovative solution counters replacement cycling attacks by rebroadcasting original Bitcoin transactions.\n- Storage for this anti-attack system is feasible and miners may have an incentive to participate.\n- Bitcoin Core's limitations may be improved by a BIP enhancing mempool synchronization across nodes.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
             "file_path": "static/bitcoin-dev/Dec_2023/022188_Altruistic-Rebroadcasting-A-Partial-Replacement-Cycling-Mitigation.xml",
+            "combined_summ_file_path": ""
+        },
+        {
+            "id": "022190",
+            "title": "bip-0127 \"Simple Proof-of-Reserves Transactions\"",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022190.html",
+            "authors": [
+                "Ademan"
+            ],
+            "published_at": "2023-12-12T18:21:29+00:00",
+            "summary": "- The debate over SHA-256 hashing methods for BIP-0127 requires further cryptographic analysis.\n- Ambiguity exists regarding the choice of scriptPubkey in transactions for the bdk-reserves.\n- Suggestions for enhancing BIP-0127 include clarifying commitment message inputs and optional data inclusion.",
+            "n_threads": 1,
+            "dev_name": "bitcoin-dev",
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Dec_2023/022190_bip-0127-Simple-Proof-of-Reserves-Transactions-.xml",
             "combined_summ_file_path": ""
         },
         {
@@ -105,15 +105,33 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-12-01T17:45:18+00:00",
-            "summary": "- Liquidity ads impact protocol design, posing pricing and attack risks for sellers.\n- Protecting sellers may be more crucial since they generally have a reputation for honesty.\n- CLTV enforcement could be optional, but complexities with splicing still challenge fairness.",
-            "n_threads": 9,
+            "summary": "- Liquidity ads impact both buyers and sellers, introducing pricing challenges and attack risks.\n- Solutions like CheckLockTimeVerify (CLTV) aim to protect parties but may inadvertently create imbalances.\n- Despite complexities, liquidity ads are key for the lightning network's progression and integration efforts.",
+            "n_threads": 11,
             "dev_name": "lightning-dev",
             "contributors": [
+                "Keagan McClelland",
                 "Matt Morehouse",
                 "ZmnSCPxj"
             ],
             "file_path": "static/lightning-dev/Dec_2023/004227_Liquidity-Ads-and-griefing-subtleties.xml",
             "combined_summ_file_path": "static/lightning-dev/Dec_2023/combined_Liquidity-Ads-and-griefing-subtleties.xml"
+        },
+        {
+            "id": "004246",
+            "title": "The remote anchor of anchor channels is redundant",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004246.html",
+            "authors": [
+                "Peter Todd"
+            ],
+            "published_at": "2023-12-13T10:40:59+00:00",
+            "summary": "- Peter Todd identified a design flaw in Lightning Network's commitment transactions.\n- Current practices cause inefficiency by using unnecessary blockchain space.\n- Suggestions for design improvement were discussed with Matt Corallo.",
+            "n_threads": 5,
+            "dev_name": "lightning-dev",
+            "contributors": [
+                "Bastien TEINTURIER"
+            ],
+            "file_path": "static/lightning-dev/Dec_2023/004246_The-remote-anchor-of-anchor-channels-is-redundant.xml",
+            "combined_summ_file_path": "static/lightning-dev/Dec_2023/combined_The-remote-anchor-of-anchor-channels-is-redundant.xml"
         },
         {
             "id": "022093",
@@ -123,7 +141,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-10-26T16:52:03+00:00",
-            "summary": "- HTLC output aggregation reduces all channel HTLC outputs to one, improving transaction efficiency.\n- Implementing this aggregation with covenants can address transaction recycling and slot jamming issues.\n- The concept necessitates new Layer 1 covenant primitives and might utilize PTLCs for proof compactness.",
+            "summary": "- HTLC output aggregation could enhance efficiency and security by consolidating commitment outputs.\n- Implementation requires new covenant types to allow users to claim their part of aggregated outputs.\n- Aggregation may solve slot jamming by obviating the need for individual output allocations per HTLC.",
             "n_threads": 3,
             "dev_name": "lightning-dev",
             "contributors": [
