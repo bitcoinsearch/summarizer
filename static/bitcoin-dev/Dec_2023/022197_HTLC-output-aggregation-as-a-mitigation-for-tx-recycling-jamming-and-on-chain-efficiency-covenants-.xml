@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+  <updated>2023-12-18T01:58:57.662868+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-12-17 22:56:38+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+    <updated>2023-12-18T01:58:57.662909+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022197.html" rel="alternate"/>
+    <summary>The email from Antoine to Johan discusses the intricacies and potential vulnerabilities associated with the new covenant mechanism in the context of Bitcoin's proposed Eltoo update. The mechanism simplifies Lightning Network transactions by collapsing all HTLC (Hash Time-Locked Contracts) outputs into one or two outputs, which are classified as offered or received. To spend an aggregated HTLC output, a user must satisfy the script locking condition by providing a preimage and a signature.
+
+Antoine explains that an aggregated HTLC offered output can represent multiple individual HTLC payouts, subject to the maximum standard transaction relay limits. The counterparty to whom the HTLCs are offered can claim a subset of these by presenting the corresponding signatures and preimages. However, there's no compulsion for the counterparty to reveal all the preimages they have been awarded. The non-spent HTLC outputs revert to a remainder subset.
+
+A significant concern raised is the possibility of replacement cycling attacks, wherein a counterparty may partially reveal preimages during the transaction process. This could potentially allow them to replace other honest transactions in the network mempool through high-fee, low-value spends, ultimately leading to double-spending attacks.
+
+Antoine provides an example of such an attack involving Alice and Bob, where Bob could manipulate the system to effectively steal a larger HTLC payout by successively replacing Alice's transactions with his own, higher fee ones. This type of attack benefits from the congestion in network mempools, which can delay the confirmation of malicious transactions.
+
+To address this issue, Antoine suggests that merely implementing "self-sustained" fees isn't sufficient. Instead, he proposes adding a sliding delay to the HTLC timelocks based on the block feerate to combat replacement cycling attackers who could exploit mempool congestion. He also touches upon the implications for witness size growth in a taproot-world scenario and mentions that introducing an accumulator at the Script level to efficiently test partial set membership might be an effective solution.
+
+Antoine concludes by linking to a previous discussion on the Linux Foundation mailing list, which further elaborates on the topic and his response therein.</summary>
+    <published>2023-12-17T22:56:38+00:00</published>
+  </entry>
+</feed>

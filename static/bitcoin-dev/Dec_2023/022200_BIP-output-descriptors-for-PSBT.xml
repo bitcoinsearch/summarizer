@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP: output descriptors for PSBT</title>
+  <updated>2023-12-18T02:03:56.318520+00:00</updated>
+  <author>
+    <name>SeedHammer Team 2023-12-18 00:52:44+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP: output descriptors for PSBT</title>
+    <updated>2023-12-18T02:03:56.318552+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022200.html" rel="alternate"/>
+    <summary>The BIP draft in discussion proposes an additional field for PSBTs, titled PSBT Encoded Output Descriptors. This enhancement aims to facilitate the transfer of output descriptors between wallets by introducing a PSBT_GLOBAL_OUTPUT_DESCRIPTOR field. This field would contain arbitrary BIP 380 output script descriptors, making the unsigned transaction optional within the PSBT. The rationale behind this proposal is that while a descriptor string encapsulates the necessary information about output scripts and addresses, it is not ideal for wallet transfers due to its lack of a machine-recognizable header and inability to convey metadata such as name and birth block.
+
+The proposed global type for the Output Descriptor includes fields for the earliest block height relevant to the descriptor, optionally followed by a UTF-8 encoded name, and the output descriptor formatted according to BIP380 without inline keys. The specification allows multiple PSBT_GLOBAL_XPUB entries when the PSBT_GLOBAL_OUTPUT_DESCRIPTOR is present and makes the presence of PSBT_GLOBAL_UNSIGNED_TX optional. Key expressions within the descriptor must reference PSBT_GLOBAL_XPUB entries using a specified format, and indexes outside the valid range or inline keys are considered invalid. Named references have been excluded due to their complexity and potential replacement with indexed references.
+
+Test vectors provided illustrate both invalid and valid cases, including examples of descriptors with out-of-bounds key references, invalid UTF-8 names, inline keys, and a valid 2-of-3 multisig descriptor named "Satoshi's Stash" with a specific birth block and associated keys.
+
+Compatibility considerations highlight that PSBTs lacking a PSBT_GLOBAL_UNSIGNED_TX might be rejected by software expecting it. These PSBTs are not intended for use in signing flows, hence posing no compatibility risk. Multiple PSBT_GLOBAL_XPUB entries could also cause rejections by software looking for a single extended key.
+
+A Go implementation for the BIP is available on GitHub, primarily for development and testing purposes, with a clear caution against using it in production due to its limited scope of validating only the PSBT format, not the descriptor itself.
+
+The BIP draft acknowledges previous work on the bip-wallet-policies draft BIP and incorporates serialization format specifications for compact descriptors, along with indexed key references, examples, and test vectors from that BIP.</summary>
+    <published>2023-12-18T00:52:44+00:00</published>
+  </entry>
+</feed>

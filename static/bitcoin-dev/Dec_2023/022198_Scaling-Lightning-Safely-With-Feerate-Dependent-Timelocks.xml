@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+  <updated>2023-12-18T02:01:38.774085+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-12-17 23:01:22+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+    <updated>2023-12-18T02:01:38.774119+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022198.html" rel="alternate"/>
+    <summary>The email from Antoine addresses the concept of a feerate-dependent timelock (FDT) proposal for Bitcoin, which aims to provide a solution for blockchain congestion detection, particularly in the context of Lightning Network and smart contracts. The FDT proposal is introduced as a novel formalization that utilizes sliding-time-locks based on block fee rates.
+
+Antoine explains that the FDT mechanism prevents the inclusion of a transaction within a block under certain conditions. These conditions are determined by existing consensus rules, such as bip68 and bip113, along with the implementation of new parameters like 'feerate_value_bound,' 'window_size,' and 'block_count.' These parameters allow transaction builders to set thresholds for when a transaction's confirmation can be delayed based on the median fee rate of a defined number of blocks.
+
+For instance, in a Lightning Network penalty scenario between two parties, transactions can be pre-signed with a specified 'feerate_value_bound.' Antoine provides an example where if the median fee rate surpasses this bound within a selected window, the transaction would not be included in the blockchain. This mechanism is suggested as a potential solution to the issue of "Forced Expiration Spam" described in the Lightning Network paper.
+
+Antoine also identifies design considerations for implementing FDTs, including the modification of revocable scripts to inspect FDT parameters and the addition of a 'claim_grace_period' parameter to mitigate fee-rate races after revocation timelocks expire. He suggests that all channels carrying a Hash Time-Locked Contract (HTLC) should have consistent FDT parameters to prevent issues like off-chain HTLC double-spending.
+
+The recommendation is made to incorporate FDT parameters into the bip341 annex due to available space and the ability to set varying FDT parameters for individual HTLC outputs within a single transaction. This could facilitate future covenant mechanisms like HTLC aggregation.
+
+While Antoine does not claim that FDTs make timeout-tree protocol more efficient than existing channel factories and payment pool constructions, he expresses optimism about the proposal's potential to address vulnerabilities related to blockchain congestion in time-sensitive applications. However, he notes that the analysis and game theory aspects concerning miner collusion have not been thoroughly reviewed, especially considering the proposed introduction of the 'claim_grace_period.'
+
+The email concludes with Antoine expressing enthusiasm for the progress represented by the FDT proposal in addressing some pressing issues in the Lightning Network and other similar use cases.</summary>
+    <published>2023-12-17T23:01:22+00:00</published>
+  </entry>
+</feed>
