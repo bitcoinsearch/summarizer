@@ -1,31 +1,22 @@
 import time
 import traceback
-import openai
 from datetime import datetime, timedelta
 from loguru import logger
 import os
-from dotenv import load_dotenv
 import sys
-import warnings
 import json
 import shutil
 
-from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX
-from generate_homepage_xml import ElasticSearchClient, GenerateJSON
+from src.config import ES_INDEX
+from src.elasticsearch_utils import ElasticSearchClient
+from src.json_utils import GenerateJSON
+from src.utils import month_dict, get_id
 
-warnings.filterwarnings("ignore")
-load_dotenv()
-
-OPENAI_ORG_KEY = os.getenv("OPENAI_ORG_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.organization = OPENAI_ORG_KEY
-openai.api_key = OPENAI_API_KEY
 
 if __name__ == "__main__":
 
     gen = GenerateJSON()
-    elastic_search = ElasticSearchClient(es_cloud_id=ES_CLOUD_ID, es_username=ES_USERNAME,
-                                         es_password=ES_PASSWORD)
+    elastic_search = ElasticSearchClient()
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
@@ -43,7 +34,7 @@ if __name__ == "__main__":
     logger.info(f"Newsletter publish date: {current_date_str}")
     logger.info(f"Gathering data for newsletter from {start_date_str} to {end_date_str}")
 
-    month_name = gen.month_dict[int(current_date.month)]
+    month_name = month_dict[int(current_date.month)]
     str_month_year = f"{month_name}_{int(current_date.year)}"
 
     active_data_list = []
@@ -131,8 +122,8 @@ if __name__ == "__main__":
 
     # gather ids of docs from active posts and new thread posts
     filtered_docs_ids = set(
-        [gen.get_id(data['_source']['title']) for data in active_data_list] +
-        [gen.get_id(data['_source']['title']) for data in new_threads_list]
+        [get_id(data['_source']['title']) for data in active_data_list] +
+        [get_id(data['_source']['title']) for data in new_threads_list]
     )
 
     # check if there are any updates in xml file
@@ -194,6 +185,6 @@ if __name__ == "__main__":
                 time.sleep(delay)
                 count += 1
                 if count > 3:
-                    sys.exit(ex)
+                    sys.exit(f"{ex}")
     else:
         logger.success("No change in the posts, no need to update newsletter.json file")

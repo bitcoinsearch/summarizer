@@ -4,17 +4,52 @@ import pandas as pd
 import os
 from tqdm import tqdm
 import re
+from ast import literal_eval
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+from loguru import logger
 import pytz
 import datetime
-from src.gpt_utils import *
-from src import config
-
+from src.gpt_utils import generate_chatgpt_summary, generate_summary, generate_title, generate_chatgpt_title, consolidate_chatgpt_summary, consolidate_summary
+from src.config import TOKENIZER, CHATGPT
 
 CURRENT_TIME = datetime.datetime.now(datetime.timezone.utc)
 CURRENT_TIMESTAMP = str(CURRENT_TIME.timestamp()).replace(".", "_")
-print(f"Current time: {CURRENT_TIMESTAMP}")
+logger.info(f"Current time: {CURRENT_TIMESTAMP}")
+
+month_dict = {
+            1: "Jan", 2: "Feb", 3: "March", 4: "April", 5: "May", 6: "June",
+            7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
+        }
+
+
+def convert_to_tuple(x):
+    try:
+        if isinstance(x, str):
+            x = literal_eval(x)
+        return tuple(x)
+    except ValueError:
+        return (x,)
+
+
+def clean_title(xml_name):
+    special_characters = ['/', ':', '@', '#', '$', '*', '&', '<', '>', '\\', '?']
+    xml_name = re.sub(r'[^A-Za-z0-9]+', '-', xml_name)
+    for sc in special_characters:
+        xml_name = xml_name.replace(sc, "-")
+    return xml_name
+
+
+def get_id(id):
+    return str(id).split("-")[-1]
+
+
+def create_folder(month_year):
+    os.makedirs(month_year, exist_ok=True)
+
+
+def remove_multiple_whitespaces(text):
+    return re.sub('\s+', ' ', text).strip()
 
 
 def normalize_text(s, sep_token=" \n "):
@@ -29,11 +64,6 @@ def normalize_text(s, sep_token=" \n "):
 
 
 def is_date(string, fuzzy=False):
-    """
-    Return whether the string can be interpreted as a date.
-    :param string: str, string to check for date
-    :param fuzzy: bool, ignore unknown tokens in string if True
-    """
     try:
         parse(string, fuzzy=fuzzy)
         return True
@@ -152,7 +182,7 @@ def scrape_email_urls(email_urls_list):
 
     # filter dataframe to get last week's data only
     df_week = get_past_week_data(emails_df)
-    df_week['tokens'] = df_week['email'].apply(lambda x: len(config.TOKENIZER.encode(x)))
+    df_week['tokens'] = df_week['email'].apply(lambda x: len(TOKENIZER.encode(x)))
 
     os.makedirs("output", exist_ok=True)
     df_week.to_csv(f"output/df_week_{CURRENT_TIMESTAMP}.csv", index=False)
@@ -181,7 +211,7 @@ def get_email_thread_data(sub_df):
         auth = r.author
         url = r.email_url
 
-        if config.CHATGPT:
+        if CHATGPT:
             summary_ = generate_chatgpt_summary(email_text)
         else:
             summary_ = generate_summary(email_text)
@@ -193,7 +223,7 @@ def get_email_thread_data(sub_df):
     # consolidated summary
     summary_concat = "\n".join(generated_summary)
 
-    if config.CHATGPT:
+    if CHATGPT:
         consolidated_summary += consolidate_chatgpt_summary(summary_concat)
         consolidated_title += generate_chatgpt_title(summary_concat)
     else:
