@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lamport scheme (not signature) to economize on L1</title>
+  <updated>2023-12-19T01:59:46.369342+00:00</updated>
+  <author>
+    <name>yurisvb at pm.me 2023-12-18 01:37:23+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lamport scheme (not signature) to economize on L1</title>
+    <updated>2023-12-19T01:59:46.369373+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022201.html" rel="alternate"/>
+    <summary>The email presents a detailed proposal for enhancing byte-efficiency in Layer 1 (L1) blockchain protocols by integrating the Lamport Scheme into the transaction signing process. The proposed method involves a dual-key system where each signing key consists of both an elliptic curve cryptography (ECC) key and a Lamport chain. When a transaction is initiated, a tuple is broadcasted that includes the transaction itself, a hash of the previous Lamport chain concatenated with the transaction, and a commitment signed by the ECC key. This commitment effectively freezes the Unspent Transaction Output (UTXO) with a promise to publish the preimage of the hash within a few blocks.
+
+The mechanism for burying information in the blockchain is described as follows: initially, parts of the tuple, excluding the commitment, are buried in a block by a miner. If the preimage is not published within the specified time frame, the signed commitment is then included in the subsequent block, which enforces a penalty payment from the frozen UTXO to both the initial and the second miner for their roles in processing the transactions.
+
+In the event that the preimage is published before its maturity date, it is included in another block, thus triggering payments for the inclusion of the data and fulfilling the obligations set out in the original transaction. The proposed benefit of this scheme is that if everything proceeds correctly, only two Lamport hashes will be recorded on L1 instead of a full ECC signature, thereby significantly reducing the space required for transactions on the blockchain.
+
+To further enhance efficiency, the author suggests employing a memory-hard hashing function like Argon2, allowing for even smaller hash sizes. By using Argon2, hashes could potentially be reduced to 12 bytes each, resulting in a total of 24 bytes, which offers a substantial reduction from the 136 bytes currently used by ECC signatures. This change could lead to greater economy in the processing and storage of blockchain transactions.</summary>
+    <published>2023-12-18T01:37:23+00:00</published>
+  </entry>
+</feed>

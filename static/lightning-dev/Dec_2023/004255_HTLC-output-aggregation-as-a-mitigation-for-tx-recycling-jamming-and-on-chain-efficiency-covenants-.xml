@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+  <updated>2023-12-19T02:00:44.364015+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-12-17 22:56:38+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
+    <updated>2023-12-19T02:00:44.364049+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004255.html" rel="alternate"/>
+    <summary>The email from Antoine to Johan discusses the intricacies of a proposed covenant mechanism within the context of Bitcoin's Lightning Network and the potential vulnerabilities it may introduce. The new mechanism aims to aggregate or collapse all HTLC (Hashed Timelock Contracts) outputs into one or possibly two outputs (offered/received). When spending an aggregated HTLC payout, one must satisfy the script locking condition by providing a preimage and a signature.
+
+Antoine outlines a scenario where an offered aggregated HTLC output contains multiple HTLC payouts (denoted by 'M'), which is still subject to limits such as the maximum standard transaction relay size. A counterparty can claim any subset 'N' of these by presenting the necessary signatures and preimages. However, there is no obligation for the counterparty to reveal all preimages they have been awarded, leading to potential clawback issues on the remaining HTLC outputs ('M').
+
+A significant concern raised is the susceptibility of this system to replacement cycling attacks. An example provided illustrates how a malicious actor could exploit the partial reveal of HTLC payout preimages. In this example, Bob can effectively replace Alice's honest aggregate HTLC-timeout transaction with his own high-fee transaction that spends only a small portion of the total value, effectively pushing Alice's transaction out of the network mempools due to concurrency. By repeating this tactic, Bob could potentially perform a double-spend attack on the higher-value HTLC payout.
+
+To combat such attacks, Antoine suggests that merely implementing "self-sustained" fees is not sufficient. He proposes adding a sliding delay to the HTLC timelock based on block feerate to prevent attackers from benefiting from network mempool congestion. This change would make it more difficult for replacement transactions to be included in blocks during periods of high congestion.
+
+Additionally, Antoine touches on the challenges faced in a taproot-enabled environment, particularly regarding witness size growth during non-cooperative closures. He suggests that introducing an accumulator at the Script level to efficiently test partial set membership could address the issue of exponential blowup, which also affects mass non-coordinated withdrawals from a payment pool.
+
+For further technical details and discussion, Antoine refers Johan to a thread on the Linux Foundation's mailing list, which can be found at https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022191.html, where he has previously provided an answer.</summary>
+    <published>2023-12-17T22:56:38+00:00</published>
+  </entry>
+</feed>

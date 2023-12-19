@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+  <updated>2023-12-19T02:03:06.387777+00:00</updated>
+  <author>
+    <name>Antoine Riard 2023-12-17 23:01:22+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+    <updated>2023-12-19T02:03:06.387803+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004256.html" rel="alternate"/>
+    <summary>The sliding reaction window for blockchain congestion detection has been an emerging topic among smart contract and Lightning developers, leading to the recent formalization of a feerate-dependent timelock (FDT) proposal for Bitcoin. This proposal outlines that transactions would be ineligible for inclusion in a block if they do not satisfy existing consensus rules or if a specified number of blocks within a given window period have a median feerate above a predefined threshold. These parameters—feerate_value_bound, window_size, and block_count—are determined by the transaction creator and are crucial for off-chain construction parties who wish to set conditions for when their time-sensitive transactions should be delayed.
+
+For instance, in a Lightning Network penalty scenario involving two parties, Alice and Bob, transactions can be pre-signed with a specific feerate_value_bound. In this case, if the median feerate exceeds the bound within the selected window, neither party's transaction can be included in the chain at the expiry time. This approach is proposed as a solution to the "Forced Expiration Spam" issue highlighted in the Lightning Network paper.
+
+However, the design introduces several considerations. The current Lightning Network penalty scripts would need adjustments to incorporate FDT parameter checks. Additionally, the proposal suggests introducing a `claim_grace_period` as a new relative timelock to prevent feerate races after revocation timelocks expire. This grace period would end at the feerate_value_bound, ensuring a delay advantage for one party and enhancing reorg-safety. It is recommended that these parameters, including the claim_grace_period, be integrated into the bip341 annex for better flexibility, potentially allowing for distinct FDT parameters for each HTLC output within a single transaction.
+
+While the FDT proposal's efficiency compared to other constructions like channel factories and payment pools remains unasserted, it appears that all such constructions could benefit from incorporating FDT parameters due to their vulnerability during blockchain congestion. The introduction of the claim_grace_period may impact the analysis and game theory surrounding miner collusion, which has not yet been reviewed in depth. Nonetheless, the FDT proposal marks a significant step towards addressing one of the most critical challenges faced by the Lightning Network and other time-sensitive blockchain applications.</summary>
+    <published>2023-12-17T23:01:22+00:00</published>
+  </entry>
+</feed>
