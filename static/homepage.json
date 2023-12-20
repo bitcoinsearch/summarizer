@@ -1,5 +1,5 @@
 {
-    "header_summary": "Yurisvb at pm.me has introduced a white paper outlining a new Kerckhoffian protocol aimed at improving the self-custody of digital assets by incorporating coercion-resistance features. This protocol is compatible with existing cryptographic systems and offers a monetization potential akin to the Lightning Network, adhering to Auguste Kerckhoff's principle favoring transparency in cryptographic design.\n\nThe SeedHammer Team has proposed enhancements to Partially Signed Bitcoin Transactions (PSBTs) through a draft Bitcoin Improvement Proposal. It introduces PSBT Encoded Output Descriptors, which allow for easier wallet transfers and address current limitations, although the accompanying Go implementation is not yet suitable for production environments.\n\nAntoine Riard has put forward the feerate-dependent timelock (FDT) proposal, which leverages dynamic timelocks in response to blockchain congestion, potentially benefiting the Lightning Network and smart contracts. The proposal suggests integrating FDT parameters into the bip341 annex and includes design recommendations for revising revocable scripts and incorporating grace periods.\n\nOverall, the discourse indicates a robust engagement in advancing Bitcoin's protocol and cryptographic safeguards, focusing on developing secure, user-centric solutions that can adapt to ongoing and emerging security challenges.",
+    "header_summary": "Yurisvb has introduced a novel Kerckhoffian protocol that enhances coercion-resistance for managing digital assets in self-custody by integrating with cryptographic systems like multi-signature setups and Shamir's Secret Sharing. This protocol offers commercial potential similar to the Lightning Network's service model, indicating a promising avenue for broader adoption.\n\nAn experimental public-key cryptosystem based on the difficulty of factoring polynomials in finite fields has been detailed, with resources for further exploration available on GitHub and Linktree. These advancements underscore a commitment to progress in cryptography and the security of digital assets.\n\nThe SeedHammer Team has proposed a Bitcoin Improvement Proposal (BIP) to include a new field for PSBT Encoded Output Descriptors in wallet transactions, aimed at improving the transferability and clarity of output descriptors between wallets. Despite being in the development stage, the proposal offers a Go implementation on GitHub and seeks to address issues with machine-readable information in transaction descriptors.\n\nAntoine Riard has proposed a feerate-dependent timelock (FDT) mechanism to enhance Lightning Network and smart contract operations by adjusting transaction confirmations in response to blockchain congestion using existing consensus rules. This proposal, which also includes design considerations to prevent fee-rate races, is highlighted for its potential to address vulnerabilities despite needing further analysis on miner collusion and game theory implications.\n\nThese discussions reflect a dedication to innovating cryptocurrency protocols and enhancing the security and reliability of digital asset transactions, contributing to the growth and trust in decentralized financial systems.",
     "recent_posts": [
         {
             "id": "022208",
@@ -9,7 +9,7 @@
                 "yurisvb at pm.me"
             ],
             "published_at": "2023-12-19T16:11:56+00:00",
-            "summary": "- The white paper discusses a new Kerckhoffian protocol for secure self-custody digital assets.\n- The protocol offers monetization potential and integration into systems like the Lightning Network.\n- A novel public-key cryptosystem is introduced, with further details available via linked resources.",
+            "summary": "- The white paper introduces a new Kerckhoffian protocol for secure self-custody digital assets management.\n- It highlights the protocol's monetization prospects and compatibility with existing cryptographic systems.\n- An emerging public-key cryptosystem, based on complex polynomial factorizations, is also presented.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -24,7 +24,7 @@
                 "SeedHammer Team"
             ],
             "published_at": "2023-12-18T00:52:44+00:00",
-            "summary": "- The BIP draft suggests adding PSBT Encoded Output Descriptors to PSBTs for wallet transfers.\n- A new global field allows for metadata and references to xpub entries, not inline keys.\n- Compatibility issues and a non-production Go implementation of the BIP are available on GitHub.",
+            "summary": "- The BIP draft suggests an additional PSBT field for output descriptors transferability.\n- The new field will allow arbitrary BIP 380 script descriptors without requiring an unsigned transaction.\n- Test vectors and a non-production Go implementation on GitHub support the BIP's development.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -39,7 +39,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-12-17T23:01:22+00:00",
-            "summary": "- Antoine Riard introduces a feerate-dependent timelock proposal for Bitcoin's congestion issues.\n- The FDT's inclusion conditions rely on bip68, bip113, and new parameters like 'feerate_value_bound.'- The FDT could mitigate \"Forced Expiration Spam\" and is suggested for bip341's annex inclusion.",
+            "summary": "- Antoine Riard introduces a feerate-dependent timelock proposal for Bitcoin's Lightning Network.\n- The proposal uses parameters to delay transactions based on blockchain fee rates.\n- Riard suggests incorporating FDT parameters into bip341 annex for HTLC output variations.",
             "n_threads": 2,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -56,7 +56,7 @@
                 "Antoine Riard"
             ],
             "published_at": "2023-12-17T23:01:22+00:00",
-            "summary": "- The FDT proposal for Bitcoin introduces conditions for delaying transactions during congestion.\n- Adjustments to Lightning Network scripts and a `claim_grace_period` are suggested for improved safety.\n- While untested for efficiency, the FDT could benefit various blockchain applications.",
+            "summary": "- The FDT proposal introduces feerate-dependent timelocks to mitigate blockchain congestion issues.\n- Adjustments to Lightning Network scripts and a `claim_grace_period` are suggested for reorg-safety.\n- FDT's efficiency is unverified, but it's considered beneficial for time-sensitive blockchain applications.",
             "n_threads": 2,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -75,7 +75,7 @@
                 "yurisvb at pm.me"
             ],
             "published_at": "2023-12-18T01:37:23+00:00",
-            "summary": "- The proposal integrates the Lamport Scheme with ECC for efficient L1 blockchain transactions.\n- Miners bury parts of the transaction tuple, enforcing penalties for untimely preimage publication.\n- Using Argon2 reduces hash size to 24 bytes, saving space over the current 136-byte ECC signatures.",
+            "summary": "- Proposal integrates Lamport Scheme for efficient L1 blockchain transaction signing.\n- Penalty enforced if hash preimage is not published, rewarding miners for transaction processing.\n- Argon2 used to shrink hashes further, significantly reducing blockchain space requirements.",
             "n_threads": 8,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -86,6 +86,23 @@
             "combined_summ_file_path": "static/bitcoin-dev/Dec_2023/combined_Lamport-scheme-not-signature-to-economize-on-L1.xml"
         },
         {
+            "id": "022093",
+            "title": "HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022093.html",
+            "authors": [
+                "Johan Tor\u00e5s Halseth"
+            ],
+            "published_at": "2023-10-26T16:52:03+00:00",
+            "summary": "- HTLC output aggregation combines multiple transactions into one, preventing recycling and jamming.\n- Aggregation allows more HTLCs without expanding commitment size, but high fees can still deter claims.\n- Despite efficiency, challenges like new covenant primitives and on-chain preimages remain for full implementation.",
+            "n_threads": 4,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "Antoine Riard"
+            ],
+            "file_path": "static/bitcoin-dev/Oct_2023/022093_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml"
+        },
+        {
             "id": "022195",
             "title": "Addressing the possibility of profitable fee manipulation attacks",
             "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022195.html",
@@ -93,7 +110,7 @@
                 "ArmchairCryptologist"
             ],
             "published_at": "2023-12-17T11:11:10+00:00",
-            "summary": "- High Bitcoin transaction fees suggest potential manipulation by strategically timing token-related transactions.\n- Theorized attacks may be profitable depending on miner participation and fee-stuffing tactics.\n- Such activities could influence fee estimation algorithms, leading to users overpaying.",
+            "summary": "- Bitcoin's increased UTXO set and chainstate database size raise manipulation concerns.\n- Strategic high-fee transactions suggest potential Bitcoin network fee market manipulation.\n- Theoretical analysis indicates miners could profit from artificial fee inflation, impacting fee estimation.",
             "n_threads": 4,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -105,23 +122,6 @@
             "combined_summ_file_path": "static/bitcoin-dev/Dec_2023/combined_Addressing-the-possibility-of-profitable-fee-manipulation-attacks.xml"
         },
         {
-            "id": "022093",
-            "title": "HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022093.html",
-            "authors": [
-                "Johan Tor\u00e5s Halseth"
-            ],
-            "published_at": "2023-10-26T16:52:03+00:00",
-            "summary": "- HTLC output aggregation could mitigate transaction recycling and slot jamming in channels.\n- Aggregated outputs allow efficient chain transactions and prevent channels from being easily jammed.\n- Recursive covenants and primitives like OP_CHECKCONTRACTVERIFY are key for implementing aggregation.",
-            "n_threads": 4,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Antoine Riard"
-            ],
-            "file_path": "static/bitcoin-dev/Oct_2023/022093_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Oct_2023/combined_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml"
-        },
-        {
             "id": "004227",
             "title": "Liquidity Ads and griefing subtleties",
             "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004227.html",
@@ -129,7 +129,7 @@
                 "Bastien TEINTURIER"
             ],
             "published_at": "2023-12-01T17:45:18+00:00",
-            "summary": "- Liquidity ads impact protocol design, creating pricing challenges and attack risks.\n- Solutions like CLTV for leased funds must consider the potential for exploitation.\n- Optional CLTV enforcement and splicing rules are complex but critical for fairness.",
+            "summary": "- Liquidity ads pose significant pricing and security challenges in protocol design.\n- Solutions like optional CLTV enforcement must consider risks and complexities like splicing.\n- Liquidity ad sellers should price for CLTV risks, acknowledging their role in lightning network evolution.",
             "n_threads": 13,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -148,7 +148,7 @@
                 "Peter Todd"
             ],
             "published_at": "2023-12-13T10:40:59+00:00",
-            "summary": "- Lightning Network's commitment transactions have a design flaw with anchor outputs.\n- Current practices cause blockchain space inefficiencies and complicate fee bumping.\n- Discussions suggest revising implementation to optimize anchor output usage.",
+            "summary": "- Anchor outputs in Lightning Network's BOLT 3 contain identified inefficiencies.\n- Using non-anchor channels with directly spendable P2WPKH outputs could reduce complexity.\n- Peter Todd proposes revisions and further analysis, engaging with Matt Corallo on the matter.",
             "n_threads": 5,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -165,7 +165,7 @@
                 "Johan Tor\u00e5s Halseth"
             ],
             "published_at": "2023-10-26T16:52:03+00:00",
-            "summary": "- HTLC output aggregation consolidates multiple transaction outputs, enhancing security and efficiency.\n- A new covenant enables self-sustained transactions, mitigating transaction recycling and slot jamming.\n- Further development of covenant primitives is essential for advancing HTLC output aggregation potential.",
+            "summary": "- HTLC output aggregation reduces outputs to one, improving spender's fee control via covenants.\n- Single aggregated output mitigates slot jamming and may allow unlimited active HTLCs.\n- New covenant primitives and PTLCs are proposed for secure, efficient HTLC output aggregation.",
             "n_threads": 4,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -177,48 +177,46 @@
     ],
     "today_in_history_posts": [
         {
-            "id": "016582",
-            "title": "BIP39 seeds",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-December/016582.html",
+            "id": "013406",
+            "title": "Script Abuse Potential?",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-January/013406.html",
             "authors": [
-                "Aymeric Vitte"
+                "Steve Davis"
             ],
-            "published_at": "2018-12-21T23:58:04+00:00",
-            "summary": "- An online post inquires about the likelihood of deriving a valid BIP39 seed with random words.\n- The poster hints at unforeseen applications for the probability findings.\n- Included are links to Bitcoin, Zcash resources, and GitHub project repositories.",
-            "n_threads": 14,
+            "published_at": "2017-01-02T21:39:24+00:00",
+            "summary": "- A user highlighted a potential attack vector involving a pk_script with op_2dup and op_hash160.\n- The script's validity isn't disputed, but its potential misuse by malicious actors is.\n- Forum participants are actively debating this issue, providing various insights and opinions.",
+            "n_threads": 8,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Alan Evans",
-                "Eric Scrivner",
-                "James MacWhyte",
-                "Jameson Lopp",
-                "Pavol Rusnak",
-                "Tiago Romagnani Silveira"
+                "Jeremy",
+                "Johnson Lau",
+                "Jorge Tim\u00f3n",
+                "Russell O'Connor"
             ],
-            "file_path": "static/bitcoin-dev/Dec_2018/016582_BIP39-seeds.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Dec_2018/combined_BIP39-seeds.xml",
-            "combined_summary": "- An individual queried the odds of a valid BIP39 seed with a 2048 word list.\n- They included links to Bitcoin and Zcash resources, seeking community insight.\n- Links to GitHub suggest applications and foster discussion on BIP39 seed generation."
+            "file_path": "static/bitcoin-dev/Jan_2017/013406_Script-Abuse-Potential-.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Jan_2017/combined_Script-Abuse-Potential-.xml",
+            "combined_summary": "- The bitcoin-dev list debates OP_CAT's limit, with memory risks and potential for covenants discussed.\n- Satoshi disabled OP_CAT in 2010, imposing a 520-byte limit; current MAX_SCRIPT_ELEMENT_SIZE restricts to 10 MB.\n- Responses to a 2017 query clarified no significant threat from a specific pk_script and reiterated the OP_CAT controversy."
         },
         {
-            "id": "001751",
-            "title": "visual identification of payee node id",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001751.html",
+            "id": "000652",
+            "title": "LN without SegWit: less efficient or less secure?",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-January/000652.html",
             "authors": [
-                "Pavol Rusnak"
+                "Andr\u00e9s G. Aragoneses "
             ],
-            "published_at": "2018-12-23T18:49:15+00:00",
-            "summary": "- A proposal suggests simplifying payee node id verification in QR code payments.\n- Identicons are proposed next to QR codes for quick recipient identification.\n- Implementing identicons requires adoption across all Lightning user-facing wallets.",
-            "n_threads": 5,
+            "published_at": "2017-01-14T10:17:40+00:00",
+            "summary": "- The email questions SegWit's activation and its effect on the Lightning Network's feasibility.\n- It discusses the efficiency and security of level 2 in contrast to level 3 within LN.\n- The writer seeks clarity on improving level 2's security by outsourcing channel monitoring.",
+            "n_threads": 10,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Eugene",
-                "Maximillian George",
-                "William Casarin",
-                "ZmnSCPxj"
+                "Anthony Towns",
+                "Christian Decker",
+                "Rusty Russell",
+                "Stefano Pepe"
             ],
-            "file_path": "static/lightning-dev/Dec_2018/001751_visual-identification-of-payee-node-id.xml",
-            "combined_summ_file_path": "static/lightning-dev/Dec_2018/combined_visual-identification-of-payee-node-id.xml",
-            "combined_summary": "- Pavol Rusnak suggested identicons beside QR codes for recipient verification.\n- Chernoff Faces were proposed for ease of recognizing changes in public keys.\n- Adoption across wallets is essential for the efficiency of this verification method."
+            "file_path": "static/lightning-dev/Jan_2017/000652_LN-without-SegWit-less-efficient-or-less-secure-.xml",
+            "combined_summ_file_path": "static/lightning-dev/Jan_2017/combined_LN-without-SegWit-less-efficient-or-less-secure-.xml",
+            "combined_summary": "- Andr\u00e9s G. Aragoneses discusses the underexplored potential of Lightning Network variations and misconceptions about miner fee impacts.\n- The feasibility of LN without SegWit and using different channel styles is debated among developers.\n- Outsourcing blockchain monitoring for security is dismissed due to unresolved vulnerabilities and coordination risks."
         }
     ]
 }
