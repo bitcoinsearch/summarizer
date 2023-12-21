@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>V3 Transactions are still vulnerable to significant tx pinning griefing attacks</title>
+  <updated>2023-12-21T01:58:14.976512+00:00</updated>
+  <author>
+    <name>Peter Todd 2023-12-20 17:14:56+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>V3 Transactions are still vulnerable to significant tx pinning griefing attacks</title>
+    <updated>2023-12-21T01:58:14.976540+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022211.html" rel="alternate"/>
+    <summary>The advent of V3 transactions marks an effort to enhance Layer 2 and smart contracting protocols, specifically tailored for Lightning Networks. The primary objective of these transactions is to address a significant issue known as Rule 3 transaction pinning. By introducing the rule that any V3 transaction with an unconfirmed V3 ancestor cannot exceed 1000 virtual bytes, it aims to prevent such pinning attacks. However, despite this new rule, V3 transactions face limitations in effectively thwarting transaction pinning.
+
+For instance, let's examine a scenario where Alice has a Lightning channel with Bob. Bob becomes uncooperative, prompting Alice to rely on V3 commitment transactions that utilize an OP_TRUE ephemeral anchor with no value. This commitment transaction, which includes both the commitment and the spending of the anchor output, must be broadcast as a single package due to the non-standard nature of zero-valued outputs unless they are spent together. Alice finances the commitment transaction's fee through a taproot transaction that combines two inputs and one output with a total size of 152 virtual bytes. She sets the transaction fee rate (Ra) high enough to ensure the transaction is processed in a timeframe she deems acceptable.
+
+However, this opens up an opportunity for Mallory, who intends to exploit the situation by inflating Alice's costs while minimizing his own expenses. He achieves this by preparing a replacement anchor spend transaction that is exactly 1000 virtual bytes and broadcasts it at a lower fee rate (Rm). Mallory's strategically connected nodes enable him to disseminate this transaction rapidly, ensuring it is widely received and potentially prioritized over Alice's original transaction due to its larger size and lower fee rate.
+
+In conclusion, while V3 transactions introduce measures to mitigate transaction pinning, attackers like Mallory can still manipulate the system. By broadcasting larger, low-fee transactions, they can disrupt the intended transaction flow, causing financial strain on the victim and demonstrating that V3 transactions alone may not be sufficient to safeguard against such pinning attacks.</summary>
+    <published>2023-12-20T17:14:56+00:00</published>
+  </entry>
+</feed>
