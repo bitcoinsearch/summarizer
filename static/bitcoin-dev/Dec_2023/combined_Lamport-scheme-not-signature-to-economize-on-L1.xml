@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-  <updated>2023-12-20T01:39:04.418033+00:00</updated>
+  <updated>2023-12-22T14:25:21.246112+00:00</updated>
+  <author>
+    <name>yurisvb at pm.me 2023-12-21 16:07:27+00:00</name>
+  </author>
+  <author>
+    <name>Nagaev Boris 2023-12-20 21:33:56+00:00</name>
+  </author>
   <author>
     <name>yurisvb at pm.me 2023-12-19 21:22:20+00:00</name>
   </author>
@@ -27,6 +33,8 @@
   <author>
     <name>yurisvb at pm.me 2023-12-18 01:37:23+00:00</name>
   </author>
+  <link href="bitcoin-dev/Dec_2023/022219_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2023/022217_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022210_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022209_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022207_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
@@ -39,17 +47,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-    <updated>2023-12-20T01:39:04.418138+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022210.html" rel="alternate"/>
-    <summary>The discourse on cryptographic efficiency, particularly in the Bitcoin ecosystem, revolves around optimizing the on-chain footprint of transaction signatures. The conversation between Boris and Yuri delves into comparing the byte-efficiency of Lamport schemes with Schnorr signatures implemented in Taproot. Boris presents a detailed breakdown of the on-chain data requirements for both schemes, discussing how a combination of Lamport signatures and elliptic curve cryptography public keys (ECCPUB) could potentially achieve the same byte footprint as the currently used Schnorr signatures.
+    <updated>2023-12-22T14:25:21.246199+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022219.html" rel="alternate"/>
+    <summary>Recent cryptographic discussions have proposed enhancements to system security and the efficiency of blockchain transactions. One proposal involves using nonces from recent blocks as salts in signing algorithms, which would incorporate 256 bits of entropy and utilize the inherent entropy in ECC public keys to combat rainbow-table attacks. The consensus on hash functions suggests that digest sizes should be double the encryption key size to address the birthday paradox, with a reluctance to reduce hash sizes due to the risk of making it economically viable for adversaries to perform such attacks in light of advancing storage technology.
 
-Yuri's response emphasizes the adoption of more economical approaches to fingerprinting and signing transactions within blockchain protocols. He advocates for the reduction of the hash size to 128 bits, aligning with a widely accepted standard. By employing this method alongside the use of memory-hard hashing functions like Argon2 for generating Lamport hashes, it is expected that the space required for representing these signatures would decrease substantially. This would not only reduce the computational overhead but also enhance the overall security by adhering to the weakest-link principle. In addition to this, he introduces the timing parameters T0, T1, and T2, which establish a temporal framework for broadcasting and validating transactions to prevent spam and ensure commitment to the network's availability.
+Standardizing fingerprint bit lengths at 128 bits has been considered to maintain security while conserving space within transactions. Schnorr keys, compatible with this standardization, are being examined for their balance between protection and entropy derivation costs. To improve transaction reliability and prevent accidental defaults, a fixed interval between T0 and T2 (48 hours) has been set for transaction timing.
 
-Furthermore, Yuri details a proposed transaction scheme that incorporates the Lamport chain. It includes a dual-key system where the ECC key serves as a conventional signature and the Lamport chain provides an extra layer of security. This scheme envisions freezing a UTXO through a smart contract commitment, which obligates the publication of a preimage of a hash after a transaction broadcast within a specified timeframe. The process incentivizes miners to include the necessary components in their blocks, with potential penalties encouraging timely execution and enhancing network robustness. 
+The Lamport scheme's usage in cryptocurrency transactions was discussed, focusing on its comparable on-chain footprint to Taproot's Schnorr keys when additional overheads are considered. Cryptocurrency transactions employ hard hash functions along with ECC and Lamport public keys to resist brute-force attacks. An economic model discourages address reuse and incorporates time constraints to ensure commitments despite network issues.
 
-The vulnerability to attacks, specifically targeting the first bundle broadcasted within the Lamport scheme, is addressed as well. The feasibility of such an attack is mitigated by the inherent difficulty of cracking the Lamport chain, which is argued to be more challenging than conducting a double-spending attack, thereby satisfying the requirement for a secure transaction mechanism.
+Highlighting the significance of security measures, a potential vulnerability involving the exploitation of broadcasted bundles by attackers was identified, emphasizing the need for evaluating risks from an attacker's perspective.
 
-In summary, the discussions highlight the need for a balance between byte-economy in transaction signatures and maintaining the integrity and security of the blockchain. The proposed use of Lamport chains, combined with ECC keys and the introduction of specific timing constraints, offers a promising avenue for achieving this goal, with potential implications for the practice of non-address reuse and the streamlining of blockchain protocol efficiencies.</summary>
-    <published>2023-12-19T21:22:20+00:00</published>
+Comparative analysis of breaking through the Lamport chain versus conducting a double-spending attack illustrates the robustness of the system, even considering advanced cracking capabilities. While Schnorr signatures were noted for their compactness, concerns about their security level prompted calls for stronger protections.
+
+Contributions to cryptographic protocols in digital currency development have been acknowledged, with references to Needham's MAVE signature scheme, his MAVEPAY cryptocurrency system, and Miller's FawkesCoin.
+
+The correspondence proposes improving byte-efficiency in Layer 1 blockchain protocols by adopting the Lamport Scheme for transaction signing, which could enhance security and optimize space on the blockchain.
+
+Regarding blockchain transactions, a tuple method is introduced, combining ECC keys and Lamport chains, where only two Lamport hashes may be stored instead of a full ECC signature, potentially reducing blockchain data storage needs. This method involves broadcasting a tuple consisting of the transaction, a combined hash, and an ECC-signed commitment. The miner buries most parts of the tuple and includes the signed commitment in a block, incentivizing timely publication of the hash's preimage. Should the preimage not be revealed within the time limit, penalties are applied to the miners from the UTXO. Conversely, revealing the preimage in time completes the transaction obligations. Argon2 is recommended for further optimization, allowing a reduction in hash sizes to 12 bytes each, considerably decreasing the required space for transactions on the blockchain.</summary>
+    <published>2023-12-21T16:07:27+00:00</published>
   </entry>
 </feed>
