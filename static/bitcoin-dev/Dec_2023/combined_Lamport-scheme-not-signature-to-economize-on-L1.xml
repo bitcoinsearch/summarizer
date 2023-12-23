@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-  <updated>2023-12-22T14:25:21.246112+00:00</updated>
+  <updated>2023-12-23T01:57:51.585008+00:00</updated>
+  <author>
+    <name>yurisvb at pm.me 2023-12-22 15:32:38+00:00</name>
+  </author>
+  <author>
+    <name>G. Andrew Stone 2023-12-22 04:52:08+00:00</name>
+  </author>
   <author>
     <name>yurisvb at pm.me 2023-12-21 16:07:27+00:00</name>
   </author>
@@ -33,6 +39,8 @@
   <author>
     <name>yurisvb at pm.me 2023-12-18 01:37:23+00:00</name>
   </author>
+  <link href="bitcoin-dev/Dec_2023/022227_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2023/022223_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022219_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022217_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022210_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
@@ -47,23 +55,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-    <updated>2023-12-22T14:25:21.246199+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022219.html" rel="alternate"/>
-    <summary>Recent cryptographic discussions have proposed enhancements to system security and the efficiency of blockchain transactions. One proposal involves using nonces from recent blocks as salts in signing algorithms, which would incorporate 256 bits of entropy and utilize the inherent entropy in ECC public keys to combat rainbow-table attacks. The consensus on hash functions suggests that digest sizes should be double the encryption key size to address the birthday paradox, with a reluctance to reduce hash sizes due to the risk of making it economically viable for adversaries to perform such attacks in light of advancing storage technology.
+    <updated>2023-12-23T01:57:51.585103+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022227.html" rel="alternate"/>
+    <summary>The cryptographic analysis begins by examining vulnerabilities within the LAMPPRI scheme, outlining three potential cryptanalysis scenarios. The first scenario deals with a pre-image problem before the publication of transaction details where an attacker has access only to the address (ADDR). The second involves the same risk after the transaction and signature (TX, SIG) are published. The third scenario considers the possibility of an outmining attack that would start with a time disadvantage. It is noted that LAMPPUB, despite its name, is not actually published, suggesting the necessity for its size to be large enough to prevent collisions in hash functions, support memory-hard-hash propositions, and allow trade-offs between storage and processing.
 
-Standardizing fingerprint bit lengths at 128 bits has been considered to maintain security while conserving space within transactions. Schnorr keys, compatible with this standardization, are being examined for their balance between protection and entropy derivation costs. To improve transaction reliability and prevent accidental defaults, a fixed interval between T0 and T2 (48 hours) has been set for transaction timing.
+The analysis continues by addressing the risks associated with chain reorganizations, where attackers could redirect all matured funds to themselves, marking a departure from classic double-spend attacks. It also evaluates the proposal's resilience against rainbow-table attacks through the incorporation of nonces as salts and recognizes the need for a more accurate adversarial model.
 
-The Lamport scheme's usage in cryptocurrency transactions was discussed, focusing on its comparable on-chain footprint to Taproot's Schnorr keys when additional overheads are considered. Cryptocurrency transactions employ hard hash functions along with ECC and Lamport public keys to resist brute-force attacks. An economic model discourages address reuse and incorporates time constraints to ensure commitments despite network issues.
+The discussion includes recommendations on hash function digest sizes, cautioning against reducing hashes to 12 bytes due to potential collision attacks and rainbow table vulnerability. Cryptographic measures discussed include a correction on the size of hash values, the inclusion of ECCPUB to mitigate risks, and the adoption of Schnorr keys to maintain security at a standardized bit length. A fixed interval between T0 and T2 is proposed to ensure reliable transaction finality.
 
-Highlighting the significance of security measures, a potential vulnerability involving the exploitation of broadcasted bundles by attackers was identified, emphasizing the need for evaluating risks from an attacker's perspective.
+A comparison is made between the Lamport and Schnorr-based Taproot schemes in terms of on-chain footprints, with the former calculated at 80 bytes and the latter at 96 bytes. Additionally, the use of Lamport hashes, which utilize a serial-work and memory-hard algorithm, contrasts with conventional hashing functions' longer digests. This system introduces two bundles: BL and BC, leading to BT, which is related to mining fees and fine structures. The single-use economic model for Lamport-based transactions is emphasized, incorporating time constraints to protect against dissensus and unintended unavailability.
 
-Comparative analysis of breaking through the Lamport chain versus conducting a double-spending attack illustrates the robustness of the system, even considering advanced cracking capabilities. While Schnorr signatures were noted for their compactness, concerns about their security level prompted calls for stronger protections.
+Finally, the email discusses a potential economically feasible attack scenario and the importance of considering the attacker's perspective concerning rewards. It also touches on the miner's incentive to include the first bundle broadcasted by the key owner, underscoring the principle of the weakest link in security considerations.
 
-Contributions to cryptographic protocols in digital currency development have been acknowledged, with references to Needham's MAVE signature scheme, his MAVEPAY cryptocurrency system, and Miller's FawkesCoin.
-
-The correspondence proposes improving byte-efficiency in Layer 1 blockchain protocols by adopting the Lamport Scheme for transaction signing, which could enhance security and optimize space on the blockchain.
-
-Regarding blockchain transactions, a tuple method is introduced, combining ECC keys and Lamport chains, where only two Lamport hashes may be stored instead of a full ECC signature, potentially reducing blockchain data storage needs. This method involves broadcasting a tuple consisting of the transaction, a combined hash, and an ECC-signed commitment. The miner buries most parts of the tuple and includes the signed commitment in a block, incentivizing timely publication of the hash's preimage. Should the preimage not be revealed within the time limit, penalties are applied to the miners from the UTXO. Conversely, revealing the preimage in time completes the transaction obligations. Argon2 is recommended for further optimization, allowing a reduction in hash sizes to 12 bytes each, considerably decreasing the required space for transactions on the blockchain.</summary>
-    <published>2023-12-21T16:07:27+00:00</published>
+In summary, the email elaborates on the robustness of the Lamport chain as a security measure and compares it to Schnorr signatures and SHA256 hashes, citing historical innovations in cryptographic protocols. It proposes byte-efficiency enhancements in Layer 1 blockchain protocols through a dual-key system combining elliptic curve cryptography with a Lamport chain, potentially reducing space requirements for transactions. The email points out ongoing efforts to optimize the balance between security and efficiency in blockchain technology.</summary>
+    <published>2023-12-22T15:32:38+00:00</published>
   </entry>
 </feed>

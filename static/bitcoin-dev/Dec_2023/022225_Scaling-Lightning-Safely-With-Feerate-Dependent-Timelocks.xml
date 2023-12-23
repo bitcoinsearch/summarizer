@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+  <updated>2023-12-23T01:54:40.528444+00:00</updated>
+  <author>
+    <name>jlspc 2023-12-22 01:25:33+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+    <updated>2023-12-23T01:54:40.528478+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022225.html" rel="alternate"/>
+    <summary>The discussion between Antoine and John revolves around the intricacies of implementing Fee Distribution Transactions (FDTs) in blockchain systems. The conversation clarifies that for a transaction to be included in a blockchain, it must wait for an aligned window W that meets specific criteria concerning block size, median fee rate, and time constraints. This aligned window cannot commence until certain time-lock conditions are met, and the transaction itself can only be added after this window has passed. It is noted, however, that once the aligned window exists, the transaction can be included at any subsequent time, as long as it does not have to fall within a window that satisfies the initial conditions.
+
+The median fee rate F for a block B is defined as the largest fee rate such that at least 2 million vbytes of transactions in B have a fee rate greater or equal to F. The email explains that the actual process entails waiting until a specified time T and then waiting for a full aligned window W with 100 consecutive blocks, starting no sooner than T, which contains fewer than 70 blocks with a median fee rate above a certain threshold. The numbers given are illustrative and could be altered if FDT specifics are included in an annex to the paper.
+
+John also addresses a concern regarding the potential race conditions between conflicting transactions, such as HTLC-success and HTLC-timeout transactions, when they become eligible for inclusion in the blockchain. He argues that additional claim grace periods may not be necessary with the appropriate definition of FDTs and honest miners. The assumption is that during the suitable window W, the transaction with a lower fee rate should be mined successfully, assuming miners adhere to the protocol rules.
+
+The email also touches on the challenge of securing Hashed Time-Locked Contracts (HTLCs) using FDTs, particularly specifying a sequence of FDTs for a Lightning Network payment with multiple hops. There is a need to ensure a sequence of expiring FDTs with sufficient time gaps and low fee rate periods between them. The introduction of a 'claim_grace_period' parameter is mentioned as a potential enhancement to the current proposal.
+
+Finally, John introduces the idea of a 'number_of_windows' parameter and weighs its implications on storage requirements. In the current proposal, FDTs require 14 bits, resulting in 16k different values and manageable memory usage. However, adding a 6-bit 'number_of_windows' parameter would increase the required storage significantly, although it would still be considered feasible. John invites further thoughts on making HTLCs safer and expresses enthusiasm about the potential improvements to both LN channel and factory protocols with extended FDT ideas. The email concludes with a link to Proton Mail, the secure email service used to send the message.</summary>
+    <published>2023-12-22T01:25:33+00:00</published>
+  </entry>
+</feed>
