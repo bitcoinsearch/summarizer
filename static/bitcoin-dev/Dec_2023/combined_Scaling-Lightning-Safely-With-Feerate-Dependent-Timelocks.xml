@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
-  <updated>2023-12-24T02:00:14.411330+00:00</updated>
+  <updated>2023-12-29T01:48:20.043553+00:00</updated>
+  <author>
+    <name>Eric Voskuil 2023-12-28 18:42:39+00:00</name>
+  </author>
   <author>
     <name>Eric Voskuil 2023-12-23 04:09:15+00:00</name>
   </author>
@@ -18,6 +21,7 @@
   <author>
     <name>jlspc 2023-12-14 17:07:40+00:00</name>
   </author>
+  <link href="bitcoin-dev/Dec_2023/022236_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022228_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022229_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022225_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
@@ -27,17 +31,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
-    <updated>2023-12-24T02:00:14.411393+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022228.html" rel="alternate"/>
-    <summary>The exchange of emails between Boris, John, and Antoine concerns the implementation of Fee Distribution Transactions (FDTs) within the context of blockchain technology, specifically addressing issues of transaction confirmation and security in relation to block fee rates.
+    <updated>2023-12-29T01:48:20.043614+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022236.html" rel="alternate"/>
+    <summary>The email from Boris Nagaev brings up concerns about the alignment of a window in blockchain mining and its effect on transaction validation, particularly regarding recent changes in transaction fees that may not be reflected due to this alignment. He suggests that a global window size could make the verification process more efficient and reduce space requirements in Full Data Transactions (FDT). Boris proposes an array of integers sized to the window to determine if enough blocks have at least a median fee rate within the latest blocks.
 
-At the heart of this discussion is the operational dynamics of FDTs and their potential impact on the Lightning Network. The concept involves introducing time-locked transactions that are dependent on the median fee rate of recent blocks within the blockchain. This mechanism ensures that a transaction remains unconfirmed during periods when the median fee rate exceeds a pre-defined threshold. The idea is to prevent certain transactions from being included in a block if the conditions based on block size, fee rate, and timing are not met, thereby mitigating risks such as the "Forced Expiration Spam" attack on the Lightning Network. The aligned window, or waiting period for inclusion into the blockchain, is critical in maintaining the integrity and fairness of transaction confirmations.
+Antoine and John's discussion delves into the implementation of Fee Distribution Transactions (FDTs) in blockchain systems, explaining the conditions under which a transaction can be included in a blockchain. They detail the criteria for an aligned window W, including block size, median fee rate, and time constraints. Antoine clarifies that the transaction must wait for a specific time T and then for a full aligned window W containing fewer than 70 blocks with a median fee rate above a given threshold. The conversation addresses race conditions between conflicting transactions and how FDTs might render additional grace periods unnecessary, assuming miners follow protocol rules. John also discusses the storage implications of introducing a 'number_of_windows' parameter alongside FDTs, suggesting it would increase the required storage but remain feasible.
 
-John elaborates on the technical details, such as the alignment of windows according to block height divisibility by a 'window_size' parameter and the subsequent effects on transaction validity. He also addresses the possibility of having a global 'window_size' to streamline verification processes and simplify data storage within transactions. Furthermore, he discusses the implications of adding a 'number_of_windows' parameter to the storage requirements for FDTs, considering both its feasibility and the potential benefits it could bring to LN channel and factory protocols.
+Antoine's email introduces a feerate-dependent timelock (FDT) proposal for Bitcoin, positioning it as a solution for congestion detection in the Lightning Network and smart contracts. He explains the sliding-time-locks based on block fee rates and how the FDT mechanism prevents a transaction's inclusion under certain fee conditions. Antoine outlines the parameters for setting confirmation delays and the potential for FDTs to mitigate "Forced Expiration Spam," recommending design considerations for revocable scripts and consistent FDT parameters across HTLC channels. He calls for incorporating FDT parameters into the bip341 annex and remains optimistic about the FDT proposal, despite unexplored areas related to miner collusion and the 'claim_grace_period.'
 
-Antoine's contribution to the conversation focuses on the formalization of FDTs and how they can be utilized to detect congestion in blockchain networks. He explains how new parameters like 'feerate_value_bound,' 'window_size,' and 'block_count' can be applied to delay transaction confirmations during high-fee periods. Antoine offers insight into the implementation considerations for FDTs, suggesting modifications to revocable scripts and the addition of a 'claim_grace_period' to counteract fee-rate races. Consistent FDT parameters across channels carrying HTLCs are recommended to avoid complications such as off-chain double-spending. He proposes incorporating these FDT parameters into the bip341 annex and shares his optimism about the FDT proposal's capabilities in addressing congestion-related vulnerabilities.
-
-Both emails underscore the significance of FDTs in enhancing the robustness of the Lightning Network against various types of attacks and inefficiencies caused by blockchain congestion. They outline the necessity for additional research, particularly concerning miner collusion and the introduction of the 'claim_grace_period.' While the broader implications and thorough game theory analysis remain areas for future exploration, the correspondence reflects concerted efforts to refine and implement FDTs as a means of improving transaction security and efficiency within blockchain networks.</summary>
-    <published>2023-12-23T04:09:15+00:00</published>
+Lastly, the efficiency of the Lightning Network is connected to the use of timelocks and their susceptibility to "forced expiration spam" attacks. Feerate-Dependent Timelocks (FDTs) are proposed to counteract these attacks by extending timelocks during high congestion, deterring attackers by making it cost-prohibitive to cause network flooding. FDTs adjust automatically to blockchain conditions and protect against dishonest miners manipulating transaction fees. The application of FDTs includes channel factories, and the nSequence field of Bitcoin transactions could encode maximum acceptable fees. The paper detailing FDTs also explores broader applications and emphasizes their role in managing fee risks. While FDT implementation incurs additional costs, the benefits outweigh these. There is a call for updating Bitcoin consensus rules to support FDTs, acknowledging that while attackers can still succeed in double-spend attacks with careful timing, the difficulty of such attacks is significantly increased with FDT parameters in place.</summary>
+    <published>2023-12-28T18:42:39+00:00</published>
   </entry>
 </feed>
