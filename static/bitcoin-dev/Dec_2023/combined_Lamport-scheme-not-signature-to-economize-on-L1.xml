@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-  <updated>2023-12-24T02:01:27.166410+00:00</updated>
+  <updated>2023-12-30T02:03:14.185231+00:00</updated>
+  <author>
+    <name>yurisvb at pm.me 2023-12-29 00:30:30+00:00</name>
+  </author>
   <author>
     <name>yurisvb at pm.me 2023-12-23 00:26:07+00:00</name>
   </author>
@@ -42,6 +45,7 @@
   <author>
     <name>yurisvb at pm.me 2023-12-18 01:37:23+00:00</name>
   </author>
+  <link href="bitcoin-dev/Dec_2023/022237_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022231_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022227_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022223_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
@@ -59,21 +63,31 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-    <updated>2023-12-24T02:01:27.166508+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022231.html" rel="alternate"/>
-    <summary>A recent programming discussion addressed corrections in cryptographic function statements, focusing on mapping LAMPPRI to address and signature formats and omitting earlier nuances. New vulnerabilities were explored through three scenarios: security concerns before a certain block height without data, including address and transaction details after the height, and an adversary outperforming miners with time disadvantages.
+    <updated>2023-12-30T02:03:14.185336+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022237.html" rel="alternate"/>
+    <summary>A series of discussions among programmers has led to a refinement of a cryptographic protocol, resulting in a 66% reduction in blockchain footprint. This was achieved by eliminating conventional public key mining and broadcasting two separate payloads. The protocol is built on the difficulty of factorizing polynomials in finite fields, with details available on GitHub.
 
-LAMPPUB, a fundamental yet unpublished component, may increase in size to ensure negligible collision rates, supporting memory-hard hash functions. The conversation considered varying scenarios - one involving ECCPRI and LAMPPRI mappings to addresses, and another pairing LAMPPRI with LSIG formats, highlighting the importance of completing protocols before attacks. It referenced Boris's approximation on security strength from address size and contemplated a multi-use scheme for LAMPPRI generation to reduce blockchain bloat and enhance security.
+Technical corrections have been made to the functions within the cryptographic scheme, specifically f2_(TX,ECCPUB), ensuring accurate representation of 'a valid LAMPPRI' transformation into an address-signature tuple. These changes highlight the importance of precision in technical documentation.
 
-Concerns over security model changes related to chain reorganizations and double-spending attacks were discussed, noting that attackers might redirect funds beyond their unspent transaction outputs. The maturity of these funds could widen attack surfaces. To bolster defenses against rainbow table and brute-force attacks, including nonces as salts was suggested, aiming to counteract the underestimation of cracking hashes.
+The discourse has identified potential vulnerabilities within the system, such as the paradox that the integral LAMPPUB is not published. To minimize collision rates, it's suggested that LAMPPUB be large, following the rationale of memory-hard hash functions that balance processing power with storage space.
 
-The exchange also debated hash function digest sizes, suggesting they be double the encryption key size, balancing block space utilization with security risks. Cryptographic optimizations discussed included hash sizes, broadcasting ECCPUB alongside LAMPPRI, weakest-link principles, and Schnorr keys benefits, proposing fixed intervals for transaction timings.
+Concerns about the security model have arisen, particularly regarding chain reorganizations and double-spending attacks. The possibility of an increased attack surface from the new changes could lead to more significant double-spending attacks than currently possible. Proposals include using recent blockchain nonces as salts and reassessing the adversarial model, which might overestimate an adversary's computational capabilities.
 
-The programmers' dialogue delved into securing cryptographic systems and the concept of "key owner broadcasts first bundle" within blockchain technology. It emphasized the security provided by the Lamport chain if it resists attacks better than double-spending exploits. The system's natural resistance to ASIC optimization and the impracticality of attacks despite pessimistic scenarios were noted.
+The significance of maintaining a sufficient digest size for cryptographic hash functions is emphasized, alongside the caution that technological advancements should not compromise security standards. It's acknowledged that these advancements might make certain attacks more feasible.
 
-Schnorr signatures' compactness was compared to other formats, and the need for robust bitcoin spending protections was raised. Innovations by R.M. Needham and A. Miller were mentioned, illustrating the evolution of cryptographic methods for digital currency security and efficiency.
+For optimizations, including ECCPUB with LAMPPRI is proposed to reduce exposure risks. Further suggestions involve standardizing fingerprints to 128 bits, adopting Schnorr keys for efficiency, and setting fixed transaction intervals.
 
-Finally, a proposal for byte-efficient Layer 1 (L1) blockchain protocol enhancements was introduced, combining elliptic curve cryptography with a Lamport chain for UTXO freezing and hash preimage publishing. This method could shrink transaction space by requiring only two Lamport hashes instead of a full ECC signature, with Argon2 hashing functions potentially reducing hash sizes further for economical blockchain processing and storage.</summary>
-    <published>2023-12-23T00:26:07+00:00</published>
+A comparison between Lamport and Taproot schemes, which use Schnorr keys, suggests that they might have similar on-chain footprints when additional transaction overheads are considered.
+
+The email series also describes the Bitcoin cryptographic framework, detailing the construction and interaction of keys, addresses, transactions, and commitments. It emphasizes a single-use economic model for Lamport-based transactions and discourages address reuse to enhance security.
+
+The correspondence also assesses a specific security risk where attackers might crack hashes within addresses, based on the economic value of the satoshis at stake. The robust "key owner broadcasts first bundle" concept ensures miners include transactions in their block attempts. The system's security is compared to the improbability of successfully executing a double-spending attack.
+
+Schnorr signatures, critical to Bitcoin's security, offer a practical serialized format but may require additional protective measures. Historical developments like MAVE, MAVEPAY, and FawkesCoin are referenced, illuminating past efforts to improve digital currency security through innovative signature schemes.
+
+Lastly, the proposal suggests a dual-key system integrating the Lamport Scheme to enhance byte-efficiency. This involves broadcasting tuples containing transactions and ECC key-signed commitments to freeze UTXOs. A penalty is enforced for failing to release preimage hashes on time, while adherence triggers payment fulfillment. Argon2, a memory-hard hashing function, is recommended to reduce hash sizes to 12 bytes, decreasing blockchain space requirements.
+
+Academic references throughout the email provide a comprehensive examination of cryptographic protocols in the realm of digital currencies.</summary>
+    <published>2023-12-29T00:30:30+00:00</published>
   </entry>
 </feed>

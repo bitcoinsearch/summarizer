@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+  <updated>2023-12-30T01:58:48.460918+00:00</updated>
+  <author>
+    <name>David A. Harding 2023-12-29 18:11:43+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+    <updated>2023-12-30T01:58:48.460951+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022241.html" rel="alternate"/>
+    <summary>The email from jlspc via the Bitcoin dev mailing list addresses a technical issue concerning the implementation of a fee-dependent timelock (FDT) soft fork and its implications for pruned full nodes. The discussion highlights a potential challenge that arises when a node operator like Alice, who runs an older version of a pruned full node, upgrades to one that supports FDTs after the fork has been activated. Since her node does not retain blocks that were pruned before the upgrade, it lacks the median feerate information necessary to validate FDTs. This situation could potentially undermine the enforcement of new consensus rules by nodes that have only recently become FDT-aware.
+
+A proposed solution to this issue is for nodes that upgrade after the activation of the FDT soft fork to start collecting median feerates from new blocks moving forward, thereby enforcing FDT rules only for transactions with available data. This approach necessitates caution from users relying on FDTs around the time of activation, as there may be discrepancies in enforcement during the transition period. The email suggests that if this method is unacceptable, upgraded nodes might need to retrieve previously pruned blocks or, alternatively, obtain only the necessary parts of those blocks. This could be facilitated by changes to the peer-to-peer protocol that allow for the downloading of specific components such as coinbase transactions or commitments within them.
+
+Dave further elaborates on a strategy for optimizing the transmission of commitment data by incorporating it into the final output of the coinbase transaction. By compressing preceding segments into a SHA midstate and extending it with the OP_RETURN commitment bytes, the resulting transaction ID can be linked to the block header using a standard Bitcoin-style merkle inclusion proof. This efficient communication mechanism would substantially reduce the amount of data needed to be conveyed for trailing commitments within large coinbase transactions. However, he notes that this idea was excluded from SegWit due to hardware constraints in certain ASIC miners at the time, which mandated that the mining reward payout be located in the final output position.</summary>
+    <published>2023-12-29T18:11:43+00:00</published>
+  </entry>
+</feed>
