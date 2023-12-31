@@ -2,7 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
-  <updated>2023-12-30T02:00:59.303544+00:00</updated>
+  <updated>2023-12-31T02:07:50.710158+00:00</updated>
+  <author>
+    <name>Nagaev Boris 2023-12-30 03:20:37+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2023-12-30 03:11:48+00:00</name>
+  </author>
+  <author>
+    <name>Nagaev Boris 2023-12-30 01:17:01+00:00</name>
+  </author>
   <author>
     <name>David A. Harding 2023-12-30 00:37:14+00:00</name>
   </author>
@@ -33,6 +42,9 @@
   <author>
     <name>jlspc 2023-12-14 17:07:40+00:00</name>
   </author>
+  <link href="bitcoin-dev/Dec_2023/022247_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2023/022243_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2023/022246_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022242_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022241_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022236_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
@@ -47,19 +59,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
-    <updated>2023-12-30T02:00:59.303626+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022242.html" rel="alternate"/>
-    <summary>Recent discussions among Bitcoin developers have centered on the potential consequences of offchain payments for the network's decentralization and resistance to censorship. Eric Voskuil emphasized the importance of keeping transaction fees within the Bitcoin protocol to prevent mining centralization that could undermine transaction censorship resistance. He suggested relying on accurate in-band fee statistics for the security of solutions like the Lightning Network (LN), coinpools, and channel factories. To mitigate risks associated with variable mining policies and off-chain fees, users are advised to use fee-dependent timelocks set below their maximum acceptable rate.
+    <updated>2023-12-31T02:07:50.710256+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022247.html" rel="alternate"/>
+    <summary>The discourse among Bitcoin developers is focused on the implementation of Feerate-Dependent Timelocks (FDTs) and their potential impact on the network. Boris Nagaev's initial proposition that miners offer a fee discount for out-of-band payments to increase earnings through faster transactions has been met with skepticism due to the 'free rider' problem, where non-discounting miners could ultimately benefit more. This could lead to adjustments in contract protocols using FDTs or miners exiting the market.
 
-Developer Dave addressed concerns about enforcing fee-dependent timelocks (FDTs) by pruned full nodes lacking historical median feerate information. He proposed that newly upgraded nodes should collect median feerates for new blocks or download relevant historical data to enforce FDTs effectively. A commitment communication technique in the coinbase transaction was mentioned as well but not adopted due to ASIC miner hardware limitations.
+Eric Voskuil raises concerns about the threat to Bitcoin's decentralization and censorship resistance from out-of-band fee payments, stressing the importance of maintaining in-band fees for transaction security. A technical challenge associated with FDTs involves pruned nodes not having median feerate information post-upgrade, potentially affecting new consensus rule enforcement. A proposed workaround is to have upgraded nodes gather new median feerates and enforce FDT rules only when data is available, advocating cautious user strategies during transition.
 
-Boris Nagaev raised issues regarding the timing and validation of Fee-Distribution Transactions (FDTs). He pointed out that recent fee changes might not be immediately reflected in transaction confirmations because of aligned windows and proposed a global window size to improve this process.
+John highlights that Forward-Dated Transactions rely on the alignment of timelock satisfaction windows to reduce dishonest mining and suggests that consecutive aligned windows can balance security against latency. The discussion includes the idea of a standardized global window size for simplifying verification processes and improving efficiency.
 
-Technical discussions between Antoine and John focused on the implementation of FDTs, considering parameters such as 'feerate_value_bound,' 'window_size,' and 'block_count' for including transactions in blocks based on median fee rates. These parameters could delay confirmations during high fee periods, addressing Forced Expiration Spam in the LN. They also discussed incorporating FDT parameters into the bip341 annex to benefit both LN channels and factory protocols.
+Antoine and John provide insight into the specifics of FDTs, explaining that transactions must wait for a qualifying aligned window before being included in the blockchain, assuming miners behave honestly. They also discuss the assumption that transactions with lower fee rates will be mined successfully during these windows.
 
-Feerate-Dependent Timelocks (FDTs) emerged as an important development for the Lightning Network, designed to adapt to blockchain conditions and enhance security against "forced expiration spam" attacks. By using dynamic timelocks, FDTs aim to increase the cost for attackers during network congestion. The nSequence field in Bitcoin transactions would be utilized for encoding maximum acceptable fees, ensuring transactions comply with specified fee rates and timelocks, thus preserving network integrity.
+Separately, the debate covers the proposal of FDTs to address issues such as congestion by adjusting transaction inclusion based on block fee rates, aiming to prevent "forced expiration spam" attacks. The FDT mechanism incorporates parameters like 'feerate_value_bound,' 'window_size,' and 'block_count' to delay confirmations if median fee rates exceed certain bounds. While rooted in bip68 and bip113, enhancements are suggested for better control during high-fee periods. In the context of the Lightning Network, pre-signed transactions could be deferred if fee conditions aren't met, and modifications to the bip341 annex could allow individual HTLC outputs within a single transaction to have varying FDT settings.
 
-The application of FDTs could further extend to channel factories, enabling innovative covenants like HTLC aggregation. Nevertheless, aspects such as miner collusion and the 'claim_grace_period' remain areas of concern that need more analysis to affirm the robustness of FDTs. Despite requiring additional DRAM and computing power, the benefits of FDTs are considered significant enough to propose updates to Bitcoin's consensus rules to incorporate them. Although FDTs cannot guarantee protection against all attack scenarios, they elevate the difficulty of successful double-spend attacks. Developers express optimism for the future implementation and effectiveness of FDTs in tackling key issues within the Lightning Network and related technologies.</summary>
-    <published>2023-12-30T00:37:14+00:00</published>
+Further considerations include a 'claim_grace_period' to counteract fee-rate races and a 'number_of_windows' parameter that would increase storage requirements but is deemed feasible. The dialogue encapsulates optimism about FDTs mitigating vulnerabilities from congestion, enhancing security while maintaining capital efficiency, and offering protection against fee manipulation by dishonest miners. Despite some attack vectors persisting, FDTs are seen as raising the difficulty for attackers without guaranteeing absolute security. Continuous innovation is emphasized for addressing network congestion and improving the safety and protocols of the Bitcoin and Lightning Networks.</summary>
+    <published>2023-12-30T03:20:37+00:00</published>
   </entry>
 </feed>
