@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[DEFUNCT] Cluster Mempool Package RBF sketch</title>
+  <updated>2023-12-29T18:52:18.976884+00:00</updated>
+  <author>
+    <name>instagibbs 2023-11-29 18:21:07.713000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[DEFUNCT] Cluster Mempool Package RBF sketch</title>
+    <updated>2023-12-29T18:52:18.976884+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/defunct-cluster-mempool-package-rbf-sketch/171" rel="alternate"/>
+    <summary>The process for post-cluster mempool package Replace-by-Fee (RBF) processing is a well-defined sequence of steps aimed at managing the Bitcoin mempool effectively when a new transaction package is introduced. The initial step involves identifying all clusters in the mempool that are affected by the transactions in the new package. This set, referred to as OLD, includes any clusters with parent or conflicting transactions and all transactions within the same clusters.
+
+Upon establishing OLD, a new set called NEW is created, which consists of the OLD cluster with the addition of the newly introduced package and the removal of all conflicts. It should be noted that this could result in multiple clusters if the prior entities split. NEW not only comprises entirely new transactions but also reorganizes existing ones from OLD.
+
+The next phase requires linearizing all clusters within NEW to organize them efficiently. Following linearization, a "pre-eviction" step is introduced where any transaction that is new to NEW but not part of OLD and has a chunk fee rate below the minimum mempool fee is removed.
+
+An incremental fee rate check is conducted to ensure that the fee difference between NEW and OLD meets a minimum increase proportional to the size difference between the two sets. If this condition is not met, the package is rejected. Additionally, a fee-size diagram comparison is performed between NEW and OLD, and a tail fee rate check is included in this step. Any inferiority in the fee-side diagram leads to rejection of the package.
+
+Once the checks are passed, the new transactions in the package are verified and then any transactions from OLD that no longer have conflicts—potentially due to the pre-eviction process—are added back into NEW. The final step is to apply the updated NEW to the mempool.
+
+There is a suggestion for improvement in the process: performing step 8, which is adding non-conflicting transactions back to NEW, before steps 5 and 6 might be beneficial. This alteration could potentially aid in passing the incremental feerate and fee-size diagram checks. Moreover, there's a consideration for re-linearizing after steps 4 and/or 8; however, its effectiveness is uncertain, and consistently applying it may require repeating the pre-eviction step, possibly leading to an extensive iterative process.</summary>
+    <published>2023-11-29T18:21:07.713000+00:00</published>
+  </entry>
+</feed>

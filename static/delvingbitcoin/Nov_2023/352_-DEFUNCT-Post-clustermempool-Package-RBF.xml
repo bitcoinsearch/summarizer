@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>[DEFUNCT] Post-clustermempool Package RBF</title>
+  <updated>2023-12-29T19:08:04.344718+00:00</updated>
+  <author>
+    <name>sipa 2023-11-29 18:50:53.731000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>[DEFUNCT] Post-clustermempool Package RBF</title>
+    <updated>2023-12-29T19:08:04.344718+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/defunct-post-clustermempool-package-rbf/173" rel="alternate"/>
+    <summary>The blog post delves into the intricacies of transaction processing within a Bitcoin-like network's mempool, specifically discussing the rules for Replace-By-Fee (RBF) for packages of transactions. The process begins with deduplication, removing any transaction already present in the receiver's mempool from the incoming package. This is followed by pre-linearization, which orders the remaining transactions without considering dependencies already in the mempool.
+
+Before proceeding further, a pre-eviction step discards any part of the package whose fee rate is beneath the threshold defined by `mempoolminfee` or `incremental_relay_feerate`, serving as DoS protection. If there are conflicts between the mempool and the incoming package, the set `CON` is determined. Cluster `OLD` is then created, encompassing all related clusters within the mempool that could be affected by these conflicts or have dependencies on the incoming package.
+
+A new cluster `NEW` is derived by subtracting `CON` from `OLD` and adding the incoming package. Several checks follow to ensure protection against DoS and to maintain incentive compatibility. These include ensuring the new package's fees exceed those of `OLD` adjusted by the size of the package, linearizing all clusters in `NEW`, verifying that `NEW`'s fee-size relationship is no worse than `OLD`'s, and checking that the new package meets certain fee rate criteria if `tail_feerate` is applicable.
+
+Further verification ensures that all transactions comply with policy and standardness rules, using UTXOs gathered from various sources. Conflicting transactions (`CON`) are then evicted from the mempool, and the incoming package is added, validating each transaction against consensus rules.
+
+The system must also consider limits on cluster count and size during linearization, failing the package if these limits are exceeded. Open questions remain regarding whether operations should be performed individually for connected components within the package and whether the outlined process is sufficiently robust. For instance, issues may arise with subpackages affecting clusters differently, potentially leading to suboptimal outcomes. While some situations can be addressed through subpackage validation or merging clusters from `OLD` and `NEW`, finding the optimal mix of old and new transactions may not always be possible with a naive approach.
+
+The aforementioned procedures and concerns are captured in two linked discussions: an initial proposal at https://delvingbitcoin.org/t/cluster-mempool-package-rbf-sketch/171 and a more evolved design at https://delvingbitcoin.org/t/post-clustermempool-package-rbf-per-chunk-processing/190, inviting further examination and refinement of these RBF rules.</summary>
+    <published>2023-11-29T18:50:53.731000+00:00</published>
+  </entry>
+</feed>

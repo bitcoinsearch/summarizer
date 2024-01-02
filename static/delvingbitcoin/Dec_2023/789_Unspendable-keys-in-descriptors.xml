@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Unspendable keys in descriptors</title>
+  <updated>2023-12-22T19:14:03.026386+00:00</updated>
+  <author>
+    <name>salvatoshi 2023-12-19 13:29:37.600000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Unspendable keys in descriptors</title>
+    <updated>2023-12-22T19:14:03.026386+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/unspendable-keys-in-descriptors/304" rel="alternate"/>
+    <summary>The recent integration of miniscript with taproot in Bitcoin Core and upcoming support in hardware signers opens up new possibilities for wallet developers. A specific challenge that arises is the creation of spending policies using unspendable keys, particularly relevant with taproot where wallets may be designed to operate only through script paths due to requirements like timelocks or conditions not expressible with keypaths like musig/FROST.
+
+Creating specific unspendable keys or extended public keys (xpubs) is straightforward, such as using an xpub constructed from the NUMS point suggested in BIP-0341 combined with a chaincode of 32 zero bytes. Yet, achieving certain properties to make these keys practical is non-trivial. These properties include making unspendable keys indistinguishable from random keys to external observers, ensuring each generated unspendable pubkey is unique and unrelated to prevent fingerprinting, making it easy to identify unspendable keys within descriptors, and minimizing additional entropy to improve user experience with hardware signing devices.
+
+Multiple approaches to generating unspendable keys have been considered. One simple method involves using a fixed unspendable xpub, which meets some criteria but fails others, such as preventing fingerprinting and indistinguishability. Another approach uses a root xpub with an unspendable pubkey and a random chaincode, satisfying most goals but compromising on avoiding additional entropy. The BIP-0341 method, generating a key expression `unspend(r)` with a fixed chaincode, shares similar properties.
+
+Additional methods involve using entropy from the taptree when there's no keypath, or recycling entropy from the descriptor itself. Recycling entropy involves generating an unspendable xpub by hashing all compressed pubkeys in the descriptor followed by a wildcard operator and pairing it with a fixed chaincode. A special marker within the descriptor could represent this unspendable xpub, simplifying the representation in wallet policies.
+
+Among the current standard-compliant solutions, using a root xpub with a random chaincode seems the most practical for hardware signers, despite its slight UX compromise. For long-term solutions requiring additions to descriptor syntax, the method of recycling descriptor entropy appears ideal but may be problematic when applied to descriptors. It is cleaner within the context of wallet policies, which separate the descriptor template from the xpubs and are designed as a more restrictive language. However, the broad adoption of wallet policies as a standard for backing up descriptor-based wallets may still be premature.
+
+In summary, while there are several proposed solutions to creating unspendable keys within the constraints of taproot and miniscript, each with their trade-offs, further discussion and ideas are necessary to refine these methods and potentially develop cleaner approaches.</summary>
+    <published>2023-12-19T13:29:37.600000+00:00</published>
+  </entry>
+</feed>

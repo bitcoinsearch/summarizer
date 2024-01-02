@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster Mempool RBF Thoughts</title>
+  <updated>2023-12-29T18:55:25.937801+00:00</updated>
+  <author>
+    <name>sdaftuar 2023-12-12 21:56:07.748000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster Mempool RBF Thoughts</title>
+    <updated>2023-12-29T18:55:25.937801+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-rbf-thoughts/156/23" rel="alternate"/>
+    <summary>The recent analysis of the Replace-By-Fee (RBF) rules proposed in GitHub pull request #28984 for Bitcoin reveals several potential issues concerning transaction relaying and fee rate calculations. A primary concern is that the heuristic used to determine if a transaction package should replace transactions in the mempool based on fee rates may not align with future desired feerate diagram tests.
+
+For instance, there's an example where the current mempool contains two transactions, A and B, with specific sizes and fees. When introducing a new package composed of transactions C and D, where D conflicts with B, the heuristic might indicate a successful replacement due to higher fee rates and total fees of the incoming package. However, visual inspections using feerate diagrams suggest that the overall feerate landscape of the mempool does not improve post-replacement.
+
+Another issue arises when considering the interaction between package validation and legacy RBF rules. If a two-transaction package passes the new validation rules, it could still encounter problems during propagation to peers. Specifically, if the first transaction, C, has a sufficient feerate to relay independently, it may propagate through the network. Subsequently, when the second transaction, D, attempts to relay, it may trigger existing RBF rules, which preclude the introduction of a new unconfirmed parent, thereby hindering its propagation. This implies that for the package RBF feature to be effective, users would need to manipulate the feerate of transaction C to prevent it from relaying separately.
+
+A third issue highlighted concerns the scenario where a transaction package is validated against the current mempool but fails during peer propagation. The example provided shows a starting mempool with transactions A and B, and a new package of transactions C and D, with D conflicting with B. The package may pass the feerate diagram test as a whole when compared with the initial state of the mempool. However, if transaction C were to relay by itself without conflict, the subsequent feerate diagram test for transaction D in the context of a mempool now containing transactions A, B, and C would not show improvement, leading to a failed propagation attempt.
+
+These observations illustrate the complexities involved in optimizing transaction processing within the Bitcoin network. The intricacies of fee calculation, package validation, and transaction relay protocols must be carefully balanced to ensure both efficiency and fairness in the system.</summary>
+    <published>2023-12-12T21:56:07.748000+00:00</published>
+  </entry>
+</feed>

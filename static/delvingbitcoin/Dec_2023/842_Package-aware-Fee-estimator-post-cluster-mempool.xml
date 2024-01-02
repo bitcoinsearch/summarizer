@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Package aware Fee estimator post cluster mempool</title>
+  <updated>2023-12-22T19:20:05.680312+00:00</updated>
+  <author>
+    <name>ismaelsadeeq 2023-12-20 21:38:24.157000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Package aware Fee estimator post cluster mempool</title>
+    <updated>2023-12-22T19:20:05.681266+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/package-aware-fee-estimator-post-cluster-mempool/312" rel="alternate"/>
+    <summary>The CBlockPolicyEstimator is designed to predict transaction confirmation times based on the fee rate, but it faces challenges in accurately assessing situations where transactions are confirmed as part of a package instead of individually due to their fee rate. Specifically, the estimator currently disregards any transaction with unconfirmed parents in the mempool, to prevent incorrect assumptions about confirmations due to high fees when in reality, packages may be confirmed together based on their ancestor score.
+
+There are two primary issues with the current approach of the CBlockPolicyEstimator: it ignores certain data points by excluding transactions with unconfirmed parents, and it sometimes incorrectly attributes transaction confirmations to fee rates when they may be confirmed for other reasons. To address these issues, it's proposed that the CBlockPolicyEstimator begins tracking transactions based on a chunk mining score, which would be updated at the time of each transaction's addition to the mempool and whenever the chunk mining score improves.
+
+When a new transaction enters the mempool, CBlockPolicyEstimator should record its mining score. If a transaction leaves the mempool for non-block-related reasons, it should be marked as a failure within the estimator's records. Upon receiving a new block, transactions should be clustered, linearized, and processed in chunks. The estimator will then compare these chunks to its internal data, removing the chunk from its statistics as a failure if no corresponding transactions were tracked. If all transactions in a chunk were in the mempool and the mining scores align, they should be removed as successful, with success defined by the number of blocks taken to mine the chunk since the last improvement in score.
+
+However, discrepancies may arise between the chunk mining score within the CBlockPolicyEstimator and the actual block's mining score. This could occur if only a subset of a package is confirmed, such as when an ancestor's fee rate is sufficiently attractive to miners. In this case, the estimator should match the chunk mining score to the score of the sponsor transaction and mark the chunk as successful based on the sponsor's metrics.
+
+Questions remain regarding the process of linearizing the new block and how it correlates to the miner's construction of the block template. Moreover, there's a need to understand why the CBlockPolicyEstimator's chunk mining score might differ from the actual block's score. The scenario suggested involves only a portion of a chunk being mined, indicating a possible divergence in mining score due to partial confirmations within a package. Lastly, consideration is given to whether tracking chunks might be a more effective method overall for the CBlockPolicyEstimator to improve its accuracy in predicting transaction confirmations.</summary>
+    <published>2023-12-20T21:38:24.157000+00:00</published>
+  </entry>
+</feed>

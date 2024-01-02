@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>CPU usage of peers</title>
+  <updated>2023-12-30T10:28:02.503389+00:00</updated>
+  <author>
+    <name>0xB10C 2023-12-01 14:58:56.392000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>CPU usage of peers</title>
+    <updated>2023-12-30T10:28:02.504289+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cpu-usage-of-peers/196/2" rel="alternate"/>
+    <summary>In an effort to analyze CPU usage by peers in Bitcoin Core, a study was conducted focusing on the time spent in `ProcessMessages()` and `SendMessages()` functions. A tracepoint was implemented at the end of these functions allowing for data collection via `bpftrace`, which outputted CSV-formatted logs. The node used for this study was hosted on a VPS with access to four AMD EPYC 7R32 cores, although Bitcoin Core's message handling thread operates single-threadedly.
+
+The examination was limited to connections sustained for more than a minute, excluding transient connections such as feeler or spy node connections. Variability in CPU usage between weekdays and weekends was noted and attributed to factors like transaction broadcast rates and the mix of full-relay versus block-relay-only connections. Full-relay connections were found to be notably more CPU-intensive than block-relay-only connections.
+
+Data showed that during peak periods, the CPU utilization for message processing could reach up to 1000ms per second, effectively utilizing 100% of one CPU core. In terms of individual peer analysis, outbound full-relay connections consumed around 600µs per second on average, making them the most resource-intensive. In contrast, both inbound and outbound block-relay-only connections were less demanding, averaging just under 100µs per second.
+
+Further insights were gained by examining the time taken to process different types of messages. Full-relay peers handled a variety of messages including `tx`, `addr`, `addrv2`, and `cmptblock`, with `tx` messages being particularly costly in terms of processing time. Block-relay-only peers mainly dealt with `inv` and `getdata` messages, and processed `version` messages more quickly than their full-relay counterparts.
+
+When considering modifying the number of connection slots, the study suggested potential increases in CPU usage. The current configuration resulted in 34.6ms of CPU time per second, while a proposed change would raise this to 46.4ms, representing a 34% increase. However, concerns about CPU usage from increasing block-relay-only connections seemed unwarranted.
+
+It was noted that different hardware, like the Raspberry Pi 4, might exhibit significantly different performance characteristics due to its lower computational power. Additionally, since the node for the study was pruned, measurements did not include CPU time associated with Initial Block Download (IBD) processes.
+
+The importance of understanding how enhancements like Erlay could affect CPU usage was highlighted, but no definitive conclusions were drawn. Lastly, the study acknowledged MIT DCI's sponsorship of the node used for this research, emphasizing the collaborative nature of the work within the Bitcoin development community.</summary>
+    <published>2023-12-01T14:58:56.392000+00:00</published>
+  </entry>
+</feed>

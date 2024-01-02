@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster Mempool RBF Thoughts</title>
+  <updated>2023-12-29T18:59:48.331894+00:00</updated>
+  <author>
+    <name>ajtowns 2023-12-05 17:44:23.047000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster Mempool RBF Thoughts</title>
+    <updated>2023-12-29T18:59:48.331894+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-rbf-thoughts/156/14" rel="alternate"/>
+    <summary>When considering the complexities of cluster sizes and the number of permissible clusters that can be connected, it's important to recognize potential consequences on transaction arrangements. In a Child Pays for Parent (CPFP) scenario where multiple transactions are paid for through a single entity, adjusting the ancestor count limit while maintaining the chunk limit could lead to unexpected outcomes. For instance, if an initial CPFP setup includes a series of transactions linked to a central transaction, and later an attempt is made to include additional transactions by replacing the central transaction (via Replace-By-Fee or RBF), this process can be repeated until the maximum chunk size is reached.
+
+This iterative RBF process allows for the incorporation of numerous clusters in stages: 21 clusters with each new replacement transaction up to a certain point, followed by a final batch that includes fewer clusters. However, an issue arises if only the latter part of this sequence is visible, such as transactions P11 to P99 without seeing the intermediate steps. In such a case, the final transaction appears to merge an excessive number of clusters, potentially exceeding established limits.
+
+The dependency on the path taken for the RBF—from the original transaction to the last one—highlights a critical flaw. A direct replacement from the first to the last transaction would not be permitted due to the apparent merging of too many clusters. Yet, an indirect approach that incrementally increases the cluster count succeeds, despite reaching the same end state. This discrepancy suggests that the rules governing transaction replacements and cluster mergers may need reconsideration to avoid such inconsistencies.</summary>
+    <published>2023-12-05T17:44:23.047000+00:00</published>
+  </entry>
+</feed>

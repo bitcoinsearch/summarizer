@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster Mempool RBF Thoughts</title>
+  <updated>2023-12-29T18:58:09.101894+00:00</updated>
+  <author>
+    <name>ajtowns 2023-12-05 22:34:37.696000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster Mempool RBF Thoughts</title>
+    <updated>2023-12-29T18:58:09.101894+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-rbf-thoughts/156/18" rel="alternate"/>
+    <summary>In the realm of transaction replacement on a blockchain, such as Bitcoin's Replace-by-Fee (RBF) protocol, there arises a complexity when a child transaction is paid for via CPFP (Child Pays For Parent) by different transactions. The situation is illustrated using a mermaid diagram where Pn represents prior transactions and C2 conflicts with each Xn due to spending the same output of Pn. This conflict ensues because C2 attempts to replace the original chain of transactions that began with P1 and continued through Pn. The replacement process involves the introduction of C3, which replaces both C2 and a range of subsequent transactions from X31 to X50. C3 is depicted as creating conflicts not only with C1 and C2 but also with transactions ranging from X11 to X50.
+
+The issue at hand is determining the correct approach to linearize the transactions once RBF has been invoked. This ensures that the mempool, the collection of all unconfirmed transactions waiting to be included in a block, reflects an accurate state. The linearization process requires creating diagrams for clusters pre- and post-RBF execution. Initially, all relevant clusters from the original mempool are mapped out, which is an operation of order $O(n\cdot \log(c))$ where $c$ is the number of clusters and $n$ is the number of transactions within these clusters. Post-RBF, the old clusters are maintained with any conflicting transactions removed, potentially causing some clusters to split. A new cluster for the new transaction(s) is created, and all related transactions from all clusters are moved into this new cluster, which is then linearized. Finally, the remnants of the old clusters are combined with the new cluster to form a complete, updated diagram.
+
+When considering whether a transaction should be accepted after invoking the RBF protocol, one must first decide if re-linearizing the affected old clusters is necessary before updating the mempool. The decision-making process involves checking if the scenarios meet certain conditions, like 2a and 2b, which are based on a threshold below 40 when transitioning from C1 to C3 directly. However, if the transitions occur sequentially from C1 to C2 and then C3, these conditions do not apply, assuming that the initial mempool contains C1 and all transactions up to P1.99 and X1.99.
+
+Thus, the entire procedure can be considered as a single linearization step, although in practice, it might be prudent to re-linearize all affected clusters after deciding to accept the RBF before the mempool is finally updated. This ensures that the mempool accurately represents the current state of the transaction set and avoids potential conflicts or discrepancies.</summary>
+    <published>2023-12-05T22:34:37.696000+00:00</published>
+  </entry>
+</feed>
