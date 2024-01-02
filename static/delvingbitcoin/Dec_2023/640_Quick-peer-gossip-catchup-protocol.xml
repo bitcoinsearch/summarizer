@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Quick peer gossip catchup protocol</title>
+  <updated>2023-12-30T10:40:36.602105+00:00</updated>
+  <author>
+    <name>cdecker 2023-12-06 13:23:54.650000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Quick peer gossip catchup protocol</title>
+    <updated>2023-12-30T10:40:36.602105+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/quick-peer-gossip-catchup-protocol/251/4" rel="alternate"/>
+    <summary>The concept of efficiently synchronizing with client nodes in a network is achieved through `lnsync`, which implements an arbitrary ordering system that the serving node applies to messages. This ordering facilitates clients' ability to seek through messages for synchronization purposes. The advantage of such a system lies in its simplicity and backward compatibility, allowing for some level of misordering without significant consequences as it may only result in slightly more data than necessary being transmitted.
+
+Messages in the network are sorted based on different criteria to facilitate this process. For instance, `channel_update` and `node_announcement` messages are sorted by their timestamps, enabling clients to query a specific range of these timestamps. However, `channel_announcement` messages present a unique challenge as they lack timestamps, making it difficult to order them uniquely among other related messages. To address this quandary, it is proposed that `channel_announcement` should be included whenever a querying node requests a timestamp range that includes any update to the channel, regardless of the lack of a unique ordering position for these announcements.
+
+A key benefit of this approach is the elimination of the need for per-peer storage, simplifying the startup process. Upon startup, nodes calculate an operational timestamp by loading the last known online timestamp, subtracting a predefined buffer (suggested as half an hour), and then communicating this timestamp during reconnection. As a result, nodes do not have to store information for each peer individually but instead maintain a single timestamp up to which they consider themselves updated. They can then request incremental updates from peers based on this timestamp, enhancing efficiency in keeping the network synchronized.</summary>
+    <published>2023-12-06T13:23:54.650000+00:00</published>
+  </entry>
+</feed>

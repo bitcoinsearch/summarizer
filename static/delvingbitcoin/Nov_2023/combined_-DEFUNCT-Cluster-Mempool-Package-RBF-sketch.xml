@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - [DEFUNCT] Cluster Mempool Package RBF sketch</title>
+  <updated>2023-12-29T18:53:05.473866+00:00</updated>
+  <author>
+    <name>sipa 2023-11-29 18:33:53.908000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs 2023-11-29 18:21:07.713000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Nov_2023/511_-DEFUNCT-Cluster-Mempool-Package-RBF-sketch.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2023/345_-DEFUNCT-Cluster-Mempool-Package-RBF-sketch.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - [DEFUNCT] Cluster Mempool Package RBF sketch</title>
+    <updated>2023-12-29T18:53:05.473866+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/defunct-cluster-mempool-package-rbf-sketch/171/2" rel="alternate"/>
+    <summary>The discussion focuses on a proposed method for handling post-clustermempool package replace-by-fee (RBF) processing without subpackage validation. The initial step involves computing the set of all affected clusters in the mempool, labeled as 'OLD'. This set includes any parent or conflict of the package's transactions and all other transactions within the same cluster(s), which may involve multiple existing clusters.
+
+Subsequently, a new set termed 'NEW' is calculated to replace 'OLD'. 'NEW' is essentially 'OLD' with the addition of the new package, minus any conflicting transactions. It should be noted that 'NEW' may contain multiple clusters if current ones split, and includes both brand new transactions and those rechunked from 'OLD'.
+
+The next stage is the linearization of all clusters in 'NEW', followed by a pre-eviction process. During pre-eviction, any transaction that is new (present in 'NEW' but not 'OLD') and has a chunk feerate below the minimum threshold ('mempoolminfee') is removed. An incremental feerate check is then carried out to ensure that the fee differential between 'NEW' and 'OLD' meets a specified increase rate multiplied by the size of the new transactions not present in 'OLD'. If this check fails, the entire package is rejected.
+
+Additionally, a fee-size diagram comparison is conducted between 'NEW' and 'OLD'. Should the diagram for 'NEW' be worse at any point, or if it fails the tail feerate check (which might be included in the incremental feerate check), the package is again subject to rejection.
+
+Upon completion of these checks, new transactions are verified, and all transactions from 'OLD' that no longer conflict (due to earlier pre-eviction steps) are added to 'NEW'. Lastly, these changes are applied to the mempool.
+
+An observation was made about the potential optimization of the process by inserting the re-addition of non-conflicting transactions (step 8) between the pre-eviction (step 4) and the incremental feerate check (step 5). This change could facilitate the latter two checks. Additionally, the possibility of re-linearizing after the pre-eviction and/or re-addition of transactions is mentioned, although its benefits are unclear and could result in repeated iterations.
+
+For further details, interested parties are directed to the original discussion on https://delvingbitcoin.org/t/post-clustermempool-package-rbf-per-chunk-processing/190.</summary>
+    <published>2023-11-29T18:33:53.908000+00:00</published>
+  </entry>
+</feed>

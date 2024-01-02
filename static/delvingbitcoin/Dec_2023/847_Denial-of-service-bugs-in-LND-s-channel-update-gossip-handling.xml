@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Denial-of-service bugs in LND's channel update gossip handling</title>
+  <updated>2023-12-22T19:21:49.662650+00:00</updated>
+  <author>
+    <name>dergoegge 2023-12-21 16:39:35.378000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Denial-of-service bugs in LND's channel update gossip handling</title>
+    <updated>2023-12-22T19:21:49.662650+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/denial-of-service-bugs-in-lnds-channel-update-gossip-handling/314" rel="alternate"/>
+    <summary>In the latter part of 2021, two denial-of-service vulnerabilities were identified in the LND (Lightning Network Daemon) software, which have since been addressed through updates. The first vulnerability involved a denial-of-service attack through memory exhaustion due to unconditionally storing premature channel updates. When a new channel is initiated, gossip messages are dispersed across the network including a 'channel_announcement' and two 'channel_updates'. In some cases, 'channel_updates' were received before the 'channel_announcement', which are unverifiable without the public keys from the 'channel_announcement'. Originally, LND had an unbounded buffer for such premature updates, making it susceptible to attackers flooding this buffer with invalid updates, potentially leading to out-of-memory conditions and risking loss of funds. This was resolved by implementing a limited cache that only retains up to 100 premature updates. It's noteworthy that an earlier fix inadvertently removed this buffer entirely but was later reversed due to unstable tests.
+
+The second vulnerability found in versions of LND prior to v0.15.0 pertained to the potential censorship of channel update gossips. The Lightning protocol doesn't inherently impose a cost on the creation and broadcasting of 'channel_update' messages, other than requiring a signature. To mitigate spam, lightning implementations, including LND, rate limit the number of channel updates they will relay. Previously, LND performed signature checks on these updates after applying rate limits. This sequence permitted an attacker to spam nodes with invalid updates, effectively censoring any subsequent legitimate updates as they would be dismissed due to rate limits. A fix was implemented to validate signatures before applying rate limits to prevent such censorship.
+
+The timeline for disclosure and resolution of these bugs is as follows: On October 19, 2021, Lightning Labs was notified about the issues. The first bug was fixed on November 5, 2021, followed by the release of version 0.14.0 on November 17, 2021. The second fix was merged on March 16, 2022, and incorporated into the June 24, 2022 release of version 0.15.0. The public was informed about these vulnerabilities on December 21, 2023. Lastly, the blog post concludes with a call to support Bitcoin research and development focused on security by donating to Brink, a nonprofit organization.</summary>
+    <published>2023-12-21T16:39:35.378000+00:00</published>
+  </entry>
+</feed>

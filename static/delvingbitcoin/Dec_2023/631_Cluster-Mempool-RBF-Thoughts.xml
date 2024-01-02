@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster Mempool RBF Thoughts</title>
+  <updated>2023-12-29T18:58:31.000751+00:00</updated>
+  <author>
+    <name>sdaftuar 2023-12-05 19:11:17.122000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster Mempool RBF Thoughts</title>
+    <updated>2023-12-29T18:58:31.000751+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-rbf-thoughts/156/17" rel="alternate"/>
+    <summary>In the process of managing transactions within a mempool, the discussion revolves around the challenges and considerations for Replace-by-Fee (RBF) mechanism and cluster size limits. The first point of consideration is the limitation on the size of a transaction cluster, with an example provided where a new transaction must not result in a cluster exceeding 100 transactions. This rule applies to both RBF and non-RBF transactions when they are added to the mempool.
+
+The second point focuses on the limits related to the number of conflicts a new transaction may introduce. There are several approaches to define this limit: a direct cap on the number of conflicting transactions, a cap including both direct conflicts and their descendants, or a cap based on the number of linearizations required after conflicts are resolved and the replacement transaction is added. The concern is that these limitations should not make the acceptance of a transaction path-dependent, meaning that the visibility of certain transaction paths should not affect the overall processing.
+
+An additional edit addresses a practical approach to dealing with the third type of limit (2c), suggesting that if there is a maximum number of N direct conflicts allowed, then at most N+1 linearizations would be needed when adding a replacement transaction. This is justified by the fact that descendants of direct conflicts belong to the same cluster as the conflict itself, ensuring no more than N clusters contain transactions that could be evicted. Furthermore, it's argued that the cost of linearizing a split cluster is less than the cumulative cost of linearizing each part individually due to the polynomial or exponential runtime of the linearization algorithm, which means the impact of cluster splits can be disregarded. 
+
+Overall, the email reflects on the complexities of implementing RBF within the constraints of transaction cluster sizes and proposes practical limits to manage potential conflicts without inducing path dependency in the process.</summary>
+    <published>2023-12-05T19:11:17.122000+00:00</published>
+  </entry>
+</feed>

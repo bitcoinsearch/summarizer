@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Package aware Fee estimator post cluster mempool</title>
+  <updated>2023-12-29T19:43:30.186977+00:00</updated>
+  <author>
+    <name>ismaelsadeeq 2023-12-25 12:25:27.672000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns 2023-12-25 10:42:32.398000+00:00</name>
+  </author>
+  <author>
+    <name>ismaelsadeeq 2023-12-24 13:22:00.976000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns 2023-12-24 11:14:22.431000+00:00</name>
+  </author>
+  <author>
+    <name>sipa 2023-12-23 14:25:17.280000+00:00</name>
+  </author>
+  <author>
+    <name>ismaelsadeeq 2023-12-23 11:10:35.539000+00:00</name>
+  </author>
+  <author>
+    <name>sipa 2023-12-22 19:37:48.740000+00:00</name>
+  </author>
+  <author>
+    <name>glozow  . 2023-12-21 11:11:07.458000+00:00</name>
+  </author>
+  <author>
+    <name>ismaelsadeeq  . 2023-12-20 21:38:24.157000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Dec_2023/867_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/866_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/863_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/862_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/856_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/855_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/852_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/844_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/842_Package-aware-Fee-estimator-post-cluster-mempool.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Package aware Fee estimator post cluster mempool</title>
+    <updated>2023-12-29T19:43:30.186977+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/package-aware-fee-estimator-post-cluster-mempool/312/9" rel="alternate"/>
+    <summary>The discussion revolves around the complexities of fee estimation in a mempool environment where transaction packages, or chunks, complicate the confirmation process. A chunk is formed when multiple transactions are bunched together, and this can happen if a Child Pays for Parent (CPFP) situation arises. In such a case, the child transaction pays a higher fee rate to expedite the confirmation of its parent transaction. The suggestion is that instead of tracking individual transactions, it might be more effective to track these chunks, which could also be single transactions, to determine their likelihood of being included in a block.
+
+A proposed system of managing the mempool is outlined, where chunks are assigned fee rates at specific times. For example, chunk [A] with a fee rate of 20 sat/vb at T=0600, followed by chunk [A B] with a fee rate of 50 sat/vb at T=0800, and so on. The idea is to consider the time at which the chunk's fee rate was last updated as the moment from which to track its presence in the mempool. This approach suggests that even though some transactions may have been present in the mempool earlier, their effective presence for fee estimation purposes begins at the point of their last fee rate update.
+
+The CBlockPolicyEstimator, responsible for predicting how many blocks it will take for a transaction at a given fee rate to be confirmed, currently does not account for transactions with unconfirmed parents. It is suggested that this estimator should begin tracking the mining score of chunks, updating this score upon the addition of transactions to the mempool or when the chunk's fee rate improves. Success within the estimator is defined by how quickly a chunk gets mined relative to its latest improved score.
+
+However, discrepancies can occur due to factors such as mempool differences, variations in linearization algorithms, or partial confirmations within a package. When there is a mismatch between the chunk fee rate in the mempool and what is observed in a new block, the recommendation is to err on the side of caution and rely on the mempool's data. This cautious approach helps prevent potential manipulation by miners who might otherwise influence fee estimates by selectively including or excluding transactions.
+
+The ultimate goal is to improve the accuracy of fee estimation by assuming miners have access to the same information as the mempool, although it is recognized that this may not always be the case. By focusing on chunk feerates and using the mempool as the predictor, the hope is to streamline the process of transaction confirmations and provide a more accurate picture of the auction-like system inherent in transaction fee estimations.</summary>
+    <published>2023-12-25T12:25:27.672000+00:00</published>
+  </entry>
+</feed>

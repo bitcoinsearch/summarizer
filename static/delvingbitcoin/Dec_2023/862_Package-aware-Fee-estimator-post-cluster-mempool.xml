@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Package aware Fee estimator post cluster mempool</title>
+  <updated>2023-12-29T19:41:34.529490+00:00</updated>
+  <author>
+    <name>ajtowns 2023-12-24 11:14:22.431000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Package aware Fee estimator post cluster mempool</title>
+    <updated>2023-12-29T19:41:34.530493+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/package-aware-fee-estimator-post-cluster-mempool/312/6" rel="alternate"/>
+    <summary>The process of tracking transactions within the Bitcoin network involves monitoring chunks, which are essentially groupings of transactions or individual transactions in isolation. Transactions enter the mempool with an associated fee rate and remain there until confirmed in a block. Fee estimation models are built on understanding the relationship between fee rates and confirmation times, specifically by analyzing how many blocks it takes for a transaction to be confirmed given a certain fee rate.
+
+An interesting scenario arises when dealing with Child Pays For Parent (CPFP) transactions, where a subsequent transaction (C) can pay a higher fee rate to expedite the confirmation of a preceding transaction (P). When such pairings occur, a combined chunk [P,C] is created with a new, higher average fee rate. If this chunk confirms, the time taken from the initial entry of P into the mempool is considered for fee estimation purposes.
+
+However, complications occur if the child transaction C is replaced by another transaction D through Replace-By-Fee (RBF), leaving the parent transaction P to be confirmed at its original lower fee rate. In this case, the question presented is whether to revert to counting the time P has spent in the mempool for fee estimation.
+
+A proposed rule suggests that for every chunk in the mempool that sees some of its transactions included in a newly mined block, fee estimation should only consider the chunk if all its transactions were confirmed. If any transaction within the chunk remains unconfirmed, the chunk should be disregarded for fee estimation purposes. When taking a chunk into account, the fee estimation should use the fee rate associated with the chunk and the mempool duration of the youngest transaction in the chunk. This approach aims to refine the accuracy of fee estimations by considering the dynamic nature of transaction confirmations and fee rates.</summary>
+    <published>2023-12-24T11:14:22.431000+00:00</published>
+  </entry>
+</feed>

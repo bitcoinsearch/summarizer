@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lamport signatures and other CAT tricks</title>
+  <updated>2023-12-30T10:32:23.102623+00:00</updated>
+  <author>
+    <name>ajtowns 2023-12-03 07:39:02.642000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lamport signatures and other CAT tricks</title>
+    <updated>2023-12-30T10:32:23.102623+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lamport-signatures-and-other-cat-tricks/236/2" rel="alternate"/>
+    <summary>The email provides a technical discussion on the optimization of scripting for constructing and verifying Merkle trees, specifically in the context of generating single-use public keys. The process starts with creating 20 byte commitments, each corresponding to a Merkle tree whose leaves are a concatenation of a nonce and a single byte. To generate a single-use public key, one must hash the concatenation of the commitment roots.
+
+When verifying a signature, the verifier reveals the path to the nth commitment for the public key corresponding to each byte of the message hash. By combining the roots of these commitments, one can reproduce the single-use public key and confirm its authenticity. This leaves the message hash on the stack, which may then be verified through signature verification or compared directly with the result of a transaction hash operation.
+
+The writer suggests that while the current method requires pushing `0` or `1` for each level of the Merkle tree to determine the branch path, using a `DIVMOD` operation could improve the process. This operation would take two stack elements, divide the first by the second, and push the quotient and remainder back onto the stack. Such an optimization could reduce the witness data per level, though it is noted that this is only beneficial if there are stack size limitations or if a looping construct is added.
+
+Another proposed operation is `OP_STR_LESSTHAN`, which would compare two byte vectors to assist in constructing the Merkle tree with an implicit order. However, the email acknowledges that these optimizations, which involve additional script bytes per level or less witness data, might not offer significant benefits without a looping construct to further streamline the process.
+
+Overall, the correspondence indicates that there are potential optimizations to the scripting involved in public key generation and signature verification processes related to Merkle trees, but the practicality of these improvements depends on the specific context, such as stack size constraints or the addition of new scripting constructs.</summary>
+    <published>2023-12-03T07:39:02.642000+00:00</published>
+  </entry>
+</feed>

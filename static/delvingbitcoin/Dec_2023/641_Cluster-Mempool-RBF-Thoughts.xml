@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster Mempool RBF Thoughts</title>
+  <updated>2023-12-29T18:56:17.273451+00:00</updated>
+  <author>
+    <name>sdaftuar 2023-12-06 15:32:29.149000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster Mempool RBF Thoughts</title>
+    <updated>2023-12-29T18:56:17.273451+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-rbf-thoughts/156/21" rel="alternate"/>
+    <summary>The discussion revolves around the necessity to re-linearize old clusters to prevent potential pitfalls in Replace-By-Fee (RBF) scenarios. The scenario depicted involves a transaction graph with transactions A, B, P1, P2, and P3, where re-linearization could affect the feerate calculations for RBF. Specifically, without re-linearizing, the fee bump required for a new transaction B to replace A could be artificially inflated by an unrelated transaction P2 due to the way mempool chunks are calculated.
+
+An example is provided using a mermaid graph representation to illustrate the structure of transactions and their respective feerates. In the first instance, the graph showcases three transactions with varying feerates, leading to a certain distribution of mempool chunks. When considering replacing transaction A with B and assuming B's feerate increases, two different outcomes for mempool chunk feerates are compared: one with re-linearization and one without. Re-linearization results in a more granular feerate distribution, which seems preferable.
+
+Further investigation involved testing how adjustments to the size or feerate of transaction P2 influence the required feerate for transaction B to be accepted, both with and without re-linearization. A table presents the minimum fee bump necessary for various sizes of P2 at a fixed feerate and for different feerates of P2 at a fixed size.
+
+The findings suggest that not re-linearizing can lead to significantly higher fee bumps required for RBF when increasing either the size or the feerate of P2. This indicates that re-linearizing old clusters is beneficial as it avoids higher fee requirements for the replacement transaction that are influenced by unrelated transactions. Therefore, the conclusion drawn is in favor of re-linearization to ensure RBF operates effectively and does not incur unnecessarily high fees due to the presence of unrelated transactions in the mempool.</summary>
+    <published>2023-12-06T15:32:29.149000+00:00</published>
+  </entry>
+</feed>
