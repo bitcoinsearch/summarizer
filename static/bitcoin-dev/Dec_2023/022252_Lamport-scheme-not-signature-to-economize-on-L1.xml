@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lamport scheme (not signature) to economize on L1</title>
+  <updated>2024-01-02T02:00:43.368519+00:00</updated>
+  <author>
+    <name>yurisvb at pm.me 2023-12-31 17:42:19+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lamport scheme (not signature) to economize on L1</title>
+    <updated>2024-01-02T02:00:43.368551+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022252.html" rel="alternate"/>
+    <summary>A recent update on a proposed protocol has been shared, detailing significant changes to its key derivation mechanism. The protocol no longer incorporates the FFM cryptosystem, opting instead for a series of one-way function derivations depicted in a diagram available on GitHub. This structure ensures that the address prior to the current one, denoted as ADDR_(i-1), can be retrieved following the transaction's confirmation a few blocks into the blockchain. This update eliminates concerns about an honest participant losing internet access and facing penalties due to unfulfilled commitments.
+
+The protocol's transaction process is outlined as follows: initially, the sender broadcasts a transaction signed using the Lamport scheme, which alone cannot be verified. Accompanying this is a conventionally signed commitment ensuring the broadcast of the corresponding Lamport pre-image before a set deadline (T2). This commitment temporarily locks the unspent transaction output (UTXO) until the promise is fulfilled, the deadline passes, or a double-spending attempt is detected, at which point fines are imposed to protect the involved miners.
+
+Additionally, the sender broadcasts the Lamport pre-image, encrypted with a symmetric key derived from a lengthy hash connected to a seed included in the bundle. This allows miners to securely access ADDR_(i-1) after the transaction is adequately buried within the blockchain but before the deadline T2, addressing potential issues of the sender being disconnected from the internet.
+
+Once ADDR_(i-1) is decrypted by the miners or broadcast by the sender, the transaction having been integrated into the blockchain, ADDR_(i-1) will be mined, validating the transaction and releasing fees to the miners. At this juncture, the previous private and public keys (PRI_i, PUB_i) are discarded, and ADDR_i takes over from ADDR_(i-1) as the operative address, with ADDR_(i-2) serving as its Lamport pre-image. Should it be the first iteration (i=1), the Lamport chain concludes. With the implementation of 16-byte long addresses and signatures, the on-chain footprint is consolidated to the targeted 32 bytes.
+
+The communication ends with season's greetings, reflecting the informal tone often found in correspondence among colleagues, despite the complex technical content.</summary>
+    <published>2023-12-31T17:42:19+00:00</published>
+  </entry>
+</feed>

@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
-  <updated>2023-12-19T02:01:18.949687+00:00</updated>
+  <updated>2024-01-02T02:07:48.180747+00:00</updated>
+  <author>
+    <name>Johan Torås Halseth 2023-12-21 13:34:36+00:00</name>
+  </author>
   <author>
     <name>Antoine Riard 2023-12-17 22:56:38+00:00</name>
   </author>
@@ -15,6 +18,7 @@
   <author>
     <name>Johan Torås Halseth 2023-10-26 16:52:03+00:00</name>
   </author>
+  <link href="lightning-dev/Dec_2023/004257_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004255_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004243_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
   <link href="lightning-dev/Nov_2023/004218_HTLC-output-aggregation-as-a-mitigation-for-tx-recycling-jamming-and-on-chain-efficiency-covenants-.xml" rel="alternate"/>
@@ -23,19 +27,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - HTLC output aggregation as a mitigation for tx recycling, jamming, and on-chain efficiency (covenants)</title>
-    <updated>2023-12-19T02:01:18.949735+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004255.html" rel="alternate"/>
-    <summary>The email from Antoine to Johan delves into the intricacies of the Lightning Network's transaction processes and raises concerns about potential vulnerabilities, specifically highlighting issues related to the aggregation of HTLC outputs. Antoine discusses a scenario where the aggregation of offered HTLC "payouts" into one or two outputs could pose a risk for replacement cycling attacks. In such an attack, a malicious actor could use high fees to replace honest transactions in the network mempools, ultimately aiming to double-spend a high-value HTLC payout. This threat is exacerbated by congested network mempools which could delay the confirmation of these malicious transactions.
+    <updated>2024-01-02T02:07:48.180827+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004257.html" rel="alternate"/>
+    <summary>The exchange between Antoine and Johan delves into the complexities of Bitcoin's Lightning Network and proposed improvements to ensure its security and scalability. Antoine introduces concerns regarding a new covenant mechanism designed for aggregating Hashed Timelock Contracts (HTLCs) and the potential vulnerabilities it could introduce, such as replacement cycling attacks where a malicious actor could exploit partial preimage reveals to perform an off-chain double-spend attack. To address this, Antoine suggests a sliding delay for HTLC timelocks based on block feerate and highlights additional challenges with witness size in taproot-enabled environments.
 
-Antoine suggests that one part of the solution could be the introduction of 'self-sustained' fees coupled with a sliding delay of the HTLC timelock based on block feerate to combat replacement cycling attackers who benefit from network congestion. He also proposes that in a taproot-world, system design might need to accept an increase in witness size for non-cooperative closures and considers the implementation of an accumulator at the Script level to efficiently test partial set membership as a way to prevent exponential blowup in situations involving mass non-coordinated withdrawals from a payment pool.
+Antoine also responds to a request for concrete examples about exploiting vulnerabilities related to broadcasting a revoked state within Eltoo protocol proposals. This communication underscores the importance of managing the complexity that comes with an exponential increase in combinations efficiently, which is pivotal for maintaining robust systems like Eltoo.
 
-Furthermore, Antoine engages with the technical aspects of transaction recycling attacks within the context of LN anchor channel types. These attacks are feasible due to the ability to add inputs to increase fees without invalidating the signature. He contrasts this with legacy channels where such vulnerabilities did not exist because fees were taken directly from the HTLC outputs. Antoine highlights the advantages of aggregating HTLC outputs but also notes the risks it introduces, including the potential for a counterparty to inflate miner's fees. To mitigate these issues, he suggests segregating HTLC claims into separate outputs and employing covenants to manage aggregated claims.
+Furthermore, Antoine discusses the technical aspects of the Lightning Network, focusing on transaction recycling attacks enabled by changes to anchor channel types. These changes allow the addition of inputs to increase fees without invalidating signatures, a vulnerability not present in legacy channels. Antoine proposes using covenants to manage aggregated HTLC claims and segregate them into separate outputs to counteract this issue. He explores the implications of long-term payment throughput limits posed by protocol restrictions and suggests using sliding windows to manage claim periods for HTLCs, requiring off-chain consensus on feerate thresholds. The potential of Point Time-Locked Contracts (PTLCs) to maintain a near-constant size for offered HTLCs is also considered.
 
-The conversation also touches upon the current protocol limit of 483 and its implications for long-term payment throughput on the LN. Antoine contemplates using sliding windows to manage claim periods for HTLCs, recognizing that this would require off-chain consensus on feerate thresholds among routing nodes. The potential for Point Time-Locked Contracts (PTLCs) to maintain near-constant size for offered HTLCs is explored, along with the application of covenant mechanisms in withdrawal phases for payment pools with many participants.
+Finally, Antoine contemplates how covenant mechanisms could be applied to payment pools' withdrawal phases, involving many participants and non-competing transactions. He addresses the complexity of activating multiple covenants in Bitcoin's conservative system and the unresolved game-theory implications of 'malicious' Layer 2 contracts. Antoine raises questions regarding advanced cryptosystems and their ability to scale Lightning Network payment throughput by decoupling off-chain payments from on-chain witness size requirements, ensuring security is not compromised. This discussion reflects ongoing efforts to balance innovation and security in cryptocurrency transaction systems.
 
-Antoine expresses caution regarding the activation of multiple covenants simultaneously in Bitcoin's conservative system, citing the possibility of creating 'malicious' Layer 2 contracts with complex game-theory implications. He references past discussions on CoinSwap's Transaction Withholding Attack and emphasizes the importance of an efficiency simulation framework to analyze different covenant constructions and their trade-offs. Finally, Antoine poses a thought-provoking question about whether advanced cryptosystems could scale LN payment throughput by decoupling the number of off-chain payments from the on-chain witness size needed for their claims, while maintaining security.
-
-In summary, the correspondence explores both the benefits and challenges associated with HTLC output aggregation, including its impact on transaction recycling and slot jamming. It highlights the need for further development of covenant primitives and a careful balance between innovation and security in the evolution of Bitcoin and Layer 2 solutions like the Lightning Network. Antoine's insights contribute to ongoing discussions aimed at enhancing the scalability and robustness of cryptocurrency transactions.</summary>
-    <published>2023-12-17T22:56:38+00:00</published>
+For more technical specifics and debate, readers are encouraged to refer to the detailed thread on the Linux Foundation mailing list provided in the email: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022191.html.</summary>
+    <published>2023-12-21T13:34:36+00:00</published>
   </entry>
 </feed>

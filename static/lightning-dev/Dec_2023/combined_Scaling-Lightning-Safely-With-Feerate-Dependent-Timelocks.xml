@@ -2,32 +2,62 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
-  <updated>2023-12-19T02:03:38.363373+00:00</updated>
+  <updated>2024-01-02T02:14:58.985743+00:00</updated>
+  <author>
+    <name>David A. Harding 2023-12-29 18:11:43+00:00</name>
+  </author>
+  <author>
+    <name>Eric Voskuil 2023-12-28 18:42:39+00:00</name>
+  </author>
+  <author>
+    <name>jlspc 2023-12-28 18:19:06+00:00</name>
+  </author>
+  <author>
+    <name>jlspc 2023-12-28 18:06:00+00:00</name>
+  </author>
+  <author>
+    <name>Eric Voskuil 2023-12-23 04:09:15+00:00</name>
+  </author>
+  <author>
+    <name>Nagaev Boris 2023-12-22 16:36:56+00:00</name>
+  </author>
+  <author>
+    <name>jlspc 2023-12-22 01:25:33+00:00</name>
+  </author>
   <author>
     <name>Antoine Riard 2023-12-17 23:01:22+00:00</name>
   </author>
   <author>
     <name>jlspc 2023-12-14 17:07:40+00:00</name>
   </author>
+  <link href="lightning-dev/Dec_2023/004267_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004266_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004265_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004264_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004260_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004259_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
+  <link href="lightning-dev/Dec_2023/004258_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004256_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <link href="lightning-dev/Dec_2023/004254_Scaling-Lightning-Safely-With-Feerate-Dependent-Timelocks.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
-    <updated>2023-12-19T02:03:38.363413+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004256.html" rel="alternate"/>
-    <summary>The recent discussion in the smart contract space has brought to light the innovative concept of utilizing sliding reaction windows for blockchain congestion detection, particularly within Bitcoin and its associated applications like Lightning Network and covenant designs. This idea is encapsulated within the framework of Feerate-Dependent Timelocks (FDTs), which represent a methodical approach to adjust timelocks based on the median fee rates of transactions over a specified window of blocks.
+    <updated>2024-01-02T02:14:58.985821+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004267.html" rel="alternate"/>
+    <summary>Developers have identified challenges in implementing feerate-dependent timelocks (FDTs) within the Bitcoin network, especially concerning pruned full nodes. If a node unaware of FDTs prunes blocks, it lacks median feerate data crucial for validating post-upgrade transactions. Proposed solutions include having upgraded nodes enforce FDTs only when they have the necessary data and acquiring older blocks or relevant data through peer-to-peer protocol enhancements.
 
-In essence, FDTs prevent a transaction from being included in a block under two conditions: first, if the height-based or epoch-based absolute or relative timelocks, as per current consensus rules, are not met; second, if less than a certain number of blocks within a given window have a median fee rate above a predetermined threshold. These parameters—median feerate, feerate value bound, window size, and block count—are chosen by the transaction creator and secured through signature or hash chain-based covenants. Consequently, parties engaging in off-chain construction can select a fee rate boundary that would delay their time-sensitive transactions when necessary.
+Consensus among developers suggests that FDTs rely on an aligned time window rather than the most recent one for improved security over chosen periods. Adjusting the window size can help balance latency with security needs. Storing FDT parameters in the bip341 annex could increase flexibility and efficiency.
 
-To exemplify, consider a scenario with a Lightning Network penalty channel between Alice and Bob where an HTLC transaction is pre-signed with specific FDT parameters. If the network's median fee rate surpasses the set threshold during the time of transaction expiry, neither party can execute their respective timeout or preimage transactions, thus providing a potential solution to the Forced Expiration Spam issue highlighted in the original Lightning Network paper.
+An FDT requires transactions to satisfy both absolute/relative timelocks and median feerate conditions during a specific aligned window before inclusion in the blockchain. Rules mandate a set number of consecutive blocks, beginning no earlier than a predetermined time, with fewer than a certain number of blocks exceeding a specified median feerate value.
 
-However, several design considerations must be addressed. For instance, the revokeable scripts within the current LN-penalty system should be updated to accommodate the enforcement of FDT's parameters, ensuring robustness against potential miner collusion. Moreover, incorporating an additional parameter, namely `claim_grace_period`, may prove beneficial. This parameter acts as a new type of relative timelock, adding another layer of security and strategy for the involved parties.
+Incorporating a claim_grace_period has been discussed to address conflicts from competing transactions, which could enhance security by ensuring honest miners include correct transactions. The application of FDTs extends beyond HTLCs, offering potential security improvements for Lightning Network channels and factory states.
 
-Given these enhancements, it is suggested that all FDT parameters be incorporated into the BIP341 annex, capitalizing on available space and allowing for different parameters across multiple HTLC outputs in a single transaction. This move could synergize well with future covenant mechanisms, such as HTLC aggregation.
+Fungible Defense Transactions aim to improve the security of time-sensitive transactions, guarding against dishonest mining and managing high congestion periods while maintaining off-chain integrity like the Lightning Network. These transactions also serve as preventative measures against double spend attempts without sacrificing capital efficiency.
 
-The blog post concludes by acknowledging the inability to assert the superiority of the FDT proposal over existing channel factories and payment pool constructions. Still, it recognizes the integral role FDT could play in addressing vulnerabilities inherent to time-sensitive applications amidst blockchain congestion. The introduction of FDTs is seen as a step forward in resolving critical issues within the Lightning Network and similar constructs.</summary>
-    <published>2023-12-17T23:01:22+00:00</published>
+FDTs balance deterrence of attackers with preserving user experience, emphasizing minimal implementation costs. Recent research correcting an error in the original Bitcoin whitepaper shows that the risk of successful double-spend attacks diminishes with each additional confirmation, highlighting the importance of confirmations for transaction security.
+
+Further technical details and practical implementations of FDTs are available on GitHub, marking a significant advancement in cryptocurrency security and the digital currency ecosystem's integrity.</summary>
+    <published>2023-12-29T18:11:43+00:00</published>
   </entry>
 </feed>

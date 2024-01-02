@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+  <updated>2024-01-02T02:11:23.077334+00:00</updated>
+  <author>
+    <name>David A. Harding 2023-12-29 18:11:43+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Lightning Safely With Feerate-Dependent Timelocks</title>
+    <updated>2024-01-02T02:11:23.077375+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004267.html" rel="alternate"/>
+    <summary>The email from jlspc via the bitcoin dev mailing list raises an issue with implementing a soft fork, specifically one involving fee-dependent timelocks (FDTs), for pruned full nodes. The concern revolves around how these nodes, which do not retain full historical blockchain data, would handle the transition to a new rule set that requires access to past block information the nodes have pruned.
+
+The scenario described involves a user named Alice who runs an older node without FDT-aware code and prunes blocks after a certain time or block number, denoted as _t_. When Alice later updates her node to a version that is aware of FDTs, she faces a validation challenge because the node lacks the old blocks needed to enforce the FDT rules. This presents a risk around the activation time of the soft fork as not all nodes might be able to enforce the new consensus rules immediately after the update, even if they nominally support them.
+
+To address this issue, it is suggested that nodes upgraded post-activation should begin collecting median feerate information for new blocks moving forward and only enforce FDTs when they have the necessary data. This approach implies that reliance on FDTs should be handled with caution near the activation period due to potential enforcement discrepancies.
+
+An alternative solution proposed involves having the upgraded pruned nodes redownload the entire missing blocks or perhaps just the relevant segments, such as coinbase transactions. With protocol modifications, it could even be limited to just the commitments within the coinbase transactions. To facilitate this process efficiently, Dave highlights a technique involving the merkle root OP_RETURN in the coinbase transaction. By using a SHA midstate compression for the earlier parts of the coinbase transaction, only the OP_RETURN commitment and a few hundred bytes are required to verify trailing commitments. This method was considered during the development of segregated witness (segwit) but was not adopted due to certain ASIC miners' hardware constraints at the time, which mandated the placement of mining reward payouts in the final output position of the coinbase transaction.</summary>
+    <published>2023-12-29T18:11:43+00:00</published>
+  </entry>
+</feed>
