@@ -28,33 +28,109 @@ class ElasticSearchClient:
     def es_client(self):
         return self._es_client
 
-    def extract_data_from_es(self, es_index, url, start_date_str, current_date_str):
+    def fetch_data_based_on_id(self, es_index, id_str):
+        logger.info(f"looking for the doc in ES with id: {id_str}")
         output_list = []
         start_time = time.time()
 
         if self._es_client.ping():
-            logger.success("connected to the ElasticSearch")
+            logger.info("connected to the ElasticSearch")
             query = {
                 "query": {
                     "bool": {
                         "must": [
                             {
-                                "prefix": {  # Using prefix query for domain matching
-                                    "domain.keyword": str(url)
-                                }
-                            },
-                            {
-                                "range": {
-                                    "created_at": {
-                                        "gte": f"{start_date_str}T00:00:00.000Z",
-                                        "lte": f"{current_date_str}T23:59:59.999Z"
-                                    }
+                                "match": {
+                                    "id.keyword": str(id_str)
                                 }
                             }
                         ]
                     }
                 }
             }
+
+            # Initialize the scroll
+            scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
+                                                     scroll='5m')
+            scroll_id = scroll_response['_scroll_id']
+            results = scroll_response['hits']['hits']
+
+            # Dump the documents into the json file
+            logger.info(f"Starting dumping of {es_index} data in json...")
+            while len(results) > 0:
+                for result in results:
+                    output_list.append(result)
+
+                # Fetch the next batch of results
+                scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='5m')
+                scroll_id = scroll_response['_scroll_id']
+                results = scroll_response['hits']['hits']
+
+            logger.info(
+                f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
+            return output_list
+        else:
+            logger.info('Could not connect to Elasticsearch')
+            return None
+
+    def extract_data_from_es(self, es_index, url, start_date_str, current_date_str,
+                             exclude_combined_summary_docs=False):
+        output_list = []
+        start_time = time.time()
+
+        if self._es_client.ping():
+            logger.success("connected to the ElasticSearch")
+            if exclude_combined_summary_docs:
+                query = {
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "prefix": {
+                                        "domain.keyword": str(url)
+                                    }
+                                },
+                                {
+                                    "range": {
+                                        "created_at": {
+                                            "gte": f"{start_date_str}T00:00:00.000Z",
+                                            "lte": f"{current_date_str}T23:59:59.999Z"
+                                        }
+                                    }
+                                }
+                            ],
+                            "must_not": [
+                                {
+                                    "term": {
+                                        "type.keyword": "combined-summary",
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            else:
+                query = {
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "prefix": {
+                                        "domain.keyword": str(url)
+                                    }
+                                },
+                                {
+                                    "range": {
+                                        "created_at": {
+                                            "gte": f"{start_date_str}T00:00:00.000Z",
+                                            "lte": f"{current_date_str}T23:59:59.999Z"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
 
             # Initialize the scroll
             scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
@@ -108,8 +184,7 @@ class ElasticSearchClient:
         seen_titles = set()
 
         thread_dict = {}
-
-        # Add this loop to create dictionary with title as key and thread count as value
+        # create dictionary with title as key and thread count as value
         for result in es_results:
             title = result['_source']['title']
             if title not in seen_titles:

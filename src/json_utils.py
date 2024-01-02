@@ -26,6 +26,9 @@ class GenerateJSON:
         str_month_year = f"{month_name}_{int(published_at.year)}"
         dev_name = data['_source']['dev_name']
 
+        if dev_name == "delvingbitcoin.org":
+            dev_name = "delvingbitcoin"
+
         current_directory = os.getcwd()
         file_path = f"static/{dev_name}/{str_month_year}/{number}_{xml_name}.xml"
         full_path = os.path.join(current_directory, file_path)
@@ -78,6 +81,37 @@ class GenerateJSON:
         response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=500)
         return response_str
 
+    def check_local_xml_files_exists(self, data, base_url_for_xml="static", look_for_combined_summary_file=False):
+        number = get_id(data["_source"]["id"])
+        title = data["_source"]["title"]
+        published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        published_at = pytz.UTC.localize(published_at)
+        local_dev_name = data['_source']['dev_name']
+        if local_dev_name == "delvingbitcoin.org":
+            local_dev_name = "delvingbitcoin"
+        xml_name = clean_title(title)
+        month_name = month_dict[int(published_at.month)]
+        str_month_year = f"{month_name}_{int(published_at.year)}"
+        # current_directory = os.getcwd()
+
+        base_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}"
+        file_extension = ".xml"
+
+        individual_summ_file_path = ""
+        combined_summ_file_path = ""
+
+        individual_summ_file = f"{base_path}/{number}_{xml_name}{file_extension}"
+        if os.path.exists(individual_summ_file):
+            individual_summ_file_path = individual_summ_file
+            # individual_summ_full_path = os.path.join(current_directory, individual_summ_file_path)
+
+        if look_for_combined_summary_file:
+            combined_summ_file = f"{base_path}/combined_{xml_name}{file_extension}"
+            if os.path.exists(combined_summ_file):
+                combined_summ_file_path = combined_summ_file
+                # combined_summ_full_path = os.path.join(current_directory, combined_summ_file_path)
+        return individual_summ_file_path, combined_summ_file_path
+
     def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
                             remove_xml_extension=False, add_combined_summary_field=False):
         number = get_id(data["_source"]["id"])
@@ -89,6 +123,8 @@ class GenerateJSON:
         authors = data['_source']['authors']
         body = data['_source']['body']
         local_dev_name = data['_source']['dev_name']
+        if local_dev_name == "delvingbitcoin.org":
+            local_dev_name = "delvingbitcoin"
         xml_name = clean_title(title)
         month_name = month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
@@ -128,21 +164,24 @@ class GenerateJSON:
 
         combined_summ_bullets = ""
         if add_combined_summary_field:
-            combined_summ_full_path = os.path.join(current_directory, combined_summ_file_path)
+            if combined_summ_file_path:
+                combined_summ_full_path = os.path.join(current_directory, combined_summ_file_path)
 
-            if os.path.exists(combined_summ_full_path):
-                namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
-                tree = ET.parse(combined_summ_full_path)
-                root = tree.getroot()
-                summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
-                combined_summ = "\n".join([summ.text for summ in summ_list])
-                combined_summ_bullets = create_n_bullets(combined_summ, n=3)
+                if os.path.exists(combined_summ_full_path):
+                    namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+                    tree = ET.parse(combined_summ_full_path)
+                    root = tree.getroot()
+                    summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
+                    combined_summ = "\n".join([summ.text for summ in summ_list])
+                    combined_summ_bullets = create_n_bullets(combined_summ, n=3)
+            else:
+                logger.warning(f"Unable to find combined summary file for: {file_path}")
 
             entry_data['combined_summary'] = combined_summ_bullets if combined_summ_bullets else ""
 
         return entry_data
 
-    def get_existing_json_ids(self, file_path):
+    def get_existing_json_title(self, file_path):
         current_directory = os.getcwd()
         full_path = os.path.join(current_directory, file_path)
         if os.path.exists(full_path):

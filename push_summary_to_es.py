@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from loguru import logger
 import tqdm
-
+import traceback
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import XMLReader
@@ -16,7 +16,8 @@ if __name__ == "__main__":
 
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-        "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+        "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
+        "https://delvingbitcoin.org/"
     ]
 
     for dev_url in dev_urls:
@@ -36,7 +37,10 @@ if __name__ == "__main__":
         docs_list = elastic_search.fetch_data_with_empty_summary(ES_INDEX, dev_url, start_date_str, current_date_str)
 
         dev_name = dev_url.split("/")[-2]
-        logger.success(f"Total threads received for {dev_name}: {len(docs_list)}")
+        if dev_name == "delvingbitcoin.org":
+            dev_name = "delvingbitcoin"
+
+        logger.success(f"Total threads received with empty summary for {dev_name}: {len(docs_list)}")
 
         for doc in tqdm.tqdm(docs_list):
             res = None
@@ -44,8 +48,7 @@ if __name__ == "__main__":
                 doc_id = doc['_id']
                 doc_index = doc['_index']
                 if not doc['_source'].get('summary'):
-                    xml_summary, res = xml_reader.get_xml_summary(doc, dev_name)
-
+                    xml_summary = xml_reader.get_xml_summary(doc, dev_name)
                     if xml_summary:
                         elastic_search.es_client.update(
                             index=doc_index,
@@ -57,9 +60,6 @@ if __name__ == "__main__":
                             }
                         )
             except Exception as ex:
-                error_message = f"Error occurred: {ex}"
-                if res:
-                    error_message += f", Response: {res}"
-                logger.error(error_message)
+                logger.error(f"Error occurred: {ex} \n{traceback.format_exc()}")
 
     logger.success(f"Process complete.")

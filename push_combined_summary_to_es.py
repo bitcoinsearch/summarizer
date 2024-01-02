@@ -7,16 +7,23 @@ import os
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import XMLReader
-
+from src.utils import remove_timestamps_from_author_names
 
 if __name__ == "__main__":
+
+    REMOVE_TIMESTAMPS_IN_AUTHORS = False
 
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
 
     total_combined_files = []
-    static_dirs = ['bitcoin-dev', 'lightning-dev']
+    static_dirs = [
+        'bitcoin-dev',
+        'lightning-dev',
+        'delvingbitcoin'
+    ]
     pattern = "combined*.xml"
+
     for static_dir in static_dirs:
         combined_files = glob.glob(f"static/{static_dir}/**/{pattern}")
         total_combined_files.extend(combined_files)
@@ -32,6 +39,10 @@ if __name__ == "__main__":
             # get data from xml file
             xml_file_data = xml_reader.read_xml_file(full_path)
 
+            if REMOVE_TIMESTAMPS_IN_AUTHORS:
+                # remove timestamps from author's names and collect unique names only
+                xml_file_data['authors'] = remove_timestamps_from_author_names(xml_file_data['authors'])
+
             # check if doc exist in ES index
             doc_exists = elastic_search.es_client.exists(index=ES_INDEX, id=file_name)
 
@@ -42,14 +53,13 @@ if __name__ == "__main__":
                     id=file_name,
                     body=xml_file_data
                 )
-                logger.success(res)
             else:
                 res = elastic_search.es_client.update(
                     index=ES_INDEX,
                     id=file_name,
                     body={'doc': xml_file_data}
                 )
-                logger.success(res)
+            logger.success(res)
 
         except Exception as ex:
             error_message = f"Error occurred: {ex} \n{traceback.format_exc()}"

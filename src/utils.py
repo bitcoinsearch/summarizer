@@ -10,17 +10,51 @@ from dateutil.relativedelta import relativedelta
 from loguru import logger
 import pytz
 import datetime
-from src.gpt_utils import generate_chatgpt_summary, generate_summary, generate_title, generate_chatgpt_title, consolidate_chatgpt_summary, consolidate_summary
+from src.gpt_utils import generate_chatgpt_summary, generate_summary, generate_title, generate_chatgpt_title, \
+    consolidate_chatgpt_summary, consolidate_summary
 from src.config import TOKENIZER, CHATGPT
 
 CURRENT_TIME = datetime.datetime.now(datetime.timezone.utc)
 CURRENT_TIMESTAMP = str(CURRENT_TIME.timestamp()).replace(".", "_")
-logger.info(f"Current time: {CURRENT_TIMESTAMP}")
+logger.info(f"Current Timestamp: {CURRENT_TIMESTAMP}")
 
 month_dict = {
-            1: "Jan", 2: "Feb", 3: "March", 4: "April", 5: "May", 6: "June",
-            7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
-        }
+    1: "Jan", 2: "Feb", 3: "March", 4: "April", 5: "May", 6: "June",
+    7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
+}
+
+
+def add_utc_if_not_present(datetime_str, iso_format=True):
+    time_formats = [
+        "%Y-%m-%d %H:%M:%S%z",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S.%fZ",
+        "%Y-%m-%dT%H:%M:%S.%f%z",
+        "%Y-%m-%d %H:%M:%S.%f%z",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%dT%H:%M:%S+00:00",
+        "%Y-%m-%dT%H:%M:%S.%fZ"
+    ]
+    for fmt in time_formats:
+        try:
+            datetime_obj = datetime.datetime.strptime(datetime_str, fmt)
+            timezone = pytz.UTC
+            datetime_obj = datetime_obj.replace(tzinfo=timezone)
+            if iso_format:
+                return datetime_obj.isoformat(" ")
+            else:
+                return datetime_obj
+        except ValueError:
+            pass
+    raise ValueError("No valid date format found for string: " + datetime_str)
+
+
+def remove_timestamps_from_author_names(author_list):
+    preprocessed_list = []
+    for author in author_list:
+        name = author.split(" ")[0:-2]
+        preprocessed_list.append(' '.join(name))
+    return list(set(preprocessed_list))
 
 
 def convert_to_tuple(x):
