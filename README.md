@@ -18,3 +18,4 @@ Summarize the [bitcoin-dev](https://lists.linuxfoundation.org/pipermail/bitcoin-
    * `postman_collection`: APIs
    * `output`: generate results on api call
    * `notebook`: jupyter-notebook with all the scripts
+   * `static`: all archived data
