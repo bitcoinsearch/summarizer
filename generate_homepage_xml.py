@@ -250,6 +250,7 @@ if __name__ == "__main__":
                 )
                 logger.info("Creating homepage.json file ... ")
 
+                # header summary
                 if len(active_data_list) > 0 or len(recent_data_list) > 0:
                     recent_post_summ = gen.generate_recent_posts_summary(recent_data_list)
                     logger.success(recent_post_summ)
@@ -257,12 +258,46 @@ if __name__ == "__main__":
                     # recent data
                     recent_page_data = []
                     for data in recent_data_list:
+
+                        # check if individual and combined xml file exists
+                        individual_file_exist, combined_file_exist = gen.check_local_xml_files_exists(
+                            data, look_for_combined_summary_file=True
+                        )
+
+                        if not individual_file_exist:
+                            this_doc_id = data['_source']['id']
+                            logger.info(f"individual summary file does not exist for id: {this_doc_id}")
+
+                            this_doc_data = elastic_search.fetch_data_based_on_id(es_index=ES_INDEX,
+                                                                                  id_str=this_doc_id)
+                            logger.info(f"Total docs found: {len(this_doc_data)}")
+
+                            xml_gen.start(dict_data=this_doc_data, url=data['_source']['domain'])
+                            logger.info(f"xml generation complete")
+
                         entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
                         recent_page_data.append(entry_data)
 
                     # active data
                     active_page_data = []
                     for data in active_data_list:
+
+                        # check if individual and combined xml file exists
+                        individual_file_exist, combined_file_exist = gen.check_local_xml_files_exists(
+                            data, look_for_combined_summary_file=True
+                        )
+
+                        if not individual_file_exist:
+                            this_doc_id = data['_source']['id']
+                            logger.info(f"individual summary file does not exist for id: {this_doc_id}")
+
+                            this_doc_data = elastic_search.fetch_data_based_on_id(es_index=ES_INDEX,
+                                                                                  id_str=this_doc_id)
+                            logger.info(f"Total docs found: {len(this_doc_data)}")
+
+                            xml_gen.start(dict_data=this_doc_data, url=data['_source']['domain'])
+                            logger.info(f"xml generation complete")
+
                         entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
                         active_page_data.append(entry_data)
 
