@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-  <updated>2024-01-02T02:03:02.989970+00:00</updated>
+  <updated>2024-01-06T02:09:52.329538+00:00</updated>
+  <author>
+    <name>yurisvb at pm.me 2024-01-05 18:22:44+00:00</name>
+  </author>
+  <author>
+    <name>yurisvb at pm.me 2024-01-05 18:02:39+00:00</name>
+  </author>
   <author>
     <name>David A. Harding 2024-01-01 18:57:13+00:00</name>
   </author>
@@ -57,6 +63,8 @@
   <author>
     <name>yurisvb at pm.me 2023-12-18 01:37:23+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2024/022273_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022272_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022254_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022253_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2023/022251_Lamport-scheme-not-signature-to-economize-on-L1.xml" rel="alternate"/>
@@ -79,19 +87,37 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lamport scheme (not signature) to economize on L1</title>
-    <updated>2024-01-02T02:03:02.990095+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022254.html" rel="alternate"/>
-    <summary>The email exchange among programmers centers on a proposal to enhance Bitcoin transaction efficiency by reducing their size, potentially decreasing signature serialization—which makes up about 16% of a transaction's total size—without major infrastructural changes. The proposed protocol uses a hash for authentication within subsequent blocks and smart contracts for commitment management, requiring transactions to span multiple blocks. The scheme is designed to reduce the on-chain footprint by only including essential components such as addresses, plaintext transactions, and a single hash in mined blocks.
+    <updated>2024-01-06T02:09:52.329686+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022273.html" rel="alternate"/>
+    <summary>Recent updates to Bitcoin protocols have resulted in transaction authentication requiring only 36 bytes and dropping to 16 bytes for address reuse due to the Lamport scheme. A discussion on Twitter Spaces is scheduled to deliberate these changes.
 
-A new approach suggests a two-thirds reduction in blockchain footprint using a cryptographic method based on factoring polynomials in finite fields, which simplifies transmissions and can be reviewed on GitHub. Discussions also cover technical precision, double-spending attacks, chain reorganizations, and security measures like calculating entropy and using nonces as salts to prevent rainbow-table attacks. A balance between block space utilization and security is sought, with an emphasis on adhering to cryptographic principles such as digest sizes being double that of symmetric encryption keys.
+Dave expresses skepticism about the benefits of reducing transaction sizes through new cryptographic elements, questioning whether such incremental savings warrant the potential risks and challenges in gaining community acceptance.
 
-In the context of cryptographic security, reducing hash sizes is debated due to potential risks, while suggestions to incorporate ECCPUB with LAMPPRI aim to reduce vulnerabilities. Standardizing fingerprints at 128 bits can save storage, and Schnorr keys are recognized for their compactness without compromising security. Transaction timing optimization and finality are also explored, alongside comparisons of cryptographic schemes and their footprints.
+Another email suggests that while integrating a new scheme could fit within Bitcoin's existing framework, convincing miners and balancing the slowed validation process present significant hurdles, invoking the No-Free-Lunch Principle.
 
-Address creation in Bitcoin combines ECC and Lamport public keys, with transactions signed by Lamport private keys using hard hash functions. Smart contracts define conditions for freezing transaction outputs, promoting security through address reuse prevention. The complexity of cracking hashes to exploit system vulnerabilities is acknowledged, and the principle of the weakest link is applied to assess overall security, with the system remaining robust even under pessimistic scenarios.
+Research indicates signature serialization makes up 14-16% of a Bitcoin transaction size; thus, new signature schemes could reduce block space usage by a similar margin. However, practicality and costs of implementation via soft or hard fork are concerns.
 
-Schnorr signatures' compactness is contrasted with potential security concerns, and advancements in cryptographic protocols are mentioned, including Lamport chains, MAVE signature scheme, MAVEPAY, FawkesCoin, and the Guy Fawkes Protocol. The proposal recommends integrating the Lamport Scheme into Layer 1 blockchain protocols for byte-efficiency, employing a dual-key system, freezing UTXOs, enforcing penalties, fulfilling obligations via preimage publication, and using Argon2 as a memory-hard hashing function.
+A cryptographic protocol offering up to a 66% reduction in blockchain footprint has been developed, based on the difficulty of factorizing polynomials. This is documented on GitHub and is being prepared as a Bitcoin Improvement Proposal.
 
-Blockchain technology is characterized by its decentralized ledger system, consensus mechanisms like PoW and PoS, smart contracts, and data storage solutions. It faces scalability and efficiency issues as the demand for storage space grows. Future prospects include broader adoption across various sectors, emphasizing the need to understand processing and storage complexities while maintaining security and decentralization.</summary>
-    <published>2024-01-01T18:57:13+00:00</published>
+A correction was issued concerning the description of a function related to pre-image problems, now correctly mapping 'a valid LAMPPRI' to an address and signature format. Further details on entropy calculations are forthcoming.
+
+The vulnerabilities of cryptographic schemes are under examination, with a focus on cryptanalysis and minimizing collision rates in hash functions. The possibility of a multi-use version of the scheme is considered to further decrease blockchain bloat.
+
+Security concerns for a proposed change include implications for chain reorganizations and double-spending attacks, with fears it may increase the attack surface. Measures against rainbow-table attacks and nonces as salts are recommended, and reassessment of the adversarial model is promised.
+
+Consensus emerges that hash functions should have digest sizes double their symmetric key size to prevent collision attacks. A 26% reduction in block space utilization is possible, but security may be compromised.
+
+Further discussions involve optimizing 12-byte hashes instead of 14-byte ones for efficiency, broadcasting ECCPUB to mitigate LSIG miner risks, standardizing fingerprint to 128 bits, and considering Schnorr keys for maintaining security standards.
+
+Comparing cryptographic schemes, Lamport leads to an 80-byte footprint versus Taproot's 96 bytes, with possible equal space requirements after additional Lamport space needs. Transaction timing simplification proposes fixing T2 at 48 hours after T0.
+
+Lamport hashes use a lengthy hash of key fingerprints, with KDFs generating ECCPRI and ECCPUB derived from them, leading to Bitcoin addresses resistant to brute force. Transaction signing processes and mining fee structures are explained, focusing on the single-use economic model for Lamport transactions.
+
+Security concerns include attackers broadcasting first bundles after cracking hashes and the need to break a second hashing layer. The weakest link principle illustrates system robustness, emphasizing the difficulty of breaking Lamport chains compared to double-spending attacks.
+
+Schnorr signatures' compactness raises questions about their security effectiveness. Cryptographic protocol developments like MAVE signature scheme, MAVEPAY cryptocurrency, and FawkesCoin based on the Guy Fawkes Protocol are mentioned by R. M. Needham.
+
+An enhancement for Layer 1 blockchain byte-efficiency combines the Lamport Scheme with a dual-key system, including a penalty payment system for unfulfilled commitments and suggesting Argon2 for potential 12-byte hashes, significantly reducing space from ECC signatures.</summary>
+    <published>2024-01-05T18:22:44+00:00</published>
   </entry>
 </feed>
