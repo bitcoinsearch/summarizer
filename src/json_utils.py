@@ -1,4 +1,3 @@
-import openai
 from xml.etree import ElementTree as ET
 from datetime import datetime
 import os
@@ -16,7 +15,7 @@ from src.gpt_utils import create_n_bullets, create_summary, generate_chatgpt_sum
 
 class GenerateJSON:
 
-    def get_xml_summary(self, data):
+    def get_xml_summary(self, data, verbose=False):
         number = get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         xml_name = clean_title(title)
@@ -34,6 +33,8 @@ class GenerateJSON:
         full_path = os.path.join(current_directory, file_path)
 
         if os.path.exists(full_path):
+            if verbose:
+                logger.info(f"fetching summary from: {full_path}")
             namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
             tree = ET.parse(full_path)
             root = tree.getroot()
@@ -47,13 +48,13 @@ class GenerateJSON:
             logger.warning(f"No xml file found: {full_path}")
             return ""
 
-    def generate_recent_posts_summary(self, dict_list):
+    def generate_recent_posts_summary(self, dict_list, verbose=False):
         logger.info("working on given post's summary")
 
         recent_post_data = ""
 
         for data in dict_list:
-            xml_summ = self.get_xml_summary(data)
+            xml_summ = self.get_xml_summary(data, verbose=verbose)
             recent_post_data += xml_summ
 
             if xml_summ is None:

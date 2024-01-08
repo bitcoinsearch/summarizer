@@ -149,17 +149,30 @@ if __name__ == "__main__":
 
                 logger.info("creating newsletter.json file ... ")
                 if len(active_data_list) > 0 or len(new_threads_list) > 0:
-                    new_threads_summary = gen.generate_recent_posts_summary(new_threads_list)
-                    logger.success(new_threads_summary)
 
                     new_threads_page_data = []
-                    for data in new_threads_list:
-                        entry_data = gen.create_single_entry(
-                            data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True
-                        )
-                        new_threads_page_data.append(entry_data)
-
                     active_page_data = []
+                    new_threads_summary = ""
+
+                    if new_threads_list:
+                        new_threads_summary += gen.generate_recent_posts_summary(new_threads_list, verbose=True)
+                        logger.success(new_threads_summary)
+
+                        for data in new_threads_list:
+                            entry_data = gen.create_single_entry(
+                                data,
+                                base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
+                                look_for_combined_summary=True,
+                                remove_xml_extension=True
+                            )
+                            new_threads_page_data.append(entry_data)
+                    else:
+                        logger.warning(f"No new threads started this week, generating summary of active posts this "
+                                       f"week ...")
+                        # if no new threads started this week, generate summary from active post this week
+                        new_threads_summary += gen.generate_recent_posts_summary(active_data_list)
+                        logger.success(new_threads_summary)
+
                     for data in active_data_list:
                         entry_data = gen.create_single_entry(
                             data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True

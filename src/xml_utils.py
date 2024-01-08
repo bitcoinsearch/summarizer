@@ -12,7 +12,8 @@ import os
 import traceback
 from loguru import logger
 
-from src.utils import preprocess_email, month_dict, get_id, clean_title, convert_to_tuple, create_folder, remove_multiple_whitespaces, add_utc_if_not_present
+from src.utils import preprocess_email, month_dict, get_id, clean_title, convert_to_tuple, create_folder, \
+    remove_multiple_whitespaces, add_utc_if_not_present
 from src.gpt_utils import create_summary
 
 
@@ -46,7 +47,8 @@ class XMLReader:
                 # logger.warning(f"No xml file found: {full_path}")
                 return None
         except Exception as e:
-            logger.error(f"Error: {e} \n{traceback.format_exc()} \n\nFILE PATH: {full_path}\nDOC ID: {data['_source']['id']}")
+            logger.error(
+                f"Error: {e} \n{traceback.format_exc()} \n\nFILE PATH: {full_path}\nDOC ID: {data['_source']['id']}")
             return None
 
     def read_xml_file(self, full_path):
@@ -212,9 +214,11 @@ class GenerateXML:
         if "bitcoin-dev" in dev_url:
             files_list = glob.glob(os.path.join(current_directory, "static", "bitcoin-dev", "**/*.xml"), recursive=True)
         elif "lightning-dev" in dev_url:
-            files_list = glob.glob(os.path.join(current_directory, "static", "lightning-dev", "**/*.xml"), recursive=True)
+            files_list = glob.glob(os.path.join(current_directory, "static", "lightning-dev", "**/*.xml"),
+                                   recursive=True)
         elif "delvingbitcoin" in dev_url:
-            files_list = glob.glob(os.path.join(current_directory, "static", "delvingbitcoin", "**/*.xml"), recursive=True)
+            files_list = glob.glob(os.path.join(current_directory, "static", "delvingbitcoin", "**/*.xml"),
+                                   recursive=True)
         else:
             files_list = glob.glob(os.path.join(current_directory, "static", "others", "**/*.xml"), recursive=True)
         return files_list
@@ -239,12 +243,12 @@ class GenerateXML:
             combined_filename = f"combined_{xml_name}.xml"
 
             if not any(file_name in item for item in files_list):
-                logger.info(f"{file_name} is not present")
+                logger.info(f"{file_name} || is not present!")
 
                 self.file_not_present_df(columns, source_cols, df_dict, files_list, dict_data, data,
                                          title, combined_filename, namespaces)
             else:
-                logger.info(f"{file_name} already exist")
+                logger.info(f"{file_name} || already exist!")
                 self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)
 
         emails_df = pd.DataFrame(df_dict)
@@ -329,7 +333,6 @@ class GenerateXML:
                         link = f'others/{str_month_year}/{number}_{xml_name}.xml'
                     return link
 
-                # combine_summary_xml
                 os_name = platform.system()
                 logger.info(f"Operating System: {os_name}")
                 titles = emails_df.sort_values('created_at')['title'].unique()
@@ -340,7 +343,7 @@ class GenerateXML:
                     title_df = title_df.drop_duplicates()
                     title_df['authors'] = title_df['authors'].apply(self.preprocess_authors_name)
                     title_df = title_df.sort_values(by='created_at', ascending=False)
-                    logger.info(f"length of title_df: {len(title_df)}")
+                    logger.info(f"Number of docs for title: {title}: {len(title_df)}")
                     if len(title_df) < 1:
                         continue
                     if len(title_df) == 1:
