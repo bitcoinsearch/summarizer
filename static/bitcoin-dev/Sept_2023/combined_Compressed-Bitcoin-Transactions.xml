@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Compressed Bitcoin Transactions</title>
-  <updated>2023-09-06T01:55:10.447975+00:00</updated>
+  <updated>2024-01-06T02:00:26.069636+00:00</updated>
+  <author>
+    <name>Andrew Poelstra 2024-01-05 15:19:31+00:00</name>
+  </author>
+  <author>
+    <name>Tom Briar 2024-01-05 15:06:01+00:00</name>
+  </author>
   <author>
     <name>Tom Briar 2023-09-05 18:30:42+00:00</name>
   </author>
@@ -33,6 +39,8 @@
   <author>
     <name>Tom Briar 2023-08-31 21:30:16+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2024/022270_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022269_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2023/021936_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2023/021935_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2023/021931_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
@@ -47,9 +55,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Compressed Bitcoin Transactions</title>
-    <updated>2023-09-06T01:55:10.448071+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-September/021936.html" rel="alternate"/>
-    <summary>In the email exchange, Tom discusses various aspects of transaction compression in Bitcoin. He mentions that currently, if a lock time is non-zero, they drop the 16 most significant bits and continue until a valid signature is obtained. Tom expresses hesitancy to add more fields to this process as it can significantly increase decompression time. He suggests dropping grinding the lock time in favor of grinding the block height, which could potentially save several bytes in transactions. Tom is working on adding an ideal transaction specification to the documentation.Tom also discusses the possibility of saving bits by specifying a reference height and encoding the exact transaction output with a delta. He suggests using the reference block height at the beginning of a packet for multiple transactions. If only a single transaction is sent, a reference height based on the current time could be used. Tom mentions that sender and receiver agreement on the exact time may require trying slightly different reference heights until the transaction signatures validate.The email exchange between Tom and the sender includes a discussion about obtaining numbers based on historical data and fuzz tests. Tom mentions updating the code to align with the documentation and estimates completing it before the end of the week. He also mentions estimating 100 blocks as safe from reorg and plans to include this limit in the compressrawtransaction RPC endpoint. Tom expresses gratitude for the feedback received.Another part of the email exchange revolves around discussions related to size numbers and the inclusion of a definition in the BIP. The sender expresses interest in having size numbers for comparison purposes and suggests adding a definition clarifying when it is not advisable to use height/index due to reorganizations. Tom responds by agreeing with Andrew's point about using a prefix tree requiring more space compared to using just the block height and an index. They have implemented a flattened index over all transactions and outputs per block, aligning with the suggestion. Tom suggests potentially reducing the number of bits needed for the block height by using a threshold indicator. The email does not provide any specific links or additional context beyond the discussion on encoding and reducing required bits.The email from Andrew Poelstra discusses the consideration of indexing all transaction outputs using ordinals but ultimately deciding against it due to extra index requirements for the decompressor. Andrew mentions their previous exploration of putting the UTXO set into a trie for prefix lookups but discarded the idea due to similar reasons and potential user behavior issues. He also acknowledges being put off by the complexity of the data structure as it no longer fits in RAM. Implementing a new index would require significant effort and decrease chances of getting code into Core. Andrew estimates saving slightly less than a byte per input on average but concludes that it's not worth the decreased user experience and increased complexity.In an email response, Fabian acknowledges simplifying his previous message and clarifies that an index of the UTXO set would require a height. He suggests considering a composite reference or a short hash, but acknowledges that Tom's current scheme may be more space efficient. Another email from Fabian suggests using an index from a sorted UTXO set instead, potentially saving space and making the scheme compatible with pruning. He mentions this as a future research topic but hasn't explored it yet.Tom is thanked for his research and implementation efforts in another email. The sender suggests analyzing the compression strength of a certain application and requests Tom to create a chart showing uncompressed/compressed sizes for different types of transactions. Andrew emphasizes the importance of including "optimum" transactions such as wpkh and Taproot transactions, as well as p2sh-wpkh and p2pkh transactions, even though they are less common. He provides his contact information and signs off with a quote about the sun always shining in space.Lastly, Tom has been working on a compression schema specifically designed for Bitcoin transactions that can be transmitted through low bandwidth channels with high CPU availability on decompression. The schema ensures that no transaction will become malformed or corrupted and Tom has provided a pull request for its implementation.Please note that the extracted information is presented in multiple paragraphs, follows formal tone, retains links, and summarizes the main points discussed in each email.</summary>
-    <published>2023-09-05T18:30:42+00:00</published>
+    <updated>2024-01-06T02:00:26.069732+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022270.html" rel="alternate"/>
+    <summary>Tom Briar and Andrew Poelstra have developed a Compressed Transaction Schema designed to significantly decrease the size of Bitcoin transactions. This technology is particularly advantageous for applications such as steganography, satellite/radio broadcasts, and peer-to-peer communication in environments with limited bandwidth but high CPU availability. The schema employs techniques like metadata packing, variable-length integers, compressed signatures, and a substitution of the txid/vout pair with block height and index for compression.
+
+The approach utilizes CompactSize and VarInt primitives for efficient numeric encoding, transaction metadata for decoding structure, and encodes input and output metadata to minimize space usage. It also identifies an ideal transaction type for optimal compression and provides test vectors to illustrate byte savings after compression.
+
+Noteworthy advancements include replacing nLocktime with relative block height for all Compressed Inputs and introducing a second type of Variable Integer. These changes are documented in a Draft PR available at: [Reference Impl/Draft PR](https://github.com/bitcoin/bitcoin/pull/29134), with detailed methods outlined in the [Compressed Transaction Schema](https://github.com/TomBriar/bitcoin/blob/2023-05--tx-compression/doc/compressed_transactions.md) documentation.
+
+The importance of this work lies in its potential to facilitate transmission of transaction information efficiently. The schema allows omission and reconstruction of certain data upon decompression, which could be crucial for specific use cases where bandwidth is scarce.
+
+In email exchanges, Tom discusses optimizing lock times and using reference heights for transaction size reduction. He proposes grinding block height rather than lock time for space savings and suggests brute-forcing different reference heights to validate signatures. He plans to update the codebase with historical trends and fuzz testing data, implementing a 100-block threshold against blockchain reorganization in a forthcoming pull request.
+
+The conversation also touches on eliminating the vout from encoding, using block height and index instead, and the rejection of using ordinals for indexing transaction outputs due to complexity and potential user confusion.
+
+Feedback from Fabian includes suggestions for improving the UTXO set index's efficiency, potentially saving space and supporting pruning compatibility. Meanwhile, Andrew requests a chart demonstrating the compression schema's effectiveness for specific transactions to better understand its application.
+
+Tom's contribution is a compression schema for bitcoin transactions, focusing on those most commonly used, aiming to preserve the integrity of transactions while transmitting over platforms with limited bandwidth but capable of handling decompression. His involvement progresses with a pull request to incorporate the compression schema into practice.</summary>
+    <published>2024-01-05T15:19:31+00:00</published>
   </entry>
 </feed>
