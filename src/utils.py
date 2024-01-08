@@ -129,7 +129,10 @@ def preprocess_email(email_body):
             temp_.append(line)
     email_string = "\n".join(temp_)
     normalized_email_string = normalize_text(email_string)
-    return normalized_email_string
+    if len(normalized_email_string) == 0:
+        return email_body
+    else:
+        return normalized_email_string
 
 
 def scrape_email_data(url_):
