@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster Mempool RBF Thoughts</title>
+  <updated>2023-12-29T18:53:52.662089+00:00</updated>
+  <author>
+    <name>instagibbs 2023-12-13 19:30:39.072000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster Mempool RBF Thoughts</title>
+    <updated>2023-12-29T18:53:52.662089+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-rbf-thoughts/156/24" rel="alternate"/>
+    <summary>The conversation pertains to a discussion about the intricacies of Replace-By-Fee (RBF) strategies, specifically focusing on what is termed "cross-sponsor" RBF. This term refers to a scenario in which a funding transaction initially sponsors one package but is later diverted to sponsor another, more urgent package—akin to Child-Pays-For-Parent (CPFP) situations where a larger unspent transaction output (UTXO) is used.
+
+An issue arises with the efficacy of the feerate improvement rules as outlined in pull request 28984 for Bitcoin's codebase. It appears that these rules may not result in a consistent enhancement of miner scores within the mempool. There's a suggestion to revise the heuristic, ensuring that: for all direct transaction conflicts, the package feerate must exceed the conflicting transaction's feerate, and for all transaction conflicts (whether direct or indirect), the package feerate must outstrip the ancestor feerate of the conflict. This recommendation aligns with the approach previously implemented in pull request 25038. However, this adjustment would make executing specific cross-sponsor RBF actions more challenging, as showcased by an example test case provided in pull request 26403.
+
+Another issue is identified concerning the proposed rules from 28984, where a transaction package might meet validation criteria but could fail during relay if a part of the package gets assessed using legacy RBF rules when it has been accepted into a peer's mempool. To circumvent such scenarios, wallet authors are advised against cross-sponsoring. Instead, they should create a zero-fee parent package using version 3/ephemeral anchors. But it's noted that if another party has already sponsored the package, cross-sponsoring becomes impossible because the parent will still be present in the mempool. The post-cluster mempool phase is said to resolve this issue, albeit some minor pinning problems might persist as indicated in a third unresolved issue, which the author finds interesting but lacks substantial commentary on at the moment.</summary>
+    <published>2023-12-13T19:30:39.072000+00:00</published>
+  </entry>
+</feed>

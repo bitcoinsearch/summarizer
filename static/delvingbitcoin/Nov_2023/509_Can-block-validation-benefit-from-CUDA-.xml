@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Can block validation benefit from CUDA?</title>
+  <updated>2023-12-29T18:48:40.746874+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2023-11-29 09:43:05.381000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Can block validation benefit from CUDA?</title>
+    <updated>2023-12-29T18:48:40.746874+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/can-block-validation-benefit-from-cuda/224/2" rel="alternate"/>
+    <summary>The utilization of GPUs for validating Bitcoin transactions is generally not considered effective due to the nature of the operations involved. Transaction validation requires accessing unspent transaction outputs, which are typically cached in memory and necessitate random access - a process not well-suited to GPUs. GPUs are optimized for vector computations that allow uniform memory access, rather than the random access required for transaction validation. Moreover, several CPUs come equipped with SHA256 hardware implementations which are likely more efficient for hashing operations than using a GPU.
+
+In terms of SHA256 usage within Bitcoin's consensus mechanisms, the calculation of `SIGHASH` is particularly critical. This involves branching depending on the type of `SIGHASH` being used (`SIGHASH_ALL`, `SIGHASH_NONE`, `SIGHASH_SINGLE`, or combinations with `SIGHASH_ANYONECANPAY`). These variations affect the sequence of bytes input into the hash function, making the process complex and branch-heavy, which does not align with the strengths of GPU processing.
+
+While one could consider offloading certain calculations to the GPU, such as SECP256K1 signature validations, these components benefit from the consistent single-instruction-multiple-data (SIMD) vectorized calculations that GPUs excel at. However, it’s important to note that with the introduction of Schnorr signatures in the Taproot upgrade, batch validation is possible. This means multiple transactions that follow the keyspend path can be validated with a single calculation, reducing any potential advantages of GPU use for this purpose. It's worth mentioning that this assessment may not reflect the most current state of Bitcoin Core's codebase, and changes in its implementation could alter the viability of GPU usage for transaction validation.</summary>
+    <published>2023-11-29T09:43:05.381000+00:00</published>
+  </entry>
+</feed>

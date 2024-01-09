@@ -10,7 +10,7 @@ import shutil
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.json_utils import GenerateJSON
-from src.utils import month_dict, get_id
+from src.utils import month_dict
 
 
 if __name__ == "__main__":
@@ -19,7 +19,8 @@ if __name__ == "__main__":
     elastic_search = ElasticSearchClient()
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-        "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+        "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
+        "https://delvingbitcoin.org/"
     ]
 
     current_date = datetime.now()
@@ -42,8 +43,12 @@ if __name__ == "__main__":
 
     for dev_url in dev_urls:
         all_data_df, all_data_list = elastic_search.fetch_all_data_for_url(ES_INDEX, dev_url)
-        data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url, start_date_str, end_date_str)
+        data_list = elastic_search.extract_data_from_es(
+            ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
+        )
         dev_name = dev_url.split("/")[-2]
+        if dev_name == "delvingbitcoin.org":
+            dev_name = "delvingbitcoin"
         logger.success(f"TOTAL THREADS RECEIVED FOR '{dev_name}': {len(data_list)}")
 
         # NEW THREADS POSTS
@@ -62,7 +67,11 @@ if __name__ == "__main__":
             # get the first post's info of this title
             df_title = all_data_df.loc[(all_data_df['title'] == this_title) & (all_data_df['domain'] == dev_url)]
             df_title.sort_values(by='created_at', inplace=True)
-            original_post = df_title.iloc[0].to_dict()
+            if not df_title.empty:
+                original_post = df_title.iloc[0].to_dict()
+            else:
+                logger.info(f"Shape of dataframe: {df_title.shape} for title: {this_title}")
+                continue
 
             if i['_source']['created_at'] == original_post['created_at']:
                 logger.info(f"new thread created on: {original_post['created_at']}, title: {this_title}")
@@ -104,7 +113,7 @@ if __name__ == "__main__":
             active_posts_data_counter += 1
         logger.info(f"number of active posts collected: {len(active_data_list)}")
 
-    # gather ids of docs from json file
+    # gather titles of docs from json file
     json_file_path = fr"static/newsletters/newsletter.json"
 
     current_directory = os.getcwd()
@@ -122,8 +131,8 @@ if __name__ == "__main__":
 
     # gather ids of docs from active posts and new thread posts
     filtered_docs_ids = set(
-        [get_id(data['_source']['title']) for data in active_data_list] +
-        [get_id(data['_source']['title']) for data in new_threads_list]
+        [data['_source']['title'] for data in active_data_list] +
+        [data['_source']['title'] for data in new_threads_list]
     )
 
     # check if there are any updates in xml file
@@ -140,16 +149,30 @@ if __name__ == "__main__":
 
                 logger.info("creating newsletter.json file ... ")
                 if len(active_data_list) > 0 or len(new_threads_list) > 0:
-                    new_threads_summary = gen.generate_recent_posts_summary(new_threads_list)
 
                     new_threads_page_data = []
-                    for data in new_threads_list:
-                        entry_data = gen.create_single_entry(
-                            data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True
-                        )
-                        new_threads_page_data.append(entry_data)
-
                     active_page_data = []
+                    new_threads_summary = ""
+
+                    if new_threads_list:
+                        new_threads_summary += gen.generate_recent_posts_summary(new_threads_list, verbose=True)
+                        logger.success(new_threads_summary)
+
+                        for data in new_threads_list:
+                            entry_data = gen.create_single_entry(
+                                data,
+                                base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
+                                look_for_combined_summary=True,
+                                remove_xml_extension=True
+                            )
+                            new_threads_page_data.append(entry_data)
+                    else:
+                        logger.warning(f"No new threads started this week, generating summary of active posts this "
+                                       f"week ...")
+                        # if no new threads started this week, generate summary from active post this week
+                        new_threads_summary += gen.generate_recent_posts_summary(active_data_list)
+                        logger.success(new_threads_summary)
+
                     for data in active_data_list:
                         entry_data = gen.create_single_entry(
                             data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True

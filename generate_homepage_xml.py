@@ -13,18 +13,20 @@ import shutil
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.json_utils import GenerateJSON
-from src.utils import month_dict, get_id
+from src.xml_utils import GenerateXML
+from src.utils import month_dict
 
 warnings.filterwarnings("ignore")
-
 
 if __name__ == "__main__":
 
     gen = GenerateJSON()
+    xml_gen = GenerateXML()
     elastic_search = ElasticSearchClient()
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-        "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+        "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
+        "https://delvingbitcoin.org/"
     ]
 
     current_date = datetime.now()
@@ -42,7 +44,7 @@ if __name__ == "__main__":
 
     recent_data_list = []
     active_data_list = []
-    today_in_history_data_list = []  # Posts that were created on today's date on previous years
+    today_in_history_data_list = []
 
     random_years_ago = None
 
@@ -51,9 +53,11 @@ if __name__ == "__main__":
         fetch_today_in_history = True
 
         all_data_df, all_data_list = elastic_search.fetch_all_data_for_url(ES_INDEX, url=dev_url)
-        data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url, start_date_str, current_date_str)
+        data_list = elastic_search.extract_data_from_es(
+            ES_INDEX, dev_url, start_date_str, current_date_str, exclude_combined_summary_docs=True
+        )
         dev_name = dev_url.split("/")[-2]
-        logger.info(f"TOTAL THREADS RECEIVED FOR - {dev_name}: {len(data_list)}")
+        logger.success(f"TOTAL THREADS RECEIVED FOR - {dev_name}: {len(data_list)}")
 
         seen_titles = set()
 
@@ -92,12 +96,11 @@ if __name__ == "__main__":
                     active_posts_data_counter += 1
                     break
 
-        logger.success(f"Number of active posts collected: {len(active_data_list)}")
+        logger.success(f"Number of active posts collected: {len(active_data_list)}, for URL: {dev_url}")
 
         # top recent posts
         recent_data_post_counter = 0
         recent_posts_data = elastic_search.filter_top_recent_posts(es_results=data_list, top_n=20)
-
         for data in recent_posts_data:
 
             # if preprocess body text not longer than token_threshold, skip that post
@@ -146,7 +149,7 @@ if __name__ == "__main__":
                 recent_data_list.append(data)
                 recent_data_post_counter += 1
 
-        logger.success(f"Number of recent posts collected: {len(recent_data_list)}")
+        logger.success(f"Number of recent posts collected: {len(recent_data_list)}, for URL: {dev_url}")
 
         # today in history posts
         logger.info(f"fetching 'Today in history' posts... ")
@@ -156,6 +159,10 @@ if __name__ == "__main__":
             at_max_years_ago = current_date.year - 2015
             random_years_ago = random.randint(at_least_years_ago, at_max_years_ago)
             logger.info(f"random years ago between {at_least_years_ago} to {at_max_years_ago}: {random_years_ago}")
+
+        if dev_url == "https://delvingbitcoin.org/":
+            random_years_ago = random.randint(1, current_date.year - 2022)
+            logger.info(f"for delving-bitcoin - random years ago between {1} to {current_date.year - 2022}: {random_years_ago}")
 
         default_days_to_look_back = 6
         loop_counter = 1
@@ -221,9 +228,9 @@ if __name__ == "__main__":
 
         logger.success(f"No. of 'Today in history' posts collected: {len(today_in_history_data_list)}")
 
-    xml_ids = gen.get_existing_json_ids(file_path=json_file_path)
-    recent_post_ids = [get_id(data['_source']['title']) for data in recent_data_list]
-    active_post_ids = [get_id(data['_source']['title']) for data in active_data_list]
+    xml_ids = gen.get_existing_json_title(file_path=json_file_path)
+    recent_post_ids = [data['_source']['title'] for data in recent_data_list]
+    active_post_ids = [data['_source']['title'] for data in active_data_list]
 
     # Combine the titles to create a concatenated set
     all_post_titles = set(recent_post_ids + active_post_ids)
@@ -243,6 +250,7 @@ if __name__ == "__main__":
                 )
                 logger.info("Creating homepage.json file ... ")
 
+                # header summary
                 if len(active_data_list) > 0 or len(recent_data_list) > 0:
                     recent_post_summ = gen.generate_recent_posts_summary(recent_data_list)
                     logger.success(recent_post_summ)
@@ -250,12 +258,46 @@ if __name__ == "__main__":
                     # recent data
                     recent_page_data = []
                     for data in recent_data_list:
+
+                        # check if individual and combined xml file exists
+                        individual_file_exist, combined_file_exist = gen.check_local_xml_files_exists(
+                            data, look_for_combined_summary_file=True
+                        )
+
+                        if not individual_file_exist:
+                            this_doc_id = data['_source']['id']
+                            logger.info(f"individual summary file does not exist for id: {this_doc_id}")
+
+                            this_doc_data = elastic_search.fetch_data_based_on_id(es_index=ES_INDEX,
+                                                                                  id_str=this_doc_id)
+                            logger.info(f"Total docs found: {len(this_doc_data)}")
+
+                            xml_gen.start(dict_data=this_doc_data, url=data['_source']['domain'])
+                            logger.info(f"xml generation complete")
+
                         entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
                         recent_page_data.append(entry_data)
 
                     # active data
                     active_page_data = []
                     for data in active_data_list:
+
+                        # check if individual and combined xml file exists
+                        individual_file_exist, combined_file_exist = gen.check_local_xml_files_exists(
+                            data, look_for_combined_summary_file=True
+                        )
+
+                        if not individual_file_exist:
+                            this_doc_id = data['_source']['id']
+                            logger.info(f"individual summary file does not exist for id: {this_doc_id}")
+
+                            this_doc_data = elastic_search.fetch_data_based_on_id(es_index=ES_INDEX,
+                                                                                  id_str=this_doc_id)
+                            logger.info(f"Total docs found: {len(this_doc_data)}")
+
+                            xml_gen.start(dict_data=this_doc_data, url=data['_source']['domain'])
+                            logger.info(f"xml generation complete")
+
                         entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
                         active_page_data.append(entry_data)
 
@@ -264,6 +306,23 @@ if __name__ == "__main__":
                     collected_dev_data = []
                     if len(today_in_history_data_list) > 0:
                         for data in today_in_history_data_list:
+
+                            # check if individual and combined xml file exists
+                            individual_file_exist, combined_file_exist = gen.check_local_xml_files_exists(
+                                data, look_for_combined_summary_file=True
+                            )
+
+                            if not individual_file_exist:
+                                this_doc_id = data['_source']['id']
+                                logger.info(f"individual summary file does not exist for id: {this_doc_id}")
+
+                                this_doc_data = elastic_search.fetch_data_based_on_id(es_index=ES_INDEX,
+                                                                                      id_str=this_doc_id)
+                                logger.info(f"Total docs found: {len(this_doc_data)}")
+
+                                xml_gen.start(dict_data=this_doc_data, url=data['_source']['domain'])
+                                logger.info(f"xml generation complete")
+
                             entry_data = gen.create_single_entry(data, look_for_combined_summary=True,
                                                                  add_combined_summary_field=True)
                             if entry_data['dev_name'] not in collected_dev_data:
@@ -295,7 +354,7 @@ if __name__ == "__main__":
                 logger.error(f"Error occurred: {ex} \n{traceback.format_exc()}")
                 time.sleep(delay)
                 count += 1
-                if count >= 3:
+                if count > 3:
                     sys.exit(f"{ex}")
     else:
         logger.success("No change in recent posts, no need to update homepage.json file")

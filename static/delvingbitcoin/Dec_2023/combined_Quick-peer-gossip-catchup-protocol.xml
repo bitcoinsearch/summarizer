@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Quick peer gossip catchup protocol</title>
+  <updated>2023-12-30T10:42:12.821389+00:00</updated>
+  <author>
+    <name>rustyrussell 2023-12-06 20:01:08.859000+00:00</name>
+  </author>
+  <author>
+    <name>cdecker 2023-12-06 13:23:54.650000+00:00</name>
+  </author>
+  <author>
+    <name>rustyrussell 2023-12-06 05:06:18.586000+00:00</name>
+  </author>
+  <author>
+    <name>MattCorallo 2023-12-05 05:49:50.566000+00:00</name>
+  </author>
+  <author>
+    <name>rustyrussell 2023-12-05 03:22:20.997000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Dec_2023/672_Quick-peer-gossip-catchup-protocol.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/640_Quick-peer-gossip-catchup-protocol.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/637_Quick-peer-gossip-catchup-protocol.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/612_Quick-peer-gossip-catchup-protocol.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2023/611_Quick-peer-gossip-catchup-protocol.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Quick peer gossip catchup protocol</title>
+    <updated>2023-12-30T10:42:12.821635+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/quick-peer-gossip-catchup-protocol/251/5" rel="alternate"/>
+    <summary>The recent discussions among programmers have focused on optimizing the efficiency of the `gossip_timestamp_filter` process within the Lightning Network's gossip protocol to achieve faster synchronization and reduce overhead. The `gossip_timestamp_filter` message, identified by type 265, filters gossip messages based on a given `chain_hash`, `first_timestamp`, and `timestamp_range`. However, the usage patterns for this filter are often limited to three categories: "none," "all," or "recent," with varying definitions for what constitutes "recent" among different implementations.
+
+A proposed solution to improve the gossip mechanism involves tracking a single offset for records with timestamps greater than two hours old, thus transforming the timestamp field into a ternary value. This approach would assist in reducing the need to scan the entire gossip store or maintain excessive metadata. Additionally, the notion that the timestamp of a record is only an approximate indication of when it was previously seen has been acknowledged. A more accurate measure would be the time at which a peer received the gossip, ideally streaming it within 60 seconds of receipt. Furthermore, the idea of maintaining received timestamps at approximately every 1MB of gossip store data has been considered, taking advantage of their monotonic nature to enhance performance.
+
+An alternative method, resembling what `lnsync` employs, is also under consideration. It involves assigning an arbitrary order to messages, allowing clients to navigate through them efficiently. This concept works well since it does not require a strict global ordering; any misordering merely results in slightly excess data transmission. Within the partial ordering system, a unique challenge arises with `channel_announcement` messages, which lack timestamps and cannot be uniquely positioned within the ordering. To address this, it is suggested that `channel_announcement` should be included if a query's timestamp range includes any update to the channel, thereby bypassing the need for per-peer storage. By using the last online timestamp minus a buffer as a reference point, nodes can request incremental updates from peers post-reconnection.
+
+Despite these improvements, there is still an acknowledgment of the potential benefits of upgrading to gossip v1.5 for minisketch integration. Using minisketch could streamline the process further, but the aforementioned strategies provide interim solutions for nodes with fewer peers. Specifically, recording the commit timestamp of gossip and combining it with the peer's last reported reception time (minus a safety margin) offers another practical approach.
+
+Finally, an ongoing rework of CLN's gossip daemon has revealed the feasibility of storing minimal information per peer, enabling the delivery of all gossip received since their last disconnection. This potential feature, tentatively titled "option_serves_gossip_catchup," would work by having peers indicate their desire to receive gossip since their last connection using a specialized TLV field within the `gossip_timestamp_filter` message. In cases where serving historical gossip is impossible, continuous streaming from the present moment would be the fallback. Implementing this feature requires tracking the last sent gossip_store offset and adjusting it upon compaction during restarts. This per-peer tracking may necessitate limiting the feature to peers with established channels and could include prioritizing significant new channel gossip, although defining importance remains challenging.</summary>
+    <published>2023-12-06T20:01:08.859000+00:00</published>
+  </entry>
+</feed>

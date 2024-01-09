@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Draft BIP for OP_TXHASH and OP_CHECKTXHASHVERIFY</title>
+  <updated>2023-12-30T11:20:54.031034+00:00</updated>
+  <author>
+    <name>reardencode 2023-12-12 05:26:10.583000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Draft BIP for OP_TXHASH and OP_CHECKTXHASHVERIFY</title>
+    <updated>2023-12-30T11:20:54.031034+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/draft-bip-for-op-txhash-and-op-checktxhashverify/121/12" rel="alternate"/>
+    <summary>The discussion begins with an exploration of the utility of non-verified transaction hashes (TXHASH) without Concurrent Signature Fields Selector (CSFS) or Concatenated Authentication Tag (CAT). It is established that TXHASH alone can still be valuable for validating equality between specific fields within a transaction. Additionally, the combination of CSFS and TXHASH is seen to work harmoniously, while integrating CAT with TXHASH expands the potential design space significantly.
+
+A technical examination of the `TXFS_SPECIAL_TEMPLATE` reveals that by not including input values as in the CheckTemplateVerify (CTV), this allows protocol designers more flexibility in terms of fee addition through specifically sized Unspent Transaction Outputs (UTXOs) at the time of spending. The usage of TXHASH enables the selection of a customized TxFieldSelector, which aids in adding fees and removes the risk associated with using a specific hash tied to a particular UTXO size. This approach emphasizes the intent to hash as many elements as possible without creating a cyclic hashing scenario.
+
+Further analysis compares adding CSFS with adopting APO-style keys, noting their similarities and differences. APO keys have a slight size disadvantage, being one byte larger than taproot x-only keys, akin to the additional opcode required for TXHASH+CSFS. However, APO-style keys offer compatibility with CHECKSIGADD, prompting a contemplation on the best method to incorporate "magic" keys, or whether introducing opcodes like `OP_INTERNAL_KEY` and/or `OP_EXTERNAL_KEY` would be more pragmatic.
+
+An example script is provided to illustrate how `OP_TXHASH` combined with `OP_CHECKSIGFROMSTACK` could enable complex requirements, such as signatures from two keys on the same transaction hash. Although emulating `OP_CHECKSIGADD` appears somewhat convoluted, it's highlighted that the required script is only marginally larger in terms of vBytes.
+
+Additional comments raise the potential simplification of default modes for input and output field selectors (`TXFS_INPUTS` and `TXFS_OUTPUTS`) to avoid the necessity of specifying bytes 3 and 4. The logic here is delicate; if both inputs and outputs are selected, either both must use the default mode or neither. Furthermore, the conversation suggests the BIP should discuss why it commits to the control block rather than the tapleaf_hash, with the revelation that the control block commitment implicitly includes the leaf hash due to BIP341’s script validation rules.
+
+Finally, the notion that the TxFieldSelector mechanism may serve future introspection opcodes is considered. To facilitate this, there might need to be a means to select the current input's script code, possibly repurposing `TXFS_CONTROL`. The dialogue advises adding this topic to the BIP for further discussion and clarification.</summary>
+    <published>2023-12-12T05:26:10.583000+00:00</published>
+  </entry>
+</feed>

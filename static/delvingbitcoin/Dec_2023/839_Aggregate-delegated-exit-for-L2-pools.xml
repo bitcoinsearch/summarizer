@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Aggregate delegated exit for L2 pools</title>
+  <updated>2023-12-22T19:00:37.685097+00:00</updated>
+  <author>
+    <name>salvatoshi 2023-12-20 13:25:42.864000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Aggregate delegated exit for L2 pools</title>
+    <updated>2023-12-22T19:00:37.685097+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/aggregate-delegated-exit-for-l2-pools/297/4" rel="alternate"/>
+    <summary>The development of fraud proofs within a protocol has been further brainstormed, particularly focusing on the complexities involved with Ingrid's statement regarding user withdrawals. Ingrid's assertion pertains to withdrawing funds for a set of users, each identified by an index within a vector commitment of `user:balance` pairs. This implies that the statement is about the collective balance of multiple accounts, necessitating a more intricate verification process due to the simultaneous involvement of multiple leaves in the Merkle tree.
+
+A potential solution involves leveraging MATT generic fraud proof protocols. The computation of the total balance from the individual balances would traditionally require a logarithmic number of transactions related to the number of user balances being summed. However, an alternative, more streamlined ad-hoc fraud proof protocol has been proposed, which could significantly reduce the number of necessary rounds in the case of a dispute.
+
+The protocol unfolds as follows: initially, Ingrid claims to withdraw on behalf of a group of users and states their total balance. If this total is disputed, Ingrid is then compelled to reveal the individual balances on-chain. The script must validate that these indices match the pre-existing root of the Merkle tree and that the sum of disclosed balances equals the claimed total. If Ingrid's claim is found to be false, the discrepancy is pinpointed through just two Merkle proofs, exposing any incorrect balance with minimal transactions—three, to be precise.
+
+It is expected that in typical scenarios, only the initial claim would be processed without contention, while the subsequent steps would come into play only in the event of a fraud accusation. A notable point in the execution of step three is the advantage of using 64-bit arithmetic, although it is possible to simulate this with existing operations such as OP_CAT.
+
+An additional consideration is the size of the user set S. For large sets, representing S as a bitmap can be vastly more efficient, and in such cases, an O(log n)-size fraud-proof protocol may be more bytes-efficient since posting all user balances on-chain wouldn't be necessary. It is also suggested that various versions of this protocol could exist concurrently within different tapleaves, allowing for flexibility and scalability based on practical needs.</summary>
+    <published>2023-12-20T13:25:42.864000+00:00</published>
+  </entry>
+</feed>

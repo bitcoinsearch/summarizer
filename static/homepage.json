@@ -1,5 +1,5 @@
 {
-    "header_summary": "Tom Briar and Andrew Poelstra have developed a Compressed Transaction Schema to minimize blockchain transaction sizes, which is beneficial for bandwidth-limited environments requiring decompression capabilities. The schema employs four main compression tactics: efficient transaction metadata packaging, variable-length integers, compressed signatures, and an innovative method of referencing outputs. Although the schema optimizes transaction efficiency, it is not suitable for unconfirmed outputs. Andrew Poelstra, the Director of Research at Blockstream, offers further insights, with more details available on his personal webpage.\n\nIn the realm of Bitcoin development, Anthony Towns has highlighted CheckTemplateVerify (CTV) and AssumeUTXO (APO) as two significant proposals designed to refine wallet and layer-two functionalities. These proposals indicate a shift towards adopting a more holistic approach to Bitcoin enhancements, rather than piecemeal changes. Despite the benefits, such as eliminating transaction malleability, there are concerns regarding AssumeUTXO's approach, particularly its similarity to Satoshi's ANYONECANPAY method and the implications for transaction inputs. Interested individuals can delve deeper into the technicalities through the Bitcoin Improvement Proposals repository's pull request.\n\nAddressing the Lightning Network's transaction security, Peter Todd points out the crucial role of CHECKSIG in anchor channels for ensuring modifications are made by authorized parties only. The ongoing debate is centered on the practicality of V3 transactions within the Lightning Network, with initial analyses suggesting they might offer limited advantages and risk adding complexity. While V3 transactions could benefit other protocols, their necessity for the Lightning Network is not yet evident. Peter Todd's website and direct contact email are available for those interested in the technical discourse or willing to contribute to the developments.",
+    "header_summary": "Tom Briar and Andrew Poelstra have developed a new Compressed Transaction Schema to minimize blockchain transaction sizes, utilizing compression to replace transaction output information and allowing for efficiency in legacy and Segwit transactions. This scheme is beneficial for scenarios with limited bandwidth, assuming availability of decompression resources. Andrew Poelstra elaborates on four main compression techniques, highlights potential size reductions, and provides technical comparisons on his web page (https://www.wpsoftware.net/andrew).\n\nIn the realm of Bitcoin network improvements, Anthony Towns has shed light on proposals like CheckTemplateVerify and AssumeUTXO, aimed at enhancing wallet and layer-two functionalities, while suggesting comprehensive upgrade strategies. Debates arise around the proposed design philosophies and their implications, with detailed technical discussions accessible through the Bitcoin Improvement Proposals repository (https://github.com/bitcoin/bips/pull/1472). Meanwhile, Peter Todd voices security concerns regarding the Lightning Network's transaction protocols, specifically the use of CHECKSIG in anchor channels, and invites further scrutiny and contact via his website (https://petertodd.org).\n\nSecurity vulnerabilities in C-Lightning versions 23.02 to 23.05.2 have been identified by a programmer known as morehouse, prompting immediate upgrades to mitigate DoS attack risks stemming from a race condition. On another front, user instagibbs has touched upon Bitcoin Improvement Proposals challenges related to smart contract ephemeral anchor funds, suggesting a new RBF rule as a preventive measure against potential MEV scenarios, with ongoing discussions hosted on GitHub (https://github.com/bitcoin/bips/pull/1524issuecomment-1865322320). Additionally, moonsettler introduces LN-symmetry, a programming concept focusing on core functionality that stands in contrast with the broader features of APO, with further review anticipated.",
     "recent_posts": [
         {
             "id": "022270",
@@ -9,7 +9,7 @@
                 "Andrew Poelstra"
             ],
             "published_at": "2024-01-05T15:19:31+00:00",
-            "summary": "- Andrew Poelstra and Tom Briar created a schema to shrink blockchain transaction sizes.\n- Their method replaces previous output data with block height and index for efficiency.\n- The schema is detailed, comparing uncompressed and compressed data, focusing on bandwidth efficiency.",
+            "summary": "- Poelstra and Briar's schema reduces transaction size via compression, employing block height and index.\n- The schema supports legacy and Segwit transactions, optimizing them to Taproot efficiency levels.\n- It integrates four compression techniques and showcases savings in transaction data for bandwidth-limited scenarios.",
             "n_threads": 12,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -29,7 +29,7 @@
                 "Anthony Towns"
             ],
             "published_at": "2024-01-03T08:36:02+00:00",
-            "summary": "- Two Bitcoin proposals, CheckTemplateVerify and AssumeUTXO, aim to improve wallet and layer-two software.\n- AssumeUTXO's addition of inputs method faces criticism, similarly to Satoshi's ANYONECANPAY.\n- Critics favor fixed transaction inputs to prevent interference and reduce txid malleability issues.",
+            "summary": "- Bitcoin's CTV and APO aim to enhance wallet and layer-two software functionalities.\n- Critics debate APO's similarity to ANYONECANPAY, emphasizing risks and third-party interference.\n- Fixed input transactions reduce txid malleability, as detailed in BIPs pull request 1472.",
             "n_threads": 14,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -50,7 +50,7 @@
                 "Peter Todd"
             ],
             "published_at": "2024-01-02T23:43:01+00:00",
-            "summary": "- CHECKSIG's use in Lightning Network anchors ensures only authorized transaction engagement.\n- V3 transactions may not significantly improve upon current Lightning Network standards.\n- Peter Todd offers further technical insights on V3 transactions at petertodd.org.",
+            "summary": "- CHECKSIG usage in Lightning Network anchor channels ensures only authorized party engagement.\n- V3 transaction advantages over current standards are unclear and may add complexity.\n- Further analysis and contributions on V3\u2019s utility for other protocols can be made via Peter Todd's contact.",
             "n_threads": 8,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -59,6 +59,56 @@
             ],
             "file_path": "static/bitcoin-dev/Jan_2024/022263_V3-Transactions-are-still-vulnerable-to-significant-tx-pinning-griefing-attacks.xml",
             "combined_summ_file_path": "static/bitcoin-dev/Jan_2024/combined_V3-Transactions-are-still-vulnerable-to-significant-tx-pinning-griefing-attacks.xml"
+        },
+        {
+            "id": "1022",
+            "title": "DoS disclosure: Channel open race in CLN",
+            "link": "https://delvingbitcoin.org/t/dos-disclosure-channel-open-race-in-cln/385",
+            "authors": [
+                "morehouse"
+            ],
+            "published_at": "2024-01-08T19:01:42.512000+00:00",
+            "summary": "- Versions 23.02 to 23.05.2 of CLN are vulnerable to DoS attacks.\n- A race condition causes assertion failures and node crashes within 30 seconds.\n- Operators must upgrade to version 23.08 to patch the concurrency issue.",
+            "n_threads": 1,
+            "dev_name": "delvingbitcoin",
+            "contributors": [],
+            "file_path": "static/delvingbitcoin/Jan_2024/1022_DoS-disclosure-Channel-open-race-in-CLN.xml",
+            "combined_summ_file_path": ""
+        },
+        {
+            "id": "1020",
+            "title": "Ephemeral Anchors and MEV",
+            "link": "https://delvingbitcoin.org/t/ephemeral-anchors-and-mev/383",
+            "authors": [
+                "instagibbs"
+            ],
+            "published_at": "2024-01-08T17:39:30.609000+00:00",
+            "summary": "- Bitcoin Improvement Proposals pose challenges in transaction incentives and security.\n- Proposed solutions risk causing Replace-by-Fee problems and fee rate imbalances.\n- A new RBF rule is suggested for more secure and fair transaction processing.",
+            "n_threads": 1,
+            "dev_name": "delvingbitcoin",
+            "contributors": [],
+            "file_path": "static/delvingbitcoin/Jan_2024/1020_Ephemeral-Anchors-and-MEV.xml",
+            "combined_summ_file_path": ""
+        },
+        {
+            "id": "1014",
+            "title": "LNHANCE bips and implementation",
+            "link": "https://delvingbitcoin.org/t/lnhance-bips-and-implementation/376/8",
+            "authors": [
+                "moonsettler"
+            ],
+            "published_at": "2024-01-08T10:21:44.597000+00:00",
+            "summary": "- LN-symmetry advances programming, focusing on essential tasks without APO's full feature set.\n- It strategically limits scope to enhance quality and efficiency in crucial areas.\n- Key functions and contrasts with APO are detailed in a contract set for review.",
+            "n_threads": 8,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "instagibbs",
+                "michaelfolkson",
+                "reardencode",
+                "urza"
+            ],
+            "file_path": "static/delvingbitcoin/Jan_2024/1014_LNHANCE-bips-and-implementation.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Jan_2024/combined_LNHANCE-bips-and-implementation.xml"
         }
     ],
     "active_posts": [
@@ -70,7 +120,7 @@
                 "Bryan Bishop"
             ],
             "published_at": "2023-11-07T15:37:22+00:00",
-            "summary": "- The Linux Foundation's halt in hosting prompts Bitcoin-dev mailing list relocation.\n- Moderators suggest public-inbox and blockchain integration for independent archiving.\n- Community feedback is sought on alternatives for a robust Bitcoin development platform.",
+            "summary": "- The bitcoin-dev mailing list needs a new host due to the Linux Foundation's pullout.\n- Current mailman2 software challenges include poor moderation tools and spam management.\n- Moderators request community input on new hosting options, considering Google Groups.",
             "n_threads": 26,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -106,7 +156,7 @@
                 "Robert Dickinson"
             ],
             "published_at": "2023-01-27T12:44:10+00:00",
-            "summary": "- The writer questions the prudence of unlimited NFT content storage on unpruned nodes.\n- They suggest imposing a size limit on blockchain inscriptions akin to OP_RETURN.\n- Proposal includes linking sats to legal constructs for blockchain-based property transfer.",
+            "summary": "- The writer queries core developers on storing boundless NFT content as ordinal witness data.\n- They express concern over potential disk usage issues for unpruned nodes in the future.\n- Proposals include size limits on inscriptions and using ordinals for property ownership transfer.",
             "n_threads": 22,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -133,7 +183,7 @@
                 "yurisvb at pm.me"
             ],
             "published_at": "2023-12-18T01:37:23+00:00",
-            "summary": "- The email details a proposal to use Lamport Scheme for L1 blockchain efficiency.\n- It involves a dual-key system, broadcasting tuples, and enforcing penalties if needed.\n- Argon2 hashing is suggested to further reduce transaction space on the blockchain.",
+            "summary": "- The email proposes integrating the Lamport Scheme with ECC for efficient blockchain transactions.\n- It specifies a penalty mechanism for unfollowed commitments, benefiting miners for their work.\n- Utilizing Argon2 hash functions could drastically reduce transaction space from 136 to 24 bytes.",
             "n_threads": 20,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -144,50 +194,131 @@
             ],
             "file_path": "static/bitcoin-dev/Dec_2023/022201_Lamport-scheme-not-signature-to-economize-on-L1.xml",
             "combined_summ_file_path": "static/bitcoin-dev/Dec_2023/combined_Lamport-scheme-not-signature-to-economize-on-L1.xml"
+        },
+        {
+            "id": "892",
+            "title": "V3 transaction policy for anti-pinning",
+            "link": "https://delvingbitcoin.org/t/v3-transaction-policy-for-anti-pinning/340",
+            "authors": [
+                "AntoineP"
+            ],
+            "published_at": "2024-01-02T09:36:47.462000+00:00",
+            "summary": "- Gloria Zhao proposed \"V3\" to resolve Bitcoin network's pinning issues.\n- Greg Sanders' ephemeral anchors complement V3, enhancing package relay.\n- V3's implementation progresses through a pull request in the Bitcoin Core repository.",
+            "n_threads": 25,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "ajtowns",
+                "glozow",
+                "harding",
+                "instagibbs",
+                "moonsettler",
+                "nettimel",
+                "orangesurf"
+            ],
+            "file_path": "static/delvingbitcoin/Jan_2024/892_V3-transaction-policy-for-anti-pinning.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Jan_2024/combined_V3-transaction-policy-for-anti-pinning.xml"
+        },
+        {
+            "id": "873",
+            "title": "[BUG]: spammers get Bitcoin blockspace at discounted price. Let's fix it",
+            "link": "https://delvingbitcoin.org/t/bug-spammers-get-bitcoin-blockspace-at-discounted-price-lets-fix-it/327",
+            "authors": [
+                "GregTonoski"
+            ],
+            "published_at": "2023-12-27T20:54:30.891000+00:00",
+            "summary": "- Disparate blockspace pricing for Bitcoin transactions is highlighted, simple ones may cost more.\n- The sender proposes uniform blockspace pricing, critiquing complexity-based discrimination.\n- Suggestion made to implement equal pricing in next Segwit version, aiming to fix skewed incentives.",
+            "n_threads": 16,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "DoctorBuzz1",
+                "ProofOfKeags",
+                "moonsettler",
+                "murch"
+            ],
+            "file_path": "static/delvingbitcoin/Dec_2023/873_-BUG-spammers-get-Bitcoin-blockspace-at-discounted-price-Let-s-fix-it.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Dec_2023/combined_-BUG-spammers-get-Bitcoin-blockspace-at-discounted-price-Let-s-fix-it.xml"
+        },
+        {
+            "id": "678",
+            "title": "Liquidity griefing in multi-party transaction protocols",
+            "link": "https://delvingbitcoin.org/t/liquidity-griefing-in-multi-party-transaction-protocols/264/2",
+            "authors": [
+                "t-bast"
+            ],
+            "published_at": "2023-12-07T11:21:18.285000+00:00",
+            "summary": "- The non-initiator contributes funds only when compensated, ensuring sellers aren't burdened with fees.\n- Node operators should use a separate Bitcoin wallet for leasing to contain griefing risks.\n- Improvements at the mempool layer are crucial for dealing with locked liquidity and delayed confirmations.",
+            "n_threads": 9,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "instagibbs",
+                "morehouse"
+            ],
+            "file_path": "static/delvingbitcoin/Dec_2023/678_Liquidity-griefing-in-multi-party-transaction-protocols.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Dec_2023/combined_Liquidity-griefing-in-multi-party-transaction-protocols.xml"
         }
     ],
     "today_in_history_posts": [
         {
-            "id": "012243",
-            "title": "Bitcoin Core 0.12.0 release candidate 1 available",
-            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-January/012243.html",
-            "authors": [
-                "Wladimir J. van der Laan"
-            ],
-            "published_at": "2016-01-17T10:08:08+00:00",
-            "summary": "- Bitcoin Core version 0.12.0rc1 binaries are now available on the official website.\n- Users can find the source code on Github with the preliminary release notes.\n- Significant changes include faster transactions, updated fees, and improved privacy.",
-            "n_threads": 11,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Jonas Schnelli",
-                "Marco Falke",
-                "Simon Selitsky",
-                "xor at freenetproject.org"
-            ],
-            "file_path": "static/bitcoin-dev/Jan_2016/012243_Bitcoin-Core-0-12-0-release-candidate-1-available.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Jan_2016/combined_Bitcoin-Core-0-12-0-release-candidate-1-available.xml",
-            "combined_summary": "- On January 25, 2016, van der Laan sought help for Bitcoin release notes on Github.\n- Minimum Bitcoin pruning storage quota is set at 550 MiB to allow 288-block deep reorgs.\n- Bitcoin Core version 0.12.0rc1 includes block pruning, with safe minimum prune value guidelines."
-        },
-        {
-            "id": "000408",
-            "title": "Laundry list of inter-peer wire protocol changes",
-            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-January/000408.html",
+            "id": "015530",
+            "title": "BIP 117 Feedback",
+            "link": "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-January/015530.html",
             "authors": [
                 "Rusty Russell"
             ],
-            "published_at": "2016-01-27T03:07:04+00:00",
-            "summary": "- Rusty Russell is finalizing the inter-node protocol version 1.0 with revisions.\n- He recommends changes in wire format, HTLC, versioning bits, and encryption.\n- Rusty requests feedback on his proposals and acknowledges possible oversights.",
-            "n_threads": 19,
+            "published_at": "2018-01-09T11:22:18+00:00",
+            "summary": "- The author criticizes BIP 117's flexibility, altstack use, and proposes simpler tail recursion.\n- They recommend initially limiting new rules to tx version 3 segwit transactions.\n- The author also advocates for measurements on dropped SIGOP and opcode limits, suggesting static analyzability.",
+            "n_threads": 10,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "Gregory Maxwell",
+                "Johnson Lau",
+                "Luke Dashjr",
+                "Mark Friedenbach",
+                "Pieter Wuille",
+                "Russell O'Connor"
+            ],
+            "file_path": "static/bitcoin-dev/Jan_2018/015530_BIP-117-Feedback.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Jan_2018/combined_BIP-117-Feedback.xml",
+            "combined_summary": "- Rusty Russell criticizes BIP 117's complexity and potential security flaws.\n- Luke Dashjr notes the non-consensus change affecting multisig standardness.\n- Discussions highlight concerns and suggest improvements for SegWit's BIP 117."
+        },
+        {
+            "id": "000926",
+            "title": "[Question] Unilateral closing during fee increase.",
+            "link": "https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-January/000926.html",
+            "authors": [
+                "Jonathan Underwood"
+            ],
+            "published_at": "2018-01-14T01:30:28+00:00",
+            "summary": "- A user's transaction of 500 MB remains unconfirmed due to their partner going offline.\n- They misjudged the needed fee of 100 satoshi/byte, assuming 40 would suffice.\n- Without CPFP by the partner for the to_remote output, CSV timer and confirmation won't start.",
+            "n_threads": 5,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Anthony Towns",
-                "CJP",
-                "Fabrice Drouin",
-                "Mats Jerratsch"
+                "Johan Tor\u00e5s Halseth",
+                "Peter Todd",
+                "Richard",
+                "ZmnSCPxj"
             ],
-            "file_path": "static/lightning-dev/Jan_2016/000408_Laundry-list-of-inter-peer-wire-protocol-changes.xml",
-            "combined_summ_file_path": "static/lightning-dev/Jan_2016/combined_Laundry-list-of-inter-peer-wire-protocol-changes.xml",
-            "combined_summary": "- The Lightning Network protocol may separate into sub-protocols with their own versioning.\n- Shachain and elkrem are being discussed for revocation secrets; protobufs could replace open-coded structures.\n- Amiko Pay employs TCP, JSON serialization, and manual confirmation for secure, decentralized payments."
+            "file_path": "static/lightning-dev/Jan_2018/000926_-Question-Unilateral-closing-during-fee-increase-.xml",
+            "combined_summ_file_path": "static/lightning-dev/Jan_2018/combined_-Question-Unilateral-closing-during-fee-increase-.xml",
+            "combined_summary": "- Johan suggests a new SIGHASH flag to help stuck mainnet channel transactions.\n- Jonathan's transaction may not confirm, hindered by low fees and CSV timelock issues.\n- Discussions focus on channel control, trust, and alternative fee payment methods."
+        },
+        {
+            "id": "55",
+            "title": "Lightning Fees - inbound vs outbound",
+            "link": "https://delvingbitcoin.org/t/lightning-fees-inbound-vs-outbound/29",
+            "authors": [
+                "ajtowns"
+            ],
+            "published_at": "2023-01-12T07:16:51.472000+00:00",
+            "summary": "- When Alice and Bob know channel demand, they'll independently aim for equal fees.\n- Imperfect knowledge leads to differing fee calculations, potentially reducing income.\n- Economic incentives and demand understanding are crucial in fee negotiations.",
+            "n_threads": 5,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "renepickhardt"
+            ],
+            "file_path": "static/delvingbitcoin/Jan_2023/55_Lightning-Fees-inbound-vs-outbound.xml",
+            "combined_summ_file_path": "",
+            "combined_summary": ""
         }
     ]
 }

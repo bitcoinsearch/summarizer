@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>LN-Symmetry Project Recap</title>
+  <updated>2024-01-08T11:42:43.237160+00:00</updated>
+  <author>
+    <name>instagibbs 2024-01-05 18:41:17.125000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>LN-Symmetry Project Recap</title>
+    <updated>2024-01-08T11:42:43.237160+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ln-symmetry-project-recap/359/3" rel="alternate"/>
+    <summary>The process of channel operations in the context of eltoo, a proposed update mechanism for the Lightning Network, is more complex than originally anticipated. Initially, it was believed that only two rounds were necessary: breach and justice, or in the case of eltoo, breach and fast-forward. However, upon closer examination, it becomes apparent that the actual sequence involves multiple steps which can double the expected timelock duration.
+
+The described operation begins with Alice and Bob conducting some channel activities. Following this, Alice sends an `update_signed` message, which includes a MuSig2 partial signature. Bob, now in possession of the complete signature and a tactical advantage, ceases communication. In response, Alice attempts to settle on-chain using a prior state, but she must wait out the timelock associated with the 'update phase' before her 'settle transaction' is deemed valid. As this timelock nears its end, Bob broadcasts the final state, initiating another waiting period equal to the update phase timelock before the settlement transaction can be published. Only after this second timelock can HTLCs be settled, effectively doubling the initial expected one-time timelock.
+
+This extended process not only impacts the timing but also introduces potential risks, as evident in the "layered eltoo" design discussed in the Lightning-dev mailing list (https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-January/002448.html). This design aimed to eliminate additional delta values, yet the complexity remains.
+
+Additionally, there's speculation about whether alternative covenant schemes could offer similar capabilities for state-graph cut-through in Bitcoin transactions. Although not fully validated or explored, OP_CTV appears to be the ideal candidate, offering the desired properties. An emulation that slightly increases the byte size was achieved using APO, suggesting that while OP_CTV might be preferable, other methods are indeed possible for achieving state-graph cut-through.</summary>
+    <published>2024-01-05T18:41:17.125000+00:00</published>
+  </entry>
+</feed>

@@ -10,13 +10,13 @@ from src.xml_utils import GenerateXML
 
 warnings.filterwarnings("ignore")
 
-
 if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-        "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
+        "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
+        "https://delvingbitcoin.org/"
     ]
 
     current_date_str = None
@@ -29,9 +29,11 @@ if __name__ == "__main__":
     logger.info(f"current_date_str: {current_date_str}")
 
     for dev_url in dev_urls:
-        data_list = elastic_search.extract_data_from_es(ES_INDEX, dev_url, start_date_str, current_date_str)
+        data_list = elastic_search.extract_data_from_es(
+            ES_INDEX, dev_url, start_date_str, current_date_str, exclude_combined_summary_docs=True
+        )
         dev_name = dev_url.split("/")[-2]
-        logger.info(f"TOTAL THREADS RECEIVED FOR - {dev_name}: {len(data_list)}")
+        logger.success(f"TOTAL THREADS RECEIVED FOR - {dev_name}: {len(data_list)}")
 
         delay = 5
         count_main = 0
