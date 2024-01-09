@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Ephemeral Anchors and MEV</title>
+  <updated>2024-01-09T09:30:02.414392+00:00</updated>
+  <author>
+    <name>instagibbs 2024-01-08 17:39:30.609000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Ephemeral Anchors and MEV</title>
+    <updated>2024-01-09T09:30:02.414392+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ephemeral-anchors-and-mev/383" rel="alternate"/>
+    <summary>As programmers delve into the intricacies of Bitcoin Improvement Proposals (BIPs), certain challenges arise, particularly in the realm of transaction incentives and security. A specific concern is the handling of ephemeral anchor funds within smart contracts, which, if not managed correctly, could incentivize counter-parties to claim these funds for themselves or result in Miner Extractable Value (MEV) scenarios. This issue was highlighted in a GitHub discussion by user @ariard and can be accessed [here](https://github.com/bitcoin/bips/pull/1524issuecomment-1865322320).
+
+The initially proposed solution aimed at ensuring that the spending of ephemeral anchors would have a fee rate equal to or higher than a minimal direct-to-miner burn. This approach involved burning funds to fees via an OP_RETURN transaction, which would discourage the inflation of ephemeral anchor values for malicious claims. However, upon further analysis, it became apparent that this could create an RBF (Replace-by-Fee) pinning problem where adversaries could front-run legitimate transactions with pure fee burns that are adequate for mempool entry but insufficient for block inclusion. With the current mempool and block inclusion rates, replacing such a transaction with a Child Pays For Parent (CPFP) transaction requires a disproportionate increase in child feerate, leading to an "ugly and problematic" step function for wallets.
+
+To address these issues, it's suggested to implement a new RBF rule similar to the one proposed in [Bitcoin Pull Request #2898](https://github.com/bitcoin/bitcoin/pull/2898). This would involve a diagram check to assess cluster-size-1 tx RBF conflicts with size-two clusters, checking if the replacement transaction is incentive compatible and brings in more total fees. The adoption of this rule would help mitigate the risks associated with ephemeral anchor spends, blunt incentives for theft by smart contract counter-parties, and greatly reduce the potential for MEV. This solution promotes a more secure and fair environment for all parties involved in the transaction process.</summary>
+    <published>2024-01-08T17:39:30.609000+00:00</published>
+  </entry>
+</feed>
