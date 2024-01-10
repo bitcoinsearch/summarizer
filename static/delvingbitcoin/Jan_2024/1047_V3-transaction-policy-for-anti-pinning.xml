@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>V3 transaction policy for anti-pinning</title>
+  <updated>2024-01-10T02:07:41.852701+00:00</updated>
+  <author>
+    <name>instagibbs 2024-01-09 19:42:52.645000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>V3 transaction policy for anti-pinning</title>
+    <updated>2024-01-10T02:07:41.852733+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/v3-transaction-policy-for-anti-pinning/340/32" rel="alternate"/>
+    <summary>When considering the security and efficiency of Lightning Network (LN) transaction anchors, there are several trade-offs associated with different types of anchors. A 2-keyed anchor, while currently in use, depends on CPFP carveout, a rule that is expected to be phased out due to issues with cluster mempool coherence, rendering this approach nonviable in the long term. Alternatively, a 1-keyed anchor without sharing requires reliance on V3 and package RBF (Replace-By-Fee), which incurs the additional cost of the counter-party's package fee plus incremental bytes. This could be slightly more expensive than just replacing the child transaction in the case of an adversarial counterparty.
+
+The option of a 1 shared keyed anchor also relies on V3 and package RBF, allowing both parties to spend the same anchor independently. However, it necessitates that all other outputs have at least one block of relative timelock, and the output must exceed the dust value. It introduces the risk of the base anchor value being stolen but does allow for package RBF or direct RBF against anchor spends.
+
+A keyless anchor presents itself as a cheaper alternative in benign cases, leading to smaller commitment transactions. It enables any outputs previously restricted by `1 CSV` to be available for potential CPFP. The drawback here is that it opens up the opportunity for adversaries to attempt pinning in a similar fashion as a highly motivated counter-party might do in the case of a 1 shared keyed anchor. Despite these vulnerabilities, keyless anchors could potentially offer advantages over CPFP-carveout-based solutions, especially in broader smart contracting scenarios.
+
+The ongoing development of LN specifications aims to address these pinning issues, and while V3 was expected to resolve them, various challenges persist. For example, using V3 in conjunction with ephemeral anchors would require additional overhead for HTLCs and protocol changes, which has not been warmly received due to the increase in byte size. Another proposed solution involves a hypothetical "V4" transaction format tailored to the 1-input-1-output scenario, but this concept has not gained significant traction either.
+
+In summary, there is an active search for viable alternatives to the CPFP carveout that can provide safety and include anti-pinning features for wallets. This pursuit involves exploring various enhancements to the LN protocol, including the modification of transaction structures and updating fee policies, to foster secure and efficient LN operations.</summary>
+    <published>2024-01-09T19:42:52.645000+00:00</published>
+  </entry>
+</feed>

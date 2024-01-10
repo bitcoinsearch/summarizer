@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Ephemeral Anchors and MEV</title>
+  <updated>2024-01-10T02:14:51.849018+00:00</updated>
+  <author>
+    <name>t-bast 2024-01-09 09:03:40.558000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Ephemeral Anchors and MEV</title>
+    <updated>2024-01-10T02:14:51.849044+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ephemeral-anchors-and-mev/383/3" rel="alternate"/>
+    <summary>Handling dust Hashed Time-Locked Contracts (HTLCs) in the Lightning Network presents a challenge that affects transaction fees and protocol complexity. When Alice sends a dust HTLC to Bob, it alters the fee structure of the commitment transactions involved. Initially, the amount from Alice's output is not reallocated to an HTLC output, which temporarily inflates the on-chain fees. Upon fulfillment by Bob, these fees are then readjusted to their original levels. However, should the initial commitment transaction be broadcast without fulfilling the HTLC, the dust amount is lost to miners as additional fees.
+
+To address this, a possible solution involving ephemeral anchors has been proposed. The current method involves accepting increased fees due to the dust HTLC, but this can lead to overpayment of fees and potential pollution of the UTXO set because of tiny outputs that may not be claimed. An alternative approach suggests adding the dust HTLC amount to the ephemeral anchor output, maintaining constant transaction fees. This option simplifies the Lightning protocol by ensuring a zero sat/byte fee rate for commitment transactions.
+
+While this second option appears more efficient, it does introduce a drawback from the perspective of miners who seek to maximize revenue through Miner Extractable Value (MEV). Given a high enough value of the ephemeral anchor output compared to the prevailing fee rate, miners would prefer to claim the entire value of the ephemeral anchor for themselves. This necessitates a follow-up transaction to pay the miner, which could be seen as wasteful since it doesn’t require any new input. Despite this inefficiency, finding a better solution to handle dust HTLCs with the goal of optimizing the protocol remains an open question.</summary>
+    <published>2024-01-09T09:03:40.558000+00:00</published>
+  </entry>
+</feed>
