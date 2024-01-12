@@ -11,7 +11,7 @@ from src.utils import remove_timestamps_from_author_names
 
 if __name__ == "__main__":
 
-    REMOVE_TIMESTAMPS_IN_AUTHORS = False
+    REMOVE_TIMESTAMPS_IN_AUTHORS = True
 
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
