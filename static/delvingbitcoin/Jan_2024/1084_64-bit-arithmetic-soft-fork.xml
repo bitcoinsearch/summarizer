@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-01-12T02:11:13.603419+00:00</updated>
+  <author>
+    <name>sipa 2024-01-11 20:40:26.242000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-01-12T02:11:13.603451+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/15" rel="alternate"/>
+    <summary>In the proposed semantics, math operations such as ADD and SUB would push two values onto the stack: a boolean indicating if the operands were in range, and the result of the operation. This differs from Bitcoin's current operations, which suggests that altering existing opcodes to exhibit new behavior may not be sensible. Instead, it might be preferable to only extend the acceptable input range for existing opcodes. The introduction of `OP_MUL` could require special handling of overflows, a scenario not well-addressed by the current interface.
+
+Regarding data encoding, there is a discussion on whether inputs should always be 8 bytes long, favoring simplicity in design. Although little-endian encoding is prevalent within the protocol, the preference stated leans slightly towards little-endian while recognizing that having two different encodings would be problematic. The email also discusses the potential modification of `CScriptNum`, a construct that wraps around `int64_t` and includes serialization, deserialization, and arithmetic operations with overflow assertions. By modifying `CScriptNum` to support 64-bit integers and relaxing the input length from 4 to 8 bytes, existing functions and operators wouldn't need alteration.
+
+The use of `CScriptNum` is consistent in other parts of the protocol such as `OP_CHECKLOCKTIMEVERIFY`, which allows up to 5-byte arguments. The conversation touches upon the lack of malleability concerns with 8 byte sizes being mandated. This leads to a discussion on integer values as script inputs and the potential shift towards a stricter encoding. The topic of literals like `OP_1`, `OP_2`, etc., comes up, highlighting possible complications with duplicating these opcodes for a 64-bit version. A suggested solution is to employ a conversion opcode after the literal or to avoid introducing separate encodings altogether, so the semantics of `OP_n` remain constant.
+
+Finally, the email addresses the existing Bitcoin Virtual Machine (VM) and how it cannot be simply modeled by a state transition function due to factors such as the position of the last executed `OP_CODESEPARATOR`, the conditional stack for if/then/else branches, and the remaining checksig budget in tapscript. The idea of `OP_ENABLE64BIT` is criticized for potentially introducing a third `VMInterpreterState`, which could complicate consensus issues. However, the consensus seems to lean towards the concept that a separate leaf version would be a cleaner solution than an `OP_ENABLE64BIT` approach.</summary>
+    <published>2024-01-11T20:40:26.242000+00:00</published>
+  </entry>
+</feed>
