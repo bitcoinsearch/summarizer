@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>An overview of the cluster mempool proposal</title>
+  <updated>2024-01-13T01:59:40.784191+00:00</updated>
+  <author>
+    <name>harding 2024-01-12 18:04:39.566000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>An overview of the cluster mempool proposal</title>
+    <updated>2024-01-13T01:59:40.784222+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/an-overview-of-the-cluster-mempool-proposal/393/5" rel="alternate"/>
+    <summary>The blog post discusses the complexities and challenges faced when trying to integrate the concept of carveouts with cluster mempool in cryptocurrency transaction systems. Carveouts are a special transaction type designed to facilitate certain operations, like Lightning Network (LN) anchor channels, which require transactions that can bypass standard mempool restrictions under specific conditions.
+
+An initial rule for carving out transactions was proposed, where a transaction must have exactly one unconfirmed ancestor and be below a certain size limit. However, this simple rule does not suffice in all cases. For example, LN anchor channels are structured such that only two outputs can be spent in the same block as the parent transaction. This is a security measure to prevent misuse of the carveout by malicious parties. Consequently, it's inferred that any well-designed use of carveouts would follow a similar pattern.
+
+To address these constraints, a refined set of rules for a transaction to qualify as a carveout has been outlined:
+
+1. A carveout transaction must be 1,000 virtual bytes or smaller.
+2. It should have exactly one unconfirmed ancestor—its parent.
+3. The parent transaction itself must not have any unconfirmed ancestors.
+4. The transaction must be the first or second output spent from its parent, provided no more than two of the parent's outputs have been spent at the time.
+
+Ensuring compliance with these rules is relatively straightforward, as checking for the size and the number of unconfirmed ancestors requires examining each transaction input, something already done in current processing. Furthermore, by periodically reviewing transactions tagged as carveouts using free CPU cycles, the system can detect if the conditions have changed, such as a parent transaction having more than two spends, and adjust the carveout status accordingly.
+
+The author had initially believed that under these rules, a cluster could contain at most two carveouts. However, they present a scenario where multiple carveouts might exist within a cluster as follows:
+
+In a diagram depicted using Mermaid syntax, three parent transactions—P1, P2, and P3—are shown leading to their respective carveouts—CO1, CO2, and CO3. These parent transactions then also lead to a regular child transaction, C1. This illustrates that while individual carveout rules are strict, the overall system permits flexibility and the coexistence of several carveouts within a single cluster.
+
+Despite these insights and the proposed framework, the effort to make carveouts fully compatible with the cluster mempool has yet to succeed. The post concludes by acknowledging the complexity of the issue and suggests that these findings might contribute to future discussions and attempts at finding a viable solution.</summary>
+    <published>2024-01-12T18:04:39.566000+00:00</published>
+  </entry>
+</feed>
