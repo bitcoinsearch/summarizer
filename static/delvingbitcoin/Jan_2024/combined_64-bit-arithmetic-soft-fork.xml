@@ -2,12 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - 64 bit arithmetic soft fork</title>
-  <updated>2024-01-13T02:03:24.465355+00:00</updated>
+  <updated>2024-01-14T02:09:46.861544+00:00</updated>
   <author>
-    <name>rustyrussell 2024-01-12 16:22:29.735000+00:00</name>
+    <name>dgpv 2024-01-13 15:12:01.617000+00:00</name>
   </author>
   <author>
-    <name>halseth 2024-01-12 13:20:15.414000+00:00</name>
+    <name>Chris_Stewart_5 2024-01-13 15:03:10.677000+00:00</name>
+  </author>
+  <author>
+    <name>dgpv 2024-01-13 15:00:18.287000+00:00</name>
+  </author>
+  <author>
+    <name>Chris_Stewart_5 2024-01-13 14:59:37.726000+00:00</name>
+  </author>
+  <author>
+    <name>Chris_Stewart_5 2024-01-13 14:53:41.807000+00:00</name>
+  </author>
+  <author>
+    <name>dgpv 2024-01-13 14:26:46.385000+00:00</name>
+  </author>
+  <author>
+    <name>rustyrussell  . 2024-01-12 16:22:29.735000+00:00</name>
+  </author>
+  <author>
+    <name>halseth  . 2024-01-12 13:20:15.414000+00:00</name>
   </author>
   <author>
     <name>ProofOfKeags  . 2024-01-11 21:01:22.448000+00:00</name>
@@ -60,6 +78,12 @@
   <author>
     <name>Chris_Stewart_  . 2024-01-10 16:11:01.778000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1101_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1105_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1104_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1103_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1102_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1099_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1093_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1088_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1086_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
@@ -83,23 +107,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - 64 bit arithmetic soft fork</title>
-    <updated>2024-01-13T02:03:24.465487+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/19" rel="alternate"/>
-    <summary>The programming community is evaluating the potential introduction of new arithmetic opcodes to handle unsigned numbers and provide greater precision beyond 64 bits. There's a consideration for re-enabling opcodes such as MUL, LSHIFT, and SUBSTR, especially in how they would interact with a modified `CScriptNum` type designed to support 64-bit integers. The modification of `CScriptNum` is seen as beneficial due to its current implementation and developers' familiarity with it.
+    <updated>2024-01-14T02:09:46.861710+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/21" rel="alternate"/>
+    <summary>The discourse focuses on enhancing scripting languages with the integration of 64-bit arithmetic operations. A consideration is made regarding the handling of arithmetic operations involving 64-bit integers, particularly the computation of arbitrary width integers and overflow detection when converting to data types like LE64 or LE32. The alternative of adding verification checks after each operation is also discussed, noting the possibility of increased script sizes and unexpected behaviors due to overflows.
 
-Debate exists around the complexity of introducing multiple operation codes within scripts. A notable issue is the proposed `OP_ENABLE64BIT` opcode, which could shift Bitcoin's virtual machine paradigm and impact script execution consistency. To maintain predictability, there are suggestions to incorporate new 64-bit opcodes directly into the VM, placing `ENABLE64BIT` at the beginning of the script sequence.
+Modifications to consensus rules, specifically tapscript leaf versions, are discussed, and a GitHub link is provided for deeper understanding. The idea of removing `SCRIPT_VERIFY_MINIMALIF` is explored, as well as ensuring consistent interpretation of literals within scripts and maintaining numeric values as 8 bytes on the stack.
 
-There's also concern over system accessibility for newcomers and consensus risks linked to altering `CScriptNum`. The transition to strict 64-bit little-endian encoding could affect witness sizes and deviate from the traditional big-endian format, yet expanding arithmetic support from 51-bit to 64-bit does not face much opposition. Compatibility with existing version 1 tapscripts is a priority, and `OP_ENABLE64BIT` is suggested to enhance arithmetic capabilities without compromising active scripts.
+The debate continues over the value of extra encoding for numbers, weighing complexity against simplification benefits such as reducing policy flags. The advantages of performing computations in the same format as transaction numbers, as observed in designing covenant scripts on Elements, are noted for their clarity in overflow detection.
 
-Furthermore, discussions cover the pros and cons of adopting 64-bit little-endian encoding and its impact on witness sizes and the transition from big-endian formats. Clarity is sought on how this expansion can coexist with version 1 tapscripts without changing current opcode semantics. Compatibility with deployed version 1 Scripts is paramount, despite possible state modifications through `OP_SUCCESSx`.
+New opcodes for handling unsigned numbers and offering greater precision are considered, alongside reactivating operations such as multiplication (MUL), left shift (LSHIFT), and substring extraction (SUBSTR). Resources, including an analysis of arithmetic opcodes, are provided for further reading on this topic.
 
-The debate on encoding efficiencies is ongoing, with some advocating for the established minimal-length big endian approach. BIP324 highlights the benefits of the current system. Proposals to mandate 64-bit arithmetic and comparison operations in future versions aim to simplify processes, although this has met skepticism due to concerns about unconventional number encoding changes.
+The discussion then turns to the `CScriptNum` implementation, suggesting building upon its structure rather than introducing a new number format. A commit link demonstrates how `CScriptNum` could support 64-bit across various numeric opcodes, proposing solutions for using `leaf_version` within the interpreter.
 
-Standardizing data representation conventions like little endian encoding is suggested to streamline programming languages and minimize complexities. An alternative proposal recommends implementing `OP_ENABLE64BIT` to support larger values without duplicating opcodes. Covenant opcodes are viewed favorably for their potential to enhance smart contract functionality and transaction versatility.
+There's a debate on conserving opcode space versus integrating features like `OP_ENABLE64BIT`, which could increase complexity. Emphasis is placed on formal specifications for the Script VM and integrating new 64-bit opcodes directly into the VM.
 
-The integration of 64-bit operations is deemed vital for a range of computational tasks, improving the precision and efficiency in processing large datasets and complex algorithms. The significance of such advancements is evident in protocols like TLUV. A draft Bitcoin Improvement Proposal and its implementation are shared for community feedback, inviting early input to refine the proposal ahead of broader discussions.
+Finally, a new opcode `OP_ENABLE64BIT` is proposed to allow arithmetic opcodes to accept inputs up to 8 bytes in size, changing the current system by pushing two values onto the stack. There are concerns about the placement of `ENABLE64BIT` within scripts to avoid confusion and ensure predictability, suggesting that it should fail the script if not placed first, except for any `OP_SUCCESSx` operations.
 
-Links for further information and feedback on these developments are provided, encouraging the community's participation in refining these proposals.</summary>
-    <published>2024-01-12T16:22:29.735000+00:00</published>
+In summary, the conversation is a technical exploration of potential improvements to Bitcoin's scripting capabilities, aiming to enhance precision and ease of development while considering the risks of altering consensus-critical components. Discussions cover the implications of 64-bit arithmetic, opcode space conservation, encoding formats, and the introduction of new opcodes, reflecting a balance between innovation and stability in the scripting environment.</summary>
+    <published>2024-01-13T15:12:01.617000+00:00</published>
   </entry>
 </feed>
