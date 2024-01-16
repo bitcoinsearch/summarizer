@@ -2,15 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - LN-Symmetry Project Recap</title>
-  <updated>2024-01-15T02:07:17.762135+00:00</updated>
+  <updated>2024-01-16T02:03:20.782923+00:00</updated>
   <author>
-    <name>instagibbs 2024-01-14 12:44:16.551000+00:00</name>
+    <name>ajtowns 2024-01-15 06:56:27.495000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-01-14 06:13:17.355000+00:00</name>
+    <name>instagibbs  . 2024-01-14 12:44:16.551000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-01-14 05:52:08.172000+00:00</name>
+    <name>ajtowns  . 2024-01-14 06:13:17.355000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2024-01-14 05:52:08.172000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2024-01-10 19:56:47.130000+00:00</name>
@@ -30,6 +33,7 @@
   <author>
     <name>instagibbs  . 2024-01-05 18:03:45.164000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1113_LN-Symmetry-Project-Recap.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1109_LN-Symmetry-Project-Recap.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1108_LN-Symmetry-Project-Recap.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1107_LN-Symmetry-Project-Recap.xml" rel="alternate"/>
@@ -43,23 +47,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - LN-Symmetry Project Recap</title>
-    <updated>2024-01-15T02:07:17.762217+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/ln-symmetry-project-recap/359/9" rel="alternate"/>
-    <summary>Technical challenges were encountered during the testing of eltoo, an update mechanism for the Lightning Network. Issues included feature bit overlap, broken non-eltoo channels, and difficulties in payment processing and shutdown processes. Node restarts were problematic due to invalid data retention.
+    <updated>2024-01-16T02:03:20.783006+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ln-symmetry-project-recap/359/10" rel="alternate"/>
+    <summary>The programming community is addressing challenges and optimizations of eltoo update mechanisms for the Lightning Network, focusing on issues such as private channel navigation using route hints, as exemplified by a [GitHub code sample](https://github.com/instagibbs/lightning/blob/be3919d9814579e6c8fb42c49c2efc9fcb5cb91f/tests/test_eltoo.pyL135). Payment division into smaller amounts is suggested to mitigate path discovery problems and handle large transactions more effectively.
 
-Attempts to use ephemeral anchors for broadcasting transactions faced problems in key recovery for fund reclamation. CheckTemplateVerify (CTV) emerged as a solution to reduce round-trip confirmations by spending update transactions via settlement transactions without additional signatures, despite potential trade-offs in storage and complexity.
+Implementing eltoo has encountered technical hurdles including feature bit conflicts, non-eltoo channel creation complications, and payment processing disruptions due to unclear recipient paths and channel shutdown errors. Node restarts have raised data integrity issues with stored values not matching valid secp256k1 points. Manual ephemeral anchors usage has facilitated successful transactions, yet accessing private keys for fund recovery remains challenging.
 
-Documentation on GitHub details CTV's role in reducing communication steps and tracking discussions on its implications. A limitation was noted with the current protocol's single nonce usage, which could be addressed by incorporating optimistic updates to improve security.
+Efforts to optimize state proposals in financial transactions are underway, involving CheckTemplateVerify (CTV) protocols which could minimize signature round-trips and storage of historical transaction updates via annex fields or partial adaptor signatures, despite the complexity added by dual signatures.
 
-Eltoo channels involve a complex process with multiple phases that can extend timelock durations. The LN-Symmetry Project advanced eltoo by developing software and functional tests, bypassing softforks or consensus requirements. The project also contributed to efforts like the Package Relay Project and developed a CLN implementation supporting eltoo available on GitHub.
+Resources such as a [GitHub document](https://github.com/instagibbs/bolts/blob/a17b60f42077a785c625430e8f6e8e2828d4d898/XX-eltoo-transactions.mdrationale-1) and [GitHub Issue 5](https://github.com/instagibbs/bolts/issues/5) explore technical details of CTV to streamline transactions by integrating state machines into Bitcoin transactions. Optimistic update limitations in the Lightning Network protocol are noted, with nonce handling requiring further enhancements for out-of-sequence updates without compromising security, as detailed at [eltoo peer protocol](https://github.com/instagibbs/bolts/blob/a17b60f42077a785c625430e8f6e8e2828d4d898/XX-eltoo-peer-protocol.mdeltoo-simplified-operation).
 
-Development and testing resources for CLN are accessible on GitHub, including a branch by instagibbs for anyprevout feature testing at https://github.com/instagibbs/bitcoin/tree/202207-anyprevout and an alternative Bitcoin protocol version at https://github.com/bitcoin-inquisition/bitcoin/releases/tag/v25.1-inq.
+Discussions also delve into the complexities of channel operations under eltoo's proposal, potentially increasing timelock durations and examining alternative covenant schemes like OP_CTV that may offer state-graph cut-through capabilities.
 
-Progress has been made on BOLT specifications for segwit ephemeral anchors, with drafts shared for review at https://github.com/instagibbs/bolts/tree/eltoo_draft. Libwally library updates support taproot changes, relevant for wallet functionality compatibility, and are available at https://github.com/instagibbs/libwally-core/tree/taproot.
+The LN-Symmetry Project contributes to the development of eltoo-style channels through research-quality software, anti-pinning research, and concepts like [Ephemeral Anchors](https://github.com/instagibbs/bips/blob/d33cdbd0777700f4fc488d54b90a8795d2c33639/bip-ephemeralanchors.mediawiki), although it leaves some features unimplemented due to ongoing improvements. It emphasizes longer htlc expiry deltas for security and expresses skepticism towards penalty systems.
 
-Research into Point Time-Locked Contracts (PTLCs) integration with eltoo channels is documented at https://gist.github.com/instagibbs/1d02d0251640c250ceea1c66665ec163single-sig-adaptor-ln-symmetry, offering insights into enhancing Lightning Network symmetry and functionality. Discussion on anti-pin technology and proposed policy changes within Bitcoin Core are tracked through commit history at https://github.com/instagibbs/bolts/commits/zero_fee_commitment.
+Significant updates in acquisition/bitcoin software v25.1-inq aim to improve system functionality and security, with release notes available for developers. Segregated Witness (segwit) ephemeral anchors have been integrated into BOLT specifications, promising to enhance network efficiency. Libwally library updates support taproot changes, marking an important scripting advancement in Bitcoin.
 
-Although currently on hiatus, the LN-Symmetry Project's findings are expected to influence future softfork discussions and channel design, contributing to the Bitcoin network's robustness and functionality.</summary>
-    <published>2024-01-14T12:44:16.551000+00:00</published>
+Compatibility studies of Point Time-Locked Contracts (PTLCs) with eltoo-style channels seek to further understanding within this framework. Proposed backports of anti-pin technology to current BOLT specifications consider policy changes in Bitcoin Core to address commitment transaction fees. However, the project is paused to focus on mempool functionalities, with the LN-Symmetry Project aiming to de-risk future softforks and advance channel design in the Bitcoin ecosystem.</summary>
+    <published>2024-01-15T06:56:27.495000+00:00</published>
   </entry>
 </feed>
