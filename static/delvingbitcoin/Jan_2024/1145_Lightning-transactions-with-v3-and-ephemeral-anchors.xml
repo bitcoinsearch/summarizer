@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lightning transactions with v3 and ephemeral anchors</title>
+  <updated>2024-01-17T02:16:55.961147+00:00</updated>
+  <author>
+    <name>t-bast 2024-01-16 17:28:44.919000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lightning transactions with v3 and ephemeral anchors</title>
+    <updated>2024-01-17T02:16:55.961175+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418" rel="alternate"/>
+    <summary>To optimize lightning transactions, the proposed changes aim to harness the capabilities of v3 transactions and ephemeral anchors. The structure of commitment transactions, which reflect the current financial state within a lightning channel, is under consideration for modification. Currently, these transactions are contingent on a complex set of outputs including main outputs subject to relative delays, anchor outputs with fixed amounts and no CSV requirements except in revocation scenarios, and HTLC-related outputs that add or deduct amounts based on their resolution.
+
+The existing system presents a strong link between on-chain fees and the off-chain funds available, creating an undesirable dependency. This is further exacerbated by the manipulation of pending trimmed HTLCs, where uneconomical HTLCs, rather than generating outputs, contribute temporarily to mining fees, affecting the sender's main output balance. Upon their resolution, the amounts are reallocated accordingly.
+
+Adopting v3 along with ephemeral anchors could lead to several improvements: commitment transactions would be v3-based, simplifying the multiple anchor outputs to a single ephemeral anchor output which would accumulate the value of all pending trimmed HTLCs. The proposed removal of both the 1-block relative delay on main and HTLC outputs and the `update_fee` message would decouple on-chain fees from off-chain funds, resulting in deterministic maximum transaction amounts without resorting to workarounds like the fee spike buffer.
+
+These changes are not without caveats. Commitment transactions would need to be broadcast as packages, and only simple one-parent-one-child package structures would initially be permitted, precluding batching strategies. When broadcasting a local commitment, additional wallet inputs may be necessary if the ephemeral anchor value is insufficient, though these must be confirmed. Conversely, no extra wallet inputs are required when dealing with revoked commitments or remote commitments; channel outputs can cover the fees in these cases.
+
+An interesting dynamic arises regarding the ephemeral anchor output’s ability to attract miner interest. By design, it can be claimed by anyone, incentivizing miners to prioritize transactions offering higher fees. For instance, if the ephemeral anchor holds more value than the transaction fees, a miner has the incentive to replace a child transaction with one directing the full anchor amount to themselves.
+
+Node operators will continue to define their maximum dust exposure, influencing the potential size of the ephemeral anchor output. With these modifications, the revised commitment transaction format would streamline outputs, providing direct payouts to parties or enabling immediate access via revocation keys, thereby eliminating unnecessary delays.
+
+Regarding HTLC transactions, the current practice of zero-fee transactions, facilitated by signatures allowing for additional broadcaster inputs, remains effective and requires no alteration in light of the proposed commitment transaction adjustments.
+
+Lastly, the transition to this new system warrants discussion, with various non-disruptive upgrade paths proposed. Depending on the urgency and development timeline, waiting for formalization of these proposals might be advisable, or alternatively, a more straightforward upgrade path for this specific change could be crafted.</summary>
+    <published>2024-01-16T17:28:44.919000+00:00</published>
+  </entry>
+</feed>
