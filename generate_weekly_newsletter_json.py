@@ -122,6 +122,7 @@ if __name__ == "__main__":
     if os.path.exists(json_full_path):
         with open(json_full_path, 'r') as j:
             json_data = json.load(j)
+
         json_xml_ids = set(
             [item['title'] for item in json_data['new_threads_this_week']] +
             [item['title'] for item in json_data['active_posts_this_week']]
@@ -184,20 +185,10 @@ if __name__ == "__main__":
                         "new_threads_this_week": new_threads_page_data,
                         "active_posts_this_week": active_page_data
                     }
+                    gen.write_json_file(json_string, json_file_path)
 
-                    json_dirname = os.path.dirname(json_file_path)
-                    os.makedirs(json_dirname, exist_ok=True)
-
-                    with open(json_file_path, 'w') as f:
-                        f.write(json.dumps(json_string, indent=4))
-                        logger.success(f"json saved file: {json_file_path}")
-
-                    # store the file in archive as well
                     archive_json_file_path = fr"static/newsletters/{str_month_year}/{current_date_str}-newsletter.json"
-                    archive_json_dirname = os.path.dirname(archive_json_file_path)
-                    os.makedirs(archive_json_dirname, exist_ok=True)
-                    shutil.copy(json_file_path, archive_json_file_path)
-                    logger.success(f'archive updated with file: {archive_json_file_path}')
+                    gen.store_file_in_archive(json_file_path, archive_json_file_path)
 
                 else:
                     logger.error(f"Data list empty! Please check the data again.")
@@ -211,3 +202,7 @@ if __name__ == "__main__":
                     sys.exit(f"{ex}")
     else:
         logger.success("No change in the posts, no need to update newsletter.json file")
+        # save the previous one with updated name in archive
+        if os.path.exists(json_full_path):
+            archive_json_file_path = fr"static/newsletters/{str_month_year}/{current_date_str}-newsletter.json"
+            gen.store_file_in_archive(json_file_path, archive_json_file_path)

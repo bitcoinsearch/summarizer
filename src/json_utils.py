@@ -2,6 +2,7 @@ from xml.etree import ElementTree as ET
 from datetime import datetime
 import os
 import json
+import shutil
 import nltk
 import pytz
 from loguru import logger
@@ -201,3 +202,18 @@ class GenerateJSON:
         body_token = sent_tokenize(body_text)
         logger.info(f"Body sentence token length: {len(body_token)}")
         return len(body_token) > sent_threshold
+
+    def write_json_file(self, json_string, save_file_path):
+
+        json_dirname = os.path.dirname(save_file_path)
+        os.makedirs(json_dirname, exist_ok=True)
+
+        with open(save_file_path, 'w') as f:
+            f.write(json.dumps(json_string, indent=4))
+            logger.success(f"saved file: {save_file_path}")
+
+    def store_file_in_archive(self, json_file_path, archive_file_path):
+        archive_dirname = os.path.dirname(archive_file_path)
+        os.makedirs(archive_dirname, exist_ok=True)
+        shutil.copy(json_file_path, archive_file_path)
+        logger.success(f'archive updated with file: {archive_file_path}')
