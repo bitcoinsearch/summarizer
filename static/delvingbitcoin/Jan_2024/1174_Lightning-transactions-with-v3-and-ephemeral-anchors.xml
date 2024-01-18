@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lightning transactions with v3 and ephemeral anchors</title>
+  <updated>2024-01-18T02:14:13.745672+00:00</updated>
+  <author>
+    <name>morehouse 2024-01-17 22:45:18.634000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lightning transactions with v3 and ephemeral anchors</title>
+    <updated>2024-01-18T02:14:13.745703+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/12" rel="alternate"/>
+    <summary>HTLC transactions are a fundamental aspect of the Lightning Network, ensuring that no mining fees are paid when `option_anchors_zero_fee_htlc_tx` is used. These transactions utilize a `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` signature to allow additional inputs by the broadcaster, without necessitating any alterations in their behavior following changes to the commitment transaction format. The proposal suggests considering the upgrade of HTLC transactions to version 3 (v3), which would enable them to be relayed as part of the commitment package and potentially prevent man-in-the-middle (MitM) pinning attacks. Such attacks involve extracting the unique signature and using it to create and pin a low feerate conflicting transaction.
+
+The current format of HTLC transactions, however, leaves them susceptible to pinning attacks, particularly through non-v3 transactions. For instance, if a payer offers multiple HTLCs with staggered timeout blocks, the payee could delay revealing preimages for these HTLCs. When the payer eventually broadcasts the commitment and child transactions to claim one HTLC at its timeout, the payee is unable to interfere due to v3 policy. Yet, just before the second HTLC times out, the payee can broadcast a low feerate spend with the preimage, aiming to pin this transaction across different mempools. This may result in partitioning, where the payer's mempool contains the HTLC-timeout transaction while other mempools hold the pinned preimage spend. Consequently, this prevents the payer from confirming their HTLC-timeout transaction or learning the preimage.
+
+To mitigate such pinning vectors, it is suggested that presigned v3 transactions become mandatory for spends of HTLCs by the remote party. This change would ensure that all paths for spending HTLCs are secure against potential pinning strategies, thereby fortifying the robustness of the Lightning Network's transaction protocol against such vulnerabilities.</summary>
+    <published>2024-01-17T22:45:18.634000+00:00</published>
+  </entry>
+</feed>

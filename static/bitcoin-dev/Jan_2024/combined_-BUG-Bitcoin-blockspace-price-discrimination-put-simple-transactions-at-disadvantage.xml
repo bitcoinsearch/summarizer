@@ -2,7 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [BUG]: Bitcoin blockspace price discrimination put simple transactions at disadvantage</title>
-  <updated>2024-01-17T02:02:28.966262+00:00</updated>
+  <updated>2024-01-18T02:05:42.928362+00:00</updated>
+  <author>
+    <name>Nagaev Boris 2024-01-16 23:40:12+00:00</name>
+  </author>
+  <author>
+    <name>Nagaev Boris 2024-01-16 23:29:58+00:00</name>
+  </author>
   <author>
     <name>Greg Tonoski 2024-01-16 10:40:48+00:00</name>
   </author>
@@ -24,6 +30,8 @@
   <author>
     <name>Greg Tonoski 2023-12-27 16:44:51+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2024/022288_-BUG-Bitcoin-blockspace-price-discrimination-put-simple-transactions-at-disadvantage.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022287_-BUG-Bitcoin-blockspace-price-discrimination-put-simple-transactions-at-disadvantage.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022284_-BUG-Bitcoin-blockspace-price-discrimination-put-simple-transactions-at-disadvantage.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022281_-BUG-Bitcoin-blockspace-price-discrimination-put-simple-transactions-at-disadvantage.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022277_-BUG-Bitcoin-blockspace-price-discrimination-put-simple-transactions-at-disadvantage.xml" rel="alternate"/>
@@ -35,17 +43,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - [BUG]: Bitcoin blockspace price discrimination put simple transactions at disadvantage</title>
-    <updated>2024-01-17T02:02:28.966359+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022284.html" rel="alternate"/>
-    <summary>In the complex landscape of Bitcoin transactions, there is an ongoing discussion about the allocation and prioritization of block space, particularly concerning Witness data. This data has been artificially inflated due to its preferential pricing model within the blockchain, leading to inefficiencies by allowing the insertion of unnecessary information. A clear illustration of this issue is a transaction (hash: 1c35521798dde4d1621e9aa5a3bacac03100fca40b6fb99be546ec50c1bcbd4a) that could have been optimized without affecting the UTXO set but instead consumed valuable block space. The resulting misallocation not only hinders network efficiency and increases costs for node operators but also exacerbates the risk of centralization, with potential for certain entities to dominate transaction space. The extent of these disparities in block allocation can be visualized through a comparison of 4MB versus 1.33MB blocks, shedding light on the structural issues present within Bitcoin's transaction handling.
+    <updated>2024-01-18T02:05:42.928481+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022288.html" rel="alternate"/>
+    <summary>The ongoing discussions among programmers about Bitcoin's blockchain technology reveal several points of concern and suggestions for improvement. A key issue identified is the centralized nature of Bitcoin sending by exchanges, which utilize batch transaction sending to save on fees. This centralization is a result of the avoidance of change creation in transactions, a practice unrelated to the witness discount that benefits from storing data in cheaper HDD as opposed to SSD storage.
 
-Further scrutiny reveals that Bitcoin's "witness discount," which applies to SegWit transactions, prioritizes larger data sizes during mining, potentially disadvantaging simpler transactions. The fees collected from transactions are not directly tied to the operational costs borne by nodes, suggesting any link between the discount and UTXO set size would be artificial and contribute to systemic inefficiencies. The concerns raised point to a need for in-depth analysis of how these inefficiencies impact the blockchain, specifically whether they occur inside or outside of the witness section. 
+Experts further dissect the intricacies of block space allocation, particularly the preference given to witness data due to its discounted storage cost, which does not directly affect the UTXO set. The allocation of block space has been questioned, with the argument that the current model allows for artificial inflation through unnecessary data, leading to larger blocks and higher costs for node operators. Moreover, this model could potentially lead to centralization risks, as larger entities might dominate transaction space by exploiting preferential pricing.
 
-An examination of the email reveals a nuanced perspective on the cost implications of different Bitcoin transaction types, notably P2WPKH and P2TR. It identifies a discrepancy in costs between sending coins to these addresses and spending them; while P2WPKH addresses are cheaper to send to, Taproot transactions are more efficient when spent because they omit the storage of the public key hash, reducing both data size and cost. This inconsistency in fee structures influences user preferences and suggests a need for reassessment to balance the costs involved in both sending and spending transactions.
+The debate around the so-called "witness discount" for SegWit transactions centers on the prioritization it receives over non-SegWit transactions, despite similar sizes and fees. It is argued that this system may disadvantage simpler transactions and does not necessarily reflect the operational costs incurred by nodes, which are independent of the UTXO set size.
 
-The email also underscores the importance of distinguishing between witness data, which benefits from a storage discount and does not impact the UTXO set, and data that contributes to the UTXO set. This differentiation is evident in the significant size disparity between the "blocks" directory (housing witness data) and the "chainstate" directory (integral to validating new transactions). Such strategic placement of directories allows for optimal storage solutions and system performance, emphasizing the need to maintain incentives for an efficient "chainstate" that supports quick transaction validation.
+Concerns have also been raised regarding the structural issues within the blockchain that could impact efficiency and decentralization principles. An analysis of the byte distribution in transactions has revealed inefficiencies and a tendency towards centralization among complex transaction initiators. This has led to calls for a more detailed understanding of how these inefficiencies manifest within the system.
 
-Lastly, the pricing strategy for blockspace allocation is critiqued for its imbalanced approach. A comparison between simple and complex transactions reveals a disproportionate weight-to-byte ratio, disadvantaging simple transactions. For instance, a simple transaction (txid: aabbcce67f2aa71932f789cac5468d39e3d2224d8bebb7ca2c3bf8c41d567cdd) has a ratio of 3, whereas a complex transaction (txid: 1c35521798dde4d1621e9aa5a3bacac03100fca40b6fb99be546ec50c1bcbd4a) has a ratio of 1.49. To address these inefficiencies and potential centralization, a uniform pricing model is proposed where each byte is valued equally, regardless of its location within the transaction data. Implementing such a correction in a future Segwit update is suggested to ensure fair and efficient use of blockspace. The community's reaction to this proposal is crucial for determining the potential implementation and timeline of these changes.</summary>
-    <published>2024-01-16T10:40:48+00:00</published>
+In terms of transaction types, the difference in cost implications between sending coins to P2WPKH and P2TR addresses is highlighted. While Taproot transactions offer long-term benefits in block space usage and cost when spending, the initial cost division influences users' preference for P2WPKH due to lower upfront costs. This suggests the need for a reassessment of fee structures to balance the cost between sending and spending phases.
+
+Storage optimizations within blockchain systems are emphasized, drawing attention to the strategic placement of witness data in less expensive storage due to its discounted rate and low latency requirements. In contrast, the UTXO set must reside in fast storage to ensure efficient transaction validation.
+
+Finally, an examination of the pricing discrepancies in blockspace allocation reveals an imbalance that disadvantages simple transactions compared to complex ones. A call for a uniform pricing strategy is put forth, advocating for equal valuation of each byte, whether within or outside the witness data. This proposed correction aims to address current inefficiencies and prevent potential centralization, with the community's reception likely shaping future developments.
+
+These discussions reflect an ongoing effort to understand and optimize Bitcoin's blockchain technology, balancing efficiency, cost, and the maintenance of its decentralized ethos.</summary>
+    <published>2024-01-16T23:40:12+00:00</published>
   </entry>
 </feed>

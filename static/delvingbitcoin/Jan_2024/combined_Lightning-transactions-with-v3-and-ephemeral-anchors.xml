@@ -2,16 +2,56 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lightning transactions with v3 and ephemeral anchors</title>
-  <updated>2024-01-17T02:17:38.257318+00:00</updated>
+  <updated>2024-01-18T02:17:48.219657+00:00</updated>
   <author>
-    <name>MattCorallo 2024-01-16 22:55:57.312000+00:00</name>
+    <name>instagibbs 2024-01-17 23:13:02.376000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-01-16 18:06:54.151000+00:00</name>
+    <name>morehouse 2024-01-17 22:45:18.634000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2024-01-16 17:28:44.919000+00:00</name>
+    <name>murch 2024-01-17 14:34:16.713000+00:00</name>
   </author>
+  <author>
+    <name>t-bast 2024-01-17 14:11:04.951000+00:00</name>
+  </author>
+  <author>
+    <name>glozow 2024-01-17 13:54:52.395000+00:00</name>
+  </author>
+  <author>
+    <name>t-bast 2024-01-17 13:33:00.486000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs 2024-01-17 12:44:11.103000+00:00</name>
+  </author>
+  <author>
+    <name>glozow 2024-01-17 11:23:16.215000+00:00</name>
+  </author>
+  <author>
+    <name>glozow 2024-01-17 11:20:38.886000+00:00</name>
+  </author>
+  <author>
+    <name>t-bast 2024-01-17 09:58:32.274000+00:00</name>
+  </author>
+  <author>
+    <name>MattCorallo  . 2024-01-16 22:55:57.312000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs  . 2024-01-16 18:06:54.151000+00:00</name>
+  </author>
+  <author>
+    <name>tbast  . 2024-01-16 17:28:44.919000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Jan_2024/1175_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1174_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1163_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1161_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1160_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1159_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1158_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1156_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1155_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1154_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1149_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1147_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1145_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
@@ -19,21 +59,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lightning transactions with v3 and ephemeral anchors</title>
-    <updated>2024-01-17T02:17:38.257362+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/3" rel="alternate"/>
-    <summary>The discussion revolves around the development and refinement of lightning transactions, specifically leveraging v3 transactions and ephemeral anchors. The proposed changes aim to optimize the commitment transaction format used in lightning channels, addressing concerns about fees and off-chain fund availability. The original two-anchor output system would be replaced by a single ephemeral anchor whose value equals the total pending trimmed HTLCs, which could sometimes result in zero satoshis. This modification seeks to eliminate the one-block relative delay on main outputs and HTLC outputs from the transaction structure, as well as the `update_fee` message, thus decoupling the on-chain fees from off-chain funds.
+    <updated>2024-01-18T02:17:48.219752+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/13" rel="alternate"/>
+    <summary>The programming community is actively discussing enhancements in Bitcoin's Lightning Network, specifically focusing on the implementation and optimization of v3 HTLC (Hashed Time-Locked Contracts) transactions to combat pinning attacks. The proposed upgrade aims to include these transactions within commitment packages, improving security for both HTLC-Success and HTLC-Timeout paths through pre-signing according to v3 protocols.
 
-These adjustments would lead to commitment transactions that no longer pay fees directly, enhancing determinism in the maximum amounts that can be sent and received on a channel. Furthermore, it is suggested that only packages of 1-parent 1-child will be initially permitted to avoid batching, with additional wallet inputs being required for broadcasting local commitments if the ephemeral anchor's value is insufficient.
+The vulnerability of current HTLC transactions to pinning attacks due to the ANYONECANPAY nature has raised concerns. A transition to presigned v3 transactions is suggested as a remedy, although it may increase virtual bytes in non-adversarial scenarios. An option under consideration is `option_anchors_zero_fee_htlc_tx`, which could maintain existing behaviors while enhancing security by relaying as part of the commitment package.
 
-An important consideration highlighted is that miners have an incentive to claim the entire amount of the ephemeral anchor output for themselves due to its configuration that allows it to be spent by anyone. This mechanism mirrors the existing situation with lightning commitment transactions containing pending trimmed HTLCs, which already contribute directly to miners' fees. Node operators are advised to set their maximum dust exposure accordingly, as this will determine the size of the ephemeral anchor output.
+Coin selection algorithms that utilize a `max_weight` parameter are acknowledged for their ability to prevent exceeding weight limits. Innovations such as CoinGrinder (CG) require further examination due to their novelty. Feedback is requested on potential policy changes affecting batching, use of unconfirmed inputs, and the enrollment of users to CPFP carve-out under v3 policy.
 
-In terms of HTLC transactions, there are no significant changes proposed; the current `option_anchors_zero_fee_htlc_tx` behavior will remain the same post-transition.
+Technical discussions also involve determining the ideal size for V3 child transactions to facilitate practical CPFP transactions without introducing pin vectors. This involves considering the variability in maximum sizes of commitment transactions across different implementations and ensuring efficient UTXO pool management.
 
-To implement these changes, a smooth upgrade path is essential. Several proposals are under consideration for upgrading channels without necessitating closures, including those outlined in pull requests on the Lightning BOLTs repository. These proposals also interact favorably with splicing, a feature many implementations are actively developing. Depending on urgency and timeline considerations, either waiting for these proposals to be finalized or establishing a simpler upgrade method specific to this scenario may be the course of action.
+Additionally, proposed improvements to lightning transactions include integrating V3 capabilities and ephemeral anchors to refine commitment transaction structures. This would simplify output structures, decouple on-chain fees from off-chain funds, and necessitate broadcasting transactions as packages with simple one-parent-one-child structures initially. The ephemeral anchor output would be claimable by anyone, incentivizing miners to prioritize transactions with higher fees and requiring node operators to assess their maximum dust exposure.
 
-Feedback is being solicited on the maximal V3 child transaction size, seeking input from wallet projects on practical CPFP (Child Pays for Parent) transaction sizes versus potential pinning vectors within the network. The balance between these factors will influence the expectations around maximal child transaction sizes. This request underscores the broader conversation about the evolution of Bitcoin Core and other wallet libraries, particularly concerning coin selection restrictions based on total input weight. 
-
-For more technical details on the policy changes at the bitcoin layer, interested parties can refer to the following resource: [V3 Transaction Policy for Anti-Pinning](https://delvingbitcoin.org/t/v3-transaction-policy-for-anti-pinning).</summary>
-    <published>2024-01-16T22:55:57.312000+00:00</published>
+HTLC transactions employing zero-fee options with broadcaster signatures allowing additional inputs are expected to remain unaffected by the restructuring. Discussions about non-disruptive upgrade paths are in progress, weighing the urgency against development timelines. Input from wallet projects is sought to help determine optimal sizes for V3 child transactions within the new framework.</summary>
+    <published>2024-01-17T23:13:02.376000+00:00</published>
   </entry>
 </feed>
