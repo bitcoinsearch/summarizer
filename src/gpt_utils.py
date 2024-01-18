@@ -114,9 +114,10 @@ def consolidate_chatgpt_summary(prompt):
         3. Add spaces after using punctuation and follow all the grammatical rules.
         4. Try to retain all the links provided and use them in proper manner at proper place.
         5. The farewell part of the email should be completely ignored.
-        6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
-        7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
-        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+        6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
+        7. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
+        8. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
+        9. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model=CHAT_COMPLETION_MODEL,

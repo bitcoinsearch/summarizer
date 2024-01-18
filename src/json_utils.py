@@ -74,7 +74,7 @@ class GenerateJSON:
         3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
         4. Any links given within the text should be retained and appropriately incorporated.
         5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
-        6. Mention full names (both the first name and last name) of the authors if applicable. 
+        6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
         7. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text, provided it should be no longer than three or four sentences.
         8. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on.
         \n CONTEXT:\n\n{recent_post_data}"""
