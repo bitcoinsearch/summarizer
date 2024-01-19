@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>One-Shot Replace-By-Fee-Rate</title>
+  <updated>2024-01-19T02:12:15.390479+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-01-18 18:23:39+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>One-Shot Replace-By-Fee-Rate</title>
+    <updated>2024-01-19T02:12:15.390509+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022298.html" rel="alternate"/>
+    <summary>In a recent blog post, a new approach to handling transaction replacement in the Bitcoin network was discussed, which aims to address the issues arising from the current Replace-by-Fee (RBF) policy. Presently, Bitcoin Core's RBF policy necessitates that a replacing transaction must offer a higher total fee than the one it replaces, without considering the fee-rate. This method of replacement has been standard since RBF's implementation but has shown limitations, particularly in its vulnerability to transaction pinning attacks within contracting protocols like Lightning.
+
+The proposal introduces a concept known as One-Shot Replace-By-Fee-Rate, offering an alternative to the absolute fee requirement. This new policy allows for a transaction or package of transactions to be replaced only if they significantly increase the fee-rate and move the transaction towards the top of the mempool, ensuring it is likely to be included in the next block. By focusing on fee-rate rather than total fee, this approach directly addresses the issue of transaction pinning by circumventing BIP-125 Rule 3 pinning, thereby reducing the potential for such attacks.
+
+An important distinction between value and fee-rate is made when considering the expected return of unconfirmed transactions to miners. Transactions with low fee-rates act as honest signals in the network, indicating to other transactors that a higher fee-rate is necessary for quicker inclusion in a block. This indirectly benefits miners as it encourages users to compete for block space by raising their transaction fees.
+
+When assessing conflicting transactions based on expected return versus fee-rate, the author points out that miners should prioritize transactions with higher fee-rates as these are more likely to be included promptly in upcoming blocks, thus generating immediate revenue. Under the current rules, a transaction with a high total fee but lower fee-rate might not get mined due to potential competition from a smaller transaction with a much higher fee-rate, which is counterintuitive to maximizing miner revenue.
+
+The One-Shot Replace-By-Fee-Rate policy proposes three key conditions for replacing transactions: the new transaction must have a fee-rate substantially greater than the original; it must possess a high enough fee-rate to place it near the top of the mempool; and the highest mineable fee-rate of the replaced transactions must not be sufficient to achieve this same positioning in the mempool.
+
+This research, sponsored by Fulgur Ventures, demonstrates that both one-shot and pure replace-by-fee-rate policies can resist bandwidth exhaustion attacks, making such mechanisms viable for implementation. This suggests that a shift towards fee-rate-based transaction replacement could enhance the efficiency and security of the Bitcoin network, particularly concerning second-layer contracting protocols.</summary>
+    <published>2024-01-18T18:23:39+00:00</published>
+  </entry>
+</feed>

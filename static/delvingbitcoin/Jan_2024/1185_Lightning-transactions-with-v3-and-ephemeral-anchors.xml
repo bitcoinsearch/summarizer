@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lightning transactions with v3 and ephemeral anchors</title>
+  <updated>2024-01-19T02:20:29.056056+00:00</updated>
+  <author>
+    <name>t-bast 2024-01-18 14:31:34.683000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lightning transactions with v3 and ephemeral anchors</title>
+    <updated>2024-01-19T02:20:29.056094+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/17" rel="alternate"/>
+    <summary>The email exchange addresses a highly technical aspect of Bitcoin's Lightning Network and its security against certain types of attacks, specifically regarding the handling of Hashed Time-Locked Contracts (HTLCs) and signature extraction. The conversation highlights the prevention of potential Man-in-the-Middle (MitM) pinning attacks that could arise from extracting a `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` signature. It is pointed out that for an output to be spent, an additional signature from the owner of the HTLC transaction using `SIGHASH_ALL` would be required, thus complicating such an attack.
+
+The discussants acknowledge another form of pinning attack previously described by another developer, ariard. They note that the attacked node does not necessarily require their HTLC-timeout transaction to confirm if they can learn the preimage, negating the need to claim the output altogether. The attacker also takes a risk in this scenario because if the attacked node learns the preimage and gets their HTLC-timeout confirmed, the attacker stands to lose money. Solutions such as a preimage gossip mechanism over the Lightning Network or a feature in bitcoind to inspect conflicting transactions for preimage extraction are suggested as potential fixes.
+
+Furthermore, the correspondence covers the impracticality of exchanging signatures to require a second-stage HTLC transaction when spending from the remote commit due to the current protocol limitations within `commit_sig` and `revoke_and_ack`. This is exemplified by previous issues encountered during the exploration of liquidity ads changes, which faced similar chicken-and-egg problems (referenced with a specific URL to a Linux Foundation mailing list).
+
+An interesting point raised is the behavior of revoked states allowing HTLC-Timeout paths to create pins. However, it is clarified that if Bob broadcasts a revoked commitment, it cannot pin while unconfirmed due to the use of v3. Once confirmed, Bob can only spend the HTLC outputs via a pre-signed HTLC transaction which includes a revocation path that Alice can potentially claim, ensuring she ultimately receives the funds.
+
+Lastly, the discussion touches upon a significant but often overlooked benefit of the v3 change: the ability to pay on-chain fees directly from the channel balance, enhancing the overall efficiency and user experience of the Lightning Network.</summary>
+    <published>2024-01-18T14:31:34.683000+00:00</published>
+  </entry>
+</feed>

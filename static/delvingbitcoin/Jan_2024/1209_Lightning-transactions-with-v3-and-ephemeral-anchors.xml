@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lightning transactions with v3 and ephemeral anchors</title>
+  <updated>2024-01-19T02:19:04.412518+00:00</updated>
+  <author>
+    <name>morehouse 2024-01-18 18:06:19.613000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lightning transactions with v3 and ephemeral anchors</title>
+    <updated>2024-01-19T02:19:04.412544+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/20" rel="alternate"/>
+    <summary>Understanding and mitigating pinning attacks within the context of Bitcoin's Lightning Network is a critical security concern. The discussion highlights the complexity of such attacks, particularly with the use of `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` signatures. It was initially suggested that version 3 (v3) transactions could prevent man-in-the-middle (MitM) pinning attacks by utilizing this signature type, but it became apparent that an additional `SIGHASH_ALL` signature from the owner of the hash time-locked contract (HTLC) transaction is necessary to spend the output.
+
+The conversation then shifted to the potential benefits of v3 on HTLC transactions, noting its utility for package relay and saving space on-chain. However, concerns were raised about adversaries exploiting the ANYONECANPAY nature of remote HTLC-Success paths to inflate data and generate a pin. It was proposed that using ephemeral anchors in conjunction with v3 might mitigate this issue, though it would increase the virtual byte (vb) cost in non-adversarial scenarios.
+
+To address pinning more effectively, it was suggested to make all HTLC spending paths use presigned v3 transactions. This approach would need to include not just HTLC-Success paths but also HTLC-Timeout paths, especially considering the risk posed by revoked states allowing HTLC-Timeout paths to create pins. After further analysis, it was determined that while remote v3 preimage spends should be presigned, it may not be necessary for remote timeout spends. A scenario was described where an entity, referred to as Alice, risks getting close to the timeout, which could allow an attacker, referred to as Mallory, to outbid Alice on fees and claim the preimage spend path upstream.
+
+The discussion acknowledged that while there is some risk to attackers executing these pinning strategies, they could still be profitable if successful more than 50% of the time. Solutions to counter such attacks were explored, including simple preimage gossip mechanisms over the Lightning Network and enhancements to bitcoind that allow inspection of conflicting peer transactions to extract the preimage.
+
+A deeper technical change was considered, involving modifying the existing `commit_sig` / `revoke_and_ack` protocol to introduce second-stage HTLC transactions. However, this presents a chicken-and-egg problem because the required signatures cannot be known in advance. The idea of a new message to transmit HTLC signatures prior to the commitment signature was floated as an alternative. Although this might seem less complex than adding features to bitcoind or creating a preimage relay network, it was recognized that it actually addresses the root cause of pinning, offering a definitive solution rather than just a probabilistic method for learning the preimage.
+
+For more detailed technical insights into the challenges and proposed solutions regarding pinning attacks on the Lightning Network, interested readers can refer to the discussions on the Lightning-dev mailing list, specifically concerning liquidity ads: [Lightning-dev] Liquidity Ads: Updated Spec Posted, please review](https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-November/004219.html).</summary>
+    <published>2024-01-18T18:06:19.613000+00:00</published>
+  </entry>
+</feed>
