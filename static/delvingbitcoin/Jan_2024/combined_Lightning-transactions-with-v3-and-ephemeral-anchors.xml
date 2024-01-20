@@ -2,30 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lightning transactions with v3 and ephemeral anchors</title>
-  <updated>2024-01-19T02:23:42.960547+00:00</updated>
+  <updated>2024-01-20T02:09:52.894996+00:00</updated>
   <author>
-    <name>ajtowns 2024-01-19 00:59:40.333000+00:00</name>
+    <name>t-bast 2024-01-19 09:05:05.281000+00:00</name>
   </author>
   <author>
-    <name>morehouse 2024-01-18 18:06:19.613000+00:00</name>
+    <name>ajtowns  . 2024-01-19 00:59:40.333000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-01-18 17:24:12.326000+00:00</name>
+    <name>morehouse  . 2024-01-18 18:06:19.613000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2024-01-18 15:06:13.751000+00:00</name>
+    <name>instagibbs  . 2024-01-18 17:24:12.326000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2024-01-18 14:31:34.683000+00:00</name>
+    <name>tbast  . 2024-01-18 15:06:13.751000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-01-18 13:39:01.232000+00:00</name>
+    <name>tbast  . 2024-01-18 14:31:34.683000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-01-18 05:12:05.491000+00:00</name>
+    <name>instagibbs  . 2024-01-18 13:39:01.232000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-01-18 05:02:14.398000+00:00</name>
+    <name>ajtowns  . 2024-01-18 05:12:05.491000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2024-01-18 05:02:14.398000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2024-01-17 23:13:02.376000+00:00</name>
@@ -66,6 +69,7 @@
   <author>
     <name>tbast  . 2024-01-16 17:28:44.919000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1217_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1214_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1209_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1186_Lightning-transactions-with-v3-and-ephemeral-anchors.xml" rel="alternate"/>
@@ -91,25 +95,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lightning transactions with v3 and ephemeral anchors</title>
-    <updated>2024-01-19T02:23:42.960687+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/21" rel="alternate"/>
-    <summary>The email discussion addresses the security challenges and proposed solutions within the Lightning Network (LN), particularly regarding pinning attacks and the implementation of version 3 (v3) transactions. Key concerns include Bob's ability to delay Alice's access to funds through HTLCs, with minimal cost implications for himself. The shift to v3 transaction format aims to prevent man-in-the-middle pinning attacks but may require additional measures, like a second `SIGHASH_ALL` signature, due to potential insufficiencies in v3 alone.
+    <updated>2024-01-20T02:09:52.895141+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-transactions-with-v3-and-ephemeral-anchors/418/22" rel="alternate"/>
+    <summary>The programming community has been engaging in technical discussions to address security issues and enhance the robustness of Bitcoin transactions, with a particular focus on the Lightning Network (LN). Key topics include strategies to mitigate eclipse and griefing attacks, such as configuring `max_htlc_value_in_flight_msat` settings and adopting version 3 (v3) transactions. These measures aim to prevent Man-in-the-Middle attacks and facilitate package relay while considering the trade-offs with increased costs.
 
-To further mitigate risks, the use of pre-signed v3 transactions for both HTLC-Success and HTLC-Timeout paths is recommended. Additionally, relative delays could be introduced to SINGLE/ACP usage to avoid conflicts with HTLC output spends. It's acknowledged that the ability to pay on-chain fees directly from channel balances is an important advantage of the v3 change.
+Efforts to secure HTLC-Success paths include the recommendation of using presigned v3 transactions across all spending paths, addressing pinning attacks, and managing coin selection through the implementation of tools like CoinGrinder. The importance of updating HTLC transactions to v3 for increased efficiency and reliability is emphasized, as well as the need for ongoing protocol evolution to balance operational efficiency with network security.
 
-Technical discussions explore options for handling conflicting peer transactions, with suggestions ranging from implementing a simple preimage gossip mechanism to developing Bitcoin Core features for preimage extraction. A less complex alternative to intricate signature exchanges involves a new message type for transmitting HTLC signatures before the commitment signature, aiming to directly address pinning problems.
+Regarding commitment transaction formats, diagrams illustrating class structures and conditional outputs have been provided to demonstrate tactical flexibility and earlier confirmation of transactions without external funds. Discussions around ephemeral anchor outputs and their computational impact due to increased signatures are also noted.
 
-A Mermaid diagram is shared to illustrate the interactions between FundingTx, CommitmentTxB, and HTLCClaimB transactions under the proposed changes, including the use of an ephemeral anchor output in `CommitmentTxB`.
+Proposals to refine LN transactions suggest adopting single ephemeral anchor outputs to streamline payouts and minimize dependencies between on-chain fees and off-chain funds. The transition requires careful consideration of various upgrade paths and integration strategies.
 
-Regarding coin selection improvements, CoinGrinder is noted as a promising tool for optimizing the process, with a `max_weight` parameter crucial for keeping transactions within weight limits. The completion status of these algorithms nears 90%, though further review is necessary for full confidence in integration.
+Discussions around the Child Pays For Parent (CPFP) mechanism involve optimizing the maximal V3 child size to improve UTXO management and control over transaction sizes. Recent decisions include removing the one-block relative delay by opting out of the `option_anchors` feature and outlining a multi-step process for deployment that supports V3 transactions and iterates CPFP carveouts.
 
-Proposals affecting eclair's treatment of anchor outputs and batching limitations are discussed, emphasizing the need for consensus across implementations. Misconceptions about the CPFP carve-out policy are clarified, ensuring a smooth transition for users to the new extended coverage.
-
-Challenges related to script introspection and simplification are acknowledged, with efforts focused on streamlining approaches for dealing with segwitv0 and tapscript. The debate over using implicit signaling versus pattern matching at spend time for applying v3 rules highlights ongoing considerations in LN transaction identification.
-
-The programming community is engaged in refining Bitcoin Core wallet functionality, particularly in managing UTXO pools and transaction sizes. The removal of one-block relative delays from LN scripts and the two-step deployment strategy for supporting v3 transactions are outlined. This includes updates to mempool/relay systems and LN implementations, transitioning away from CPFP carveouts to embrace V3 and RBF mechanics.
-
-Optimizations proposed for lightning transactions involve structural adjustments to commitment transactions, incorporating ephemeral anchors to simplify output arrangements and disassociate on-chain fees from off-chain funds. The design changes aim to streamline outputs and eliminate unnecessary delays while maintaining zero-fee HTLC transactions' effectiveness. Feedback from wallet projects on transaction sizes and security is sought to inform the balancing act required within the v3 framework.</summary>
-    <published>2024-01-19T00:59:40.333000+00:00</published>
+Finally, feedback from wallet projects is being gathered to determine the maximum size for V3 child transactions, balancing the needs for efficient processing with security concerns. The community continues to seek input to resolve outstanding issues, such as differentiating between LN anchor spends and tapscript introspection, as it moves toward more secure and efficient cryptocurrency transaction systems.</summary>
+    <published>2024-01-19T09:05:05.281000+00:00</published>
   </entry>
 </feed>
