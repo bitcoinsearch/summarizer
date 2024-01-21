@@ -2,12 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Warnet + Increase Tx Relay Rate</title>
-  <updated>2024-01-20T02:00:36.391636+00:00</updated>
+  <updated>2024-01-21T02:05:39.974333+00:00</updated>
   <author>
-    <name>m3dwards 2024-01-19 23:56:02.399000+00:00</name>
+    <name>ajtowns 2024-01-20 03:46:40.964000+00:00</name>
   </author>
   <author>
-    <name>m3dwards 2024-01-19 23:48:45.748000+00:00</name>
+    <name>mdwards  . 2024-01-19 23:56:02.399000+00:00</name>
+  </author>
+  <author>
+    <name>mdwards  . 2024-01-19 23:48:45.748000+00:00</name>
   </author>
   <author>
     <name>ajtowns  . 2023-12-22 03:04:11.956000+00:00</name>
@@ -27,6 +30,7 @@
   <author>
     <name>amiti  . 2023-12-14 21:14:15.928000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1238_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1235_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1237_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2023/849_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
@@ -39,19 +43,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Warnet + Increase Tx Relay Rate</title>
-    <updated>2024-01-20T02:00:36.391744+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/warnet-increase-tx-relay-rate/294/7" rel="alternate"/>
-    <summary>A recent simulation aimed at analyzing the performance of a peer-to-peer network in blockchain scenarios has been conducted, utilizing a Warnet scenario with 100 nodes on a virtual machine. The setup began with mining blocks to provide each node with a starting balance, and then proceeded to produce blocks at a normal rate while sending transactions at a set rate. A simple block timing function based on an exponential distribution was implemented to mimic realistic conditions. However, even with the application of a pull request (PR), no significant improvements were observed in transaction request numbers or mempool size, which raises questions about the possible need for additional mechanisms such as Replace-By-Fee (RBF), Child Pays For Parent (CPFP), or unconfirmed transaction chains to affect the results.
+    <updated>2024-01-21T02:05:39.974453+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/warnet-increase-tx-relay-rate/294/9" rel="alternate"/>
+    <summary>The blog post begins with an overview of a recent simulation aimed at understanding the behavior of a Bitcoin network under various conditions. This exercise involved a Warnet scenario with 100 nodes and focused on transaction relay and confirmation. The simulation did not visualize the initial distribution of 50 BTC to each node, rather it examined the network after establishing normal block production rates. A block timing function was used to replicate realistic mining intervals, and the results indicated that the pending update (PR) being tested did not significantly affect performance at moderate transaction rates. Metrics such as transaction reconstruction requests, mempool size, and outbound connections were measured, though the latter was deemed less relevant for this test.
 
-The simulation also explored the relationship between the relay rate and the number of transactions requested for reconstruction, theorizing that a higher relay rate could result in more changes within the mempool. There's uncertainty regarding how different transaction patterns, like RBF or CPFP, would impact the simulation, particularly at higher transaction rates. To address stability issues experienced at higher rates, there is interest in moving simulations to a Kubernetes-backed Warnet environment, which is expected to offer better stability with larger numbers of nodes and higher transaction throughput.
+The email highlights the importance of accurate timekeeping in simulations, suggesting mocktime as a viable option, yet also acknowledges the potential advantages of using real-time for comparisons. The sender agrees with AJ Towns' contributions and is willing to experiment with node numbers beyond 100 while also considering smaller sets for comparative purposes. The goal is to create a deterministic method for generating UTXOs and to observe system performance at increasing transaction creation rates. Questions regarding the balance between inbound and outbound transaction rates are raised, particularly with respect to aligning individual node metrics with overall network standards.
 
-An alternative testing approach involving mocktime was discussed, which allows for manipulation of time in the context of block mining. This method could potentially reconcile transaction relay configurations that do not scale with increased block production. The idea is to accelerate block production, for example, by configuring blocks to be mined every five minutes, doubling the transaction creation rate. Caution is advised when implementing mocktime, as it may lead to skewed results if not applied properly. Establishing a real-time baseline might serve as a more effective comparison tool.
+An in-depth study is proposed to assess the impact of varying transaction insertion and confirmation rates, concentrating on RBF transactions and their patterns on the mainnet. A 100-node network will be utilized, with adjustments like reducing the `MAX_OUTBOUND_FULL_RELAY_CONNECTIONS` parameter to mimic larger networks. Mining will occur every ten minutes by a random peer, with transactions split into smaller amounts and additional transactions generated at specified rates using Taproot or P2WSH formats. Fees will be dynamically set using the `estimatesmartfee 5` command, modified by a random factor. Key metrics include compact block relay efficiency, with expectations of mempool inconsistencies and increased transaction request numbers when rates exceed certain thresholds.
 
-The sender acknowledges contributions from AJ Towns and agrees to the proposed approach, expressing willingness to experiment with more than 100 nodes. They consider reducing the number to assess various outcomes with both 4 and 8 nodes configurations. The primary goal is to create a deterministic process for generating Unspent Transaction Outputs (UTXOs) to support diverse transaction patterns and find the threshold where system performance degrades. This involves increasing the transaction creation rate during tests until a notable rise in transaction requests occurs. Additionally, there is contemplation over how to reconcile individual node metrics with those acceptable across the entire network, especially considering the proposed inbound and outbound transaction rate differences.
-
-The research focuses on analyzing network performance under variable transaction rates and block confirmation times, emphasizing the importance of RBF transactions and their patterns on the current mainnet. A network consisting of 100 nodes will be used, with varying transaction creation rates and three potential confirmation speeds. The study aims to emulate real-world conditions by splitting block reward transactions into smaller amounts and dynamically calculating fees. Performance will be gauged through compact block relay efficiency, and expectations include potential inconsistencies in the mempool and 'txn requested' numbers when sustained transaction creation rates surpass certain thresholds. This approach is vital for identifying network bottlenecks and optimizing configurations for effective real-world usage patterns.
-
-To replicate a mainnet environment accurately, it is important to consider the dynamics of transactions and network configuration. The replication of transaction dynamics is crucial, with an emphasis on analyzing the effects of varying transaction rates. Network setup should closely approximate actual mainnet conditions, despite limitations such as the obscurity of the mainnet's structure and resource availability. Tests by @pinheadmz have indicated the feasibility of operating 250 nodes using Docker, and with Kubernetes support via Warnet, managing a larger number of nodes could be possible. Discussions are ongoing about the optimal number of nodes and network topology to effectively approximate mainnet conditions. Outcomes sought from setting up such scenarios include key metrics observation post-implementation, estimating bandwidth and CPU usage increases due to relay rate changes, understanding the influence of relay rates on mempool turnover, and assessing memory impacts. Feedback is solicited to refine the approach, identify any gaps, and prioritize elements in the process. The collaborative effort aims to ensure the simulated environment is both representative and insightful for understanding mainnet behavior.</summary>
-    <published>2024-01-19T23:56:02.399000+00:00</published>
+To emulate mainnet conditions, transaction dynamics and network configuration must be carefully considered. The simulation aims to replicate mainnet behaviors, particularly those involving RBF transactions, within the constraints of mainnet's obscure structure and warnet resources. Kubernetes support via warnet may allow for handling larger node numbers. The discussion revolves around achieving the most effective network topology to mirror mainnet conditions and determining which metrics are crucial post-implementation. These include estimating bandwidth and CPU usage increases due to relay rate changes, the effect of these rates on mempool turnover during congestion, and the memory impact on internal send queues across peers. Community feedback is sought to refine the approach, identify any overlooked aspects, and prioritize elements of the simulation process, all aimed at creating a representative and insightful simulated environment for understanding mainnet behavior.</summary>
+    <published>2024-01-20T03:46:40.964000+00:00</published>
   </entry>
 </feed>

@@ -2,9 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - 64 bit arithmetic soft fork</title>
-  <updated>2024-01-20T02:07:59.516375+00:00</updated>
+  <updated>2024-01-21T02:10:05.803677+00:00</updated>
   <author>
-    <name>Chris_Stewart_5 2024-01-19 21:27:03.245000+00:00</name>
+    <name>dgpv 2024-01-20 14:36:06.211000+00:00</name>
+  </author>
+  <author>
+    <name>Chris_Stewart_5 2024-01-20 13:16:16.585000+00:00</name>
+  </author>
+  <author>
+    <name>Chris_Stewart_5 2024-01-20 12:57:31.799000+00:00</name>
+  </author>
+  <author>
+    <name>dgpv 2024-01-20 05:01:16.940000+00:00</name>
+  </author>
+  <author>
+    <name>Chris_Stewart_  . 2024-01-19 21:27:03.245000+00:00</name>
   </author>
   <author>
     <name>Davidson  . 2024-01-17 22:31:06.270000+00:00</name>
@@ -90,6 +102,10 @@
   <author>
     <name>Chris_Stewart_  . 2024-01-10 16:11:01.778000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1247_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1245_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1243_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1241_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1228_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1173_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1146_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
@@ -123,25 +139,21 @@
   <entry>
     <id>2</id>
     <title>Combined summary - 64 bit arithmetic soft fork</title>
-    <updated>2024-01-20T02:07:59.516567+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/29" rel="alternate"/>
-    <summary>The programming community is discussing optimizations in script execution and arithmetic operations within Bitcoin and Elements, focusing on development ease and system integrity. An initial point of analysis involves the impact of literals like `OP_0`, `OP_1`, and `OP_2` on memory consumption when used in signature versions. A bug in historical scanning results was noted, with a follow-up promised upon obtaining accurate data.
+    <updated>2024-01-21T02:10:05.803896+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/33" rel="alternate"/>
+    <summary>Recent discussions among programmers have focused on refining Bitcoin's scripting language, specifically concerning arithmetic operations and enhancements to its efficiency and functionality. The debate was initially spurred by Rusty Russell's suggestion to simplify arithmetic opcodes for non-negative numbers, which raised concerns about compiler compatibility and the possibility of creating a generic opcode for fixed-width number conversion.
 
-Bitcoin Improvement Proposal 62 (BIP62) is highlighted for its role in addressing transaction malleability and influencing the introduction of the `fRequireMinimal` flag, which could simplify future soft fork implementations. Number encodings within the Bitcoin protocol are also being scrutinized for their compatibility requirements and storage efficiency.
+The community is also considering making all existing opcodes accept 8-byte inputs in a way that's backward-compatible or adding new opcodes to accommodate legacy code. Such changes are complicated due to the need to support historical scripts and consider the implications of future soft forks. The importance of maintaining support for historical scripts like `p2sh`, `p2wsh`, and `p2trsp` is emphasized, as well as the difficulty of removing parts of the code like `SCRIPT_VERIFY_MINIMALDATA`.
 
-Confusion regarding the endianness of `CScriptNum` is debated, revealing differing opinions supported by references to Bitcoin codebase and documentation. The discussion also addresses overflow checks and their potential reduction while emphasizing the importance of verification steps to avoid unexpected behaviors.
+Bitcoin Improvement Proposal 62 (BIP62) was revisited with clarification that it addresses transaction malleability rather than optimizing disk space. The conversation suggested consolidating multiple number encodings into a single format to aid wallet software developers. The endianness of `CScriptNum` was clarified as little-endian, highlighting the importance of script processing efficiency and the necessity of overflow checks after 64-bit arithmetic operations.
 
-Further discourse includes the possibility of altering consensus rules related to leaf versions without necessitating a hard fork, as understood from the "interpreter.cpp" file in the Bitcoin GitHub repository. Changes concerning the `SCRIPT_VERIFY_MINIMALIF` flag are being contemplated for tapscript, requiring careful evaluation of transaction verification and network security implications.
+There were inquiries about the modification of leaf version checks in tapscript and whether they would require a hard fork, alongside discussions on the inflexibility of consensus rules and the potential changes to script verifications, such as the enforced `SCRIPT_VERIFY_MINIMALIF` flag in tapscript.
 
-The need for consistent numeric value sizes in scripting is discussed, along with the idea of additional encoding to simplify the learning curve for new contributors, potentially affecting policy flags such as `SCRIPT_VERIFY_MINIMALDATA` and `SCRIPT_VERIFY_MINIMALIF`. Developers aim to refine the developer experience by simplifying scripting processes and enhancing script reliability.
+The dialogue also involved technical aspects of Bitcoin's scripting capabilities and the balance between introducing new features and maintaining blockchain efficiency. There were proposals for new opcodes to handle unsigned numbers and extend precision beyond the current 64-bit limit, as well as suggestions to reintroduce certain arithmetic operations such as multiplication and left shift. Furthermore, there was a proposal to extend 64-bit support across various numeric opcodes, with an emphasis on backward compatibility and safety checks.
 
-Standardization of numerical value encoding formats within covenant scripts on Elements is proposed to simplify computations and improve script robustness. Proposals for new opcodes to manage unsigned numbers and reintroduction of certain operations like multiplication and left shift are being considered for their precision benefits.
+Additionally, the concept of pushing two values onto the stack for math operations was proposed, marking a significant shift from Bitcoin's current execution mechanics. The community discussed the importance of exact matching in script interpreters to avoid consensus splits and the trade-offs between conserving opcode space and adding complex features. A formal specification for the Script Virtual Machine and the direct integration of new 64-bit opcodes were advocated, as well as strict enforcement of an `OP_ENABLE64BIT` opcode placement at the beginning of a script.
 
-Enhancements to `CScriptNum` for 64-bit arithmetic support are favored over new number formats, with an existing commit illustrating possible extension across numeric opcodes. Discussions about changing ADD and SUB behavior involve extending operand ranges rather than altering opcode behavior, with little-endian data encoding slightly preferred.
-
-Lastly, the introduction of `OP_ENABLE64BIT` is discussed, which could allow arithmetic opcodes to handle larger inputs but also increase VM interpreter complexity. An alternative proposes using a separate `leaf_version` for interpretative consistency.
-
-In summary, there's active exploration of new opcode `OP_ENABLE64BIT` for VM architecture, concerns about consensus issues due to increased complexity, and debates about encoding systems' changes from big-endian to little-endian formats. Standardizing operations for reduced complexity and enhancing covenant opcode functionality are also prominent topics, alongside the significance of 64-bit arithmetic for transaction introspection and smart contract utility. Early feedback is sought for a BIP proposal and its implementation, aiming to refine these ideas further. Links to the BIP ([proposal](https://github.com/Christewart/bips/pull/1)) and implementation ([implementation](https://github.com/Christewart/bitcoin/pull/2)) are provided for review.</summary>
-    <published>2024-01-19T21:27:03.245000+00:00</published>
+In summary, the programming community is diligently exploring enhancements to Bitcoin's scripting environment while being mindful of system stability and predictability. There's a push towards standardizing numerical data handling, reintroducing arithmetic operations, and carefully integrating these changes without compromising network security and efficiency. Resources such as Russell's blog post and GitHub commits offer further insights into these ongoing technical discussions.</summary>
+    <published>2024-01-20T14:36:06.211000+00:00</published>
   </entry>
 </feed>
