@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Disclosure: Btcd consensus bugs due to usage of signed transaction version</title>
+  <updated>2024-01-23T02:11:41.029652+00:00</updated>
+  <author>
+    <name>dergoegge 2024-01-22 23:04:10.980000+00:00</name>
+  </author>
+  <author>
+    <name>Davidson 2024-01-22 22:26:32.151000+00:00</name>
+  </author>
+  <author>
+    <name>Chris_Stewart_5 2024-01-22 14:59:12.532000+00:00</name>
+  </author>
+  <author>
+    <name>dergoegge 2024-01-22 14:56:46.272000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Jan_2024/1291_Disclosure-Btcd-consensus-bugs-due-to-usage-of-signed-transaction-version.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1288_Disclosure-Btcd-consensus-bugs-due-to-usage-of-signed-transaction-version.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1283_Disclosure-Btcd-consensus-bugs-due-to-usage-of-signed-transaction-version.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1282_Disclosure-Btcd-consensus-bugs-due-to-usage-of-signed-transaction-version.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Disclosure: Btcd consensus bugs due to usage of signed transaction version</title>
+    <updated>2024-01-23T02:11:41.029703+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-btcd-consensus-bugs-due-to-usage-of-signed-transaction-version/455/4" rel="alternate"/>
+    <summary>The recent discovery of a bug in btcd, the Bitcoin daemon implementation, was identified through differential fuzzing, a method suggested by Guido Vranken. The bug was found in versions prior to v0.24.0 and pertains to an incorrect implementation of consensus rules as per BIP 68 and BIP 112. These BIPs introduce relative time locks into Bitcoin transactions, which are essential for operations such as Hash Time Locked Contracts. However, btcd incorrectly processed transaction versions as signed integers instead of unsigned ones, leading to potential mishandling of transactions that have negative versions.
+
+This discrepancy can have severe consequences, including the risk of chain splits where btcd nodes may diverge from the Bitcoin Core network, posing several risks. Lightning Nodes depending on btcd for their blockchain backend could lose funds if they don't receive updates for the canonical chain. Attackers might exploit the split, mining the 'btcd chain' without competition, deceiving users into accepting invalid payments. Additionally, miners using btcd could end up mining on an invalid chain, wasting resources as their efforts would not be recognized by the wider network.
+
+In response to this finding, a pull request has been submitted to Bitcoin Core to add a static test vector that checks the relevant logic, viewable at [Bitcoin Core PR #29291](https://github.com/bitcoin/bitcoin/pull/29291). Similarly, a patch for bitcoin-s can be seen at [bitcoin-s PR #5346](https://github.com/bitcoin-s/bitcoin-s/pull/5346).
+
+The timeline of events started with the initial disclosure to Lightning Labs on May 22, 2023, followed by a fix merged into btcd on June 21, 2023. The new version of btcd (v0.24.0) incorporating these fixes was released at the end of the year on December 31, 2023, with a public disclosure following on January 22, 2024.
+
+The programmer responsible for uncovering this issue was rewarded with a bug bounty of 0.023 BTC by the btcd project. To support further security-focused research and development in the Bitcoin ecosystem, contributions can be made through donations to Brink at their [donation page](https://brink.dev/donate).</summary>
+    <published>2024-01-22T23:04:10.980000+00:00</published>
+  </entry>
+</feed>

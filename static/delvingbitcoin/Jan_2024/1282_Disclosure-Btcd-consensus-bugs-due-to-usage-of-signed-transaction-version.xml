@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Disclosure: Btcd consensus bugs due to usage of signed transaction version</title>
+  <updated>2024-01-23T02:11:22.239792+00:00</updated>
+  <author>
+    <name>dergoegge 2024-01-22 14:56:46.272000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Disclosure: Btcd consensus bugs due to usage of signed transaction version</title>
+    <updated>2024-01-23T02:11:22.239827+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-btcd-consensus-bugs-due-to-usage-of-signed-transaction-version/455" rel="alternate"/>
+    <summary>The btcd software, a notable Bitcoin node implementation, had a critical issue in versions prior to v0.24.0 due to improper adherence to the consensus rules set forth by BIP 68 and BIP 112, which are integral to the operation of relative time locks in Bitcoin transactions. These relative time locks are particularly crucial for mechanisms such as Hash Time Locked Contracts (HTLCs). The specific problem arose from the way btcd handled transaction versions; it treated them as signed 32-bit integers rather than unsigned as prescribed by the BIPs. Consequently, this misinterpretation led to transactions with negative version numbers bypassing the rules established by BIP 68 or being incorrectly rejected when `OP_CHECKSEQUENCEVERIFY` was used as stipulated in BIP 112.
+
+This discrepancy created a risk of chain splits, which could have several serious repercussions including the potential for lightning nodes that depend on btcd to lose funds, miners wasting resources on an invalid chain, and the possibility of attackers exploiting the situation to confirm invalid payments. Although transactions with negative versions are non-standard, recent events suggest that this would not pose a significant obstacle for a determined attacker.
+
+In light of these implications, users of btcd are urged to update to version v0.24.0 or later to mitigate these risks. The issue was initially disclosed to Lightning Labs on May 22, 2023, followed by a fix merged into btcd on June 21, 2023. The release of btcd v0.24.0 on December 31, 2023, eventually addressed these vulnerabilities.
+
+The discovery of this bug led to a reward of 0.023 BTC for the reporting party and highlighted the utility of differential fuzzing techniques, as suggested by Guido Vranken, in identifying discrepancies between btcd's and Bitcoin Core’s script interpreters.
+
+For those interested in supporting ongoing security-focused research and development within the Bitcoin ecosystem, contributions can be made to Brink, an organization dedicated to this cause.</summary>
+    <published>2024-01-22T14:56:46.272000+00:00</published>
+  </entry>
+</feed>

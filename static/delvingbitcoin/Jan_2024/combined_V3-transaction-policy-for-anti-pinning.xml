@@ -2,27 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - V3 transaction policy for anti-pinning</title>
-  <updated>2024-01-10T02:12:48.535091+00:00</updated>
+  <updated>2024-01-23T02:09:20.005170+00:00</updated>
   <author>
-    <name>instagibbs 2024-01-09 19:42:52.645000+00:00</name>
+    <name>instagibbs 2024-01-22 13:34:33.453000+00:00</name>
   </author>
   <author>
-    <name>rustynail 2024-01-09 17:14:59.971000+00:00</name>
+    <name>ajtowns 2024-01-22 10:53:08.317000+00:00</name>
   </author>
   <author>
-    <name>rustynail 2024-01-09 17:13:30.389000+00:00</name>
+    <name>instagibbs  . 2024-01-09 19:42:52.645000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-01-09 14:57:31.676000+00:00</name>
+    <name>rustynail  . 2024-01-09 17:14:59.971000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-01-09 14:46:24.882000+00:00</name>
+    <name>rustynail  . 2024-01-09 17:13:30.389000+00:00</name>
   </author>
   <author>
-    <name>rustynail 2024-01-09 02:31:45.414000+00:00</name>
+    <name>instagibbs  . 2024-01-09 14:57:31.676000+00:00</name>
   </author>
   <author>
-    <name>rustynail 2024-01-09 01:41:58.240000+00:00</name>
+    <name>instagibbs  . 2024-01-09 14:46:24.882000+00:00</name>
+  </author>
+  <author>
+    <name>rustynail  . 2024-01-09 02:31:45.414000+00:00</name>
+  </author>
+  <author>
+    <name>rustynail  . 2024-01-09 01:41:58.240000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2024-01-08 16:26:01.476000+00:00</name>
@@ -99,6 +105,8 @@
   <author>
     <name>AntoineP  . 2024-01-02 09:36:47.462000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1280_V3-transaction-policy-for-anti-pinning.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1279_V3-transaction-policy-for-anti-pinning.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1047_V3-transaction-policy-for-anti-pinning.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1045_V3-transaction-policy-for-anti-pinning.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1044_V3-transaction-policy-for-anti-pinning.xml" rel="alternate"/>
@@ -135,19 +143,29 @@
   <entry>
     <id>2</id>
     <title>Combined summary - V3 transaction policy for anti-pinning</title>
-    <updated>2024-01-10T02:12:48.535306+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/v3-transaction-policy-for-anti-pinning/340/32" rel="alternate"/>
-    <summary>Programmers within the Bitcoin community are engaging in technical discussions on optimizing transaction processing and smart contract functionality, especially concerning the Lightning Network. The trade-offs of various ephemeral anchor types for transactions have been a focal point, with considerations of how they affect mempool coherence and vulnerability to pinning attacks. Current challenges include addressing the Child Pays For Parent (CPFP) carve-out changes, which impact different proposed solutions such as two-keyed anchors, single-keyed anchors without sharing that rely on version 3 (V3), shared keyed anchors, and keyless anchors. The latter, while cost-effective in benign scenarios, opens up avenues for adversaries to launch pinning attacks.
+    <updated>2024-01-23T02:09:20.005398+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/v3-transaction-policy-for-anti-pinning/340/34" rel="alternate"/>
+    <summary>Programmers are focusing on optimizing Bitcoin transaction protocols, especially considering v3 constraints. There is a consensus that parent transactions should have a single output that is immediately spendable to reduce conflicts between CPFP (Child Pays for Parent) and RBF (Replace-By-Fee) rules. The implementation of `1 CSV` (CheckSequenceVerify) to lock customer addresses, however, is seen as impractical.
 
-The lack of consensus on implementing a solution to pinning issues persists despite deliberations within the LN specification group. The potential centralization risks from out-of-band fee payment APIs and the proposal of a soft fork to address persistent 'dust' in the UTXO set have raised concerns about network integrity and decentralization. Discussions also explore the broader implications of v3 transaction pinning vulnerabilities, emphasizing the need for a system resistant to such attacks.
+The cooperative efforts between node operators and transaction creators are emphasized in prioritizing high feerate transactions over potentially valid ones to prevent free relay issues. V3 protocol modifications aim to reject low feerate but high-fee child transactions to prevent network congestion. Yet, v3 limitations restrict pairs of related transactions in the mempool, complicating batch CPFP scenarios. Ephemeral anchors offer some flexibility by allowing multiple outputs to be immediately spendable, provided each child transaction conflicts with one another.
 
-Efforts to reconcile innovation with principles of decentralization are evident in ongoing debates over whether external fees in smart contracts should be considered detrimental or beneficial. The use of presigned HTLC-X transactions, for instance, offers lower costs and increased efficiency, yet raises concerns about network autonomy. A proposition to modify blockchain consensus rules aims to maintain fairness in transaction validation. Peter Todd suggests that while these changes could help manage transaction sizes and preserve decentralized principles of mining, miners might still find ways to consolidate outputs more effectively.
+The Lightning Network faces trade-offs with different types of anchors. Two-keyed anchors are being phased out due to mempool coherence issues, while one-keyed and keyless anchors pose their own sets of costs and risks. Ephemeral anchors increase overhead for HTLCs and require protocol changes. There's no consensus on an ideal solution, and the potential "V4" transaction format has yet to gain popularity.
 
-The complexity of managing liquidity in blockchain systems is another topic of discussion, prompting suggestions like capping total HTLC exposure relative to available liquidity as a compromise. Peter Todd's recent blog post and the shift of technical debates to platforms like pull requests and gists document the evolution of the V3 policy, highlighting the active debate over its merits.
+HTLC non-pinnability isn't currently a priority due to its complexity, but future iterations of specification development may address this issue. A BIP suggests a maximum fee multiplier to manage fluctuating mempool conditions and recommends conventional anchors with checksig validations over ephemeral ones to minimize attack risks. The proposed maximum "5x theoretical pin" in the BIP is a significant reduction from the previous 500x estimate, taking into account practical limits dictated by attacker and defender behaviors. Visual data by @0xB10C on Twitter provides further insights.
 
-The Bitcoin Core's proposed V3 policy is scrutinized for its potential to optimize transaction relay by improving efficiency and reliability. The policy seeks to refine mechanisms that could lead to quicker validation times and reduced bandwidth consumption. Contributors to the Bitcoin Core repository play a crucial role in evaluating and iterating the policy through collaborative discussions on GitHub.
+Discussions also reveal that attackers might pay 25% less than their victims' fees, increasing the victim's cost up to 2.8 times. Concerns about transaction delays caused by attackers exploiting fee structures are raised, with potential indefinite delays if attackers pay below the block inclusion threshold.
 
-In conclusion, the Bitcoin community's discussions are characterized by a commitment to enhancing the protocol while maintaining the core tenets of decentralization and fair access. The proposed V3 policy reflects a continued effort toward advancing the ecosystem's infrastructure, demonstrating the importance of community consensus in the development of Bitcoin Core.</summary>
-    <published>2024-01-09T19:42:52.645000+00:00</published>
+The "cycle attack," where a replaced child transaction causes the original parent transaction and its associated fee bump to be dropped from the mempool, is a topic of concern. Persistent re-broadcasting is suggested as a countermeasure.
+
+The dialogue within the blockchain community encompasses censorship resistance, centralization risks, and optimization of fee bumping mechanisms. Centralization concerns arise from miners providing out-of-band fee payment APIs, potentially undermining Bitcoin's decentralization ethos. A soft fork proposal aims to limit ephemeral anchors to a single block to combat these risks.
+
+Miners spending outputs from anchor channels within a single block raises questions about the necessity of a soft-fork implementation of ephemeral anchors. The discussions illustrate the complexities of balancing efficiency, security, and decentralization in blockchain technology.
+
+Peter Todd discusses the impact of stuckless payments on the Lightning Network's revenue model, emphasizing latency as a critical factor for nodes earning forwarding fees. He points out vulnerabilities in broadcasting commitment transactions and suggests capping HTLC exposure relative to liquidity.
+
+Gloria Zhao's "V3" transaction relay policy focuses on addressing pinning issues and complements Greg Sanders' ephemeral anchors concept. As technical discourse moves away from a soon-to-be-discontinued mailing list, formal posting on the list, a gist, pull requests, and GitHub issue trackers provide context for the evolution of this policy. These resources contribute to understanding the proposed V3 transaction relay policy's role in enhancing Bitcoin's transaction relay capabilities.
+
+The ongoing dialogues in the developer community show a dedication to preserving decentralization while improving transaction efficiencies. Discussions on integrating advanced functionalities like HTLCs into existing frameworks highlight the need for a balanced approach to innovation. Peter Todd offers a comprehensive review of HTLCs and possible enhancements [https://petertodd.org/2023/v3-transactions-reviewhtlcs-and-replace-by-fee] while debates around signature types and direct negotiation with miners for fee arrangements raise fairness concerns. Presigned HTLC-X transactions advance cross-chain functionality, yet the appropriateness of external fees in smart contracts remains debatable. Proposed consensus rule changes aim to ensure a fair validation process, and soft forks are considered to maintain mining decentralization and security. Further analysis by Peter Todd can be found through his blog post and the Bitcoin Core Pull Request discussion at [PR28948](https://github.com/bitcoin/bitcoin/pull/28948issuecomment-1873490509).</summary>
+    <published>2024-01-22T13:34:33.453000+00:00</published>
   </entry>
 </feed>
