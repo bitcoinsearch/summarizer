@@ -17,12 +17,13 @@ def generate_summary(prompt):
         1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
         2. The summary tone should be formal and full of information.
         3. Add spaces after using punctuation and follow all the grammatical rules.
-        4. Try to retain all the links provided and use them in proper manner at proper place.
+        4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
         5. The farewell part of the email should be completely ignored.
         6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
         7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
         8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
         9. Do not refer to cryptocurrency or cryptocurrencies. This is a summary for the Bitcoin community. Substitute all instances of cryptocurrencies with Bitcoin and Lightning as appropriate.
+        10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.Completion.create(
         model=COMPLETION_MODEL,
@@ -43,12 +44,13 @@ def consolidate_summary(prompt):
         1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
         2. The summary tone should be formal and full of information.
         3. Add spaces after using punctuation and follow all the grammatical rules.
-        4. Try to retain all the links provided and use them in proper manner at proper place.
+        4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
         5. The farewell part of the email should be completely ignored.
         6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
         7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
         8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
         9. Do not refer to cryptocurrency or cryptocurrencies. This is a summary for the Bitcoin community. Substitute all instances of cryptocurrencies with Bitcoin and Lightning as appropriate.
+        10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.Completion.create(
         model=COMPLETION_MODEL,
@@ -84,11 +86,12 @@ def generate_chatgpt_summary(prompt):
         1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
         2. The summary tone should be formal and full of information.
         3. Add spaces after using punctuation and follow all the grammatical rules.
-        4. Try to retain all the links provided and use them in proper manner at proper place.
+        4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
         5. The farewell part of the email should be completely ignored.
         6. Ensure that the summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
         7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.  
-        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text. 
+        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+        9. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility. 
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model=CHAT_COMPLETION_MODEL,
@@ -112,12 +115,13 @@ def consolidate_chatgpt_summary(prompt):
         1. While extracting, avoid using phrases referring to the context. Instead, directly present the information or points covered.  Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..." or "The context questions..." etc
         2. The summary tone should be formal and full of information.
         3. Add spaces after using punctuation and follow all the grammatical rules.
-        4. Try to retain all the links provided and use them in proper manner at proper place.
+        4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
         5. The farewell part of the email should be completely ignored.
         6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
         7. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
         8. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
         9. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+        10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
     response = openai.ChatCompletion.create(
         model=CHAT_COMPLETION_MODEL,

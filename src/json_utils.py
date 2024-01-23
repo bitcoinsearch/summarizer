@@ -73,11 +73,12 @@ class GenerateJSON:
         1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
         2. The summarization must have a formal tone and be high in informational content.
         3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
-        4. Any links given within the text should be retained and appropriately incorporated.
+        4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
         5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
         6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
         7. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text, provided it should be no longer than three or four sentences.
         8. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on.
+        9. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
         \n CONTEXT:\n\n{recent_post_data}"""
 
         response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=500)
