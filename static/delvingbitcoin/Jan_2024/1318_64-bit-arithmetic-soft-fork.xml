@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-01-24T02:14:59.418205+00:00</updated>
+  <author>
+    <name>halseth 2024-01-23 20:36:15.253000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-01-24T02:14:59.418239+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/35" rel="alternate"/>
+    <summary>In the discussed email, the nuances of memory consumption versus disk space in the context of Bitcoin Script are debated. It is clarified that while literals such as `OP_0`, `OP_1`, `OP_2`, etc., occupy only one byte on disk, they expand to eight bytes in memory when pushed onto the stack. This expansion impacts memory consumption and is restricted to the numbers 0-16. For numbers greater than 16, an 8-byte representation must be added to the script, leading to the suggestion that variable length encoding should remain the default to avoid extra costs.
+
+The conversation also touches upon the integration of RISC-V emulation within Bitcoin Script, referencing a project called [Eltrace](https://github.com/halseth/elftrace). The email highlights the potential benefits of adding support for converting numbers to a 32/64-bit little-endian (LE) format during script execution without necessitating full arithmetic support for another format. The importance of 64-bit arithmetic is underscored by its utility in enforcing values on subsequent transactions, noting that most relevant values are encoded in fixed-length LE format.
+
+Furthermore, the handling of these scenarios is suggested to be dependent on the introspection opcodes, which could be designed to place `ScriptNum` on the stack. The writer recommends reviewing Rusty Russell's piece titled [Arithmetic Opcodes: What Could They Look Like?](https://rusty.ozlabs.org/2023/12/30/arithmetic-opcodes.html) for further insights. Finally, the idea of moving to unsigned-only values is entertained as it could streamline complexities, particularly if this change is made backwards compatible with the existing `ScriptNum` format for positive numbers. The possibility of repurposing existing opcodes by updating the leaf version is also mentioned, potentially eliminating the need for new opcodes like `OP_ADDV`.</summary>
+    <published>2024-01-23T20:36:15.253000+00:00</published>
+  </entry>
+</feed>

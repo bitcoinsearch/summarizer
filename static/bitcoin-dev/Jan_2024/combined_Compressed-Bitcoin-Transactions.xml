@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Compressed Bitcoin Transactions</title>
-  <updated>2024-01-19T02:03:45.424981+00:00</updated>
+  <updated>2024-01-24T02:03:56.249090+00:00</updated>
+  <author>
+    <name>Tom Briar 2024-01-19 21:09:35+00:00</name>
+  </author>
   <author>
     <name>Jonas Schnelli 2024-01-18 09:24:02+00:00</name>
   </author>
@@ -48,6 +51,7 @@
   <author>
     <name>Tom Briar 2023-08-31 21:30:16+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2024/022305_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022292_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022286_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022274_Compressed-Bitcoin-Transactions.xml" rel="alternate"/>
@@ -67,19 +71,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Compressed Bitcoin Transactions</title>
-    <updated>2024-01-19T02:03:45.425089+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022292.html" rel="alternate"/>
-    <summary>Recent advancements in Bitcoin transaction compression have led to the development of a Compressed Transaction Schema by Tom Briar and Andrew Poelstra, which can result in up to 30% size savings. This schema is relevant within the framework of BIP-324 and its details are available on GitHub. The updates to Bitcoin Core's reference implementation focus on excluding regenerable data such as valid signatures to optimize transaction sizes, this is particularly beneficial for Taproot keyspend transactions.
+    <updated>2024-01-24T02:03:56.249206+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022305.html" rel="alternate"/>
+    <summary>Tom's communication focuses on the development of data compression strategies for Bitcoin transactions, specifically targeting peer-to-peer encrypted traffic. He highlights that traditional compression tools like gzip are not efficient for compressing Bitcoin transactions due to their inability to handle pseudorandom data effectively. Instead, Tom suggests removing redundant elements such as hashes and public keys, which can be regenerated after decompression, to achieve significant size reductions.
 
-The Compressed Transaction Schema is designed for scenarios with restricted bandwidth but available computational resources for decompression, employing techniques like metadata packing, compact integers, compressed signatures with public key recovery, and substituting txid/vout pairs with block height and output index. Yet, challenges may arise during a block reorganization.
+He also emphasizes the necessity for application-layer solutions for version 2 encrypted P2P traffic, contrasting it with the OSI model layer adjustments suitable for non-encrypted version 1 traffic. A specific compression proposal at the application layer is scrutinized for its potential to enhance space savings without requiring substantial CPU resources, facilitating quicker block propagation throughout the network. These technical discussions continue on GitHub for a deeper evaluation of this approach.
 
-Tom Briar has highlighted new methods for handling lock time in transactions, aiming to minimize decompression time without compromising security, suggesting the omission of lock time grinding in favor of block height grinding. He also proposes encoding transaction outputs using a delta from a reference height, which is space-efficient when transmitting multiple transactions.
+The Compressed Transaction Schema, conceived by Tom Briar and Andrew Poelstra, is introduced as a technique to decrease transaction sizes within the Bitcoin network by up to 30%, particularly useful under BIP-324. The schema innovates by excluding optional components and introducing new formats such as relative block height and compressed inputs. It is especially beneficial in scenarios with limited bandwidth but sufficient processing power for decompression. Four methods are proposed to optimize compression, though one may complicate decompression in the event of block reorganizations. Details on this schema, including test vectors and performance examples, can be found in the documentation accessible via [this link](https://github.com/TomBriar/bitcoin/blob/2023-05--tx-compression/doc/compressed_transactions.md).
 
-Further research includes empirical evaluation of these techniques using historical data and fuzz tests. A new RPC endpoint for compressing raw transactions is proposed, which will alert users about uncompressed TxId due to insufficient age. Discussions have also considered the use of a flattened index over all transactions per block, rather than a prefix tree for UTXO indexing, to maintain simplicity and space efficiency.
+In practice, integrating this schema into Bitcoin Core requires balancing transaction size optimization with decompression time. Alternatives for handling lock time are discussed to conserve bytes, and a method involving encoding transaction outputs with a delta relative to a reference height is considered. Tom responds to feedback from Jonas and Fabian, noting efforts to gather empirical data and introducing a new RPC endpoint to monitor transaction age for compression eligibility. Clear guidelines in BIP documentation are emphasized to mitigate risks during blockchain reorganizations.
 
-Fabian has acknowledged an oversimplification in his approach and suggests using a composite reference or a short hash as potential alternatives, though he admits Tom's scheme might already be optimally efficient. Fabian's own alternative involves an indexed sorted set of UTXOs, which could save space and support data pruning techniques, but further investigation into this idea is required.
-
-Andrew Poelstra has requested Tom Briar to produce a chart demonstrating the application's compression strength, focusing on "optimum" transactions like 2-in-2-out wpkh and Taproot transactions, and considering data for less common transaction types. Tom Briar's contributions to bitcoin transaction compression continue through active development and collaboration, ensuring efficient transmission and integrity of transactions.</summary>
-    <published>2024-01-18T09:24:02+00:00</published>
+Fabian proposes future exploration of a sorted UTXO set index to save space and suggests alternatives for UTXO indexing, while Andrew requests a chart to illustrate the compression strength of specific transaction types. Tom has taken an active role in developing a compression schema for Bitcoin transactions, maintaining transaction integrity while optimizing for efficiency and security. He has made strides in implementing his schema, indicative of ongoing innovation in transaction processing.</summary>
+    <published>2024-01-19T21:09:35+00:00</published>
   </entry>
 </feed>
