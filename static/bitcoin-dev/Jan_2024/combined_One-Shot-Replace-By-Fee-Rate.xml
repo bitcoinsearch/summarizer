@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - One-Shot Replace-By-Fee-Rate</title>
-  <updated>2024-01-23T02:03:46.189164+00:00</updated>
+  <updated>2024-01-25T02:03:35.401380+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-01-24 04:44:14+00:00</name>
+  </author>
   <author>
     <name>Peter Todd 2024-01-22 22:52:01+00:00</name>
   </author>
@@ -12,6 +15,7 @@
   <author>
     <name>Peter Todd 2024-01-18 18:23:39+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2024/022308_One-Shot-Replace-By-Fee-Rate.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022303_One-Shot-Replace-By-Fee-Rate.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022302_One-Shot-Replace-By-Fee-Rate.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022298_One-Shot-Replace-By-Fee-Rate.xml" rel="alternate"/>
@@ -19,13 +23,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - One-Shot Replace-By-Fee-Rate</title>
-    <updated>2024-01-23T02:03:46.189228+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022303.html" rel="alternate"/>
-    <summary>The recent discussions within the Bitcoin development community have brought to light a potential issue with the current Replace-by-Fee (RBF) rules as highlighted by a blog post. The main concern lies in the existing RBF policy's limitation, which allows a high fee-rate transaction to be replaced with one of a lower fee-rate that may not be as attractive for miners to include in a block. This problem arises from an interpretation of BIP-125 Rule 2, which does not prevent combining unconfirmed inputs from different replaced transactions to create a less valuable transaction for the miners. A proposed solution can be found in a draft fix at [this GitHub pull request](https://github.com/bitcoin/bitcoin/pull/26451), which aims to rectify the situation by ensuring all unconfirmed inputs in a replacement come from the same original transaction.
+    <updated>2024-01-25T02:03:35.401448+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022308.html" rel="alternate"/>
+    <summary>A recent update from a developer has introduced a new fix in the Libre Relay fork of Bitcoin, which can be reviewed on their GitHub repository at [https://github.com/petertodd/bitcoin/tree/libre-relay-v26.0](https://github.com/petertodd/bitcoin/tree/libre-relay-v26.0). This implementation enforces a minimum 2x fee-rate increase for transaction replacement, and utilizes a service bit to ensure compatibility with nodes running the same protocol. The developer is actively seeking feedback on potential exploits in this code, particularly concerning replace-by-fee-rate denial-of-service attacks. There is also an intriguing development regarding OP_Return restrictions being lifted in the Libre Relay, potentially provoking reactions within the community. The author’s contact information points to Peter Todd's personal website at [https://petertodd.org](https://petertodd.org) and his email address.
 
-In response to this, an alternative approach called One-Shot Replace-By-Fee-Rate (RBFr) was proposed and explained through a blog post referenced for discussion. The method outlined in the proposal suggested replacing transactions based on an increase in the fee-rate rather than the absolute fee, potentially addressing issues such as transaction pinning. However, a counterexample presented [on Stacker News](https://stacker.news/items/393182) illustrated a scenario where five transactions could cyclically replace each other, manipulating both RBF and RBFr rules. This example demonstrated how the system could be exploited to use less network bandwidth while maintaining high feerates, ultimately questioning the safety of deploying the One Shot RBFr proposal on the network.
+The discussion about Bitcoin's replace-by-fee rules brings to light an inefficiency in step 7 of a process related to BIP-125 Rule 2. This rule inadequately prevents certain transactions from being combined in a way that makes them unattractive to miners. A proposed solution, detailed in a GitHub pull request ([https://github.com/bitcoin/bitcoin/pull/26451](https://github.com/bitcoin/bitcoin/pull/26451)), aims to rectify the situation by ensuring all unconfirmed inputs in a replacement transaction originate from the same replaced transaction. This change is designed to eliminate a loophole that currently allows economically viable but rare replacements. Additional clarity on this issue is sought through the use of graphics, suggesting a broader educational effort on the topic.
 
-The new One-Shot Replace-By-Fee-Rate model is designed to prioritize transactions based on their fee-rate over their total fee. This new policy focuses on the fee-rate and is likely to ensure quicker inclusion in a block. It benefits miners by encouraging users to raise transaction fees to compete for block space. One-Shot RBFr establishes three conditions for transaction replacement: a higher fee-rate than the original, a fee-rate high enough to place the transaction near the top of the mempool, and ensuring the highest mineable fee-rate of replaced transactions does not suffice for similar mempool positioning. Research backed by Fulgur Ventures indicates that one-shot and purely fee-rate-based policies are resilient against bandwidth exhaustion attacks, suggesting their potential implementation could improve Bitcoin's network efficiency and security, especially in regard to second-layer contracting protocols.</summary>
-    <published>2024-01-22T22:52:01+00:00</published>
+An analysis of the One Shot Replace By Fee Rate (RBFr) proposal from a blog post by Peter Todd ([https://petertodd.org/2024/one-shot-replace-by-fee-rate](https://petertodd.org/2024/one-shot-replace-by-fee-rate)) reveals a strategy involving confirmed inputs and repeated transaction broadcasting to manipulate feerate and fees within the Bitcoin network. The proposal suggests a cycle that could potentially overload the network with large transactions at minimal cost, posing significant risks to its stability. The sender questions the safety of implementing the One Shot RBFr as it may lead to bandwidth exhaustion and unintended consequences for the network.
+
+In response to limitations within the current RBF policy, a new proposal called One-Shot Replace-By-Fee-Rate is discussed. It serves as an alternative to the absolute fee requirement and emphasizes the importance of fee-rate over total fee. Focusing on fee-rate offers a solution to transaction pinning attacks in contracting protocols like Lightning. The proposal outlines conditions for replacing transactions based on fee-rate to prioritize those more likely to be included in the next block, thereby benefiting miners. Research backed by Fulgur Ventures shows that both one-shot and pure replace-by-fee-rate policies are resistant to bandwidth exhaustion attacks, indicating the viability of these mechanisms for the Bitcoin network and enhancing efficiency and security, especially for second-layer contracting protocols.</summary>
+    <published>2024-01-24T04:44:14+00:00</published>
   </entry>
 </feed>

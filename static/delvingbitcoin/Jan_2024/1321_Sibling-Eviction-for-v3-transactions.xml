@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Sibling Eviction for v3 transactions</title>
+  <updated>2024-01-25T02:12:27.934932+00:00</updated>
+  <author>
+    <name>glozow 2024-01-24 14:31:36.227000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Sibling Eviction for v3 transactions</title>
+    <updated>2024-01-25T02:12:27.934961+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/sibling-eviction-for-v3-transactions/472" rel="alternate"/>
+    <summary>In the realm of transaction management within a mempool, programmers often grapple with decisions related to maintaining descendant limits while handling transactions that could potentially exceed these limits. A common practice is to reject incoming transactions that risk breaching this threshold, unless they qualify for an exception like Child Pays For Parent (CPFP) carve-out. However, there exists an alternative method that balances maintaining anti-DoS measures and optimizing for high fee rate transactions. This involves potentially evicting less economically viable descendants in favor of newer, more lucrative ones.
+
+Ephemeral Anchors presents a solution by creating a competitive scenario among sibling transactions with a "must spend" anchor, compelling them to conflict with one another, an idea initially proposed at a Lightning Network meeting in 2022. However, this strategy is not without its complications. Concerns such as inadvertently enabling full Replace-By-Fee (RBF) conditions, difficulties in deciding which descendant to evict given multiple possible combinations, and whether such measures are incentive-compatible were raised.
+
+The transition to version 3 (v3) transactions addresses some of these issues. V3 transactions inherently signal replaceability, mitigating worries about RBF scenarios and simplifying the descendant eviction process because a child cannot have multiple ancestors. This change promotes the pursuit of a transaction set that is both incentive compatible and adheres to DoS prevention limits. An example of this implementation can be found at [this GitHub pull request](https://github.com/bitcoin/bitcoin/pull/29306).
+
+For practical application, RBF rules are applied to sibling evictions, not only leveraging existing code but also to uphold the principles of incentivization and limit unnecessary network load. This approach prevents indefinite sibling eviction wars, where minimal satoshi increases are used to repeatedly outbid one another.
+
+There are notable benefits to this system, especially concerning the integration of v3 logic with current Lightning Network commitment transactions, despite their two-anchor setup. There's a proposal to pattern-match these LN transactions to automatically apply v3 policy rules until the LN adopts v3 usage. Additionally, sibling eviction permits mutual CPFP actions between local and remote parties without requiring new topologies, facilitating efficient transaction confirmations for multi-party arrangements such as coinjoins. This would allow any party to use their output for CPFP, potentially replacing another's low fee child transaction.</summary>
+    <published>2024-01-24T14:31:36.227000+00:00</published>
+  </entry>
+</feed>
