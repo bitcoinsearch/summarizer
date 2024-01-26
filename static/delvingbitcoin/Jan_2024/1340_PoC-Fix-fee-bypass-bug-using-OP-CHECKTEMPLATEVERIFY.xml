@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>PoC: Fix fee bypass bug using OP_CHECKTEMPLATEVERIFY</title>
+  <updated>2024-01-26T02:11:51.993836+00:00</updated>
+  <author>
+    <name>1440000bytes 2024-01-25 17:32:41.372000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>PoC: Fix fee bypass bug using OP_CHECKTEMPLATEVERIFY</title>
+    <updated>2024-01-26T02:11:51.993868+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/poc-fix-fee-bypass-bug-using-op-checktemplateverify/478" rel="alternate"/>
+    <summary>HodlHodl, a peer-to-peer (P2P) trading platform, leverages a 2-of-3 multisig setup for its transactions, ensuring that each trade generates a new multisig address derived from the public keys of the buyer, seller, and HodlHodl itself. Each party has the ability to coordinate during trades, with the possibility of transferring the locked bitcoin without incurring fees from HodlHodl. To facilitate this process, an open-source tool is available at [escrow_extractor](https://gitlab.com/hodlhodl-public/escrow_extractor/). Detailed specifications of HodlHodl's multisig contracts can be found in their [contract specification](https://gitlab.com/hodlhodl-public/hodl-client-js/-/blob/master/multisig-spec.md), and they utilize the OP_CHECKTEMPLATEVERIFY (CTV) function as outlined in the [OP_CHECKTEMPLATEVERIFY documentation](https://github.com/bitcoin/bips/blob/deae64bfd31f6938253c05392aa355bf6d7e7605/bip-0119.mediawiki).
+
+The transactional process involves the seller funding a CTV address with bitcoin, which can only be spent on two addresses: the 2-of-3 multisig or HodlHodl's own address. An example of such a transaction can be seen at this [mempool link](https://mempool.space/signet/tx/76b79ff326522dccbe46befe40d7f4e9b66e63695707ae0e11cc4f65f0d1db9d). Following this, the seller provides both the buyer and HodlHodl with an `unlock_tx` hex. When the buyer confirms payment through the seller's bank account, they broadcast the `unlock_tx`, resulting in the deduction of HodlHodl's trading fee and securing the remaining amount in the 2-of-3 multisig address. An example of this step can be viewed at another [mempool transaction](https://mempool.space/signet/tx/85e1db10c47d222b83ed0b540acbe2568e65ad34f25968725d06d7e7a8c02b1b). The multisig can then be unlocked using two out of the three keys, allowing the transfer of the bitcoin to the buyer. In any dispute scenario, HodlHodl holds the deciding power to either return the funds to the seller or release them to the buyer.
+
+An alternative to this method would be employing a 3-of-3 multisig; however, this would create a custodial situation, meaning users would not be able to access their bitcoins if HodlHodl were to become non-operational. The use of OP_CHECKTEMPLATEVERIFY is crucial as it ensures that HodlHodl receives its fee for every trade conducted on the platform. Although the current system serves as a proof of concept, there is potential for further optimization.
+
+The concept and implementation have been recognized through acknowledgments to individuals and entities like [Jeremy Rubin](https://twitter.com/JeremyRubin), [HodlHodl](https://hodlhodl.com/), and [katsu](https://twitter.com/0x0ff_). These contributions highlight the collaborative effort behind developing secure and efficient mechanisms for facilitating bitcoin trades.</summary>
+    <published>2024-01-25T17:32:41.372000+00:00</published>
+  </entry>
+</feed>

@@ -2,30 +2,56 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Sibling Eviction for v3 transactions</title>
-  <updated>2024-01-25T02:12:52.532095+00:00</updated>
+  <updated>2024-01-26T02:10:37.899245+00:00</updated>
   <author>
-    <name>morehouse 2024-01-24 17:07:42.460000+00:00</name>
+    <name>morehouse 2024-01-25 18:02:11.893000+00:00</name>
   </author>
   <author>
-    <name>glozow 2024-01-24 14:31:36.227000+00:00</name>
+    <name>instagibbs 2024-01-25 17:03:34.088000+00:00</name>
   </author>
+  <author>
+    <name>t-bast 2024-01-25 16:47:34.033000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs 2024-01-25 16:18:52.096000+00:00</name>
+  </author>
+  <author>
+    <name>morehouse 2024-01-25 16:05:57.268000+00:00</name>
+  </author>
+  <author>
+    <name>glozow 2024-01-25 09:45:32.410000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns 2024-01-25 09:14:54.597000+00:00</name>
+  </author>
+  <author>
+    <name>morehouse  . 2024-01-24 17:07:42.460000+00:00</name>
+  </author>
+  <author>
+    <name>glozow  . 2024-01-24 14:31:36.227000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Jan_2024/1341_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1339_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1338_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1337_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1336_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1334_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1333_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1327_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1321_Sibling-Eviction-for-v3-transactions.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Sibling Eviction for v3 transactions</title>
-    <updated>2024-01-25T02:12:52.532146+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/sibling-eviction-for-v3-transactions/472/2" rel="alternate"/>
-    <summary>The discussion centers around the intricacies of Bitcoin transaction management, particularly in relation to Lightning Network (LN) and Child Pays for Parent (CPFP) strategies. The concept of sibling eviction is presented as a method for optimizing mempool space by replacing one unconfirmed transaction with another that has a higher fee rate, thus addressing issues of pinning and DoS attacks without compromising on descendant limits.
+    <updated>2024-01-26T02:10:37.899338+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/sibling-eviction-for-v3-transactions/472/9" rel="alternate"/>
+    <summary>The email conversation delves into the technical intricacies of transaction management within Bitcoin's Lightning Network (LN), discussing how certain proposed features could simplify and enhance the efficiency of commitment transactions. The topic of using a single shared key for anchor outputs at 330 satoshis is introduced as a means to streamline LN transactions. This approach, coupled with package relay and Replace-By-Fee (RBF) mechanisms, as well as the concept of sibling eviction, is considered beneficial in reducing the complexity of LN commitment transactions. Ephemeral anchors, which are outputs that must be spent when used, are deemed important not just for the Lightning Network but also for several other use cases outside of it.
 
-Sibling eviction offers an alternative to CPFP carve-out by evicting less incentive-compatible descendants to prioritize new, high-fee-rate transactions. This avoids DoS vulnerabilities while maintaining efficiency. Ephemeral Anchors is a proposed solution that emulates sibling eviction; however, it raises concerns about replace-by-fee (RBF) signaling, wallet compatibility, and the complexity of choosing which descendant to evict.
+The sender clarifies that ephemeral anchors remain relevant due to their ability to facilitate general sibling eviction — a process where a transaction can replace another by spending an unencumbered output from a common parent transaction, even in the absence of direct conflict between them. The utility of sibling eviction is emphasized particularly for its intuitive nature and the way it implicitly occurs through the requirement to spend ephemeral anchors. With this mechanism, it's possible to bump transactions in various scenarios involving package RBF and sibling eviction without the need for complex mempool topologies.
 
-Version 3 (v3) transactions address these concerns as they inherently signal replaceability, simplifying the decision process since there's only one possible descendant which cannot have multiple ancestors. Sibling eviction under v3 would follow RBF rules to maintain incentive compatibility and limit resource costs. The implementation of this concept can be found in a proposed code update at [GitHub](https://github.com/bitcoin/bitcoin/pull/29306).
+Furthermore, the messages explore the potential integration of v3 transaction rules into the existing Lightning Network framework, highlighting the simplicity of evaluating and executing sibling eviction under these rules. This is considered especially desirable for v3 transactions due to their inherent signaling for replaceability, which simplifies the decision-making process around descendant eviction. A GitHub pull request is cited as an example of implementing v3 logic ([GitHub pull request](https://github.com/bitcoin/bitcoin/pull/29306)).
 
-Moreover, the benefits of sibling eviction extend to LN commitment transactions. A suggestion was made to pattern-match LN transactions to v3 policy rules until a full transition to v3 is possible. The current issue is that LN commitments usually feature two anchors, whereas v3 supports a one parent, one child topology. Sibling eviction could resolve conflicts between local and remote CPFPs without necessitating a change to the transaction topology.
-
-Additionally, sibling eviction facilitates v3 application in multi-party transactions like coinjoins, where participants may wish to use CPFP to expedite their transactions without needing a dedicated anchor. If a participant lowballs their fee bump, another participant's output could potentially evict the lowballed transaction's child, allowing for more flexible and efficient fee management.</summary>
-    <published>2024-01-24T17:07:42.460000+00:00</published>
+In regards to package RBF and sibling eviction, the notion of evicting less economically viable descendants to make room for more profitable ones is discussed. The dialogue sheds light on the balance between anti-DoS measures and optimizing for high fee rate transactions within a mempool, suggesting that while sibling eviction provides some benefits, it should be accompanied by package RBF and package relay to address broader challenges, such as pinning and enabling zero-fee commitments within the LN. The integration of v3 transaction logic with current LN transactions is proposed as an interim solution until LN fully adopts v3 transactions. Lastly, the application of sibling eviction to multi-party arrangements, such as coinjoins, is mentioned, allowing any party to perform Child-Pays-For-Parent (CPFP) actions efficiently.</summary>
+    <published>2024-01-25T18:02:11.893000+00:00</published>
   </entry>
 </feed>

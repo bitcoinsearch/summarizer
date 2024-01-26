@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
+  <updated>2024-01-26T01:58:06.661522+00:00</updated>
+  <author>
+    <name>jlspc 2024-01-25 17:49:26+00:00</name>
+  </author>
+  <author>
+    <name>Michael Folkson 2024-01-25 12:57:52+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2024-01-24 19:31:07+00:00</name>
+  </author>
+  <link href="bitcoin-dev/Jan_2024/022313_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022310_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022309_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
+    <updated>2024-01-26T01:58:06.661587+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022313.html" rel="alternate"/>
+    <summary>The recent discussions among programmers have delved into the nuances of Bitcoin transaction protocols, specifically concerning CheckTemplateVerify (CTV) and its implications for fee payments within the Bitcoin network. CTV, a proposed opcode, has been designed to create commitments for specific transaction outputs, detailing the number of inputs and outputs and the hash of the outputs. Its primary application is envisioned with anchor outputs for fee payments or by generating an additional input in a separate transaction that will be included in the committed transaction.
+
+However, this approach poses scalability challenges as it necessitates the management of extra Unspent Transaction Outputs (UTXOs) solely dedicated to fee payments. This requirement contradicts the efficiency benefits of UTXO sharing schemes that CTV seeks to promote. In the context of reactive security protocols such as the Lightning Network, where the timely mining of transactions is crucial for maintaining self-sovereignty, the dependency on these extra UTXOs for fee payments inadvertently mandates that users maintain another UTXO, thus negating the shared UTXO scheme's purpose.
+
+An alternative solution might involve third-party fee payments, like those through the Lightning Network. However, this could undermine mining decentralization and lacks the direct efficiency of fee payments. Owing to these design concerns, it's recommended to halt further development of CTV in its current form. The suggestion points towards creating new covenant schemes that integrate replace-by-fee features, which would remove the necessity for additional UTXOs, subsequently improving on-chain efficiency.
+
+For additional insights into CTV and ongoing debates, interested parties can refer to the [Bitcoin Improvement Proposals on GitHub](https://github.com/bitcoin/bips/blob/deae64bfd31f6938253c05392aa355bf6d7e7605/bip-0119.mediawiki) or delve into [Peter Todd's review on v3 transactions](https://petertodd.org/2023/v3-transactions-reviewanchor-outputs-are-a-danger-to-mining-decentralization). To contact Peter Todd directly, one can use the provided email address, with the caveat of removing the last character as indicated.
+
+On another front, the potential integration of feerate-dependent timelocks (FDTs) with CTV has been discussed, which would allow for a fixed-fee transaction without anchor outputs if it competes with a transaction featuring an FDT. This conversation is supported by references to the Linux Foundation mailing list, indicating a growing interest in exploring alternatives within the transaction fee structure and strategies. 
+
+Moreover, there's an ongoing debate regarding the commitment to fee payment by the spending transaction under CTV, which aligns more with Child Pays for Parent (CPFP) rather than Replace-By-Fee (RBF). In high fee environments, the current preference for CPFP may become less optimal compared to simply replacing an unconfirmed transaction with RBF. A view from Bitcoin StackExchange emphasizes RBF's superiority over CPFP in terms of efficiency and feasibility, as CPFP requires the transaction to have a change output and pass policy checks independently. These findings raise questions about the limitations of CTV-based solutions in comparison to Alternate Protocol Outputs (APO)-based systems, which could adjust fees with every channel update based on current market rates. Presently, justice transactions for revoked states are constructed with market fee rates that may greatly differ from current values, presenting a significant obstacle in the pre-Lightning Network Symmetry landscape. 
+
+To learn more about Bitcoin and related technologies, enthusiasts can visit educational resources such as [Port of Bitcoin on YouTube](https://www.youtube.com/@portofbitcoin).</summary>
+    <published>2024-01-25T17:49:26+00:00</published>
+  </entry>
+</feed>

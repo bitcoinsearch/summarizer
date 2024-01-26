@@ -2,19 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_CHECKSIGFROMSTACKVERIFY ECDSA useful?</title>
-  <updated>2024-01-20T02:11:26.113721+00:00</updated>
+  <updated>2024-01-26T02:08:55.818993+00:00</updated>
   <author>
-    <name>reardencode 2024-01-19 17:36:46.423000+00:00</name>
+    <name>reardencode 2024-01-25 23:40:42.439000+00:00</name>
   </author>
   <author>
-    <name>reardencode 2024-01-19 14:30:14.659000+00:00</name>
+    <name>harding 2024-01-25 22:41:35.294000+00:00</name>
   </author>
   <author>
-    <name>moonsettler 2024-01-19 13:45:27.207000+00:00</name>
+    <name>reardencode  . 2024-01-19 17:36:46.423000+00:00</name>
   </author>
   <author>
-    <name>reardencode 2024-01-19 05:50:24.893000+00:00</name>
+    <name>reardencode  . 2024-01-19 14:30:14.659000+00:00</name>
   </author>
+  <author>
+    <name>moonsettler  . 2024-01-19 13:45:27.207000+00:00</name>
+  </author>
+  <author>
+    <name>reardencode  . 2024-01-19 05:50:24.893000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Jan_2024/1345_OP-CHECKSIGFROMSTACKVERIFY-ECDSA-useful-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1343_OP-CHECKSIGFROMSTACKVERIFY-ECDSA-useful-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1225_OP-CHECKSIGFROMSTACKVERIFY-ECDSA-useful-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1222_OP-CHECKSIGFROMSTACKVERIFY-ECDSA-useful-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1220_OP-CHECKSIGFROMSTACKVERIFY-ECDSA-useful-.xml" rel="alternate"/>
@@ -23,15 +31,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_CHECKSIGFROMSTACKVERIFY ECDSA useful?</title>
-    <updated>2024-01-20T02:11:26.113776+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/op-checksigfromstackverify-ecdsa-useful/438/4" rel="alternate"/>
-    <summary>The ongoing dialogue among programmers regarding the use of ECDSA signatures in various script types has brought forth some interesting viewpoints. A tweet from Super Testnet on X highlighted the discussion around DER encoded ECDSA signature lengths being used as proof of work, suggesting the inclusion of ECDSA signing in all script types. This argument was acknowledged by a user named @moonsettler, who noted that it mainly applies to legacy scripts since entrenched systems would require upgrades for any signing operation on Tapscript.
+    <updated>2024-01-26T02:08:55.819054+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checksigfromstackverify-ecdsa-useful/438/6" rel="alternate"/>
+    <summary>The programming and cryptocurrency communities are currently engaged in a nuanced discourse regarding the use of cryptographic signatures, with a particular focus on the ECDSA (Elliptic Curve Digital Signature Algorithm) within different scripts and its potential replacement by newer methods like Schnorr signatures. A recent conversation highlights the concept of reactivating CAT for proof-of-work proofs using plain hashes as a better alternative to ECDSA, citing that there are more efficient ways to achieve this. It's suggested that while ECDSA could be used for proof of work via DER encoding, it presents several challenges that would require thorough examination by an expert before being adopted in any significant financial agreements.
 
-Delving deeper into the intricacies of cryptographic practices, the conversation addressed situations where existing custody operations may rely on an ECDSA Threshold Signature Scheme (TSS) which they trust, and might want to leverage protocols such as post-signed vaults or delegation that use CheckSigFromStackVerify (CSFSV). These entities have the means to implement new protocols but might not have the resources to audit newer schemes like FROST or MuSig2 and transition to Tapscript. Despite this, there's a leaning towards making CSFS(V) BIP340 Schnorr only, with potential future upgrades to accommodate non-32-byte keys if necessary.
+Additionally, the importance of ECDSA signature length and the push for its standardization across all script types was underscored in a tweet by Super Testnet. Their argument is rooted in the belief that uniform proof of work verification through ECDSA signing will enhance security and reliability in the transaction validation process. For further technical insights on this integration, one can refer to the Super Testnet's Twitter [discussion](https://twitter.com/super_testnet/status/1748370856814715015).
 
-Further exploration into the topic considers the practical realities of organizations that depend on ECDSA Multi-Party Computation (MPC) as an established practice. Given that these processes, along with their associated libraries and tools, have been audited and trusted, entities such as Coinbase and other large custodians may be hesitant to switch to new cryptographic methods like Schnorr signatures, despite their proven security. The example cited includes the slow adoption of P2TR outputs by exchanges, indicating a general reluctance to rapidly adopt new technologies.
+In legacy systems where ECDSA is deeply ingrained, there's a hesitance to transition to new protocols and signatures due to trust in established procedures and the resource intensity involved in migrating to alternatives like Tapscript. The industry appears to favor BIP340 Schnorr signatures for CheckSigFromStack (CSFSV), though remains receptive to future changes if warranted by practical reasons. This inclination suggests a trend toward simplifying cryptographic operations while keeping options open based on feedback and development.
 
-Finally, the discussion turned to a question raised by @ajtowns on whether ECDSA should be included for OP_CHECKSIGFROMSTACKVERIFY in legacy scripts. This topic was briefly reviewed during an optech review session. The specific question was whether OP_CHECKSIGFROMSTACKVERIFY should support only BIP340 Schnorr signing with 32-byte keys or also include ECDSA signing with 33-byte keys prefixed by `0x02` or `0x03`. Further consideration revolved around whether this support should extend only to legacy/witnessv0 scripts or also include tapscript `0xc0`. The consensus among most participants, except for @JeremyRubin who didn't provide a strong justification, leaned towards not including ECDSA.</summary>
-    <published>2024-01-19T17:36:46.423000+00:00</published>
+Large custodians, exemplified by Coinbase, demonstrate a reluctance to shift from ECDSA to Schnorr because of substantial investments in their current systems. The cautious approach of these organizations reflects an industry-wide resistance to change, preferring to wait until new cryptographic solutions have been thoroughly vetted.
+
+A technical debate among Bitcoin developers has emerged over whether OP_CHECKSIGFROMSTACKVERIFY should support both ECDSA and BIP340 Schnorr signatures or solely the latter. This discussion, which took place on the Optech review platform, reveals differing opinions on the inclusion of ECDSA and its scope. While some developers advocate for the exclusion of ECDSA, others remain open to its integration without strong arguments for its necessity. The outcome of this debate is crucial for determining the direction of Bitcoin scripting and has far-reaching consequences for script flexibility, security, and compatibility with existing infrastructures.</summary>
+    <published>2024-01-25T23:40:42.439000+00:00</published>
   </entry>
 </feed>
