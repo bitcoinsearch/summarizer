@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>One-Shot Replace-By-Fee-Rate</title>
+  <updated>2024-01-28T01:55:31.959868+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-01-27 07:19:22+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>One-Shot Replace-By-Fee-Rate</title>
+    <updated>2024-01-28T01:55:31.959904+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022314.html" rel="alternate"/>
+    <summary>A practical examination of a transaction replacement attack on the Bitcoin network was undertaken, revealing a discrepancy between the anticipated and actual behavior of the mempool's fee-rate policy. The issue arose during the attempt to Replace-by-Fee (RBF) two transactions: tx_HS and tx_LL, with a new transaction tx_LM. The initial understanding was that tx_HS, having inherited a low fee-rate from its low-feerate parent, would not directly affect the RBF process due to its mining score being only 1.95 s/vB. However, the attempt to replace these transactions with tx_LM, which has a larger virtual size of 100,000 vB and a higher fee-rate of 3.05 s/vB, did not succeed.
+
+Contrary to the initial belief, tx_HS is treated as a direct conflict within the mempool, necessitating that any replacing transaction must exceed its raw fee-rate. This means that while tx_HS does spend an unconfirmed output, it is the raw fee-rate of tx_HS itself that is considered for comparison when determining if the transaction can be replaced or not. Thus, the proposed tx_LM needed to beat the direct fee-rate of tx_HS, rather than simply offering a higher fee-rate overall.
+
+To validate this finding, a test script was shared, which can be executed in a Bitcoin regtest environment using version 26.0 of the Bitcoin software. The command line arguments required are `-acceptnonstdtxn -mempoolfullrbf=1`, and the script relies on python-bitcoinlib v0.12.2. The script outlines the step-by-step process of creating transactions tx_ll, tx_ls, tx_hs, and the final tx_lm, along with signing and sending these transactions to the network. Each step includes the creation of new transactions with specific outputs and scripts, followed by the signing and broadcasting of these transactions. This script serves as a tool for others to replicate the situation and observe the behavior of the mempool's fee-rate policy firsthand.</summary>
+    <published>2024-01-27T07:19:22+00:00</published>
+  </entry>
+</feed>
