@@ -40,7 +40,11 @@ class GenerateJSON:
             tree = ET.parse(full_path)
             root = tree.getroot()
             summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
-            summ = "\n".join([summ.text for summ in summ_list])
+            if summ_list:
+                summ = "\n".join([summ.text for summ in summ_list])
+            else:
+                logger.warning(f"No summary found: {full_path}")
+                summ = ""
             author_list = root.findall(".//atom:author", namespaces)
             author_ = "\n".join([a.find('atom:name', namespaces).text for a in author_list])
             author_ = " ".join(author_.split(" ")[:-2])
@@ -175,8 +179,12 @@ class GenerateJSON:
                     tree = ET.parse(combined_summ_full_path)
                     root = tree.getroot()
                     summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
-                    combined_summ = "\n".join([summ.text for summ in summ_list])
-                    combined_summ_bullets = create_n_bullets(combined_summ, n=3)
+                    if summ_list:
+                        combined_summ = "\n".join([summ.text for summ in summ_list])
+                        combined_summ_bullets = create_n_bullets(combined_summ, n=3)
+                    else:
+                        logger.warning(f"No combined summary found: {combined_summ_full_path}")
+                        combined_summ_bullets = ""
             else:
                 logger.warning(f"Unable to find combined summary file for: {file_path}")
 

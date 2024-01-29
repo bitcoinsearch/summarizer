@@ -5,7 +5,7 @@ from loguru import logger
 import os
 import sys
 import json
-import shutil
+from tqdm import tqdm
 
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         # NEW THREADS POSTS
         seen_titles = set()
         for i in data_list:
-            # check if the first post for this title is in past week
+            # check if the first post for this title is in the past week
             this_title = i['_source']['title']
             if this_title in seen_titles:
                 continue
@@ -136,7 +136,7 @@ if __name__ == "__main__":
         [data['_source']['title'] for data in new_threads_list]
     )
 
-    # check if there are any updates in xml file
+    # check if there are any updates in the xml file
     if filtered_docs_ids != json_xml_ids:
         logger.info("changes found in recent posts ... ")
 
@@ -159,14 +159,17 @@ if __name__ == "__main__":
                         new_threads_summary += gen.generate_recent_posts_summary(new_threads_list, verbose=True)
                         logger.success(new_threads_summary)
 
-                        for data in new_threads_list:
-                            entry_data = gen.create_single_entry(
-                                data,
-                                base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
-                                look_for_combined_summary=True,
-                                remove_xml_extension=True
-                            )
-                            new_threads_page_data.append(entry_data)
+                        for data in tqdm(new_threads_list):
+                            try:
+                                entry_data = gen.create_single_entry(
+                                    data,
+                                    base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
+                                    look_for_combined_summary=True,
+                                    remove_xml_extension=True
+                                )
+                                new_threads_page_data.append(entry_data)
+                            except Exception as ex:
+                                logger.error(f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
                     else:
                         logger.warning(f"No new threads started this week, generating summary of active posts this "
                                        f"week ...")
@@ -174,11 +177,15 @@ if __name__ == "__main__":
                         new_threads_summary += gen.generate_recent_posts_summary(active_data_list)
                         logger.success(new_threads_summary)
 
-                    for data in active_data_list:
-                        entry_data = gen.create_single_entry(
-                            data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary", look_for_combined_summary=True, remove_xml_extension=True
-                        )
-                        active_page_data.append(entry_data)
+                    for data in tqdm(active_data_list):
+                        try:
+                            entry_data = gen.create_single_entry(
+                                data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
+                                look_for_combined_summary=True, remove_xml_extension=True
+                            )
+                            active_page_data.append(entry_data)
+                        except Exception as ex:
+                            logger.error(f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
 
                     json_string = {
                         "summary_of_threads_started_this_week": new_threads_summary,
@@ -198,7 +205,7 @@ if __name__ == "__main__":
                 logger.error(f"Error occurred: {ex} \n{traceback.format_exc()}")
                 time.sleep(delay)
                 count += 1
-                if count > 3:
+                if count > 1:
                     sys.exit(f"{ex}")
     else:
         logger.success("No change in the posts, no need to update newsletter.json file")
