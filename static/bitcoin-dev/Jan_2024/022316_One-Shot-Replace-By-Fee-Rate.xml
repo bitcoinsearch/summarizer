@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>One-Shot Replace-By-Fee-Rate</title>
+  <updated>2024-01-29T01:52:37.804235+00:00</updated>
+  <author>
+    <name>Murch 2024-01-28 17:27:06+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>One-Shot Replace-By-Fee-Rate</title>
+    <updated>2024-01-29T01:52:37.804271+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022316.html" rel="alternate"/>
+    <summary>The correspondence between the programmers reveals a discussion on transaction conflicts within a certain system, where they are addressing the intricacies of how specific transactions can conflict and the implications of introducing new elements into this scenario. The focus lies on the issue that `tx_LM` and `tx_HS` initially spend the same input, leading to a direct conflict. However, it is clarified that for the proposed scenario, it is not necessary for these two transactions to be in conflict. Instead, the required conflicts are between `tx_LM` and `tx_LL`, as well as `tx_LM` and `tx_RBFr`.
+
+An alternative strategy is introduced by suggesting the use of a third confirmed input `c3`. By having `tx_LM` spend `c3` instead of `c2`, and `tx_RBFr` spend both `c2` and `c3`, four distinct conflicts are created:
+
+1. `tx_HS` and `tx_RBFr` would conflict due to both attempting to spend `c2`.
+2. `tx_HS` and `tx_LS` would be in conflict over spending `tx_LL:0`.
+3. `tx_LL` and `tx_LM` would clash because they both aim to spend `c1`.
+4. `tx_LM` and `tx_RBFr` would be conflicting over the spending of `c3`.
+
+In this revised setup, `tx_RBFr` would be slightly larger, which implies an increased fee, but the overall numbers are expected to align properly. Although this analysis has yet to be verified with the provided code, there is an opportunity for further review in the following week if it remains unexplored.
+
+The critical point made is that the proposed Replace-by-Fee rules (RBFr) could potentially allow for infinite replacement cycles when combined with the existing RBF rules. This emphasizes the necessity to consider these interactions carefully to prevent such scenarios from occurring within the system.</summary>
+    <published>2024-01-28T17:27:06+00:00</published>
+  </entry>
+</feed>
