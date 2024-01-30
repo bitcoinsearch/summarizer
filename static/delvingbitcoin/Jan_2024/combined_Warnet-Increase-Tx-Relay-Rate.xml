@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Warnet + Increase Tx Relay Rate</title>
-  <updated>2024-01-21T02:05:39.974333+00:00</updated>
+  <updated>2024-01-30T02:22:07.074035+00:00</updated>
   <author>
-    <name>ajtowns 2024-01-20 03:46:40.964000+00:00</name>
+    <name>amiti 2024-01-29 22:41:00.411000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2024-01-20 03:46:40.964000+00:00</name>
   </author>
   <author>
     <name>mdwards  . 2024-01-19 23:56:02.399000+00:00</name>
@@ -30,6 +33,7 @@
   <author>
     <name>amiti  . 2023-12-14 21:14:15.928000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1374_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1238_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1235_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1237_Warnet-Increase-Tx-Relay-Rate.xml" rel="alternate"/>
@@ -43,15 +47,25 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Warnet + Increase Tx Relay Rate</title>
-    <updated>2024-01-21T02:05:39.974453+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/warnet-increase-tx-relay-rate/294/9" rel="alternate"/>
-    <summary>The blog post begins with an overview of a recent simulation aimed at understanding the behavior of a Bitcoin network under various conditions. This exercise involved a Warnet scenario with 100 nodes and focused on transaction relay and confirmation. The simulation did not visualize the initial distribution of 50 BTC to each node, rather it examined the network after establishing normal block production rates. A block timing function was used to replicate realistic mining intervals, and the results indicated that the pending update (PR) being tested did not significantly affect performance at moderate transaction rates. Metrics such as transaction reconstruction requests, mempool size, and outbound connections were measured, though the latter was deemed less relevant for this test.
+    <updated>2024-01-30T02:22:07.074124+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/warnet-increase-tx-relay-rate/294/11" rel="alternate"/>
+    <summary>Blockchain network optimization requires a delicate balance between transaction relay efficiency and system security. Setting a minimum fee rate is critical to prevent abuse and manage bandwidth costs. The target is to synchronize the top 1MB of the mempool, allowing miners to access high-fee transactions, using topological fee rate sorting for prioritization.
 
-The email highlights the importance of accurate timekeeping in simulations, suggesting mocktime as a viable option, yet also acknowledges the potential advantages of using real-time for comparisons. The sender agrees with AJ Towns' contributions and is willing to experiment with node numbers beyond 100 while also considering smaller sets for comparative purposes. The goal is to create a deterministic method for generating UTXOs and to observe system performance at increasing transaction creation rates. Questions regarding the balance between inbound and outbound transaction rates are raised, particularly with respect to aligning individual node metrics with overall network standards.
+Testing revealed that excessively high relay rates can be problematic, but low rates can cause synchronization issues. Using compact block logging as a heuristic has been suggested to measure synchronization. Simulation studies have shown mempool synchronization challenges during high transaction rates, with possible causes including resource-intensive operations and inconsistent simulation results. Identifying these causes is essential for system optimization.
 
-An in-depth study is proposed to assess the impact of varying transaction insertion and confirmation rates, concentrating on RBF transactions and their patterns on the mainnet. A 100-node network will be utilized, with adjustments like reducing the `MAX_OUTBOUND_FULL_RELAY_CONNECTIONS` parameter to mimic larger networks. Mining will occur every ten minutes by a random peer, with transactions split into smaller amounts and additional transactions generated at specified rates using Taproot or P2WSH formats. Fees will be dynamically set using the `estimatesmartfee 5` command, modified by a random factor. Key metrics include compact block relay efficiency, with expectations of mempool inconsistencies and increased transaction request numbers when rates exceed certain thresholds.
+In a Warnet scenario with 100 nodes, simulations focused on Bitcoin transaction relay did not show significant performance changes with pending updates. Future tests will consider the effects of different transaction features and higher node counts. A Kubernetes-based environment is proposed for enhanced stability and handling increased transaction volumes.
 
-To emulate mainnet conditions, transaction dynamics and network configuration must be carefully considered. The simulation aims to replicate mainnet behaviors, particularly those involving RBF transactions, within the constraints of mainnet's obscure structure and warnet resources. Kubernetes support via warnet may allow for handling larger node numbers. The discussion revolves around achieving the most effective network topology to mirror mainnet conditions and determining which metrics are crucial post-implementation. These include estimating bandwidth and CPU usage increases due to relay rate changes, the effect of these rates on mempool turnover during congestion, and the memory impact on internal send queues across peers. Community feedback is sought to refine the approach, identify any overlooked aspects, and prioritize elements of the simulation process, all aimed at creating a representative and insightful simulated environment for understanding mainnet behavior.</summary>
-    <published>2024-01-20T03:46:40.964000+00:00</published>
+The limitations in presenting simulated pull request (PR) outcomes are noted due to the absence of visual data. The discussion is thus steered toward collaborative development practices without detailed simulation results. Mocktime implementation needs careful consideration, with a preference for real-time testing to ensure practicality and precision.
+
+Adjusting block production frequency directly influences transaction clearance. Researchers advocate for cautious adjustments during simulations to maintain relevance to real-world conditions. Testing under accelerated block production aims to emulate high-load scenarios but may not accurately represent standard operations.
+
+The proposal includes experimenting with various node counts and establishing deterministic UTXO generation to determine performance thresholds. Aligning individual node metrics with network standards is crucial. A study on transaction rates and network performance will use a 100-node network running Bitcoin Core version 26.0 to observe system behavior, potentially adjusting connection parameters for accurate emulation of larger networks. Blocks will be mined every ten minutes, underscoring the significance of transaction distribution patterns.
+
+A project is underway to assess compact block relay efficiency by generating Taproot or P2WSH transactions at specific rates. Dynamic fee calculation through `estimatesmartfee 5` and observing network handling of block relays via debug mode logs are key components. Concerns include potential mempool discrepancies and transaction requests exceeding 18 transactions per second, especially during RBF operations or CPFP scenarios.
+
+Replicating mainnet conditions is challenging due to its complexity and warnet resource limitations. However, tests show the feasibility of running 250 nodes using Docker, with scalability options like Kubernetes. The ideal node count and network topology to best reflect mainnet are still under discussion.
+
+Post-implementation analysis will focus on identifying critical metrics such as bandwidth and CPU usage changes, mempool turnover, and fee rates during congestion. Different relay rates' impact on transaction propagation and the memory footprint from internal send queues are also under consideration. Community feedback is invited to refine these concepts and prioritize key elements, aiming to simulate an environment that offers insights into the behaviors of the mainnet.</summary>
+    <published>2024-01-29T22:41:00.411000+00:00</published>
   </entry>
 </feed>

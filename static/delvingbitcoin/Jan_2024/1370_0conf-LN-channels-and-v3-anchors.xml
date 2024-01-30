@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>0conf LN channels and v3 anchors</title>
+  <updated>2024-01-30T02:25:04.910207+00:00</updated>
+  <author>
+    <name>MattCorallo 2024-01-29 22:29:37.666000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>0conf LN channels and v3 anchors</title>
+    <updated>2024-01-30T02:25:04.910242+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/0conf-ln-channels-and-v3-anchors/494" rel="alternate"/>
+    <summary>The recent LN spec call highlighted an issue with v3 transactions regarding the support for 0conf channels. Essentially, this involves a scenario where two parties in a lightning channel—party A who trusts party B not to double-spend but is wary of B potentially going offline permanently, and party B who doesn't trust party A at all—face a dilemma if one party goes offline after a transaction, leaving the other party wanting their funds back. Currently, the proposed v3 transaction model encounters a problem under these circumstances because it mandates that transactions should not have unconfirmed ancestors.
+
+This becomes particularly problematic when the funding transaction does not confirm due to rising fees immediately after the channel closure or if it was initially created with a low fee, which is a common practice as there typically isn’t an urgency for confirmation. Under the current proposal, the unconfirmed funding transaction combined with the v3 commitment transaction and any Child Pays For Parent (CPFP) anchor spend that may be dependent on it creates a non-broadcastable package, since the v3 transaction would be invalidated by its unconfirmed ancestor.
+
+There's no clear solution outlined yet for adjusting v3 transaction rules to accommodate this situation. However, a potential way forward could involve restricting the funding transaction to only confirmed inputs, thereby allowing a chain of transactions with the structure A -&gt; B -&gt; {C, D, CPFP bump}. This structure implies that while the direct payment between the two parties is allowed, subsequent transactions related to fee bumps through CPFP could be permitted, provided they follow from a confirmed funding transaction.</summary>
+    <published>2024-01-29T22:29:37.666000+00:00</published>
+  </entry>
+</feed>
