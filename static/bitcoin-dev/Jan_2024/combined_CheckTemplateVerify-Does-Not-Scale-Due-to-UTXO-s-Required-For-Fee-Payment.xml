@@ -2,7 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
-  <updated>2024-01-28T01:57:21.914833+00:00</updated>
+  <updated>2024-01-31T01:58:03.672241+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-01-30 08:40:41+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2024-01-30 05:55:09+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2024-01-30 05:17:04+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2024-01-30 05:07:16+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2024-01-30 04:49:57+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2024-01-30 04:46:27+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2024-01-30 04:41:30+00:00</name>
+  </author>
+  <author>
+    <name>Peter Todd 2024-01-30 04:38:26+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj 2024-01-30 04:12:07+00:00</name>
+  </author>
   <author>
     <name>Brandon Black 2024-01-27 06:28:54+00:00</name>
   </author>
@@ -15,6 +42,15 @@
   <author>
     <name>Peter Todd 2024-01-24 19:31:07+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2024/022325_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022324_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022323_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022322_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022321_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022320_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022319_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022318_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2024/022317_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022315_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022313_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2024/022310_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
@@ -23,17 +59,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
-    <updated>2024-01-28T01:57:21.914889+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022315.html" rel="alternate"/>
-    <summary>Concerns regarding the scalability and fee structures in Bitcoin's Layer 2 solutions, such as the Lightning Network, are addressed through innovative protocol design. The implementation of CTV-based protocols can mitigate issues with user balances and exit fees within such networks. For users with insufficient on-chain balance to pay exit fees, their in-protocol balance could be utilized. The use of ephemeral anchors in the transaction tree allows for the creation of a fee package by spending the user's UTXO and the ephemeral anchors along the path to facilitate an exit at the necessary fee rate. Another strategy involves users committing a second UTXO upon entering a channel tree protocol, which would generate a fee-paying output when needed, circumventing scaling problems. Protocols aim to enable users with limited funds to use Bitcoin with minimized trust, potentially leveraging fee insurance to cover the costs of pulling specific exit series onto the blockchain.
+    <updated>2024-01-31T01:58:03.672338+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022325.html" rel="alternate"/>
+    <summary>The current discussions among developers are addressing the fee payment structure within the Lightning Network (LN), focusing on commitment transactions, fairness in fee distribution, and incentives. It is observed that the channel initiator might not necessarily pay most of the fees, challenging the expectation of 'initiator pays.' Real-world examples have shown that cooperative close failures can occur due to low initial fee rates, necessitating the recipient to use Child Pays for Parent (CPFP) to expedite their transaction.
 
-The concept of feerate-dependent timelocks (FDTs) offers an alternative transaction structure that eliminates the need for anchor outputs by locking transactions with a pre-defined fee, which becomes competitive when juxtaposed with others incorporating FDTs. The Lightning Development Mailing List serves as a platform to delve into the nuances of FDTs and their impact on transaction protocols.
+Proposals such as BIP 118 and BIP 143 seek to modify digital signature hashing, influencing how fees get distributed in LN transactions. The concept of 'initiator pays' is under scrutiny, especially with regard to potential fee-related attacks where an attacker could drain a channel at a low fee-rate time, leaving the victim with high transaction fees. Debates also touch upon the security implications of fee-rate-dependent timelocks (FDTs) which rely on miner honesty, and whether anchor outputs and CPFP are less efficient than Replace-by-Fee (RBF) due to additional block space required for CPFP transactions.
 
-The debate between CheckTemplateVerify (CTV) and Replace-By-Fee (RBF) mechanisms, particularly in high fee scenarios, is crucial to understanding the efficiency and practicality of Bitcoin transactions. CTV aligns more closely with Child Pays for Parent (CPFP), which, in some cases, may be less efficient than RBF's approach of replacing unconfirmed transactions. Transactions relying on CPFP must meet certain requirements, such as having a change output and passing policy checks, which constrains their eligibility. This discussion extends to considerations of LN symmetry and how fee adjustments are made in relation to market rates.
+Peter Todd has proposed signing multiple offchain transaction versions with different fee rates to address these issues, although concerns about incentives and party responsibilities for fee payments persist. There is consideration for shared burden in fee payments, potentially requiring contributions from all parties during channel openings, diverging from single-sided funding models.
 
-CTV itself is a proposed opcode designed to commit to a future transaction, detailing inputs, outputs, and the output hash. Its main applications are anticipated with anchor outputs for fee payments or by creating separate transactions to include in the committed transaction. However, the necessity for additional UTXOs to manage fees contradicts the intended efficiencies of UTXO sharing schemes, suggesting a reevaluation of CTV's current design. Recommendations point towards developing new covenant schemes compatible with RBF to enhance on-chain efficiency without the burden of extra UTXOs.
+Moreover, there is an ongoing debate regarding the fair allocation of on-chain fees within channels and the practicality of multiple fee-rate-version transactions in protocols like Poon-Dryja or Decker-Russell-Osuntokun. Discussions cover the management of Hash Time-Locked Contracts (HTLCs), user balance protocols, and CTV-based solutions for exit fees. Proposed ideas include using in-protocol balances to cover fees, ephemeral anchors for exiting users, dual UTXO commitments for incoming users, and fee insurance to facilitate multiple exits through one UTXO. These concepts aim to decrease trust requirements and scale the network effectively.
 
-For further exploration of these topics, resources such as the [Lightning Development Mailing List](https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004254.html), Michael Folkson's [YouTube channel](https://www.youtube.com/@portofbitcoin), and discussions on [GitHub's Bitcoin Improvement Proposals](https://github.com/bitcoin/bips/blob/deae64bfd31f6938253c05392aa355bf6d7e7605/bip-0119.mediawiki) provide valuable insights. Additionally, Peter Todd's thoughts on transactional challenges and mining decentralization are accessible through his [review on v3 transactions](https://petertodd.org/2023/v3-transactions-reviewanchor-outputs-are-a-danger-to-mining-decentralization).</summary>
-    <published>2024-01-27T06:28:54+00:00</published>
+Michael Folkson discusses the comparison between CTV and RBF, particularly in high fee scenarios, highlighting the limitations of CPFP compared to the efficiency of RBF. He also addresses the implications for LN symmetry and suggests that APO-based LN-Symmetry could enable fee adjustments with channel updates. For further in-depth discussions, individuals can visit the [Lightning Development Mailing List](https://lists.linuxfoundation.org/pipermail/lightning-dev/2023-December/004254.html) and Michael Folkson's [YouTube channel](https://www.youtube.com/@portofbitcoin).
+
+Critiques of CTV highlight the contradiction of its goal to simplify UTXO management with the possible requirement of additional UTXOs for fee payments. Suggestions include pausing CTV development in favor of new covenant schemes that integrate RBF features to avoid extra UTXOs and enhance on-chain efficiency. Resources related to these topics are available in the [Bitcoin Improvement Proposals on GitHub](https://github.com/bitcoin/bips/blob/deae64bfd31f6938253c05392aa355bf6d7e7605/bip-0119.mediawiki) and [Peter Todd's review on v3 transactions](https://petertodd.org/2023/v3-transactions-reviewanchor-outputs-are-a-danger-to-mining-decentralization). Peter Todd's contact information is provided, excluding the last character for security purposes.</summary>
+    <published>2024-01-30T08:40:41+00:00</published>
   </entry>
 </feed>

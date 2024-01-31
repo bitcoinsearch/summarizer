@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Block-stalling issue in Core prior to v22.0</title>
+  <updated>2024-01-31T02:07:06.034538+00:00</updated>
+  <author>
+    <name>Crypt-iQ 2024-01-30 16:51:22.864000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Block-stalling issue in Core prior to v22.0</title>
+    <updated>2024-01-31T02:07:06.034569+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/block-stalling-issue-in-core-prior-to-v22-0/499" rel="alternate"/>
+    <summary>A security vulnerability was identified and reported in May 2021 concerning Bitcoin Core, specifically relating to the version of the software prior to v22.0. The issue involved the way `bitcoind` selects peers for relaying compact blocks, whereby an attacker could manipulate a victim's peer selection by providing blocks faster than honest nodes through a function named `PeerManagerImpl::MaybeSetPeerAsAnnouncingHeaderAndIDs`. The `mapBlocksInFlight` mechanism within `bitcoind`, which allows a node around 10 minutes to respond with a requested block, was integral to this exploit. The potential for an attacker to add numerous connections during the setup phase could also undermine the peer eviction process through `AttemptToEvictConnection`.
+
+The attack methodology included several steps, starting with the attacker replacing the victim's compact block connections and establishing numerous additional connections to the victim node. By ensuring these malicious connections were sequential in the connection manager's vector, the attacker could delay block relay by competing with legitimate announcements and strategically disconnecting or sending invalid blocks just before timeouts were reached. This would systematically trigger the next controlled connection to be chosen to relay the block, thereby causing substantial delays.
+
+These delays could have serious implications for the Lightning Network (LN), particularly when considering channels with specified CLTV delta times for Hash Time-Locked Contracts (HTLCs). The described attack could allow malicious LN nodes to force close transactions and claim HTLCs by delaying block delivery to intermediate nodes, potentially leading to the theft of the value of an HTLC.
+
+The issue has since been addressed with two pull requests that were integrated into the Bitcoin Core v22.0 release. One of the patches [PR#22144](https://github.com/bitcoin/bitcoin/pull/22144) introduced randomization to message processing order, ensuring that at least one honest peer remains between malicious ones. Another patch [PR#22147](https://github.com/bitcoin/bitcoin/pull/22147) prevented the demotion of the last outbound high-bandwidth compact-block relaying peer by an inbound attacker. These improvements are significant for enhancing the robustness of the network against such attacks, although it remains crucial for node operators, especially those running lightning nodes, to update to more secure versions of the software to mitigate risks.</summary>
+    <published>2024-01-30T16:51:22.864000+00:00</published>
+  </entry>
+</feed>

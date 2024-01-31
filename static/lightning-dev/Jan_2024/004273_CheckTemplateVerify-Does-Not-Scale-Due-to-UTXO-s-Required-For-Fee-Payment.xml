@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
+  <updated>2024-01-31T01:59:16.844193+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2024-01-30 05:07:16+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
+    <updated>2024-01-31T01:59:16.844222+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2024-January/004273.html" rel="alternate"/>
+    <summary>The email from ZmnSCPxj elaborates on the nuances of channel funding and fee payment within the Lightning Network (LN). The writer presents a scenario to illustrate why the "initiator pays" model is significant. In this model, the one who opens a channel is responsible for covering onchain fees. The outlined attack strategy involves creating a new node, opening a channel with a victim node during a period of low fees, transferring funds out, and then abandoning the new node. This forces the victim to close the channel unilaterally, incurring the associated onchain fee. Under the "initiator pays" system, the attacker would bear this cost, not the victim. This mitigates the impact on the victim, although they would still need to pay fees to return their funds to the LN.
+
+The sender also discusses the importance of a non-zero reserve that is proportional to the channel's size. This reserve requirement ensures that an attacker would have some funds tied up with the victim, discouraging repeated attacks since the attacker must open new channels each time, which incurs additional onchain fees. 
+
+Further discussion in the email touches on the Decker-Russell-Osuntokun (DRO) model, where both parties hold identical offchain transactions, a concept sometimes referred to as "LN-symmetry." However, the author suggests two possible methods to introduce fee asymmetry: splitting the fee in a "fair" manner or creating an artificial asymmetry by modifying `nSequence` in update+state transactions and having each party provide signatures only for its counterpart's transaction. This latter method could ensure that the party holding a particular transaction is responsible for its fees.
+
+Lastly, the email proposes a variation where in an "initiator pays" situation, the initiator would receive full signatures for all feerate versions, but the counterparty would only get full signatures for the lowest-fee version. This variation could be disregarded if a multi-version proposal is developed where both sides contribute to the fees or if the exiting party pays the fee, thereby rendering the variation unnecessary.</summary>
+    <published>2024-01-30T05:07:16+00:00</published>
+  </entry>
+</feed>

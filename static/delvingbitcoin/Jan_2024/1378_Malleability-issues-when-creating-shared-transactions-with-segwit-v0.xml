@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Malleability issues when creating shared transactions with segwit v0</title>
+  <updated>2024-01-31T02:05:52.149592+00:00</updated>
+  <author>
+    <name>t-bast 2024-01-30 09:32:10.184000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Malleability issues when creating shared transactions with segwit v0</title>
+    <updated>2024-01-31T02:05:52.149623+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/malleability-issues-when-creating-shared-transactions-with-segwit-v0/497" rel="alternate"/>
+    <summary>Layer 2 contracts, which play a crucial role in the cryptocurrency ecosystem, often involve complex transactions requiring inputs from several parties who may not trust each other. To mitigate potential issues, participants generally pre-sign a refund transaction as an insurance policy against collaborative failures, securing their ability to reclaim funds.
+
+The problem arises with the possibility of transaction ID malleation—if the `txid` can be altered after participants have signed off on a transaction, it could render the pre-signed refund transaction useless. This vulnerability opens a door for malicious parties to blackmail others into paying to release their funds. Such a use case is present in the Lightning Network's interactive-tx transactions, particularly in dual-funding and splicing scenarios, as detailed in the [lightning/bolts pull request](https://github.com/lightning/bolts/pull/851).
+
+To understand the issue, consider a scenario where Alice and Bob collaborate to fund a Lightning channel without sharing the complete previous transaction (`prevtx`). Both add inputs using `tx_add_input` messages that should contain only Segregated Witness (segwit) compatible `scriptPubKeys` to prevent malleability. However, if Alice secretly uses a non-segwit `scriptPubKey`, she can sign and publish the funding transaction with a changed `txid`, rendering Bob's commitment transactions invalid and trapping his funds.
+
+Segwit v1, specified in [BIP 341](https://github.com/bitcoin/bips/blob/deae64bfd31f6938253c05392aa355bf6d7e7605/bip-0341.mediawiki), aims to address this by including the `amounts` and `scriptPubKeys` of all inputs in the signature hash, binding signatures to the specific inputs used. Nonetheless, dropping the `prevtx` entirely from the process is not yet safe for all cases. Participants are only fully protected if they contribute at least one input using segwit v1 themselves.
+
+In conclusion, within the Lightning Network framework, it is advisable to omit the `prevtx` field only under certain conditions: either when performing a splice transaction of a taproot channel, where there is a shared input utilizing taproot requiring both parties' signatures, or when every participant adds at least one taproot input to the transaction. This ensures that all inputs are bound to the transaction and protected against malleation, safeguarding the interests of all involved.</summary>
+    <published>2024-01-30T09:32:10.184000+00:00</published>
+  </entry>
+</feed>
