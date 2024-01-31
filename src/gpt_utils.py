@@ -158,6 +158,7 @@ def generate_chatgpt_title(prompt):
 
 
 def create_n_bullets(body_summary, n=3):
+    logger.info("creating the bullet points ...")
     bullets_prompt = f"""Summarize the following email into {n} distinct sentences based on the guidelines 
     mentioned below. 
         1. Each sentence you write should not exceed fifteen words. 
@@ -205,7 +206,7 @@ def get_summary_chunks(body, tokens_per_sub_body):
     chunks = split_prompt_into_chunks(body, tokens_per_sub_body)
     summaries = []
 
-    logger.info(f"Total chunks created: {len(chunks)}")
+    logger.info(f"total chunks created: {len(chunks)}")
 
     for chunk in chunks:
         count_gen_sum = 0
@@ -230,8 +231,7 @@ def recursive_summary(body, tokens_per_sub_body, max_length):
 
     summary_length = sum([len(TOKENIZER.encode(s)) for s in summaries])
 
-    logger.info(f"Summary length: {summary_length}")
-    logger.info(f"Max length: {max_length}")
+    logger.info(f"summary length: {summary_length}; max length: {max_length}")
 
     if summary_length > max_length:
         logger.info("entering in recursion ...")
@@ -269,6 +269,7 @@ def gpt_api(body):
 
 
 def create_summary(body):
+    logger.info("creating the summary ...")
     summ = gpt_api(body)
     return summ
 

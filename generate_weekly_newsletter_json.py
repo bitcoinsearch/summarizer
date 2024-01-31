@@ -12,7 +12,6 @@ from src.elasticsearch_utils import ElasticSearchClient
 from src.json_utils import GenerateJSON
 from src.utils import month_dict
 
-
 if __name__ == "__main__":
 
     gen = GenerateJSON()
@@ -42,7 +41,7 @@ if __name__ == "__main__":
     new_threads_list = []
 
     for dev_url in dev_urls:
-        all_data_df, all_data_list = elastic_search.fetch_all_data_for_url(ES_INDEX, dev_url)
+
         data_list = elastic_search.extract_data_from_es(
             ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
         )
@@ -54,27 +53,21 @@ if __name__ == "__main__":
         # NEW THREADS POSTS
         seen_titles = set()
         for i in data_list:
-            # check if the first post for this title is in the past week
             this_title = i['_source']['title']
             if this_title in seen_titles:
                 continue
             seen_titles.add(this_title)
 
-            counts, contributors = elastic_search.fetch_contributors_and_threads(
-                title=this_title, domain=dev_url, df=all_data_df
-            )
+            # check if the first post for this title is in the past week
+            original_post = elastic_search.get_earliest_posts_by_title(es_index=ES_INDEX, url=dev_url, title=this_title)
 
-            # get the first post's info of this title
-            df_title = all_data_df.loc[(all_data_df['title'] == this_title) & (all_data_df['domain'] == dev_url)]
-            df_title.sort_values(by='created_at', inplace=True)
-            if not df_title.empty:
-                original_post = df_title.iloc[0].to_dict()
-            else:
-                logger.info(f"Shape of dataframe: {df_title.shape} for title: {this_title}")
-                continue
+            if original_post['_source'] and i['_source']['created_at'] == original_post['_source']['created_at']:
+                logger.success(f"new thread created on: {original_post['_source']['created_at']} || TITLE: {this_title}")
 
-            if i['_source']['created_at'] == original_post['created_at']:
-                logger.info(f"new thread created on: {original_post['created_at']}, title: {this_title}")
+                counts, contributors = elastic_search.es_fetch_contributors_and_threads(
+                    es_index=ES_INDEX, title=this_title, domain=dev_url
+                )
+
                 for author in i['_source']['authors']:
                     contributors.remove(author)
                 i['_source']['n_threads'] = counts
@@ -84,14 +77,13 @@ if __name__ == "__main__":
         logger.info(f"number of new threads started this week: {len(new_threads_list)}")
 
         # TOP ACTIVE POSTS
-        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=15,
-                                                                   all_data_df=all_data_df)
+        active_posts_data = elastic_search.filter_top_active_posts(es_results=data_list, top_n=15)
         logger.info(f"number of filtered top active post: {len(active_posts_data)}")
 
         new_threads_titles_list = [i['_source']['title'] for i in new_threads_list]
 
         seen_titles = set()
-        active_posts_data_counter = 0
+        # active_posts_data_counter = 0
         for data in active_posts_data:
             # if active_posts_data_counter >= 3:
             #     break
@@ -99,18 +91,10 @@ if __name__ == "__main__":
             title = data['_source']['title']
             if (title in seen_titles) or (title in new_threads_titles_list):
                 continue
-            seen_titles.add(title)
-
-            counts, contributors = elastic_search.fetch_contributors_and_threads(title=title, domain=dev_url,
-                                                                                 df=all_data_df)
-            for author in data['_source']['authors']:
-                if author in contributors:
-                    contributors.remove(author)
-            data['_source']['n_threads'] = counts
-            data['_source']['contributors'] = contributors
             data['_source']['dev_name'] = dev_name
+            seen_titles.add(title)
             active_data_list.append(data)
-            active_posts_data_counter += 1
+            # active_posts_data_counter += 1
         logger.info(f"number of active posts collected: {len(active_data_list)}")
 
     # gather titles of docs from json file
@@ -169,7 +153,8 @@ if __name__ == "__main__":
                                 )
                                 new_threads_page_data.append(entry_data)
                             except Exception as ex:
-                                logger.error(f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
+                                logger.error(
+                                    f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
                     else:
                         logger.warning(f"No new threads started this week, generating summary of active posts this "
                                        f"week ...")
@@ -185,7 +170,8 @@ if __name__ == "__main__":
                             )
                             active_page_data.append(entry_data)
                         except Exception as ex:
-                            logger.error(f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
+                            logger.error(
+                                f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
 
                     json_string = {
                         "summary_of_threads_started_this_week": new_threads_summary,
