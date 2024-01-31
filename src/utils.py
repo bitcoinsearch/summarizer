@@ -16,7 +16,7 @@ from src.config import TOKENIZER, CHATGPT
 
 CURRENT_TIME = datetime.datetime.now(datetime.timezone.utc)
 CURRENT_TIMESTAMP = str(CURRENT_TIME.timestamp()).replace(".", "_")
-logger.info(f"Current Timestamp: {CURRENT_TIMESTAMP}")
+logger.info(f"Current Time: {CURRENT_TIME}")
 
 month_dict = {
     1: "Jan", 2: "Feb", 3: "March", 4: "April", 5: "May", 6: "June",

@@ -3,6 +3,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan
 from loguru import logger
 
 from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_DATA_FETCH_SIZE
@@ -139,7 +140,6 @@ class ElasticSearchClient:
             results = scroll_response['hits']['hits']
 
             # Dump the documents into the json file
-            logger.info(f"Starting dumping of {es_index} data in json...")
             while len(results) > 0:
                 for result in results:
                     output_list.append(result)
@@ -150,11 +150,11 @@ class ElasticSearchClient:
                 results = scroll_response['hits']['hits']
 
             logger.info(
-                f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
+                f"dumping of '{es_index}' data completed in {time.time() - start_time:.2f} seconds.")
 
             return output_list
         else:
-            logger.info('Could not connect to Elasticsearch')
+            logger.warning('could not connect to Elasticsearch')
             return None
 
     def filter_top_recent_posts(self, es_results, top_n):
@@ -179,21 +179,26 @@ class ElasticSearchClient:
 
         return unique_results
 
-    def filter_top_active_posts(self, es_results, top_n, all_data_df):
+    def filter_top_active_posts(self, es_results, top_n):
         unique_results = []
-        seen_titles = set()
 
         thread_dict = {}
         # create dictionary with title as key and thread count as value
         for result in es_results:
             title = result['_source']['title']
-            if title not in seen_titles:
-                counts, contributors = self.fetch_contributors_and_threads(title=title,
-                                                                           domain=result['_source']['domain'],
-                                                                           df=all_data_df)
-                thread_dict[title] = counts  # add counts as value to thread_dict with key as title
-                result['_source']['n_threads'] = counts  # add thread count to source
-                seen_titles.add(title)
+            counts, contributors = self.es_fetch_contributors_and_threads(
+                es_index=result['_index'],
+                title=title,
+                domain=result['_source']['domain']
+            )
+            result['_source']['n_threads'] = counts
+            for author in result['_source']['authors']:
+                contributors.remove(author)
+            result['_source']['n_threads'] = counts
+            result['_source']['contributors'] = contributors
+
+            # add counts as value to thread_dict with a key as title
+            thread_dict[title] = counts
 
         # Use the dictionary created above, to sort the results
         es_results_sorted = sorted(
@@ -282,15 +287,87 @@ class ElasticSearchClient:
             logger.info('Could not connect to Elasticsearch')
             return None
 
-    def fetch_contributors_and_threads(self, title, domain, df):
-        df_filtered = df.loc[(df['title'] == title) & (df['domain'] == domain)]
-        # df_filtered = df_filtered.drop_duplicates()  # id
-        counts = len(df_filtered)
-        df_filtered['authors'] = df_filtered['authors'].apply(tuple)
-        contributors = df_filtered['authors'].tolist()
-        contributors = [i[0] for i in contributors]
-        contributors = list(np.unique(contributors))
+    def get_earliest_posts_by_title(self, es_index, url, title):
+        query = {
+            "size": 1,  # only retrieve the first (earliest) document
+            "query": {
+                "bool": {
+                    "must": [
+                        {"term": {"title.keyword": title}},
+                        {"term": {"domain.keyword": url}}
+                    ]
+                }
+            },
+            "sort": [
+                {"created_at": {"order": "asc"}}  # sort by creation date ascending
+            ]
+        }
+
+        response = self._es_client.search(index=es_index, body=query)
+        if response['hits']['hits']:
+            earliest_post = response['hits']['hits'][0]  # ['_source']
+            # logger.info(f"Earlier Post for this title: {earliest_post['created_at']} - {earliest_post['title']}")
+        else:
+            earliest_post = {}
+            logger.info(f"No earliest post found for title: {title}")
+        return earliest_post
+
+    def es_fetch_contributors_and_threads(self, es_index, title, domain):
+        query = {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must": [
+                        {"match_phrase": {"title.keyword": title}},
+                        {"term": {"domain.keyword": domain}}
+                    ]
+                }
+            },
+            "aggs": {
+                "authors_list": {
+                    "terms": {
+                        "field": "authors.keyword",
+                        "size": 10000
+                    }
+                }
+            }
+        }
+
+        response = self._es_client.search(index=es_index, body=query)
+        counts = response['hits']['total']['value']
+        contributors = [author['key'] for author in response['aggregations']['authors_list']['buckets']]
         return counts, contributors
+
+    def fetch_data_in_date_range(self, es_index, start_date, end_date, domain):
+        logger.info(f"fetching documents from {start_date} to {end_date}")
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range": {
+                                "created_at": {
+                                    "gte": start_date,
+                                    "lte": end_date,
+                                    "format": "strict_date_optional_time||epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term": {
+                                "domain.keyword": domain
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+
+        # perform the search using the 'scan' helper to retrieve all documents matching the query
+        documents = scan(client=self._es_client, query=query, index=es_index, size=self._es_data_fetch_size)
+        selected_threads = [doc for doc in documents]
+        logger.info(f"number of documents fetched: {len(selected_threads)}")
+        return selected_threads
 
     def fetch_data_with_empty_summary(self, es_index, url=None, start_date_str=None, current_date_str=None):
         logger.info(f"connecting ElasticSearch to fetch the docs with summary ... ")
