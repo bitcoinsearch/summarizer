@@ -2,33 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Block-stalling issue in Core prior to v22.0</title>
-  <updated>2024-01-31T02:07:47.561613+00:00</updated>
+  <updated>2024-02-01T02:08:18.403254+00:00</updated>
   <author>
-    <name>instagibbs 2024-01-30 21:10:59.516000+00:00</name>
+    <name>Crypt-iQ 2024-01-31 15:01:19.484000+00:00</name>
   </author>
   <author>
-    <name>Crypt-iQ 2024-01-30 16:51:22.864000+00:00</name>
+    <name>instagibbs  . 2024-01-30 21:10:59.516000+00:00</name>
   </author>
+  <author>
+    <name>CryptiQ  . 2024-01-30 16:51:22.864000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Jan_2024/1396_Block-stalling-issue-in-Core-prior-to-v22-0.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1388_Block-stalling-issue-in-Core-prior-to-v22-0.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1383_Block-stalling-issue-in-Core-prior-to-v22-0.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Block-stalling issue in Core prior to v22.0</title>
-    <updated>2024-01-31T02:07:47.561663+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/block-stalling-issue-in-core-prior-to-v22-0/499/2" rel="alternate"/>
-    <summary>Running a non-listening Bitcoin node can significantly mitigate certain security risks, including block-stalling attacks. In May 2021, a vulnerability related to the handling of compact blocks in Bitcoin Core was reported. At that time, the master branch commit was `6b254814c076054eedc4311698d16c8971937814`. Despite most of the network having updated to version 22.0 or above, some nodes remained outdated. The disclosure aimed to encourage these remaining users, particularly those running lightning nodes, to update their software to enhance security.
+    <updated>2024-02-01T02:08:18.403298+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/block-stalling-issue-in-core-prior-to-v22-0/499/3" rel="alternate"/>
+    <summary>The practice of running non-listening nodes within networks is gaining attention as a security measure. The primary advantage of such nodes is the considerable increase in difficulty for attackers to perform specific types of attacks due to the nodes' reduced visibility and interaction with the network. Non-listening nodes do not actively seek incoming connections, challenging malicious entities to locate and exploit them. This method aligns with a conservative security approach that emphasizes reducing attack surfaces by limiting exposure to essential network activities. By doing so, these nodes avoid unnecessary risks associated with open ports and services.
 
-Bitcoin Core, as it functioned around May 2021, had specific mechanisms for relaying compact blocks. It selected three peers to relay such blocks based on who first provided a non-compact block. An attacker could exploit this by preempting honest nodes and occupying all three compact-block slots. The attack involved several steps: replacing the victim's compact block connections, establishing numerous additional connections with sequential placement in the connection manager, and using headers-first announcements to monopolize the victim's block requests. As the victim's node awaited the block delivery from these malicious connections, the attackers would strategically delay providing the actual block, disconnect, or provide an invalid block right before a timeout occurred. This manipulation caused the victim's node to cycle through the attacker's connections, delaying the block reception each time.
+A security vulnerability identified in May 2021 exposed a risk in versions of Bitcoin Core software prior to v22.0. The vulnerability was related to how `bitcoind` selected peers for compact block relay and could be exploited using the function `PeerManagerImpl::MaybeSetPeerAsAnnouncingHeaderAndIDs`. An attacker could potentially manipulate peer selection by supplying blocks faster than honest nodes and interfere with the `mapBlocksInFlight` mechanism, which expected a node to respond with a requested block within about 10 minutes. The exploit allowed an attacker to make multiple connections during the setup phase, undermining the peer eviction process with `AttemptToEvictConnection`. The methodology behind this attack involved replacing a victim's compact block connections with those controlled by the attacker, creating additional malicious connections, and manipulating block relay through timely disconnections or sending invalid blocks.
 
-The implications of such an attack on the Lightning Network (LN) are significant. If two malicious LN nodes collude to delay block information to an intermediary node, they could exploit the timing dependencies of Hash Time-Locked Contracts (HTLCs) used in LN payment channels. By initiating block delays at critical moments, the attackers could force channel closures and unfairly claim funds by broadcasting transactions that spend the HTLC outputs after a force-close but before the intermediary can react.
+These vulnerabilities posed a significant threat to the Lightning Network (LN), especially concerning channels with specific CLTV delta times for Hash Time-Locked Contracts (HTLCs). Attackers could force close transactions and claim HTLCs by delaying block delivery to intermediate nodes, which could lead to the theft of the value contained in an HTLC. 
 
-To address the vulnerability, two pull requests were merged into Bitcoin Core version 22.0:
-
-1. [PR #22144](https://github.com/bitcoin/bitcoin/pull/22144), which randomized message processing order, making it highly likely that at least one honest peer would disrupt any pair of malicious block-relaying peers.
-2. [PR #22147](https://github.com/bitcoin/bitcoin/pull/22147), ensuring that the last outbound high-bandwidth compact block relay peer would not be demoted by an attacker's inbound connection.
-
-These patches improved the security and robustness of block relay in Bitcoin Core, reducing the risk of similar stalling attacks in the future.</summary>
-    <published>2024-01-30T21:10:59.516000+00:00</published>
+To address these issues, two pull requests were integrated into the Bitcoin Core v22.0 release. First, [PR22144](https://github.com/bitcoin/bitcoin/pull/22144) introduced randomization in message processing order to preserve at least one honest peer among malicious ones. Second, [PR22147](https://github.com/bitcoin/bitcoin/pull/22147) prevented inbound attackers from demoting the last outbound high-bandwidth compact-block relaying peer. These patches significantly enhance the network's defense against such sophisticated attacks, highlighting the importance for operators, particularly those running lightning nodes, to upgrade their software to ensure continued security and risk mitigation.</summary>
+    <published>2024-01-31T15:01:19.484000+00:00</published>
   </entry>
 </feed>

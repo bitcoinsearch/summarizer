@@ -2,22 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - 0conf LN channels and v3 anchors</title>
-  <updated>2024-01-31T02:05:17.669905+00:00</updated>
+  <updated>2024-02-01T02:07:29.507085+00:00</updated>
   <author>
-    <name>instagibbs 2024-01-30 21:13:29.571000+00:00</name>
+    <name>t-bast 2024-01-31 07:30:44.084000+00:00</name>
   </author>
   <author>
-    <name>morehouse 2024-01-30 20:48:10.596000+00:00</name>
+    <name>instagibbs  . 2024-01-30 21:13:29.571000+00:00</name>
   </author>
   <author>
-    <name>MattCorallo 2024-01-30 20:10:14.070000+00:00</name>
+    <name>morehouse  . 2024-01-30 20:48:10.596000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2024-01-30 10:24:58.122000+00:00</name>
+    <name>MattCorallo  . 2024-01-30 20:10:14.070000+00:00</name>
+  </author>
+  <author>
+    <name>tbast  . 2024-01-30 10:24:58.122000+00:00</name>
   </author>
   <author>
     <name>MattCorallo  . 2024-01-29 22:29:37.666000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2024/1393_0conf-LN-channels-and-v3-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1389_0conf-LN-channels-and-v3-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1387_0conf-LN-channels-and-v3-anchors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2024/1386_0conf-LN-channels-and-v3-anchors.xml" rel="alternate"/>
@@ -27,15 +31,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - 0conf LN channels and v3 anchors</title>
-    <updated>2024-01-31T02:05:17.669977+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/0conf-ln-channels-and-v3-anchors/494/5" rel="alternate"/>
-    <summary>The ongoing discourse around version 3 (v3) transactions in the context of a cluster mempool suggests that post-implementation, there could be significant improvements. The current v3 proposal does not fully accommodate the complexities of unconfirmed transaction chains, which are commonplace when performing splices within the Lightning Network (LN). To address this, one suggestion involves limiting funding transactions to confirmed inputs only, which would enable a transaction topology where party A pays party B, followed by subsequent transactions including fee bumps via Child Pays For Parent (CPFP).
+    <updated>2024-02-01T02:07:29.507153+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/0conf-ln-channels-and-v3-anchors/494/6" rel="alternate"/>
+    <summary>The recent discussions on version 3 (v3) indicate that its initial design did not account for the potential integration of a cluster mempool, which is expected to significantly enhance v3's capabilities. The integration of a cluster mempool is believed to offer opportunities for optimization beyond what was originally anticipated with v3. As such, future development should consider the positive impacts of a cluster mempool and aim to maximize these benefits in the enhancement of v3.
 
-Currently, there is an identified issue with v3 transactions when considering the support for zero-confirmation (0-conf) channels within the LN. This situation arises when one party is offline after a transaction and the other seeks the return of their funds. The problem with the proposed v3 model is its restriction against transactions with unconfirmed ancestors, posing challenges especially if the funding transaction gets stuck due to insufficient fees. In this scenario, a chain consisting of an unconfirmed funding transaction, the v3 commitment transaction, and any dependent CPFP anchor spend becomes non-broadcastable, rendering the v3 transaction invalid.
+In addressing transaction handling within v3, the focus has been on simplifying the funding transactions by excluding unconfirmed inputs, leading to a designated transaction topology. This simplification involves 0-confirmation funding transactions and adding a shared anchor for emergency CPFP transactions. The suggested approach aims to maintain the simplicity of the current v3 proposal while paving the way for improved reliability, providing parties with the necessary tools to manage emergencies effectively.
 
-To circumvent this, it has been suggested to change the rules for v3 transactions to prevent such issues. One approach includes having a confirmed input requirement for the funding transaction, enabling a sequence of transactions with the pattern A -&gt; B -&gt; {C, D, CPFP bump}. This implies that direct payments between two parties within the channel are possible, and in instances where there's a need for a fee increase, CPFP can be utilized as long as it stems from a confirmed funding transaction.
+The challenges of designing unconfirmed splices are acknowledged, particularly regarding the analysis of transaction chains. The conversation reflects a preference for using RBF over CPFP for splice bumps despite the necessity of CPFP to prevent trivial attacks where one peer could steal funds from another. There is an emphasis on rethinking mempool policies to avoid the need for a subsequent version upgrade and to align closely with the intended framework.
 
-It is recognized that the preferred method to deal with transaction fee bumps should be Replace-By-Fee (RBF) rather than CPFP, but under the present circumstances, CPFP remains a necessity to safeguard against transaction pinning. While this solution is not ideal, it does not exacerbate the existing system; it merely serves as a continuation of the current protective measures until a more refined policy or a version 4 (v4) can be developed. There is no definitive fix yet, but these discussions are crucial in reshaping the mempool policy to come as close as possible to an optimal solution.</summary>
-    <published>2024-01-30T21:13:29.571000+00:00</published>
+An intricate issue revolves around limiting the funding transaction to exclude unconfirmed inputs, creating a more straightforward transaction structure. However, this raises concerns about inhibiting the chaining of unconfirmed splices. While the system can function adequately if the funding transaction confirms independently or through CPFP, the requirement for a change output on B's side to employ CPFP is not ideal. Despite this, the current workaround does not present new challenges specifically introduced by v3.
+
+Lastly, the LN spec call brought attention to an issue with v3 transactions that support 0-conf channels. The dilemma arises when one party goes offline after a transaction, leaving the other wanting their funds back. The proposed v3 model faces a problem as it requires transactions not to have unconfirmed ancestors. The challenge is to create a solution that allows for a chain of transactions following a confirmed funding transaction, thereby enabling direct payments and subsequent CPFP fee bumps without invalidating the v3 transaction due to unconfirmed ancestors.</summary>
+    <published>2024-01-31T07:30:44.084000+00:00</published>
   </entry>
 </feed>

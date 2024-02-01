@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
-  <updated>2024-01-31T02:00:26.280616+00:00</updated>
+  <updated>2024-02-01T02:00:42.625073+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-01-30 08:40:41+00:00</name>
+  </author>
   <author>
     <name>Anthony Towns 2024-01-30 05:55:09+00:00</name>
   </author>
@@ -21,6 +24,7 @@
   <author>
     <name>Michael Folkson 2024-01-25 12:57:52+00:00</name>
   </author>
+  <link href="lightning-dev/Jan_2024/004276_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2024/004275_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2024/004274_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
   <link href="lightning-dev/Jan_2024/004273_CheckTemplateVerify-Does-Not-Scale-Due-to-UTXO-s-Required-For-Fee-Payment.xml" rel="alternate"/>
@@ -31,17 +35,21 @@
   <entry>
     <id>2</id>
     <title>Combined summary - CheckTemplateVerify Does Not Scale Due to UTXO's Required For Fee Payment</title>
-    <updated>2024-01-31T02:00:26.280678+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2024-January/004275.html" rel="alternate"/>
-    <summary>The recent exchanges between various programmers delve into the nuances of Bitcoin Improvement Proposals (BIPs) and their implications for the Lightning Network (LN), particularly concerning transaction fee mechanics and the handling of commitment transactions. The discussion touches upon BIP 118's definition of `SIGHASH_NOINPUT` and how it affects the transaction digest algorithm, comparing it to BIP 143's influence on version 0 witness programs. The importance of `nSequence` in the context of transaction malleability and fee payment is highlighted. Clarifications are made regarding potential misunderstandings about how LN commitments operate differently for local and remote sides, and the conditions under which multiple fee variants can be used within the network.
+    <updated>2024-02-01T02:00:42.625140+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2024-January/004276.html" rel="alternate"/>
+    <summary>Lightning Network channels are currently designed with an understanding that the commitment transactions will pay a low fee rate by default, which can be later increased using anchor outputs and Child Pays for Parent (CPFP) methods. This design may not necessarily burden the initiator with the majority of the fee costs. In practice, the recipient often ends up paying more to expedite their transaction. A real-world example is cited where due to a glitch during a channel closing, the recipient with a significantly larger balance had to use CPFP to push through a commitment transaction with a fee below the minrelayfee. This contradicts the presumption that the initiator should pay the majority of fees.
 
-The dialogue also addresses concerns about fee responsibility in channel openers and initiators through scenarios such as a low-fee attack, emphasizing the "initiator pays" principle to mitigate possible exploitation. It explores strategies to handle fees in a "fair" manner and suggests creating an artificial asymmetry or leveraging CPFP anchors to ensure that the party broadcasting the transaction covers the associated fee. The conversation outlines the intricacies of multi-fee-version proposals and the challenges of balancing incentives among parties involved.
+The email also discusses Bitcoin Improvement Proposal 118 (BIP 118), which aims to simplify certain types of transactions in off-chain contract protocols. BIP 118 suggests altering the transaction digest algorithm of BIP 143 when verifying a SIGHASH_NOINPUT signature by setting certain fields to zeros, thereby not committing to previous outputs or other inputs' sequences within the transaction.
 
-Peter Todd proposes a solution to sign multiple versions of offchain transactions at varying feerates to avoid issues with market feerate divergence. However, this approach raises questions about the incentives for counterparties who might prefer higher-feerate versions. ZmnSCPxj elaborates on the complexities of implementing such a proposal, touching on the need for equitable fee sharing and considering the implications for hosting HTLCs within larger contracts.
+Moreover, the email addresses misconceptions about the Decker-Russell-Osuntokun protocol and its impact on transaction fees, particularly highlighting that update transactions require input and output amounts to be equal, meaning fees must be covered externally. For deeper insight into the nuances of fee payments within Lightning Network channels, one can refer to the provided blog post [v3 Transactions Review](https://petertodd.org/2023/v3-transactions-reviewhtlcs-and-replace-by-fee).
 
-Furthermore, the discussion by Michael Folkson brings up the comparison between CPFP and RBF mechanisms, suggesting that RBF may be more efficient under high fee conditions due to its ability to replace unconfirmed transactions without requiring additional outputs. He references Antoine Poinsot's analysis, which points out CPFP's limitations and inefficiencies. Folkson queries how these mechanisms compare to potential LN-Symmetry implementations based on CTV or APO, speculating on the adaptability of fee adjustments in each scenario.
+The discussion further extends to potential attack strategies within the Lightning Network, such as opening a channel with low fees and transferring funds before abandoning the node, leaving the victim to incur unilateral closure fees. An "initiator pays" model could mitigate such risks. The non-zero reserve proportional to the channel's size is emphasized as a deterrent against repeated attacks. Fee asymmetry could be introduced by modifying `nSequence` in update+state transactions or by only providing full signatures for the lowest-fee versions to the counterparty.
 
-Throughout the exchange, there is an emphasis on careful consideration of the design choices and economics behind transaction fee structures and the impact on the user experience within the Bitcoin and Lightning Network ecosystems. The community is encouraged to participate in further discussions and research to refine these systems. For those seeking additional information on Bitcoin's technical aspects, resources such as [Port of Bitcoin](https://www.youtube.com/@portofbitcoin) are recommended.</summary>
-    <published>2024-01-30T05:55:09+00:00</published>
+The handling of commitment transactions and HTLC (Hash-Time Locked Contracts) feerates is another area of focus, stressing the necessity for all fee variants to be supplied before the state of a lightning channel progresses. This ensures that channels do not advance until conditions are met, preventing incomplete commitments.
+
+Finally, the email touches upon the issue of fixed fee rates in commitment transactions within both the current Poon-Dryja and the expected Decker-Russell-Osuntokun frameworks of the Lightning Network. Anchor commitments are proposed as a solution to adjust fees. However, multiple off-chain transaction versions with varying fee rates have been suggested to provide flexibility in fee payment, although this could also lead to imbalances if one party prefers high-feerate versions without any repercussions.
+
+Michael Folkson's comparison between CPFP and RBF highlights the potential inefficiencies of CPFP in high-fee scenarios and questions whether Lightning Network Symmetry based on CTV faces similar limitations compared to an ANYPREVOUT-based system. He suggests that an APO-based system could better adapt fees to market rates with each channel update. For those interested in gaining a deeper understanding of Bitcoin and its transaction mechanisms, Michael Folkson recommends the resource [Port of Bitcoin](https://www.youtube.com/@portofbitcoin).</summary>
+    <published>2024-01-30T08:40:41+00:00</published>
   </entry>
 </feed>

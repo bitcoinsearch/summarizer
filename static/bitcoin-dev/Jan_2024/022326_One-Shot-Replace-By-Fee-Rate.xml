@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>One-Shot Replace-By-Fee-Rate</title>
+  <updated>2024-02-01T01:57:28.171232+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-01-31 08:40:12+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>One-Shot Replace-By-Fee-Rate</title>
+    <updated>2024-02-01T01:57:28.171271+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2024-January/022326.html" rel="alternate"/>
+    <summary>The recent discussion focuses on the successful demonstration of a vulnerability within the current Replace-By-Fee (RBF) rules in a regtest node. An attack was conducted that highlighted the ability to replace a higher fee-rate transaction, referred to as tx_RBFr, with a lower fee-rate and less profitable one named tx_HS. This is particularly concerning as it goes against the expected behavior where only more profitable transactions should replace existing ones.
+
+In response to this issue, there's a mention of sdaufter's "Enforce incentive compatibility" pull request, which is believed to potentially reject such an unprofitable replacement, although it hasn't been tested yet. To address this vulnerability more directly, a commit has been added to the libre-relay-v26.0 branch. This new code change specifically rejects transaction replacements that involve spending unconfirmed inputs when such replacements are in conflict with multiple transactions simultaneously.
+
+This solution is designed to prevent the formation of cycles that could exploit the system by introducing the concept of "fee-rate-depth". This measure pairs the raw fee rate of a transaction with its depth, which is defined by the number of unconfirmed parent transactions that would need to be mined for the transaction to proceed. By adopting a policy whereby a transaction can only replace another if it offers an improved fee-rate-depth—either through a higher fee rate or a reduced depth—the system strengthens its defenses against the identified attack vector.
+
+The discussion also includes a hypothetical scenario of an unconfirmed transaction graph, presumably to illustrate how the fee-rate-depth measurement works. Unfortunately, further details about this example were not provided within the context shared. Nonetheless, the proposed changes aim to enhance the security and reliability of transaction processing within the network by ensuring that only genuinely more profitable transactions can supplant others.</summary>
+    <published>2024-01-31T08:40:12+00:00</published>
+  </entry>
+</feed>
