@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Taxonomy of Transaction Fees in Smart Contracts</title>
+  <updated>2024-02-02T02:05:15.840875+00:00</updated>
+  <author>
+    <name>instagibbs 2024-02-01 16:52:08.683000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Taxonomy of Transaction Fees in Smart Contracts</title>
+    <updated>2024-02-02T02:05:15.840906+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/taxonomy-of-transaction-fees-in-smart-contracts/512" rel="alternate"/>
+    <summary>The discussion begins by exploring various fee mechanisms utilized by wallets and smart contracts within Bitcoin transactions, which is crucial for mempool design. Understanding these can help enhance Bitcoin-scaling solutions and support user intentions more effectively.
+
+Smart contracts are often seen as logical transactions that effectuate state changes and may include separate transactions to cover fees. Fees coming from within the logical transaction itself are termed endogenous fees, which can be associated with a single Replace-by-Fee (RBF) transaction. This structure is the most straightforward and includes typical wallet sends and non-anchor lightning network penalty channels. They are deemed maximally compact due to their efficient use of space within a blockchain block.
+
+In contrast, exogenous fees involve funds coming from outside the smart contract but still contained within a single Bitcoin transaction. This scenario is common in `SIGHASH_SINGLE | ANYONECANPAY` arrangements found in various applications such as the Lightning Network's HTLC presigned transactions and Mercury Wallet's statechains. It requires additional inputs or possibly an output for fee payment, potentially increasing complexity but maintaining a single transaction.
+
+Child-Pays-for-Parent (CPFP) strategies are also discussed, where fees are included within a parent transaction without any conflict resolution necessary from the parent's inputs. This method suits scenarios where users cannot control the parent transaction, like receiving low-fee transactions from others. The LN's symmetry settlement transactions and fee bumping using one's balance output in pre-anchor channels exemplify this approach.
+
+Exogenous fees with CPFP are similar but may involve outputs that cannot be immediately spent due to locktimes or other restrictions. This pattern is present in today's LN anchor channels, which necessitate all fees to be exogenous to avoid pinning issues.
+
+Package RBF combines CPFP and package RBF, allowing a child transaction to pay for a parent's conflict. If smart contract outputs are free from encumbrances, fees can be endogenously included. However, Bitcoin's current mempool implementations don't support this due to the need for evaluating entire transaction packages. The Lightning Network would benefit from this for commitment transactions accompanied by fee-paying child transactions upon lifting certain timelocks.
+
+Not all smart contracts use parent and child structures; some involve either pre-signed or CheckTemplateVerify (CTV)-encumbered transaction trees. These trees fit into the previously mentioned categories depending on factors such as relay capability, spendability of virtual UTXOs, and whether sibling eviction—for instance, different from v3-style—is necessary to bypass cluster limits.
+
+A composed transaction structure could involve a Timeout Tree, where leaf nodes use endogenous fees and single transaction RBF-compatible channels. Upon needing to settle on-chain, this could transition to endogenous fees funding CPFP and engaging package RBF should sibling eviction be necessary or any ancestor input becomes conflicted. Additionally, it could facilitate payment for a separate smart contract settled with exogenous fees, should the original contract fail.</summary>
+    <published>2024-02-01T16:52:08.683000+00:00</published>
+  </entry>
+</feed>

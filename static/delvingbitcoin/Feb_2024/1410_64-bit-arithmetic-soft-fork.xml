@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-02-02T01:53:16.339729+00:00</updated>
+  <author>
+    <name>EthanHeilman 2024-02-01 22:23:40.258000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-02-02T01:53:16.339768+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/36" rel="alternate"/>
+    <summary>The discussion revolves around a proposed modification to the Bitcoin Improvement Proposal (BIP) concerning the handling of overflow in 64-bit addition operations. Currently, the BIP suggests that in the event of an overflow during such an operation, the result would be to push 'false' onto the stack. The proposed alteration aims to refine this process by pushing both the result of the operation and the overflow amount onto the stack.
+
+Under the suggested change, when no overflow occurs, the operation would yield two values: the sum and an overflow amount of zero. For example, adding 1 and 1 using OP_ADD64 would push 2 (the result) and 0 (the overflow amount) onto the stack. In contrast, if an overflow does occur, the stack would receive the modulo result of the operation along with the overflow amount. An illustrative case is adding 2^64 - 1 and 5 with OP_ADD64, which would result in 4 on the stack, representing the result modulo 2^64, accompanied by an overflow value of 1. This approach effectively treats these two stack values as parts of a 128-bit number, divided into two 64-bit segments.
+
+Pushing values onto the stack in this manner simplifies arithmetic on numbers larger than 64 bits by segmenting them into manageable 64-bit portions. The overflow amount is crucial as it indicates how much to carry over to the next segment, acting as a flag for detecting overflow; if it's non-zero, an overflow has occurred.
+
+The original BIP allows for the addition of numbers exceeding 64 bits using a similar segmentation method. However, the current method is less intuitive, involving conditional statements and subtraction operations, which the proposed change seeks to streamline.</summary>
+    <published>2024-02-01T22:23:40.258000+00:00</published>
+  </entry>
+</feed>
