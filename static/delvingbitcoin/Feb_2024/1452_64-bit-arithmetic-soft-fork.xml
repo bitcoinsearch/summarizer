@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-02-04T01:59:53.854650+00:00</updated>
+  <author>
+    <name>ajtowns 2024-02-03 12:02:57.768000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-02-04T01:59:53.854682+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/40" rel="alternate"/>
+    <summary>In the realm of computational arithmetic, the handling of large numbers and the potential for overflows present distinct challenges. Discussions around arithmetic operations on large numbers, such as 520-byte integers, highlight several key considerations. Among these, the treatment of overflows is a critical aspect. Possible strategies to address overflows include operating modulo $2^n$, where no overflow occurs because all calculations are performed within a fixed range. Alternatively, scripts could be programmed to abort when inputs exceed a predefined threshold, or to indicate overflow within every result.
+
+Determining an appropriate value for $n$ in $2^n$ is also essential. While a 64-bit size suffices to handle Bitcoin's maximum supply at about $2^{51}$ satoshis, larger sizes like $2^{256}$ could facilitate manipulation of scalars for cryptographic applications such as secp256k1. Even larger, a $2^{4160}$ bit size aligns with current stack entry limits, allowing for the handling of 520-byte numbers.
+
+The decision between supporting only unsigned integers versus both signed and unsigned integers is another factor. Although modular arithmetic lends itself more intuitively to unsigned integers, signed arithmetic may simplify certain contracts. As for serialization formats, choices between sign-bit, two's complement, fixed-length, and variable-length serializations each have their implications. Fixed-length serialization constrains precision, while variable-length serialization raises questions about representing integer values uniquely.
+
+For ease of implementation, adopting 64-bit unsigned modular arithmetic (`uint64_t`) may seem straightforward. However, considering potential applications and performance benchmarks, a preference might emerge for 4160-bit signed numbers, possibly serialized in a CScriptNum-like format. An abort-on-overflow behavior could serve as a protective measure against errors that historically led to bugs, such as the "overflow allows printing money" issue encountered in Bitcoin. To execute modular arithmetic without automatic overflow handling, users could manually compute expressions like `((x % k) * (y % k)) % k`, ensuring that $k \leq \sqrt{2^{n}}$ to avoid overflow issues.</summary>
+    <published>2024-02-03T12:02:57.768000+00:00</published>
+  </entry>
+</feed>

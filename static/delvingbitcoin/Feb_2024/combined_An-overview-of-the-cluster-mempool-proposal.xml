@@ -2,18 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - An overview of the cluster mempool proposal</title>
-  <updated>2024-02-03T01:50:51.903552+00:00</updated>
+  <updated>2024-02-04T01:58:10.854585+00:00</updated>
   <author>
-    <name>instagibbs 2024-02-02 15:36:24.905000+00:00</name>
+    <name>ajtowns 2024-02-03 11:29:09.208000+00:00</name>
   </author>
   <author>
-    <name>sdaftuar 2024-02-02 15:00:33.098000+00:00</name>
+    <name>instagibbs  . 2024-02-02 15:36:24.905000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-02-02 14:46:32.086000+00:00</name>
+    <name>sdaftuar  . 2024-02-02 15:00:33.098000+00:00</name>
   </author>
   <author>
-    <name>sdaftuar 2024-02-02 14:30:38.096000+00:00</name>
+    <name>instagibbs  . 2024-02-02 14:46:32.086000+00:00</name>
+  </author>
+  <author>
+    <name>sdaftuar  . 2024-02-02 14:30:38.096000+00:00</name>
   </author>
   <author>
     <name>sdaftuar  . 2024-01-12 19:27:17.249000+00:00</name>
@@ -36,6 +39,7 @@
   <author>
     <name>sdaftuar  . 2024-01-09 22:52:52.578000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2024/1450_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1447_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1442_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1441_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
@@ -51,21 +55,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - An overview of the cluster mempool proposal</title>
-    <updated>2024-02-03T01:50:51.903642+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/an-overview-of-the-cluster-mempool-proposal/393/11" rel="alternate"/>
-    <summary>The correspondence provides an in-depth analysis of cryptocurrency transaction mempool management, specifically addressing sibling eviction and its implications for networks utilizing "top block" solutions. It underscores the limitations of relying on peers to decide which transactions to evict due to visibility constraints and topology restrictions. The email suggests simpler yet effective methods may be preferable over complex strategies to improve mempool quality. Furthermore, it rejects the idea that the re-entrance of evicted transactions is a principled objection, advocating for functional improvements over none.
+    <updated>2024-02-04T01:58:10.854676+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/an-overview-of-the-cluster-mempool-proposal/393/12" rel="alternate"/>
+    <summary>The text explores the intricacies of transaction management in networked systems, with a focus on the mempool's transaction eviction and re-entry. It critiques current replacement mechanisms and debates whether to aim for an optimal solution or to make incremental improvements. A proposed alternative involves temporarily exceeding cluster limits followed by linearization and pruning.
 
-The discussion continues by considering whether sibling eviction could replace the carveout rule for Lightning Network (LN) transactions, suggesting a policy allowing transaction replacement under certain conditions. However, there are challenges with ensuring evicted transactions do not immediately re-enter the mempool. Implementing a sibling eviction policy without enabling trivial pinning is recognized as complex.
+There is a dialogue about reformulating 'carveout' rules for transactions that bypass standard mempool restrictions, such as those used by the Lightning Network (LN), considering factors like transaction size and output expenditures. The complexity of ensuring compatibility with the cluster mempool necessitates continued research.
 
-Technical aspects of 'carveout' rules crucial for LN transactions are analyzed, outlining four criteria for a valid carveout and noting the discrepancy between these and current LN anchor outputs. The necessity of maintaining predictable system efficiency through structured transaction graph topology is emphasized. Despite stringent individual carveout rules, the challenge of aligning them with the cluster mempool model remains unresolved.
+A sibling eviction policy is discussed as an alternative to the CPFP carveout rule, allowing some transactions to evict other transactions that share the same unconfirmed parent. This policy's economic and usability impacts are explored, alongside its potential benefits and added complexity.
 
-The email calls for further research into incentive-compatibility for transaction fee rates, particularly at the top of the mempool. It discusses the potential of adapting "mempoolfullrbf" style Replace-By-Fee (RBF) mechanisms to temporarily exceed cluster limits before pruning back to fit. These theoretical approaches underscore efforts to improve blockchain network management of transaction fees and mempool dynamics.
+The concept of incentive-compatibility in fee rates is also examined, suggesting that fees at the top of the mempool should be weighted more heavily. The possibility of discounting mechanisms could innovate mempool dynamics and fee management, though these ideas remain theoretical.
 
-In Bitcoin Core community discussions, optimizing mempool management focuses on fee rates and transaction volumes. Comparing two different-sized mempools, OLD and NEW, poses a challenge; one proposed method involves extending the smaller mempool artificially, while another extrapolates the smaller mempool's fee rate diagram based on an assumed tail feerate. Due to the complexity of these methods, a zero tail feerate is generally preferred.
+Challenges in comparing different mempool states are addressed, emphasizing the need for a framework to compare profitability based on fee rates and transaction volumes. Replace-By-Fee (RBF) rules and their implications are analyzed, particularly when smaller, higher-fee transactions aim to replace larger transactions with lower fees.
 
-Challenges with a carve-out rule exempting certain transactions from cluster size limits and evictions are highlighted, where adherence to cluster sizes is recommended over policies allowing exceptions. Concerns about RBF validation lead to suggestions for a flagging system to bypass cluster size restrictions for qualifying transactions.
+A new design for the Bitcoin Core mempool suggests policy changes to enforce cluster size limitations, replacing ancestor and descendant limits, and revising RBF rules. Incoming transactions must offer a "strictly better feerate diagram" to be accepted, potentially making the CPFP rule obsolete. This approach seeks to maintain a total ordering of transactions, align eviction and mining selection algorithms with miner incentives, and simplify the organization of transactions for improved efficiency.
 
-Finally, a proposed redesign of the Bitcoin Core mempool introduces policy changes to supersede ancestor and descendant limits and refine RBF rules, aiming for a 'strictly better feerate diagram' for transaction replacement. This would establish total ordering of all transactions, facilitate efficient mining selections and evictions, and reduce CPU overhead. The community is directed to @sipa's original write-up for more details and invited to provide feedback on the draft implementation.</summary>
-    <published>2024-02-02T15:36:24.905000+00:00</published>
+The proposal emphasizes strict adherence to cluster sizes without exceptions. It considers redefining policy frameworks to support specific transaction topologies within cluster size constraints. The design promises better mining transaction selection and eviction processes through descending feerate order iterations, eliminating the need for monitoring ancestor and descendant counts, which could reduce CPU overhead.
+
+For further details and technical explanations, one can refer to the original write-up by @sipa and review the initial draft implementation, noting that continuous enhancements and parameter adjustments are expected after further analysis and benchmarking.</summary>
+    <published>2024-02-03T11:29:09.208000+00:00</published>
   </entry>
 </feed>
