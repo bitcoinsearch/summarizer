@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>`sighash_outputdeltabounds`</title>
+  <updated>2024-02-05T02:08:52.835929+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2024-02-04 23:47:42.569000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>`sighash_outputdeltabounds`</title>
+    <updated>2024-02-05T02:08:52.835956+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/sighash-outputdeltabounds/504/2" rel="alternate"/>
+    <summary>In a modern approach to blockchain transaction fee management, a new scheme is proposed that allows one output within a transaction to handle the fees without specifying an exact amount. This innovative method permits flexibility in fee allocation while ensuring other outputs remain unaffected. The system involves an additional signature from the output owner, granting them the authority to specify fee deductions from their share independently of other participants. This concept is particularly beneficial as it requires only one participant to be online to finalize the fee payment.
+
+The technical underpinnings of this proposed framework are grounded in the extension of `OP_CHECKTEMPLATEVERIFY` (CTV). A set of rules delineates how the operation interprets varying byte lengths on the stack top. Depending on the length, the data parsed includes an output index and an optional amount to deduct alongside a 32-byte hash commitment. For example, a stack top of 34 bytes indicates an output index with no deduction, whereas 41 bytes would signify both an output index and a specified deduction amount in little-endian format. 
+
+To ensure integrity, the system enforces strict validation protocols. A "heavy CTV hashes" counter is used to monitor the number of "output pays fee" CTVHASH types processed—if more than one is encountered, validation fails. Transactions must consist of exactly one input, and the `nSequence` of this input should be set to zero. Additional checks are performed if an amount to deduct is provided, comparing the input's amount with the required output after deduction.
+
+The hashing process for template verification incorporates several transaction details, including version, lock time, and output count. It also modifies the output hash by setting the amount of the indexed output to zero. 
+
+This novel `CTVHASH` mode, in conjunction with `OP_CHECKSIGFROMSTACK`, achieves functionality similar to the initial proposal, allowing for dynamic fee allocations upon transaction publication. By creating a CTV-tree, it eliminates the need for external UTXOs to cover fees. The root address of such a tree branches into multiple tapleaves, each corresponding to various output combinations and associated maximum fee payments. These leaves further bifurcate, enabling individual participants to publish their respective outputs by covering all related fees within the CTV-tree structure. This method offers a decentralized, flexible solution for managing transaction fees directly within the transaction outputs.</summary>
+    <published>2024-02-04T23:47:42.569000+00:00</published>
+  </entry>
+</feed>
