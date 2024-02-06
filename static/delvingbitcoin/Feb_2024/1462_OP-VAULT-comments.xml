@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>OP_VAULT comments</title>
+  <updated>2024-02-06T02:03:17.175367+00:00</updated>
+  <author>
+    <name>harding 2024-02-05 23:45:12.891000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>OP_VAULT comments</title>
+    <updated>2024-02-06T02:03:17.175400+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-vault-comments/521" rel="alternate"/>
+    <summary>The review of BIP345 `OP_VAULT` raises several concerns related to the economic viability of recovery transactions in the face of unauthorized withdrawals by an attacker with access to the trigger authorization key. An issue highlighted is that the cost to create a trigger and withdrawal transaction may be less than the cost to initiate a recovery, potentially leading to a scenario where it's economically rational for the victim to ignore small thefts. This is exemplified when an attacker, Mallory, steals a minor portion of funds from Bob's vault while revaulting the rest, forcing Bob to consider if the high fee for recovery outweighs the stolen amount.
+
+In a more advanced scenario, even if Bob's watchtower monitors the mempool, Mallory can accumulate a block full of zero-fee transactions that transfer small amounts from Bob's vault. By mining this block during low feerate periods, Mallory can broadcast the theft once successful, leaving Bob with a recovery transaction that may not be worth the watchtower's cost in satoshis.
+
+Furthermore, there's concern regarding the watchtower's reserve requirements. Mallory could split the vault into numerous small chunks, each being economically viable to recover individually. However, the collective cost to the watchtower's hot wallet to batch recover all inputs could be significant (potentially upwards of 0.3 BTC in fees). This implies that each watchtower must maintain substantial reserves in their hot wallet, which poses additional security risks. Users relying on multiple watchtowers would need to proportionally increase their total reserve to ensure at least one watchtower can respond to theft, thus multiplying the risk.
+
+To mitigate these issues, the proposal suggests implementing a relative block delay between respends from the same vault output. This modification would limit Mallory to a single uneconomic withdrawal before Bob can recover the remaining funds, albeit this solution reduces vault flexibility for frequent spending and complicates script composition for contract protocols.
+
+Without such a delay mechanism, vaults containing less than 0.3 BTC might not offer substantial security beyond the trigger authorization script itself. An attacker could render the entire vault value uneconomical to recover, potentially profiting from the attack.</summary>
+    <published>2024-02-05T23:45:12.891000+00:00</published>
+  </entry>
+</feed>
