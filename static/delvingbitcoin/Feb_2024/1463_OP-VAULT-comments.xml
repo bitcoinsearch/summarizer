@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_VAULT comments</title>
+  <updated>2024-02-07T01:51:53.332615+00:00</updated>
+  <author>
+    <name>ajtowns 2024-02-06 03:29:59.578000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_VAULT comments</title>
+    <updated>2024-02-07T01:51:53.332647+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-vault-comments/521/2" rel="alternate"/>
+    <summary>Bob's vault security system, which only monitors confirmed transactions and not the mempool, allows Mallory to exploit a vulnerability using his trigger authorization key. By creating a low feerate transaction, she can siphon off a small amount of funds while revaulting the remainder. Bob is faced with a dilemma when considering recovery actions: crafting a large, high-feerate recovery transaction might cost more than the stolen funds are worth, potentially leading him to disregard the minor loss.
+
+However, constructing a recovery transaction may not be as burdensome as expected. It would consist of multiple inputs with witness data that include a control block, a `VAULT_RECOVER` script, and an output index. An additional recover authorization key would enlarge the script slightly but would facilitate recovery by including an extra input for fees. This design means that even with the extra input needed to counter Mallory's theft, the increase in transaction size would be minimal.
+
+Mallory could extend her attack by making successive offchain zero-fee transactions from the revaulted outputs, gradually draining Bob's vault. The cumulative effect of these transactions could fill an entire block. While this seems more disruptive than profitable—since Mallory loses potential income from ignoring standard mempool transactions—the attack remains a concern.
+
+To mitigate such vulnerabilities, it's suggested to include a `1 OP_CSV` delay within the trigger authorization script. This change would prevent multiple uneconomic withdrawals and give Bob the opportunity to initiate a sweep of his funds into recovery before Mallory can significantly deplete them. This protective measure does impose some limitations on the vault's flexibility and its integration with contract protocols, yet it's a necessary trade-off to secure the funds.
+
+It's also noted that if there are multiple payments scheduled from a vault in a single block, they could be combined within a single CTV (CHECKTEMPLATEVERIFY), which inherently commits to multiple outputs. Since any contractual arrangements would require confirmation of the CTV script path spend, the constraint imposed by the `1 OP_CSV` delay is not considered significant in terms of affecting contracts reliant on such payments.</summary>
+    <published>2024-02-06T03:29:59.578000+00:00</published>
+  </entry>
+</feed>
