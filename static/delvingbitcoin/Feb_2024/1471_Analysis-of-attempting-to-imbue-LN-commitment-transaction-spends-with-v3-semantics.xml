@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Analysis of attempting to imbue LN commitment transaction spends with v3 semantics</title>
+  <updated>2024-02-08T01:59:26.508225+00:00</updated>
+  <author>
+    <name>sdaftuar 2024-02-07 16:47:29.258000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Analysis of attempting to imbue LN commitment transaction spends with v3 semantics</title>
+    <updated>2024-02-08T01:59:26.508257+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/analysis-of-attempting-to-imbue-ln-commitment-transaction-spends-with-v3-semantics/527" rel="alternate"/>
+    <summary>The recent analysis of applying v3 policy proposal to Lightning Network (LN) commitment transactions without any explicit software updates for the LN project has brought forth some insightful data. A simulation conducted over transaction data from 2023 has revealed that a total of 14,124 transactions would have been affected by the v3 validation rules, which include conditions like 1 parent-1 child and a maximum child size of 1000 virtual bytes. Out of these, 856 transactions, representing 6.06%, would have failed to pass the new validation criteria.
+
+Upon further investigation into whether the template matching is exclusively identifying LN commitment transaction anchor spends, results showed that out of the 856 failed transactions, 508 had inputs matching the LN anchor spend script template, while 175 had a direct parent that matched. This suggests that no other types of transactions were incorrectly identified by the template matching process.
+
+When examining why transactions were rejected by the v3 validation rules, it was found that most rejections were due to hitting ancestor or descendant count limits indicative of batch Child Pays for Parent (CPFP) or having more than one descendant transaction in a chain. Specifically, 595 transactions were blocked due to ancestor count limits, with 302 of these appearing to be batched CPFP transactions where multiple anchors are spent in the same transaction. The sizes of inputs matching the anchor spend script ranged from 2 to 6 per transaction. Only 10 transactions failed because they exceeded the size limit.
+
+Regarding the characteristics of transactions that fail due to ancestor count limits, 99 were never mined, and 175 were rejected because they would have created a length 2 descendant chain. Additionally, there were 19 transactions that included only one anchor spend alongside an output from another unconfirmed transaction; further analysis of these cases could offer more clarity.
+
+Lastly, an observation on the distribution of child transaction sizes for all 14,124 transactions was made using a histogram on a logarithmic scale, indicating that almost all transactions were small, fitting within the specified ranges of 25 virtual bytes.
+
+This analysis provides valuable insights into how the proposed v3 policy could impact LN commitment transactions and highlights the potential need for careful consideration before implementing such changes to ensure minimal disruption to existing transaction patterns.</summary>
+    <published>2024-02-07T16:47:29.258000+00:00</published>
+  </entry>
+</feed>
