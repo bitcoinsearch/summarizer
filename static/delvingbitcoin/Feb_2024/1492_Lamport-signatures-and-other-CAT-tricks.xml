@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lamport signatures and other CAT tricks</title>
+  <updated>2024-02-09T01:51:35.448126+00:00</updated>
+  <author>
+    <name>moonsettler 2024-02-08 22:19:48.787000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lamport signatures and other CAT tricks</title>
+    <updated>2024-02-09T01:51:35.448161+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lamport-signatures-and-other-cat-tricks/236/11" rel="alternate"/>
+    <summary>In the realm of blockchain and cryptocurrency, innovative solutions are continuously explored to enhance security and data integrity. One such method involves utilizing specific cryptographic techniques within the contract templates for state channels. The transaction template includes a `nLockTime` parameter which ensures that only transactions with a larger lock time can supersede the current on-chain state. This mechanism is critical for maintaining the contract's integrity over time. To facilitate this process, a series of hashes are employed: `state-n-hash`, `settlement-n-hash`, and `state-n-recovery-data`. These hashes represent various states of the contract, offering a way to settle or recover the contract at any point before reaching its final state.
+
+The initial approach to securing these state transitions involved using the CheckTemplateVerify (CTV) opcode combined with SHA256 and CAT operations. However, it was identified that this naive implementation might be vulnerable due to malleability issues since CTV only accepts 32-byte parameters. To mitigate this risk, an extra SHA256 layer is applied to the hash of the CTV template before concatenation for signature verification. This additional step ensures the immutability of both the template and the composite message.
+
+It's also suggested that a modified version of the `OP_CAT` operation could be introduced with certain restrictions. Specifically, it would only generate strings up to 80 bytes in length, thereby preventing complex scripts while allowing simpler use cases such as Lamport signatures and nonce manipulation schemes. This limitation could either remain permanently or be subject to change through a soft fork or expiration at a predetermined block height, based on future assessments of its impact.
+
+Finally, the importance of ensuring data availability is emphasized. By signing a concatenated string of critical data, only the latest state needs to be maintained, thus simplifying the overall data management required for the channel's operation. This strategy reflects a balance between efficiency and security in managing state channels on the blockchain.</summary>
+    <published>2024-02-08T22:19:48.787000+00:00</published>
+  </entry>
+</feed>
