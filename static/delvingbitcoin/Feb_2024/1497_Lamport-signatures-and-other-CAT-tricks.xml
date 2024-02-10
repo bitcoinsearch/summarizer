@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Lamport signatures and other CAT tricks</title>
+  <updated>2024-02-10T01:48:53.486759+00:00</updated>
+  <author>
+    <name>moonsettler 2024-02-09 11:24:28.710000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Lamport signatures and other CAT tricks</title>
+    <updated>2024-02-10T01:48:53.486793+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lamport-signatures-and-other-cat-tricks/236/13" rel="alternate"/>
+    <summary>Understanding the complexities of channel coins movement in off-chain transactions is crucial for maintaining a robust Lightning Network (LN) system. When a peer moves channel coins to a new address, and it does not align with the final state recognized by you, having access to all non-deterministic components of the script is vital. This enables you to reconstruct the state and transact using the most recent information. The use of nLockTime within CheckTemplateVerify (CTV) provides an immutable reference, pinpointing the exact state being examined. However, the final settlement hash is influenced by the balance between peers and any existing Hashed Time-Locked Contracts (HTLCs). To simplify this, one must know the time-locked settlement CTV template hash.
+
+The concept of LN-symmetry aspires to streamline channel states while enhancing backup and recovery processes. Therefore, critical data required for recovery should be accessible from transactions that spend to intermediate states. While OP_RETURN output serves this purpose, it incurs higher costs – four times more expensive than SegWit space.
+
+To counteract these challenges, several alternatives are proposed:
+
+1. CTV could commit to a taproot annex, with the annex being accepted in relay policy, following the APO approach.
+2. Introducing a VECTORCOMMIT opcode, which uses a construct like hash(hash(m1)|hash(m2)|..|hash(m16)), where 'hash' is a tagged Sha256 designed intentionally to be incompatible with SIGHASHING to prevent any potential 'sneaky CAT' issues.
+3. Implementing nCSFS/V, which would allow for optional commitment to multiple messages by integrating VECTORCOMMIT into CSFS/V.
+
+These options aim to provide more efficient ways to encode critical data necessary for channel state recovery in the event of a dispute or data loss.</summary>
+    <published>2024-02-09T11:24:28.710000+00:00</published>
+  </entry>
+</feed>
