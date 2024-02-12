@@ -2,12 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lamport signatures and other CAT tricks</title>
-  <updated>2024-02-10T01:51:21.403050+00:00</updated>
+  <updated>2024-02-12T01:55:17.548611+00:00</updated>
   <author>
-    <name>moonsettler 2024-02-09 11:24:28.710000+00:00</name>
+    <name>cguida 2024-02-11 22:49:38.527000+00:00</name>
   </author>
   <author>
-    <name>harding 2024-02-09 03:13:23.990000+00:00</name>
+    <name>moonsettler 2024-02-11 22:04:22.542000+00:00</name>
+  </author>
+  <author>
+    <name>harding 2024-02-11 19:03:26.496000+00:00</name>
+  </author>
+  <author>
+    <name>moonsettler  . 2024-02-09 11:24:28.710000+00:00</name>
+  </author>
+  <author>
+    <name>harding  . 2024-02-09 03:13:23.990000+00:00</name>
   </author>
   <author>
     <name>moonsettler  . 2024-02-08 22:19:48.787000+00:00</name>
@@ -42,6 +51,9 @@
   <author>
     <name>moonsettler  . 2023-12-03 00:47:43.909000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2024/1513_Lamport-signatures-and-other-CAT-tricks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2024/1512_Lamport-signatures-and-other-CAT-tricks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2024/1511_Lamport-signatures-and-other-CAT-tricks.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1497_Lamport-signatures-and-other-CAT-tricks.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1494_Lamport-signatures-and-other-CAT-tricks.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1492_Lamport-signatures-and-other-CAT-tricks.xml" rel="alternate"/>
@@ -59,23 +71,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lamport signatures and other CAT tricks</title>
-    <updated>2024-02-10T01:51:21.403147+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/lamport-signatures-and-other-cat-tricks/236/13" rel="alternate"/>
-    <summary>In the realm of blockchain technology, programmers are actively discussing advancements in state channel security and efficiency. They are exploring cryptographic techniques to enhance transactions, particularly for cryptocurrencies such as Bitcoin.
+    <updated>2024-02-12T01:55:17.548725+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lamport-signatures-and-other-cat-tricks/236/16" rel="alternate"/>
+    <summary>Recent discussions among programmers have focused on advanced blockchain technology, particularly involving the Lightning Network and Bitcoin scripting. These conversations have addressed the movement of channel coins in off-chain transactions, emphasizing the need for detailed information like settlement transaction data to maintain smooth operations. The integrity of channel state is maintained through parameters such as `nLockTime` and multiple hashes representing different contract states. There is a suggestion to secure state transitions by adding an SHA256 layer to CheckTemplateVerify (CTV) template hashes and possibly reintroducing a restricted `OP_CAT` operation.
 
-A key topic is the non-deterministic elements in scripts that reconstruct and validate channel states, emphasizing the role of the `nLockTime` parameter to ensure contract integrity by allowing only newer transactions to replace older ones. To combat malleability, a combination of the CheckTemplateVerify (CTV) opcode and SHA256 and CAT operations is proposed with suggestions to limit the size of strings produced by `OP_CAT`.
+In terms of Bitcoin scripting enhancements, there is a proposal for a soft fork introducing Pay to X Script Hash (P2XSH), which would use `OP_HASH256 OP_EQUAL` to support complex scripts and provide quantum resistance. Versioning scripts as tapleaf structures could further extend script capabilities. However, there is skepticism about the practicality of implementing certain features, like CAT via soft-fork, within Bitcoin's existing structure.
 
-The discourse includes proposals for script enhancements inspired by Bitcoin's Taproot upgrade, aiming for complexity handling, developer flexibility, and ease of upgrades. A soft fork proposal introduces new script operations and encoding methods for a quantum-resistant script hash mechanism with `OP_SUCCESS` opcodes.
+Security discussions have included proposals for mandatory disclosures to strengthen validation processes and concerns over keyspends being targeted by attackers, suggesting a 'quantum proof exit hatch' for treasuries. The resilience of script path spends is considered reliable as long as SHA256 remains preimage resistant. The community is debating verification methods for keyspend operations, recognizing potential exploitations by adversaries, and considering enforcing script-only transactions while retaining current address formats.
 
-However, there are recognized constraints within Bitcoin's architecture that limit the implementation of certain advanced scripts. Security protocols are also debated, with strategies suggested to improve the verification process against quantum attacks, such as revealing preimage tweaks during validation and considering script-only transactions compatible with current address formats.
+Finally, there is concern over the discrete logarithm problem potentially compromising transaction privacy, underscoring the necessity for robust cryptographic practices. Proposals include enhancing taproot security with a soft-fork to mitigate quantum vulnerabilities, establishing quantum-resistant Pay-to-Taproot (P2TR) outputs, and using a Nothing-Up-My-Sleeve (NUMS) point as a quantum-safe placeholder.
 
-Concerns are raised about the discrete logarithm problem's threat to transaction privacy, stressing the need for future-proof security systems. A soft-fork suggestion seeks to restrict the standard internal public key usage and recommends a NUMS point for interim quantum resistance.
-
-Optimization efforts include scripting for Merkle tree construction and single-use public keys to minimize witness data, mentioning potential operations like `DIVMOD` and `OP_STR_LESSTHAN`, especially if stack size limits or looping constructs are applied.
-
-An analysis is provided on a blockchain-based script designed for signature data management, suitable for an input size of about 4-5KB, operating within an Inquisition signet resembling Bitcoin's mainnet. The script integrates complex verification operations and conditional checks for Merkle proof validation, and ideas are sought for enhancing its efficiency and compatibility with both current and prospective blockchain technologies.
-
-Finally, the emails detail a cryptographic process utilizing an alternative stack to handle various byte counts, concatenate and hash data elements, and verify the structure of a Merkle tree. A root hash serving as a public key is calculated from Merkle roots and sighash bytes. This root stems from private keys generated by a BIP-32 HD wallet seed, creating preimages that contribute to the root hash. An introspection mechanism ensures transactional compliance, maintaining user privacy while allowing public verifiability through deterministic public keys.</summary>
-    <published>2024-02-09T11:24:28.710000+00:00</published>
+Technical insights into optimizing Merkle tree scripting involve single-use public keys generated from commitments linked to nonces and bytes. Optimizations may include a `DIVMOD` operation for stack computations and an `OP_STR_LESSTHAN` operation for byte vector comparisons. A blockchain-based script designed for signature data around 4-5KB discussed its application on an Inquisition signet, handling elements like hashes, merkle control bytes, and sighash bytes with a sophisticated verification system. The viability of integrating quantum-resistant signatures within P2TR outputs and updating taproot via a soft fork is also examined. This involves a cryptographic procedure using an alt-stack, concatenation, hashing, and swapping to validate a Merkle tree, ensuring transaction compliance and maintaining user privacy with deterministic public keys.</summary>
+    <published>2024-02-11T22:49:38.527000+00:00</published>
   </entry>
 </feed>
