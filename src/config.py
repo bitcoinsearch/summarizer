@@ -23,7 +23,7 @@ CHATGPT = True
 COMPLETION_MODEL = "text-davinci-003"  # "text-ada-001"
 
 # used in generation of xmls production, homepage, newsletter etc.
-CHAT_COMPLETION_MODEL = "gpt-4-1106-preview"  # "gpt-3.5-turbo", "gpt-4"
+CHAT_COMPLETION_MODEL = "gpt-4-turbo-preview"  # "gpt-3.5-turbo", "gpt-4"
 
 ES_CLOUD_ID = os.getenv("ES_CLOUD_ID")
 ES_USERNAME = os.getenv("ES_USERNAME")
