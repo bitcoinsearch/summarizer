@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Malleability issues when creating shared transactions with segwit v0</title>
+  <updated>2024-02-14T01:58:22.231954+00:00</updated>
+  <author>
+    <name>instagibbs 2024-02-13 16:04:47.430000+00:00</name>
+  </author>
+  <author>
+    <name>tbast  . 2024-01-30 09:32:10.184000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Feb_2024/1531_Malleability-issues-when-creating-shared-transactions-with-segwit-v0.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2024/1378_Malleability-issues-when-creating-shared-transactions-with-segwit-v0.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Malleability issues when creating shared transactions with segwit v0</title>
+    <updated>2024-02-14T01:58:22.232035+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/malleability-issues-when-creating-shared-transactions-with-segwit-v0/497/2" rel="alternate"/>
+    <summary>In the evolving landscape of cryptocurrency, Layer 2 contracts have significantly enhanced transaction capabilities, facilitating intricate exchanges between parties that may not inherently trust one another. These contracts typically necessitate participants to pre-sign a refund transaction. This serves as a safeguard, ensuring they can reclaim their funds if collaborative efforts fail. However, this system is not without its vulnerabilities, particularly concerning the malleability of transaction IDs (`txid`). If a `txid` is altered post-approval by the involved parties, the efficacy of the pre-signed refund transaction could be compromised, potentially leading to situations where malicious entities could exploit this weakness for financial gain.
+
+A specific instance where this vulnerability is pronounced is within the Lightning Network's interactive-tx transactions, especially noted in scenarios involving dual-funding and splicing. A detailed examination of this issue can be found in the [lightning/bolts pull request](https://github.com/lightning/bolts/pull/851). The problem arises when collaborators, such as Alice and Bob, engage in funding a Lightning channel. They add inputs through `tx_add_input` messages which are expected to contain only Segregated Witness (segwit) compatible `scriptPubKeys`, negating the risk of malleability. However, if one party clandestinely employs a non-segwit `scriptPubKey`, they can alter the `txid` after signing the funding transaction. This action invalidates the commitment transactions of the other party, effectively trapping their funds.
+
+Segregated Witness version 1 (segwit v1), as outlined in [BIP 341](https://github.com/bitcoin/bips/blob/deae64bfd31f6938253c05392aa355bf6d7e7605/bip-0341.mediawiki), proposes a solution to this predicament by mandating the inclusion of `amounts` and `scriptPubKeys` of all inputs in the signature hash. This requirement binds signatures unequivocally to the specific inputs used, thereby mitigating the risk of `txid` malleability. However, completely eliminating the `prevtx` from the transaction process remains unsafe under certain conditions. For maximum protection against these vulnerabilities, it is recommended that each participant ensures at least one input utilizes segwit v1.
+
+The decision to exclude the `prevtx` field is deemed secure primarily in two scenarios: when conducting a splice transaction within a taproot channel that features a shared input requiring signatures from all parties, or when every participant includes at least one taproot input in the transaction. Adhering to these guidelines ensures that all inputs are securely tied to the transaction, effectively guarding against malleability and promoting the security and integrity of transactions within the Lightning Network ecosystem.</summary>
+    <published>2024-02-13T16:04:47.430000+00:00</published>
+  </entry>
+</feed>
