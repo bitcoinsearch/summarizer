@@ -2,12 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Lightning Hardware Wallet</title>
-  <updated>2024-02-15T01:56:17.290746+00:00</updated>
+  <updated>2024-02-16T01:56:32.148717+00:00</updated>
   <author>
-    <name>t-bast 2024-02-14 14:57:01.333000+00:00</name>
+    <name>salvatoshi 2024-02-15 13:36:35.650000+00:00</name>
   </author>
   <author>
-    <name>pgrange 2024-02-14 09:23:43.182000+00:00</name>
+    <name>edouard 2024-02-15 11:23:59.626000+00:00</name>
+  </author>
+  <author>
+    <name>tbast  . 2024-02-14 14:57:01.333000+00:00</name>
+  </author>
+  <author>
+    <name>pgrange  . 2024-02-14 09:23:43.182000+00:00</name>
   </author>
   <author>
     <name>tbast  . 2024-02-13 12:49:23.227000+00:00</name>
@@ -15,6 +21,8 @@
   <author>
     <name>pgrange  . 2024-02-13 10:50:39.817000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2024/1581_Lightning-Hardware-Wallet.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2024/1579_Lightning-Hardware-Wallet.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1566_Lightning-Hardware-Wallet.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1561_Lightning-Hardware-Wallet.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1530_Lightning-Hardware-Wallet.xml" rel="alternate"/>
@@ -23,15 +31,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Lightning Hardware Wallet</title>
-    <updated>2024-02-15T01:56:17.290797+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/lightning-hardware-wallet/555/4" rel="alternate"/>
-    <summary>The integration of hardware wallets with the Lightning network presents a nuanced challenge aimed at enhancing the security of Bitcoin transactions. This initiative seeks to address the limitations of current Lightning wallets, which are optimized for smaller payments, by focusing on securing larger transactions through hardware wallet integration for key management. The project leverages the Phoenix project by ACINQ for its Lightning wallet component and plans to use a Ledger device for the hardware aspect, recognizing its popularity and proven track record in previous integrations. This experimental phase aims to assess both the technical feasibility and the user experience of this novel combination, with a prototype application that facilitates Lightning network payments with transaction signing delegated to the hardware wallet.
+    <updated>2024-02-16T01:56:32.148777+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lightning-hardware-wallet/555/6" rel="alternate"/>
+    <summary>The Vanadium project, currently in its prototypal and experimental stages, aims to significantly simplify embedded programming by abstracting the complexities and platform-specific quirks of different embedded toolchains and hardware. Targeting a developer-ready stage by Q4, it promises to ease the development process for applications, including low-volume lightning nodes and personal security HSM (Hardware Security Module) solutions. Despite its potential, scaling high-volume routing lightning nodes remains challenging due to hardware limitations rather than those of the virtual machine (VM). The project was showcased at Baltic Honeybadger 2023 through a presentation, the slides of which are available [here](https://docs.google.com/presentation/d/1bMGbM6aHFVk0b03BWd8nmvoWJw1UxhAfbdOUBtoP9iE/edit?usp=drive_link), alongside an earlier blog post that can be found [here](https://www.ledger.com/blog/app-streaming).
 
-One significant hurdle identified is maintaining user convenience while integrating hardware security features. Currently, Lightning wallets automate the search for payment paths, a process that could become cumbersome if each attempt necessitates hardware validation. Moreover, receiving payments might face delays, as user validation is required before completion, potentially impacting the overall user experience. This endeavor seeks to find optimal solutions that seamlessly integrate hardware security mechanisms into the Lightning protocol without compromising user convenience.
+Vanadium, envisioned by Salvatore Ingala and Ledger engineers, extends the capabilities of hardware wallets by utilizing a RISC VM to run any application using client memory, thus bypassing the memory constraints traditionally associated with such devices. This approach enables storing states, policies, and other information on the client side, verified through Merkle Tree root commitments and hardware wallet signatures. Unlike the current bitcoin ledger app handling miniscript descriptors, Vanadium proposes a more advanced computing abstraction, potentially supported by the Rust-Lightning SDK and leveraging Rust's growing toolset.
 
-Additionally, the proposal introduces several technical complexities, such as the need for the hardware device to be stateful and capable of implementing complex policies. After a user authorizes a payment, multiple signing operations may be necessary, requiring the hardware device to prevent malicious applications from exfiltrating funds. The device must also handle various background operations requiring signatures, such as splicing and commitment fee updates, autonomously. This suggests incorporating a substantial portion of the lightning channel state machine logic directly into the hardware device, a task equating to developing an entire lightning network implementation within the hardware wallet. This represents a considerable undertaking, underscoring the scale and complexity of the project.
+Addressing payment technicalities, especially with hardware device issues during transactions, poses significant challenges. A proposed solution involves asynchronous payments to allow flexible handling of payment timings, as discussed on the Linux Foundation's mailing list ([link](https://lists.linuxfoundation.org/pipermail/lightning-dev/2021-October/003307.html)). This method could alleviate problems arising from automatic failures due to unreachable devices, offering a more adaptable framework compared to the current system reliant on immediate user coordination for invoice sharing and payment.
 
-This open-source project differentiates itself by targeting secure, large-amount transactions on the Lightning network, catering to end-users who prioritize securing their assets with hardware wallets. It contrasts with existing solutions like Bitbox and Electrum's approach, focusing solely on the security aspects of Lightning transactions. Despite recognizing other challenges like network liquidity, the project’s strategic focus remains on enhancing transaction security to bolster user confidence and control over their funds on the Lightning network. Feedback from individuals who self-custody Bitcoin and emphasize asset security is particularly valued as the project progresses.</summary>
-    <published>2024-02-14T14:57:01.333000+00:00</published>
+The dialogue also explores a new methodology for non-custodial mobile wallet transactions, requiring active user participation for transaction verification, diverging from the seamless experience provided by apps like Phoenix. This shift towards requiring hardware ledger connectivity introduces potential delays and complicates user interaction, raising questions about usability and the practical implementation of security measures. Yet, this strategy might offer benefits in scenarios necessitating synchronous payments, suggesting an area for strategic development and user experience optimization.
+
+Moreover, the conversation delves into the technical and user experience implications of integrating Phoenix and Ledger for on-chain operations. The anticipated complexity of implementing a comprehensive lightning channel state machine logic within the hardware device underscores the substantial challenge of this endeavor. It highlights the necessity for a nuanced approach to ensuring secure and autonomous transaction analysis and authorization by the hardware device.
+
+Finally, a new open-source project aims to bolster Bitcoin transactions on the Lightning network through hardware wallet integration for enhanced key management. Focusing on securing larger transactions, the initiative seeks to explore the feasibility and user experience of marrying the functionalities of a Lightning wallet with a hardware wallet. This project, targeting a prototype phase using Phoenix's source code and a Ledger device, underscores the unmet need for hardware-protected Lightning wallets capable of securely managing significant transaction volumes without compromising convenience.</summary>
+    <published>2024-02-15T13:36:35.650000+00:00</published>
   </entry>
 </feed>
