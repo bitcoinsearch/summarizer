@@ -2,15 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - An overview of the cluster mempool proposal</title>
-  <updated>2024-02-09T02:07:14.814206+00:00</updated>
+  <updated>2024-02-19T02:01:14.164208+00:00</updated>
   <author>
-    <name>instagibbs 2024-02-08 15:23:54.319000+00:00</name>
+    <name>sdaftuar 2024-02-18 15:43:27.168000+00:00</name>
   </author>
   <author>
-    <name>sdaftuar 2024-02-08 15:00:36.660000+00:00</name>
+    <name>hebasto 2024-02-18 15:28:06.571000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2024-02-08 14:15:36.144000+00:00</name>
+    <name>instagibbs  . 2024-02-08 15:23:54.319000+00:00</name>
+  </author>
+  <author>
+    <name>sdaftuar  . 2024-02-08 15:00:36.660000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs  . 2024-02-08 14:15:36.144000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2024-02-05 15:08:32.829000+00:00</name>
@@ -51,6 +57,8 @@
   <author>
     <name>sdaftuar  . 2024-01-09 22:52:52.578000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2024/1599_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2024/1598_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1490_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1489_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1485_An-overview-of-the-cluster-mempool-proposal.xml" rel="alternate"/>
@@ -71,23 +79,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - An overview of the cluster mempool proposal</title>
-    <updated>2024-02-09T02:07:14.814320+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/an-overview-of-the-cluster-mempool-proposal/393/16" rel="alternate"/>
-    <summary>The dialogue addresses inefficiencies in Bitcoin's mempool clustering algorithm, particularly when a new transaction with a high fee rate arrives and necessitates the eviction of existing transactions. It discusses the potential for re-adding previously evicted transactions, indicating a need for optimization in the transition between mempool states.
+    <updated>2024-02-19T02:01:14.164333+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/an-overview-of-the-cluster-mempool-proposal/393/18" rel="alternate"/>
+    <summary>The email discussion examines the challenges and strategies for managing transactions within a mempool, with a specific focus on cluster size limits and the eviction of transactions to accommodate new ones. The concept of a cluster size limit is highlighted as a means to manage the output spendable from a single transaction before the parent transaction's confirmation, particularly in scenarios involving CoinJoin transactions. It is noted that there is an existing descendant count limit that restricts unconfirmed spends from a single transaction, with aspirations to support larger numbers than the default limit, potentially up to 100.
 
-An alternative cost-based eviction strategy is proposed, focusing on the Cost of Forgetting (CFR) to minimize the fees paid during eviction while managing mempool space effectively. This method's computational complexity and its trade-off with perceived benefits are acknowledged as points of concern.
+Further discussed are the mechanisms for prioritizing or evicting transactions in the mempool, including an algorithm employing a minheap prioritized by Cumulative Fee Rate (CFR) for managing large transaction clusters exceeding the mempool's capacity. This process aims to balance efficiency with the minimal impact on the transaction pool. The implications of these management strategies for practical use cases such as zero-confirmation funding transactions in the Lightning Network and Ark/Timeout trees are also considered, acknowledging the challenges of adding anchors and balancing efficiency against potential overhead.
 
-The conversation also explores the challenges wallets face in making effective eviction decisions due to incomplete network information. It suggests addressing simpler scenarios before aiming for an optimal solution that may be unattainable. The concept of sibling eviction is introduced as an alternative to the current CPFP carveout rule, allowing higher fee transactions to replace those with the same unconfirmed parent within size limits.
+Critiques are presented regarding the current approach to improving mempool quality, pinpointing inefficiencies related to rebroadcasting and revalidating unnecessarily evicted transactions. An alternative solution involving peers in the eviction decision process is proposed, albeit with questions about its feasibility and effectiveness. Additionally, the concept of sibling eviction is explored as an alternative to the CPFP carveout rule for optimizing transaction selection in the mempool, recognizing the complexity of eviction decisions while stressing the importance of considering all alternatives.
 
-The discussion notes economic implications and user experience, advocating for flexible mechanisms rather than strict rules and recognizing the importance of learning from unsuccessful ideas.
+The correspondence delves into the implementation and refinement of 'carveout' rules within the Bitcoin blockchain for Lightning Network transactions. The detailed criteria for carveouts face challenges, especially concerning LN anchor channels and the enforcement of rules on the transaction graph's structure. A potential update ('v3') is mentioned, aiming to enforce stricter limitations on spending anchor outputs to simplify the transaction graph topology. The conversation further suggests an incentive compatibility model based on transaction fee rates to address mempool management challenges, including adapting "mempoolfullrbf" style Replace-By-Fee mechanisms and the concept of a "tail feerate" for evaluating mining profitability from different mempool configurations.
 
-A blog post further examines the nuances of carveout transactions in Bitcoin, highlighting their role in enhancing Lightning Network efficiency. Carveouts allow certain transactions to bypass standard mempool restrictions, based on criteria such as size and the absence of additional unconfirmed ancestors. The system's flexibility is demonstrated by the possibility of multiple carveouts within a single cluster.
-
-Incentive compatibility in fee rates is discussed, suggesting prioritizing higher fees at the top of the mempool, but acknowledging the lack of proven effectiveness against manipulation strategies like anti-pin strategies. The blog outlines the theoretical nature of "mempoolfullrbf" style Replace-By-Fee (RBF) and the necessity of thorough research before implementation.
-
-When evaluating fee rate profitability across different mempools, the preferred method involves padding the smaller mempool for equitable assessment. The post calls for strict adherence to cluster size constraints and cautions against policies allowing exceptions.
-
-Concerns about the deprecation of the CPFP carve-out rule and the absence of simple alternatives are expressed. A proposal for a new design in Bitcoin Core's mempool presents policy changes emphasizing cluster size and RBF rule updates. This design aims for better alignment with miner incentives through a fully sorted mempool, simplifying transaction organization and improving efficiency. Details and community feedback on this proposal can be found in the original write-up by Pieter Wuille (@sipa).</summary>
-    <published>2024-02-08T15:23:54.319000+00:00</published>
+Lastly, two primary strategies for adhering to cluster size limitations are discussed: evicting existing transactions or expanding the cluster beyond its limits. A recommendation is made for strict adherence to predefined cluster sizes, emphasizing sound engineering principles. A new design proposition for the Bitcoin Core mempool introduces policy changes focused on cluster size limitations and updated RBF rules, aiming to replace the current system's shortcomings with a design that enforces total ordering of all transactions in the mempool, potentially streamlining the transaction processing framework.</summary>
+    <published>2024-02-18T15:43:27.168000+00:00</published>
   </entry>
 </feed>
