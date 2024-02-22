@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Setting to_self_delay and cltv_expiry prior to channel opening</title>
+  <updated>2024-02-22T01:50:25.770629+00:00</updated>
+  <author>
+    <name>Keagan McClelland 2024-02-14 21:44:06+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Setting to_self_delay and cltv_expiry prior to channel opening</title>
+    <updated>2024-02-22T01:50:25.770666+00:00</updated>
+    <link href="https://lists.linuxfoundation.org/pipermail/lightning-dev/2024-February/004278.html" rel="alternate"/>
+    <summary>In the realm of Lightning Network Daemon (LND), the configuration and negotiation of timelocks during the channel opening process are pivotal for maintaining the security and operability of the network. The maximum contest window, a critical parameter in this setup, is by default set to 2016 blocks. This value, however, can be adjusted by modifying the `bitcoin.maxlocaldelay` setting within the `lnd.conf` file, offering flexibility to users based on their security requirements or preferences.
+
+The negotiation of these timelocks occurs implicitly during the channel opening procedure through the exchange of `open_channel` and `accept_channel` messages. These messages include a `to_self_delay` field that specifies the timelock duration. This mechanism allows either participant to reject the proposed channel if the suggested timelock does not align with their expectations. An error message indicating an unacceptable timelock provides feedback, enabling parties to iteratively find a mutually agreeable duration. 
+
+When it comes to imposing timelock constraints, the approach varies depending on whether one is initiating the channel opening or responding. Initiators specify their preferred timelock through RPC arguments during the channel opening, whereas responders rely on the configuration specified in `lnd.conf` or default to a linear scale based on channel size if no configuration is provided. For those seeking greater control over these settings, LND offers the option to utilize a ChannelAcceptor, allowing for dynamic decision-making regarding timelock constraints.
+
+It's important to note that there is no requirement for the timelock values to be symmetric between the two parties involved in the channel. This aspect underscores the importance of clear communication and negotiation to ensure both parties are satisfied with the timelock settings, preventing potential disagreements from hindering the establishment of a channel.
+
+For further technical details and insights into the protocol mechanics and LND's behavior regarding timelocks and channel negotiations, interested readers can refer to the official documentation available at [Lightning Network Specifications](https://github.com/lightning/bolts/blob/master/02-peer-protocol.md?plain=1L703-L706), [LND Funding Manager](https://github.com/lightningnetwork/lnd/blob/master/funding/manager.goL1639-L1646), and [Channel Acceptor Documentation](https://docs.lightning.engineering/lightning-network-tools/lnd/channel-acceptor), among other resources. These documents provide a comprehensive overview of the procedures and options available to participants of the Lightning Network, ensuring a robust and flexible platform for digital transactions.</summary>
+    <published>2024-02-14T21:44:06+00:00</published>
+  </entry>
+</feed>
