@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Liquidity provider utxo management</title>
+  <updated>2024-02-23T02:03:07.161623+00:00</updated>
+  <author>
+    <name>remyers 2024-02-22 14:49:27.076000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Liquidity provider utxo management</title>
+    <updated>2024-02-23T02:03:07.161653+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/liquidity-provider-utxo-management/600" rel="alternate"/>
+    <summary>The discussion revolves around the challenges faced by liquidity providers, especially those operating Lightning nodes, in managing their wallets efficiently for funding liquidity through ads. These wallets often encounter issues like frequent spending of UTXOs on liquidity transactions, infrequent wallet refills, and the risk of unconfirmed transactions due to simultaneous spends or unsafe change. The ideal scenario posited involves funding each liquidity transaction with a single input and without generating a change output to minimize weight, fees, and the risk associated with tied-up funds in change outputs that may delay in becoming spendable or might not confirm at all.
+
+A solution proposed to optimize UTXO management focuses on several strategies. Initially, it suggests importing a user-defined set of target UTXOs intended for funding liquidity transactions, tailored to accommodate different fee rates and the requirements of multiple simultaneous transactions. This approach aims at selecting UTXOs that precisely or slightly overpay fees, avoiding the need for additional inputs and change outputs. Furthermore, the proposal includes proactive measures for refilling UTXO buckets, especially under conditions of low fee rates or significant depletion, by creating change outputs that can be later split to replenish these buckets. Coin selection mechanisms are also considered, where if a single input solution is unattainable, the generated change output should opportunistically contribute to refilling targeted buckets to an extent that aligns with predefined criteria.
+
+Testing of this proposed solution involved experiments with a modified version of the [coin_selection_simulation](https://github.com/achow101/coin-selection-simulation) and changes to Bitcoin Core as seen in draft PR [29422](https://github.com/bitcoin/bitcoin/pull/29442). Preliminary results indicated a potential reduction in on-chain fees by approximately 15% compared to standard coin selection practices. This outcome suggests room for further refinement and improvement in the strategy, inviting feedback and suggestions for optimization.
+
+The inquiry concludes with several questions aimed at enhancing the proposed strategy. These include considerations on whether pre and post-processing of coin selection parameters could further optimize the process, the viability of exclusively using certain algorithms like branch-and-bound and [CoinGrinder](https://github.com/bitcoin/bitcoin/pull/27877) to reduce fees, and ideas for a more efficient algorithm for adding inputs and splitting change. Additionally, it opens the discussion to other potential use cases that could benefit from such functionality, including coin join users.</summary>
+    <published>2024-02-22T14:49:27.076000+00:00</published>
+  </entry>
+</feed>
