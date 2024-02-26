@@ -68,6 +68,8 @@ class XMLReader:
         link = root.findall(".//atom:entry/atom:link", namespaces)[0].get('href')
         if "bitcoin-dev" in link:
             domain = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
+        elif "bitcoindev" in link:
+            domain = "https://gnusha.org/pi/bitcoindev/"
         elif "lightning-dev" in link:
             domain = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
         elif "delvingbitcoin" in link:
@@ -124,7 +126,7 @@ class GenerateXML:
 
         df_dict["title"].append(title)
         formatted_file_name = file.split("/static")[1]
-        logger.info(formatted_file_name)
+        # logger.info(formatted_file_name)
 
         tree = ET.parse(file)
         root = tree.getroot()
@@ -173,7 +175,7 @@ class GenerateXML:
                         summary = root.find('atom:entry/atom:summary', namespace).text
                         df_dict["body"].append(summary)
             else:
-                logger.info(f"File not present:- {file}")
+                logger.info(f"file not present: {file}")
 
     def file_present_df(self, files_list, namespace, combined_filename, title, xmls_list, df_dict):
         combined_file_fullpath = None
@@ -211,22 +213,14 @@ class GenerateXML:
 
     def get_local_xml_file_paths(self, dev_url):
         current_directory = os.getcwd()
-        if "bitcoin-dev" in dev_url:
-            files_list = glob.glob(os.path.join(current_directory, "static", "bitcoin-dev", "**/*.xml"), recursive=True)
-        elif "lightning-dev" in dev_url:
-            files_list = glob.glob(os.path.join(current_directory, "static", "lightning-dev", "**/*.xml"),
-                                   recursive=True)
-        elif "delvingbitcoin" in dev_url:
-            files_list = glob.glob(os.path.join(current_directory, "static", "delvingbitcoin", "**/*.xml"),
-                                   recursive=True)
-        else:
-            files_list = glob.glob(os.path.join(current_directory, "static", "others", "**/*.xml"), recursive=True)
+        directory = self.get_base_directory(dev_url)
+        files_list = glob.glob(os.path.join(current_directory, "static", directory, "**/*.xml"), recursive=True)
         return files_list
 
     def generate_new_emails_df(self, dict_data, dev_url):
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
 
-        # get locally stored xml files path
+        # get a locally stored xml files path
         files_list = self.get_local_xml_file_paths(dev_url)
 
         columns = ['_index', '_id', '_score']
@@ -243,16 +237,15 @@ class GenerateXML:
             combined_filename = f"combined_{xml_name}.xml"
 
             if not any(file_name in item for item in files_list):
-                logger.info(f"{file_name} || is not present!")
+                logger.info(f"Not present: {file_name}")
 
                 self.file_not_present_df(columns, source_cols, df_dict, files_list, dict_data, data,
                                          title, combined_filename, namespaces)
             else:
-                logger.info(f"{file_name} || already exist!")
+                logger.info(f"Present: {file_name}")
                 self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)
 
         emails_df = pd.DataFrame(df_dict)
-
         emails_df['authors'] = emails_df['authors'].apply(convert_to_tuple)
         emails_df = emails_df.drop_duplicates()
         emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
@@ -260,6 +253,17 @@ class GenerateXML:
         emails_df['title'] = emails_df['title'].apply(remove_multiple_whitespaces)
         logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
+
+    def get_base_directory(self, url):
+        if "bitcoin-dev" in url or "bitcoindev" in url:
+            directory = "bitcoin-dev"
+        elif "lightning-dev" in url:
+            directory = "lightning-dev"
+        elif "delvingbitcoin" in url:
+            directory = "delvingbitcoin"
+        else:
+            directory = "others"
+        return directory
 
     def start(self, dict_data, url):
         if len(dict_data) > 0:
@@ -272,44 +276,26 @@ class GenerateXML:
                         cols['created_at'] = add_utc_if_not_present(cols['created_at'], iso_format=False)
                     month_name = month_dict[int(cols['created_at'].month)]
                     str_month_year = f"{month_name}_{int(cols['created_at'].year)}"
+                    number = get_id(cols['id'])
+                    xml_name = clean_title(cols['title'])
 
-                    if "bitcoin-dev" in url:
-                        if not os.path.exists(f"static/bitcoin-dev/{str_month_year}"):
-                            create_folder(f"static/bitcoin-dev/{str_month_year}")
-                        number = get_id(cols['id'])
-                        xml_name = clean_title(cols['title'])
-                        file_path = f"static/bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml"
-                    elif "lightning-dev" in url:
-                        if not os.path.exists(f"static/lightning-dev/{str_month_year}"):
-                            create_folder(f"static/lightning-dev/{str_month_year}")
-                        number = get_id(cols['id'])
-                        xml_name = clean_title(cols['title'])
-                        file_path = f"static/lightning-dev/{str_month_year}/{number}_{xml_name}.xml"
-                    elif "delvingbitcoin" in url:
-                        if not os.path.exists(f"static/delvingbitcoin/{str_month_year}"):
-                            create_folder(f"static/delvingbitcoin/{str_month_year}")
-                        number = get_id(cols['id'])
-                        xml_name = clean_title(cols['title'])
-                        file_path = f"static/delvingbitcoin/{str_month_year}/{number}_{xml_name}.xml"
-                    else:
-                        if not os.path.exists(f"static/others/{str_month_year}"):
-                            create_folder(f"static/others/{str_month_year}")
-                        number = get_id(cols['id'])
-                        xml_name = clean_title(cols['title'])
-                        file_path = f"static/others/{str_month_year}/{number}_{xml_name}.xml"
+                    directory = self.get_base_directory(url)
+                    dir_path = f"static/{directory}/{str_month_year}"
 
+                    # create directory if it doesn't exist
+                    if not os.path.exists(dir_path):
+                        create_folder(dir_path)
+
+                    # construct file path
+                    file_path = f"{dir_path}/{number}_{xml_name}.xml"
+
+                    # check if file exists
                     if os.path.exists(file_path):
-                        logger.info(f"{file_path} already exist")
-                        if "bitcoin-dev" in url:
-                            link = f'bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml'
-                        elif "lightning-dev" in url:
-                            link = f'lightning-dev/{str_month_year}/{number}_{xml_name}.xml'
-                        elif "delvingbitcoin" in url:
-                            link = f'delvingbitcoin/{str_month_year}/{number}_{xml_name}.xml'
-                        else:
-                            link = f'others/{str_month_year}/{number}_{xml_name}.xml'
-                        return link
+                        logger.info(f"Exist: {file_path}")
+                        return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
 
+                    # create file if not exist
+                    logger.info(f"Not found: {file_path}")
                     summary = create_summary(cols['body'])
                     feed_data = {
                         'id': combine_flag,
@@ -320,21 +306,13 @@ class GenerateXML:
                         'created_at': cols['created_at_org'],
                         'summary': summary
                     }
-
                     self.generate_xml(feed_data, file_path)
-
-                    if "bitcoin-dev" in url:
-                        link = f'bitcoin-dev/{str_month_year}/{number}_{xml_name}.xml'
-                    elif "lightning-dev" in url:
-                        link = f'lightning-dev/{str_month_year}/{number}_{xml_name}.xml'
-                    elif "delvingbitcoin" in url:
-                        link = f'delvingbitcoin/{str_month_year}/{number}_{xml_name}.xml'
-                    else:
-                        link = f'others/{str_month_year}/{number}_{xml_name}.xml'
-                    return link
+                    return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
 
                 os_name = platform.system()
                 logger.info(f"Operating System: {os_name}")
+
+                # get unique titles
                 titles = emails_df.sort_values('created_at')['title'].unique()
                 logger.info(f"Total titles in data: {len(titles)}")
                 for title_idx, title in tqdm(enumerate(titles)):
@@ -344,37 +322,29 @@ class GenerateXML:
                     title_df['authors'] = title_df['authors'].apply(self.preprocess_authors_name)
                     title_df = title_df.sort_values(by='created_at', ascending=False)
                     logger.info(f"Number of docs for title: {title}: {len(title_df)}")
+
                     if len(title_df) < 1:
                         continue
                     if len(title_df) == 1:
                         generate_local_xml(title_df.iloc[0], "0", url)
                         continue
-                    # body = title_df['body'].apply(str).tolist() + old_files_data_dict["summary_list"]
                     combined_body = '\n\n'.join(title_df['body'].apply(str))
-                    # combined_body = '\n\n'.join(body)
                     xml_name = clean_title(title)
                     combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
                     combined_authors = list(
                         title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
-
                     month_year_group = \
                         title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
 
                     flag = False
-                    std_file_path = ''
+                    std_file_path = ""
                     for idx, (month_year, _) in enumerate(month_year_group):
                         logger.info(f"Month and Year: {month_year}")
                         month_name = month_dict[int(month_year[0])]
                         str_month_year = f"{month_name}_{month_year[1]}"
 
-                        if "bitcoin-dev" in url:
-                            file_path = f"static/bitcoin-dev/{str_month_year}/combined_{xml_name}.xml"
-                        elif "lightning-dev" in url:
-                            file_path = f"static/lightning-dev/{str_month_year}/combined_{xml_name}.xml"
-                        elif "delvingbitcoin" in url:
-                            file_path = f"static/delvingbitcoin/{str_month_year}/combined_{xml_name}.xml"
-                        else:
-                            file_path = f"static/others/{str_month_year}/combined_{xml_name}.xml"
+                        directory = self.get_base_directory(url)
+                        file_path = fr"static/{directory}/{str_month_year}/combined_{xml_name}.xml"
 
                         combined_summary = create_summary(combined_body)
                         feed_data = {
