@@ -28,6 +28,8 @@ class GenerateJSON:
 
         if dev_name == "delvingbitcoin.org":
             dev_name = "delvingbitcoin"
+        if dev_name == "bitcoindev":
+            dev_name = "bitcoin-dev"
 
         current_directory = os.getcwd()
         file_path = f"static/{dev_name}/{str_month_year}/{number}_{xml_name}.xml"
@@ -96,6 +98,8 @@ class GenerateJSON:
         local_dev_name = data['_source']['dev_name']
         if local_dev_name == "delvingbitcoin.org":
             local_dev_name = "delvingbitcoin"
+        if local_dev_name == "bitcoindev":
+            local_dev_name = "bitcoin-dev"
         xml_name = clean_title(title)
         month_name = month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"
@@ -132,6 +136,8 @@ class GenerateJSON:
         local_dev_name = data['_source']['dev_name']
         if local_dev_name == "delvingbitcoin.org":
             local_dev_name = "delvingbitcoin"
+        if local_dev_name == "bitcoindev":
+            local_dev_name = "bitcoin-dev"
         xml_name = clean_title(title)
         month_name = month_dict[int(published_at.month)]
         str_month_year = f"{month_name}_{int(published_at.year)}"

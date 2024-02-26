@@ -19,7 +19,8 @@ if __name__ == "__main__":
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
-        "https://delvingbitcoin.org/"
+        "https://delvingbitcoin.org/",
+        "https://gnusha.org/pi/bitcoindev/"
     ]
 
     current_date = datetime.now()
@@ -48,6 +49,8 @@ if __name__ == "__main__":
         dev_name = dev_url.split("/")[-2]
         if dev_name == "delvingbitcoin.org":
             dev_name = "delvingbitcoin"
+        if dev_name == "bitcoindev":
+            dev_name = "bitcoin-dev"
         logger.success(f"TOTAL THREADS RECEIVED FOR '{dev_name}': {len(data_list)}")
 
         # NEW THREADS POSTS
