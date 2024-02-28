@@ -203,9 +203,13 @@ class GenerateJSON:
         full_path = os.path.join(current_directory, file_path)
         if os.path.exists(full_path):
             with open(full_path, 'r') as j:
-                data = json.load(j)
-            id_list = [item['title'] for item in data['recent_posts']]
-            id_list = id_list + [item['title'] for item in data['active_posts']]
+                try:
+                    data = json.load(j)
+                except Exception as e:
+                    logger.info(f"Error reading json file:{full_path} :: {e}")
+                    data = {}
+            id_list = [item['title'] for item in data.get('recent_posts', [])]
+            id_list = id_list + [item['title'] for item in data.get('active_posts', [])]
             return id_list
         else:
             logger.warning(f"No existing homepage.json file found: {full_path}")
