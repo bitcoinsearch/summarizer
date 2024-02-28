@@ -335,6 +335,8 @@ class ElasticSearchClient:
 
         response = self._es_client.search(index=es_index, body=query)
         counts = response['hits']['total']['value']
+        if int(counts) > 0:
+            counts = int(counts)-1
         contributors = [author['key'] for author in response['aggregations']['authors_list']['buckets']]
         return counts, contributors
 

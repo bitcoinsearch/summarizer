@@ -61,7 +61,7 @@ if __name__ == "__main__":
     current_date = datetime.now()
     current_date_str = current_date.strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=7)
+    start_date = current_date - timedelta(days=7)
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"current_date_str: {current_date_str}")
@@ -249,8 +249,12 @@ if __name__ == "__main__":
             full_path = os.path.join(current_directory, json_file_path)
             if os.path.exists(full_path):
                 with open(full_path, 'r') as j:
-                    data = json.load(j)
-                    today_in_history_data_list.extend(data['today_in_history_posts'])
+                    try:
+                        data = json.load(j)
+                    except Exception as e:
+                        logger.info(f"Error reading json file:{full_path} :: {e}")
+                        data = {}
+                    today_in_history_data_list.extend(data.get('today_in_history_posts', []))
                     history_data_collected_from_yesterday = True
 
         logger.success(f"No. of 'Today in history' posts collected: {len(today_in_history_data_list)}")
@@ -259,10 +263,13 @@ if __name__ == "__main__":
     full_path = os.path.join(current_directory, json_file_path)
     if os.path.exists(full_path):
         with open(full_path, 'r') as j:
-            yesterday_data = json.load(j)
+            try:
+                yesterday_data = json.load(j)
+            except Exception as e:
+                logger.info(f"Error reading json file:{full_path} :: {e}")
+                yesterday_data = {}
 
     xml_ids_title = gen.get_existing_json_title(file_path=json_file_path)
-
     recent_post_ids = [data['_source']['title'] for data in recent_data_list]
     active_post_ids = [data['_source']['title'] for data in active_data_list]
     all_post_titles = set(recent_post_ids + active_post_ids)
@@ -305,7 +312,7 @@ if __name__ == "__main__":
                 # today in history
                 if history_data_collected_from_yesterday:
                     logger.info("No change in 'Today in History' data posts, gathering data from yesterday's post.")
-                    today_in_history_data = yesterday_data['today_in_history_posts']
+                    today_in_history_data = yesterday_data.get('today_in_history_posts', [])
                 else:
                     if len(today_in_history_data_list) > 0:
                         today_in_history_data = page_data_handling(today_in_history_data_list, get_unique_per_dev=True)
@@ -338,7 +345,7 @@ if __name__ == "__main__":
         # today in history
         if history_data_collected_from_yesterday:
             logger.info("No change in 'Today in History' data posts, gathering data from yesterday's post.")
-            today_in_history_data = yesterday_data['today_in_history_posts']
+            today_in_history_data = yesterday_data.get('today_in_history_posts', [])
         else:
             rewrite_json_file = True
             if len(today_in_history_data_list) > 0:
@@ -350,9 +357,9 @@ if __name__ == "__main__":
         if rewrite_json_file:
             logger.info(f'Rewriting the homepage.json file')
             json_string = {
-                "header_summary": yesterday_data['header_summary'],
-                "recent_posts": yesterday_data['recent_posts'],
-                "active_posts": yesterday_data['active_posts'],
+                "header_summary": yesterday_data.get('header_summary', []),
+                "recent_posts": yesterday_data.get('recent_posts', []),
+                "active_posts": yesterday_data.get('recent_posts', []),
                 "today_in_history_posts": today_in_history_data
             }
             gen.write_json_file(json_string, json_file_path)

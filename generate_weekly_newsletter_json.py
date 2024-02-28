@@ -25,10 +25,10 @@ if __name__ == "__main__":
     current_date = datetime.now()
     current_date_str = current_date.strftime("%Y-%m-%d")
 
-    start_date = datetime.now() - timedelta(days=7)
+    start_date = current_date - timedelta(days=7)
     start_date_str = start_date.strftime("%Y-%m-%d")
 
-    end_date = datetime.now() - timedelta(days=1)
+    end_date = current_date - timedelta(days=1)
     end_date_str = end_date.strftime("%Y-%m-%d")
 
     logger.info(f"Newsletter publish date: {current_date_str}")
@@ -105,11 +105,15 @@ if __name__ == "__main__":
     json_xml_ids = set()
     if os.path.exists(json_full_path):
         with open(json_full_path, 'r') as j:
-            json_data = json.load(j)
+            try:
+                json_data = json.load(j)
+            except Exception as e:
+                logger.info(f"Error reading json file:{json_full_path} :: {e}")
+                json_data = {}
 
         json_xml_ids = set(
-            [item['title'] for item in json_data['new_threads_this_week']] +
-            [item['title'] for item in json_data['active_posts_this_week']]
+            [item['title'] for item in json_data.get('new_threads_this_week', [])] +
+            [item['title'] for item in json_data.get('active_posts_this_week', [])]
         )
     else:
         logger.warning(f"No existing newsletter.json file found: {json_full_path}")
