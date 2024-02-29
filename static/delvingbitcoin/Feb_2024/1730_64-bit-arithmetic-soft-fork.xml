@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-02-29T01:49:15.096371+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2024-02-28 14:12:36.190000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-02-29T01:49:15.096406+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/47" rel="alternate"/>
+    <summary>The implementation of `OP_INOUT_AMOUNT` in Bitcoin as explored involves several intricate steps to handle satoshi values within transaction scripts. Initially, an `int64_t` value representing satoshis is retrieved from the `BaseTransactionSignatureChecker.GetTransactionData()` function. This value is then converted into a minimally encoded `CScriptNum`, a process that doesn't necessarily require a separate opcode but can be executed within the `OP_INOUT_AMOUNT` implementation itself.
+
+A significant adjustment is made by modifying the `nMaxNumSize` parameter in the `CScriptNum` constructor to accommodate 8 bytes instead of the previous limit, allowing for the handling of larger numeric values pertinent to Bitcoin transactions ([modification reference](https://github.com/Christewart/bitcoin/blob/c617c5c3b0d21499b196184b5279b45627060cb5/src/script/script.hL265)). Following this adjustment, the `CScriptNum` is pushed onto the stack for subsequent use.
+
+However, challenges arise when other opcodes consume the satoshi value at the stack's top, necessitating a mechanism to support an `nMaxNumSize` of 8 bytes. This requirement stems from the historical limitation where numeric opcodes interpreted `CScriptNum` with a `nMaxNumSize` of only 4 bytes, leading to potential overflow exceptions. An example of such an overflow exception can be found in the codebase ([overflow exception reference](https://github.com/Christewart/bitcoin/blob/c617c5c3b0d21499b196184b5279b45627060cb5/src/script/script.hL268)). The issue extends to any opcode that utilizes `CScriptNum` to interpret stack top values, including `OP_WITHIN`, indicating a broader impact on script processing and necessitating careful consideration in the implementation of `OP_INOUT_AMOUNT` to avoid these pitfalls.</summary>
+    <published>2024-02-28T14:12:36.190000+00:00</published>
+  </entry>
+</feed>
