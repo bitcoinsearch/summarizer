@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Op_checkmaxtimeverify</title>
-  <updated>2024-02-22T01:56:18.107090+00:00</updated>
+  <updated>2024-03-01T01:56:51.476898+00:00</updated>
   <author>
-    <name>EvanWinget 2024-02-21 04:47:51.660000+00:00</name>
+    <name>murch 2024-02-29 19:29:30.553000+00:00</name>
+  </author>
+  <author>
+    <name>EvanWinget  . 2024-02-21 04:47:51.660000+00:00</name>
   </author>
   <author>
     <name>orkunkilic  . 2024-02-20 12:12:48.309000+00:00</name>
@@ -18,6 +21,7 @@
   <author>
     <name>EvanWinget  . 2024-02-18 02:35:08.738000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2024/1740_Op-checkmaxtimeverify.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1649_Op-checkmaxtimeverify.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1644_Op-checkmaxtimeverify.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1622_Op-checkmaxtimeverify.xml" rel="alternate"/>
@@ -27,15 +31,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Op_checkmaxtimeverify</title>
-    <updated>2024-02-22T01:56:18.107146+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/op-checkmaxtimeverify/581/5" rel="alternate"/>
-    <summary>The discourse addresses the intricate considerations surrounding the implementation of Partially Signed Bitcoin Transactions (PSBTs) and their potential migration from an off-chain to an on-chain system, elucidating the complexities this shift might introduce, especially regarding Miner Extractable Value (MEV). The conversation notably highlights the need for a nuanced examination of how such a transition could impact transaction dynamics within the blockchain ecosystem, stressing the importance of analyzing the use of CheckSequenceVerify (CSV) against CheckMultiTimeVerify (CMTV) scripts. The flexibility provided by certain scripts, allowing assets to be spent at any given time, contrasts with the introduction of scripts that could eventually render transactions unspendable, raising concerns about miner incentives towards censoring such transactions. This dialogue underscores the pressing necessity to delve into these matters, considering their profound implications for security, user autonomy, and potential unintended consequences that may arise, including increased censorship activities by miners.
+    <updated>2024-03-01T01:56:51.476985+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checkmaxtimeverify/581/6" rel="alternate"/>
+    <summary>The conversation delves into the complexities of implementing an expiration mechanism for transactions within a blockchain framework. It highlights the potential for such a mechanism to introduce confusion regarding the finality of transactions and incentivize certain behaviors that could undermine the integrity of the blockchain, like reorganizing blocks to exclude transactions that were meant to expire. The concept of creating a conflicting transaction that is timelocked but offers a higher fee as a way to make the original transaction invalid introduces an incentive-compatible approach to transaction expiration.
 
-Further, the conversation pivots to the discussion of incorporating an operation code (op code) to enable transaction expiration within the Bitcoin protocol. This proposal, notably favored over the initial suggestion and rooted in Peter's insights, emphasizes choosing block height as a more dependable metric over block time due to concerns over possible manipulation by miners for personal gain. The dialogue also contemplates the coexistence of high fee rate transactions with expiration times and those with lock times within the mempool, suggesting that this could lead miners to adjust the nTime value both forwards and backwards. Such adjustments would aim to include transactions beneficial to them, thus introducing a complex strategic layer to mining activities that could potentially equalize economic incentives across the network.
+There's a concern regarding the unintended consequences of expiring Unspent Transaction Outputs (UTXOs), which could lead to them becoming unspendable and inadvertently increasing the value of the remaining currency due to the reduction in total coins. This scenario is considered more of an accidental benefit rather than a targeted outcome. The introduction of Partially Signed Bitcoin Transactions (PSBTs) for asset swaps is discussed as a mitigation strategy against the risk of expiring transactions, ensuring outputs remain spendable by their creators even if the transaction expires before confirmation.
 
-The significance of the [OP_EXPIRE](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022042.html) post is highlighted as a crucial resource for understanding the benefits and considerations of implementing an expiratory mechanism within Bitcoin transactions. Although the draft Bitcoin Improvement Proposal (BIP) had not been reviewed by the sender, the recommendation to explore the OP_EXPIRE post suggests its utility in shedding light on the intricacies of adding expiration features to enhance the cryptocurrency's functionality.
+The dialogue also explores the implications of moving PSBTs from an off-chain to an on-chain framework, especially concerning how Miner Extractable Value (MEV) issues are managed. The shift introduces new dynamics in addressing MEV, necessitating a comparison between using CheckSequenceVerify (CSV) versus CheckMultiTimeVerify (CMTV) scripts. There's an acknowledgment of the nuanced considerations involved, including the potential for increased censorship activities by miners, highlighting the need for careful analysis of these changes' impact on transaction dynamics and the broader blockchain ecosystem.
 
-Moreover, the email delves into a proposed opcode aimed at improving the efficiency of peer-to-peer asset swaps and fostering decentralization by reducing reliance on centralized exchanges. This proposal is outlined in an early draft BIP found [here](https://github.com/EvanWinget/bips/blob/7d70761da8fe43ae5d4fdd0c18b14765652ccfec/bip-checkmaxtimeverify.mediawiki), with its motivation tied to addressing economic inefficiencies associated with unconfirmed transactions. By enabling such transactions to become invalid after a specific block height or time, the proposed opcode seeks to make asset swap markets more efficient, reduce their on-chain footprint, and ultimately support a more decentralized ecosystem. The author calls for feedback from the broader Bitcoin community to refine the concept and ensure its effectiveness in achieving its intended goals.</summary>
-    <published>2024-02-21T04:47:51.660000+00:00</published>
+Further discussion is centered around the addition of an op code for transaction expiration, based on a proposal viewed more favorably than the original idea suggested by the author. The debate focuses on using block height versus block time for determining transaction expiration, with a consensus leaning towards block height due to concerns over miners manipulating block time. The complexity introduced by having transactions with different expiration incentives coexist in the mempool is noted as a potential counterbalance to miner manipulation, adding strategic depth to economic incentives across the network.
+
+The significance of the [OP_EXPIRE](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022042.html) post is mentioned, suggesting it as a foundational resource for understanding the merits and considerations of implementing an expiration feature in the Bitcoin protocol. This recommendation underscores the post's relevance and utility in the context of Bitcoin development.
+
+Lastly, the proposal for introducing a new opcode aimed at making peer-to-peer asset swaps more efficient and reducing reliance on centralized marketplaces is discussed. The early draft BIP linked [here](https://github.com/EvanWinget/bips/blob/7d70761da8fe43ae5d4fdd0c18b14765652ccfec/bip-checkmaxtimeverify.mediawiki) outlines the motivation behind this idea, focusing on economic inefficiencies associated with unconfirmed transactions. By enabling these transactions to be invalidated beyond a specific block height or time, the proposal aims to encourage decentralization and improve the efficiency of asset swap markets, thus mitigating the push towards centralized solutions. Feedback from the Delving Bitcoin community is sought to identify any potential issues with the concept, ensuring its viability and effectiveness.</summary>
+    <published>2024-02-29T19:29:30.553000+00:00</published>
   </entry>
 </feed>
