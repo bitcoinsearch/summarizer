@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - State minimization in MuSig2 signing sessions</title>
+  <updated>2024-03-03T01:56:59.851882+00:00</updated>
+  <author>
+    <name>cmd 2024-03-02 22:11:50.566000+00:00</name>
+  </author>
+  <author>
+    <name>salvatoshi  . 2024-03-01 15:24:01.026000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/March_2024/1768_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1742_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - State minimization in MuSig2 signing sessions</title>
+    <updated>2024-03-03T01:56:59.851923+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/state-minimization-in-musig2-signing-sessions/626/2" rel="alternate"/>
+    <summary>The discussion highlights a novel approach to improve the signing flow for wallets, specifically targeting the limitations faced by hardware signing devices within the Bitcoin ecosystem. This new method is designed to efficiently manage signing sessions at the psbt-level, especially beneficial for devices with limited storage capabilities. By creating a more streamlined process, it addresses the complexity of transactions with multiple inputs, utilizing synthetic randomness for each input and key pair involved in the transaction. This eliminates the need for devices to maintain a large state between signing sessions, which is particularly challenging for hardware with restricted storage.
+
+A crucial innovation presented is the generation of a global random number, `rand_root`, which serves as the foundation for deriving session-specific randomness, `rand'`, for every input and key pair in a transaction. This is achieved through the SHA256 hashing of the `rand_root` combined with the input index and key index, ensuring the uniqueness and avoidance of collisions. The process significantly simplifies the generation and validation of pubnonces and partial signatures without requiring substantial state information to be stored on the device between sessions.
+
+The proposed signing mechanism unfolds in two main phases: pubnonce generation and partial signature generation. Initially, when a PSBT without pubnonces is sent to the device, it triggers the creation of a new session along with the generation of the `rand_root`. Following this, pubnonces are generated for each input/key pair, and the `rand_root` is securely saved to persistent memory. In the subsequent phase, upon receiving the PSBT with pubnonces, the session is recreated in volatile memory, facilitating the verification of pubnonces and the production of partial signatures relying on the previously established synthetic randomness.
+
+This method emphasizes security by ensuring that the `rand_root` is securely stored and not reused across different signing sessions, safeguarding against potential security vulnerabilities. Additionally, it showcases resilience against malleability attacks on the PSBT, maintaining the integrity of secnonce/pubnonce pairs despite changes in transaction data. The adaptability of this technique allows for handling multiple parallel signing sessions effectively, thanks to unique session identification.
+
+The contribution of Yannick Seurin in developing this sophisticated signing flow is acknowledged, highlighting the collective effort in enhancing the proposed mechanism. Further insights and understanding are supported through references to related discussions and proposals, including the [descriptor containing musig()](https://github.com/bitcoin/bips/pull/1540) and the [wallet policy](https://github.com/bitcoin/bips/pull/1389), providing readers with comprehensive background information on the subject.</summary>
+    <published>2024-03-02T22:11:50.566000+00:00</published>
+  </entry>
+</feed>
