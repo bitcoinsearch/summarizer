@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>0</id>
   <title>Mapping Human-Readable Names to Payment Instructions</title>
-  <updated>2024-02-26T14:58:48.338946+00:00</updated>
+  <updated>2024-03-01T10:37:19.002765+00:00</updated>
   <author>
     <name>Matt Corallo 2024-02-13 19:56:00+00:00</name>
   </author>
@@ -10,23 +10,15 @@
   <entry>
     <id>0</id>
     <title>Mapping Human-Readable Names to Payment Instructions</title>
-    <updated>2024-02-26T14:58:48.338946+00:00</updated>
+    <updated>2024-03-01T10:37:19.002765+00:00</updated>
     <link href="https://gnusha.org/pi/bitcoindev/34eaef2a-b53f-4622-a620-a3bc5161cbf7@mattcorallo.com" rel="alternate"/>
-    <summary>This blog post introduces a Bitcoin Improvement Proposal (BIP) aimed at standardizing the mechanism for resolving human-readable names to Bitcoin payment instructions, supporting various payment methods like lightning, on-chain, payjoin, silent addresses, and more. The proposal suggests encoding BIP 21 URI schemes in DNS TXT records, leveraging the DNS's global, hierarchical namespace to map human-readable labels to detailed records, thus facilitating easier and more secure transaction processes for users.
+    <summary>The proposed Bitcoin Improvement Proposal (BIP) introduces a standard for resolving human-readable names to Bitcoin payment instructions using DNS TXT records. This approach allows for encoding BIP 21 URI schemes in DNS, addressing the strong user demand for easily understandable names for payment instructions across various cryptocurrency applications. The utilization of DNS offers a global, hierarchical namespace that, when combined with DNSSEC, provides cryptographic security through a simple PKI system, allowing for stateless and even offline validation from a single trusted root. Moreover, DNS queries typically do not reveal the querier's IP address due to proxying through ISP-provided resolvers or the use of open resolvers, further preserving privacy.
 
-The motivation behind this BIP is the growing demand from users for human-readable payment instructions across various cryptocurrency applications. By utilizing DNSSEC within the DNS framework, the proposal ensures cryptographic security through a straightforward Public Key Infrastructure (PKI), which adheres to the DNS's hierarchical nature. This approach allows for stateless, potentially offline verification of DNS records from a trusted root, offering privacy benefits since DNS queries typically do not expose the querier's IP address due to proxying through ISP-provided or other resolvers.
+The specification mandates that Bitcoin wallets should prioritize explicit public key methods over DNS-based resolution when available. Payment instructions, associated with specific user and domain names, must be stored in a single TXT record and be DNSSEC-signed. Additionally, the proposal outlines strict requirements for DNSSEC signature validation, including the rejection of SHA-1 or RSA signatures with keys shorter than 1024 bits, although SHA-1 DS records may be accepted. It also recommends regular rotation of on-chain addresses in payment instructions to minimize address reuse and suggests displaying recipient information in a specific format for enhanced clarity.
 
-The specification outlines several key rules and guidelines for implementing this system. It emphasizes that Bitcoin wallets should prioritize explicit public key methods over DNS-based resolutions when available. Payment instructions will be stored under specific DNS TXT records, required to be DNSSEC-signed for authenticity. Moreover, the proposal delineates how clients should resolve these instructions, including the handling of non-ASCII identifiers and the necessity for fully validating DNSSEC signatures without relying on remote resolvers.
+The rationale behind choosing DNS over blockchain-based or HTTP(s)-based solutions includes the drawbacks of existing schemes, such as lack of succinct proofs, exposure of sender IP addresses, reliance on TLS Certificate Authority infrastructure, and limited open access. Despite the censorship-resistance and security benefits of blockchain alternatives, their lack of material adoption and reliance on trusted intermediaries make DNS a more practical choice. The proposal also advocates for private DNS querying methods, like Tor or VPN technologies, to improve privacy and suggests strategies to mitigate potential user enumeration risks inherent in storing valid users directly in the DNS.
 
-Addressing potential concerns around address reuse, the proposal advises regular rotation of on-chain addresses listed in payment instructions and recommends using short DNS TTLs for prompt updates. It also guides on how wallets should display recipient information, suggesting a format that combines user and domain identifiers.
-
-Rationalizing the choice of DNS over blockchain or HTTP(s)-based alternatives, the proposal argues that despite the censorship-resistance and security advantages of blockchain solutions, they lack widespread adoption and often reintroduce intermediary trust issues. Similarly, HTTP(s)-based protocols suffer from significant privacy and security drawbacks, making DNS a preferable option due to its broad accessibility and established infrastructure.
-
-The proposal also considers private DNS querying techniques, such as using public recursive resolvers or performing resolution over Tor or VPNs, to mitigate privacy concerns associated with centralized DNS querying. Additionally, it touches upon the issue of DNS enumeration, acknowledging the practicality of user enumeration in payment contexts but suggesting measures to mitigate its ease.
-
-Examples and reference implementations are provided to illustrate the proposed mechanism in action, including a specific example of resolving a payment instruction for `matt@mattcorallo.com` and links to relevant code repositories for DNSSEC proof generation/validation and a lightning-specific name resolver.
-
-For further details, readers are encouraged to review the full BIP draft and code examples available in the BIPs repository at [https://github.com/bitcoin/bips/pull/1551](https://github.com/bitcoin/bips/pull/1551).</summary>
+Examples provided illustrate how human-readable names would resolve to Bitcoin payment instructions, including support for lightning BOLT12 offers. Reference implementations are also mentioned, including a DNSSEC proof generation and validation tool, and a lightning-specific name to payment instruction resolver, alongside parsing implementations based on BIP 21. These resources are available at [https://git.bitcoin.ninja/index.cgi?p=dnssec-prover;a=summary](https://git.bitcoin.ninja/index.cgi?p=dnssec-prover;a=summary) and [https://git.bitcoin.ninja/index.cgi?p=lightning-resolver;a=summary](https://git.bitcoin.ninja/index.cgi?p=lightning-resolver;a=summary), respectively.</summary>
     <published>2024-02-13T19:56:00+00:00</published>
   </entry>
 </feed>
