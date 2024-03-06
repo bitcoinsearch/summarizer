@@ -123,6 +123,12 @@ def preprocess_email(email_body):
             continue
         if line.endswith("?crit :"):
             continue
+        if re.match(r'\d{4}-\d{2}-\d{2}', line):
+            continue
+        if line.startswith("From:") or line.strip().startswith("To") or line.strip().startswith("permalink"):
+            continue
+        if line.startswith("Sent with Proton Mail"):
+            continue
         if line and not line.startswith('>'):
             if line.startswith('-- ') or line.startswith('[') or line.startswith('_____'):
                 continue

@@ -17,7 +17,8 @@ if __name__ == "__main__":
     gen = GenerateJSON()
     elastic_search = ElasticSearchClient()
     dev_urls = [
-        "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
+        ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
+         "https://gnusha.org/pi/bitcoindev/"],
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
         "https://delvingbitcoin.org/"
     ]
@@ -45,9 +46,12 @@ if __name__ == "__main__":
         data_list = elastic_search.extract_data_from_es(
             ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
         )
-        dev_name = dev_url.split("/")[-2]
-        if dev_name == "delvingbitcoin.org":
-            dev_name = "delvingbitcoin"
+
+        if isinstance(dev_url, list):
+            dev_name = dev_url[0].split("/")[-2]
+        else:
+            dev_name = dev_url.split("/")[-2]
+
         logger.success(f"TOTAL THREADS RECEIVED FOR '{dev_name}': {len(data_list)}")
 
         # NEW THREADS POSTS
