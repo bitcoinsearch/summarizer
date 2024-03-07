@@ -16,7 +16,8 @@ if __name__ == "__main__":
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
-        "https://delvingbitcoin.org/"
+        "https://delvingbitcoin.org/",
+        "https://gnusha.org/pi/bitcoindev/"
     ]
 
     current_date_str = None
@@ -33,7 +34,7 @@ if __name__ == "__main__":
             ES_INDEX, dev_url, start_date_str, current_date_str, exclude_combined_summary_docs=True
         )
         dev_name = dev_url.split("/")[-2]
-        logger.success(f"TOTAL THREADS RECEIVED FOR - {dev_name}: {len(data_list)}")
+        logger.success(f"TOTAL THREADS RECEIVED FOR - '{dev_name}': {len(data_list)}")
 
         delay = 5
         count_main = 0
@@ -49,3 +50,5 @@ if __name__ == "__main__":
                 count_main += 1
                 if count_main > 5:
                     sys.exit(ex)
+
+    logger.info("Process Complete.")

@@ -23,8 +23,10 @@ def page_data_handling(data_list: list, get_unique_per_dev=False):
     collected_dev_data = []
     for data in tqdm(data_list):
         try:
-            individual_file_exists, combined_file_exists = gen.check_local_xml_files_exists(data,
-                                                                                            look_for_combined_summary_file=True)
+            individual_file_exists, combined_file_exists = gen.check_local_xml_files_exists(
+                data,
+                look_for_combined_summary_file=True
+            )
             if not individual_file_exists:
                 this_doc_id = data['_source']['id']
                 logger.info(f"individual summary file does not exist for id: {this_doc_id}")
@@ -53,7 +55,8 @@ if __name__ == "__main__":
     xml_gen = GenerateXML()
     elastic_search = ElasticSearchClient()
     dev_urls = [
-        "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
+        ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
+         "https://gnusha.org/pi/bitcoindev/"],
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
         "https://delvingbitcoin.org/"
     ]
@@ -85,8 +88,13 @@ if __name__ == "__main__":
         data_list = elastic_search.extract_data_from_es(
             ES_INDEX, dev_url, start_date_str, current_date_str, exclude_combined_summary_docs=True
         )
-        dev_name = dev_url.split("/")[-2]
-        logger.success(f"TOTAL THREADS RECEIVED FOR - {dev_name}: {len(data_list)}")
+
+        if isinstance(dev_url, list):
+            dev_name = dev_url[0].split("/")[-2]
+        else:
+            dev_name = dev_url.split("/")[-2]
+
+        logger.success(f"TOTAL THREADS RECEIVED FOR - '{dev_name}': {len(data_list)}")
 
         seen_titles = set()
 
@@ -342,7 +350,7 @@ if __name__ == "__main__":
         logger.info("No change in 'Recent' or 'Active' posts.")
         rewrite_json_file = False
 
-        # today in history
+        # update today in history and save file if no change in Recent or Active posts
         if history_data_collected_from_yesterday:
             logger.info("No change in 'Today in History' data posts, gathering data from yesterday's post.")
             today_in_history_data = yesterday_data.get('today_in_history_posts', [])

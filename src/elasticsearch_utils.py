@@ -29,6 +29,13 @@ class ElasticSearchClient:
     def es_client(self):
         return self._es_client
 
+    def get_domain_query(self, url):
+        if isinstance(url, list):
+            domain_query = {"terms": {"domain.keyword": url}}
+        else:
+            domain_query = {"term": {"domain.keyword": url}}
+        return domain_query
+
     def fetch_data_based_on_id(self, es_index, id_str):
         logger.info(f"looking for the doc in ES with id: {id_str}")
         output_list = []
@@ -81,16 +88,15 @@ class ElasticSearchClient:
 
         if self._es_client.ping():
             logger.success("connected to the ElasticSearch")
+
+            domain_query = self.get_domain_query(url)
+
             if exclude_combined_summary_docs:
                 query = {
                     "query": {
                         "bool": {
                             "must": [
-                                {
-                                    "prefix": {
-                                        "domain.keyword": str(url)
-                                    }
-                                },
+                                domain_query,
                                 {
                                     "range": {
                                         "created_at": {
@@ -103,7 +109,7 @@ class ElasticSearchClient:
                             "must_not": [
                                 {
                                     "term": {
-                                        "type.keyword": "combined-summary",
+                                        "type.keyword": "combined-summary"
                                     }
                                 }
                             ]
@@ -115,11 +121,7 @@ class ElasticSearchClient:
                     "query": {
                         "bool": {
                             "must": [
-                                {
-                                    "prefix": {
-                                        "domain.keyword": str(url)
-                                    }
-                                },
+                                domain_query,
                                 {
                                     "range": {
                                         "created_at": {
@@ -288,13 +290,14 @@ class ElasticSearchClient:
             return None
 
     def get_earliest_posts_by_title(self, es_index, url, title):
+        domain_query = self.get_domain_query(url)
         query = {
             "size": 1,  # only retrieve the first (earliest) document
             "query": {
                 "bool": {
                     "must": [
                         {"term": {"title.keyword": title}},
-                        {"term": {"domain.keyword": url}}
+                        domain_query
                     ]
                 }
             },
@@ -313,13 +316,14 @@ class ElasticSearchClient:
         return earliest_post
 
     def es_fetch_contributors_and_threads(self, es_index, title, domain):
+        domain_query = self.get_domain_query(domain)
         query = {
             "size": 0,
             "query": {
                 "bool": {
                     "must": [
                         {"match_phrase": {"title.keyword": title}},
-                        {"term": {"domain.keyword": domain}}
+                        domain_query
                     ]
                 }
             },
@@ -336,12 +340,13 @@ class ElasticSearchClient:
         response = self._es_client.search(index=es_index, body=query)
         counts = response['hits']['total']['value']
         if int(counts) > 0:
-            counts = int(counts)-1
+            counts = int(counts) - 1
         contributors = [author['key'] for author in response['aggregations']['authors_list']['buckets']]
         return counts, contributors
 
     def fetch_data_in_date_range(self, es_index, start_date, end_date, domain):
         logger.info(f"fetching documents from {start_date} to {end_date}")
+        domain_query = self.get_domain_query(domain)
         query = {
             "query": {
                 "bool": {
@@ -355,11 +360,7 @@ class ElasticSearchClient:
                                 }
                             }
                         },
-                        {
-                            "term": {
-                                "domain.keyword": domain
-                            }
-                        }
+                        domain_query
                     ]
                 }
             }
@@ -379,6 +380,8 @@ class ElasticSearchClient:
         if self._es_client.ping():
             logger.success("connected to the ElasticSearch")
 
+            domain_query = self.get_domain_query(url)
+
             if url and start_date_str and current_date_str:
                 logger.info(f"Url: {url}, Start Date: {start_date_str}, Current Date: {current_date_str}")
                 query = {
@@ -393,11 +396,7 @@ class ElasticSearchClient:
                                         }
                                     }
                                 },
-                                {
-                                    "prefix": {
-                                        "domain.keyword": str(url)
-                                    }
-                                }
+                                domain_query
                             ],
                             "must_not": {
                                 "exists": {
@@ -413,11 +412,7 @@ class ElasticSearchClient:
                     "query": {
                         "bool": {
                             "must": [
-                                {
-                                    "prefix": {
-                                        "domain.keyword": str(url)
-                                    }
-                                }
+                                domain_query
                             ],
                             "must_not": {
                                 "exists": {

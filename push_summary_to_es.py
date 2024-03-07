@@ -17,7 +17,8 @@ if __name__ == "__main__":
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
-        "https://delvingbitcoin.org/"
+        "https://delvingbitcoin.org/",
+        "https://gnusha.org/pi/bitcoindev/"
     ]
 
     for dev_url in dev_urls:
@@ -36,11 +37,12 @@ if __name__ == "__main__":
 
         docs_list = elastic_search.fetch_data_with_empty_summary(ES_INDEX, dev_url, start_date_str, current_date_str)
 
-        dev_name = dev_url.split("/")[-2]
-        if dev_name == "delvingbitcoin.org":
-            dev_name = "delvingbitcoin"
+        if isinstance(dev_url, list):
+            dev_name = dev_url[0].split("/")[-2]
+        else:
+            dev_name = dev_url.split("/")[-2]
 
-        logger.success(f"Total threads received with empty summary for {dev_name}: {len(docs_list)}")
+        logger.success(f"Total threads received with empty summary for '{dev_name}': {len(docs_list)}")
 
         for doc in tqdm.tqdm(docs_list):
             res = None

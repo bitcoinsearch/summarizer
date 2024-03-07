@@ -28,6 +28,8 @@ class GenerateJSON:
 
         if dev_name == "delvingbitcoin.org":
             dev_name = "delvingbitcoin"
+        if dev_name == "bitcoindev":
+            dev_name = "bitcoin-dev"
 
         current_directory = os.getcwd()
         file_path = f"static/{dev_name}/{str_month_year}/{number}_{xml_name}.xml"
