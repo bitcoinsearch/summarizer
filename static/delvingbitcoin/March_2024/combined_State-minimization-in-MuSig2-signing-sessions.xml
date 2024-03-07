@@ -2,30 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - State minimization in MuSig2 signing sessions</title>
-  <updated>2024-03-03T01:56:59.851882+00:00</updated>
+  <updated>2024-03-07T01:38:28.828887+00:00</updated>
   <author>
-    <name>cmd 2024-03-02 22:11:50.566000+00:00</name>
+    <name>salvatoshi 2024-03-06 18:17:29.781000+00:00</name>
+  </author>
+  <author>
+    <name>real-or-random 2024-03-06 17:23:09.937000+00:00</name>
+  </author>
+  <author>
+    <name>cmd  . 2024-03-02 22:11:50.566000+00:00</name>
   </author>
   <author>
     <name>salvatoshi  . 2024-03-01 15:24:01.026000+00:00</name>
   </author>
+  <link href="delvingbitcoin/March_2024/1806_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1805_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2024/1768_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2024/1742_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - State minimization in MuSig2 signing sessions</title>
-    <updated>2024-03-03T01:56:59.851923+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/state-minimization-in-musig2-signing-sessions/626/2" rel="alternate"/>
-    <summary>The discussion highlights a novel approach to improve the signing flow for wallets, specifically targeting the limitations faced by hardware signing devices within the Bitcoin ecosystem. This new method is designed to efficiently manage signing sessions at the psbt-level, especially beneficial for devices with limited storage capabilities. By creating a more streamlined process, it addresses the complexity of transactions with multiple inputs, utilizing synthetic randomness for each input and key pair involved in the transaction. This eliminates the need for devices to maintain a large state between signing sessions, which is particularly challenging for hardware with restricted storage.
+    <updated>2024-03-07T01:38:28.828938+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/state-minimization-in-musig2-signing-sessions/626/4" rel="alternate"/>
+    <summary>The conversation delves into the intricacies of improving signing flows for hardware wallets, with a specific focus on addressing the limitations posed by devices with constrained storage capabilities. This discussion is particularly relevant in the context of Bitcoin Improvement Proposal (BIP) 0327, which proposes an innovative method to manage psbt-level signing sessions efficiently. The crux of this method lies in its ability to generate synthetic randomness for each input and key pair involved in a transaction. This is achieved through a unique technique that employs a global random number termed `rand_root`, from which session-specific randomness is derived for each input and key pair. By utilizing SHA256 hashing of the concatenated `rand_root`, input index, and key index, the method ensures uniqueness and collision avoidance. This approach significantly reduces the need for persistent storage of state across multiple signing sessions, thus catering to the constraints of embedded devices.
 
-A crucial innovation presented is the generation of a global random number, `rand_root`, which serves as the foundation for deriving session-specific randomness, `rand'`, for every input and key pair in a transaction. This is achieved through the SHA256 hashing of the `rand_root` combined with the input index and key index, ensuring the uniqueness and avoidance of collisions. The process significantly simplifies the generation and validation of pubnonces and partial signatures without requiring substantial state information to be stored on the device between sessions.
+The signing process is structured into two distinct phases: pubnonce generation and partial signature generation. Initially, a PSBT without pubnonces is sent to the device, prompting the generation of a new session and the synthesis of `rand_root`. Subsequent steps involve the creation of pubnonces for each input/key pair and the eventual saving of the session's secret `rand_root` to persistent memory. The second phase revolves around the PSBT, now equipped with pubnonces, facilitating the recreation of the session in volatile memory for the verification of pubnonces and the generation of partial signatures. This method meticulously addresses security concerns by ensuring the secure storage of the session-specific `rand_root` and its non-reusability across different signing sessions, thereby mitigating potential security risks.
 
-The proposed signing mechanism unfolds in two main phases: pubnonce generation and partial signature generation. Initially, when a PSBT without pubnonces is sent to the device, it triggers the creation of a new session along with the generation of the `rand_root`. Following this, pubnonces are generated for each input/key pair, and the `rand_root` is securely saved to persistent memory. In the subsequent phase, upon receiving the PSBT with pubnonces, the session is recreated in volatile memory, facilitating the verification of pubnonces and the production of partial signatures relying on the previously established synthetic randomness.
+Furthermore, the adaptability of this method to support multiple parallel signing sessions, each identified uniquely, enhances its practical utility. The resilience of this approach against malleability attacks on the PSBT is underscored, highlighting how changes in transaction data cannot predictably alter the generated secnonce/pubnonce pairs due to the secure generation of synthetic randomness.
 
-This method emphasizes security by ensuring that the `rand_root` is securely stored and not reused across different signing sessions, safeguarding against potential security vulnerabilities. Additionally, it showcases resilience against malleability attacks on the PSBT, maintaining the integrity of secnonce/pubnonce pairs despite changes in transaction data. The adaptability of this technique allows for handling multiple parallel signing sessions effectively, thanks to unique session identification.
+In addition to the primary discussion, there is mention of the implementation efforts surrounding Ledger devices and the exploration of using CounterNonceGen as an alternative mechanism. Despite the potential complexities and the necessity for a secure atomic counter, the conversation suggests that similar methodologies could be applied with CounterNonceGen, especially in maintaining secure psbt-level signing sessions. BitEscrow's work on parallel musig2 signing sessions is noted, introducing concepts such as "root_nonce" and "session_id". Their Github repository at [BitEscrow/escrow-core](https://github.com/BitEscrow/escrow-core) provides further insights into their implementation, including the computation of branching paths from initial nonce values and the application of Discreet Log Contracts (DLCs). 
 
-The contribution of Yannick Seurin in developing this sophisticated signing flow is acknowledged, highlighting the collective effort in enhancing the proposed mechanism. Further insights and understanding are supported through references to related discussions and proposals, including the [descriptor containing musig()](https://github.com/bitcoin/bips/pull/1540) and the [wallet policy](https://github.com/bitcoin/bips/pull/1389), providing readers with comprehensive background information on the subject.</summary>
-    <published>2024-03-02T22:11:50.566000+00:00</published>
+Acknowledgments are extended to Yannick Seurin for his contributions towards refining this signing flow mechanism. Additional resources and discussions related to this topic, such as the [descriptor containing musig()](https://github.com/bitcoin/bips/pull/1540) and the [wallet policy](https://github.com/bitcoin/bips/pull/1389), are offered to provide readers with comprehensive insights into the underlying principles and developments in this area.</summary>
+    <published>2024-03-06T18:17:29.781000+00:00</published>
   </entry>
 </feed>
