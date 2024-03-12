@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Unilateral Exit</title>
+  <updated>2024-03-12T01:53:26.893318+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2024-03-11 09:07:34.319000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Unilateral Exit</title>
+    <updated>2024-03-12T01:53:26.893354+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/unilateral-exit/664" rel="alternate"/>
+    <summary>Implementing shared non-custodial UTXOs necessitates a mechanism for unilateral exits, enabling participants to withdraw from a shared transaction without needing consent from others. This capability is critical for maintaining the non-custodial nature of such systems, preventing situations where a participant's funds could be held "hostage" by others. In traditional custodial setups, UTXOs are often implicitly shared among users, but transitioning to a non-custodial model while preserving this sharing aspect requires new solutions, especially for complex arrangements beyond simple two-party scenarios like those found in Lightning Network channels.
+
+In the context of the Lightning Network and similar systems, unilateral exits involve not just the withdrawal of funds but also the handling of additional contracts within the channel, such as HTLCs (Hashed Timelock Contracts). Ideally, when exiting, it would be beneficial to publish only the relevant HTLCs to the blockchain rather than all, minimizing on-chain footprint and preserving privacy and efficiency. The challenge arises in enabling selective exits without requiring the publication of all off-chain contracts, which becomes impractical with increasing numbers of contracts or participants.
+
+To address these challenges, the use of Merkle trees has been proposed, offering a log N complexity for publishing a single UTXO's exit information on-chain. However, this approach raises concerns regarding block space efficiency, particularly if multiple or all offchain UTXOs require on-chain publication. An alternative, such as `OP_CTV` trees, has been considered but presents its own set of limitations, including the potential for significant blockspace consumption if all transactions were to be published.
+
+The concept of cryptographic accumulators offers a promising direction for efficient and scalable unilateral exits. These accumulators can commit to a set of items and allow for the insertion and deletion of items with relatively small witnesses, potentially solving the problem of efficiently committing to and proving membership in a set of offchain UTXOs. While some accumulators, like RSA-based ones, offer constant-size witnesses, their practical implementation within systems like Bitcoin faces challenges due to data size and computational constraints.
+
+The proposal introduces a novel opcode, `OP_EXIT`, leveraging accumulator schemes to enable efficient unilateral exits from shared UTXOs. This opcode facilitates the removal of specific `(point, value)` pairs from the accumulator, allowing for the dynamic updating of the shared UTXO without the need for all participants to exit simultaneously. Additionally, the `OP_TLUV` concept by ajtowns is highlighted as an implementation of the `OP_EXIT` functionality, underpinning the feasibility of using accumulators for managing shared UTXOs and facilitating efficient unilateral exits within a Taproot framework. This approach aims to balance the benefits of shared UTXOs with the need for scalability, privacy, and reduced blockchain footprint in non-custodial transaction systems.</summary>
+    <published>2024-03-11T09:07:34.319000+00:00</published>
+  </entry>
+</feed>
