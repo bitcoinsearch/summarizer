@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Op_checkmaxtimeverify</title>
-  <updated>2024-03-04T02:04:35.004773+00:00</updated>
+  <updated>2024-03-13T02:01:59.544831+00:00</updated>
   <author>
-    <name>EvanWinget 2024-03-03 02:22:15.038000+00:00</name>
+    <name>ajtowns 2024-03-12 23:45:54.753000+00:00</name>
+  </author>
+  <author>
+    <name>murch 2024-03-12 20:09:36.208000+00:00</name>
+  </author>
+  <author>
+    <name>EvanWinget  . 2024-03-03 02:22:15.038000+00:00</name>
   </author>
   <author>
     <name>murch  . 2024-02-29 19:29:30.553000+00:00</name>
@@ -24,6 +30,8 @@
   <author>
     <name>EvanWinget  . 2024-02-18 02:35:08.738000+00:00</name>
   </author>
+  <link href="delvingbitcoin/March_2024/1866_Op-checkmaxtimeverify.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1863_Op-checkmaxtimeverify.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2024/1770_Op-checkmaxtimeverify.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1740_Op-checkmaxtimeverify.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1649_Op-checkmaxtimeverify.xml" rel="alternate"/>
@@ -35,17 +43,21 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Op_checkmaxtimeverify</title>
-    <updated>2024-03-04T02:04:35.004858+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/op-checkmaxtimeverify/581/7" rel="alternate"/>
-    <summary>The discourse around implementing a transaction expiration mechanism within blockchain networks delves into various complexities and potential ramifications. Such a feature introduces a layer of uncertainty regarding the finality of transactions, as it might incentivize miners to reorganize the blockchain to exclude blocks containing transactions on the verge of expiration. This could undermine the network's stability and open avenues for bandwidth-wasting attacks by cluttering the network with low-priority transactions. A proposed solution involves creating conflicting transactions that are time-locked until the original transaction's expiration, offering a higher fee to ensure miners prioritize them once the time lock expires. This aligns with miners' incentive structures without disrupting network efficiency.
+    <updated>2024-03-13T02:01:59.544907+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checkmaxtimeverify/581/9" rel="alternate"/>
+    <summary>The discourse surrounding the potential addition of an expiration mechanism for Bitcoin transactions, notably through the implementation of an `OP_EXPIRE` opcode, presents a multifaceted analysis involving technical and economic considerations. This proposed feature aims to enhance transaction efficiency by allowing users to set an expiration on transactions, which could be particularly useful in scenarios involving conditional and timeout paths, such as with lightning network channels. By enabling the aggregation of expired transactions into a single operation, this mechanism could potentially reduce the proliferation of dust outputs in users' wallets, thereby optimizing wallet management and on-chain space utilization.
 
-Concerns extend to the possibility of unintentionally benefiting currency holders through the censorship of Unspent Transaction Outputs (UTXOs), leading to their expiration and consequent unavailability. This scenario could inadvertently increase the value of remaining coins. Additionally, there's apprehension about users mistakenly applying constraints on confirmed outputs, rendering them unspendable due to inactivity before their expiration. However, when dealing with Partially Signed Bitcoin Transactions (PSBTs) specifically tailored for asset swaps, these issues are mitigated. PSBTs are designed to ensure that the output meant for the creator remains spendable, thus safeguarding against loss due to transaction expiration or accidental constraints.
+Peter Todd's insights into managing the challenges associated with transaction expiration emphasize the importance of imposing higher minimum relay fees for transactions nearing their expiration. This approach seeks to mitigate bandwidth wastage on transactions unlikely to be mined due to their impending expiry. Such strategic fee adjustments align with the broader objective of maintaining network efficiency without compromising the economic incentives inherent to the mining process. The consideration of block height as a more reliable metric than block time for transaction expiration further underscores the need for precision in implementing such features, given the potential for manipulation in block time reporting by miners.
 
-The conversation also explores the implications of transitioning PSBTs from an off-chain to an on-chain framework, especially concerning Miner Extractable Value (MEV) dynamics. The current off-chain resolution of MEV issues may shift significantly with an on-chain approach, requiring a careful examination of how CheckSequenceVerify (CSV) and CheckMultiTimeVerify (CMTV) mechanisms would operate in this new context. There's a nuanced debate over using block height versus block time as a metric for transaction expiration, with a consensus leaning towards block height due to concerns over miners' potential manipulation of block time. Despite these challenges, the introduction of an op code for transaction expiration is argued to potentially balance economic incentives across the network, especially if both high fee rate transactions with expiration times and those with lock times coexist in the mempool.
+The conversation extends to the implications of introducing transaction expiration on the stability and predictability of the blockchain. Concerns are raised regarding the potential for miners to engage in reorganization (reorg) activities to exclude transactions included in the last permissible block, thus undermining network integrity. Additionally, the prospect of bandwidth-wasting attacks through the submission of low-priority transactions highlights the complexities of balancing technical efficiency with economic incentives. A suggested solution involves creating a conflicting, higher-fee transaction that becomes valid upon the expiration of the original, thereby leveraging miners' preference for transactions with higher fees to ensure network fluidity.
 
-The email references the [OP_EXPIRE post](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022042.html) as a foundational resource for understanding the merits and considerations of adding an expiratory mechanism to Bitcoin transactions. This adds another dimension to the dialogue, emphasizing the exploration of innovations within the Bitcoin protocol that could enhance its functionality and address emerging needs.
+Further discussions delve into the unintended economic consequences of expiring transactions, particularly the potential for incentivizing censorship of Unspent Transaction Outputs (UTXOs) and the resultant implications for currency value due to reduced supply. The introduction of Partially Signed Bitcoin Transactions (PSBTs) for asset swaps emerges as a mitigating factor, offering mechanisms to preserve the spendability of outputs in the event of transaction expiration. This preserves assets against loss from unintentional constraints or censorship attempts.
 
-Lastly, the proposal for a new opcode aimed at making peer-to-peer asset swaps more efficient underscores a broader objective of reducing reliance on centralized marketplaces and fostering decentralization. An early draft BIP proposes enabling transactions to become invalid beyond a specified block height or time, addressing economic inefficiencies of unconfirmed transactions and potentially competitive block space between asset swap transactions and traditional Bitcoin transactions. Feedback from the broader community is sought to refine the concept and ensure its practicality and effectiveness in promoting a more decentralized ecosystem and mitigating centralization pressures.</summary>
-    <published>2024-03-03T02:22:15.038000+00:00</published>
+Exploring the transition of PSBTs from off-chain to on-chain contexts raises additional considerations regarding Miner Extractable Value (MEV) and the potential for increased miner censorship. The nuanced debate between employing CheckSequenceVerify (CSV) versus CheckMultiTimeVerify (CMTV) scripts reflects the ongoing efforts to balance user autonomy with network security and efficiency.
+
+The foundational premise of enhancing peer-to-peer asset swaps through a new opcode, as outlined in the draft Bitcoin Improvement Proposal (BIP), encapsulates the overarching goal of reducing reliance on centralized marketplaces. By proposing mechanisms that could invalidate unconfirmed transactions beyond a certain block height or time, the initiative seeks to address the competitive demand for block space, aiming to streamline asset swap markets and foster decentralization within the Bitcoin ecosystem.
+
+In summary, the discussions encapsulate a comprehensive examination of the technical, economic, and operational implications of introducing a transaction expiration feature to Bitcoin. Through a collaborative exploration of potential benefits, challenges, and solutions, the dialogue underscores the importance of careful consideration and community feedback in the evolution of blockchain protocols to support efficient, secure, and decentralized financial operations.</summary>
+    <published>2024-03-12T23:45:54.753000+00:00</published>
   </entry>
 </feed>

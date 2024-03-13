@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Mempool Incentive Compatibility</title>
-  <updated>2024-03-08T01:53:19.593994+00:00</updated>
+  <updated>2024-03-13T01:57:12.281708+00:00</updated>
   <author>
-    <name>rustyrussell 2024-03-07 02:53:25.889000+00:00</name>
+    <name>murch 2024-03-12 18:28:58.122000+00:00</name>
+  </author>
+  <author>
+    <name>rustyrussell  . 2024-03-07 02:53:25.889000+00:00</name>
   </author>
   <author>
     <name>rustyrussell  . 2024-03-07 00:58:22.648000+00:00</name>
@@ -75,6 +78,7 @@
   <author>
     <name>sdaftuar  . 2024-02-13 19:19:39.167000+00:00</name>
   </author>
+  <link href="delvingbitcoin/March_2024/1859_Mempool-Incentive-Compatibility.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2024/1808_Mempool-Incentive-Compatibility.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2024/1807_Mempool-Incentive-Compatibility.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1715_Mempool-Incentive-Compatibility.xml" rel="alternate"/>
@@ -103,25 +107,29 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Mempool Incentive Compatibility</title>
-    <updated>2024-03-08T01:53:19.594156+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/mempool-incentive-compatibility/553/24" rel="alternate"/>
-    <summary>The conversation explores a novel approach to Bitcoin's transaction management, suggesting an incremental fee strategy for transactions evicted from the mempool. This method contrasts with current practices by proposing that subsequent transactions from the same sender incur higher fees, aiming to manage network resources more effectively by prioritizing transactions willing to pay more post-eviction. However, challenges in implementation are acknowledged, given its potential less effectiveness compared to directly collecting fees from transactions.
+    <updated>2024-03-13T01:57:12.281880+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/mempool-incentive-compatibility/553/25" rel="alternate"/>
+    <summary>The discourse initiates with an examination of the replace-by-feerate scheme in conjunction with Bitcoin's existing Replace-By-Fee (RBF) rules, highlighting potential Denial-of-Service (DoS) vulnerabilities through low-cost, high-impact transaction resubmissions. This underscores the importance of ensuring transactions increment mempool fees to mitigate bandwidth exploitation, as detailed on [Bitcoin Stack Exchange](https://bitcoin.stackexchange.com/q/121541/5406).
 
-It delves into the limitations of Child Pays for Parent (CPFP) in version 3 (v3) of Bitcoin transactions, particularly under rising transaction fees. The discussion advocates for future protocol enhancements to allow inline fees and cost-sharing among transactions through covenant technology, aimed at navigating high-fee environments without renegotiating terms. The concept of transaction introspection and aggregation is proposed as a means to alleviate high fees by compiling multiple transactions into one, distributing costs more efficiently among participants.
+Further analysis uncovers discrepancies between miners' financial incentives under RBF policies and network security principles, exposing a susceptibility to pinning attacks that can hinder transaction confirmations. This reveals a misalignment between economic motivations and transaction replacement mechanisms.
 
-An examination of Bitcoin’s transaction fee mechanism reveals its dynamic nature, governed by a decay system influenced by network congestion. The adaptive feature is designed to lower the barrier for transaction processing during low-demand periods, optimizing the fee market's responsiveness to changing network conditions. Furthermore, misconceptions regarding the permanence of fee increases following eviction from the mempool are addressed, clarifying that such increases are temporary and aim to manage mempool congestion.
+Proposed adjustments focus on managing mempool evictions by incrementing fees for subsequent transactions from identical senders, aiming for a more equitable resource distribution. The implementation challenges of such systems are acknowledged, especially in terms of complexity and transaction prioritization post-eviction.
 
-The intricacies of pinning transactions within the blockchain are discussed, exploring speculative solutions for overcoming excessive fees associated with transaction conflicts. Technical and economic considerations of transaction replacement policies, including First-Seen-Safe and Replace-by-Fee mechanisms, are highlighted, pointing to the complexity of ensuring network robustness.
+The dialogue critiques the Child Pays for Parent (CPFP) method within Bitcoin transactions, advocating for designs that facilitate inline fees and shared costs more efficiently. Future covenant technology is suggested as a solution to override CPFP limitations, promoting protocol resilience in high-fee contexts.
 
-The dialogue also touches upon strategies concerning blockchain transaction fees and policies, emphasizing the need for fair cost replacement and a refined theoretical framework to guide Replace-By-Fee (RBF) policies. It critiques version 3 transactions for their limitations in supporting CPFP in rising fee situations, suggesting that future technologies might offer more efficient fee distribution methods.
+Technical discussions extend to Bitcoin's fee adjustment strategy based on mempool congestion, employing a decay mechanism documented in the [Bitcoin GitHub repository](https://github.com/bitcoin/bitcoin/blob/4d7d7fd123113342f09871b1a383cda1bb53d0ea/src/txmempool.cppL1091-L1121) to refine the fee market. Considerations around pinning transactions introduce potential operational codes for dismantling excessive fees and enhancing blockchain efficiency.
 
-Two policy suggestions, the "Feerate Diagram Policy" and the "Next Block Policy," are presented to refine RBF within Bitcoin’s protocol, with the former favored for enhancing economic efficiency and robustness against DoS attacks. Challenges related to transaction pinning are acknowledged, alongside the importance of precise language in virtual block management and adherence to transaction size limits for network integrity.
+The conversation scrutinizes transaction replacement policies, emphasizing the need for comprehensive understanding of their effects on network security and economic dynamics. It also tackles the intricacies of v3 transactions and their impact on network fee management, suggesting limitations in addressing mempool eviction and calling for alternative strategies.
 
-A cautious approach to Bitcoin development is advocated, focusing on manageable improvements. The discourse extends to cryptocurrency mining, emphasizing the significance of understanding miner incentives and the practical implications of accepting non-standard-size transactions. The economic rationality behind large mining pools retaining transactions despite competitive dynamics is explored, along with the complexities of transaction selection within blockchain mining.
+Concerns about the Fee Distribution Policy (FDP) and its influence on mining decisions highlight the critical nature of precision in policy discussions. Two policy proposals—Feerate Diagram Policy and Next Block Policy—are evaluated for their potential to improve economic efficiency and address DoS vulnerabilities, with a preference for the former due to its alignment with incentive compatibility.
 
-Replace-By-Fee (RBF) mechanisms are discussed, suggesting variable fee adjustments within the same block to address the unpredictability of the mempool and network states. Concerns about higher fees incentivizing behaviors that undermine network integrity, such as transaction censorship, are raised. Proposals to address concerns related to RBF protocols suggest a hysteresis approach to alleviate friction points without significantly altering miner behavior.
+Virtual block management and the clarification of technical terminologies are underscored, stressing accuracy in technical communications to uphold network efficiency and integrity.
 
-Lastly, optimizing transaction ordering in Bitcoin's mempool is examined, highlighting innovative strategies aimed at maximizing fee collection considering block size constraints. Pieter Wuille’s theorem and the cluster mempool proposal offer insights into managing and ordering transactions within the Bitcoin network, found [here](https://delvingbitcoin.org/t/cluster-mempool-definitions-theory/202optimal-linearizations-6) and in the [cluster mempool proposal](https://delvingbitcoin.org/t/an-overview-of-the-cluster-mempool-proposal/393/1). These discussions contribute to understanding incentive-compatible behaviors important for maintaining network integrity and efficiency.</summary>
-    <published>2024-03-07T02:53:25.889000+00:00</published>
+Miner incentives, particularly in the context of declining total fees, prompt a call for further research into miner behavior and the practical implications of non-standard transaction sizes. The discourse advocates for simpler mining practices over complex optimization strategies, considering real-world inefficiencies.
+
+A novel approach to Replace-By-Fee (RBF) evaluation proposes exponential discounting to accommodate mempool unpredictability, although it faces challenges regarding DoS protection and subjective assessments.
+
+Finally, the exploration into optimizing Bitcoin's mempool highlights advanced strategies for maximizing fee collection while adhering to block size limits. Feerate diagrams and cluster linearizations emerge as vital tools for efficient transaction selection, despite complexities introduced by RBF policies. Concerns regarding lenient RBF rules and DoS attack vulnerabilities are addressed, emphasizing a balanced approach to network security and transaction fee dynamics.</summary>
+    <published>2024-03-12T18:28:58.122000+00:00</published>
   </entry>
 </feed>
