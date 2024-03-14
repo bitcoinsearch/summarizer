@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP324 Proxy: easy integration of v2 transport protocol for light clients (PoC)</title>
+  <updated>2024-03-14T02:00:57.858150+00:00</updated>
+  <author>
+    <name>theStack 2024-03-13 17:32:11.483000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP324 Proxy: easy integration of v2 transport protocol for light clients (PoC)</title>
+    <updated>2024-03-14T02:00:57.858184+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip324-proxy-easy-integration-of-v2-transport-protocol-for-light-clients-poc/678" rel="alternate"/>
+    <summary>The development of a novel tool aimed at enabling peer-to-peer encryption for Bitcoin clients not yet compliant with BIP324 is underway. This tool functions by establishing a local process that acts as a translator between the p2p v1 and v2 protocols. It operates by initiating a server socket on the local TCP port 1324, creating a new thread for each incoming v1 connection. The identification of the remote peer address is facilitated through the first VERSION message received, specifically from the `addr_recv` field as detailed in the Protocol documentation [here](https://en.bitcoin.it/wiki/Protocol_documentationversion). Following this, a v2 handshake is executed, after which the initial VERSION message is relayed to the remote node. The proxy then assumes the role of forwarding messages between the two nodes, translating them into the appropriate p2p version format.
+
+This setup necessitates P2P connections to be redirected to localhost:1324 rather than directly to the actual remote peer address at the TCP level, typically requiring minimal adjustments to the client's codebase, ideally through a command-line option. The entire implementation has been crafted in Python3 without the need for any external dependencies. However, it's important to note that most cryptographic elements employed are borrowed from Bitcoin Core's BIP324 implementation within the functional test framework, with acknowledgments to contributors such as stratospher and sipa.
+
+Currently, this project is considered a proof-of-concept, characterized by its slow performance and susceptibility to side-channel attacks, rendering it unsuitable for practical applications beyond testing scenarios. At present, support is limited to signet, albeit extending this to other networks could be easily achieved by altering the `NET_MAGIC` constant. Future plans include an efficient rewrite of the tool in Rust, although the timeline for this remains uncertain due to the developer's unfamiliarity with the language.
+
+For those interested in further details or contributing to the project, resources including the GitHub repository and a presentation delivered during a Brink engineering call can be found [here](https://github.com/theStack/bip324-proxy) and [here](https://github.com/theStack/bip324-proxy/raw/master/doc/bip324-proxy_presentation.pdf), respectively. The latter includes examples of light clients tested with the BIP324 proxy, highlighting the necessary patches for redirection. Feedback, suggestions, and innovative ideas are highly encouraged to enhance the project's development.</summary>
+    <published>2024-03-13T17:32:11.483000+00:00</published>
+  </entry>
+</feed>
