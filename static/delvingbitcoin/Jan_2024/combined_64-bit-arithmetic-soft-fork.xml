@@ -2,12 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - 64 bit arithmetic soft fork</title>
-  <updated>2024-02-29T01:51:44.311409+00:00</updated>
+  <updated>2024-03-20T01:59:16.875903+00:00</updated>
   <author>
-    <name>Chris_Stewart_5 2024-02-28 14:12:36.190000+00:00</name>
+    <name>Chris_Stewart_5 2024-03-19 14:17:49.792000+00:00</name>
   </author>
   <author>
-    <name>sjors 2024-02-28 10:22:38.304000+00:00</name>
+    <name>Chris_Stewart_  . 2024-02-28 14:12:36.190000+00:00</name>
+  </author>
+  <author>
+    <name>sjors  . 2024-02-28 10:22:38.304000+00:00</name>
   </author>
   <author>
     <name>halseth  . 2024-02-27 14:12:41.868000+00:00</name>
@@ -144,6 +147,7 @@
   <author>
     <name>Chris_Stewart_  . 2024-01-10 16:11:01.778000+00:00</name>
   </author>
+  <link href="delvingbitcoin/March_2024/1938_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1730_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1728_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2024/1721_64-bit-arithmetic-soft-fork.xml" rel="alternate"/>
@@ -195,35 +199,21 @@
   <entry>
     <id>2</id>
     <title>Combined summary - 64 bit arithmetic soft fork</title>
-    <updated>2024-02-29T01:51:44.311714+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/47" rel="alternate"/>
-    <summary>The conversation begins with an examination of adapting `CScriptNum` for implementing `OP_INOUT_AMOUNT` in Bitcoin. This involves encoding satoshi values as minimally encoded integers and managing potential overflow exceptions when numeric op codes interpret these larger `CScriptNum` values. The aim is to enhance Bitcoin's scripting capabilities to support extensive numerical operations without compromising system integrity.
+    <updated>2024-03-20T01:59:16.876218+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/48" rel="alternate"/>
+    <summary>The Bitcoin Core PR review club meeting scheduled for March 20, 2024, will focus on the implementation of the `OP_INOUT_AMOUNT` opcode, which represents an advancement in handling satoshi values within transaction scripts. This includes the retrieval of satoshi amounts as `int64_t` values and their conversion into minimally encoded `CScriptNum`, with an adjustment to the `nMaxNumSize` parameter to support 8 bytes. This change is essential for managing larger numeric values in Bitcoin transactions and addresses challenges from other opcodes that consume satoshi values by supporting an 8-byte `nMaxNumSize`.
 
-Subsequent discussions highlight the implications of integrating `OP_INOUT_AMOUNT` within the Bitcoin network, emphasizing the theoretical and practical benefits for transactional flexibility and security. A new blog post, test scripts, and a GitHub commit are provided for further exploration of these script enhancements.
+The implementation's implications on blockchain size reveal a potential increase of 0.17% since the genesis block, highlighting concerns around blockchain growth and storage. Economic impacts, particularly on transaction costs, are also pivotal in evaluating the viability of these changes within the blockchain infrastructure.
 
-The conversation also addresses the critical handling of hashes in programming, focusing on the correct processing of leading zeroes and endianness through specific opcodes like `FROMFIXNUM` and `BYTEREV`. This segment underscores the importance of data consistency across computational environments.
+The adaptation of the `IN_OUT` opcode for handling a 64-bit `ScriptNum` type encoding is described as straightforward, pushing a `ScriptNum` encoded integer onto the stack and facilitating easier management of numeric data types within scripting. Further insights into `OP_INOUT_AMOUNT` suggest it could enable more complex and secure transaction types, thereby enhancing Bitcoin's scripting capabilities. A new post and test scripts on GitHub provide practical examples and explorations of these enhancements.
 
-Furthermore, the dialogue explores the challenges of big number operations within blockchain technologies, proposing a nuanced approach to the minimaldata rule to simplify programming efforts. It also discusses ensuring data integrity through the MINIMALDATA rule, which mandates a single, canonical form for each integer.
+Discussions include correct hash processing techniques, big number operations within the secp scalar field, and the significance of the MINIMALDATA rule in serialization. Proposals for extended-bit arithmetic and managing overflows in stack operations reflect ongoing dialogues on computational capabilities and programming challenges, touching on memory versus disk space considerations, RISC-V emulation integration, and benefits of transitioning to 8-byte encodings for ScriptNums within Bitcoin's blockchain.
 
-Arithmetic operations on large numbers raise considerations regarding overflows and the choice between signed and unsigned integers. Strategies such as modular arithmetic and abort-on-overflow behavior are examined, along with the implications of different serialization formats.
+The introduction of covenant opcodes for satoshi value operations marks a significant advancement, aiming to improve functionality and flexibility in cryptocurrency-related projects by enabling efficient arithmetic operations on satoshi values. This could significantly enhance blockchain and cryptocurrency transactions by allowing for more complex conditions on how outputs can be spent.
 
-The computational costs associated with processing large numbers and methods to effectively manage these costs within programming environments are acknowledged, recognizing the feasibility of performing arithmetic operations on significantly large numbers without substantial impacts on computational efficiency.
+Adopting 64-bit arithmetic in programming is crucial for improving operation efficiency in areas such as transaction hash computations and specific opcode elements execution. This shift indicates an industry-wide effort towards higher precision and efficiency in data and algorithm processing.
 
-The proposition of extended-bit arithmetic introduces a sophisticated approach to managing calculations beyond the 64-bit limit, with specific opcodes proposed to facilitate seamless transitions between variable and fixed encodings and accommodate endian conversions.
-
-The proposal to modify Bitcoin's Script operation codes (opcodes) for arithmetic operations like OP_ADD64 aims to streamline arithmetic on numbers larger than 64 bits by breaking them into manageable segments. This method aids in detecting overflows and maintaining variable length encoding as the default to mitigate additional costs.
-
-Memory consumption versus disk space within Bitcoin Script is discussed, with the integration of RISC-V emulation highlighting the utility of 64-bit arithmetic. The transition to 8-byte encodings for ScriptNums suggests a modest increase in storage requirements, as detailed in a comprehensive JSON file available at [this GitHub repository](https://github.com/Christewart/bitcoin-s-core/tree/2024-01-19-count-scriptnums).
-
-Rusty Russell's article proposes simplifying arithmetic opcodes by focusing on non-negative numbers, while the ongoing debate about new arithmetic opcodes leans towards adding new opcodes specifically for 64-bit numbers to maintain backward compatibility.
-
-Advancements in Script programming aim to simplify the development process, with proposals to remove certain verification flags facing skepticism due to the need for backward compatibility.
-
-The reintroduction of 256-bit arithmetic and the consideration of complex cryptographic operations facilitated by Taproot reflect the evolving landscape of Bitcoin scripting capabilities.
-
-The discussion about introducing a new opcode, `OP_ENABLE64BIT`, aims to expand the computational range significantly while maintaining network stability and compatibility with existing scripts. Proposals such as creating a new taproot leaf version are discussed as alternatives to direct opcode modifications.
-
-Lastly, the enhancement of covenant opcodes by incorporating arithmetic operations on satoshi values indicates a meaningful step forward in maximizing blockchain technology's potential. The adoption of 64-bit arithmetic across various programming applications is seen as a crucial enhancement, with the community drafting a Bitcoin Improvement Proposal (BIP) for public review at [BIP proposal link](https://github.com/Christewart/bips/pull/1), and an accompanying implementation at [implementation link](https://github.com/Christewart/bitcoin/pull/2).</summary>
-    <published>2024-02-28T14:12:36.190000+00:00</published>
+Recent discussions on the OP_TLUV mailing list have emphasized the impact of 64-bit arithmetic on the TLUV protocol and its broader applicability, sparking interest among developers across various domains. A Bitcoin Improvement Proposal (BIP) has been drafted and is available for public review at [BIP proposal link](https://github.com/Christewart/bips/pull/1), with an implementation guide at [implementation link](https://github.com/Christewart/bitcoin/pull/2). The initiator seeks early feedback to refine the proposal before wider evaluation, opting for an unconventional platform for initial discussions to gather insights and fine-tune the proposal for formal submission to the developer community.</summary>
+    <published>2024-03-19T14:17:49.792000+00:00</published>
   </entry>
 </feed>

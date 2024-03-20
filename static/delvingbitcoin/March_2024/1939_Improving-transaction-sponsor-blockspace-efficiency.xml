@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Improving transaction sponsor blockspace efficiency</title>
+  <updated>2024-03-20T02:19:58.300969+00:00</updated>
+  <author>
+    <name>harding 2024-03-19 20:19:34.753000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Improving transaction sponsor blockspace efficiency</title>
+    <updated>2024-03-20T02:19:58.300999+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/improving-transaction-sponsor-blockspace-efficiency/696" rel="alternate"/>
+    <summary>Jeremy Rubin's initial proposal for [transaction fee sponsors](sponsors) introduced a mechanism allowing transactions to sponsor others by including a specific transaction ID (txid) in the sponsor transaction's output script. This concept was designed to enable one transaction to support the inclusion of another in the same block, therefore fostering a more efficient utilization of block space. However, during a discussion between Rubin and the author, it was realized that this process could be optimized further. The refined approach suggests embedding the txid to be sponsored within a signature message of the sponsor transaction. This method not only secures the txid against unauthorized modifications but also reduces the overhead from Rubin's original design, which required additional bytes for each sponsorship.
+
+The revised proposal significantly streamlines the process by ensuring the sponsor transaction directly follows the transaction it aims to sponsor within a block. This direct succession permits the verification process to deduce the txid without explicitly including it in the transaction, thereby saving valuable block space. The overhead for indicating a transaction to be sponsored could potentially be reduced to zero or near-zero vbytes, a notable improvement over the previous model, which necessitated 42 vbytes. Furthermore, Rubin's original scheme allowed only for single transactions to be sponsored by a sponsor transaction and vice versa. In contrast, the new proposal at the consensus level introduces the possibility for a sponsor transaction to support multiple transactions and for various sponsor transactions to collectively sponsor one or several unrelated transactions. 
+
+The implementation of such a system involves a rewritable vector within the sponsor transaction, detailing the position of the sponsored transactions within a block. This flexible arrangement caters to sponsoring an arbitrary number of transactions without the constraints imposed by fixed ordering. The use of two-byte values allows for the sponsorship of up to 65k transactions at any position within a block, with the potential for even more efficient encodings. For transactions awaiting block inclusion, the witness data could list the txids directly, enhancing the efficiency of the sponsorship mechanism and minimizing onchain data footprint.
+
+Moreover, this streamlined approach opens avenues for high-frequency spenders to offer transaction sponsorship services with minimal overhead. By leveraging trust and reputation, a market for transaction sponsorship could emerge, enabling entities like Alice in the provided example to sponsor transactions for others like Bob, based on agreed terms and payments over networks like the Lightning Network. This model not only promotes a more efficient use of block space but also fosters a collaborative environment where transactions can be sponsored with minimal impact on the blockchain's capacity.</summary>
+    <published>2024-03-19T20:19:34.753000+00:00</published>
+  </entry>
+</feed>
