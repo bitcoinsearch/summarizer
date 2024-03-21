@@ -2,24 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_Expire mempool behavior</title>
-  <updated>2024-03-17T02:00:59.147526+00:00</updated>
+  <updated>2024-03-21T02:03:02.943489+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-03-19 15:04:00+00:00</name>
+  </author>
   <author>
     <name>Antoine Riard 2024-03-16 18:21:00+00:00</name>
   </author>
   <author>
     <name>Peter Todd 2024-03-13 03:32:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/March_2024/mcf43c105c52470717a28fb3d6aff5e9943cfd868_OP-Expire-mempool-behavior.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2024/m50465916f1bb05fdcc319e68165c10b0e17239e2_OP-Expire-mempool-behavior.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2024/m9f51fc0372f404045b20a86e23ec1ddc0d77e565_OP-Expire-mempool-behavior.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - OP_Expire mempool behavior</title>
-    <updated>2024-03-17T02:00:59.147579+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/ZfEeNcX3ebyuYYRi@petertodd.org/T/#m50465916f1bb05fdcc319e68165c10b0e17239e2" rel="alternate"/>
-    <summary>The discourse surrounding the use of OP_Expire and its implications for bandwidth consumption has sparked considerable debate among the cryptocurrency community. A key concern identified is that this feature could become a vector for wasteful bandwidth usage, particularly if attackers generate high-fee transactions guaranteed to be mined promptly. This situation could lead to significant bandwidth consumption, posing a challenge especially when these transactions are part of an attacker’s normal operations. However, it's important to note that this issue isn't exclusive to OP_Expire. The mechanism shares similarities with the Replace-By-Fee (RBF) system, which allows transactions to be replaced by paying a minimal additional fee. In both cases, the additional costs associated with transaction replacement—1 satoshi per virtual byte for OP_Expire—are seen as compensatory for the bandwidth consumed during the process.
+    <updated>2024-03-21T02:03:02.943535+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/ZfEeNcX3ebyuYYRi@petertodd.org/T/#mcf43c105c52470717a28fb3d6aff5e9943cfd868" rel="alternate"/>
+    <summary>The discussion surrounding Lightning Network (LN) transactions, specifically second-stage transactions such as HTLC-preimage and HTLC-timeout, brings to light the challenges associated with bandwidth consumption when a HTLC-preimage is broadcast close to its expiration. This situation forces routing nodes to automatically broadcast an HTLC-timeout transaction, potentially leading to a waste of bandwidth for transactions with low chances of being mined. The introduction of altruistic rebroadcasting aims to address this by prioritizing transactions with higher mining probabilities, in line with Replacement-By-Fee (RBF) principles. An in-depth examination on this topic is available through a [mailing list thread](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-December/022188.html).
 
-The discussion further elaborates on the economic incentives and costs related to transaction replacement and bandwidth usage. It suggests that OP_Expire, while introducing a new aspect to transaction handling, does not fundamentally change the established dynamics of transaction replacement costs and bandwidth utilization inherent in current practices like RBF. This perspective sheds light on the nuanced understanding of how new features such as OP_Expire interact with existing mechanisms within the cryptocurrency ecosystem. For those interested in diving deeper into these discussions, contributions from individuals like Peter Todd provide valuable insights. His work and thoughts can be accessed through his website or direct communication channels, offering a richer understanding of the technical and economic considerations at play. Further exploration of these topics can be found on platforms like the [delvingbitcoin forum](https://delvingbitcoin.org/t/op-checkmaxtimeverify/581/8), which hosts a variety of discussions on cryptocurrency developments and innovations.</summary>
-    <published>2024-03-16T18:21:00+00:00</published>
+The discourse also touches upon the consistency observed in minimum fees across different nodes, highlighting a uniform fee structure that contrasts with the variance seen in mempool sizes. This predictability is crucial for strategies against divergent mempool fees, as discussed in a [GitHub pull request 28488](https://github.com/bitcoin/bitcoin/pull/28488). However, BIP125's rule 4 presents a loophole in nVersion=3 transactions, allowing attackers to perform replacement cycling attacks without adequately covering bandwidth costs. This tactic enables an attacker to exploit the system by using the same Unspent Transaction Outputs (UTXOs) across multiple nodes, thus avoiding fair fee payments.
+
+Further, traditional LN nodes face practical implementation challenges due to their singular tx-relay edge access to the tx-relay network. This limitation complicates the execution of replacement cycling attacks, yet the possibility of an attacker isolating victim transactions within local mempools remains a concern. Despite assumptions that altruistic rebroadcasting would mitigate such attacks, it poses only a minor obstacle given the low cost of acquiring UTXOs.
+
+Additionally, concerns have been raised regarding OP_Expire's potential as a "bandwidth-wasting vector." Although it requires attackers to pay actual fees, thereby making the attack costly, it resembles Replace-By-Fee (RBF) mechanisms where transactions can be replaced for a nominal additional fee. OP_Expire operates under similar principles, suggesting that while it introduces new dynamics in transaction handling, it does not fundamentally alter the economic incentives or costs related to transaction replacements and bandwidth usage. For more insights into these discussions, including contributions from individuals like Peter Todd, readers are encouraged to explore [petertodd.org](https://petertodd.org).</summary>
+    <published>2024-03-19T15:04:00+00:00</published>
   </entry>
 </feed>
