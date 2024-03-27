@@ -152,7 +152,7 @@ class GenerateJSON:
         # fetch the summary from xml if exist
         xml_summary = self.get_xml_summary(data)
 
-        if xml_summary is None:
+        if (xml_summary is None or xml_summary == "") and body and body.strip():
             xml_summary = create_summary(body)
 
         bullets = create_n_bullets(xml_summary, n=3)
@@ -218,17 +218,25 @@ class GenerateJSON:
         logger.info(f"Body sentence token length: {len(body_token)}")
         return len(body_token) > sent_threshold
 
-    def write_json_file(self, json_string, save_file_path):
-
-        json_dirname = os.path.dirname(save_file_path)
-        os.makedirs(json_dirname, exist_ok=True)
-
-        with open(save_file_path, 'w') as f:
-            f.write(json.dumps(json_string, indent=4))
-            logger.success(f"saved file: {save_file_path}")
-
     def store_file_in_archive(self, json_file_path, archive_file_path):
         archive_dirname = os.path.dirname(archive_file_path)
         os.makedirs(archive_dirname, exist_ok=True)
         shutil.copy(json_file_path, archive_file_path)
         logger.success(f'archive updated with file: {archive_file_path}')
+
+    def load_json_file(self, path):
+        with open(path, 'r') as j:
+            try:
+                return json.load(j)
+            except Exception as e:
+                logger.info(f"Error reading json file:{path} :: {e}")
+                return {}
+
+    def write_json_file(self, data, path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        try:
+            with open(path, 'w') as f:
+                f.write(json.dumps(data, indent=4))
+                logger.success(f"Saved file: {path}")
+        except Exception as e:
+            logger.info(f"Error saving json file:{path} :: {e}")

@@ -288,10 +288,10 @@ class GenerateXML:
                     if not os.path.exists(dir_path):
                         create_folder(dir_path)
 
-                    # construct file path
+                    # construct a file path
                     file_path = f"{dir_path}/{number}_{xml_name}.xml"
 
-                    # check if file exists
+                    # check if the file exists
                     if os.path.exists(file_path):
                         logger.info(f"Exist: {file_path}")
                         return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
