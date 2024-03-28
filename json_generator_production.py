@@ -98,7 +98,8 @@ if __name__ == "__main__":
 
                     # break after 30 entries
                     temp_counter += 1
-                    if temp_counter == 30:
+                    if temp_counter == 50:
+                        logger.info(f"Break statement called after: {temp_counter} entries.")
                         break
 
                 break
