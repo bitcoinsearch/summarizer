@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Payjoin-in-Potentiam: Externally fund an LSP channel open with one transaction</title>
+  <updated>2024-03-30T01:57:45.633103+00:00</updated>
+  <author>
+    <name>bitgould 2024-03-29 20:57:53.897000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Payjoin-in-Potentiam: Externally fund an LSP channel open with one transaction</title>
+    <updated>2024-03-30T01:57:45.633134+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/payjoin-in-potentiam-externally-fund-an-lsp-channel-open-with-one-transaction/749" rel="alternate"/>
+    <summary>The Swap-in-Potentiam proposal, as introduced by Jesse Posner and ZmnSCPxj, aims to streamline the process of moving funds from an onchain address to the Lightning Network while maintaining a high level of trust minimization. This is achieved through a contractual agreement between two parties: Alice, the owner of the funds, and Bob, a potential swap partner. The contract features two branches, one dedicated to onchain or channel transactions and another equipped with a time lock for Alice. This setup necessitates collaboration with a Lightning Service Provider (LSP) and is deemed particularly advantageous for mobile wallet users who seek a swift transition of funds from the blockchain layer to the Lightning layer without enduring the delays of additional confirmations. For a comprehensive understanding of the protocol and its step-by-step execution, interested readers are directed to the original discussion on the Lightning-dev mailing list. The execution of the Swap-in-Potentiam involves two pivotal transactions: funding a swap address and subsequently opening the lightning channel with the funds from that address.
+
+A significant innovation within this framework is the incorporation of Payjoin, a method that allows external funds to directly fund a channel opening from the LSP without the need to post a swap output address on the blockchain. This is accomplished by substituting the payjoin output in the first transaction that funds a swap address, thereby ensuring that only the combined result is visible on the blockchain. Through the Payjoin-in-Potentiam approach, the commitment transaction to the LSP's Swap-in-Potentiam address is initially prepared. However, before broadcasting this transaction, the funder sends it as a Partially Signed Bitcoin Transaction (PSBT) to the LSP. The LSP then substitutes the Swap-in-Potentiam address in the original PSBT with a channel opening address in a new payjoin PSBT via [payment output substitution](https://github.com/bitcoin/bips/blob/b3701faef2bdb98a0d7ace4eedbeefa2da4c89ed/bip-0078.mediawikiuser-content-span_idoutputsubstitutionspanPayment_output_substitution). This adjusted PSBT is returned to the funder for signing and broadcasting. Should the transaction not be signed and broadcasted, the LSP retains the ability to proceed with the original PSBT's transaction to open a channel, or alternatively, Alice can reclaim the funds after a designated timeout period.
+
+This system aligns closely with the previously proposed Lightning Payjoin concept but distinguishes itself by having the LSP, rather than an edge node, facilitate the channel opening. Notably, the BIP 78 recommendation for matching input and output script types in payjoin transactions is identified as a potential privacy concern, prompting advocacy for a change in specifications to avoid such fingerprinting.
+
+The sequence diagrams provided offer a detailed illustration of the transaction flow for both Swap-in-Potentiam and Payjoin-in-Potentiam processes. They encapsulate the steps from requesting a unique address for fund transfer to the final confirmation of the transaction by the blockchain, highlighting the importance of timely communication between the involved parties to ensure the success of the single transaction approach. This innovative method presents a more efficient and privacy-conscious way to integrate onchain funds into the Lightning Network, backed by the safety net of a fallback mechanism in cases of non-cooperation or communication interruptions.</summary>
+    <published>2024-03-29T20:57:53.897000+00:00</published>
+  </entry>
+</feed>

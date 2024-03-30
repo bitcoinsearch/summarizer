@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Payjoin-in-Potentiam: Externally fund an LSP channel open with one transaction</title>
+  <updated>2024-03-30T01:57:18.282523+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2024-03-30 00:06:01.726000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Payjoin-in-Potentiam: Externally fund an LSP channel open with one transaction</title>
+    <updated>2024-03-30T01:57:18.282558+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/payjoin-in-potentiam-externally-fund-an-lsp-channel-open-with-one-transaction/749/3" rel="alternate"/>
+    <summary>The recent discussions and developments in the realm of cryptocurrency transactions have introduced an innovative concept known as swap-in-potentiam, as detailed in the draft specification [here](https://github.com/ZmnSCPxj-jr/swap-in-potentiam/blob/cf7b11476ee5ad7a85edb5482d05f17ff625feb4/doc/swap-in-potentiam.md). This new approach leverages a channel opening flow rather than the traditional onchain-to-offchain swap, aligning with the principles set forth by [LSPS0](https://github.com/BitcoinAndLightningLayerSpecs/lsp/blob/68e498ebc278dcd4ab6188d12e93ea2e91c5d882/LSPS0/README.md), albeit as an extension that is yet to be discussed with the LSPS standards group. Central to this mechanism is the use of public keys known between transacting parties, where Alice knows a public key controlled by Bob for initiating transactions. This setup facilitates the creation of a watch-only onchain wallet by Alice using BIP32 HD derivation, negating the need for a swap address.
+
+In implementing swap-in-potentiam, all inputs to the funding transaction must originate from addresses with the same Lightning Service Provider (LSP) as Bob, though Alice's keys can differ. This requirement stems from the desire to avoid using Partially Signed Bitcoin Transactions (PSBT) since the current sub-protocol lacks support for MuSig2, opting instead for a bespoke format that communicates the inputs and order of outputs. Despite this, PSBT remains utilized for general onchain-to-onchain transactions, enabling swap-in-potentiam wallets to implement PayJoin. There is hope that future adaptations will incorporate MuSig2 support within PSBT, but until then, a specific 2-of-2 tapleaf path exists to facilitate transactions without MuSig2.
+
+The essence of swap-in-potentiam lies in its ability to transform an onchain address into one that can be spent in the Lightning Network after achieving a minimum confirmation depth, without necessitating additional waiting periods for moving funds from onchain to offchain. This process allows for a unique transaction method where a third party, potentially unaware of the beneficiary's identity, can fund the swap-in-potentiam address. This funding action inadvertently opens a channel, akin to a non-Lightning channel open, through a modified Spilman channel mechanism, utilizing `OP_CLTV`/`OP_CSV`. Unlike traditional Lightning Network channel openings that require active participation from both parties to exchange initial signatures, the swap-in-potentiam channel can be opened unilaterally or even by a third party, thereby streamlining the transaction process. The only requisite is onchain confirmation, which occurs between the third-party funder and Alice, eliminating the need for any intermediary waiting period between Alice and Bob.</summary>
+    <published>2024-03-30T00:06:01.726000+00:00</published>
+  </entry>
+</feed>
