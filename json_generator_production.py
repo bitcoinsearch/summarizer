@@ -96,7 +96,7 @@ if __name__ == "__main__":
                     this_data['summary'] = this_summary
                     gen.write_json_file(this_data, json_full_path)
 
-                    # break after 30 entries
+                    # break after n entries
                     temp_counter += 1
                     if temp_counter == 50:
                         logger.info(f"Break statement called after: {temp_counter} entries.")
