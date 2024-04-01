@@ -1,8 +1,6 @@
 import time
 from datetime import datetime
-import numpy as np
-import pandas as pd
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch.helpers import scan
 from loguru import logger
 
@@ -221,9 +219,8 @@ class ElasticSearchClient:
 
         return unique_results
 
-    def fetch_all_data_for_url(self, es_index, url, start_date_str=None, end_date_str=None):
-        logger.info(f"fetching all the data")
-        output_list = []
+    def fetch_raw_data_for_url_with_empty_summary(self, es_index, url, start_date_str=None, end_date_str=None):
+        logger.info(f"fetching all the data for url: {url}")
         raw_output_list = []
         start_time = time.time()
 
@@ -247,44 +244,54 @@ class ElasticSearchClient:
                                         }
                                     }
                                 }
-                            ]
+                            ],
+                            "must_not": {
+                                "exists": {
+                                    "field": "summary"
+                                }
+                            }
                         }
                     }
                 }
             else:
                 query = {
                     "query": {
-                        "match_phrase": {
-                            "domain.keyword": str(url)
+                        "bool": {
+                            "must": [
+                                {
+                                    "prefix": {
+                                        "domain.keyword": str(url)
+                                    }
+                                }
+                            ],
+                            "must_not": {
+                                "exists": {
+                                    "field": "summary"
+                                }
+                            }
                         }
                     }
                 }
 
-            # Initialize the scroll
-            scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
-                                                     scroll='5m')
+            scroll_response = self._es_client.search(
+                index=es_index, body=query, size=self._es_data_fetch_size, scroll='5m'
+            )
             scroll_id = scroll_response['_scroll_id']
             results = scroll_response['hits']['hits']
 
-            # Dump the documents into the json file
             logger.info(f"Starting dumping of {es_index} data in json...")
             while len(results) > 0:
-                # Save the current batch of results
                 for result in results:
                     raw_output_list.append(result)
-                    output_list.append(result['_source'])
 
                 # Fetch the next batch of results
                 scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='5m')
                 scroll_id = scroll_response['_scroll_id']
                 results = scroll_response['hits']['hits']
 
-            logger.info(
-                f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
-
-            df = pd.DataFrame(output_list)
-            logger.info(f"Total threads received for: {df.shape[0]}")
-            return df, raw_output_list
+            logger.info(f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
+            logger.info(f"Total threads received : {len(raw_output_list)}")
+            return raw_output_list
         else:
             logger.info('Could not connect to Elasticsearch')
             return None
@@ -484,3 +491,96 @@ class ElasticSearchClient:
         else:
             logger.warning('Could not connect to Elasticsearch')
             return output_list
+
+    def get_duplicated_data_based_on_url(self, es_index, domain_url):
+
+        if self._es_client.ping():
+            logger.success("connected to the ElasticSearch")
+            query = {
+                "size": 0,
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "domain.keyword": str(domain_url)
+                                }
+                            }
+                        ]
+                    }
+                },
+                "aggs": {
+                    "filtered_by_domain": {
+                        "filter": {
+                            "term": {
+                                "domain.keyword": str(domain_url)
+                            }
+                        },
+                        "aggs": {
+                            "duplicate_urls": {
+                                "terms": {
+                                    "field": "url.keyword",
+                                    "min_doc_count": 2,
+                                    "size": 1000
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            response = self._es_client.search(index=es_index, body=query)
+            duplicated_url_list = [u['key'] for u in
+                                   response['aggregations']['filtered_by_domain']['duplicate_urls']['buckets']]
+            return duplicated_url_list
+
+    def get_data_based_on_doc_url(self, es_index, doc_url):
+        if self._es_client.ping():
+            query = {
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "url.keyword": str(doc_url)
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+
+            scroll_response = self._es_client.search(
+                index=es_index, body=query, size=self._es_data_fetch_size, scroll='5m'
+            )
+            res = scroll_response['hits']['hits']
+            return res
+        else:
+            return []
+
+    def document_add(self, index_name, doc, doc_id=None):
+        """Funtion to add a document by providing index_name,
+        document type, document contents as doc and document id."""
+        resp = self._es_client.index(index=index_name, body=doc, id=doc_id)
+        return resp
+
+    def document_view(self, index_name, doc_id):
+        """Function to view document."""
+        try:
+            resp = self._es_client.get(index=index_name, id=doc_id)
+        except NotFoundError:
+            resp = False
+        return resp
+
+    def document_update(self, index_name, doc_id, doc=None, new=None):
+        """Function to edit a document either updating existing fields or adding a new field."""
+        if doc:
+            resp = self._es_client.index(index=index_name, id=doc_id, body=doc)
+        else:
+            resp = self._es_client.update(index=index_name, id=doc_id, body={"doc": new})
+        return resp
+
+    def document_delete(self, index_name, doc_id):
+        """Function to delete a specific document."""
+        resp = self._es_client.delete(index=index_name, id=doc_id)
+        return resp
