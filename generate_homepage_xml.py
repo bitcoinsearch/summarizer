@@ -145,7 +145,7 @@ if __name__ == "__main__":
             counts, contributors = elastic_search.es_fetch_contributors_and_threads(
                 es_index=ES_INDEX, title=title, domain=dev_url
             )
-
+            # exclude the post authors
             for author in data['_source']['authors']:
                 contributors.remove(author)
             data['_source']['n_threads'] = counts
@@ -167,6 +167,7 @@ if __name__ == "__main__":
                 counts, contributors = elastic_search.es_fetch_contributors_and_threads(
                     es_index=ES_INDEX, title=title, domain=dev_url
                 )
+                # exclude the post authors
                 for author in data['_source']['authors']:
                     contributors.remove(author)
                 data['_source']['n_threads'] = counts
@@ -230,6 +231,7 @@ if __name__ == "__main__":
                             continue
 
                         if contributors:
+                            # exclude the post authors
                             for author in doc['_source']['authors']:
                                 contributors.remove(author)
                         doc['_source']['n_threads'] = counts

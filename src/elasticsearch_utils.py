@@ -127,12 +127,20 @@ class ElasticSearchClient:
 
     def extract_data_from_es(self, es_index, url, start_date_str, current_date_str,
                              exclude_combined_summary_docs=False):
+        """
+        Fetches and extracts documents from a specified Elasticsearch index based on URL,
+        date range, and an optional exclusion flag for combined summary documents.
+        The method returns a list of documents that match the query criteria.
+        """
         output_list = []
         start_time = time.time()
 
         if self._es_client.ping():
             logger.success("connected to the ElasticSearch")
 
+            # Construct a search query to filter documents by domain,
+            # date range (start to end date) and optionally exclude
+            # 'combined-summary' documents
             domain_query = self.get_domain_query(url)
 
             if exclude_combined_summary_docs:
@@ -228,7 +236,7 @@ class ElasticSearchClient:
     def filter_top_active_posts(self, es_results, top_n):
         unique_results = []
 
-        thread_dict = {}
+        thread_dict = {} # maps post titles to their respective activity levels
         # create dictionary with title as key and thread count as value
         for result in es_results:
             title = result['_source']['title']
@@ -238,6 +246,7 @@ class ElasticSearchClient:
                 domain=result['_source']['domain']
             )
             result['_source']['n_threads'] = counts
+            # exclude the post authors
             for author in result['_source']['authors']:
                 contributors.remove(author)
             result['_source']['n_threads'] = counts
@@ -246,7 +255,8 @@ class ElasticSearchClient:
             # add counts as value to thread_dict with a key as title
             thread_dict[title] = counts
 
-        # Use the dictionary created above, to sort the results
+        # Use the dictionary created above to sort the results
+        # posts with a higher thread count are placed at the top
         es_results_sorted = sorted(
             es_results,
             key=lambda x: thread_dict[x['_source']['title']], reverse=True
@@ -370,9 +380,13 @@ class ElasticSearchClient:
         return earliest_post
 
     def es_fetch_contributors_and_threads(self, es_index, title, domain):
+        """
+        Fetches the count of threads and unique contributors for a given post based on title and domain
+        """
+        # The search query 
         domain_query = self.get_domain_query(domain)
         query = {
-            "size": 0,
+            "size": 0, # no search hits are returned, the focus is solely on the aggregations and counts
             "query": {
                 "bool": {
                     "must": [
@@ -381,6 +395,7 @@ class ElasticSearchClient:
                     ]
                 }
             },
+            # count unique authors associated with the matching documents
             "aggs": {
                 "authors_list": {
                     "terms": {
@@ -394,6 +409,7 @@ class ElasticSearchClient:
         response = self._es_client.search(index=es_index, body=query)
         counts = response['hits']['total']['value']
         if int(counts) > 0:
+            # exclude original post
             counts = int(counts) - 1
         contributors = [author['key'] for author in response['aggregations']['authors_list']['buckets']]
         return counts, contributors
@@ -427,7 +443,7 @@ class ElasticSearchClient:
         return selected_threads
 
     def fetch_data_with_empty_summary(self, es_index, url=None, start_date_str=None, current_date_str=None):
-        logger.info(f"connecting ElasticSearch to fetch the docs with summary ... ")
+        logger.info(f"connecting ElasticSearch to fetch the docs with no summary ... ")
         output_list = []
         start_time = time.time()
 

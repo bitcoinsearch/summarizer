@@ -57,6 +57,8 @@ if __name__ == "__main__":
         logger.success(f"TOTAL THREADS RECEIVED FOR '{dev_name}': {len(data_list)}")
 
         # NEW THREADS POSTS
+        # @TODO you already identify the original post by type==original_post
+        # so you could get the posts in order by date and check if the original posts is there
         seen_titles = set()
         for i in data_list:
             this_title = i['_source']['title']
