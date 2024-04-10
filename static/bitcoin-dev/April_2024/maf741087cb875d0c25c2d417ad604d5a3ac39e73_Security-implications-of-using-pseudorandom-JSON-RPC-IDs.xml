@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Security implications of using pseudorandom JSON-RPC IDs</title>
+  <updated>2024-04-10T02:06:22.309577+00:00</updated>
+  <author>
+    <name>Antoine Riard 2024-04-09 23:35:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Security implications of using pseudorandom JSON-RPC IDs</title>
+    <updated>2024-04-10T02:06:22.309617+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/74f23461-fae2-4dd7-9a20-5e6557cd1f2fn@googlegroups.com/T/#maf741087cb875d0c25c2d417ad604d5a3ac39e73" rel="alternate"/>
+    <summary>The Bitcoin Core RPC protocol, as outlined in the `src/rpc/protocol` directory, does not guarantee unique JSON RPC IDs for applications, presenting a potential challenge for developers relying on these IDs for application interaction. The internal handling of tasks within Bitcoin Core utilizes `std::unique_ptr` within its `WorkQueue`, ensuring that each pointer should theoretically have a unique virtual memory address assigned by the operating system's kernel to the `bitcoind` process. However, this system is not foolproof. Memory corruption could, under certain conditions influenced by binary compilation flags among other factors, mistakenly associate an RPC call pointer with an incorrect `bitcoind` function address.
+
+In light of potential security vulnerabilities, including those stemming from memory corruption—even if they appear benign or affect non-critical subsystems—it is crucial for such issues to be reported. Communicating these bugs with detailed technical descriptions to security@bitcoincore.org or trusted security reporters is essential. For individuals unfamiliar with the protocols surrounding security disclosure, resources such as [Responsible Disclosure Guidelines](https://bitcoinops.org/en/topics/responsible-disclosures/) and Linux's [Security Bugs Process](https://docs.kernel.org/process/security-bugs.html) offer valuable guidance.
+
+Moreover, the practice of running multiple user-level applications that share a common Bitcoin Core JSON-RPC on a single process instance is discouraged, especially in scenarios where funds are at risk or the use case extends beyond merely informational purposes, such as querying the blockchain's state height or available feature sets. It is also important to note that the JSON RPC calls lack end-to-end encryption, nor is there a key distribution protocol for endpoints, which could pose additional security risks. This information is further detailed in the `doc/JSON-RPC-interface.md` documentation.</summary>
+    <published>2024-04-09T23:35:00+00:00</published>
+  </entry>
+</feed>
