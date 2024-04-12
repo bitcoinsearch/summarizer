@@ -248,8 +248,8 @@ def recursive_summary(body, tokens_per_sub_body, max_length, custom_prompt=None)
 
 
 def gpt_api(body, custom_prompt=None):
-    body_length_limit = 2800
-    tokens_per_sub_body = 2700
+    body_length_limit = 127000
+    tokens_per_sub_body = 127000
     summaries = recursive_summary(body, tokens_per_sub_body, body_length_limit, custom_prompt)
 
     if len(summaries) > 1:
