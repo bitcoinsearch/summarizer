@@ -10,11 +10,13 @@ from tqdm import tqdm
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.json_utils import GenerateJSON
+from src.xml_utils import GenerateXML
 from src.utils import month_dict
 
 if __name__ == "__main__":
 
     gen = GenerateJSON()
+    xml_gen = GenerateXML()
     elastic_search = ElasticSearchClient()
     dev_urls = [
         ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
@@ -153,6 +155,9 @@ if __name__ == "__main__":
 
                         for data in tqdm(new_threads_list):
                             try:
+                                # check and generate any missing file
+                                xml_gen.start(dict_data=[data], url=data['_source']['domain'])
+
                                 entry_data = gen.create_single_entry(
                                     data,
                                     base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
@@ -172,6 +177,9 @@ if __name__ == "__main__":
 
                     for data in tqdm(active_data_list):
                         try:
+                            # check and generate any missing file
+                            xml_gen.start(dict_data=[data], url=data['_source']['domain'])
+
                             entry_data = gen.create_single_entry(
                                 data, base_url_for_xml="https://tldr.bitcoinsearch.xyz/summary",
                                 look_for_combined_summary=True, remove_xml_extension=True

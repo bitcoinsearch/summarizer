@@ -212,10 +212,9 @@ def split_prompt_into_chunks(prompt, chunk_size):
 def get_summary_chunks(body, tokens_per_sub_body, custom_prompt=None):
     chunks = split_prompt_into_chunks(body, tokens_per_sub_body)
     summaries = []
+    # logger.info(f"Total chunks created: {len(chunks)}")
 
-    logger.info(f"Total chunks created: {len(chunks)}")
-
-    for chunk in tqdm(chunks):
+    for chunk in chunks:
         count_gen_sum = 0
         while True:
             try:
@@ -276,7 +275,6 @@ def gpt_api(body, custom_prompt=None):
 
 
 def create_summary(body, custom_prompt=None):
-    logger.info("creating the summary ...")
     summ = gpt_api(body, custom_prompt)
     return summ
 

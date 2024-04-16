@@ -90,37 +90,6 @@ class GenerateJSON:
         response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=500)
         return response_str
 
-    def check_local_xml_files_exists(self, data, base_url_for_xml="static", look_for_combined_summary_file=False):
-        number = get_id(data["_source"]["id"])
-        title = data["_source"]["title"]
-        published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        published_at = pytz.UTC.localize(published_at)
-        local_dev_name = data['_source']['dev_name']
-        if local_dev_name == "delvingbitcoin.org":
-            local_dev_name = "delvingbitcoin"
-        xml_name = clean_title(title)
-        month_name = month_dict[int(published_at.month)]
-        str_month_year = f"{month_name}_{int(published_at.year)}"
-        # current_directory = os.getcwd()
-
-        base_path = f"{base_url_for_xml}/{local_dev_name}/{str_month_year}"
-        file_extension = ".xml"
-
-        individual_summ_file_path = ""
-        combined_summ_file_path = ""
-
-        individual_summ_file = f"{base_path}/{number}_{xml_name}{file_extension}"
-        if os.path.exists(individual_summ_file):
-            individual_summ_file_path = individual_summ_file
-            # individual_summ_full_path = os.path.join(current_directory, individual_summ_file_path)
-
-        if look_for_combined_summary_file:
-            combined_summ_file = f"{base_path}/combined_{xml_name}{file_extension}"
-            if os.path.exists(combined_summ_file):
-                combined_summ_file_path = combined_summ_file
-                # combined_summ_full_path = os.path.join(current_directory, combined_summ_file_path)
-        return individual_summ_file_path, combined_summ_file_path
-
     def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
                             remove_xml_extension=False, add_combined_summary_field=False):
         number = get_id(data["_source"]["id"])
