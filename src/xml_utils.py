@@ -16,6 +16,10 @@ from src.utils import preprocess_email, month_dict, get_id, clean_title, convert
     remove_multiple_whitespaces, add_utc_if_not_present
 from src.gpt_utils import create_summary
 
+from src.config import ES_INDEX
+from src.elasticsearch_utils import ElasticSearchClient
+elastic_search = ElasticSearchClient()
+
 
 def get_base_directory(url):
     if "bitcoin-dev" in url or "bitcoindev" in url:
@@ -230,7 +234,7 @@ class GenerateXML:
         files_list = glob.glob(os.path.join(current_directory, "static", directory, "**/*.xml"), recursive=True)
         return files_list
 
-    def generate_new_emails_df(self, dict_data, dev_url):
+    def generate_new_emails_df(self, main_dict_data, dev_url):
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
 
         # get a locally stored xml files path
@@ -241,22 +245,34 @@ class GenerateXML:
                        'url', 'authors']
         df_dict = {col: [] for col in (columns + source_cols)}
 
-        for data in range(len(dict_data)):
+        seen_titles = set()
+        for idx in range(len(main_dict_data)):
             xmls_list = []
-            number = get_id(dict_data[data]["_source"]["id"])
-            title = dict_data[data]["_source"]["title"]
-            xml_name = clean_title(title)
-            file_name = f"{number}_{xml_name}.xml"
-            combined_filename = f"combined_{xml_name}.xml"
+            this_title = main_dict_data[idx]["_source"]["title"]
+            if this_title in seen_titles:
+                continue
 
-            if not any(file_name in item for item in files_list):
-                logger.info(f"Not present: {file_name}")
+            # generate xml for all the docs that fall under this title
+            title_dict_data = elastic_search.fetch_data_based_on_title(
+                es_index=ES_INDEX, title=this_title, url=dev_url
+            )
+            for data_idx in range(len(title_dict_data)):
+                title = title_dict_data[data_idx]["_source"]["title"]
+                number = get_id(title_dict_data[data_idx]["_source"]["id"])
+                xml_name = clean_title(title)
+                file_name = f"{number}_{xml_name}.xml"
+                combined_filename = f"combined_{xml_name}.xml"
+                created_at = title_dict_data[data_idx]["_source"]["created_at"]
 
-                self.file_not_present_df(columns, source_cols, df_dict, files_list, dict_data, data,
-                                         title, combined_filename, namespaces)
-            else:
-                logger.info(f"Present: {file_name}")
-                self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)
+                if not any(file_name in item for item in files_list):
+                    logger.info(f"Not present: {created_at} | {file_name}")
+                    self.file_not_present_df(columns, source_cols, df_dict, files_list, title_dict_data, data_idx,
+                                             title, combined_filename, namespaces)
+                else:
+                    logger.info(f"Present: {created_at} | {file_name}")
+                    self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)
+
+                seen_titles.add(this_title)
 
         emails_df = pd.DataFrame(df_dict)
         emails_df['authors'] = emails_df['authors'].apply(convert_to_tuple)
@@ -264,7 +280,7 @@ class GenerateXML:
         emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
         emails_df['body'] = emails_df['body'].apply(preprocess_email)
         emails_df['title'] = emails_df['title'].apply(remove_multiple_whitespaces)
-        logger.info(f"Shape of emails_df: {emails_df.shape}")
+        # logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
 
     def start(self, dict_data, url):
@@ -312,7 +328,7 @@ class GenerateXML:
                     return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
 
                 os_name = platform.system()
-                logger.info(f"Operating System: {os_name}")
+                # logger.info(f"Operating System: {os_name}")
 
                 # get unique titles
                 titles = emails_df.sort_values('created_at')['title'].unique()
@@ -341,7 +357,7 @@ class GenerateXML:
                     flag = False
                     std_file_path = ""
                     for idx, (month_year, _) in enumerate(month_year_group):
-                        logger.info(f"Month and Year: {month_year}")
+                        # logger.info(f"Month and Year: {month_year}")
                         month_name = month_dict[int(month_year[0])]
                         str_month_year = f"{month_name}_{month_year[1]}"
 

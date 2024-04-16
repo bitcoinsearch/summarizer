@@ -79,6 +79,52 @@ class ElasticSearchClient:
             logger.info('Could not connect to Elasticsearch')
             return None
 
+    def fetch_data_based_on_title(self, es_index, title, url):
+        logger.info(f"looking for title: {title}")
+        output_list = []
+
+        if self._es_client.ping():
+            query = {
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "match_phrase":
+                                {
+                                    "title.keyword": title
+                                }
+                            },
+                            {
+                                "term":
+                                {
+                                    "domain.keyword": str(url)
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+
+            # Initialize the scroll
+            scroll_response = self._es_client.search(index=es_index, body=query, size=self._es_data_fetch_size,
+                                                     scroll='5m')
+            scroll_id = scroll_response['_scroll_id']
+            results = scroll_response['hits']['hits']
+
+            while len(results) > 0:
+                for result in results:
+                    output_list.append(result)
+
+                # Fetch the next batch of results
+                scroll_response = self._es_client.scroll(scroll_id=scroll_id, scroll='5m')
+                scroll_id = scroll_response['_scroll_id']
+                results = scroll_response['hits']['hits']
+
+            return output_list
+        else:
+            logger.info('Could not connect to Elasticsearch')
+            return None
+
     def extract_data_from_es(self, es_index, url, start_date_str, current_date_str,
                              exclude_combined_summary_docs=False):
         output_list = []
@@ -289,7 +335,8 @@ class ElasticSearchClient:
                 scroll_id = scroll_response['_scroll_id']
                 results = scroll_response['hits']['hits']
 
-            logger.info(f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
+            logger.info(
+                f"Dumping of {es_index} data in json has completed and has taken {time.time() - start_time:.2f} seconds.")
             logger.info(f"Total threads received : {len(raw_output_list)}")
             return raw_output_list
         else:

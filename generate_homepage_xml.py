@@ -23,17 +23,8 @@ def page_data_handling(data_list: list, get_unique_per_dev=False):
     collected_dev_data = []
     for data in tqdm(data_list):
         try:
-            individual_file_exists, combined_file_exists = gen.check_local_xml_files_exists(
-                data,
-                look_for_combined_summary_file=True
-            )
-            if not individual_file_exists:
-                this_doc_id = data['_source']['id']
-                logger.info(f"individual summary file does not exist for id: {this_doc_id}")
-                this_doc_data = elastic_search.fetch_data_based_on_id(es_index=ES_INDEX, id_str=this_doc_id)
-                logger.info(f"Total docs found: {len(this_doc_data)}")
-                xml_gen.start(dict_data=this_doc_data, url=data['_source']['domain'])
-                logger.info(f"xml generation complete")
+            # check and generate any missing file
+            xml_gen.start(dict_data=[data], url=data['_source']['domain'])
             entry_data = gen.create_single_entry(data, look_for_combined_summary=True)
 
             if get_unique_per_dev:

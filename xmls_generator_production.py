@@ -20,18 +20,18 @@ if __name__ == "__main__":
         "https://gnusha.org/pi/bitcoindev/"
     ]
 
-    current_date_str = None
-    if not current_date_str:
-        current_date_str = datetime.now().strftime("%Y-%m-%d")
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=30)
 
-    start_date = datetime.now() - timedelta(days=30)
+    # yyyy-mm-dd
+    end_date_str = end_date.strftime("%Y-%m-%d")
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_data: {start_date_str}")
-    logger.info(f"current_date_str: {current_date_str}")
+    logger.info(f"end_date_str: {end_date_str}")
 
     for dev_url in dev_urls:
         data_list = elastic_search.extract_data_from_es(
-            ES_INDEX, dev_url, start_date_str, current_date_str, exclude_combined_summary_docs=True
+            ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
         )
         dev_name = dev_url.split("/")[-2]
         logger.success(f"TOTAL THREADS RECEIVED FOR - '{dev_name}': {len(data_list)}")
