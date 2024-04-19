@@ -2,16 +2,40 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Second Look at Weak Blocks</title>
-  <updated>2024-04-18T01:55:07.387676+00:00</updated>
+  <updated>2024-04-19T01:56:21.144775+00:00</updated>
   <author>
-    <name>instagibbs 2024-04-17 15:56:26.759000+00:00</name>
+    <name>mcelrath 2024-04-18 17:14:04.476000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-04-17 15:28:21.297000+00:00</name>
+    <name>instagibbs 2024-04-18 15:47:09.925000+00:00</name>
+  </author>
+  <author>
+    <name>mcelrath 2024-04-18 13:36:59.726000+00:00</name>
+  </author>
+  <author>
+    <name>AntoineP 2024-04-18 12:46:56.542000+00:00</name>
+  </author>
+  <author>
+    <name>garlonicon 2024-04-18 11:16:26.881000+00:00</name>
+  </author>
+  <author>
+    <name>jungly 2024-04-18 07:16:55.801000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs  . 2024-04-17 15:56:26.759000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2024-04-17 15:28:21.297000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2024-04-16 17:45:35.589000+00:00</name>
   </author>
+  <link href="delvingbitcoin/April_2024/2275_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2024/2274_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2024/2271_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2024/2270_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2024/2268_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2024/2262_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2024/2255_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2024/2254_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2024/2242_Second-Look-at-Weak-Blocks.xml" rel="alternate"/>
@@ -19,13 +43,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Second Look at Weak Blocks</title>
-    <updated>2024-04-18T01:55:07.387718+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/second-look-at-weak-blocks/805/3" rel="alternate"/>
-    <summary>The exploration of enhancing blockchain efficiency emphasizes the utilization of weak blocks within the infrastructure established for compact blocks. This proposal aims to reduce delays and unnecessary communications in block propagation, potentially benefiting mining fairness and decentralization. By mitigating disparities in mempool policies and their effects, the introduction of "weak compact blocks" could streamline the final block relay process. The adaptation from compact to weak compact blocks doesn't necessitate a Directed Acyclic Graph (DAG) or additional consensus beyond validation, allowing these messages to serve as a robust broadcast layer for miners' efforts. Despite this innovative approach, questions regarding the extent of necessary validation, strategies for omitting weak blocks from storage, and handling untraceable transactions persist.
+    <updated>2024-04-19T01:56:21.144877+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/second-look-at-weak-blocks/805/9" rel="alternate"/>
+    <summary>The discussion revolves around the limitations and potential of weak block propagation in blockchain networks, specifically addressing the inefficacy of weak blocks in achieving mempool synchronization in a fragmented mempool environment. The primary issue highlighted is that miners engaged in out-of-band fee arrangements are unlikely to share transactions they are paid for out-of-band through weak blocks, as this could enable other miners to usurp these fees. This practice not only undermines the goal of mempool synchronization but also exacerbates the challenge of block validation times due to the necessity of retrieving missing transactions. Moreover, the approach conflicts with the "first seen" rule employed by mempools for accepting transactions, thereby impacting transaction censorship resistance and failing to establish a consensus on transaction order, considering the manipulability of timestamps.
 
-A Proof of Concept (PoC) has been developed to demonstrate the practicality of integrating weak blocks into the mempool and further disseminating them, indicating a need for further dialogue on several technical aspects. These include the Proof of Work (PoW) multiplier adjustment, the optimal number of blocks to buffer, and the management of transactions already present in the mempool. The possibility of employing both high and low bandwidth solutions for the propagation of weak blocks suggests a flexible approach to maintaining efficiency while considering bandwidth limitations.
+A proposed solution to these challenges involves the implementation of Braidpool, which aims to incentivize miners to participate in a decentralized mining pool, offering benefits such as reduced variance and outsourced transaction selection. This model relies on extending Nakamoto consensus to a Directed Acyclic Graph (DAG) structure to achieve time ordering and conflict resolution among transactions within weak blocks. However, it is acknowledged that while a decentralized mining pool can encourage adherence to transaction broadcast norms, it cannot entirely prevent centralized pools from engaging in out-of-band transaction acceptance. Economic disincentives are suggested as a means to deter such practices. The discourse includes references to further reading on Braidpool's ambitions and specifications.
 
-Moreover, the proposal opens up discussions on broader implications for network performance, such as improved fee estimation for upcoming blocks, thereby influencing miner strategies. Future steps involve gathering input from the developer community and evaluating miner interest in using Remote Procedure Calls (RPCs) for block submission or supporting direct non-compact version submissions for initial spread. Market research is critical to ascertain the practicality and inclination among miners, especially smaller entities, towards adopting this system for enhanced network convergence.</summary>
-    <published>2024-04-17T15:56:26.759000+00:00</published>
+Additionally, there's a consideration of employing a variant of compact block messages to facilitate the propagation of "weak compact blocks," aiming to streamline the process without necessitating a consensus on these messages. This approach focuses on ensuring efficient transmission and validation of weak blocks, potentially reducing the overhead associated with filling gaps in transaction history. This concept aligns with Braidpool’s strategy of referencing the last confirmed bitcoin block to simplify the validation of weak blocks, thus avoiding the sequential validation typically required.
+
+The exploration also extends to optimizing bandwidth usage through selective transmission of weak blocks and prioritizing `weakheaders` to mitigate additional data transfer loads. It contemplates the frequency of weak block discovery and its implications on network data volume, suggesting a need for strategic filtering to manage redundancy effectively. The proposal theorizes on maintaining a manageable weak block cache size, anticipating a high occurrence rate of weak blocks between actual block confirmations, which necessitates efficient processing capabilities for rapid proof of work validation and transaction caching.
+
+Furthermore, the narrative touches upon the evolution of mining shares propagation and the potential integration of existing compact block infrastructure to support weak block transmission. This adaptation seeks to improve compact block relay efficiency and contribute to mining fairness by alleviating discrepancies arising from divergent mempool policies. The proposal underscores several unresolved questions related to the validation and management of weak blocks, advocating for community feedback and further experimentation to refine the approach. Possible applications and the broader impacts of this system on network performance and mining strategies, including fee estimation for subsequent blocks, are also discussed, indicating areas for future research and development.</summary>
+    <published>2024-04-18T17:14:04.476000+00:00</published>
   </entry>
 </feed>
