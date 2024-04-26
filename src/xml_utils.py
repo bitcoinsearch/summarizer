@@ -1,23 +1,24 @@
-import re
-import pandas as pd
-from feedgen.feed import FeedGenerator
-from tqdm import tqdm
-import platform
-import shutil
-from datetime import datetime, timezone
-import pytz
 import glob
-import xml.etree.ElementTree as ET
 import os
+import platform
+import re
+import shutil
 import traceback
-from loguru import logger
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 
-from src.utils import preprocess_email, month_dict, get_id, clean_title, convert_to_tuple, create_folder, \
-    remove_multiple_whitespaces, add_utc_if_not_present
-from src.gpt_utils import create_summary
+import pandas as pd
+import pytz
+from feedgen.feed import FeedGenerator
+from loguru import logger
+from tqdm import tqdm
 
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
+from src.gpt_utils import create_summary
+from src.utils import preprocess_email, month_dict, get_id, clean_title, convert_to_tuple, create_folder, \
+    remove_multiple_whitespaces, add_utc_if_not_present
+
 elastic_search = ElasticSearchClient()
 
 
@@ -149,8 +150,6 @@ class GenerateXML:
 
         # The title is directly provided as a parameter
         df_dict["title"].append(title)
-        # formatted_file_name = file.split("/static")[1]
-        # logger.info(formatted_file_name)
 
         # Parse the XML file to extract and append relevant data
         tree = ET.parse(file)
@@ -174,51 +173,46 @@ class GenerateXML:
         df_dict["authors"].append([author_result.strip()])
 
     def file_not_present_df(self, columns, source_cols, df_dict, files_list, dict_data, data,
-                            title, combined_filename, namespace):
+                            title, namespace):
         """
         Processes data directly from the given document (`data`) as no XML summary is
         available for that document. Also, for each individual summary (XML file) that
         already exists for the given thread, extracts and appends its content to the dictionary.
         """
-        # Append basic data from dict_data for each column into df_dict
+        # Append basic data from dict_data for each column into df_dict using list comprehension
         for col in columns:
             df_dict[col].append(dict_data[data][col])
 
+        # Processing source_cols with conditional append
         for col in source_cols:
+            value = dict_data[data]['_source'][col]
             if "created_at" in col:
-                datetime_obj = add_utc_if_not_present(dict_data[data]['_source'][col], iso_format=False)
-                df_dict[col].append(datetime_obj)
-            else:
-                df_dict[col].append(dict_data[data]['_source'][col])
+                value = add_utc_if_not_present(value, iso_format=False)
+            df_dict[col].append(value)
+
+        # Iterate over files with transformed file paths
+        files_list = [file.replace("\\", "/") for file in files_list]
+
+        # Use dictionary to store parsed XML trees to avoid redundant parsing
+        parsed_files = {}
 
         # For each individual summary (XML file) that exists for the
         # given thread, extract and append their content to the dictionary
-        # TODO: 
-        # This method is called for every post without a summary, which means that
-        # existing inidividual summaries for a thread are added n-1 times the amount
-        # of new posts in the thread at the time of execution of the cron job.
-        # this is not an issue because we then drop duplicates, but it's extra complexity. 
         for file in files_list:
-            file = file.replace("\\", "/")
             if os.path.exists(file):
-                tree = ET.parse(file)
-                root = tree.getroot()
+                if file not in parsed_files:
+                    tree = ET.parse(file)
+                    root = tree.getroot()
+                    parsed_files[file] = (tree, root)
+
+                tree, root = parsed_files[file]
                 file_title = root.find('atom:entry/atom:title', namespace).text
 
                 if title == file_title:
                     self.append_columns(df_dict, file, title, namespace)
 
-                    if combined_filename in file:
-                        # TODO: the code will never reach this point
-                        # as we are already filtering per thread title so no
-                        # "Combined summary - X" filename will pass though
-                        tree = ET.parse(file)
-                        root = tree.getroot()
-                        summary = root.find('atom:entry/atom:summary', namespace).text
-                        df_dict["body"].append(summary)
-                    else:
-                        summary = root.find('atom:entry/atom:summary', namespace).text
-                        df_dict["body"].append(summary)
+                    summary = root.find('atom:entry/atom:summary', namespace).text
+                    df_dict["body"].append(summary)
             else:
                 logger.info(f"file not present: {file}")
 
@@ -230,39 +224,45 @@ class GenerateXML:
         summary exists, it extracts the content of individual summaries, appending it
         to the data dictionary.
         """
-        combined_file_fullpath = None # the combined XML file if found
         # List to keep track of the month folders that contain
         # the XML files for the posts of the current thread
-        month_folders = []
+        month_folders = set()
 
-        # Iterate through the list of local XML file paths
+        # Cached listdir calls to avoid repeated disk access
+        folder_contents = {}
+
+        # Identifying combined file and processing individual summaries in a single loop
+        combined_file_fullpath = None
+
         for file in files_list:
-            file = file.replace("\\", "/")
+            normalized_file = file.replace("\\", "/")
             # Check if the current file is the combined XML file for the thread
-            if combined_filename in file:
-                combined_file_fullpath = file
+            if combined_filename in normalized_file:
+                combined_file_fullpath = normalized_file
             # Parse the XML file to find the title and compare it with the current title
             # in order to understand if the post/file is part of the current thread
-            tree = ET.parse(file)
+            tree = ET.parse(normalized_file)
             root = tree.getroot()
             file_title = root.find('atom:entry/atom:title', namespace).text
             # If titles match, add the file to the list of relevant XMLs and track its month folder
             if title == file_title:
-                individual_summaries_xmls_list.append(file)
-                month_folder_path = "/".join(file.split("/")[:-1])
-                if month_folder_path not in month_folders:
-                    month_folders.append(month_folder_path)
+                individual_summaries_xmls_list.append(normalized_file)
+                month_folder_path = "/".join(normalized_file.split("/")[:-1])
+                month_folders.add(month_folder_path)
 
         # Ensure the combined XML file is copied to all relevant month folders
         for month_folder in month_folders:
-            if combined_file_fullpath and combined_filename not in os.listdir(month_folder):
-                if combined_filename not in os.listdir(month_folder):
-                    shutil.copy(combined_file_fullpath, month_folder)
+            if month_folder not in folder_contents:
+                folder_contents[month_folder] = os.listdir(month_folder)
+
+            if combined_file_fullpath and combined_filename not in folder_contents[month_folder]:
+                shutil.copy(combined_file_fullpath, month_folder)
 
         # If individual summaries exist but no combined summary,
         # extract and append their content to the dictionary
-        if len(individual_summaries_xmls_list) > 0 and not any(combined_filename in item for item in files_list):
-            logger.info("individual summaries are present but not combined ones ...")
+        combined_exists = any(combined_filename in item for item in files_list)
+        if individual_summaries_xmls_list and not combined_exists:
+            logger.info("Individual summaries are present but not combined ones.")
             for file in individual_summaries_xmls_list:
                 self.append_columns(df_dict, file, title, namespace)
                 tree = ET.parse(file)
@@ -283,12 +283,18 @@ class GenerateXML:
         files_list = glob.glob(os.path.join(current_directory, "static", directory, "**/*.xml"), recursive=True)
         return files_list
 
+    def get_local_xml_file_paths_for_title(self, dev_url, title):
+        """
+        Retrieve paths for all relevant local XML files based on the given domain and title
+        """
+        current_directory = os.getcwd()
+        directory = get_base_directory(dev_url)
+        files_list = glob.glob(os.path.join(current_directory, "static", directory, f"**/*{title}.xml"), recursive=True)
+        return files_list
+
     def generate_new_emails_df(self, main_dict_data, dev_url):
         # Define XML namespace for parsing XML files
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
- 
-        # Retrieve all existing XML files (summaries) for the given source
-        files_list = self.get_local_xml_file_paths(dev_url)
 
         # Initialize a dictionary to store data for DataFrame construction, with predefined columns
         columns = ['_index', '_id', '_score']
@@ -297,9 +303,9 @@ class GenerateXML:
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
-        # Process each document in the input data   
+        # Process each document in the input data
         for idx in range(len(main_dict_data)):
-            xmls_list = [] # the existing XML files for the thread that the fetched document is part of
+            xmls_list = []  # the existing XML files for the thread that the fetched document is part of
             thread_title = main_dict_data[idx]["_source"]["title"]
             if thread_title in seen_titles:
                 continue
@@ -322,11 +328,14 @@ class GenerateXML:
                 combined_filename = f"combined_{xml_name}.xml"
                 created_at = title_dict_data[data_idx]["_source"]["created_at"]
 
+                # Retrieve all existing XML files (summaries) for the given source and title
+                files_list = self.get_local_xml_file_paths_for_title(dev_url=dev_url, title=xml_name)
+
                 # Check if the XML file for the document exists
                 if not any(file_name in item for item in files_list):
                     logger.info(f"Not present: {created_at} | {file_name}")
                     self.file_not_present_df(columns, source_cols, df_dict, files_list, title_dict_data, data_idx,
-                                             title, combined_filename, namespaces)
+                                             title, namespaces)
                 else:
                     logger.info(f"Present: {created_at} | {file_name}")
                     self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)

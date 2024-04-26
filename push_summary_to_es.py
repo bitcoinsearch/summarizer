@@ -6,14 +6,15 @@ from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import XMLReader
 
-
 if __name__ == "__main__":
 
     APPLY_DATE_RANGE = False
 
+    # Instantiating objects for reading XML and connecting to ElasticSearch
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
 
+    # URLs for development mailing lists and forums
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
@@ -21,8 +22,9 @@ if __name__ == "__main__":
         "https://gnusha.org/pi/bitcoindev/"
     ]
 
+    # Process each URL in the dev_urls list
     for dev_url in dev_urls:
-
+        # Set the date range for data extraction
         if APPLY_DATE_RANGE:
             current_date_str = None
             if not current_date_str:
@@ -35,21 +37,20 @@ if __name__ == "__main__":
             start_date_str = None
             current_date_str = None
 
+        # Fetch doc with an empty summary field
         docs_list = elastic_search.fetch_data_with_empty_summary(ES_INDEX, dev_url, start_date_str, current_date_str)
 
-        if isinstance(dev_url, list):
-            dev_name = dev_url[0].split("/")[-2]
-        else:
-            dev_name = dev_url.split("/")[-2]
-
+        dev_name = dev_url[0].split("/")[-2] if isinstance(dev_url, list) else dev_url.split("/")[-2]
         logger.success(f"Total threads received with empty summary for '{dev_name}': {len(docs_list)}")
 
+        # Loop through all fetched docs and update them by adding the summary from xml files
         for doc in tqdm.tqdm(docs_list):
             res = None
             try:
                 doc_id = doc['_id']
                 doc_index = doc['_index']
                 if not doc['_source'].get('summary'):
+                    # Get summary text from locally stored XML files
                     xml_summary = xml_reader.get_xml_summary(doc, dev_name)
                     if xml_summary:
                         elastic_search.es_client.update(

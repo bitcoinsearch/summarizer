@@ -1,9 +1,11 @@
-import time
-from datetime import datetime, timedelta
 import sys
-from loguru import logger
+import time
 import warnings
+from datetime import datetime, timedelta
+
+from loguru import logger
 from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
+
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import GenerateXML
@@ -11,8 +13,12 @@ from src.xml_utils import GenerateXML
 warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
+
+    # Instantiating objects for generating JSON, XML and connecting to ElasticSearch
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
+
+    # URLs of mailing lists and forums
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
@@ -20,15 +26,17 @@ if __name__ == "__main__":
         "https://gnusha.org/pi/bitcoindev/"
     ]
 
+    # Set the date range for data extraction
     end_date = datetime.now()
     start_date = end_date - timedelta(days=30)
 
-    # yyyy-mm-dd
     end_date_str = end_date.strftime("%Y-%m-%d")
     start_date_str = start_date.strftime("%Y-%m-%d")
+
     logger.info(f"start_data: {start_date_str}")
     logger.info(f"end_date_str: {end_date_str}")
 
+    # Process each URL in the dev_urls list
     for dev_url in dev_urls:
         data_list = elastic_search.extract_data_from_es(
             ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
