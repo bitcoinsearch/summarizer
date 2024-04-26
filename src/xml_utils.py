@@ -134,6 +134,12 @@ class GenerateXML:
             f.write(feed_xml)
 
     def append_columns(self, df_dict, file, title, namespace):
+        """
+        Extract specific information from the given XML file corresponding to
+        a single post or reply within a thread and append this information to
+        the given dictionary (df_dict)
+        """
+        # Append default values for columns that will not be directly filled from the XML
         df_dict["body_type"].append(0)
         df_dict["id"].append(file.split("/")[-1].split("_")[0])
         df_dict["type"].append(0)
@@ -141,21 +147,26 @@ class GenerateXML:
         df_dict["_id"].append(0)
         df_dict["_score"].append(0)
 
+        # The title is directly provided as a parameter
         df_dict["title"].append(title)
         # formatted_file_name = file.split("/static")[1]
         # logger.info(formatted_file_name)
 
+        # Parse the XML file to extract and append relevant data
         tree = ET.parse(file)
         root = tree.getroot()
 
+        # Extract and format the publication date
         date = root.find('atom:entry/atom:published', namespace).text
         datetime_obj = add_utc_if_not_present(date, iso_format=False)
         df_dict["created_at"].append(datetime_obj)
 
+        # Extract the URL from the 'link' element
         link_element = root.find('atom:entry/atom:link', namespace)
         link_href = link_element.get('href')
         df_dict["url"].append(link_href)
 
+        # Process and append the author's name, removing digits and unnecessary characters
         author = root.find('atom:author/atom:name', namespace).text
         author_result = re.sub(r"\d", "", author)
         author_result = author_result.replace(":", "")
@@ -164,6 +175,12 @@ class GenerateXML:
 
     def file_not_present_df(self, columns, source_cols, df_dict, files_list, dict_data, data,
                             title, combined_filename, namespace):
+        """
+        Processes data directly from the given document (`data`) as no XML summary is
+        available for that document. Also, for each individual summary (XML file) that
+        already exists for the given thread, extracts and appends its content to the dictionary.
+        """
+        # Append basic data from dict_data for each column into df_dict
         for col in columns:
             df_dict[col].append(dict_data[data][col])
 
@@ -173,6 +190,14 @@ class GenerateXML:
                 df_dict[col].append(datetime_obj)
             else:
                 df_dict[col].append(dict_data[data]['_source'][col])
+
+        # For each individual summary (XML file) that exists for the
+        # given thread, extract and append their content to the dictionary
+        # TODO: 
+        # This method is called for every post without a summary, which means that
+        # existing inidividual summaries for a thread are added n-1 times the amount
+        # of new posts in the thread at the time of execution of the cron job.
+        # this is not an issue because we then drop duplicates, but it's extra complexity. 
         for file in files_list:
             file = file.replace("\\", "/")
             if os.path.exists(file):
@@ -184,6 +209,9 @@ class GenerateXML:
                     self.append_columns(df_dict, file, title, namespace)
 
                     if combined_filename in file:
+                        # TODO: the code will never reach this point
+                        # as we are already filtering per thread title so no
+                        # "Combined summary - X" filename will pass though
                         tree = ET.parse(file)
                         root = tree.getroot()
                         summary = root.find('atom:entry/atom:summary', namespace).text
@@ -194,30 +222,48 @@ class GenerateXML:
             else:
                 logger.info(f"file not present: {file}")
 
-    def file_present_df(self, files_list, namespace, combined_filename, title, xmls_list, df_dict):
-        combined_file_fullpath = None
+    def file_present_df(self, files_list, namespace, combined_filename, title, individual_summaries_xmls_list, df_dict):
+        """
+        Iterates through the list of XML files, identifying the combined XML file and
+        individual summaries relevant to the given thread (as specified by title).
+        It copies the combined XML file to all relevant month folders. If no combined
+        summary exists, it extracts the content of individual summaries, appending it
+        to the data dictionary.
+        """
+        combined_file_fullpath = None # the combined XML file if found
+        # List to keep track of the month folders that contain
+        # the XML files for the posts of the current thread
         month_folders = []
+
+        # Iterate through the list of local XML file paths
         for file in files_list:
             file = file.replace("\\", "/")
+            # Check if the current file is the combined XML file for the thread
             if combined_filename in file:
                 combined_file_fullpath = file
+            # Parse the XML file to find the title and compare it with the current title
+            # in order to understand if the post/file is part of the current thread
             tree = ET.parse(file)
             root = tree.getroot()
             file_title = root.find('atom:entry/atom:title', namespace).text
+            # If titles match, add the file to the list of relevant XMLs and track its month folder
             if title == file_title:
-                xmls_list.append(file)
+                individual_summaries_xmls_list.append(file)
                 month_folder_path = "/".join(file.split("/")[:-1])
                 if month_folder_path not in month_folders:
                     month_folders.append(month_folder_path)
 
+        # Ensure the combined XML file is copied to all relevant month folders
         for month_folder in month_folders:
             if combined_file_fullpath and combined_filename not in os.listdir(month_folder):
                 if combined_filename not in os.listdir(month_folder):
                     shutil.copy(combined_file_fullpath, month_folder)
 
-        if len(xmls_list) > 0 and not any(combined_filename in item for item in files_list):
+        # If individual summaries exist but no combined summary,
+        # extract and append their content to the dictionary
+        if len(individual_summaries_xmls_list) > 0 and not any(combined_filename in item for item in files_list):
             logger.info("individual summaries are present but not combined ones ...")
-            for file in xmls_list:
+            for file in individual_summaries_xmls_list:
                 self.append_columns(df_dict, file, title, namespace)
                 tree = ET.parse(file)
                 root = tree.getroot()
@@ -229,34 +275,46 @@ class GenerateXML:
         return author_tuple
 
     def get_local_xml_file_paths(self, dev_url):
+        """
+        Retrieve paths for all relevant local XML files based on the given domain
+        """
         current_directory = os.getcwd()
         directory = get_base_directory(dev_url)
         files_list = glob.glob(os.path.join(current_directory, "static", directory, "**/*.xml"), recursive=True)
         return files_list
 
     def generate_new_emails_df(self, main_dict_data, dev_url):
+        # Define XML namespace for parsing XML files
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
-
-        # get a locally stored xml files path
+ 
+        # Retrieve all existing XML files (summaries) for the given source
         files_list = self.get_local_xml_file_paths(dev_url)
 
+        # Initialize a dictionary to store data for DataFrame construction, with predefined columns
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
                        'url', 'authors']
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
+        # Process each document in the input data   
         for idx in range(len(main_dict_data)):
-            xmls_list = []
-            this_title = main_dict_data[idx]["_source"]["title"]
-            if this_title in seen_titles:
+            xmls_list = [] # the existing XML files for the thread that the fetched document is part of
+            thread_title = main_dict_data[idx]["_source"]["title"]
+            if thread_title in seen_titles:
                 continue
 
-            # generate xml for all the docs that fall under this title
+            # `files_list` contains all existing XML files for the current thread
+            # but older threads might lack corresponding XML files if they were
+            # inactive when we began creating summaries. When such threads become
+            # active, XML files for their posts/docs are absent.
+            # To address this, we fetch all documents under the active thread to
+            # prepare for XML generation in subsequent processing steps.
             title_dict_data = elastic_search.fetch_data_based_on_title(
-                es_index=ES_INDEX, title=this_title, url=dev_url
+                es_index=ES_INDEX, title=thread_title, url=dev_url
             )
             for data_idx in range(len(title_dict_data)):
+                # Extract relevant identifiers and metadata from the document
                 title = title_dict_data[data_idx]["_source"]["title"]
                 number = get_id(title_dict_data[data_idx]["_source"]["id"])
                 xml_name = clean_title(title)
@@ -264,6 +322,7 @@ class GenerateXML:
                 combined_filename = f"combined_{xml_name}.xml"
                 created_at = title_dict_data[data_idx]["_source"]["created_at"]
 
+                # Check if the XML file for the document exists
                 if not any(file_name in item for item in files_list):
                     logger.info(f"Not present: {created_at} | {file_name}")
                     self.file_not_present_df(columns, source_cols, df_dict, files_list, title_dict_data, data_idx,
@@ -272,9 +331,11 @@ class GenerateXML:
                     logger.info(f"Present: {created_at} | {file_name}")
                     self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)
 
-                seen_titles.add(this_title)
+                seen_titles.add(thread_title)
 
+        # Convert the dictionary to a pandas DataFrame for structured data representation
         emails_df = pd.DataFrame(df_dict)
+        # Clean and preprocess fields in the DataFrame
         emails_df['authors'] = emails_df['authors'].apply(convert_to_tuple)
         emails_df = emails_df.drop_duplicates()
         emails_df['authors'] = emails_df['authors'].apply(self.preprocess_authors_name)
@@ -307,12 +368,13 @@ class GenerateXML:
                     # construct a file path
                     file_path = f"{dir_path}/{number}_{xml_name}.xml"
 
-                    # check if the file exists
+                    # Check if we already created a summary for this post in the past
                     if os.path.exists(file_path):
+                        # if XML file exists, we already created a summary
                         logger.info(f"Exist: {file_path}")
                         return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
 
-                    # create file if not exist
+                    # No summary was found, we need to create one
                     logger.info(f"Not found: {file_path}")
                     summary = create_summary(cols['body'])
                     feed_data = {
@@ -330,10 +392,11 @@ class GenerateXML:
                 os_name = platform.system()
                 # logger.info(f"Operating System: {os_name}")
 
-                # get unique titles
+                # Identify threads by getting unique titles across posts
                 titles = emails_df.sort_values('created_at')['title'].unique()
                 logger.info(f"Total titles in data: {len(titles)}")
                 for title_idx, title in tqdm(enumerate(titles)):
+                    # Filter emails by title and prepare them for XML generation
                     title_df = emails_df[emails_df['title'] == title]
                     title_df['authors'] = title_df['authors'].apply(convert_to_tuple)
                     title_df = title_df.drop_duplicates()
@@ -341,16 +404,23 @@ class GenerateXML:
                     title_df = title_df.sort_values(by='created_at', ascending=False)
                     logger.info(f"Number of docs for title: {title}: {len(title_df)}")
 
+                    # Handle threads with single and multiple documents differently
                     if len(title_df) < 1:
                         continue
                     if len(title_df) == 1:
+                        # Don't create combined summary for threads with no replies
                         generate_local_xml(title_df.iloc[0], "0", url)
                         continue
+                    # COMBINED SUMMARY GENERATION
+                    # Combine the individual posts of the thread into combined_body
                     combined_body = '\n\n'.join(title_df['body'].apply(str))
                     xml_name = clean_title(title)
+                    # Generate XML files (if not exist) for each post in the thread, collecting their paths into combined_links
                     combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
+                    # Generate a list of strings, each combining the first author's name with their post's creation date
                     combined_authors = list(
                         title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
+                    # Group emails by month and year based on their creation date to process them in time-based segments
                     month_year_group = \
                         title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
 
@@ -363,7 +433,9 @@ class GenerateXML:
 
                         directory = get_base_directory(url)
                         file_path = fr"static/{directory}/{str_month_year}/combined_{xml_name}.xml"
-
+                        # Generate a single combined thread summary using:
+                        # - the individual summaries of previous posts
+                        # - the actual content of newer posts
                         combined_summary = create_summary(combined_body)
                         feed_data = {
                             'id': "2",
@@ -374,11 +446,16 @@ class GenerateXML:
                             'created_at': add_utc_if_not_present(title_df.iloc[0]['created_at_org']),
                             'summary': combined_summary
                         }
+                        # We use a flag to check if the XML file for the
+                        # combined summary is generated for the first time
                         if not flag:
+                            # Generate XML only once for the first month-year and keep its path
                             self.generate_xml(feed_data, file_path)
                             std_file_path = file_path
                             flag = True
                         else:
+                            # For subsequent month-year groups, copy the initially
+                            # created XML file instead of creating a new one
                             if os_name == "Windows":
                                 shutil.copy(std_file_path, file_path)
                             elif os_name == "Linux":
