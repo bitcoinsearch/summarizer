@@ -1,8 +1,9 @@
-from xml.etree import ElementTree as ET
-from datetime import datetime
-import os
 import json
+import os
 import shutil
+from datetime import datetime
+from xml.etree import ElementTree as ET
+
 import nltk
 import pytz
 from loguru import logger
@@ -17,6 +18,20 @@ from src.gpt_utils import create_n_bullets, create_summary, generate_chatgpt_sum
 class GenerateJSON:
 
     def get_xml_summary(self, data, verbose=False):
+        """
+        Extracts summary information from an XML file based on provided data.
+
+        Args:
+            self: The instance of the class invoking the method.
+            data (dict): A dictionary containing data from a source, expected to have keys '_source', 'id', 'title', and 'created_at'.
+            verbose (bool, optional): If True, verbose logging is enabled. Defaults to False.
+
+        Returns:
+            str: A string containing author information and summary extracted from the XML file.
+
+        Notes:
+            This method assumes that the XML file structure conforms to Atom syndication format.
+        """
         number = get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         xml_name = clean_title(title)
@@ -56,6 +71,21 @@ class GenerateJSON:
             return ""
 
     def generate_recent_posts_summary(self, dict_list, verbose=False):
+        """
+        Generate a concise summary from a compilation of condensed recent discussions.
+
+        Args:
+            self: The instance of the class invoking the method.
+            dict_list (list): A list of dictionaries containing data from recent posts.
+            verbose (bool, optional): If True, verbose logging is enabled. Defaults to False.
+
+        Returns:
+            str: A concise summary of the recent discussions.
+
+        Notes:
+            This method assumes the availability of the functions get_xml_summary, preprocess_email, create_summary, and generate_chatgpt_summary_for_prompt.
+
+        """
         logger.info("working on given post's summary")
 
         recent_post_data = ""
@@ -92,6 +122,23 @@ class GenerateJSON:
 
     def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
                             remove_xml_extension=False, add_combined_summary_field=False):
+        """
+       Create a single entry data structure from the provided data.
+
+       Args:
+           self: The instance of the class invoking the method.
+           data (dict): A dictionary containing data from a source, expected to have keys '_source', 'id', 'title', 'created_at', 'contributors', 'url', 'authors', and 'body'.
+           base_url_for_xml (str, optional): The base URL for the XML files. Defaults to "static".
+           look_for_combined_summary (bool, optional): If True, look for combined summary files. Defaults to False.
+           remove_xml_extension (bool, optional): If True, remove the XML file extension from the file paths. Defaults to False.
+           add_combined_summary_field (bool, optional): If True, add a field for combined summary. Defaults to False.
+
+       Returns:
+           dict: A dictionary containing the entry data with keys 'id', 'title', 'link', 'authors', 'published_at',
+                 'summary', 'n_threads', 'dev_name', 'contributors', 'file_path', and 'combined_summ_file_path'. If
+                 add_combined_summary_field is True, it also contains 'combined_summary' key.
+
+       """
         number = get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -164,6 +211,21 @@ class GenerateJSON:
         return entry_data
 
     def get_existing_json_title(self, file_path):
+        """
+        Retrieve existing titles from a JSON file located at the specified path.
+
+        Args:
+            self: The instance of the class invoking the method.
+            file_path (str): The path to the JSON file.
+
+        Returns:
+            list: A list containing titles extracted from the JSON file's 'recent_posts' and 'active_posts' fields.
+
+        Notes:
+            This method assumes that the JSON file has the structure expected for a homepage JSON file, with 'recent_posts'
+            and 'active_posts' fields containing lists of dictionaries, each having a 'title' key.
+
+        """
         current_directory = os.getcwd()
         full_path = os.path.join(current_directory, file_path)
         if os.path.exists(full_path):
@@ -181,6 +243,23 @@ class GenerateJSON:
             return []
 
     def is_body_text_long(self, data, sent_threshold=2):
+        """
+        Check if the body text of the provided data is longer than a specified number of sentences.
+
+        Args:
+            self: The instance of the class invoking the method.
+            data (dict): A dictionary containing data from a source, expected to have a '_source' key with a 'body' key
+                         containing the body text.
+            sent_threshold (int, optional): The threshold number of sentences to consider the body text as long.
+                                            Defaults to 2.
+
+        Returns:
+            bool: True if the body text contains more sentences than the threshold, False otherwise.
+
+        Notes:
+            This method assumes the availability of the function preprocess_email and sent_tokenize.
+
+        """
         body_text = data['_source']['body']
         body_text = preprocess_email(body_text)
         body_token = sent_tokenize(body_text)
@@ -188,12 +267,35 @@ class GenerateJSON:
         return len(body_token) > sent_threshold
 
     def store_file_in_archive(self, json_file_path, archive_file_path):
+        """
+        Store a JSON file in an archive file.
+
+        Args:
+            self: The instance of the class invoking the method.
+            json_file_path (str): The path to the JSON file to be archived.
+            archive_file_path (str): The path to the archive file where the JSON file will be stored.
+
+        Returns:
+            None
+
+        """
         archive_dirname = os.path.dirname(archive_file_path)
         os.makedirs(archive_dirname, exist_ok=True)
         shutil.copy(json_file_path, archive_file_path)
         logger.success(f'archive updated with file: {archive_file_path}')
 
     def load_json_file(self, path):
+        """
+        Load data from a JSON file located at the specified path.
+
+        Args:
+            self: The instance of the class invoking the method.
+            path (str): The path to the JSON file.
+
+        Returns:
+            dict: A dictionary containing the data loaded from the JSON file, or an empty dictionary if the file cannot be read.
+
+        """
         with open(path, 'r') as j:
             try:
                 return json.load(j)
@@ -202,6 +304,18 @@ class GenerateJSON:
                 return {}
 
     def write_json_file(self, data, path):
+        """
+        Write data to a JSON file located at the specified path.
+
+        Args:
+            self: The instance of the class invoking the method.
+            data (dict): The data to be written to the JSON file.
+            path (str): The path to the JSON file.
+
+        Returns:
+            None
+
+        """
         os.makedirs(os.path.dirname(path), exist_ok=True)
         try:
             with open(path, 'w') as f:

@@ -23,6 +23,16 @@ elastic_search = ElasticSearchClient()
 
 
 def get_base_directory(url):
+    """
+    Determine the base directory for storing files based on the provided URL.
+
+    Args:
+        url (str): The URL used to determine the base directory.
+
+    Returns:
+        str: The base directory determined based on the URL. Possible values are "bitcoin-dev", "lightning-dev", "delvingbitcoin", or "others".
+
+    """
     if "bitcoin-dev" in url or "bitcoindev" in url:
         directory = "bitcoin-dev"
     elif "lightning-dev" in url:
@@ -37,6 +47,22 @@ def get_base_directory(url):
 class XMLReader:
 
     def get_xml_summary(self, data, dev_name):
+        """
+        Retrieve the summary from an XML file associated with the provided data.
+
+        Args:
+            self: The instance of the class invoking the method.
+            data (dict): A dictionary containing data from a source, expected to have keys '_source', 'id', 'title', and 'created_at'.
+            dev_name (str): The name of the development platform associated with the data.
+
+        Returns:
+            str or None: The summary extracted from the XML file, or None if no summary is found.
+
+        Notes:
+            This method assumes the availability of the functions get_id, clean_title, get_base_directory, and month_dict.
+            It also assumes the existence of the os, pytz, and ET modules for file operations, datetime handling, and XML parsing, respectively.
+
+        """
         number = get_id(data["_source"]["id"])
         title = data["_source"]["title"]
         xml_name = clean_title(title)
@@ -70,6 +96,22 @@ class XMLReader:
             return None
 
     def read_xml_file(self, full_path):
+        """
+        Read and extract information from an XML file located at the specified path.
+
+        Args:
+            self: The instance of the class invoking the method.
+            full_path (str): The path to the XML file.
+
+        Returns:
+            dict: A dictionary containing extracted information from the XML file, including 'id', 'title', 'summary',
+                  'body', 'url', 'authors', 'created_at', 'body_type', 'type', 'domain', and 'indexed_at'.
+
+        Notes:
+            This method assumes the availability of the clean_title function.
+            It also assumes the existence of the os, datetime, and ET modules for file operations, datetime handling, and XML parsing, respectively.
+
+        """
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
         tree = ET.parse(full_path)
         root = tree.getroot()
@@ -113,6 +155,22 @@ class XMLReader:
 class GenerateXML:
 
     def generate_xml(self, feed_data, xml_file):
+        """
+        Generate an Atom XML feed based on the provided feed data and write it to the specified XML file.
+
+        Args:
+            self: The instance of the class invoking the method.
+            feed_data (dict): A dictionary containing data for generating the feed, including 'id', 'title', 'authors', 'links',
+                              'url', 'created_at', and 'summary'.
+            xml_file (str): The path to the XML file where the generated feed will be written.
+
+        Returns:
+            None
+
+        Notes:
+            This method assumes the existence of the FeedGenerator module for generating the feed XML.
+
+        """
         # create feed generator
         fg = FeedGenerator()
         fg.id(feed_data['id'])
@@ -136,9 +194,23 @@ class GenerateXML:
 
     def append_columns(self, df_dict, file, title, namespace):
         """
-        Extract specific information from the given XML file corresponding to
-        a single post or reply within a thread and append this information to
-        the given dictionary (df_dict)
+        Append specific information from the given XML file corresponding to a single post or reply within a thread
+        to the given dictionary (df_dict).
+
+        Args:
+            self: The instance of the class invoking the method.
+            df_dict (dict): A dictionary containing columns as keys and lists as values, representing DataFrame columns.
+            file (str): The path to the XML file.
+            title (str): The title of the post or reply.
+            namespace (dict): A dictionary containing XML namespace mappings.
+
+        Returns:
+            None
+
+        Notes:
+            This method assumes the existence of the ET module for XML parsing.
+            It also assumes the availability of the add_utc_if_not_present function and the re module for datetime handling and string manipulation, respectively.
+
         """
         # Append default values for columns that will not be directly filled from the XML
         df_dict["body_type"].append(0)
@@ -271,12 +343,38 @@ class GenerateXML:
                 df_dict["body"].append(summary)
 
     def preprocess_authors_name(self, author_tuple):
+        """
+        Preprocess author names by removing '+' characters and stripping whitespace.
+
+        Args:
+            self: The instance of the class invoking the method.
+            author_tuple (tuple): A tuple containing author names.
+
+        Returns:
+            tuple: A tuple with author names processed by removing '+' characters and stripping whitespace.
+
+        Notes:
+            This method assumes that author names are provided as a tuple of strings.
+
+        """
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
         return author_tuple
 
     def get_local_xml_file_paths(self, dev_url):
         """
-        Retrieve paths for all relevant local XML files based on the given domain
+        Retrieve paths for all relevant local XML files based on the given domain.
+
+        Args:
+            self: The instance of the class invoking the method.
+            dev_url (str): The URL of the development platform.
+
+        Returns:
+            list: A list containing paths to relevant local XML files.
+
+        Notes:
+            This method assumes the existence of the os and glob modules for file operations.
+            It also assumes the availability of the get_base_directory function.
+
         """
         current_directory = os.getcwd()
         directory = get_base_directory(dev_url)
@@ -285,7 +383,16 @@ class GenerateXML:
 
     def get_local_xml_file_paths_for_title(self, dev_url, title):
         """
-        Retrieve paths for all relevant local XML files based on the given domain and title
+        Retrieve paths for all relevant local XML files based on the given domain and title.
+
+        Args:
+            self: The instance of the class invoking the method.
+            dev_url (str): The URL of the development platform.
+            title (str): The title of the post or reply.
+
+        Returns:
+            list: A list containing paths to relevant local XML files.
+
         """
         current_directory = os.getcwd()
         directory = get_base_directory(dev_url)
@@ -293,6 +400,23 @@ class GenerateXML:
         return files_list
 
     def generate_new_emails_df(self, main_dict_data, dev_url):
+        """
+        Generate a new DataFrame containing email data from the given main dictionary data and development URL.
+
+        Args:
+            self: The instance of the class invoking the method.
+            main_dict_data (list): A list of dictionaries containing data fetched from Elasticsearch Index.
+            dev_url (str): The URL of the development platform.
+
+        Returns:
+            pandas.DataFrame: A DataFrame containing email data extracted from the main dictionary data.
+
+        Notes:
+            This method assumes the existence of the elastic_search module for fetching data based on title.
+            It also assumes the availability of the get_id, clean_title, get_local_xml_file_paths_for_title, and logger functions,
+            as well as the preprocess_authors_name, remove_multiple_whitespaces, and preprocess_email functions.
+
+        """
         # Define XML namespace for parsing XML files
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
 
@@ -354,12 +478,47 @@ class GenerateXML:
         return emails_df
 
     def start(self, dict_data, url):
+        """
+        Start the process of generating local XML files and combined summaries based on the provided dictionary data and URL.
+
+        Args:
+            self: The instance of the class invoking the method.
+            dict_data (list): A list of dictionaries containing data fetched from Elasticsearch Index.
+            url (str): The URL of the development platform.
+
+        Returns:
+            None
+
+        Notes:
+            This method assumes the existence of the logger object, the get_id, clean_title, convert_to_tuple, preprocess_authors_name,
+            generate_new_emails_df, generate_local_xml, create_summary, get_base_directory, add_utc_if_not_present, and generate_xml functions,
+            as well as the month_dict object.
+            It also assumes the availability of the os, platform, pandas, shutil, and tqdm modules for file operations, platform information,
+            DataFrame manipulation, file copying, and progress tracking, respectively.
+
+        """
         if len(dict_data) > 0:
             emails_df = self.generate_new_emails_df(dict_data, url)
             if len(emails_df) > 0:
                 emails_df['created_at_org'] = emails_df['created_at'].astype(str)
 
                 def generate_local_xml(cols, combine_flag, url):
+                    """
+                    Generate a local XML file based on the provided columns data, combine flag, and URL.
+
+                    Args:
+                        cols (dict): A dictionary containing column data, including 'id', 'created_at', 'title', 'body', 'authors', and 'url'.
+                        combine_flag (str): A flag indicating whether to combine the XML file with others.
+                        url (str): The URL of the development platform.
+
+                    Returns:
+                        str: The file path of the generated local XML file.
+
+                    Notes:
+                        This method assumes the existence of the add_utc_if_not_present, create_folder, get_id, clean_title,
+                        get_base_directory, create_summary, and generate_xml functions, as well as the month_dict and logger objects.
+
+                    """
                     if isinstance(cols['created_at'], str):
                         cols['created_at'] = add_utc_if_not_present(cols['created_at'], iso_format=False)
                     month_name = month_dict[int(cols['created_at'].month)]

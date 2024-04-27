@@ -20,6 +20,21 @@ warnings.filterwarnings("ignore")
 
 
 def page_data_handling(data_list: list, get_unique_per_dev=False):
+    """
+    Handle the page data by generating XML files and creating single entries.
+
+    Args:
+        data_list (list): A list of dictionaries containing page data.
+        get_unique_per_dev (bool, optional): Flag indicating whether to get only unique documents per development domain. Defaults to False.
+
+    Returns:
+        list: A list of dictionaries containing processed page data.
+
+    Notes:
+        This function assumes the existence of the tqdm, xml_gen, json_gen, logger, traceback, and create_single_entry functions,
+        as well as the month_dict object.
+
+    """
     page_data = []
     collected_dev_data = []
     for data in tqdm(data_list):
