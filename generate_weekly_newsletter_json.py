@@ -16,12 +16,10 @@ from src.xml_utils import GenerateXML
 
 if __name__ == "__main__":
 
-    # Instantiating objects for generating JSON, XML and connecting to ElasticSearch
     json_gen = GenerateJSON()
     xml_gen = GenerateXML()
     elastic_search = ElasticSearchClient()
 
-    # URLs for development mailing lists and forums
     dev_urls = [
         ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
          "https://gnusha.org/pi/bitcoindev/"],

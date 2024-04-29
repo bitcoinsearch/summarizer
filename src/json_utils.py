@@ -28,9 +28,6 @@ class GenerateJSON:
 
         Returns:
             str: A string containing author information and summary extracted from the XML file.
-
-        Notes:
-            This method assumes that the XML file structure conforms to Atom syndication format.
         """
         number = get_id(data["_source"]["id"])
         title = data["_source"]["title"]
@@ -81,10 +78,6 @@ class GenerateJSON:
 
         Returns:
             str: A concise summary of the recent discussions.
-
-        Notes:
-            This method assumes the availability of the functions get_xml_summary, preprocess_email, create_summary, and generate_chatgpt_summary_for_prompt.
-
         """
         logger.info("working on given post's summary")
 
@@ -220,11 +213,6 @@ class GenerateJSON:
 
         Returns:
             list: A list containing titles extracted from the JSON file's 'recent_posts' and 'active_posts' fields.
-
-        Notes:
-            This method assumes that the JSON file has the structure expected for a homepage JSON file, with 'recent_posts'
-            and 'active_posts' fields containing lists of dictionaries, each having a 'title' key.
-
         """
         current_directory = os.getcwd()
         full_path = os.path.join(current_directory, file_path)
@@ -255,10 +243,6 @@ class GenerateJSON:
 
         Returns:
             bool: True if the body text contains more sentences than the threshold, False otherwise.
-
-        Notes:
-            This method assumes the availability of the function preprocess_email and sent_tokenize.
-
         """
         body_text = data['_source']['body']
         body_text = preprocess_email(body_text)

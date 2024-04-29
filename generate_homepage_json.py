@@ -29,11 +29,6 @@ def page_data_handling(data_list: list, get_unique_per_dev=False):
 
     Returns:
         list: A list of dictionaries containing processed page data.
-
-    Notes:
-        This function assumes the existence of the tqdm, xml_gen, json_gen, logger, traceback, and create_single_entry functions,
-        as well as the month_dict object.
-
     """
     page_data = []
     collected_dev_data = []
@@ -57,12 +52,10 @@ def page_data_handling(data_list: list, get_unique_per_dev=False):
 
 if __name__ == "__main__":
 
-    # Instantiating objects for generating JSON, XML and connecting to ElasticSearch
     json_gen = GenerateJSON()
     xml_gen = GenerateXML()
     elastic_search = ElasticSearchClient()
 
-    # URLs of mailing lists and forums
     dev_urls = [
         ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
          "https://gnusha.org/pi/bitcoindev/"],

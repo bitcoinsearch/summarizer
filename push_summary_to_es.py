@@ -10,11 +10,9 @@ if __name__ == "__main__":
 
     APPLY_DATE_RANGE = False
 
-    # Instantiating objects for reading XML and connecting to ElasticSearch
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
 
-    # URLs for development mailing lists and forums
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",

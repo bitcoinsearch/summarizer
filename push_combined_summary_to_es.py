@@ -13,7 +13,6 @@ if __name__ == "__main__":
 
     REMOVE_TIMESTAMPS_IN_AUTHORS = True
 
-    # Instantiating objects for reading XML and connecting to ElasticSearch
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
 

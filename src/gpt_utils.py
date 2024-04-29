@@ -194,7 +194,7 @@ def create_n_bullets(body_summary, n=3):
     return response_str
 
 
-def split_prompt_into_chunks(prompt, chunk_size):
+def split_prompt_into_chunks(prompt: str, chunk_size: int) -> list[str]:
     """
     Split a given prompt into chunks of specified size.
 
@@ -204,7 +204,6 @@ def split_prompt_into_chunks(prompt, chunk_size):
 
     Returns:
         list: A list containing the chunks of the input prompt.
-
     """
     tokens = TOKENIZER.encode(prompt)
     chunks = []
@@ -220,7 +219,7 @@ def split_prompt_into_chunks(prompt, chunk_size):
     return chunks
 
 
-def get_summary_chunks(body, tokens_per_sub_body, custom_prompt=None):
+def get_summary_chunks(body: str, tokens_per_sub_body: int, custom_prompt: str = None) -> list[str]:
     """
     Generate summary chunks for a given body of text.
 
@@ -231,7 +230,6 @@ def get_summary_chunks(body, tokens_per_sub_body, custom_prompt=None):
 
     Returns:
         list: A list containing summary chunks generated from the input body.
-
     """
     chunks = split_prompt_into_chunks(body, tokens_per_sub_body)
     summaries = []
@@ -254,7 +252,7 @@ def get_summary_chunks(body, tokens_per_sub_body, custom_prompt=None):
     return summaries
 
 
-def recursive_summary(body, tokens_per_sub_body, max_length, custom_prompt=None):
+def recursive_summary(body: str, tokens_per_sub_body: int, max_length: int, custom_prompt: str = None) -> list[str]:
     """
     Generate summary recursively for a given body of text.
 
@@ -266,7 +264,6 @@ def recursive_summary(body, tokens_per_sub_body, max_length, custom_prompt=None)
 
     Returns:
         list: A list containing the generated summaries.
-
     """
     summaries = get_summary_chunks(body, tokens_per_sub_body, custom_prompt)
 
@@ -281,7 +278,7 @@ def recursive_summary(body, tokens_per_sub_body, max_length, custom_prompt=None)
         return summaries
 
 
-def gpt_api(body, custom_prompt=None):
+def gpt_api(body: str, custom_prompt: str = None) -> str:
     """
     Interface function for generating summaries using GPT models.
 
@@ -291,7 +288,6 @@ def gpt_api(body, custom_prompt=None):
 
     Returns:
         str: The generated summary.
-
     """
     body_length_limit = 127000
     tokens_per_sub_body = 127000
@@ -320,7 +316,7 @@ def gpt_api(body, custom_prompt=None):
         return "\n".join(summaries)
 
 
-def create_summary(body, custom_prompt=None):
+def create_summary(body: str, custom_prompt: str = None) -> str:
     """
     Create a summary for the given body of text.
 
@@ -330,13 +326,12 @@ def create_summary(body, custom_prompt=None):
 
     Returns:
         str: The generated summary.
-
     """
     summ = gpt_api(body, custom_prompt)
     return summ
 
 
-def generate_chatgpt_summary_for_prompt(summarization_prompt, max_tokens):
+def generate_chatgpt_summary_for_prompt(summarization_prompt: str, max_tokens: int) -> str:
     response = openai.ChatCompletion.create(
         model=CHAT_COMPLETION_MODEL,
         messages=[

@@ -107,10 +107,6 @@ class XMLReader:
             dict: A dictionary containing extracted information from the XML file, including 'id', 'title', 'summary',
                   'body', 'url', 'authors', 'created_at', 'body_type', 'type', 'domain', and 'indexed_at'.
 
-        Notes:
-            This method assumes the availability of the clean_title function.
-            It also assumes the existence of the os, datetime, and ET modules for file operations, datetime handling, and XML parsing, respectively.
-
         """
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
         tree = ET.parse(full_path)
@@ -167,9 +163,6 @@ class GenerateXML:
         Returns:
             None
 
-        Notes:
-            This method assumes the existence of the FeedGenerator module for generating the feed XML.
-
         """
         # create feed generator
         fg = FeedGenerator()
@@ -206,10 +199,6 @@ class GenerateXML:
 
         Returns:
             None
-
-        Notes:
-            This method assumes the existence of the ET module for XML parsing.
-            It also assumes the availability of the add_utc_if_not_present function and the re module for datetime handling and string manipulation, respectively.
 
         """
         # Append default values for columns that will not be directly filled from the XML
@@ -353,9 +342,6 @@ class GenerateXML:
         Returns:
             tuple: A tuple with author names processed by removing '+' characters and stripping whitespace.
 
-        Notes:
-            This method assumes that author names are provided as a tuple of strings.
-
         """
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
         return author_tuple
@@ -370,10 +356,6 @@ class GenerateXML:
 
         Returns:
             list: A list containing paths to relevant local XML files.
-
-        Notes:
-            This method assumes the existence of the os and glob modules for file operations.
-            It also assumes the availability of the get_base_directory function.
 
         """
         current_directory = os.getcwd()
@@ -410,11 +392,6 @@ class GenerateXML:
 
         Returns:
             pandas.DataFrame: A DataFrame containing email data extracted from the main dictionary data.
-
-        Notes:
-            This method assumes the existence of the elastic_search module for fetching data based on title.
-            It also assumes the availability of the get_id, clean_title, get_local_xml_file_paths_for_title, and logger functions,
-            as well as the preprocess_authors_name, remove_multiple_whitespaces, and preprocess_email functions.
 
         """
         # Define XML namespace for parsing XML files
@@ -489,13 +466,6 @@ class GenerateXML:
         Returns:
             None
 
-        Notes:
-            This method assumes the existence of the logger object, the get_id, clean_title, convert_to_tuple, preprocess_authors_name,
-            generate_new_emails_df, generate_local_xml, create_summary, get_base_directory, add_utc_if_not_present, and generate_xml functions,
-            as well as the month_dict object.
-            It also assumes the availability of the os, platform, pandas, shutil, and tqdm modules for file operations, platform information,
-            DataFrame manipulation, file copying, and progress tracking, respectively.
-
         """
         if len(dict_data) > 0:
             emails_df = self.generate_new_emails_df(dict_data, url)
@@ -513,10 +483,6 @@ class GenerateXML:
 
                     Returns:
                         str: The file path of the generated local XML file.
-
-                    Notes:
-                        This method assumes the existence of the add_utc_if_not_present, create_folder, get_id, clean_title,
-                        get_base_directory, create_summary, and generate_xml functions, as well as the month_dict and logger objects.
 
                     """
                     if isinstance(cols['created_at'], str):

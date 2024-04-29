@@ -39,10 +39,6 @@ def add_utc_if_not_present(datetime_str, iso_format=True):
                                   Otherwise, returns a datetime object with UTC timezone.
     Raises:
         ValueError: If no valid date format is found for the given datetime string.
-
-    Note:
-        This function supports parsing datetime strings in various formats, including those with or without timezone information.
-        If the input datetime string does not contain timezone information, UTC timezone is added to it.
     """
     time_formats = [
         "%Y-%m-%d %H:%M:%S%z",
@@ -77,11 +73,6 @@ def remove_timestamps_from_author_names(author_list):
 
     Returns:
         list of str: A list of unique author names with timestamps removed.
-
-    Example:
-        >> authors = ["John Doe 2023-01-15 12:30:45", "Jane Smith", "Alice Wonderland 2022-05-10 08:45:30"]
-        >> remove_timestamps_from_author_names(authors)
-        ['John Doe', 'Jane Smith', 'Alice Wonderland']
     """
     preprocessed_list = []
     for author in author_list:
@@ -100,15 +91,6 @@ def convert_to_tuple(x):
     Returns:
         tuple: The input converted to a tuple.
 
-    Example:
-        >> convert_to_tuple("(1, 2, 3)")
-        (1, 2, 3)
-        >> convert_to_tuple("[4, 5, 6]")
-        (4, 5, 6)
-        >> convert_to_tuple("7")
-        (7,)
-        >> convert_to_tuple(8)
-        (8,)
     """
     try:
         if isinstance(x, str):
@@ -128,11 +110,6 @@ def clean_title(xml_name):
     Returns:
         str: The cleaned title with special characters replaced by hyphens.
 
-    Example:
-        >> clean_title("The@Quick/Brown:Fox")
-        'The-Quick-Brown-Fox'
-        >> clean_title("Special&characters\\are$here")
-        'Special-characters-are-here'
     """
     special_characters = ['/', ':', '@', '#', '$', '*', '&', '<', '>', '\\', '?']
     xml_name = re.sub(r'[^A-Za-z0-9]+', '-', xml_name)
@@ -151,11 +128,6 @@ def get_id(id):
     Returns:
         str: The last part of the ID string.
 
-    Example:
-        >> get_id("abc-def-123")
-        '123'
-        >> get_id("xyz-987")
-        '987'
     """
     return str(id).split("-")[-1]
 
@@ -167,8 +139,6 @@ def create_folder(month_year):
     Args:
         month_year (str): The name of the folder to be created.
 
-    Example:
-        >> create_folder("April_2024")
     """
     os.makedirs(month_year, exist_ok=True)
 
@@ -183,11 +153,6 @@ def remove_multiple_whitespaces(text):
     Returns:
         str: The text with multiple whitespaces replaced by a single whitespace.
 
-    Example:
-        >> remove_multiple_whitespaces("Hello    world")
-        'Hello world'
-        >> remove_multiple_whitespaces("   This  is   a   test   ")
-        'This is a test'
     """
     return re.sub('\s+', ' ', text).strip()
 
@@ -203,11 +168,6 @@ def normalize_text(s, sep_token=" \n "):
     Returns:
         str: The normalized text.
 
-    Example:
-        >> normalize_text("Hello    world!")
-        'Hello world'
-        >> normalize_text("This..is a test\n#with#special#characters")
-        'This. is a testwithspecialcharacters'
     """
     s = re.sub(r'\s+', ' ', s).strip()
     s = re.sub(r". ,", "", s)
@@ -230,15 +190,6 @@ def is_date(string, fuzzy=False):
     Returns:
         bool: True if the string represents a date, False otherwise.
 
-    Example:
-        >> is_date("2024-04-26")
-        True
-        >> is_date("April 26, 2024")
-        True
-        >> is_date("26-04-2024", fuzzy=True)
-        True
-        >> is_date("Not a date")
-        False
     """
     try:
         parse(string, fuzzy=fuzzy)
@@ -324,8 +275,6 @@ def get_past_week_data(dataframe):
     Returns:
         pd.DataFrame: A DataFrame containing data from the past week.
 
-    Note:
-        Assumes the DataFrame has a 'timestamp' column.
     """
     dt_now = CURRENT_TIME
     dt_min = dt_now - datetime.timedelta(days=7)

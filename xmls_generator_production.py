@@ -14,11 +14,9 @@ warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
 
-    # Instantiating objects for generating JSON, XML and connecting to ElasticSearch
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
 
-    # URLs of mailing lists and forums
     dev_urls = [
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",

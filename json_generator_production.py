@@ -25,11 +25,9 @@ def get_json_full_path(base_path, url):
 if __name__ == "__main__":
     APPLY_DATE_RANGE = False
 
-    # Instantiating objects for generating JSON, XML and connecting to ElasticSearch
     gen = GenerateJSON()
     elastic_search = ElasticSearchClient()
 
-    # URLs of mailing lists and forums
     dev_urls = [
         "https://btctranscripts.com/",
     ]
