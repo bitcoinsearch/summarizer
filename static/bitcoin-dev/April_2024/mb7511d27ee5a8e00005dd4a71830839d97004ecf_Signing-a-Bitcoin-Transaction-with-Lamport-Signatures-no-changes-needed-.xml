@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
+  <updated>2024-04-29T02:01:34.842486+00:00</updated>
+  <author>
+    <name>Ethan Heilman 2024-04-29 00:30:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
+    <updated>2024-04-29T02:01:34.842539+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAEM=y+XyW8wNOekw13C5jDMzQ-dOJpQrBC+qR8-uDot25tM=XA@mail.gmail.com/T/#u#mb7511d27ee5a8e00005dd4a71830839d97004ecf" rel="alternate"/>
+    <summary>In a groundbreaking discussion at the MIT DCI, an innovative approach was developed to implement Lamport signatures for Bitcoin transactions without the need for OP_CAT, a feature not currently available in Bitcoin's scripting language. This new scheme allows for the signing of spending transactions directly, diverging from previous methods that sign arbitrary data or utilize different script functionalities such as tapscript. The foundation of this method lies in utilizing the variable length of ECDSA signatures in Bitcoin, where the signature size can act as a proxy for the transaction hash, facilitated by the observation that the length of the 's-value' in an ECDSA signature is influenced by the transaction hash for a fixed nonce and signing key.
+
+The security of this novel scheme hinges on a specific setting of the nonce, k, to the multiplicative inverse of 2, which results in a significantly short 'r' value. This peculiar setup enables the identical 'r' values across multiple signatures to be validated based on their lengths using a simple size comparison operation within Bitcoin's scripting language. However, this method introduces a unique challenge; it requires a large number of signatures to achieve cryptographic security, with discussions suggesting around 1000 signatures might be needed to secure a transaction adequately.
+
+Lamport signatures play a crucial role in this scheme by allowing the signing of the ECDSA signature lengths instead of the transaction hashes directly. This method significantly complicates an attacker's ability to forge a transaction, as they would need to generate a matching set of signature sizes in the correct order, a feat that becomes exponentially difficult with each additional signature required by the protocol. 
+
+Despite its innovative approach, the scheme has identified weaknesses, such as susceptibility to tuning attacks, where attackers could manipulate the signature length through different SIG_HASH flags, and mix and match attacks exploiting small variations in 'r' value lengths. Proposed improvements aim to mitigate these issues by increasing the diversity of signed ECDSA signature lengths and employing techniques like Winternitz One Time signatures to compress the length of signatures further, thereby enhancing overall security.
+
+This exploratory work has sparked interest and feedback from several experts in the field, including contributions and critiques aimed at refining the approach. It represents a significant step toward leveraging existing Bitcoin script capabilities to implement more advanced cryptographic schemes, albeit with the caveat that its current form is more suited to academic exploration rather than practical application. The discussion reflects ongoing efforts to expand Bitcoin's utility through creative scripting and highlights the collaborative nature of innovation within the cryptocurrency space.</summary>
+    <published>2024-04-29T00:30:00+00:00</published>
+  </entry>
+</feed>
