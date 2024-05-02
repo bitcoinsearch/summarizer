@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
+  <updated>2024-05-02T01:59:09.749822+00:00</updated>
+  <author>
+    <name>Antoine Riard 2024-05-01 03:46:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
+    <updated>2024-05-02T01:59:09.749856+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/2775e9e8-4f1a-4f03-a8f0-4a4c2f6e93a9n@googlegroups.com/T/#m2366b783e1a2fe3962a453cfe71e83948c76b067" rel="alternate"/>
+    <summary>In the email from Antoine to Ethan, an in-depth analysis of a proposed emulation of the Lamport signature verification/generation scheme within the Bitcoin Script context is provided. The scheme suggests leveraging the ECDSA's `k` nonce as a fixed public value and incorporating the ECDSA-signature length and the cleartext `r,s` signature for signature verification through the OP_CHECKSIG operation, which has been part of Bitcoin Script since its inception. This approach aims to emulate the Lamport signature's functionality within a P2SH redeem script, using the signature digest commitment to a transaction's fields verified by the interpreter for both ECDSA and Schnorr signature schemes.
+
+Antoine raises concerns regarding the security of this proposed scheme against message forgery attacks and invalid curve domain parameters, such as the use of the point at infinity, which could potentially allow for manipulation of coordinates. Furthermore, the fundamental one-time usage property of Lamport signatures introduces additional complications, especially in a public transaction-relay network. There are worries that miners might exploit the broadcasting of transactions to force the disclosure of more pre-committed fixed-nonce ECDSA signatures.
+
+The email also critiques the robustness of the scheme based on the number of on-chain pre-committed signatures, suggesting that while increasing these could theoretically enhance security, it may not suffice against attackers with substantial computational resources. Antoine points out that given state-of-the-art collision attacks on hash functions, the security offered by 2^64 bits might be inadequate. Additionally, there's mention of the potential for shortcuts through pre-computing rainbow tables for the ECDSA r-value of a specific signature size.
+
+Lastly, Antoine touches upon an open question related to the existence of hash-chain-based covenants in Bitcoin today. This involves fixing the integer `z` of the s-value of an ECDSA signature in a redeem script and computing backward the chain of child redeem scripts to mitigate hash-chain dependencies. The security guarantees and the cost implications of such a scheme under the current block size limit of 4MWU remain unclear.</summary>
+    <published>2024-05-01T03:46:00+00:00</published>
+  </entry>
+</feed>
