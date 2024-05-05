@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Satoshi Style Message Signing</title>
+  <updated>2024-05-05T02:01:21.817780+00:00</updated>
+  <author>
+    <name>sipa 2024-05-04 04:50:53.015000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Satoshi Style Message Signing</title>
+    <updated>2024-05-05T02:01:21.817809+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/satoshi-style-message-signing/850/2" rel="alternate"/>
+    <summary>The message signing and encoding mechanism associated with Bitcoin was not developed by Satoshi Nakamoto but rather introduced by the sender of the original communication. This system, which was established before the Bitcoin Improvement Proposal (BIP) process came into existence, lacks formal documentation, making the source code the primary reference for understanding its operation. Despite this, the implementation has been adapted across multiple programming languages due to its widespread reimplementation within the community.
+
+The technical process for signing a message involves several steps, beginning with the serialization of the string "Bitcoin Signed Message:\n" appended to the message intended for signing. This is followed by encoding both elements using the P2P protocol's serialization format, specifically by prepending each element with a CompactSize-encoded length indicator, as detailed in the [Bitcoin protocol documentation](https://en.bitcoin.it/wiki/Protocol_documentation#Variable_length_integer). After serialization, the combined data undergoes a double SHA-256 hashing.
+
+For the creation of an ECDSA signature from the hashed message, two integers $(r, s)$ are generated using the address' private key. This signature is then made recoverable through the inclusion of a header byte alongside 32-byte big-endian encodings of $r$ and $s$. The header byte plays a crucial role in enabling the verifier to deduce the public key from the signature. The calculation of this byte involves several equations that utilize modular arithmetic to manipulate the signature components and the elliptic curve parameters. These computations lead to the determination of a "recid" value based on the coordinates of a resultant point $R$, which, when combined with other factors such as the parity of $R$'s Y coordinate and the compression state of the public key $Q$, dictates the final value of the header byte.
+
+This intricate procedure underscores the complexity inherent in cryptographic operations within Bitcoin's framework, demonstrating the blend of mathematical rigor and practical considerations that underpin the platform's security mechanisms.</summary>
+    <published>2024-05-04T04:50:53.015000+00:00</published>
+  </entry>
+</feed>
