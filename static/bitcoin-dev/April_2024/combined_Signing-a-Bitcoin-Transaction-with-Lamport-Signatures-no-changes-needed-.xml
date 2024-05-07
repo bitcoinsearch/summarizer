@@ -2,7 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
-  <updated>2024-05-03T02:03:48.850437+00:00</updated>
+  <updated>2024-05-07T02:09:32.325668+00:00</updated>
+  <author>
+    <name>Andrew Poelstra 2024-05-06 19:06:00+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2024-05-06 18:56:00+00:00</name>
+  </author>
+  <author>
+    <name>Andrew Poelstra 2024-05-06 16:48:00+00:00</name>
+  </author>
+  <author>
+    <name>David A. Harding 2024-05-06 07:39:00+00:00</name>
+  </author>
   <author>
     <name>Ethan Heilman 2024-05-01 20:02:00+00:00</name>
   </author>
@@ -24,6 +36,10 @@
   <author>
     <name>Ethan Heilman 2024-04-29 00:30:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/May_2024/m81d6a023b913c7a122dfd25235843e24268d862d_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2024/m45a7b830a93c365b02b4ff274a56da717f9c0a66_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2024/m7e21336f6f66360c71229e5dbc6a5d4ff65145ea_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/May_2024/md6ecdf2b9b125460db390a353679b1527cdf7cc5_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2024/m4598d2909fd95ee0eaf5249d3c527534a97f4ec7_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2024/m2366b783e1a2fe3962a453cfe71e83948c76b067_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
   <link href="bitcoin-dev/April_2024/m1aed003971fcff909120c5761459328d827d6a9e_Signing-a-Bitcoin-Transaction-with-Lamport-Signatures-no-changes-needed-.xml" rel="alternate"/>
@@ -35,17 +51,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
-    <updated>2024-05-03T02:03:48.850504+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/CAEM=y+XjPwsst=rU5KS==F8VfXaLtcfgoWt2CuY+hBMmLXhCsA@mail.gmail.com/T/#m4598d2909fd95ee0eaf5249d3c527534a97f4ec7" rel="alternate"/>
-    <summary>The email exchange between Antoine and Ethan delves into the complexities of implementing a secure cryptographic scheme within Bitcoin's blockchain, specifically discussing the emulation of Lamport signatures via ECDSA's `k` nonce alterations and the potential vulnerabilities this introduces. The conversation critically examines the security assumptions underlying this approach, emphasizing concerns over the unforgeability of the scheme and the risk posed by quantum computing to the ECDSA signature algorithm. Antoine points out the inherent risks in relying on specific properties of ECDSA signatures without a solid proof of security, highlighting the inadequacy of 64 bits of security and the feasibility of bypassing signature security through precomputed values.
+    <updated>2024-05-07T02:09:32.325755+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/ZjkqIzPSFLc0GJJ1@camus/T/#m81d6a023b913c7a122dfd25235843e24268d862d" rel="alternate"/>
+    <summary>In a series of detailed exchanges between programmers and cryptography experts, discussions revolved around various aspects of cryptographic security, particularly focusing on the implementation and implications of ECDSA in Bitcoin's scripting language. The discourse opened with an acknowledgment of the computational challenges associated with implementing ECDSA signatures due to their opcode intensity. Despite this, it was noted that post-Taproot script could verify traces of any program execution if elements fit within 4-byte CScriptNums, allowing for the potential reconstruction of ECDSA through transaction data manipulation. However, practical limitations such as a substantial opcode requirement and a possible need for BitVM tricks were highlighted, alongside the current impracticality under pre-Taproot constraints due to a 201 opcode limit.
 
-Further elaboration on the scheme's optimization suggests a reduction in opcode usage by consolidating the validation of multiple ECDSA signatures into a single check. This proposed method capitalizes on the combinatorial advantage offered by positioning shorter signatures, aiming to enhance efficiency while maintaining security against attackers with significant computational resources. However, concerns are raised about the practicality of increasing the number of on-chain pre-committed signatures as a means to bolster security, given the computational expense involved and the current limitations imposed by Bitcoin's protocol, such as the 201-opcode limit and the 4MWU block size restriction.
+Further elaboration was provided on the concept of covenants within Bitcoin's framework, considering them as scripts capable of restricting scriptPubKey of subsequent transactions. The discussion touched upon Lamport signatures and their role in covenant creation, despite inherent challenges posed by circular dependencies in hashing and the one-time nature of Lamport signatures. Concerns about the robustness of proposed schemes against message forgery and invalid curve domain parameters were raised, alongside the potential for miners to exploit transaction broadcasts.
 
-The dialogue extends into a discussion about the future of cryptographic security in the face of advancing quantum computing technology. A theoretical mitigation strategy involves setting a fixed 'r=1' value for all ECDSA signatures to counteract quantum vulnerabilities. Despite this, the conversation acknowledges the necessity of further innovation, including a potential soft fork, to fully protect Bitcoin from quantum attacks.
+A novel approach to cryptographic scheme optimization was suggested, focusing on reducing opcode usage by signing vectors indicating positions of specific signature lengths rather than individual signatures. This would streamline the process and potentially reduce the computational burden on the network. Additionally, the conversation ventured into quantum computing's impact on cryptographic security, revealing vulnerabilities in ECDSA signatures and suggesting mitigation strategies such as adopting fixed signature values.
 
-At the heart of the discussion is an exploration of integrating Lamport signatures within Bitcoin's script environment to enable advanced functionalities like covenants. This innovative approach, discussed at MIT DCI, leverages the variable length of ECDSA signatures as a proxy for transaction hashes, proposing a novel method that significantly increases cryptographic security but also introduces new challenges, such as susceptibility to certain types of attacks and the practical limitations of requiring a large number of signatures.
+The dialogue also explored the possibility of integrating Lamport signatures within Bitcoin's script environment, assuming discrete logarithm problems remain hard. This led to a speculative discussion on quantum-resistant algorithms and the practical implications for current cryptographic practices. A groundbreaking method was proposed for implementing Lamport signatures without OP_CAT, using ECDSA signature length variations as a mechanism for secure Bitcoin transactions. This innovative approach, however, was recognized as more academically intriguing than immediately practical due to its complexity and potential security vulnerabilities.
 
-Throughout the email exchange, there is a recurring theme of balancing the pursuit of cryptographic advancements with the imperative of ensuring robust security measures. The conversation highlights both the potential and the pitfalls of experimenting with new cryptographic schemes within the Bitcoin ecosystem. It reflects a broader discourse on the evolution of blockchain technology, underscoring the ongoing need for research, collaboration, and innovation to address emerging threats and leverage opportunities for enhancing digital currency security.</summary>
-    <published>2024-05-01T20:02:00+00:00</published>
+These exchanges underscored the continuous quest for enhancing cryptographic security within Bitcoin's evolving landscape, emphasizing the collaborative effort in addressing technical challenges and exploring innovative solutions. The discussions reflected a deep engagement with both theoretical and practical considerations, aiming to push the boundaries of what's currently achievable within the constraints of Bitcoin's scripting capabilities and the broader context of advancing technological developments.</summary>
+    <published>2024-05-06T19:06:00+00:00</published>
   </entry>
 </feed>
