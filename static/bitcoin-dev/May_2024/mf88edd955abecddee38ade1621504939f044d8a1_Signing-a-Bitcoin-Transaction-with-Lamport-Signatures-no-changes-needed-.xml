@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
+  <updated>2024-05-08T01:44:13.664688+00:00</updated>
+  <author>
+    <name>Antoine Riard 2024-05-07 00:55:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Signing a Bitcoin Transaction with Lamport Signatures (no changes needed)</title>
+    <updated>2024-05-08T01:44:13.664721+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/Zjo72iTDYjwwsXW3@camus/T/#mf88edd955abecddee38ade1621504939f044d8a1" rel="alternate"/>
+    <summary>The discussion revolves around a potential vulnerability in using Lamport public keys within a blockchain transaction scheme, specifically highlighting the susceptibility to denial-of-service (DoS) attacks under certain conditions. The scenario outlined demonstrates how adversaries, particularly a coalition of miners possessing significant hashrate capabilities, could exploit this weakness. They could refuse to include a user's (Alice's) transaction in the blockchain, thereby forcing the user to either wait for the remaining honest portion of the network to process the transaction or incentivize the transaction's inclusion through increased fees. This situation becomes more critical with the introduction of a fee-bumping UTXO locked under a Lamport emulated public key, emphasizing the one-time usage property of such keys and the potential for enhanced exposure to DoS attacks or wallet UTXO deanonymization compared to more traditional ECDSA/Schnorr schemes.
+
+Further concerns are raised about the worst-case scenario where an attacker forces the user to exhaust all their Lamport public keys committed in UTXOs, including those allocated for fee-bumping, thereby effectively freezing the original UTXO due to perpetually low feerates or unfavorable miner feerate practices. This vector of attack might not be isolated, as it could also emerge in scenarios involving second-layer solutions like dual-funding, where multiple UTXOs competing for confirmation could exacerbate the issue.
+
+The email shifts focus towards the technical aspects of signature algorithms, particularly ECDSA, noting a prohibition against using the point at infinity in the curve point resulting from modular arithmetic operations. It questions whether manipulation of the transaction hash could potentially lead to generating a curve point equal to the point at infinity, especially when the transaction involves inputs from untrusted parties and utilizes SIGHASH flags. This comparison underscores fundamental differences between modular arithmetic and bitwise rotations, suggesting that while both face challenges, pre-computation in finite fields (as in the case of ECDSA) offers theoretical advantages over block mining processes, which are constrained by lookup and propagation latency.
+
+Lastly, the email corrects an initial oversight regarding the commitment of spent outpoints in a child signature digest in a non-APO world, highlighting this as a design bottleneck. It suggests exploring possibilities for removing such commitments, potentially through mechanisms like leveraging OP_SIZE or amending other components of the ECDSA signature, which could address some of the outlined vulnerabilities and improve the overall resilience of the system.</summary>
+    <published>2024-05-07T00:55:00+00:00</published>
+  </entry>
+</feed>
