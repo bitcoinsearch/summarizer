@@ -2,26 +2,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP352: PSBT support</title>
-  <updated>2024-05-20T02:01:14.269095+00:00</updated>
+  <updated>2024-05-21T01:58:35.123386+00:00</updated>
   <author>
-    <name>Sosthene 2024-05-19 17:32:48.113000+00:00</name>
+    <name>andrewtoth 2024-05-20 17:56:49.967000+00:00</name>
+  </author>
+  <author>
+    <name>josibake 2024-05-20 12:01:29.956000+00:00</name>
+  </author>
+  <author>
+    <name>Sosthene  . 2024-05-19 17:32:48.113000+00:00</name>
   </author>
   <author>
     <name>josibake  . 2024-05-17 11:51:04.620000+00:00</name>
   </author>
+  <link href="delvingbitcoin/May_2024/2478_BIP352-PSBT-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2024/2462_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2458_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2441_BIP352-PSBT-support.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - BIP352: PSBT support</title>
-    <updated>2024-05-20T02:01:14.269149+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/2" rel="alternate"/>
-    <summary>The conversation surrounding the implementation of silent payment outputs within PSBTs (Partially Signed Bitcoin Transactions) sheds light on existing methodologies and future avenues for augmenting privacy and security in cryptocurrency dealings. The dialogue commences by examining the process of spending these outputs, suggesting a pragmatic approach through the employment of the `PSBT_IN_PROPRIETARY` type to incorporate a `shared_secret_tweak` with the spend public key. This tactic is essential for deriving the adjusted spend private key necessary for transaction signing. Such a method implies the feasibility of immediate application, while the proposition of instating new fields tailored for these operations hints at potential advancements and normalization in the procedure.
+    <updated>2024-05-21T01:58:35.123460+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/4" rel="alternate"/>
+    <summary>The email explores the intricacies of implementing and refining a Partially Signed Bitcoin Transaction (PSBT) workflow tailored for silent payment outputs, which are integral to enhancing privacy in cryptocurrency transactions. It delves into the technical challenges and potential solutions associated with spending from and sending to silent payment addresses. The process of spending involves a unique method where the `shared_secret_tweak` is applied to the spend private key during the signing phase to properly derive the signing key. This crucial step, detailed with code references on GitHub ([sp-client](https://github.com/cygnet3/sp-client/blob/0a81059e2959b87798432fc10c9447ba276dc1a1/src/spclient.rsL684)), ensures that transactions directed towards silent payment addresses can be signed accurately. 
 
-On the contrary, the act of sending silent payments introduces more intricate hurdles, mainly due to the interdependencies between inputs and generated outputs and the need for access to specific private keys. A notable advancement in addressing this complexity is presented through a draft BIP (Bitcoin Improvement Proposal) authored by delvingless and andrewtoth, which can be viewed at [https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260](https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260). This proposal advocates for the creation of an `OutputGenerator` role, dedicated to streamlining the integration of silent payment functionalities into existing systems by minimizing alterations required from other roles. For example, signers would merely need to authenticate a novel field, `DLEQ_PROOF`, to confirm the accurate generation of outputs without directly interfacing with the generating private keys. Moreover, the proposal explores an innovative mechanism whereby the `OutputGenerator` might not necessitate direct access to private keys, potentially utilizing an "ECDH share" instead. This concept suggests a cryptographic framework enabling secure collaboration sans full key exposure. Nevertheless, caution is advised regarding this technique's unverified security posture and the associated hazards, particularly concerning the reaction of signing devices to Diffie-Hellman propositions. This underscores the broader discussion on weighing the merits of such sophisticated functionalities against their security ramifications.
+Moreover, the sender outlines a strategy for addressing the accurate calculation of transaction fees and the adaptability of the PSBT until final output keys are generated. This approach incorporates a placeholder scriptpubkey in the unsigned transaction, allowing for precise fee estimations and subsequent adjustments to the PSBT based on the current transaction state. Further details are provided through another GitHub link ([sp-client details](https://github.com/cygnet3/sp-client/blob/0a81059e2959b87798432fc10c9447ba276dc1a1/src/spclient.rsL267)), showcasing the method's effectiveness despite its potential for optimization.
 
-In summation, navigating the complexities and security considerations inherent in fully integrating silent payments within PSBTs constitutes a challenging endeavor. However, the collective efforts and suggestions delineated signify considerable progress toward achieving heightened levels of privacy and security in cryptocurrency transactions.</summary>
-    <published>2024-05-19T17:32:48.113000+00:00</published>
+In addition to spending methodologies, the correspondence addresses the complexities involved in sending silent payments, particularly regarding the generation of outputs and inputs, and the access to private keys required for such transactions. A promising solution is presented in the form of a draft Bitcoin Improvement Proposal (BIP) by delvingless andrewtoth, accessible at [https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260](https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260), which introduces the concept of an `OutputGenerator` role. This role simplifies the integration of silent payment logic into existing systems by limiting the modifications needed for other roles in the transaction process. Specifically, signers would only need to confirm a new field, `DLEQ_PROOF`, to verify the correctness of output generation without needing direct access to generating private keys.
+
+Additionally, the proposal entertains the innovative idea of using an "ECDH share" instead of full access to private keys for the OutputGenerator, offering a potentially more secure way to cooperate cryptographically. However, concerns about the security of this method are raised, particularly regarding how signing devices would respond to Diffie-Hellman requests, highlighting the need for a careful evaluation of advanced features against their security risks. In summary, the discussions and proposals outlined in the email represent significant progress towards achieving more private and secure cryptocurrency transactions through the use of silent payments in PSBTs, while also acknowledging the ongoing technical and security challenges that must be addressed.</summary>
+    <published>2024-05-20T17:56:49.967000+00:00</published>
   </entry>
 </feed>
