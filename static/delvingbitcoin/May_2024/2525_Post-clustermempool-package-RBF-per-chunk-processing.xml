@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Post-clustermempool package RBF: per-chunk processing</title>
+  <updated>2024-05-24T01:59:13.305619+00:00</updated>
+  <author>
+    <name>sdaftuar 2024-05-23 14:35:30.440000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Post-clustermempool package RBF: per-chunk processing</title>
+    <updated>2024-05-24T01:59:13.305651+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/post-clustermempool-package-rbf-per-chunk-processing/190/14" rel="alternate"/>
+    <summary>The discussion highlights a significant potential issue with the current approach to Replace-By-Fee (RBF) using feerate diagram comparisons, particularly in the context of package RBF. An attack vector is identified where an adversary could exploit the system by replacing a high-feerate transaction in the mempool with a low-feerate, high-fee transaction that becomes costly to replace due to the total fee test. This scenario involves the construction of a large transaction cluster that may not be optimally linearized by the current heuristics, particularly when part of the transaction graph includes transactions with varying fees.
+
+In the described attack, the adversary constructs a complex transaction setup where a low-fee transaction within a big cluster leads to two high-fee transactions. This setup might not be easily identified as a significant chunk for linearization due to heuristic limitations. However, by adding another transaction that spends from these high-fee transactions at a low feerate but introduces a new transaction with a slightly higher feerate that conflicts with an existing high-feerate transaction in the mempool, the attacker manipulates the system. The addition of this new transaction potentially improves the overall feerate diagram of the cluster, making the replacement of the original high-feerate transaction with the adversarial transaction viable.
+
+This strategy exploits two main aspects: the ability to run the linearization algorithm an additional time, potentially finding a better linearization that favors the new transaction over the existing one, and the limitations of the linearization algorithm itself. By intentionally creating a transaction cluster that linearizes poorly under current heuristics but improves with the addition of a new leaf transaction, the attacker can manipulate the outcome to their advantage.
+
+The issue also extends to concerns about the feasibility of addressing this problem within single-transaction RBF scenarios, suggesting that simply requiring a new transaction's chunk feerate to surpass its conflicts might not provide a viable solution in package RBF settings without imposing overly strict limitations. This complex challenge underscores the need for further exploration and potential adjustments in RBF strategies to mitigate such adversarial tactics effectively.</summary>
+    <published>2024-05-23T14:35:30.440000+00:00</published>
+  </entry>
+</feed>
