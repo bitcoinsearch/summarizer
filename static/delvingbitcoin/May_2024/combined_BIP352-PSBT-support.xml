@@ -2,12 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP352: PSBT support</title>
-  <updated>2024-05-21T01:58:35.123386+00:00</updated>
+  <updated>2024-05-27T02:01:01.330548+00:00</updated>
   <author>
-    <name>andrewtoth 2024-05-20 17:56:49.967000+00:00</name>
+    <name>andrewtoth 2024-05-27 00:34:44.509000+00:00</name>
   </author>
   <author>
-    <name>josibake 2024-05-20 12:01:29.956000+00:00</name>
+    <name>andrewtoth  . 2024-05-20 17:56:49.967000+00:00</name>
+  </author>
+  <author>
+    <name>josibake  . 2024-05-20 12:01:29.956000+00:00</name>
   </author>
   <author>
     <name>Sosthene  . 2024-05-19 17:32:48.113000+00:00</name>
@@ -15,6 +18,7 @@
   <author>
     <name>josibake  . 2024-05-17 11:51:04.620000+00:00</name>
   </author>
+  <link href="delvingbitcoin/May_2024/2539_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2478_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2462_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2458_BIP352-PSBT-support.xml" rel="alternate"/>
@@ -23,15 +27,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - BIP352: PSBT support</title>
-    <updated>2024-05-21T01:58:35.123460+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/4" rel="alternate"/>
-    <summary>The email explores the intricacies of implementing and refining a Partially Signed Bitcoin Transaction (PSBT) workflow tailored for silent payment outputs, which are integral to enhancing privacy in cryptocurrency transactions. It delves into the technical challenges and potential solutions associated with spending from and sending to silent payment addresses. The process of spending involves a unique method where the `shared_secret_tweak` is applied to the spend private key during the signing phase to properly derive the signing key. This crucial step, detailed with code references on GitHub ([sp-client](https://github.com/cygnet3/sp-client/blob/0a81059e2959b87798432fc10c9447ba276dc1a1/src/spclient.rsL684)), ensures that transactions directed towards silent payment addresses can be signed accurately. 
+    <updated>2024-05-27T02:01:01.330626+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/5" rel="alternate"/>
+    <summary>The email contains detailed discussions on the implementation and challenges of integrating silent payment functionalities within the Partially Signed Bitcoin Transactions (PSBT) framework, focusing on ensuring compatibility, security, and efficiency. It begins with technical enhancements proposed for silent payments, specifically addressing the need to prevent older versions from mistakenly signing placeholder scriptpubkey by making PSBT_OUT_SCRIPT optional. This adaptation helps in avoiding unnecessary inclusions by older implementations that do not recognize silent payment fields. Furthermore, the email introduces measures to solidify transaction integrity by suggesting that the Inputs Modifiable Flag and the Silent Payments Modifiable Flag be set to false. This action ensures outputs are generated once, facilitating simpler fee calculations and maintaining transaction finality.
 
-Moreover, the sender outlines a strategy for addressing the accurate calculation of transaction fees and the adaptability of the PSBT until final output keys are generated. This approach incorporates a placeholder scriptpubkey in the unsigned transaction, allowing for precise fee estimations and subsequent adjustments to the PSBT based on the current transaction state. Further details are provided through another GitHub link ([sp-client details](https://github.com/cygnet3/sp-client/blob/0a81059e2959b87798432fc10c9447ba276dc1a1/src/spclient.rsL267)), showcasing the method's effectiveness despite its potential for optimization.
+Moreover, the email raises a critical concern about ensuring transaction outputs comply with specific criteria, proposing the merge of Constructor and Updater roles within the PSBT framework. This merge aims to simplify the discrimination between eligible and non-eligible prevouts, thereby enforcing mutual exclusion between silent payment outputs and inputs marked as ANYONECANSPEND or Segwit version greater than 1. The discussion extends into the technical complexities of implementing silent payments, highlighting the importance of careful design to uphold compatibility and security standards while adhering to intended transaction parameters. 
 
-In addition to spending methodologies, the correspondence addresses the complexities involved in sending silent payments, particularly regarding the generation of outputs and inputs, and the access to private keys required for such transactions. A promising solution is presented in the form of a draft Bitcoin Improvement Proposal (BIP) by delvingless andrewtoth, accessible at [https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260](https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260), which introduces the concept of an `OutputGenerator` role. This role simplifies the integration of silent payment logic into existing systems by limiting the modifications needed for other roles in the transaction process. Specifically, signers would only need to confirm a new field, `DLEQ_PROOF`, to verify the correctness of output generation without needing direct access to generating private keys.
+Another significant aspect covered is the challenge of managing `shared_secret_tweak` across different silent payment addresses within a transaction, underscoring the necessity for a mechanism to link each tweak with its corresponding input and spend key. This aspect underscores the complexity involved in transactions with multiple silent payment outputs, emphasizing the need for precise execution to ensure transaction security.
 
-Additionally, the proposal entertains the innovative idea of using an "ECDH share" instead of full access to private keys for the OutputGenerator, offering a potentially more secure way to cooperate cryptographically. However, concerns about the security of this method are raised, particularly regarding how signing devices would respond to Diffie-Hellman requests, highlighting the need for a careful evaluation of advanced features against their security risks. In summary, the discussions and proposals outlined in the email represent significant progress towards achieving more private and secure cryptocurrency transactions through the use of silent payments in PSBTs, while also acknowledging the ongoing technical and security challenges that must be addressed.</summary>
-    <published>2024-05-20T17:56:49.967000+00:00</published>
+The email further delves into an experimental setup developed for a donation wallet, which incorporates WebAssembly for spending from silent payment outputs. Despite being described as hacky, this initial setup marks a foundational step towards future enhancements. The described method tweaks the spend private key with a `shared_secret_tweak` during the signing phase, crucial for deriving the correct signing key. This process underscores the intricacies of transactions directed towards silent payment addresses and highlights the potential for optimization despite current limitations.
+
+Additionally, the possibility of enhancing coinjoin wallets with silent payment features is mentioned, raising concerns about security implications. This segment suggests engaging with experts in secp256k1 cryptography to comprehensively address these concerns, reflecting the ongoing dialogue within the community regarding the balance between advanced features and their security ramifications.
+
+Finally, the discussion touches upon both the current capabilities and future possibilities for supporting the sending and spending of silent payment outputs in PSBTs. A promising approach for immediate implementation involves using the `PSBT_IN_PROPRIETARY` type alongside a `shared_secret_tweak`, indicating potential for standardization and further development. Moreover, a draft BIP proposes an `OutputGenerator` role to streamline silent payment integrations, suggesting innovative methods for secure collaborations without full key disclosure. Despite these advancements, the text cautions against unproven security methods and emphasizes the importance of ongoing discussions to navigate the technical and security complexities involved in fully supporting silent payments within the PSBT framework.</summary>
+    <published>2024-05-27T00:34:44.509000+00:00</published>
   </entry>
 </feed>
