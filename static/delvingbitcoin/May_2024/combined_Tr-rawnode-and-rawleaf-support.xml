@@ -2,26 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Tr(): rawnode() and rawleaf() support</title>
-  <updated>2024-05-23T02:01:53.102548+00:00</updated>
+  <updated>2024-05-29T02:04:28.728203+00:00</updated>
   <author>
-    <name>josibake 2024-05-22 15:28:00.776000+00:00</name>
+    <name>ajtowns 2024-05-28 21:20:57.620000+00:00</name>
   </author>
   <author>
-    <name>Eunovo 2024-05-22 15:25:38.310000+00:00</name>
+    <name>Eunovo 2024-05-28 17:41:55.616000+00:00</name>
   </author>
+  <author>
+    <name>Eunovo 2024-05-28 17:37:26.121000+00:00</name>
+  </author>
+  <author>
+    <name>sipa 2024-05-28 15:49:08.375000+00:00</name>
+  </author>
+  <author>
+    <name>josibake  . 2024-05-22 15:28:00.776000+00:00</name>
+  </author>
+  <author>
+    <name>Eunovo  . 2024-05-22 15:25:38.310000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/May_2024/2559_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2024/2557_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2024/2556_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2024/2555_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2504_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2503_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Tr(): rawnode() and rawleaf() support</title>
-    <updated>2024-05-23T02:01:53.102589+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/tr-rawnode-and-rawleaf-support/901/2" rel="alternate"/>
-    <summary>Recent discussions within the Bitcoin development community, particularly surrounding [Issue 24114](https://github.com/bitcoin/bitcoin/issues/24114) and insights from a [Partial Descriptors Gist](https://gist.github.com/sipa/06c5c844df155d4e5044c2c8cac9c05epartial-descriptors), have led to the proposal of two new descriptors for Taproot (tr()): `rawnode(HEXHASH)` and `rawleaf(HEXSCRIPT,[HEXLEAFVER])`. These innovations aim at enhancing the flexibility and efficiency of specifying branches and scripts in Taproot trees. The `rawnode` descriptor allows users to define a branch using a merkle hash directly, which caters to scenarios requiring Need-to-Know-Branches (N2KB), simplification of TR trees, or when information in certain branches is omitted. This functionality was underscored by a use case demonstrating significant simplification in descriptor notation.
+    <updated>2024-05-29T02:04:28.728263+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/tr-rawnode-and-rawleaf-support/901/6" rel="alternate"/>
+    <summary>The discussions and proposals regarding Bitcoin's Taproot descriptors, particularly on GitHub issue [Issue 24114](https://github.com/bitcoin/bitcoin/issues/24114) and the insights shared in the [Partial Descriptors Gist](https://gist.github.com/sipa/06c5c844df155d4e5044c2c8cac9c05epartial-descriptors), have introduced innovative descriptor types such as `rawnode(HEXHASH)` and `rawleaf(HEXSCRIPT,[HEXLEAFVER])`. These developments aim to enhance the flexibility and functionality of specifying Taproot trees. The `rawnode()` descriptor facilitates the specification of branches within a Taproot tree by using its merkle hash, addressing various user needs. This feature supports Need-to-Know-Branches (N2KBs), highlighted by Jeremy's comments in [another pull request](https://github.com/bitcoin/bitcoin/pull/21365issuecomment-793027851), allowing for the construction of Taproot trees with either omitted information or simplified TR trees. Such advancements are pivotal for improving privacy and efficiency in specific scenarios.
 
-Furthermore, the introduction of `rawleaf` facilitates the addition of raw scripts with varied leaf versions into the Taproot tree, supporting an argument that descriptors should convey script and leaf version information analogously to PSBTs. This discussion raises questions about the potential redundancy between `rawnode` and `rawleaf`, suggesting that further exploration into their distinct advantages or the possibility of merging functionalities under a unified descriptor could be beneficial.
+The `rawleaf()` descriptor, while initially appearing redundant next to `rawnode()`, proves its value as articulated by @sipa. It enables the inclusion of raw scripts with varying leaf versions, thereby facilitating precise script and leaf version communication through PSBTs (Partially Signed Bitcoin Transactions). This function is crucial in the context of ongoing discussions about possibly refining the descriptor under `tr()` to prevent overburdening the `raw()` descriptor, showcasing a preference for the distinctiveness offered by `rawleaf`.
 
-The development and testing of these concepts have been advanced through a proof of concept, specifically through the creation of `RawNodeDescriptor` and `RawLeafDescriptor` subclasses. These are tailored exclusively for P2TR contexts, enhancing the Bitcoin scripting capabilities significantly. Notably, the inference mechanism for descriptors has been refined; if no taptree is inferred and the Merkle root remains non-null, a simplified `tr(internal_key,rawnode(merkle_root))` descriptor is proposed in lieu of the traditional `rawtr(tr_public_key)` approach. This modification suggests a strategic shift towards optimizing the inferencing process, although its benefits over existing methodologies warrant further discussion and validation.</summary>
-    <published>2024-05-22T15:28:00.776000+00:00</published>
+A proof of concept demonstrating these concepts has been developed, available on the [wip-tr-raw-nodes branch](https://github.com/Eunovo/bitcoin/tree/wip-tr-raw-nodes) of Eunovo's Bitcoin repository, with further details provided in a [diff comparison](https://github.com/bitcoin/bitcoin/compare/master.Eunovo:bitcoin:wip-tr-raw-nodes). This implementation introduces two new `DescriptorImpl` subclasses: `RawNodeDescriptor` and `RawLeafDescriptor`. Both classes are specifically valid within the P2TR context and can be inferred by the `InferDescriptor`. Notably, the inference logic suggests that in cases where no taptree is inferred and the Merkle root is not null, a `tr(internal_key,rawnode(merkle_root))` descriptor will be returned instead of the previously utilized `rawtr(tr_public_key)`. This modification prompts a discussion on the benefits of this approach over the former, indicating potential advantages in terms of specificity and flexibility for constructing and inferring Taproot descriptors.</summary>
+    <published>2024-05-28T21:20:57.620000+00:00</published>
   </entry>
 </feed>
