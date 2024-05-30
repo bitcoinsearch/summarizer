@@ -2,18 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Tr(): rawnode() and rawleaf() support</title>
-  <updated>2024-05-29T02:04:28.728203+00:00</updated>
+  <updated>2024-05-30T02:01:31.182635+00:00</updated>
   <author>
-    <name>ajtowns 2024-05-28 21:20:57.620000+00:00</name>
+    <name>Eunovo 2024-05-29 08:00:27.448000+00:00</name>
   </author>
   <author>
-    <name>Eunovo 2024-05-28 17:41:55.616000+00:00</name>
+    <name>ajtowns  . 2024-05-28 21:20:57.620000+00:00</name>
   </author>
   <author>
-    <name>Eunovo 2024-05-28 17:37:26.121000+00:00</name>
+    <name>Eunovo  . 2024-05-28 17:41:55.616000+00:00</name>
   </author>
   <author>
-    <name>sipa 2024-05-28 15:49:08.375000+00:00</name>
+    <name>Eunovo  . 2024-05-28 17:37:26.121000+00:00</name>
+  </author>
+  <author>
+    <name>sipa  . 2024-05-28 15:49:08.375000+00:00</name>
   </author>
   <author>
     <name>josibake  . 2024-05-22 15:28:00.776000+00:00</name>
@@ -21,6 +24,7 @@
   <author>
     <name>Eunovo  . 2024-05-22 15:25:38.310000+00:00</name>
   </author>
+  <link href="delvingbitcoin/May_2024/2561_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2559_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2557_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2556_Tr-rawnode-and-rawleaf-support.xml" rel="alternate"/>
@@ -31,13 +35,13 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Tr(): rawnode() and rawleaf() support</title>
-    <updated>2024-05-29T02:04:28.728263+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/tr-rawnode-and-rawleaf-support/901/6" rel="alternate"/>
-    <summary>The discussions and proposals regarding Bitcoin's Taproot descriptors, particularly on GitHub issue [Issue 24114](https://github.com/bitcoin/bitcoin/issues/24114) and the insights shared in the [Partial Descriptors Gist](https://gist.github.com/sipa/06c5c844df155d4e5044c2c8cac9c05epartial-descriptors), have introduced innovative descriptor types such as `rawnode(HEXHASH)` and `rawleaf(HEXSCRIPT,[HEXLEAFVER])`. These developments aim to enhance the flexibility and functionality of specifying Taproot trees. The `rawnode()` descriptor facilitates the specification of branches within a Taproot tree by using its merkle hash, addressing various user needs. This feature supports Need-to-Know-Branches (N2KBs), highlighted by Jeremy's comments in [another pull request](https://github.com/bitcoin/bitcoin/pull/21365issuecomment-793027851), allowing for the construction of Taproot trees with either omitted information or simplified TR trees. Such advancements are pivotal for improving privacy and efficiency in specific scenarios.
+    <updated>2024-05-30T02:01:31.182733+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/tr-rawnode-and-rawleaf-support/901/7" rel="alternate"/>
+    <summary>The utilization of Nested 2-of-3 Key Bundles (N2KBs) presents a sophisticated approach in the digital transaction sphere, particularly enhancing security and flexibility for specific operations such as inheritance or escrow services. N2KBs offer a strategic advantage by creating spend paths that are not immediately visible to all parties involved, enabling a safeguard mechanism for fund recovery under critical circumstances like key loss. This technology proves beneficial across various wallet types, serving distinct purposes with differing security levels. For instance, it allows a backup wallet, which might lack the capability to execute advanced contract features available in the primary wallet, to still perform transactions through knowledge of an internal public key and a specific rawnode leaf. Such versatility underscores N2KBs' significance in bolstering both complex contractual needs and basic recovery solutions in digital asset management.
 
-The `rawleaf()` descriptor, while initially appearing redundant next to `rawnode()`, proves its value as articulated by @sipa. It enables the inclusion of raw scripts with varying leaf versions, thereby facilitating precise script and leaf version communication through PSBTs (Partially Signed Bitcoin Transactions). This function is crucial in the context of ongoing discussions about possibly refining the descriptor under `tr()` to prevent overburdening the `raw()` descriptor, showcasing a preference for the distinctiveness offered by `rawleaf`.
+There's an ongoing inquiry within the community regarding the opacity of these spend paths and their impact on transaction transparency and trust. The dialogue has engaged experts to explore the operational framework of N2KBs further, aiming to address concerns and enhance the integrity of transactions facilitated by this technology. This discussion reflects a broader commitment to ensuring that new technologies like N2KBs maintain a balance between innovation, security, and transparency in transactional processes.
 
-A proof of concept demonstrating these concepts has been developed, available on the [wip-tr-raw-nodes branch](https://github.com/Eunovo/bitcoin/tree/wip-tr-raw-nodes) of Eunovo's Bitcoin repository, with further details provided in a [diff comparison](https://github.com/bitcoin/bitcoin/compare/master.Eunovo:bitcoin:wip-tr-raw-nodes). This implementation introduces two new `DescriptorImpl` subclasses: `RawNodeDescriptor` and `RawLeafDescriptor`. Both classes are specifically valid within the P2TR context and can be inferred by the `InferDescriptor`. Notably, the inference logic suggests that in cases where no taptree is inferred and the Merkle root is not null, a `tr(internal_key,rawnode(merkle_root))` descriptor will be returned instead of the previously utilized `rawtr(tr_public_key)`. This modification prompts a discussion on the benefits of this approach over the former, indicating potential advantages in terms of specificity and flexibility for constructing and inferring Taproot descriptors.</summary>
-    <published>2024-05-28T21:20:57.620000+00:00</published>
+In the domain of Bitcoin's Taproot descriptors, significant advancements have been proposed to augment flexibility and functionality. Specifically, discussions on GitHub and insights shared through Gists have introduced two new descriptor types: `rawnode()` and `rawleaf()`. These proposals aim to refine how Taproot trees are specified, allowing for more precise communication of script and leaf versions, and facilitating the construction of Taproot trees with omitted information or simplified TR trees. Such developments hint at a deliberate movement towards optimizing privacy and efficiency in Bitcoin transactions. A proof of concept showcasing these new descriptors emphasizes a shift towards greater specificity and flexibility in constructing and inferring Taproot descriptors, potentially offering a more nuanced approach to managing cryptographic systems. The engagement of the community in these discussions, alongside expert contributions, signifies a proactive stance towards evolving Bitcoin's foundational technology to better meet user needs and scenarios, while fostering an environment of collaboration and innovation.</summary>
+    <published>2024-05-29T08:00:27.448000+00:00</published>
   </entry>
 </feed>
