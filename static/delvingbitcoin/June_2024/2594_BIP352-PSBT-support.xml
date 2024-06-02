@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP352: PSBT support</title>
+  <updated>2024-06-02T02:03:27.153789+00:00</updated>
+  <author>
+    <name>josibake 2024-06-01 18:04:52.150000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP352: PSBT support</title>
+    <updated>2024-06-02T02:03:27.153826+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/9" rel="alternate"/>
+    <summary>In analyzing the potential challenges and solutions for implementing confidential transactions within a blockchain network, particularly in the context of using Partially Signed Bitcoin Transactions (PSBT), several key points emerge regarding the management of proofs for transaction inputs and outputs. The primary concern revolves around the computational and data overhead associated with generating and verifying cryptographic proofs for each transaction element, especially in complex transactions such as coinjoins, which involve multiple participants.
+
+One critical observation is that for ensuring the privacy and security of transactions, it's not necessary to generate a separate proof for every output within a transaction. Instead, the focus should be on validating the authenticity and integrity of each input. This can be achieved through a mechanism where a proof is provided for each input, demonstrating that the secret key used to create an Elliptic Curve Diffie-Hellman (ECDH) share is indeed the same key used in the transaction. This approach significantly reduces the amount of data required for proofs since it limits the necessity only to inputs rather than applying it to both inputs and outputs.
+
+Furthermore, the method for verifying the outputs simplifies the process. By accumulating the ECDH shares from all inputs and then applying a specific hash function (as outlined in BIP0352), the software wallet can efficiently confirm the validity of the transaction outputs. This process involves calculating a shared secret and then using it along with the spend public key to verify if the computed public key matches the ones specified in the transaction outputs.
+
+An innovative solution is proposed for scenarios where a single signer controls all relevant private keys involved in the transaction. In such cases, the requirement for individual input proofs can be further optimized away. Instead, a single comprehensive proof that encompasses the entire transaction can be provided. This proof demonstrates that the aggregated secret key, when combined with the scan public key, matches the aggregated public key generated from the base point. Alongside the shared secret, this allows the software wallet to verify the entire transaction in one go, streamlining the process even more.
+
+By adopting these strategies, the burden of proof generation and verification can be significantly reduced, making it more feasible to implement confidential transactions on the blockchain without compromising on scalability or privacy. This approach ensures that while the security and confidentiality of transactions are maintained, the efficiency and practicality of using PSBTs for both regular and complex transactions are not adversely affected.</summary>
+    <published>2024-06-01T18:04:52.150000+00:00</published>
+  </entry>
+</feed>
