@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-06-03T02:02:18.725159+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2024-06-02 17:07:11.430000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-06-03T02:02:18.725189+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/49" rel="alternate"/>
+    <summary>The recent update to the Bitcoin script introduces significant changes aimed at simplifying and enhancing the development experience for Script developers. The updated version, available at [https://github.com/Christewart/bitcoin/tree/64bit-arith-implicit](https://github.com/Christewart/bitcoin/tree/64bit-arith-implicit), makes a pivotal shift by removing 64-bit specific opcodes in favor of repurposing the existing ones. This change means that opcodes such as `OP_ADD`, `OP_SUB`, `OP_MUL`, and `OP_DIV` will now implicitly support 64-bit arithmetic operations without requiring distinct 64-bit versions. Consequently, every opcode within `interpreter.cpp` that previously accepted a `CScriptNum` input has been updated to accept an `int64_t` stack parameter instead. This adjustment allows operations like `OP_1ADD` to handle `int64_t` arguments directly, pushing both an `int64_t` result and a boolean success indicator back onto the stack.
+
+Furthermore, this update eliminates the need for casting opcodes like `OP_SCRIPTNUMTOLE64`, `OP_LE64TOSCRIPTNUM`, and `OP_LE32TOLE64`, streamlining the scripting process. Developers no longer need to decide between using standard or 64-bit specific opcodes for their operations, nor do they have to convert the stack top with casting opcodes, thereby simplifying script development. However, this revision necessitates the modification of existing scripts that use constant numeric arguments. Scripts leveraging operations such as `OP_CHECKLOCKTIMEVERIFY` and `OP_CHECKSEQUENCEVERIFY` will require updates to accommodate 8-byte parameters instead of the previous 5-byte parameters.
+
+A key aspect of this overhaul is its reliance on pattern matching on `SigVersion` to dictate the implementation of opcodes. For example, the handling of `OP_DEPTH` can be tailored based on the `SigVersion`, allowing for future redefinitions of opcode semantics through pattern matching. This approach not only facilitates the introduction of new implementations but also ensures that the system robustly handles new `SigVersion` additions through compiler-enforced exhaustiveness checks. By compelling developers to address any new `SigVersion` cases, the update lays a solid foundation for future upgrades to the interpreter, promising a more dynamic and flexible development environment.</summary>
+    <published>2024-06-02T17:07:11.430000+00:00</published>
+  </entry>
+</feed>

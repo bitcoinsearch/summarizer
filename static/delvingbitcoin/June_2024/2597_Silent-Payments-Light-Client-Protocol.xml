@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Silent Payments: Light Client Protocol</title>
+  <updated>2024-06-03T02:06:22.196495+00:00</updated>
+  <author>
+    <name>josibake 2024-06-02 09:25:01.067000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Silent Payments: Light Client Protocol</title>
+    <updated>2024-06-03T02:06:22.196526+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891/10" rel="alternate"/>
+    <summary>Grouping outputs by transaction ID ($txid$) offers significant advantages in terms of bandwidth and computational efficiency. By organizing outputs this way, the amount of data transmitted to the client is substantially reduced. This reduction is quantified as $(n_{outputs} -1)\cdot n_{transactions} \cdot 32$ bytes, considering that all outputs from the same transaction share the same $txid$. Additionally, this approach minimizes redundancy by avoiding the repeated transmission of certain fields such as blockhash and block number for each Unspent Transaction Output (UTXO). The proposed structure for the final result would be `block_hash: { txid1: [output1, output2], txid2: [output3, output4] }`, which efficiently organizes the data by grouping outputs under their corresponding transaction IDs.
+
+From a computational perspective, when an output is identified, the process of verifying and iterating through outputs becomes more streamlined with grouped $txid$s. Without grouping, the client must undertake a more laborious process involving the verification of $SPK_{k=0}$ as a non-false positive by locating it in the list and subsequently removing it, creating $SPK_{k=1}$, and checking the entire list again with incremented $k$ values for each found output. Conversely, with outputs grouped by $txid$, the client simply locates the $txid$ and iterates over the associated outputs, significantly simplifying the process. This not only represents a marginal computational improvement but also reduces bandwidth requirements for the client. As highlighted by @cygnet3, if every client is expected to perform this grouping, centralizing the effort on the server side is more efficient, sparing each client from redundant work and further optimizing the system's overall performance.</summary>
+    <published>2024-06-02T09:25:01.067000+00:00</published>
+  </entry>
+</feed>

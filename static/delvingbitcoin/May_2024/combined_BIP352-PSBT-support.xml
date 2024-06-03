@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP352: PSBT support</title>
-  <updated>2024-06-02T02:03:45.880648+00:00</updated>
+  <updated>2024-06-03T02:05:28.952800+00:00</updated>
   <author>
-    <name>josibake 2024-06-01 18:04:52.150000+00:00</name>
+    <name>josibake 2024-06-02 08:44:37.010000+00:00</name>
+  </author>
+  <author>
+    <name>andrewtoth 2024-06-02 01:44:13.210000+00:00</name>
+  </author>
+  <author>
+    <name>josibake  . 2024-06-01 18:04:52.150000+00:00</name>
   </author>
   <author>
     <name>andrewtoth  . 2024-05-29 13:51:12.405000+00:00</name>
@@ -30,6 +36,8 @@
   <author>
     <name>josibake  . 2024-05-17 11:51:04.620000+00:00</name>
   </author>
+  <link href="delvingbitcoin/June_2024/2596_BIP352-PSBT-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2595_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2594_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2562_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2024/2553_BIP352-PSBT-support.xml" rel="alternate"/>
@@ -43,19 +51,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - BIP352: PSBT support</title>
-    <updated>2024-06-02T02:03:45.880725+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/9" rel="alternate"/>
-    <summary>The dialogue on the optimization and security of Partially Signed Bitcoin Transactions (PSBT) with silent payments delves into several technical enhancements and theoretical frameworks aimed at improving the efficiency and reliability of cryptocurrency transactions. A primary focus is on the feasibility of maintaining a running sum of Discrete Logarithm Equality (DLEQ) proofs to streamline the storage of proofs in transactions, especially addressing the challenges posed by transactions with numerous inputs and outputs, such as coinjoins. The proposal suggests an alternative to individual input and output proofs by considering a transaction-level proof for inputs that could potentially reduce the data required for proofs, thereby accommodating the constraints of regular and complex transaction types.
+    <updated>2024-06-03T02:05:28.952970+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/11" rel="alternate"/>
+    <summary>The discussion opens with an exploration of the computational and verification necessities for managing cryptographic proofs within blockchain transactions, specifically focusing on the Partially Signed Bitcoin Transactions (PSBT) framework. It highlights a significant departure from generating individual proofs for each transaction output to a more streamlined approach concentrated on validating the authenticity of transaction inputs. This method emphasizes the use of a proof for each input, demonstrating that the secret key responsible for creating an Elliptic Curve Diffie-Hellman (ECDH) share matches the key used in the transaction. Such an approach mitigates the data requirements for proofs and simplifies the verification process for transaction outputs. Furthermore, it suggests an optimization for scenarios where a single signer controls all relevant keys, allowing for a comprehensive proof covering the entire transaction, thereby streamlining the verification process even further.
 
-The Musig2 PSBT BIP draft introduces specific fields for inputs to support spending activities, reflecting on scenarios where signers possess different levels of access to private keys and varying degrees of trust from wallets. This draft outlines workflows for generating output scripts and completing the signing process, contingent upon the signer's access to private keys and the wallet's trust level. For transactions involving silent payments, the draft proposes methods to ensure transaction integrity and security through ECDH sums and proofs, addressing the technical complexities of verifying silent payment outputs and managing signers' contributions in a multi-signer environment.
+The conversation then shifts to the Musig2 PSBT BIP draft, which delves into the nuances of spending support in transactions with multiple inputs and outputs. It outlines several scenarios based on the signer’s access to private keys and the trust level of the wallet, leading to different workflows for generating output scripts and calculating ECDH sums and proofs. This segment underscores the need for adaptability in transactions involving multiple signers and varying degrees of trust, aiming to maintain security through the verification of silent payment outputs.
 
-Furthermore, the discussion explores the concept of leveraging "ECDH shares" instead of direct access to private keys, aiming to enhance security in cryptographic operations. This proposition suggests a shift towards a more secure and privacy-preserving approach to handling cryptographic signatures, albeit acknowledging the challenges in validating each contribution's correctness without compromising private key confidentiality.
+A theoretical proposition is introduced, focusing on reducing the necessity for the `OutputGenerator` to access private keys directly. Instead, leveraging an ECDH share allows participants to contribute parts of their private keys, theoretically enhancing security by avoiding full disclosure of private keys. However, this introduces complexities in ensuring accurate contributions to the ECDH sum for each transaction output, alongside concerns regarding the operational efficiency and security implications of such an approach.
 
-An update to the draft BIP includes the DLEQ proof, based on insights from [RubenSomsen's gist](https://gist.github.com/RubenSomsen/be7a4760dd4596d06963d67baf140406), marking a significant enhancement in the proposal's cryptographic rigor. This addition aims to align the BIP with best practices and peer-reviewed innovations in the field, highlighting a commitment to advancing security and efficiency in PSBTs.
+The draft BIP's recent update includes the DLEQ proof, marking a pivotal enhancement aimed at bolstering the proposal's security and efficiency. This update, sourced from RubenSomsen's work, signifies a commitment to integrating advanced cryptographic techniques, reflecting a broader effort to adhere to high security and reliability standards within the domain.
 
-The email also reflects on the implementation nuances of silent payments within the PSBT framework, suggesting amendments to ensure compatibility and adherence to transaction parameters without compromising security. It discusses the creation of a basic PSBT workflow for a donation wallet, detailing the process for spending from silent payment outputs and the challenges associated with managing taproot script inputs. The potential for incorporating silent payment features into coinjoin wallets is mentioned, alongside the importance of consulting cryptography experts to address security concerns comprehensively.
-
-Lastly, the conversation touches on the capabilities and future directions for sending and spending silent payment outputs in PSBTs. It presents immediate methods and the possibility of introducing new fields for streamlined operations, referencing a draft BIP by delvingless and andrewtoth ([draft BIP](https://gist.github.com/andrewtoth/dc26f683010cd53aca8e477504c49260)) that proposes an `OutputGenerator` role to facilitate silent payment logic integration. This role, conceived to minimize the need for significant changes in existing systems, underscores an innovative approach to secure cooperation without full key disclosure, although it cautions against unproven security methods and highlights the need for careful consideration of advanced features' security implications.</summary>
-    <published>2024-06-01T18:04:52.150000+00:00</published>
+Lastly, the email discusses the implementation challenges and considerations for enabling silent payments within the PSBT framework. This encompasses technical details for spending from silent payment outputs, including a proprietary method for tweaking the spend private key during the signing phase. It also addresses the complexities involved in sending silent payments, particularly the dependencies between outputs and inputs and the necessity for secure collaboration without full key disclosure. The potential for integrating silent payment features into coinjoin wallets is mentioned, alongside the importance of addressing security concerns in collaboration with cryptography experts. A proposed draft BIP by delvingless andrewtoth offers a promising solution by introducing an `OutputGenerator` role, potentially streamlining the integration of silent payments into existing systems. This solution, however, comes with caveats regarding its security, emphasizing the delicate balance between advancing privacy features and ensuring robust security measures.</summary>
+    <published>2024-06-02T08:44:37.010000+00:00</published>
   </entry>
 </feed>
