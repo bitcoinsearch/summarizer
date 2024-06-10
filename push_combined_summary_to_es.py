@@ -34,6 +34,9 @@ if __name__ == "__main__":
 
     logger.info(f"Total unique combined files: {len(total_combined_files_dict)}")
 
+    count_new = 0
+    count_updated = 0
+
     for file_name, full_path in tqdm.tqdm(total_combined_files_dict.items()):
         try:
             # get data from xml file
@@ -43,26 +46,23 @@ if __name__ == "__main__":
                 # remove timestamps from author's names and collect unique names only
                 xml_file_data['authors'] = remove_timestamps_from_author_names(xml_file_data['authors'])
 
-            # check if doc exist in ES index
-            doc_exists = elastic_search.es_client.exists(index=ES_INDEX, id=file_name)
+            res = elastic_search.es_client.update(
+                index=ES_INDEX,
+                id=file_name,
+                body={
+                    'doc': xml_file_data,
+                    'doc_as_upsert': True
+                }
+            )
 
-            # insert the doc in ES index if it does not exist, else update it
-            if not doc_exists:
-                res = elastic_search.es_client.index(
-                    index=ES_INDEX,
-                    id=file_name,
-                    body=xml_file_data
-                )
-            else:
-                res = elastic_search.es_client.update(
-                    index=ES_INDEX,
-                    id=file_name,
-                    body={'doc': xml_file_data}
-                )
-            logger.success(res)
+            logger.success(f"Version-{res['_version']}, Result-{res['result']}, ID-{res['_id']}")
+            if res['result'] == 'created':
+                count_new += 1
+            if res['result'] == 'updated':
+                count_updated += 1
 
         except Exception as ex:
             error_message = f"Error occurred: {ex} \n{traceback.format_exc()}"
             logger.error(error_message)
 
-    logger.success(f"Process complete.")
+    logger.info(f"Inserted {count_new} new documents, Updated {count_updated} documents")
