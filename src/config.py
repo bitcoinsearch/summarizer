@@ -1,7 +1,7 @@
 import os
-import openai
 import warnings
 
+import openai
 import tiktoken
 from dotenv import load_dotenv
 

@@ -16,7 +16,7 @@ if __name__ == "__main__":
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
 
-    total_combined_files = []
+    # Static directory names to look into for respective combined summary xml files
     static_dirs = [
         'bitcoin-dev',
         'lightning-dev',
@@ -24,29 +24,30 @@ if __name__ == "__main__":
     ]
     pattern = "combined*.xml"
 
+    total_combined_files = []
     for static_dir in static_dirs:
         combined_files = glob.glob(f"static/{static_dir}/**/{pattern}")
         total_combined_files.extend(combined_files)
     logger.info(f"Total combined files: {(len(total_combined_files))}")
 
-    # get unique combined file paths
+    # Get unique combined file paths
     total_combined_files_dict = {os.path.splitext(os.path.basename(i))[0]: i for i in total_combined_files}
-
     logger.info(f"Total unique combined files: {len(total_combined_files_dict)}")
 
+    # Loop through all locally stored combined summary XML files and insert/update them accordingly
     for file_name, full_path in tqdm.tqdm(total_combined_files_dict.items()):
         try:
-            # get data from xml file
+            # Get data from xml file
             xml_file_data = xml_reader.read_xml_file(full_path)
 
             if REMOVE_TIMESTAMPS_IN_AUTHORS:
-                # remove timestamps from author's names and collect unique names only
+                # Remove timestamps from author's names and collect unique names only
                 xml_file_data['authors'] = remove_timestamps_from_author_names(xml_file_data['authors'])
 
-            # check if doc exist in ES index
+            # Check if doc exist in ES index
             doc_exists = elastic_search.es_client.exists(index=ES_INDEX, id=file_name)
 
-            # insert the doc in ES index if it does not exist, else update it
+            # Insert the doc in ES index if it does not exist, else update it
             if not doc_exists:
                 res = elastic_search.es_client.index(
                     index=ES_INDEX,

@@ -1,10 +1,10 @@
 import sys
-import openai
-from tqdm import tqdm
-from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
 import time
 import traceback
+
+import openai
 from loguru import logger
+from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
 
 from src.config import TOKENIZER, OPENAI_API_KEY, OPENAI_ORG_KEY, CHAT_COMPLETION_MODEL, COMPLETION_MODEL
 
@@ -194,7 +194,17 @@ def create_n_bullets(body_summary, n=3):
     return response_str
 
 
-def split_prompt_into_chunks(prompt, chunk_size):
+def split_prompt_into_chunks(prompt: str, chunk_size: int) -> list[str]:
+    """
+    Split a given prompt into chunks of specified size.
+
+    Args:
+        prompt (str): The input text prompt to be split into chunks.
+        chunk_size (int): The maximum size of each chunk in tokens.
+
+    Returns:
+        list: A list containing the chunks of the input prompt.
+    """
     tokens = TOKENIZER.encode(prompt)
     chunks = []
 
@@ -209,10 +219,20 @@ def split_prompt_into_chunks(prompt, chunk_size):
     return chunks
 
 
-def get_summary_chunks(body, tokens_per_sub_body, custom_prompt=None):
+def get_summary_chunks(body: str, tokens_per_sub_body: int, custom_prompt: str = None) -> list[str]:
+    """
+    Generate summary chunks for a given body of text.
+
+    Args:
+        body (str): The text body for which summaries are to be generated.
+        tokens_per_sub_body (int): The maximum number of tokens per summary chunk.
+        custom_prompt (str, optional): Custom prompt to be used for summarization. Defaults to None.
+
+    Returns:
+        list: A list containing summary chunks generated from the input body.
+    """
     chunks = split_prompt_into_chunks(body, tokens_per_sub_body)
     summaries = []
-    # logger.info(f"Total chunks created: {len(chunks)}")
 
     for chunk in chunks:
         count_gen_sum = 0
@@ -232,7 +252,19 @@ def get_summary_chunks(body, tokens_per_sub_body, custom_prompt=None):
     return summaries
 
 
-def recursive_summary(body, tokens_per_sub_body, max_length, custom_prompt=None):
+def recursive_summary(body: str, tokens_per_sub_body: int, max_length: int, custom_prompt: str = None) -> list[str]:
+    """
+    Generate summary recursively for a given body of text.
+
+    Args:
+        body (str): The text body for which summaries are to be generated.
+        tokens_per_sub_body (int): The maximum number of tokens per summary chunk.
+        max_length (int): The maximum length of the summary in tokens.
+        custom_prompt (str, optional): Custom prompt to be used for summarization. Defaults to None.
+
+    Returns:
+        list: A list containing the generated summaries.
+    """
     summaries = get_summary_chunks(body, tokens_per_sub_body, custom_prompt)
 
     summary_length = sum([len(TOKENIZER.encode(s)) for s in summaries])
@@ -246,7 +278,17 @@ def recursive_summary(body, tokens_per_sub_body, max_length, custom_prompt=None)
         return summaries
 
 
-def gpt_api(body, custom_prompt=None):
+def gpt_api(body: str, custom_prompt: str = None) -> str:
+    """
+    Interface function for generating summaries using GPT models.
+
+    Args:
+        body (str): The text body for which summaries are to be generated.
+        custom_prompt (str, optional): Custom prompt to be used for summarization. Defaults to None.
+
+    Returns:
+        str: The generated summary.
+    """
     body_length_limit = 127000
     tokens_per_sub_body = 127000
     summaries = recursive_summary(body, tokens_per_sub_body, body_length_limit, custom_prompt)
@@ -274,12 +316,22 @@ def gpt_api(body, custom_prompt=None):
         return "\n".join(summaries)
 
 
-def create_summary(body, custom_prompt=None):
+def create_summary(body: str, custom_prompt: str = None) -> str:
+    """
+    Create a summary for the given body of text.
+
+    Args:
+        body (str): The text body for which summaries are to be generated.
+        custom_prompt (str, optional): Custom prompt to be used for summarization. Defaults to None.
+
+    Returns:
+        str: The generated summary.
+    """
     summ = gpt_api(body, custom_prompt)
     return summ
 
 
-def generate_chatgpt_summary_for_prompt(summarization_prompt, max_tokens):
+def generate_chatgpt_summary_for_prompt(summarization_prompt: str, max_tokens: int) -> str:
     response = openai.ChatCompletion.create(
         model=CHAT_COMPLETION_MODEL,
         messages=[
