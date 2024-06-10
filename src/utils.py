@@ -53,7 +53,10 @@ def remove_timestamps_from_author_names(author_list):
     preprocessed_list = []
     for author in author_list:
         name = author.split(" ")[0:-2]
-        preprocessed_list.append(' '.join(name))
+        name = ' '.join(name)
+        if name.endswith(" ."):
+            name = name.replace(" .", "")
+        preprocessed_list.append(name)
     return list(set(preprocessed_list))
 
 
