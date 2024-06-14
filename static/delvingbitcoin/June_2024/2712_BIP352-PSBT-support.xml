@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP352: PSBT support</title>
+  <updated>2024-06-14T02:03:26.470545+00:00</updated>
+  <author>
+    <name>achow101 2024-06-13 23:11:18.592000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP352: PSBT support</title>
+    <updated>2024-06-14T02:03:26.470579+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/13" rel="alternate"/>
+    <summary>In an effort to enhance the efficiency and coverage of edge cases in PSBT (Partially Signed Bitcoin Transactions), a new proposal has emerged that introduces additional input and output fields without necessitating the creation of a PSBTv3, opting instead for modifications to the PSBTv2 specifications. This approach involves the inclusion of fields such as `PSBT_IN_SP_ECDH_SHARE` and `PSBT_IN_SP_DLEQ` for inputs, along with a `PSBT_OUT_SP_V0_INFO` field for outputs. The `PSBT_IN_SP_ECDH_SHARE` is designed to hold an ECDH share linked to a specific scan key, calculated using the private key of the input and the recipient's scan key. On the other hand, the `PSBT_IN_SP_DLEQ` field contains a DLEQ proof which also relates to the scan key of the recipient but produced through a different cryptographic operation.
+
+For outputs, the newly proposed `PSBT_OUT_SP_V0_INFO` field is intended to store silent payments scan and spend public keys derived from the silent payments address, requiring no key data. This field plays a crucial role by allowing parsers that are aware of silent payments to compute the output script once all inputs are set and the ECDH shares have been computed. It ensures backward compatibility and integrity for transactions by mandating the presence of at least one of `PSBT_OUT_SCRIPT` or `PSBT_OUT_SP_V0_INFO`, with the possibility of including both. This dual-field strategy ensures that both silent payment-aware and unaware parsers can handle the PSBT correctly, while also addressing the risk of manipulation by ensuring that signers verify the `PSBT_OUT_SCRIPT` against expectations when both relevant fields are present.
+
+The proposal does not advocate for changes to the `PSBT_GLOBAL_TX_MODIFIABLE` but emphasizes the necessity for certain conditions regarding silent payments outputs and segwit version inputs. Specifically, it suggests that transactions adding silent payments outputs should not contain any inputs if they utilize a segwit version greater than 1. Moreover, signers are advised to confirm that no segwit v2+ inputs are present if the transaction includes silent payments v0 outputs. This nuanced approach seeks to maintain transaction integrity and security, especially in scenarios involving unaware signers or parsers, thereby mitigating potential risks associated with silent payment transactions.</summary>
+    <published>2024-06-13T23:11:18.592000+00:00</published>
+  </entry>
+</feed>
