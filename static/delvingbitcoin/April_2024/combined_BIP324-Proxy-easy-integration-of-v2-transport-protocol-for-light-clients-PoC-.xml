@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP324 Proxy: easy integration of v2 transport protocol for light clients (PoC)</title>
-  <updated>2024-06-05T02:01:15.449911+00:00</updated>
+  <updated>2024-06-18T02:04:32.669821+00:00</updated>
   <author>
-    <name>Liz.Lightning 2024-06-04 05:19:44.817000+00:00</name>
+    <name>Liz.Lightning 2024-06-17 05:35:05.498000+00:00</name>
+  </author>
+  <author>
+    <name>Liz.Lightning  . 2024-06-04 05:19:44.817000+00:00</name>
   </author>
   <author>
     <name>theStack  . 2024-06-03 18:01:35.559000+00:00</name>
@@ -51,6 +54,7 @@
   <author>
     <name>theStack  . 2024-03-13 17:32:11.483000+00:00</name>
   </author>
+  <link href="delvingbitcoin/June_2024/2722_BIP324-Proxy-easy-integration-of-v2-transport-protocol-for-light-clients-PoC-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2624_BIP324-Proxy-easy-integration-of-v2-transport-protocol-for-light-clients-PoC-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2616_BIP324-Proxy-easy-integration-of-v2-transport-protocol-for-light-clients-PoC-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2607_BIP324-Proxy-easy-integration-of-v2-transport-protocol-for-light-clients-PoC-.xml" rel="alternate"/>
@@ -71,21 +75,25 @@
   <entry>
     <id>2</id>
     <title>Combined summary - BIP324 Proxy: easy integration of v2 transport protocol for light clients (PoC)</title>
-    <updated>2024-06-05T02:01:15.450022+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip324-proxy-easy-integration-of-v2-transport-protocol-for-light-clients-poc/678/16" rel="alternate"/>
-    <summary>The conversation delves into various technical aspects of implementing the bip324-proxy in Go, exploring the availability and functionality of secp256k1 bindings critical for EllSwift pubkey encoding. Notably, an initial attempt to utilize existing libraries, such as the one offered by Decred, was made but eventually led to the creation of a custom implementation translated from Python to Go due to compatibility issues. This approach, despite being described as "ugly," is functional. Additionally, there's an interrogation of light clients' ability to handle multiple peers with identical IP addresses but different ports, a feature that seems feasible through distinguishing connections via "ip:port" combinations. However, the certainty on this mechanism's reliability across different clients remains unclear, prompting a need for further testing with examples like btcd and inquiries about minimal examples for neutrino clients to clarify these operational dynamics.
+    <updated>2024-06-18T02:04:32.670040+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip324-proxy-easy-integration-of-v2-transport-protocol-for-light-clients-poc/678/17" rel="alternate"/>
+    <summary>The release of the initial version of a Bitcoin BIP324 proxy is announced, providing a solution that, while operational, invites improvements and feedback. The journey to this point underscores the challenges encountered in integrating secure cryptographic operations into programming projects, notably the search for appropriate secp256k1 bindings. Despite exploring various libraries, the decision to translate a Python reference implementation into Golang was made, reflecting the complexities of implementing cryptographic standards and the necessity for accessible, reliable libraries.
 
-The email underscores a significant interest in refining the integration of bip324-proxy with various programming languages and client software. A notable point of discussion is the exploration of Go's ecosystem for appropriate cryptographic primitives and the potential use of the btcd library's custom secp256k1 library. Despite concerns about its currency and performance, this exploration signifies the ongoing effort to enhance the proxy's functionality. Moreover, the concept of static configuration for light clients, as opposed to modifying them directly, is presented as a beneficial strategy to circumvent limitations associated with direct client alterations. This strategy, however, introduces considerations about managing peer configurations and the dynamic discovery of new peers, emphasizing the complexity of achieving seamless integration without compromising on flexibility or functionality.
+Addressing the configuration of light clients, especially the ability to add multiple peers sharing the same IP address, is discussed, emphasizing the importance of utilizing both IP address and port number for identification. The selection process of remote peers for light clients, suggesting reliance on DNS seed peers for optimal configurations, indicates broader issues within decentralized networks regarding the straightforward method for end users to identify and configure reliable peers.
 
-In addressing asynchronous operations, the distinction between traditional operating system threads and "green threads" managed by the language runtime is highlighted. This comparison sheds light on the trade-offs involved in achieving concurrency, such as the increased resource consumption associated with operating system thread implementations versus the efficiency and simplicity of green threads. The conversation also touches upon the practical implications of these choices, including compatibility issues and the balance between simplicity and resource efficiency in network programming.
+A discussion about the bip324-proxy's implementation in Go highlights the exploration of the Go language ecosystem for its cryptographic primitives and the concept of static configuration for light clients as opposed to patching them. This method, which avoids modifying the client directly, raises questions about the feasibility of adding multiple peers with the same IP but different ports and how users would identify which remote peers to configure.
 
-The collaborative efforts in developing a Rust-based version 2 proxy for BIP324 are particularly noteworthy. This initiative not only aims at leveraging the Tokio runtime for asynchronous programming but also at designing the library to be independent of any specific runtime environment. Such efforts indicate a strategic move towards enhancing the protocol's flexibility and usability across different programming contexts. Furthermore, the email highlights resources and practices in Rust programming, emphasizing the importance of effective coding techniques, asynchronous TCP examples, and cryptography. Concerns about the auditability of `RustCrypto` crates due to the presence of `unsafe` code blocks underline the ongoing dialogue around security and readability in cryptographic implementations.
+An optimistic outlook is shared about making the bip324 implementation available as a library, aiming to simplify integration without altering client software. This initiative suggests configuring a proxy to listen on different ports corresponding to specific peers, thereby enabling direct sending of bip324 messages to respective peers. However, this introduces a challenge concerning peer discovery, contemplating the use of DNS-seed for on-the-fly peer discovery as a potential solution.
 
-The development trajectory of BIP324, especially concerning peer-to-peer communication enhancements, reflects a concerted effort to minimize dependencies and streamline the implementation process. The focus on constructing a top-level API around the Floresta Rust client within the upcoming week illustrates the prioritization of making the project more accessible and integrated within the existing ecosystem. Additionally, the consideration of whether to rely on well-supported cryptographic libraries versus minimizing dependencies encapsulates the broader philosophical approaches within the programming community regarding optimization and package management.
+Exploring asynchronous operations emphasizes the use of "spawning" as a method to create new threads of work, contrasting green threads with traditional operating system threads. This discussion navigates through the trade-offs between using green threads for asynchronous programming and shifting towards a more traditional threading model based on operating system threads.
 
-Discussions surrounding the challenges of identifying remote peer addresses in P2P networks highlight the practical difficulties in ensuring reliable P2P connectivity. The variability in how different clients populate the `addr_recv` field necessitates clear documentation and possibly adjustments to ensure compatibility with BIP324 proxies. This aspect, coupled with the ambition to rewrite relevant parts of the protocol in Rust, underscores the technical advancements aimed at improving the robustness and efficiency of P2P protocols within the Bitcoin ecosystem.
+Significant progress in developing a Rust-based version 2 proxy for BIP324 is noted, drawing from an existing Python implementation and leveraging the asynchronous programming capabilities of the Tokio runtime. This development adopts a "sans I/O" approach, aimed at making the library independent of any specific runtime environment, indicating a commitment to creating a versatile and efficient solution for the BIP324 protocol.
 
-The endeavor to develop a tool facilitating peer-to-peer encryption for Bitcoin clients through a local translator between p2p v1 and v2 protocols represents a significant step towards enhancing privacy and security in Bitcoin transactions. Despite being a proof-of-concept with limitations in performance and susceptibility to attacks, this project lays the groundwork for future developments in cryptocurrency protocols. The proposed Rust rewrite aims to address these limitations, promising a more efficient and secure implementation that could have widespread implications for Bitcoin's P2P network architecture.</summary>
-    <published>2024-06-04T05:19:44.817000+00:00</published>
+Resources and practices in Rust programming are discussed, highlighting effective coding techniques, asynchronous TCP examples, and cryptography with a particular fondness for the book titled [Effective Rust](https://www.lurklurk.org/effective-rust/). Concerns about the auditability of `RustCrypto` crates due to `unsafe` code blocks are raised, leading to an interaction with the `rust-bitcoin` maintainers and a recommendation for reducing dependencies for better integration within the `rust-bitcoin` community.
+
+The conversation then shifts to the specifics of inbound and outbound connections in Bitcoin Core, focusing on address serialization and the use of reverse proxies. It details the limitations currently faced by Bitcoin Core in implementing BIP-155 address serialization for TorV3, I2P, CJDNS, and reflects on the practical utility of a reverse proxy for inbound connections. This part of the discussion also touches upon the anticipation of relevant alternative node implementations adopting BIP324, potentially before widespread adoption among light clients.
+
+Finally, the potential development of a Rust library for BIP324 and its utility in enhancing privacy for Bitcoin light-client implementations is broached. The dialogue suggests transforming the tool into a Rust library, recognizing the value it could bring to projects like Nakamoto. An offer of collaboration, despite a self-admitted lack of fluency in Rust, showcases a willingness to contribute to small-scale projects and foster partnership within the developer community.</summary>
+    <published>2024-06-17T05:35:05.498000+00:00</published>
   </entry>
 </feed>
