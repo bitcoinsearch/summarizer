@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>64 bit arithmetic soft fork</title>
+  <updated>2024-06-19T02:04:35.130769+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2024-06-18 12:30:26.356000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>64 bit arithmetic soft fork</title>
+    <updated>2024-06-19T02:04:35.130805+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/64-bit-arithmetic-soft-fork/397/52" rel="alternate"/>
+    <summary>The prototype for extending `CScriptNum` in Bitcoin proposes significant enhancements aimed at improving the flexibility and capability of script operations. The introduction of this prototype, available for review in a [pull request against master](https://github.com/Christewart/bitcoin/pull/3), marks a notable advancement by re-enabling the `OP_MUL` and `OP_DIV` opcodes, which are crucial for multiplication and division operations within Bitcoin scripts. Furthermore, this enhancement supports 8-byte computations with arithmetic and comparison opcodes without introducing any new opcodes. Instead, it cleverly repurposes existing opcodes based on `SigVersion`, transitioning the underlying implementation type in `CScriptNum` from `int64_t` to `__int128_t`. This change not only broadens the supported range of values to `[-2^63 +1..2^63 -1]` but also preserves the behavior of the old `CScriptNum`, which includes variable length encoding, allowing overflow results while prohibiting computation on overflowed results.
+
+For those unfamiliar with the current workings of `CScriptNum`, it's important to understand its operational constraints. Previously, numeric opcodes were limited to operations on 4-byte integers, within a specific range, but allowed results to overflow as long as they weren't used in subsequent numeric operations. `CScriptNum` enforced these semantics by storing results as an `int64` and permitting out-of-range values to be returned as a vector of bytes, although it threw an exception if arithmetic was performed or the result was interpreted as an integer. This nuanced approach ensured compatibility within the limitations of the Bitcoin scripting language.
+
+However, the proposed changes introduce potential consensus risks, particularly concerning how `CScriptNum`'s behavior alteration could affect interactions with older network nodes. The modification of the constructor to accept a `__int128_t` parameter instead of `int64_t` applies to all `SigVersion`s, raising concerns about how transactions that utilize values exceeding `std::numeric_limits::max()` but are below `std::numeric_limits&lt;__int128_t&gt;::max()` might be processed by legacy nodes. This shift underscores the need for careful consideration of backward compatibility and consensus stability.
+
+Additionally, the choice of `__int128_t` for extending value support encounters practical challenges, notably incompatibility issues on Windows platforms. Continuous Integration (CI) failures highlighted during testing reveal that `__int128_t` is not adequately supported on Windows, leading to compilation errors and signaling the necessity for alternative approaches to achieve the desired functionality expansion without compromising system integrity or compatibility. This challenge invites further discussion and exploration of viable solutions that can accommodate the intended enhancements to `CScriptNum` without introducing platform-specific obstacles.</summary>
+    <published>2024-06-18T12:30:26.356000+00:00</published>
+  </entry>
+</feed>

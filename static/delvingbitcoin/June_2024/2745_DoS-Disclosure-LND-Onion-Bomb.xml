@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>DoS Disclosure: LND Onion Bomb</title>
+  <updated>2024-06-19T02:09:47.282266+00:00</updated>
+  <author>
+    <name>roasbeef 2024-06-18 23:27:07.917000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>DoS Disclosure: LND Onion Bomb</title>
+    <updated>2024-06-19T02:09:47.282297+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/dos-disclosure-lnd-onion-bomb/979/3" rel="alternate"/>
+    <summary>The recent discussion highlights a critical issue encountered within the `lnd` system, where an over-allocation of memory was traced back to the manner in which buffer sizes were determined prior to actual data receipt. The core of the problem lies in the initial allocation process for buffers, which was based on an encoded length value. This approach led to scenarios where the allocated memory could significantly exceed what was actually necessary for received messages. It's important to note that, while the protocol itself has safeguards to prevent the reception of messages exceeding a maximum size at the wire level, these measures do not address the preallocation concern.
+
+The technical aspect contributing to this issue involves the use of a `BigSize` variable integer (varint) for encoding the length prefix. This varint is capable of representing values larger than `65535`, indicating that the encoding scheme allows for the specification of large sizes, even though such sizes may not be supported by the protocol for actual message content. This discrepancy between the potential for large size specification and the protocol's maximum message size enforcement created an inefficiency in memory usage, specifically through the premature allocation of memory resources based on anticipated message sizes rather than the sizes of messages as they are received and processed.</summary>
+    <published>2024-06-18T23:27:07.917000+00:00</published>
+  </entry>
+</feed>

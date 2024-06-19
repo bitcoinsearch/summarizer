@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - DoS Disclosure: LND Onion Bomb</title>
+  <updated>2024-06-19T02:10:22.256898+00:00</updated>
+  <author>
+    <name>ariard 2024-06-18 23:38:56.939000+00:00</name>
+  </author>
+  <author>
+    <name>ariard 2024-06-18 23:27:16.593000+00:00</name>
+  </author>
+  <author>
+    <name>roasbeef 2024-06-18 23:27:07.917000+00:00</name>
+  </author>
+  <author>
+    <name>morehouse 2024-06-18 17:48:35.668000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/June_2024/2746_DoS-Disclosure-LND-Onion-Bomb.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2744_DoS-Disclosure-LND-Onion-Bomb.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2745_DoS-Disclosure-LND-Onion-Bomb.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2743_DoS-Disclosure-LND-Onion-Bomb.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - DoS Disclosure: LND Onion Bomb</title>
+    <updated>2024-06-19T02:10:22.256961+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/dos-disclosure-lnd-onion-bomb/979/4" rel="alternate"/>
+    <summary>The Rust-Lightning codebase adopts fixed-size allocation buffers throughout its structure, aligning with the recommendations of BOLT8 from the Lightning specification. This specification caps the maximum message size at 65535 bytes, a measure designed to streamline node memory management based on predictable input sizes. The detailed specifications can be found in the Lightning message documentation available at [GitHub](https://github.com/lightning/bolts/blob/c562d91ace0e95bec3c6f8758969eaf3627f23c8/08-transport.mdlightning-message-specification). However, vulnerabilities have been identified related to how these size constraints are managed, particularly in versions of LND (Lightning Network Daemon) prior to 0.17.0. 
+
+The core of the vulnerability stemmed from an issue where LND nodes would preallocate memory buffers based on the encoded length of incoming messages, without proper verification of this length against the protocol's maximum allowed size. As a result, attackers could exploit this by setting the length of onion payload messages up to 4 GB, causing an immediate out-of-memory (OOM) crash by overwhelming the node with excessively large allocations for these payloads. This vulnerability made it feasible for attackers to execute DoS (Denial of Service) attacks by sending multiple malicious onion packets, thus crashing the nodes and potentially putting funds at risk.
+
+To mitigate this risk and protect against potential DoS attacks exploiting this vulnerability, it is crucial for operators of LND nodes to upgrade to version 0.17.0 or later. The updated version introduces bounds checks on onion payload lengths to prevent such unchecked memory allocation. Upgrading ensures the node is safeguarded against this specific attack vector, enhancing overall network security. For more comprehensive insights into the vulnerability, its implications, and the steps taken to address it, consider reading the detailed analysis provided in the blog post titled "Understanding the LND Onion Bomb Vulnerability" available at [morehouse.github.io](https://morehouse.github.io/lightning/lnd-onion-bomb/). This resource offers a deeper dive into the technical specifics and preventive strategies essential for maintaining node integrity and security within the Lightning Network ecosystem.</summary>
+    <published>2024-06-18T23:38:56.939000+00:00</published>
+  </entry>
+</feed>

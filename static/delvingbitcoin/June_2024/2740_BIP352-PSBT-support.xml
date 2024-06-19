@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP352: PSBT support</title>
+  <updated>2024-06-19T02:07:40.084421+00:00</updated>
+  <author>
+    <name>josibake 2024-06-18 13:10:57.761000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP352: PSBT support</title>
+    <updated>2024-06-19T02:07:40.084448+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/21" rel="alternate"/>
+    <summary>The conversation delves into the technical intricacies of handling silent payment addresses within PSBT (Partially Signed Bitcoin Transactions), specifically focusing on ensuring consistent output scripts across different signers and addressing the implications of the `ANYONECANPAY` signature option. When multiple `PSBT_OUT_SP_V0_INFO` fields share the same scan key, it's crucial for signers to sort silent payment addresses by their scan and spend public keys in a lexicographic order. This approach ensures that all signers derive the same values for generating output scripts for the same scan public key, which is pivotal for maintaining transaction integrity without dictating the final ordering within the transaction itself.
+
+The discussion also highlights potential issues when incorporating the `ANYONECANPAY` signature flag alongside `SIGHASH_ALL`. Specifically, it outlines scenarios where inputs can be modified post-signature, potentially compromising the transaction. These scenarios range from cases where no silent payment recipients are added, to situations where both unaware and aware signers interact with a mix of `PSBT_OUT_SP_V0_INFO` and `PSBT_OUT_SCRIPT` fields. The dialogue underscores the necessity for the last SP-aware signer to utilize the `ALL` signature flag to prevent unauthorized modifications by ensuring each output has a corresponding `PSBT_OUT_SCRIPT` field before any non-SP signer can proceed. This measure effectively safeguards against the risk of rebroadcasting a transaction with invalidated silent payment outputs due to external manipulation of the inputs.
+
+Further, the conversation explores optimizations related to proof per input requirements, particularly in use cases involving multiple small UTXOs intended for a single silent payment address. By allowing signers to consolidate shares and proofs, the computational workload can be significantly reduced, enhancing efficiency without compromising security. This optimization not only benefits the signers by decreasing the necessary computations but also introduces considerations for verifiers in terms of data handling and verification processes. This proposal suggests a potential direction for streamlining transactions while maintaining the robustness of silent payment mechanisms within the PSBT framework.</summary>
+    <published>2024-06-18T13:10:57.761000+00:00</published>
+  </entry>
+</feed>
