@@ -2,12 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP352: PSBT support</title>
-  <updated>2024-06-21T02:04:14.927280+00:00</updated>
+  <updated>2024-06-22T04:35:42.753287+00:00</updated>
   <author>
-    <name>andrewtoth 2024-06-20 20:29:14.700000+00:00</name>
+    <name>josibake 2024-06-21 14:07:17.974000+00:00</name>
   </author>
   <author>
-    <name>josibake 2024-06-20 09:21:52.200000+00:00</name>
+    <name>andrewtoth 2024-06-21 13:41:15.741000+00:00</name>
+  </author>
+  <author>
+    <name>josibake 2024-06-21 13:15:06.505000+00:00</name>
+  </author>
+  <author>
+    <name>andrewtoth  . 2024-06-20 20:29:14.700000+00:00</name>
+  </author>
+  <author>
+    <name>josibake  . 2024-06-20 09:21:52.200000+00:00</name>
   </author>
   <author>
     <name>andrewtoth  . 2024-06-18 15:50:41.699000+00:00</name>
@@ -69,6 +78,9 @@
   <author>
     <name>josibake  . 2024-05-17 11:51:04.620000+00:00</name>
   </author>
+  <link href="delvingbitcoin/June_2024/2778_BIP352-PSBT-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2777_BIP352-PSBT-support.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2776_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2773_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2771_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2741_BIP352-PSBT-support.xml" rel="alternate"/>
@@ -95,19 +107,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - BIP352: PSBT support</title>
-    <updated>2024-06-21T02:04:14.927430+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/24" rel="alternate"/>
-    <summary>The discussion centers on the intricacies of incorporating silent payments within the framework of Partially Signed Bitcoin Transactions (PSBT), highlighting a broad spectrum of technical considerations and proposed enhancements aimed at bolstering privacy and security in cryptocurrency transactions. At the heart of this conversation is the challenge of handling silent payment outputs, necessitating meticulous attention to cryptographic details and transaction integrity to ensure seamless integration into the PSBT structure.
+    <updated>2024-06-22T04:35:42.753486+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/27" rel="alternate"/>
+    <summary>The discussion delves into the intricacies of implementing secure cryptocurrency transactions, specifically focusing on silent payments and the challenges associated with the `ANYONECANPAY` signature flag. The exchange begins with an analysis of security vulnerabilities that arise when using the `SINGLE | ACP` flag for signing transactions. It is highlighted that this method introduces potential risks, as external observers could manipulate the transaction by altering inputs, potentially redirecting funds. The conversation underscores the importance of ensuring transaction integrity by avoiding the use of `ACP` in scenarios where trust among signers is not absolute.
 
-A critical aspect discussed is the necessity for signers to exercise caution when utilizing signature hash types, particularly avoiding `ALL | ACP` in the context of silent payments to maintain transaction privacy and integrity. The dialogue underscores the importance of signers verifying consistent output scripts across transactions, spotlighting the potential vulnerabilities associated with the `ANYONECANPAY` flag and its implications for transaction security. This consideration is paramount in scenarios where inputs might be modified post-signature, raising concerns about the robustness of transactions involving silent payments.
+Further, the discourse explores various technical strategies to optimize silent payment transactions within the Partially Signed Bitcoin Transactions (PSBT) framework. A key point is the requirement for signers aware of silent payments to meticulously check for `ACP` flags on inputs they intend to sign and to ensure no silent payment outputs are present unless all conditions are met. This precaution is crucial for maintaining the confidentiality and integrity of the transaction. Additionally, the dialogue suggests modifications to the PSBT structure to include global fields for shares and proofs, aiming to streamline the verification process and reduce computational overhead for signers. This proposal acknowledges the trade-offs between processing efficiency and memory requirements, suggesting a nuanced approach depending on the signer's computational capabilities.
 
-Further elaboration reveals proposals aimed at optimizing the efficiency and security of transactions by suggesting modifications to global fields within the PSBT framework. These proposals include the introduction of new fields tailored to support silent payments, such as `PSBT_IN_SP_ECDH_SHARE` and `PSBT_OUT_SP_V0_INFO`, which facilitate the secure management of ECDH shares and proofs crucial for maintaining the confidentiality of transaction outputs. Moreover, the conversation delves into the potential of streamlining the verification process by consolidating proofs, thereby reducing the computational burden on participants and enhancing the overall efficiency of the system.
+In addressing the technical execution of silent payment transactions, the conversation highlights the need for precise management of input signatures and output scripts. One proposed solution involves leveraging shared secrets and proofs to generate consistent output scripts across different signers, ensuring the transaction remains intact regardless of input modifications. This approach requires careful consideration of the data structure within the PSBT to accommodate these cryptographic elements efficiently.
 
-Additionally, the discourse explores the conceptual shift towards employing an "ECDH share" technique, which could offer a more secure alternative to direct private key access by output generators. This approach, while promising in theory, is met with caution due to unverified security implications, particularly the response of signing devices to Diffie-Hellman requests. Such discussions indicate a proactive pursuit of innovative solutions to enhance transactional privacy without compromising security.
+Moreover, the discussion touches upon the broader implications for the Bitcoin network, particularly regarding the integration of silent payment features into the BIP174 standard. It proposes adding specific fields to support the silent payment mechanism, such as `PSBT_IN_SP_ECDH_SHARE` and `PSBT_OUT_SP_V0_INFO`, without necessitating a new version of the PSBT format. These additions aim to facilitate the seamless inclusion of silent payment transactions, enhancing privacy without compromising the existing infrastructure.
 
-Notably, the conversation also addresses practical challenges in implementing silent payments, from the complexities of managing input and output dependencies to the nuances of tweaking spend keys for transaction signing. These discussions are enriched by references to ongoing work and proposals, such as a draft BIP by delvingless and andrewtoth, offering a glimpse into the collaborative efforts underway to refine the integration of silent payments into the PSBT protocol.
+The exchange also contemplates the practical aspects of implementing these proposals, considering the operational complexities and potential security concerns. The notion of introducing an `OutputGenerator` role is discussed, alongside the possibilities for optimizing the handling of cryptographic proofs. The dialogue advocates for a cautious yet innovative approach to evolving the PSBT standard, emphasizing the importance of security, efficiency, and backward compatibility in fostering advancements in cryptocurrency transactions.
 
-In summary, the discourse encapsulates a comprehensive exploration of strategies and challenges surrounding the integration of silent payments into PSBTs. It highlights the community's commitment to advancing cryptocurrency privacy and security through meticulous technical scrutiny and innovative cryptographic solutions. The conversation not only underscores the complexity of achieving seamless integration but also reflects the dynamic nature of collaborative problem-solving within the cryptocurrency ecosystem.</summary>
-    <published>2024-06-20T20:29:14.700000+00:00</published>
+Lastly, the conversation encapsulates the collaborative effort required to address the challenges of silent payment transactions, from the technical nuances of PSBT enhancements to the overarching goal of improving transaction privacy. The discourse reflects a deep engagement with the subject matter, proposing thoughtful solutions while acknowledging the inherent complexities and trade-offs involved in advancing cryptocurrency technologies.</summary>
+    <published>2024-06-21T14:07:17.974000+00:00</published>
   </entry>
 </feed>
