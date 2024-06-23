@@ -2,15 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP352: PSBT support</title>
-  <updated>2024-06-22T04:35:42.753287+00:00</updated>
+  <updated>2024-06-23T02:06:01.521529+00:00</updated>
   <author>
-    <name>josibake 2024-06-21 14:07:17.974000+00:00</name>
+    <name>andrewtoth 2024-06-22 14:51:45.345000+00:00</name>
   </author>
   <author>
-    <name>andrewtoth 2024-06-21 13:41:15.741000+00:00</name>
+    <name>josibake  . 2024-06-21 14:07:17.974000+00:00</name>
   </author>
   <author>
-    <name>josibake 2024-06-21 13:15:06.505000+00:00</name>
+    <name>andrewtoth  . 2024-06-21 13:41:15.741000+00:00</name>
+  </author>
+  <author>
+    <name>josibake  . 2024-06-21 13:15:06.505000+00:00</name>
   </author>
   <author>
     <name>andrewtoth  . 2024-06-20 20:29:14.700000+00:00</name>
@@ -78,6 +81,7 @@
   <author>
     <name>josibake  . 2024-05-17 11:51:04.620000+00:00</name>
   </author>
+  <link href="delvingbitcoin/June_2024/2779_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2778_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2777_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2776_BIP352-PSBT-support.xml" rel="alternate"/>
@@ -107,19 +111,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - BIP352: PSBT support</title>
-    <updated>2024-06-22T04:35:42.753486+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/27" rel="alternate"/>
-    <summary>The discussion delves into the intricacies of implementing secure cryptocurrency transactions, specifically focusing on silent payments and the challenges associated with the `ANYONECANPAY` signature flag. The exchange begins with an analysis of security vulnerabilities that arise when using the `SINGLE | ACP` flag for signing transactions. It is highlighted that this method introduces potential risks, as external observers could manipulate the transaction by altering inputs, potentially redirecting funds. The conversation underscores the importance of ensuring transaction integrity by avoiding the use of `ACP` in scenarios where trust among signers is not absolute.
+    <updated>2024-06-23T02:06:01.521701+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/28" rel="alternate"/>
+    <summary>The discourse surrounding the implementation and verification processes in cryptocurrency transactions, particularly those involving silent payments, unveils a complex landscape of technical requirements and security measures for signers. It’s evident that signers must diligently verify Anti-Counterfeiting Proofs (ACP) on inputs they are responsible for and reject any transactions with unacceptable sighash types alongside silent payment outputs, emphasizing a rigorous adherence to transaction integrity protocols. The conversation proposes methodologies to simplify the verification process, including the addition of global shares and proofs for inputs if capable of being signed by the signer, contrasting with per-input shares and proofs when signers can only endorse specific inputs. This bifurcation aims at balancing computational and memory demands across diverse signing devices, highlighting an ongoing debate on optimizing cryptographic transaction verifications.
 
-Further, the discourse explores various technical strategies to optimize silent payment transactions within the Partially Signed Bitcoin Transactions (PSBT) framework. A key point is the requirement for signers aware of silent payments to meticulously check for `ACP` flags on inputs they intend to sign and to ensure no silent payment outputs are present unless all conditions are met. This precaution is crucial for maintaining the confidentiality and integrity of the transaction. Additionally, the dialogue suggests modifications to the PSBT structure to include global fields for shares and proofs, aiming to streamline the verification process and reduce computational overhead for signers. This proposal acknowledges the trade-offs between processing efficiency and memory requirements, suggesting a nuanced approach depending on the signer's computational capabilities.
+A critical aspect of transaction security discussed is the inherent risk associated with using the `ACP` signature, which could potentially compromise the funds of the signing party due to vulnerabilities in the signing process. An alternative, safer approach is illustrated through the use of the `ALL` signature type, which provides a safeguard against security breaches, ensuring the protection of a signer's inputs irrespective of the counterpart's signing method. This distinction underscores the importance of choosing secure signature types to maintain transaction integrity and protect participant interests.
 
-In addressing the technical execution of silent payment transactions, the conversation highlights the need for precise management of input signatures and output scripts. One proposed solution involves leveraging shared secrets and proofs to generate consistent output scripts across different signers, ensuring the transaction remains intact regardless of input modifications. This approach requires careful consideration of the data structure within the PSBT to accommodate these cryptographic elements efficiently.
+Moreover, the dialogue delves into the technicalities of employing `SINGLE | ACP` flags in transaction signing, exposing a significant security vulnerability where external modifications could redirect transaction outputs. The discussion articulates the need for absolute trust amongst signers to mitigate risks associated with incorrect script generation or malicious intent, suggesting a cautious approach towards implementing `ACP` in transaction protocols.
 
-Moreover, the discussion touches upon the broader implications for the Bitcoin network, particularly regarding the integration of silent payment features into the BIP174 standard. It proposes adding specific fields to support the silent payment mechanism, such as `PSBT_IN_SP_ECDH_SHARE` and `PSBT_OUT_SP_V0_INFO`, without necessitating a new version of the PSBT format. These additions aim to facilitate the seamless inclusion of silent payment transactions, enhancing privacy without compromising the existing infrastructure.
+In exploring secure transaction protocols, the narrative extends to the optimization of data storage within PSBTs, advocating for a restructuring to accommodate global shares and proofs rather than duplicating them across inputs. This proposition aims at easing the verification process and reducing computational burdens, especially in transactions with multiple signers and inputs. The conversation acknowledges the varied capabilities and preferences of signers, advocating for flexible transaction structuring to uphold security and efficiency in silent payment transactions.
 
-The exchange also contemplates the practical aspects of implementing these proposals, considering the operational complexities and potential security concerns. The notion of introducing an `OutputGenerator` role is discussed, alongside the possibilities for optimizing the handling of cryptographic proofs. The dialogue advocates for a cautious yet innovative approach to evolving the PSBT standard, emphasizing the importance of security, efficiency, and backward compatibility in fostering advancements in cryptocurrency transactions.
+Furthermore, the introduction of additional fields in PSBTv2 specifications to support silent payment mechanisms without necessitating a new version highlights an adaptive strategy towards enhancing transaction privacy. The proposed inclusion of fields like `PSBT_IN_SP_ECDH_SHARE` and `PSBT_OUT_SP_V0_INFO` reflects an effort to streamline transaction processing while ensuring backward compatibility and integrity. This approach, coupled with discussions on minimizing proof requirements through consolidated methods, illustrates a proactive pursuit of optimizing cryptographic protocols for improved security and efficiency.
 
-Lastly, the conversation encapsulates the collaborative effort required to address the challenges of silent payment transactions, from the technical nuances of PSBT enhancements to the overarching goal of improving transaction privacy. The discourse reflects a deep engagement with the subject matter, proposing thoughtful solutions while acknowledging the inherent complexities and trade-offs involved in advancing cryptocurrency technologies.</summary>
-    <published>2024-06-21T14:07:17.974000+00:00</published>
+Lastly, the communication touches on the practical aspects of implementing silent payments within PSBTs, from spending from specific outputs to managing prevouts, underscoring the need for precise differentiation and association between inputs and their corresponding tweaks. The exploration of WebAssembly experiments and the potential for silent payment features in coinjoin wallets further exemplifies the dynamic exploration of secure and private cryptocurrency transactions, emphasizing the balance between innovation, security, and practical application challenges.</summary>
+    <published>2024-06-22T14:51:45.345000+00:00</published>
   </entry>
 </feed>
