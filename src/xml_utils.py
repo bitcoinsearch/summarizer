@@ -105,6 +105,7 @@ class XMLReader:
             'body_type': "raw",
             'type': "combined-summary",
             'domain': domain if domain else None,
+            'thread_url': link if link else None,
             'indexed_at': indexed_at if indexed_at else None
         }
 
