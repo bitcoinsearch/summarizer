@@ -2,19 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - bLIP: BOLT 11 Invoice Blinded Path Tagged Field</title>
-  <updated>2024-06-27T02:03:55.166389+00:00</updated>
+  <updated>2024-06-28T02:03:29.202440+00:00</updated>
   <author>
-    <name>roasbeef 2024-06-26 22:49:49.832000+00:00</name>
+    <name>roasbeef 2024-06-27 20:53:27.553000+00:00</name>
   </author>
   <author>
-    <name>ellemouton 2024-06-26 19:27:03.124000+00:00</name>
+    <name>t-bast 2024-06-27 07:06:39.378000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2024-06-26 11:28:27.175000+00:00</name>
+    <name>roasbeef  . 2024-06-26 22:49:49.832000+00:00</name>
+  </author>
+  <author>
+    <name>ellemouton  . 2024-06-26 19:27:03.124000+00:00</name>
+  </author>
+  <author>
+    <name>tbast  . 2024-06-26 11:28:27.175000+00:00</name>
   </author>
   <author>
     <name>ellemouton  . 2024-06-26 00:10:57.337000+00:00</name>
   </author>
+  <link href="delvingbitcoin/June_2024/2813_bLIP-BOLT-11-Invoice-Blinded-Path-Tagged-Field.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2024/2810_bLIP-BOLT-11-Invoice-Blinded-Path-Tagged-Field.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2809_bLIP-BOLT-11-Invoice-Blinded-Path-Tagged-Field.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2808_bLIP-BOLT-11-Invoice-Blinded-Path-Tagged-Field.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2803_bLIP-BOLT-11-Invoice-Blinded-Path-Tagged-Field.xml" rel="alternate"/>
@@ -23,17 +31,19 @@
   <entry>
     <id>2</id>
     <title>Combined summary - bLIP: BOLT 11 Invoice Blinded Path Tagged Field</title>
-    <updated>2024-06-27T02:03:55.166440+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/blip-bolt-11-invoice-blinded-path-tagged-field/991/4" rel="alternate"/>
-    <summary>The ongoing discussions and proposals within the Bitcoin Lightning Network community are focused on enhancing privacy and reliability of payment delivery. One such proposal is a Bitcoin Lightning Improvement Proposal (bLIP) that introduces a new tagged field for BOLT 11 payment invoices, aimed at enabling encoded blinded path information to be communicated to payers. This initiative seeks to leverage the benefits of route blinding, as detailed in the BOLT 4 specification, prior to the full adoption of the more extensive changes suggested by the Offers proposal, which includes features like onion messaging requiring significant network upgrades.
+    <updated>2024-06-28T02:03:29.202531+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/blip-bolt-11-invoice-blinded-path-tagged-field/991/6" rel="alternate"/>
+    <summary>The discussion primarily focuses on the development and implications of adopting new encoding formats for invoices within the Bitcoin Lightning Network, specifically the consideration between continuing with BOLT 11 invoices with added features versus introducing BOLT 12 invoices. A significant point of debate is whether to incorporate blinded paths into BOLT 11 invoices or to fully embrace BOLT 12 invoices, which would necessitate less coding effort and fewer modifications to existing specifications. The use of blinded paths is seen as a way to enhance the Offers flow, making it more robust by gaining experience with these paths, identifying edge cases, and implementing new pathfinding solutions from the receiver's end. This approach is favored over introducing partial, unrefined components that could extend the deployment timeline and potentially degrade user experience.
 
-The core of this proposal is the addition of a `bolt11_blinded_path` feature bit within the experimental range, signaling support and understanding of the new tagged field. The proposed structure for this field heavily borrows from encoding techniques outlined in the Offers proposal, including various data points such as fee rates, CLTV expiry deltas, and a series of encrypted elements that create private payment routes. The document carefully considers backward compatibility with existing BOLT 11 invoice readers, allowing for unknown fields to be skipped and facilitating the continued processing of invoices with the new tagged field.
+The potential benefits of integrating blinded paths into existing protocols like BOLT 11 are contrasted against the adoption of a new, separate invoice format under BOLT 12. Concerns about complicating the ecosystem with multiple invoice formats have led to a reconsideration of exposing BOLT 12 invoices independently. However, it is suggested that separating BOLT 12 invoice specifications from Offers could facilitate their adoption without necessarily complicating the current system. Such separation would allow for flexibility in specifying mandatory fields when an invoice originates from an offer, using the TLV structure for versatility. This adjustment aims to streamline the process, making it more accessible and possibly paving the way for wider acceptance and use of BOLT 12 invoices alongside traditional offerings.
 
-Furthermore, the proposal serves as an interim solution, anticipating its own obsolescence with the broader adoption of the Offers protocol and its associated invoice format. It outlines technical specifications and operational considerations necessary for implementing blinded paths, including restrictions on the number of hops in a path due to size limitations related to `data_length` encoding and QR code capacity.
+Moreover, the dialogue touches upon the strategic advantage of building upon the bolt 11 protocol by incorporating new features directly into it. This ensures backward compatibility and leverages its widespread adoption to improve user experience by providing informative error messages for unrecognized features. This method contrasts with introducing an entirely new format, which could lead to greater confusion among users unfamiliar with the changes.
 
-In addition to providing a detailed example of how the new field can accommodate multiple blinded paths within identified constraints, the proposal invites feedback on several unresolved questions. These include optimizing space within the invoice structure, enhancing the security and integrity of the invoice signing process, and methods for conveying maximum CLTV expiry values. The discussion also touches upon the simplification of introduction nodes within blinded paths and the implications of introducing an experimental tagged field range specifically for BOLT 11 in anticipation of its eventual phase-out.
+Furthermore, there's an exploration of how Bolt 12 invoices could be directly used for transactions, bypassing the conventional offer/invoice request flow associated with Bolt 11. This streamlined approach suggests an efficient method for handling transactions that necessitates adaptation from both payers and recipients, highlighting a forward-thinking strategy in supporting the comprehensive functionalities of Bolt 12 in future developments.
 
-The dialogue surrounding the possibility of decoupling the Bolt 12 _invoice_ format from Offers itself has been revisited, considering the integration of new encoding formats and the reception of such ideas within the developer community. Despite previous pushback against introducing another format, there's an acknowledgment of the potential benefits of extracting the BOLT 12 invoice format from the greater specification to facilitate its adoption. This suggests a dual approach where both the continuation of BOLT 11 enhancements and the future extraction of the BOLT 12 invoice format are considered viable paths forward. The importance of this development is underscored by the interest in using BOLT 11 extensions for programmatic flows, such as the L402 protocol or sub-swap services like Loop, which could benefit from the privacy and efficiency gains offered by blinded paths.</summary>
-    <published>2024-06-26T22:49:49.832000+00:00</published>
+Additionally, the discussion introduces a Bitcoin Lightning Improvement Proposal (bLIP) aimed at enhancing privacy and reliability in lightning payment delivery through a new tagged field for BOLT 11 payment invoices, indicating encoded blinded path information. This proposed improvement seeks to leverage route blinding benefits immediately without awaiting the complete adoption of the Offers framework, which encompasses more extensive network upgrades. The proposal outlines technical specifications, compatibility considerations, and transition strategies, emphasizing this feature as an interim solution pending the broader implementation of Offers and its associated invoice format.
+
+In summary, the conversation encapsulates a complex balance between advancing the Bitcoin Lightning Network's functionality through new features and formats while maintaining usability and backward compatibility. It reflects a broader dialogue within the community about the best paths forward in terms of technological adoption, user experience, and the strategic development of the network's payment protocols.</summary>
+    <published>2024-06-27T20:53:27.553000+00:00</published>
   </entry>
 </feed>
