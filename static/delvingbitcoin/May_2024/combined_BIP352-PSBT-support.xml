@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP352: PSBT support</title>
-  <updated>2024-06-23T02:06:01.521529+00:00</updated>
+  <updated>2024-06-30T02:09:49.363292+00:00</updated>
   <author>
-    <name>andrewtoth 2024-06-22 14:51:45.345000+00:00</name>
+    <name>andrewtoth 2024-06-29 21:00:11.488000+00:00</name>
+  </author>
+  <author>
+    <name>andrewtoth  . 2024-06-22 14:51:45.345000+00:00</name>
   </author>
   <author>
     <name>josibake  . 2024-06-21 14:07:17.974000+00:00</name>
@@ -81,6 +84,7 @@
   <author>
     <name>josibake  . 2024-05-17 11:51:04.620000+00:00</name>
   </author>
+  <link href="delvingbitcoin/June_2024/2828_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2779_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2778_BIP352-PSBT-support.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2024/2777_BIP352-PSBT-support.xml" rel="alternate"/>
@@ -111,19 +115,21 @@
   <entry>
     <id>2</id>
     <title>Combined summary - BIP352: PSBT support</title>
-    <updated>2024-06-23T02:06:01.521701+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/28" rel="alternate"/>
-    <summary>The discourse surrounding the implementation and verification processes in cryptocurrency transactions, particularly those involving silent payments, unveils a complex landscape of technical requirements and security measures for signers. It’s evident that signers must diligently verify Anti-Counterfeiting Proofs (ACP) on inputs they are responsible for and reject any transactions with unacceptable sighash types alongside silent payment outputs, emphasizing a rigorous adherence to transaction integrity protocols. The conversation proposes methodologies to simplify the verification process, including the addition of global shares and proofs for inputs if capable of being signed by the signer, contrasting with per-input shares and proofs when signers can only endorse specific inputs. This bifurcation aims at balancing computational and memory demands across diverse signing devices, highlighting an ongoing debate on optimizing cryptographic transaction verifications.
+    <updated>2024-06-30T02:09:49.363466+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/29" rel="alternate"/>
+    <summary>The discussion begins with a consideration of technical feedback on the PSBT draft, suggesting a separation of the DLEQ (Discrete Logarithm Equality) proofs into their own Bitcoin Improvement Proposal (BIP). This proposition is underpinned by a draft that builds upon @RubenSomsen's gist, providing a foundation for further development in this area. The conversation delves into several key aspects of programming and cryptocurrency transactions, emphasizing the importance of handling group proofs, silent payment verification by signers, and the intricacies of implementing Anti-Counterfeiting Proofs (ACP) within the context of cryptocurrency transactions.
 
-A critical aspect of transaction security discussed is the inherent risk associated with using the `ACP` signature, which could potentially compromise the funds of the signing party due to vulnerabilities in the signing process. An alternative, safer approach is illustrated through the use of the `ALL` signature type, which provides a safeguard against security breaches, ensuring the protection of a signer's inputs irrespective of the counterpart's signing method. This distinction underscores the importance of choosing secure signature types to maintain transaction integrity and protect participant interests.
+On the topic of silent payments, a nuanced approach to transaction verification is outlined, focusing on the conditions under which a signer should fail a transaction involving silent payment outputs. The dialogue underscores the necessity for signers to check for ACP on inputs they are responsible for signing, particularly when a sighash type other than `ALL` is present alongside silent payment outputs. The exploration into this subject reveals suggestions for simplifying the process through which signers verify transactions involving silent payments, proposing the addition of global shares and proofs for all inputs if applicable. This strategy aims to balance computational and memory demands on signers, acknowledging the varied capabilities of devices used in the signing process.
 
-Moreover, the dialogue delves into the technicalities of employing `SINGLE | ACP` flags in transaction signing, exposing a significant security vulnerability where external modifications could redirect transaction outputs. The discussion articulates the need for absolute trust amongst signers to mitigate risks associated with incorrect script generation or malicious intent, suggesting a cautious approach towards implementing `ACP` in transaction protocols.
+The conversation also highlights the security implications of using the `ACP` signature, pointing out the significant risk it poses to the funds of the parties involved in a transaction. It outlines the safer alternative of signing with `ALL`, protecting inputs regardless of how other parties have signed the transaction. This distinction emphasizes the criticality of choosing the appropriate signature type to ensure transaction security.
 
-In exploring secure transaction protocols, the narrative extends to the optimization of data storage within PSBTs, advocating for a restructuring to accommodate global shares and proofs rather than duplicating them across inputs. This proposition aims at easing the verification process and reducing computational burdens, especially in transactions with multiple signers and inputs. The conversation acknowledges the varied capabilities and preferences of signers, advocating for flexible transaction structuring to uphold security and efficiency in silent payment transactions.
+Further, the discourse examines the challenges associated with the `SINGLE | ACP` signing mechanism, illustrating potential security vulnerabilities when incorrect script generation or manipulation by external observers occurs. This analysis leads to broader considerations on trust and verification in the transaction process, particularly for silent payment-aware signers.
 
-Furthermore, the introduction of additional fields in PSBTv2 specifications to support silent payment mechanisms without necessitating a new version highlights an adaptive strategy towards enhancing transaction privacy. The proposed inclusion of fields like `PSBT_IN_SP_ECDH_SHARE` and `PSBT_OUT_SP_V0_INFO` reflects an effort to streamline transaction processing while ensuring backward compatibility and integrity. This approach, coupled with discussions on minimizing proof requirements through consolidated methods, illustrates a proactive pursuit of optimizing cryptographic protocols for improved security and efficiency.
+Additionally, the technicalities of managing shares and proofs within Payment Service Buses (PSBTs) are explored, suggesting an efficient way to handle transaction data by incorporating shares and proofs as global attributes. This method seeks to optimize transaction verification processes while maintaining or enhancing privacy measures and transactional integrity.
 
-Lastly, the communication touches on the practical aspects of implementing silent payments within PSBTs, from spending from specific outputs to managing prevouts, underscoring the need for precise differentiation and association between inputs and their corresponding tweaks. The exploration of WebAssembly experiments and the potential for silent payment features in coinjoin wallets further exemplifies the dynamic exploration of secure and private cryptocurrency transactions, emphasizing the balance between innovation, security, and practical application challenges.</summary>
-    <published>2024-06-22T14:51:45.345000+00:00</published>
+In addressing the optimization of cryptographic protocols, the discussion presents two approaches for handling inputs in cryptographic proofs, advocating for a unified proof for each scan key alongside its corresponding set of inputs. This proposal aims to streamline management and verification processes, highlighting the ongoing efforts to enhance security and efficiency in cryptographic operations.
+
+Lastly, the updated draft for the BIP introduces the DLEQ proof, marking a substantial enhancement aimed at bolstering the security and efficiency of the proposed improvements. This update signifies a commitment to incorporating advanced cryptographic techniques, underscoring the collective endeavor to refine and advance the standards governing cryptocurrency transactions and programming constructs.</summary>
+    <published>2024-06-29T21:00:11.488000+00:00</published>
   </entry>
 </feed>
