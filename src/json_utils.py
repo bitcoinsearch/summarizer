@@ -19,6 +19,7 @@ class GenerateJSON:
     def get_xml_summary(self, data, verbose=False):
         number = get_id(data["_source"]["id"])
         title = data["_source"]["title"]
+        url_ = data["_source"]["url"]
         xml_name = clean_title(title)
         published_at = datetime.strptime(data['_source']['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
         published_at = pytz.UTC.localize(published_at)
@@ -50,7 +51,7 @@ class GenerateJSON:
             author_list = root.findall(".//atom:author", namespaces)
             author_ = "\n".join([a.find('atom:name', namespaces).text for a in author_list])
             author_ = " ".join(author_.split(" ")[:-2])
-            return f"{author_}:{summ}\n"
+            return f"Author: {author_}\nBody: {summ} \nSource URL: {url_}\n-----\n\n"
         else:
             logger.warning(f"No xml file found: {full_path}")
             return ""
@@ -68,25 +69,24 @@ class GenerateJSON:
                 body = data['_source']['body']
                 author_ = data['_source']['authors']
                 author_ = ", ".join([a for a in author_])
+                url_ = data['_source']['url']
                 body = preprocess_email(body)
                 body_summ = create_summary(body)
-                summ = f"{author_}:{body_summ}\n"
+                summ = f"Author: {author_}\nBody: {body_summ} \nSource URL: {url_}\n-----\n\n"
                 recent_post_data += summ
-        recent_post_data = create_summary(recent_post_data)
 
-        summ_prompt = f"""You are required to produce a concise header summary from a compilation of condensed recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of only three or four significant sentences, adhering to these important criteria:
-    Guidelines:
-        1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
-        2. The summarization must have a formal tone and be high in informational content.
-        3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
-        4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
-        5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
-        6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
-        7. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text, provided it should be no longer than three or four sentences.
-        8. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on.
-        9. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
-        \n CONTEXT:\n\n{recent_post_data}"""
-
+        summ_prompt = f"""Create a concise and very short summary under 100 words from a compilation of recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of only three or four significant sentences, adhering to these important criteria:
+            Guidelines:
+                1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
+                2. The summarization must have a formal tone and be high in informational content.
+                3. Ensure that punctuation is followed by a space and that all syntax rules are adhered to.
+                4. Any links given within the text should be retained, appropriately incorporated and formatted in markdown as [link text](URL).
+                5. Rather than being a simple rewording of the original content, the summary should restructure and simplify the main points.
+                6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
+                7. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text, provided it should be no longer than two sentences. 
+                8. Include relevant source URLs in the middle or at the end of each paragraph where applicable. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
+                9. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on.
+                \n CONTEXT:\n\n{recent_post_data}"""
         response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=500)
         return response_str
 
