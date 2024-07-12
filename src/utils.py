@@ -10,9 +10,11 @@ from dateutil.relativedelta import relativedelta
 from loguru import logger
 import pytz
 import datetime
+import csv
 from src.gpt_utils import generate_chatgpt_summary, generate_summary, generate_title, generate_chatgpt_title, \
     consolidate_chatgpt_summary, consolidate_summary
 from src.config import TOKENIZER, CHATGPT
+from src.elasticsearch_utils import ElasticSearchClient
 
 CURRENT_TIME = datetime.datetime.now(datetime.timezone.utc)
 CURRENT_TIMESTAMP = str(CURRENT_TIME.timestamp()).replace(".", "_")
@@ -339,7 +341,8 @@ def save_html_file(df_week_generated, save_file_name):
         file_handle.write(html)
 
         # write title and summary
-        html = f"<h3 style='text-align:center; font-family:verdana; color:#282828;'>{title}</h3><p>{summary}</p><br><b>References:</b>"
+        html = (f"<h3 style='text-align:center; font-family:verdana; color:#282828;'>{title}</h3><p>{summary}</p><br"
+                f"><b>References:</b>")
         file_handle.write(html)
 
         for i in range(len(urls)):
@@ -356,3 +359,35 @@ def save_html_file(df_week_generated, save_file_name):
     file_handle.close()
 
     return f"output/{save_file_name}.html"
+
+
+def log_csv(file_name, url=None, inserted=0, updated=0, no_changes=0, folder_path="daily_logs",
+            error="False", error_log="---"):
+    date = datetime.datetime.utcnow().strftime("%d_%m_%Y")
+    month_year = datetime.datetime.utcnow().strftime("%Y_%m")
+    time = datetime.datetime.utcnow().strftime("%H:%M:%S")
+
+    log_folder_path = os.path.join(folder_path, month_year)
+    if not os.path.exists(log_folder_path):
+        os.makedirs(log_folder_path)
+
+    csv_file_path = os.path.join(log_folder_path, f'{date}_logs.csv')
+    with open(csv_file_path, mode='a', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        if csv_file.tell() == 0:
+            writer.writerow(
+                ['Date', 'Time', 'File name', 'URL', 'Inserted records', 'Updated records', 'No changes records',
+                 'Total records', 'Error', 'Error log'])
+
+        total_docs = 0
+
+        if isinstance(url, str):
+            total_docs = ElasticSearchClient().get_domain_counts(index_name=os.getenv('INDEX'), domain=url)
+
+        elif isinstance(url, list):
+            for i in url:
+                t_docs = ElasticSearchClient().get_domain_counts(index_name=os.getenv('INDEX'), domain=i)
+                total_docs += t_docs
+
+        writer.writerow([date, time, file_name, url, inserted, updated, no_changes, total_docs, error, error_log])
+    logger.success("CSV Update Successfully :)")

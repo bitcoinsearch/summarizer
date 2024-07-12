@@ -1,5 +1,6 @@
 import time
 from datetime import datetime
+
 from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch.helpers import scan
 from loguru import logger
@@ -23,9 +24,43 @@ class ElasticSearchClient:
             http_auth=(self._es_username, self._es_password),
         )
 
+    def get_domain_counts(self, index_name, domain):
+        """Function to get the total counts for the given 'domain' field from Elasticsearch index."""
+        body = {
+            "query": {
+                "term": {
+                    "domain.keyword": domain
+                }
+            }
+        }
+
+        try:
+            resp = self.es_client.count(index=index_name, body=body)
+            return resp['count']
+        except Exception as e:
+            logger.error(f"Error fetching domain counts: {e}")
+            return None
+
     @property
     def es_client(self):
         return self._es_client
+
+    def upsert_document(self, index_name, doc_id, doc_body):
+
+        script = {
+            "source": "ctx._source.putAll(params)",
+            "params": doc_body
+        }
+
+        request_body = {
+            "scripted_upsert": True,
+            "script": script,
+            "upsert": doc_body
+        }
+
+        # Perform the upsert operation
+        response = self._es_client.update(index=index_name, id=doc_id, body=request_body)
+        return response
 
     def get_domain_query(self, url):
         if isinstance(url, list):
@@ -90,15 +125,15 @@ class ElasticSearchClient:
                         "must": [
                             {
                                 "match_phrase":
-                                {
-                                    "title.keyword": title
-                                }
+                                    {
+                                        "title.keyword": title
+                                    }
                             },
                             {
                                 "term":
-                                {
-                                    "domain.keyword": str(url)
-                                }
+                                    {
+                                        "domain.keyword": str(url)
+                                    }
                             }
                         ]
                     }
@@ -236,7 +271,7 @@ class ElasticSearchClient:
     def filter_top_active_posts(self, es_results, top_n):
         unique_results = []
 
-        thread_dict = {} # maps post titles to their respective activity levels
+        thread_dict = {}  # maps post titles to their respective activity levels
         # create dictionary with title as key and thread count as value
         for result in es_results:
             title = result['_source']['title']
@@ -383,10 +418,10 @@ class ElasticSearchClient:
         """
         Fetches the count of threads and unique contributors for a given post based on title and domain
         """
-        # The search query 
+        # The search query
         domain_query = self.get_domain_query(domain)
         query = {
-            "size": 0, # no search hits are returned, the focus is solely on the aggregations and counts
+            "size": 0,  # no search hits are returned, the focus is solely on the aggregations and counts
             "query": {
                 "bool": {
                     "must": [
