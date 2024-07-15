@@ -47,7 +47,8 @@ if __name__ == "__main__":
     elastic_search = ElasticSearchClient()
     dev_urls = [
         ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-         "https://gnusha.org/pi/bitcoindev/"],
+         "https://gnusha.org/pi/bitcoindev/",
+         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"],
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
         "https://delvingbitcoin.org/"
     ]
@@ -205,8 +206,9 @@ if __name__ == "__main__":
             start_of_time_str = start_of_time.strftime("%Y-%m-%dT%H:%M:%S")
             end_of_time_str = end_of_time.strftime("%Y-%m-%dT%H:%M:%S")
 
-            logger.info(f"collecting the data from {days_to_look_back} days range ... || Start of week: {start_of_time} | "
-                        f"End of week: {end_of_time}")
+            logger.info(
+                f"collecting the data from {days_to_look_back} days range ... || Start of week: {start_of_time} | "
+                f"End of week: {end_of_time}")
 
             selected_threads = elastic_search.fetch_data_in_date_range(
                 es_index=ES_INDEX,
