@@ -21,7 +21,7 @@ if __name__ == "__main__":
     dev_urls = [
         ["https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
          "https://gnusha.org/pi/bitcoindev/",
-        "https://mailing-list.bitcoindevs.xyz/bitcoindev/"],
+         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"],
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
         "https://delvingbitcoin.org/"
     ]
