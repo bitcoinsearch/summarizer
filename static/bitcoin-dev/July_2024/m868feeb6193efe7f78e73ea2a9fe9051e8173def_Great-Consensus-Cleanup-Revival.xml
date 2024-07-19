@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Great Consensus Cleanup Revival</title>
+  <updated>2024-07-19T02:06:02.400524+00:00</updated>
+  <author>
+    <name>Antoine Riard 2024-07-18 17:39:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Great Consensus Cleanup Revival</title>
+    <updated>2024-07-19T02:06:02.400565+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/gnM89sIQ7MhDgI62JciQEGy63DassEv7YZAMhj0IEuIo0EdnafykF6RH4OqjTTHIHsIoZvC2MnTUzJI7EfET4o-UQoD-XAQRDcct994VarE=@protonmail.com/T/#m868feeb6193efe7f78e73ea2a9fe9051e8173def" rel="alternate"/>
+    <summary>The distinction between a valid coinbase input, often referred to as a "null point," and any other type of transaction input is highlighted by its unique serialization. Unlike typical inputs that utilize null pointers to indicate their state, a "null point" in the context of a coinbase transaction comprises a 36-byte value with a specific structure: 32 bytes set to 0x00 followed by 4 bytes set to 0xff. This design choice by Satoshi Nakamoto facilitated the serialization of the first block transaction (coinbase) by including an input with an unusable script pointing to an invalid transaction:index tuple, rather than excluding an input altogether.
+
+The identification of a coinbase transaction necessitates a comparison of these 36 bytes against the known null point value, ensuring the integrity of the Merkle tree by preventing type64 malleation. Additionally, the proposal to add a new 64-byte size check for all block transactions aims to detect hash invalidity with minimal memory overhead, challenging the approach that applies this check solely to the coinbase transaction. This discussion extends into the realm of domain separation and the immutability of transaction `scriptpubkey` output, which, when correctly committed, renders the witness commitment impervious to malleation due to the comprehensive incorporation of each transaction's details.
+
+Furthermore, the concept of "block message with valid header but malleated committed valid tx data" emphasizes the necessity of validating the witness commitment to ensure the authenticity of the provided witness data. The integrity of a block is anchored not only in its header and transaction commitments but also in the necessity of corroborating these commitments to maintain the fidelity of the block's identity. This principle underlines the importance of meticulous validation processes, even in the presence of established checkpoints or milestones, to mitigate the potential for transaction or witness data malleation.
+
+The debate also touches on the challenges presented by potential scenarios where a single coinbase transaction appears in multiple blocks due to competing branches at the same height, as allowed under protocols like bip34. This highlights the complex dynamics of blockchain management and the critical nature of block validation strategies that prioritize proof-of-work checks to safeguard network integrity against low-pow attack vectors.
+
+In addressing the inefficacy of invalidity caching and the proposal to prohibit 64-byte transactions at the consensus level, there's an acknowledgment of the nuanced trade-offs between performance considerations and security measures within the node's architectural framework. The conversation further delves into the technicalities of implementing a validation mechanism for detecting malleation through a specific pattern in the byte stream without necessitating hash operations, as detailed in a shared document ([link](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/attachments/20190225/a27d8837/attachment-0001.pdf)). This approach underscores the ongoing efforts to refine DoS mitigation strategies without compromising the efficiency or security of blockchain transactions.</summary>
+    <published>2024-07-18T17:39:00+00:00</published>
+  </entry>
+</feed>

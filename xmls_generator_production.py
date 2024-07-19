@@ -17,7 +17,8 @@ if __name__ == "__main__":
         "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
         "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
         "https://delvingbitcoin.org/",
-        "https://gnusha.org/pi/bitcoindev/"
+        "https://gnusha.org/pi/bitcoindev/",
+        "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
     ]
 
     end_date = datetime.now()
@@ -34,7 +35,7 @@ if __name__ == "__main__":
             ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
         )
         dev_name = dev_url.split("/")[-2]
-        logger.success(f"TOTAL THREADS RECEIVED FOR - '{dev_name}': {len(data_list)}")
+        logger.success(f"TOTAL THREADS RECEIVED FOR - '{dev_url}': {len(data_list)}")
 
         delay = 5
         count_main = 0
