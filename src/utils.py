@@ -50,13 +50,24 @@ def add_utc_if_not_present(datetime_str, iso_format=True):
 
 
 def remove_timestamps_from_author_names(author_list):
+    timestamp_pattern = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\+\d{2}:\d{2})?')  # YYYY-MM-DD HH:MM:SS±HH:MM
     preprocessed_list = []
+
     for author in author_list:
-        name = author.split(" ")[0:-2]
-        name = ' '.join(name)
-        if name.endswith(" ."):
-            name = name.replace(" .", "")
-        preprocessed_list.append(name.strip())
+        if timestamp_pattern.search(author):
+            name = author.split(" ")[0:-2]
+            name = ' '.join(name)
+            if name.endswith(" ."):
+                name = name.replace(" .", "")
+            if name.strip() != '':
+                preprocessed_list.append(name.strip())
+            else:
+                preprocessed_list.append(author.strip())
+        else:
+            preprocessed_list.append(author.strip())
+
+    if not preprocessed_list or all(not name for name in preprocessed_list):
+        logger.warning(f"New case found: {author_list} ---> {preprocessed_list}")
     return list(set(preprocessed_list))
 
 
