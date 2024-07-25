@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Cluster mempool: block building with sub-chunk granularity</title>
+  <updated>2024-07-25T02:07:00.397567+00:00</updated>
+  <author>
+    <name>sipa 2024-07-24 18:40:20.438000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Cluster mempool: block building with sub-chunk granularity</title>
+    <updated>2024-07-25T02:07:00.397603+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-block-building-with-sub-chunk-granularity/1044" rel="alternate"/>
+    <summary>In the realm of cluster mempool management, a sophisticated strategy is employed to construct block templates by selecting transaction chunks from clusters based on their fee rate, arranged from high to low, until the block reaches its size limit. This method hinges on maintaining an optimal linearization and chunking of transactions within each cluster, ensuring that the constructed block's total fee approaches optimality. The loss in potential fees is minimal, constrained by the product of the unfilled block size and the fee rate of the first excluded chunk. To mitigate significant loss, it's suggested to impose limits not only on the number of clusters but also on their individual sizes.
+
+Further refinement in block construction can be achieved by exploring beyond fixed-size chunks, especially when the next-best chunk exceeds the remaining block space. One approach involves selectively including smaller subsets or prefixes of a chunk, effectively bypassing larger, non-fitting chunks. This necessitates the consideration of the remaining parts of a chunk after excluding its last transaction, thereby recalculating the highest-fee subset for inclusion. This concept introduces the idea of precomputed absorption sets for each transaction, detailing potential chunk subdivisions and their fee rates, hence allowing for a more granular selection process without the need for mutable data structures at runtime.
+
+The process of determining these absorption sets is streamlined through a modified chunking algorithm, capable of identifying all possible chunk configurations in linear time. By evaluating the quality of transactions within each chunk, improvements in block building efficiency can be made, albeit the challenge lies in defining a suitable metric that enhances sub-chunk quality without compromising the overarching goal of optimal linearization.
+
+To maximize the fee yield of a constructed block, a branch-and-bound search algorithm may be employed, utilizing precomputed absorption sets to explore various combinations of chunk prefixes. This method offers the potential to find the optimal fee-maximizing set of transactions that can fit in a block, extending beyond the limitations of fixed chunk boundaries to include any sequence of applicable absorption sets. Such an algorithm underscores the advantage of using precomputed sets over dynamic computation during runtime, as it allows for an efficient backtracking mechanism that does not compromise the selection state.
+
+For further reading and details on the methodologies discussed, refer to the provided [strategy link](https://delvingbitcoin.org/t/introduction-to-cluster-linearization/1032h-24-block-building-and-eviction-7) and additional resources on chunking and post-linearization algorithms.</summary>
+    <published>2024-07-24T18:40:20.438000+00:00</published>
+  </entry>
+</feed>
