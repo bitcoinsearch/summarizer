@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2024-08-07T02:10:42.496070+00:00</updated>
+  <updated>2024-08-09T02:08:19.345474+00:00</updated>
   <author>
-    <name>Crypt-iQ 2024-08-06 13:41:52.443000+00:00</name>
+    <name>0xB10C 2024-08-08 10:17:20.354000+00:00</name>
+  </author>
+  <author>
+    <name>CryptiQ  . 2024-08-06 13:41:52.443000+00:00</name>
   </author>
   <author>
     <name>xBC  . 2024-08-04 15:45:21.037000+00:00</name>
@@ -12,6 +15,7 @@
   <author>
     <name>xBC  . 2024-08-02 12:08:52.409000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Aug_2024/2928_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2024/2920_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2024/2913_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2024/2911_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -19,13 +23,13 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2024-08-07T02:10:42.496116+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/3" rel="alternate"/>
-    <summary>The discussion on the impact of extra pool sizes on block reconstruction delves into several key areas concerning compact block reconstructions, particularly focusing on how these are affected by different mempool sizes and the operational differences between low-bandwidth and high-bandwidth modes. The analysis points out that most compact blocks are transmitted via high-bandwidth mode, which is responsible for around 75% of deliveries. This mode allows for the preemptive sending of a `cmpctblock` message prior to block validation, unlike the low-bandwidth mode which requires a sequence of message exchanges starting with an `inv`/`headers` message. It's observed that blocks received through high-bandwidth mode generally require fewer additional transaction requests for reconstruction, indicating a more streamlined process compared to low-bandwidth mode. Further optimization potential is noted in the low-bandwidth mode's handling of transactions that were not previously known, suggesting enhancements could reduce the need for further transaction requests.
+    <updated>2024-08-09T02:08:19.345523+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/4" rel="alternate"/>
+    <summary>The discussion on the impact of extra pool sizes on block reconstruction within blockchain technology delves into two primary areas: the additional transactions held for compact block reconstruction and the variations in mempool sizes among peers. The role of a peer's `feefilter` in estimating their pool size is examined, albeit with limitations due to privacy concerns and calculation methods. Factors affecting the `feefilter` include its half-life calculation, memory usage variances by different mempool maps, and intentional rounding for privacy. These elements underscore the complexities in managing network interactions and optimizing transaction processing and block reconstruction in blockchain networks.
 
-Exploring the nuances of compact block reconstructions reveals insights into their efficiency within the Bitcoin network. Through the use of `debug=cmpctblock` logging, the study examines several aspects including the frequency of needing additional `getblocktxn` -&gt; `blocktxn` round-trips, the composition of transactions in compact blocks, and the effects of node configuration changes on block reconstruction performance. Notably, shifts in node settings, such as increasing maximum connections or adopting full-RBF (Replace-By-Fee) policies, have shown to significantly influence the reconstruction process. Observations during periods of heightened mempool activity illustrate the detrimental effect of network congestion on reconstruction efficiency, with certain adjustments proving effective in mitigating these impacts.
+An analysis on compact block reconstructions showcases a critical distinction between low-bandwidth and high-bandwidth modes in terms of performance and operation. High-bandwidth mode, responsible for approximately 75% of compact block deliveries, sends a `cmpctblock` message prior to block validation. In contrast, low-bandwidth mode involves an `inv`/`headers` message and a subsequent `getdata(compactblock)` request from the receiver. Observations indicate that high-bandwidth mode leads to fewer transaction requests during block reconstruction, suggesting higher efficiency. Most compact blocks are delivered with only the coinbase transaction pre-filled, pointing to potential optimization opportunities in low-bandwidth mode by pre-filling unknown transactions to reduce the need for further requests. However, such optimizations have not been implemented in Bitcoin Core as indicated by a [TODO in the codebase](https://github.com/bitcoin/bitcoin/blob/2aff9a36c352640a263e8b5de469710f7e80eb54/src/blockencodings.cppL24-L25). The impending release of Bitcoin Core v28.0, introducing full-RBF by default, presents an opportunity to revisit these operational modes and possibly improve low-bandwidth compact block delivery and reconstruction efficiency.
 
-The analysis also highlights the forthcoming update to Bitcoin Core v28.0, which will introduce full-RBF by default, presenting an opportune moment to reevaluate the dynamics between low- and high-bandwidth modes and potentially implement improvements. Additionally, the examination of block reconstruction times, based on whether additional transaction information was required, provides evidence of significant variances influenced by node connectivity and hardware capabilities. This exploration raises pertinent questions about the balance of transaction needs in different bandwidth modes, the role of extra pool sizes in reconstruction efficiency, and the broader implications for network-wide policy adjustments, such as enabling `mempoolfullrbf` by default to improve block propagation times.</summary>
-    <published>2024-08-06T13:41:52.443000+00:00</published>
+Further insights into compact block reconstruction are garnered through the `debug=cmpctblock` logging feature on monitoring nodes, focusing on the efficiency of block reconstructions within the Bitcoin network. This study examines the frequency of additional transaction request rounds (`getblocktxn` -&gt; `blocktxn`) necessitated by a node's lack of certain transactions during the reconstruction phase. Despite minor configuration differences, most nodes adhere to Bitcoin Core's defaults, but adjustments such as increasing maximum connections or changing policy settings (like `mempoolfullrbf=1`) significantly affect the block reconstruction process. Periods of heightened mempool activity correlate with decreased rates of compact block reconstructions not requiring additional transaction requests, highlighting network congestion's impact on reconstruction efficiency. Notably, changes like enabling `mempoolfullrbf` by default could expedite block propagation times, suggesting policy deviations could enhance overall network efficiency. The investigation also uncovers disparities in median block reconstruction duration based on the necessity of additional transaction requests, emphasizing the influence of node connectivity and hardware capabilities on reconstruction times. The exploration raises questions about the need for extra transactions in different bandwidth modes, the effects of varying extra pool sizes on efficiency, and the performance evolution of block reconstructions, especially with the adoption of full-RBF by miners. Comparing outbound-only nodes to those accepting inbound connections might offer further insights into optimizing block reconstruction processes across the Bitcoin network.</summary>
+    <published>2024-08-08T10:17:20.354000+00:00</published>
   </entry>
 </feed>
