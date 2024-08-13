@@ -7,7 +7,7 @@ from collections import defaultdict
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import XMLReader
-from src.utils import remove_timestamps_from_author_names, log_csv
+from src.utils import remove_timestamps_from_author_names, summarizer_log_csv
 
 if __name__ == "__main__":
 
@@ -15,8 +15,7 @@ if __name__ == "__main__":
     updated_count = defaultdict(set)
     no_changes_count = defaultdict(set)
     unique_urls = set()
-    error_occurred = False
-    error_message = "---"
+    error_message = None
     try:
         REMOVE_TIMESTAMPS_IN_AUTHORS = True
 
@@ -70,28 +69,19 @@ if __name__ == "__main__":
                 logger.warning(full_path)
 
         logger.success(f"Process complete.")
-        logger.success(f"Error Occurred: {error_occurred}")
 
     except Exception as ex:
         error_occurred = True
-        error_message = str(ex)
-        logger.error(f"Error Occurred: {error_occurred}")
+        error_message = f"Error:{ex}\n{traceback.format_exc()}"
         logger.error(f"Error Message: {error_message}")
         logger.error(f"Process failed.")
 
     finally:
-        for url in unique_urls:
-            log_csv(file_name='push_combined_summary_to_es',
-                    url=url,
-                    inserted=len(inserted_count[url]),
-                    updated=len(updated_count[url]),
-                    no_changes=len(no_changes_count[url]),
-                    error=str(error_occurred),
-                    error_log=error_message)
-
-            logger.info(f"URL:->{url}"
-                        f" :: Inserted Count:->{len(inserted_count[url])}"
-                        f" :: Updated Count:->{len(updated_count[url])}"
-                        f" :: No Changed Count:->{len(no_changes_count[url])}.")
+        summarizer_log_csv(file_name='push_combined_summary_to_es',
+                           domain=list(unique_urls),
+                           inserted=sum(len(inserted_count[url]) for url in unique_urls),
+                           updated=sum(len(updated_count[url]) for url in unique_urls),
+                           no_changes=sum(len(no_changes_count[url]) for url in unique_urls),
+                           error=error_message)
 
     logger.success("Process Complete.")

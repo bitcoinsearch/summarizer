@@ -26,12 +26,9 @@ class ElasticSearchClient:
 
     def get_domain_counts(self, index_name, domain):
         """Function to get the total counts for the given 'domain' field from Elasticsearch index."""
+        domain_query = self.get_domain_query(domain)
         body = {
-            "query": {
-                "term": {
-                    "domain.keyword": domain
-                }
-            }
+            "query": domain_query
         }
 
         try:
