@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Segwit Ephemeral Anchors</title>
+  <updated>2024-07-16T02:07:56.943477+00:00</updated>
+  <author>
+    <name>Greg Sanders 2023-11-02 17:50:55.522000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Segwit Ephemeral Anchors</title>
+    <updated>2024-07-16T02:07:56.943503+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/segwit-ephemeral-anchors/160" rel="alternate"/>
+    <summary>The concept of Ephemeral Anchors is introduced as a way to create key-less output types that can include values considered as "dusty," provided these are immediately spent within the mempool. This mechanism, however, depends on Bitcoin's legacy script system, which introduces a significant drawback. Specifically, transactions that spend these anchors are vulnerable to transaction ID malleability by miners due to the absence of CLEANSTACK consensus rules in the legacy script. This vulnerability poses challenges for integrating with other protocols, such as splicing, since it can disrupt pre-signed transaction chains unless mitigated by a new signature type like ANYPREVOUT.
+
+An initial solution that leverages `wsh(OP_TRUE)` is acknowledged but criticized for its inefficiency—requiring 33 additional output bytes and revealing a witness script that simply states "OP_TRUE." This approach is deemed expensive and somewhat redundant since it could theoretically be applied within the current mainnet for both creating and redeeming outputs. 
+
+As an alternative, the proposal suggests utilizing the softfork for witness programs introduced by bip141 and adopting an undefined witness program to circumvent the outlined issue. By replacing the script "OP_TRUE" with "OP_TRUE 0xffff," the proposal leverages bip141's scriptSig rules to allow these outputs to be spent with an empty witness, thus only adding 3 additional bytes over the original proposal. This solution is currently implemented in a special branch, as detailed in the provided [GitHub link](https://github.com/instagibbs/bitcoin/commits/ephemeral-anchors-segwit). Notably, while the creation of such outputs is already considered standard, spending them requires additional relay relaxation, a change that is part of the new commit. This adjustment simplifies the implementation by moving away from handling OP_TRUE outputs, which are frequently used in tests on the master branch.</summary>
+    <published>2023-11-02T17:50:55.522000+00:00</published>
+  </entry>
+</feed>

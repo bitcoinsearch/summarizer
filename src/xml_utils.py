@@ -86,7 +86,8 @@ class XMLReader:
         if "bitcoin-dev" in link:
             domain = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
         elif "bitcoindev" in link:
-            domain = "https://gnusha.org/pi/bitcoindev/"
+            # domain = "https://gnusha.org/pi/bitcoindev/"
+            domain = "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
         elif "lightning-dev" in link:
             domain = "https://lists.linuxfoundation.org/pipermail/lightning-dev/"
         elif "delvingbitcoin" in link:

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Keyless Anchors Are Vulnerable To Replacement Cycling Attacks</title>
+  <updated>2024-08-03T02:07:35.241465+00:00</updated>
+  <author>
+    <name>Peter Todd 2024-08-02 07:54:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Keyless Anchors Are Vulnerable To Replacement Cycling Attacks</title>
+    <updated>2024-08-03T02:07:35.241495+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CALeFGL1dLhdvdePzt5xdZxskcU6WJDJL_PSmO2u2Z1nKZCKMag@mail.gmail.com/T/#mdce3f423ad18aa732b67f3c600ee8d9e6b9ccbab" rel="alternate"/>
+    <summary>A novel vulnerability in the cryptocurrency transaction process, particularly affecting Bitcoin transactions where fees are paid via Child Pays for Parent (CPFP) through keyless ephemeral anchors, has been identified. This vulnerability allows for what is known as a replacement cycling attack, enabling attackers to disrupt the normal processing of transactions without incurring significant costs, provided they were already intending to transact with a higher total fee and fee-rate than their target. The essence of this attack involves creating two transactions, where the second transaction pays the fees for both, and then using a third-party transaction to replace these in the mempool by offering higher fees, effectively making the original transactions uneconomical to mine due to their lower fee rate.
+
+The attack specifically targets transaction setups where transaction A is made with low or zero fees and relies on transaction B to cover its fees through CPFP. An attacker can broadcast a competing transaction B2 that spends from their own funds along with the keyless ephemeral anchor from A but at a higher fee rate than B. Following this, the attacker can double-spend B2 with another transaction, B3, excluding the ephemeral anchor, thus cycling out transaction B and leaving A unmineable. The risk to the attacker is minimal, primarily the small chance of B2 being mined before it can be replaced by B3.
+
+This type of attack also extends to transactions employing SIGHASH_ANYONECANPAY, assuming all signatures use this flag, which further broadens its potential impact. To counteract such attacks, one suggested remedy is the implementation of an optional rebroadcasting module within Bitcoin Core. This module would monitor transactions that have been dropped from the mempool, ensuring they are re-added once valid again, thereby mitigating the effects of replacement cycling attacks. However, simply preventing the replacement of transactions like B2 with B3 is not a viable solution, as it could lead to new forms of exploitation by attackers.
+
+Privacy concerns arise with the proposed countermeasure of rebroadcasting transactions, as each rebroadcast could potentially expose information about the transaction's origin. To alleviate these concerns, it has been suggested that having third parties altruistically rebroadcast transactions could help preserve privacy. For more detailed insights into this topic, Peter Todd provides further discussion and analysis on his [personal website](https://petertodd.org).</summary>
+    <published>2024-08-02T07:54:00+00:00</published>
+  </entry>
+</feed>

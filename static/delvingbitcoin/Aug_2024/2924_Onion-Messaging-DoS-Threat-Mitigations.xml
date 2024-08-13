@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Onion Messaging DoS Threat Mitigations</title>
+  <updated>2024-08-08T02:10:06.748445+00:00</updated>
+  <author>
+    <name>gijswijs 2024-08-07 06:47:09.212000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Onion Messaging DoS Threat Mitigations</title>
+    <updated>2024-08-08T02:10:06.748476+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/onion-messaging-dos-threat-mitigations/1058" rel="alternate"/>
+    <summary>The Financial Cryptography and Data Security 2024 (FC'24) conference featured a noteworthy paper titled "Short Paper: Onion Messages on Leash" by Amin Bashiri and Majid Khabbazian from the University of Alberta. The paper, accessible at [https://fc24.ifca.ai/preproceedings/104.pdf](https://fc24.ifca.ai/preproceedings/104.pdf), delves into the denial-of-service (DoS) threats associated with Onion Messaging (OM) and proposes several mitigation strategies.
+
+One key aspect discussed is the maximum number of hops an OM can traverse, initially suggested to be 504 based on the assumption of a 65-byte per hop data payload. However, this overlooks the transition to a newer format where the per-hop payload size is actually 68 bytes, leading to a recalculated maximum of 481 hops when considering the entire payload minus header and trailing bytes.
+
+To counteract potential abuse of OM's routing capabilities, the paper introduces a "Hard Leash" approach that limits the number of hops a message can travel by dedicating a portion of the payload for routing information. This concept mirrors the Tor network's practice, where the default circuit length consists of three hops, with eight being the maximum, as outlined in [Tor's proposals](https://spec.torproject.org/proposals/110-avoid-infinite-circuits.html).
+
+Another significant mitigation technique is the "Soft Leash," which requires a proof-of-work (PoW) for adding hops. This PoW mechanism scales exponentially with each additional hop by linking each hop's PoW to the previous one, thereby increasing the computational challenge significantly. This method takes inspiration from similar defenses implemented in Tor, as detailed in [Tor's blog post](https://blog.torproject.org/introducing-proof-of-work-defense-for-onion-services/).
+
+The third suggestion focuses on rate limiting, proposing that the rate of outgoing Onion Messages should be proportional to the total channel capacity of the receiving node. Such a measure would help manage the traffic flow more effectively and reduce the risk of DoS attacks.
+
+Lastly, the paper recommends that routing for OM should consider the channel capacities of nodes when selecting a path. By favoring paths weighted by the sum of nodes' channel capacities, the routing not only leans towards more capable nodes but also incorporates a higher rate limit, enhancing overall success rates while making it cost-prohibitive for attackers to interfere.
+
+This research contributes valuable insights into enhancing the security of Lightning Network (LN) through strategic limitations and requirements in OM handling, reflecting the growing academic interest in LN's security implications.</summary>
+    <published>2024-08-07T06:47:09.212000+00:00</published>
+  </entry>
+</feed>

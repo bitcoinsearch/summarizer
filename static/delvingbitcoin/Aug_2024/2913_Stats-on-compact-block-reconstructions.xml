@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Stats on compact block reconstructions</title>
+  <updated>2024-08-05T02:07:59.664361+00:00</updated>
+  <author>
+    <name>0xB10C 2024-08-04 15:45:21.037000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Stats on compact block reconstructions</title>
+    <updated>2024-08-05T02:07:59.664391+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/2" rel="alternate"/>
+    <summary>The analysis of compact block reconstructions in the context of low-bandwidth versus high-bandwidth modes reveals a significant distinction in their performance and operational mechanisms. Compact blocks are primarily delivered through high-bandwidth mode, accounting for approximately 75% of deliveries. This mode involves peers sending a `cmpctblock` message before the validation of the block, contrasting with the low-bandwidth mode where a peer sends an `inv`/`headers` message, followed by a `getdata(compactblock)` request from the receiver to obtain the compact block. 
+
+A noteworthy observation is that compact blocks received via high-bandwidth mode generally request transactions less frequently than those received in low-bandwidth mode. This is advantageous as it indicates a more efficient process of block reconstruction without needing additional transaction information. Additionally, it has been observed that nearly all compact blocks come with only the coinbase transaction pre-filled, suggesting an area for optimization in the low-bandwidth mode.
+
+In the case of low-bandwidth mode, where blocks are fully validated before being announced, there exists potential for improvement. Specifically, the sender could pre-fill transactions it was previously unaware of, potentially reducing the necessity for subsequent transaction requests. However, a review of the Bitcoin Core implementation indicates this optimization has not yet been implemented, as noted in a [TODO within the codebase](https://github.com/bitcoin/bitcoin/blob/2aff9a36c352640a263e8b5de469710f7e80eb54/src/blockencodings.cppL24-L25).
+
+The upcoming adoption of Bitcoin Core v28.0, which introduces full-RBF (Replace-By-Fee) by default, provides an opportune moment to reassess these dynamics. Should the performance disparities between low- and high-bandwidth modes persist, it would merit dedicating time to implement the aforementioned improvements, potentially enhancing the efficiency of low-bandwidth compact block delivery and reconstruction.</summary>
+    <published>2024-08-04T15:45:21.037000+00:00</published>
+  </entry>
+</feed>
