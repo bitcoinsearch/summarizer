@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Non interactive anti-exfil (airgap compatible)</title>
+  <updated>2024-08-21T02:11:31.962754+00:00</updated>
+  <author>
+    <name>moonsettler 2024-08-20 18:40:40.188000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Non interactive anti-exfil (airgap compatible)</title>
+    <updated>2024-08-21T02:11:31.962785+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/non-interactive-anti-exfil-airgap-compatible/1081" rel="alternate"/>
+    <summary>The discussion introduces an anti-exfiltration variant specifically designed for air-gapped signing devices that utilize Partially Signed Bitcoin Transactions (PSBTs), seamlessly integrating into the existing QR code-based signing workflows. This variant aims to enhance security during the signing process, preventing potential exfiltration of private keys.
+
+The proposed signing protocol begins with the signing device generating a hash from the private key, message, and nonce, denoted as q. This hash is then multiplied by the generator point G to produce Q. Subsequently, a new variable k is calculated by adding q to another hash generated from Q, the message, and the nonce. R is obtained by multiplying k by G, and e is derived from hashing R, the public key X, and the message. Depending on the signature scheme used, Schnorr or ECDSA, the signature is produced differently. For Schnorr, the signature s is computed by adding k to the product of the private key x and e. In the ECDSA approach, r is obtained from the x-coordinate of R, and s is calculated using k inverse, the message, and r times x.
+
+After the signature generation, the signing device sends Q and s back to the wallet application. The wallet app then recalculates R using Q, the message, and the nonce, followed by combining them with G. It finally recalculates R and s for verification purposes. In the verification step for Schnorr signatures, e is re-derived using R, X, and the message, ensuring that the multiplication of s by G equals R plus the product of e and X. For ECDSA signatures, the verification checks whether the inversion of s multiplied by the message and G, added to the inversion of s multiplied by r and X, equals R.
+
+This method provides a secure mechanism for signing transactions in an isolated environment, effectively mitigating risks associated with key exfiltration through its novel use of cryptographic operations and nonce incorporation.</summary>
+    <published>2024-08-20T18:40:40.188000+00:00</published>
+  </entry>
+</feed>
