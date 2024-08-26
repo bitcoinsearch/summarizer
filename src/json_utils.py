@@ -75,7 +75,7 @@ class GenerateJSON:
                 summ = f"Author: {author_}\nBody: {body_summ} \nSource URL: {url_}\n-----\n\n"
                 recent_post_data += summ
 
-        summ_prompt = f"""Create a concise and very short summary under 100 words from a compilation of recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of only three or four significant sentences, adhering to these important criteria:
+        summ_prompt = f"""Create a concise and very short summary of around 300 words from a compilation of recent discussions. Transform the following extracted text from mailing lists into a brief summary composed of only three or four significant sentences, adhering to these important criteria:
             Guidelines:
                 1. While synthesizing, refrain from or reword phrases like "The context discusses...", "The email discusses...", "In this context...", "The context covers...", "The context questions...", "In this email...", "The email covers..." and similar phrases.
                 2. The summarization must have a formal tone and be high in informational content.
@@ -87,7 +87,7 @@ class GenerateJSON:
                 8. Include relevant source URLs in the middle or at the end of each paragraph where applicable. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
                 9. Please ensure that the summary does not start with labels like "Email 1:", "Email 2:" and so on.
                 \n CONTEXT:\n\n{recent_post_data}"""
-        response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=500)
+        response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=1000)
         return response_str
 
     def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
