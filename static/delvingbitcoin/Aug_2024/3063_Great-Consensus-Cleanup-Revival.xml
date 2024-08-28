@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Great Consensus Cleanup Revival</title>
+  <updated>2024-08-28T02:11:10.552654+00:00</updated>
+  <author>
+    <name>ajtowns 2024-08-27 09:50:19.543000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Great Consensus Cleanup Revival</title>
+    <updated>2024-08-28T02:11:10.552683+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/35" rel="alternate"/>
+    <summary>The process of verifying the authenticity of a block within a blockchain entails specific technical measures, especially when considering an 80-byte header for block 999999. To authenticate such a block, one would require the 32-byte SHA256 midstate of the coinbase transaction leading up to its final segments, alongside the remaining chunks (64 bytes each), and a partial merkle tree relevant to the coinbase transaction, not exceeding 448 bytes. Utilizing the midstate, one iterates over these additional chunks, which are pivotal in committing to the locktime, thereby obtaining the coinbase transaction's transaction identifier (txid).
+
+A noteworthy aspect of this verification process involves the inherent risks associated with partially verifying merkle trees. Specifically, the scenario presents a potential risk where the actual coinbase transaction, if it measures 400 bytes serialized with an nLockTime of 900,000, could misleadingly suggest a different block height than actual. This discrepancy arises if the last four bytes of the txid for the second transaction within a block display the value 0x88bf0d00 (representing 901,000 in little endian). In such instances, when these two txids are concatenated, they might falsely represent a 64-byte transaction with an nLockTime of 901,000. Consequently, a "valid" merkle proof could erroneously affirm that the block's height is 1000 blocks more than its true position.
+
+However, this problem can be mitigated if verifiers maintain certain assumptions. For instance, ensuring the coinbase transaction of a valid block exceeds 64 bytes—a condition met if there is a usage of five or more bytes of extranonce, inclusion of a segwit commitment, or if the block reward has not been burnt—helps in safeguarding against such discrepancies. Moreover, it's crucial for verifiers to confirm that the provided midstate does not equate to the sha256 initial state, further enhancing the robustness of the verification process.</summary>
+    <published>2024-08-27T09:50:19.543000+00:00</published>
+  </entry>
+</feed>
