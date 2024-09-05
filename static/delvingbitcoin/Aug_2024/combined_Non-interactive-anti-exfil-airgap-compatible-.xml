@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Non interactive anti-exfil (airgap compatible)</title>
-  <updated>2024-09-04T02:14:46.339079+00:00</updated>
+  <updated>2024-09-05T02:15:32.136942+00:00</updated>
   <author>
-    <name>moonsettler 2024-09-03 21:28:46.874000+00:00</name>
+    <name>moonsettler 2024-09-04 14:38:47.803000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns 2024-09-04 03:39:06.312000+00:00</name>
+  </author>
+  <author>
+    <name>moonsettler  . 2024-09-03 21:28:46.874000+00:00</name>
   </author>
   <author>
     <name>moonsettler  . 2024-08-21 19:35:39.046000+00:00</name>
@@ -45,6 +51,8 @@
   <author>
     <name>reardencode  . 2024-08-20 15:26:52.208000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Sept_2024/3099_Non-interactive-anti-exfil-airgap-compatible-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2024/3097_Non-interactive-anti-exfil-airgap-compatible-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3095_Non-interactive-anti-exfil-airgap-compatible-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2024/3035_Non-interactive-anti-exfil-airgap-compatible-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2024/3032_Non-interactive-anti-exfil-airgap-compatible-.xml" rel="alternate"/>
@@ -63,21 +71,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Non interactive anti-exfil (airgap compatible)</title>
-    <updated>2024-09-04T02:14:46.339181+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/non-interactive-anti-exfil-airgap-compatible/1081/14" rel="alternate"/>
-    <summary>The conversation introduces a sophisticated cryptographic attack method named Dark Smoothie, which extends upon the previously known Dark Skippy vulnerability. Dark Smoothie exploits a scenario where a transaction is signed with two inputs locked by the same private key, allowing for the leakage of 256 bits (24 words) without complex mathematical operations. This attack leverages simple arithmetic on elliptic curves to extract secret keys from digital signatures when certain conditions are met. It highlights the potential for low probability attacks, such as those triggered by "dusting" an address with a transaction that meets specific criteria, to leak secrets without physical access to the device. The method underscores the importance of adopting robust anti-exfiltration measures like Anti-Exfil protocols to mitigate such vulnerabilities.
+    <updated>2024-09-05T02:15:32.137060+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/non-interactive-anti-exfil-airgap-compatible/1081/16" rel="alternate"/>
+    <summary>The discourse introduces a sophisticated cryptographic vulnerability referred to as the "Dark Smoothie" approach, which delineates a method through which an attacker can decipher a 256-bit seed from merely two signatures sourced from the same device. This method does not necessitate complex mathematical operations, instead relying on the exploitation of digital transaction protocols where cryptographic signatures are utilized. The process involves calculating specific values using the private key, the attacker's secret, and hash functions to unveil the `256_bit_secret`. This vulnerability is particularly alarming due to its ability to be triggered by seemingly innocuous activities like "dusting," thereby revealing the identity or other sensitive details of a wallet owner. Furthermore, it elaborates on countermeasures like the implementation of Anti-Exfil protocols, which aim to fortify the security measures against such vulnerabilities, contingent upon the companion application's integrity.
 
-Further analysis delves into the challenges of securing cryptographic devices against both software and hardware-based threats. It points out that even with rigorous anti-exfiltration measures, attackers can exploit vulnerabilities in the device's physical construction, such as side channel and radio frequency leaks. This emphasizes the broader spectrum of cybersecurity, beyond just software and firmware protections, highlighting the necessity for comprehensive security strategies that also consider physical device integrity.
+The inquiry delves into the potential efficacy of integrating a 4-bit checksum as a deterrent against attackers, proposing that such an integration would compel attackers to exert additional computational efforts. The effectiveness of this strategy, however, is contingent upon the dynamic nature of the checksum; a static checksum does not significantly complicate the attacker's challenge but rather imposes a predetermined number of iterations for them to bypass. It posits setting a computational target time to verify a single signature, making it substantially more challenging for attackers to exfiltrate more than one bit of information stealthily.
 
-The efficacy of incorporating a 4-bit checksum in signature verification as a defensive strategy against these attacks is debated. While it potentially increases the computational effort required from an attacker, its effectiveness is contingent upon dynamically adjusting the checksum to avoid simplifying the attacker's task. The proposal suggests targeting a computational time of around 2 seconds per signature verification to deter unauthorized information leakage effectively.
+Further discussion highlights the intricacies involved in identifying signatures originating from a common seed, underscoring the complexity and potential for combinatorial explosion absent prior knowledge of which signatures to focus on. While algorithms capable of tolerating errors by mixing incorrect with correct values exist, their efficacy diminishes with the increasing volume of signatures, illustrating the sophisticated nature of potential attacks and the necessity for robust security protocols.
 
-The discourse also explores the practical aspects of implementing forward error correction (FEC) codes to estimate the number of signatures needed to compromise a seed. This approach sheds light on the computational relationship between the number of bits leaked per signature and the total number of signatures required to fully expose a seed. It introduces a nuanced perspective on the balance between computational feasibility and security, suggesting that even limited hardware capabilities can present a significant threat if exploited properly.
+An innovative leakage method through large checksums alongside every signature is explored, emphasizing the method's reliance on unique criteria known only to attackers or malicious manufacturers for selecting bits of the checksum for leakage. This technique underscores the gradual reconstruction of the original secret as more checksum bits are exposed, albeit demanding specific insights into which signatures share a common origin from the same seed—a factor complicating the attacker's endeavor.
 
-An innovative anti-exfiltration technique tailored for air-gapped signing devices using Partially Signed Bitcoin Transactions (PSBTs) is proposed. This technique integrates seamlessly with QR code-based signing workflows, enhancing security during the signing process by preventing private key exfiltration. It employs a novel combination of cryptographic operations and nonce utility, ensuring the secure generation and verification of signatures within isolated environments.
+The text addresses the challenges of securing devices against not just software or firmware threats but also those stemming from physical device construction. It acknowledges that while anti-exfiltration measures provide a defense mechanism, they may fall short in scenarios where devices are designed with inherent vulnerabilities, highlighting the multifaceted nature of cybersecurity threats and the imperative for comprehensive protective strategies.
 
-Lastly, the discussion touches upon the confusion surrounding the term "vector commitment" within cryptographic contexts. It clarifies its application in relation to ECDSA and Schnorr signatures, referencing a scheme that aligns more closely with ideas discussed in well-known cryptocurrency development forums and documents. This clarification aids in understanding the specific cryptographic mechanisms under discussion and their relevance to enhancing transaction signing security.
+A further aspect of the discussion revolves around employing Forward Error Correction (FEC) codes to estimate the number of signatures necessary to compromise a seed, drawing attention to the direct relationship between the number of signatures and the feasibility of leaking seed bits. This exploration points to the nuanced balance between computational effort and potential security breaches within cryptographic systems.
 
-Overall, the dialogue encapsulates a comprehensive examination of cryptographic vulnerabilities and proposes innovative solutions to bolster security. It encompasses a range of topics from theoretical attack vectors to practical defense mechanisms, emphasizing the continuous evolution of cryptographic practices in response to emerging threats.</summary>
-    <published>2024-09-03T21:28:46.874000+00:00</published>
+Additionally, the conversation transitions towards the feasibility of executing exploits via firmware modifications alone or if intrinsic malicious design intentions are requisite. It introduces FEC codes as a strategy to obviate the need for tracking leaked seed portions, detailing a method whereby parts of a large "checksum" are deterministically leaked across signatures. This approach, while theoretically sound, faces practical detection challenges during routine integrity checks of signature generation processes, indicating the complexities and considerations necessary in formulating defenses against sophisticated cryptographic attacks.
+
+Lastly, the dialogue touches upon the constraints faced by low power devices in managing continuous cryptographic computations and the impracticality of such attack vectors given the robustness of routine operational testing designed to detect anomalies. This part of the discussion suggests ongoing deliberations on enhancing security protocols to thwart attacks leveraging firmware vulnerabilities, reflecting the continuous evolution of cybersecurity measures in response to emerging threats.</summary>
+    <published>2024-09-04T14:38:47.803000+00:00</published>
   </entry>
 </feed>
