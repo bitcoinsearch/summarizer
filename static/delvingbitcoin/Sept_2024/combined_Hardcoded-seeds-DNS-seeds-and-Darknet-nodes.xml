@@ -2,16 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Hardcoded seeds, DNS seeds and Darknet nodes</title>
-  <updated>2024-09-11T02:14:48.951830+00:00</updated>
+  <updated>2024-09-12T02:15:47.528854+00:00</updated>
   <author>
-    <name>1440000bytes 2024-09-10 13:13:40.200000+00:00</name>
+    <name>sipa 2024-09-11 18:05:17.683000+00:00</name>
   </author>
   <author>
-    <name>sipa 2024-09-10 12:51:20.650000+00:00</name>
+    <name>virtu 2024-09-11 08:02:10.537000+00:00</name>
   </author>
   <author>
-    <name>virtu 2024-09-10 08:42:24.774000+00:00</name>
+    <name>virtu 2024-09-11 07:43:47.522000+00:00</name>
   </author>
+  <author>
+    <name>bytes  . 2024-09-10 13:13:40.200000+00:00</name>
+  </author>
+  <author>
+    <name>sipa  . 2024-09-10 12:51:20.650000+00:00</name>
+  </author>
+  <author>
+    <name>virtu  . 2024-09-10 08:42:24.774000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Sept_2024/3163_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2024/3160_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2024/3159_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3152_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3151_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3149_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
@@ -19,13 +31,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Hardcoded seeds, DNS seeds and Darknet nodes</title>
-    <updated>2024-09-11T02:14:48.951893+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/hardcoded-seeds-dns-seeds-and-darknet-nodes/1123/3" rel="alternate"/>
-    <summary>The discussion revolves around the proposition of eliminating the reliance on DNS for discovering Bitcoin nodes, suggesting an alternative approach that involves using the IP addresses of nodes managed by developers. These nodes would be capable of responding to `getaddr` requests, facilitating bootstrapping without the need for DNS seeds. A proof of concept (PoC) darknet seeder has been developed, showcasing the ability to serve Onion, I2P, and Cjdns addresses through various protocols including IPv4, Cjdns (DNS/UDP), Onion, and I2P (DNS/TCP). This approach utilizes a BIP155-like encoding and demonstrates an innovative use of NULL records for addressing, despite concerns about the feasibility of using TXT records due to potential issues highlighted in a recent GitHub issue comment.
+    <updated>2024-09-12T02:15:47.528941+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/hardcoded-seeds-dns-seeds-and-darknet-nodes/1123/6" rel="alternate"/>
+    <summary>The discussion centers around the advantages of DNS-based seeding for network protocols, emphasizing its cost-effectiveness due to worldwide caching infrastructure and the privacy it offers. The reliance on the operating system's DNS resolver and configuration plays a crucial role in maintaining these benefits. However, the complexity introduced by using a dependency or an ad-hoc DNS resolver is highlighted, especially when attempting to work across all supported platforms or trying to find the system's configured DNS server. This complexity could compromise the caching and privacy advantages, suggesting a potential shift towards P2P-style seeding as a simpler alternative, which is already in use within Tor networks.
 
-The conversation further explores the compatibility of these NULL encodings with the `getaddrinfo` function across different platforms, considering the limitations that darknet-only nodes face in utilizing DNS seeds to discover Bitcoin network addresses. To assess the viability of hardcoded seed data for these nodes, statistics were compiled showing the longevity and reachability of hardcoded seed nodes over time. The analysis, represented in charts, indicates varying lifespans for seed nodes across network types, with IPv4 nodes showing the shortest lifespan and I2P nodes demonstrating greater durability, even in the face of a DoS attack. Interestingly, there appeared to be an omission in updating seed nodes during the v26 release, affecting network connectivity.
+The conversation also touches upon the technical feasibility of using NULL records over TXT records for DNS queries within Bitcoin's networking context. Despite initial considerations for TXT records due to their "human-readable" data, NULL records were favored for their efficiency in handling binary data. This choice reflects a strategic approach to leveraging DNS records in supporting network operations, considering both performance and privacy implications. The dialogue includes a specific reference to a GitHub issue discussing challenges with TXT records, indicating ongoing discussions within the community about optimizing DNS record usage.
 
-This dialogue underscores the challenges and considerations in enhancing the resilience and accessibility of Bitcoin nodes, especially for darknet-only configurations. The PoC darknet seeder project is positioned as a potential solution to these challenges, offering a method to integrate Onion, I2P, and Cjdns addresses into the Bitcoin network's infrastructure. This initiative raises questions about the necessity and practicality of such adaptations, particularly in the context of mixed clearnet-darknet nodes versus darknet-only nodes. Feedback and further examination are encouraged to explore the implications and effectiveness of this approach in supporting decentralized digital currency networks.</summary>
-    <published>2024-09-10T13:13:40.200000+00:00</published>
+A practical demonstration of sending and receiving NULL queries in C++ is provided, showcasing the straightforward nature of DNS operations and highlighting the unnecessary addition of dependency libraries for specific queries. This example underscores the simplicity and effectiveness of direct DNS queries in network programming.
+
+Further, the text explores the development of a Proof of Concept (PoC) darknet seeder that supports various network addresses, including Onion, I2P, and Cjdns, in addition to IPv4. This seeder uses a BIP155-like encoding for address resolution across different network types, illustrating a versatile approach to DNS usage beyond traditional A and AAAA records. The discussion about this PoC seeder emphasizes its potential to enhance connectivity for nodes across different networks, particularly highlighting the innovative use of NULL records within the DNS framework as an alternative to more conventional methods like TXT records.
+
+The narrative then delves into the implications of relying on hardcoded seed data for node connectivity, contrasting the longevity of IPv4 nodes with that of I2P nodes. The failure to update seed nodes in a recent version release and the historically low number of Onion and I2P seed nodes are identified as significant challenges. The development of the PoC darknet seeder is presented as a response to these issues, aiming to improve the integration of darknet addresses into the broader network. This exploration of custom DNS `NULL` queries and the collaborative feedback from the community highlight a concerted effort toward enhancing the functionality and connectivity within the ecosystem, signifying a commitment to addressing the technical challenges associated with network protocol dependencies and darknet connectivity.</summary>
+    <published>2024-09-11T18:05:17.683000+00:00</published>
   </entry>
 </feed>
