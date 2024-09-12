@@ -38,3 +38,18 @@ jobs:
 
     - name: Execute Python script
       run: python push_summary_to_es.py
+
+    - name: Configure Git
+      run: |
+        git config user.email "${{ secrets.GIT_AUTHOR_EMAIL }}"
+        git config user.name "${{ secrets.GIT_AUTHOR_NAME }}"
+
+    - name: Add and commit changes
+      run: |
+        git add .
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "push_summary_to_es: updated logs"
+          git push
+        fi

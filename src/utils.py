@@ -1,18 +1,22 @@
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
+import csv
+import datetime
 import os
-from tqdm import tqdm
 import re
 from ast import literal_eval
+
+import pandas as pd
+import pytz
+import requests
+from bs4 import BeautifulSoup
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from loguru import logger
-import pytz
-import datetime
+from tqdm import tqdm
+
+from src.config import TOKENIZER, CHATGPT
+from src.elasticsearch_utils import ElasticSearchClient
 from src.gpt_utils import generate_chatgpt_summary, generate_summary, generate_title, generate_chatgpt_title, \
     consolidate_chatgpt_summary, consolidate_summary
-from src.config import TOKENIZER, CHATGPT
 
 CURRENT_TIME = datetime.datetime.now(datetime.timezone.utc)
 CURRENT_TIMESTAMP = str(CURRENT_TIME.timestamp()).replace(".", "_")
@@ -350,7 +354,8 @@ def save_html_file(df_week_generated, save_file_name):
         file_handle.write(html)
 
         # write title and summary
-        html = f"<h3 style='text-align:center; font-family:verdana; color:#282828;'>{title}</h3><p>{summary}</p><br><b>References:</b>"
+        html = (f"<h3 style='text-align:center; font-family:verdana; color:#282828;'>{title}</h3><p>{summary}</p><br"
+                f"><b>References:</b>")
         file_handle.write(html)
 
         for i in range(len(urls)):
@@ -367,3 +372,32 @@ def save_html_file(df_week_generated, save_file_name):
     file_handle.close()
 
     return f"output/{save_file_name}.html"
+
+
+def summarizer_log_csv(file_name, domain=None, inserted=0, updated=0, no_changes=0, folder_path="./summarizer_logs/",
+                       error=None):
+    last_updated = datetime.datetime.now().isoformat(timespec='milliseconds').replace('+00:00', 'Z')
+
+    if domain:
+        csv_headers = ['last_updated', 'source', 'total_docs', 'inserted_docs', 'updated_docs', 'no_changed_docs',
+                       'error']
+        total_docs = ElasticSearchClient().get_domain_counts(index_name=os.getenv('INDEX'), domain=domain)
+        csv_data = [last_updated, domain, total_docs, inserted, updated, no_changes, error]
+    else:
+        csv_headers = ['last_updated', 'error']
+        csv_data = [last_updated, error]
+
+    os.makedirs(folder_path, exist_ok=True)
+    save_file_path = f"{folder_path}/{file_name}.csv"
+    with open(save_file_path, mode='a', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        if csv_file.tell() == 0:
+            writer.writerow(csv_headers)
+
+        writer.writerow(csv_data)
+        logger.success(f"Logs updated successfully at: {save_file_path}")
+
+    logger.info(f"Inserted Docs: {inserted}")
+    logger.info(f"Updated Docs: {updated}")
+    logger.info(f"No changed Docs: {no_changes}")
+    logger.info(f"Error Message: {error}")
