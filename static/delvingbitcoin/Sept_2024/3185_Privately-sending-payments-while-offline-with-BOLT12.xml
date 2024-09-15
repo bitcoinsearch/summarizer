@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Privately sending payments while offline with BOLT12</title>
+  <updated>2024-09-15T02:22:34.497262+00:00</updated>
+  <author>
+    <name>andyschroder 2024-09-14 07:01:38.506000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Privately sending payments while offline with BOLT12</title>
+    <updated>2024-09-15T02:22:34.497293+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/privately-sending-payments-while-offline-with-bolt12/1134" rel="alternate"/>
+    <summary>The concept revolves around enabling devices to authorize payments at points of sale without the need for a direct internet connection on the device itself, while ensuring that the payment process remains secure and efficient. This idea primarily focuses on scenarios where a buyer, equipped with a mobile device that is initially connected to the internet, pre-computes several `invreq_payer_id` and `invreq_paths` on their home node. These identifiers, along with secret keys, are stored on the device, each with a specific validity time and budget, and can be manually revoked if necessary.
+
+Upon leaving home, the buyer's device loses its internet connectivity. However, when the buyer wishes to make a purchase, such as buying food in a foreign country, the transaction can still proceed smoothly. The seller's point of sale device, which is connected to the internet, presents a BOLT12 `offer` via NFC or QR code. The buyer's device then responds with a signed `invoice_request` using the pre-computed `invreq_payer_id` and `invreq_paths`, ignoring certain fields like `offer_paths` or `offer_issuer_id` since the response is not sent as an onion message. A `reply_path` for the `invoice` to be sent back as an onion message is also included.
+
+This method introduces several significant benefits. Firstly, it eliminates the need for the buyer or sender to have an online presence at the time of the transaction. It also maintains the privacy of the sender and simplifies the technology required for such transactions, potentially allowing for the system to be integrated into smart cards rather than relying solely on smartphones. Compatibility with existing point of sale devices and wallets is anticipated, without the requirement for a webserver or SSL, offering a more secure alternative to current methods like those suggested by [LNURL-withdrawPOS](https://github.com/theDavidCoen/LNURL-withdrawPOS).
+
+However, a critical adjustment is proposed for BOLT12 to ensure the security and scalability of this process. The modification involves the inclusion of a mechanism for the buyer's node to verify that the `invoice` received matches the `invoice_request` they authorized. This could be achieved by copying the signature from field `240` in the `invoice_request` to field `239` in the `invoice`, allowing the payer to confirm the authenticity and accuracy of the invoice. Such a change would not only enhance trust in the transaction process but also reduce the computational and storage burdens on nodes by eliminating the need to track and manage outstanding `invoice_requests`.</summary>
+    <published>2024-09-14T07:01:38.506000+00:00</published>
+  </entry>
+</feed>
