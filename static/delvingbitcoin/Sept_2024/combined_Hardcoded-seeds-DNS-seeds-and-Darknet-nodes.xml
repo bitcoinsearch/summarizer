@@ -2,18 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Hardcoded seeds, DNS seeds and Darknet nodes</title>
-  <updated>2024-09-13T02:15:49.323467+00:00</updated>
+  <updated>2024-09-24T02:21:21.433532+00:00</updated>
   <author>
-    <name>sipa 2024-09-12 21:47:52.189000+00:00</name>
+    <name>virtu 2024-09-23 14:33:41.084000+00:00</name>
   </author>
   <author>
-    <name>virtu 2024-09-12 19:40:15.647000+00:00</name>
+    <name>sipa  . 2024-09-12 21:47:52.189000+00:00</name>
   </author>
   <author>
-    <name>1440000bytes 2024-09-12 18:41:16.485000+00:00</name>
+    <name>virtu  . 2024-09-12 19:40:15.647000+00:00</name>
   </author>
   <author>
-    <name>virtu 2024-09-12 06:03:21.076000+00:00</name>
+    <name>bytes  . 2024-09-12 18:41:16.485000+00:00</name>
+  </author>
+  <author>
+    <name>virtu  . 2024-09-12 06:03:21.076000+00:00</name>
   </author>
   <author>
     <name>sipa  . 2024-09-11 18:05:17.683000+00:00</name>
@@ -33,6 +36,7 @@
   <author>
     <name>virtu  . 2024-09-10 08:42:24.774000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Sept_2024/3251_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3175_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3174_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3172_Hardcoded-seeds-DNS-seeds-and-Darknet-nodes.xml" rel="alternate"/>
@@ -47,17 +51,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Hardcoded seeds, DNS seeds and Darknet nodes</title>
-    <updated>2024-09-13T02:15:49.323549+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/hardcoded-seeds-dns-seeds-and-darknet-nodes/1123/10" rel="alternate"/>
-    <summary>The email discussion delves into the technical intricacies of using DNS for Bitcoin node discovery, emphasizing the potential benefits and challenges of this approach. It introduces the idea of encoding data within AAAA records, which could be particularly useful for sharing IP addresses with non-default port numbers among nodes. This method would necessitate additional decoding logic in Bitcoin Core, triggered by a reserved prefix to distinguish these encoded addresses from standard IPv6 addresses. The feasibility of encoding Onion v3 and i2p addresses, which are longer than IPv6 addresses, is also considered. An example of encoding an IPv4 address and port number in an IPv6 address is provided, showcasing a practical application of this concept.
+    <updated>2024-09-24T02:21:21.433617+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/hardcoded-seeds-dns-seeds-and-darknet-nodes/1123/11" rel="alternate"/>
+    <summary>The discussion begins by addressing a novel encoding mechanism devised to maintain the integrity of response entries' order. This is crucial given that recursive resolvers may alter the sequence, potentially leading to data misinterpretation. The proposed solution aims to preserve data reliability within systems where the original order of entries is vital.
 
-The conversation further explores various public nameservers and their caching behaviors concerning TXT and NULL records, concluding that while most support caching if certain criteria are met, the reliance on custom DNS lookups might not be pursued due to potential blockers. The advantages of DNS-based seeding for Bitcoin nodes are highlighted, including reduced operational costs and enhanced privacy through the use of global caching infrastructure and the difficulty for DNS seed operators to ascertain specific details about nodes. However, the complexity of external DNS dependencies and the potential loss of caching reliability when moving away from A/AAA records are recognized as significant concerns.
+Further, it delves into the technicalities of encoding information within DNS records, specifically AAAA records, highlighting an innovative approach to data transmission. By utilizing these records beyond their conventional use, it becomes possible to encode arbitrary data, showcasing the flexibility and potential for DNS records to convey additional information outside their original design parameters.
 
-Technical discussions extend into the optimization of DNS configurations for cryptocurrency networks, with a focus on the efficiency of NULL records over TXT records for binary data handling. The limitations of `getaddrinfo` in only returning A and AAAA records lead to a suggested workaround involving direct DNS queries for NULL records, illustrated through a C++ code snippet. This approach aims at overcoming the conventional limitations of DNS querying within network protocols.
+The conversation introduces a technique for encoding data within AAAA records, using a reserved prefix to distinguish encoded data from standard IPv6 addresses, ensuring compatibility with existing operations such as `getaddrinfo`. This method appears promising for sharing IPv4 addresses and their associated port numbers, suggesting a broader application for effectively encoding smaller address formats into AAAA records. Detailed insights into this encoding strategy are available in a shared document, [Encoding IPv4 address and port number in IPv6 address](https://gitlab.com/-/snippets/3746764), which provides further technical elaboration on its implementation.
 
-A shift towards eliminating DNS dependency by directly using IP addresses for node communication is proposed, highlighting a Proof of Concept (PoC) darknet seeder supporting various network addresses and utilizing BIP155-like encoding. Issues with traditional DNS record usage are discussed, alongside the exploration of NULL records as an alternative for better system efficiency. Furthermore, the discussion touches upon the cross-platform compatibility of NULL encodings and the importance of ensuring broad functionality across different systems.
+In examining the caching capabilities of various public nameservers, a commonality in supporting TXT and NULL record caching emerges, contingent upon authoritative server criteria. This capability is pivotal for enhancing DNS query efficiency. However, complexities in implementing a custom DNS lookup strategy via TXT/NULL records lead to considering AAAA records for data encoding, offering an innovative method to embed information within DNS queries without impacting fundamental operations.
 
-Lastly, the viability of hardcoded seeds for Bitcoin connectivity is analyzed, revealing the challenges faced by nodes on different networks and the necessity of updating seed lists for maintaining robust connectivity. The development of a PoC darknet seeder is presented as a solution to enhance connectivity for darknet-only nodes, indicating a collaborative community effort towards improving Bitcoin's networking capabilities. The ongoing examination of custom DNS `NULL` queries within Bitcoin Core signifies a commitment to addressing the technical challenges associated with ensuring seamless connectivity for all types of nodes.</summary>
-    <published>2024-09-12T21:47:52.189000+00:00</published>
+The narrative also explores DNS-based seeding for Bitcoin nodes, emphasizing the advantages of global caching infrastructure and universal OS support, which collectively reduce operational costs and bolster privacy. It acknowledges complexities stemming from external DNS dependencies or ad-hoc resolver implementations, suggesting direct P2P connections as a simpler alternative if certain benefits are relinquished. This shifts focus towards maintaining essential node discovery functionalities while navigating DNS-based seeding challenges.
+
+A technical dialogue centers on utilizing NULL records in DNS for binary data storage, highlighting a preference over TXT records for their efficiency despite initial readability benefits. Concerns about caching support for different DNS record types are raised, albeit minimized by DNS seeds' short Time-To-Live (TTL), which suggests minimal impact on node bootstrapping processes. This reflects ongoing efforts to optimize DNS configurations for cryptocurrency networks, balancing data format readability against system efficiency.
+
+The email includes a practical guide for querying DNS records without external libraries, showcasing a C++ code snippet for sending and receiving a NULL query. This illustrates the straightforward nature of DNS queries at a lower level, contrasting with higher-level abstractions that conceal these details.
+
+Lastly, the discussion advocates for reducing DNS dependency within network protocols, proposing direct IP communication for node interactions. It highlights a Proof of Concept (PoC) darknet seeder supporting various network addresses, demonstrating the potential for NULL records in DNS to serve as an alternative for unconventional data transmission. This suggests rethinking foundational aspects like DNS dependency to enhance network protocol efficiency and reliability. Additionally, it emphasizes the need for cross-platform compatibility testing for functions like `getaddrinfo` with NULL encodings, underscoring the importance of broad functionality across different platforms.</summary>
+    <published>2024-09-23T14:33:41.084000+00:00</published>
   </entry>
 </feed>
