@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Draft BIP for OP_TXHASH and OP_CHECKTXHASHVERIFY</title>
+  <updated>2024-09-26T03:21:42.116073+00:00</updated>
+  <author>
+    <name>ajtowns 2023-10-02 09:31:12.808000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Draft BIP for OP_TXHASH and OP_CHECKTXHASHVERIFY</title>
+    <updated>2024-09-26T03:21:42.116102+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/draft-bip-for-op-txhash-and-op-checktxhashverify/121/2" rel="alternate"/>
+    <summary>The proposal in question addresses concerns around resource usage and quadratic hashing by suggesting two general methods. The first method involves a two-phase approach where initially, a constant number of hashes are calculated over each byte of the transaction and cached. This process adds a computation complexity proportional to the transaction size and requires storage for caching the results. In the second phase, these cached hashes are combined at runtime to implement the new opcode efficiently. Concerns were raised regarding the cost of the initial step and the complexity involved in sharing just-in-time cached data across different threads, especially when inputs handled by these threads require access to a shared cache without recalculating it.
+
+Another strategy proposed is to permit the transaction to perform additional hashing operations but to account for these through added "virtual weight" using the taproot annex as outlined in [BIP 342](https://github.com/bitcoin/bips/blob/e918b50731397872ad2922a1b08a5a4cd1d6d546/bip-0342.mediawikicite_note-13). This approach aims to mitigate concerns by incorporating the extra computational effort into the transaction's weight calculation.
+
+The discussion also touches upon the proposed implementation’s flexibility in selecting which transaction fields and input/output ranges to hash. This flexibility is considered highly beneficial, offering a broad range of use cases. However, there is an invitation to demonstrate these benefits through practical examples or demos, such as the one available at [opvault-demo](https://github.com/jamesob/opvault-demo/).
+
+Concerns were noted regarding the potential inclusion of this feature in miniscript due to the risks associated with allowing user-provided stack elements to alter script behavior drastically, potentially making any script succeed. This aspect highlights the need for cautious consideration when integrating new features that might affect script validity and behavior. The suggestion to introduce an OP_TXHASH2 for future enhancements rather than modifying existing opcodes reflects a conservative approach to upgrade paths, contrasting with how upgrades like checksig operability have been managed.</summary>
+    <published>2023-10-02T09:31:12.808000+00:00</published>
+  </entry>
+</feed>
