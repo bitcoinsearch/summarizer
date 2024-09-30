@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - SuperScalar: Laddered Timeout-Tree-Structured Decker-Wattenhofer Factories</title>
-  <updated>2024-09-27T02:21:23.495309+00:00</updated>
+  <updated>2024-09-30T02:25:00.936848+00:00</updated>
   <author>
-    <name>ZmnSCPxj 2024-09-26 04:30:47.207000+00:00</name>
+    <name>ZmnSCPxj 2024-09-30 00:10:27.537000+00:00</name>
+  </author>
+  <author>
+    <name>ariard 2024-09-29 22:59:07.757000+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj  . 2024-09-26 04:30:47.207000+00:00</name>
   </author>
   <author>
     <name>ZmnSCPxj  . 2024-09-23 06:57:54.275000+00:00</name>
@@ -42,6 +48,8 @@
   <author>
     <name>ZmnSCPxj  . 2024-09-16 20:08:19.856000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Sept_2024/3303_SuperScalar-Laddered-Timeout-Tree-Structured-Decker-Wattenhofer-Factories.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2024/3302_SuperScalar-Laddered-Timeout-Tree-Structured-Decker-Wattenhofer-Factories.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3271_SuperScalar-Laddered-Timeout-Tree-Structured-Decker-Wattenhofer-Factories.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3248_SuperScalar-Laddered-Timeout-Tree-Structured-Decker-Wattenhofer-Factories.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2024/3246_SuperScalar-Laddered-Timeout-Tree-Structured-Decker-Wattenhofer-Factories.xml" rel="alternate"/>
@@ -59,25 +67,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - SuperScalar: Laddered Timeout-Tree-Structured Decker-Wattenhofer Factories</title>
-    <updated>2024-09-27T02:21:23.495422+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/superscalar-laddered-timeout-tree-structured-decker-wattenhofer-factories/1143/13" rel="alternate"/>
-    <summary>The implementation of SuperScalar aims to enhance the efficiency of transactions within the Bitcoin Lightning Network by mandating non-zero fees for tree nodes, contrary to the potential for zero-fee transactions that rely on child transactions for fee coverage. This approach seeks to onboard users without existing Unspent Transaction Outputs (UTXOs) by ensuring that tree nodes contribute to the network's liquidity through minor fees. The strategy mitigates the risk associated with zero-fee transactions, which depend on external funding sources, by shifting the fee payment responsibility to the Liquidity Service Providers (LSPs) in cases where they reap the UTXO without publishing the entire tree. Modifying tree nodes involves decreasing the `nSequence` and potentially increasing the feerate to prioritize the confirmation of the latest state version, even under high-fee conditions. Moreover, the introduction of P2A outputs to tree nodes is discussed, highlighting its risks, particularly in scenarios where LSPs might exploit high-fee periods to confirm older versions of a node, disadvantaging the client.
+    <updated>2024-09-30T02:25:00.936954+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/superscalar-laddered-timeout-tree-structured-decker-wattenhofer-factories/1143/15" rel="alternate"/>
+    <summary>An assisted exit in the context of Lightning Network involves a procedure where a client initiates an exit from an in-factory construction to a Lightning Service Provider (LSP), followed by an onchain transaction from the LSP back to the user. This process is distinct from a scenario where the LSP unilaterally facilitates a user's exit and covers the associated onchain fees. The essence of this strategy is that it allows the LSP to reclaim in-factory funds sooner, particularly if all clients opt for assisted exits, including transitioning to newer factories. This mechanism benefits the LSP by enabling the recovery of funds directly from the funding outpoint immediately, bypassing the need for waiting periods required in unilateral exits and avoiding fees during high-fee periods. 
 
-During the Lightning protocol development summit, an innovative exit mechanism was introduced, leveraging Point Time-Locked Contracts (PTLCs) to enhance clients' flexibility and privacy when exiting. This method allows clients to transfer their in-factory private keys to an LSP, enabling seamless fund transfers without the intention of returning to the original factory. This PTLC-based strategy ensures that even if a client exits and shares a leaf with another client, the LSP can use the exiting client's private key for future transactions, potentially reallocating channel funds to benefit remaining clients. This process underscores the evolving strategies aimed at improving transactional efficiency and client experience within the Lightning Network ecosystem.
+The SuperScalar protocol represents an advancement over previous versions by mandating non-zero fees for all tree nodes, thus ensuring self-sufficiency in fee generation within the system. It addresses potential attacks in high-fee conditions by modifying node parameters to prioritize transactions. However, vulnerabilities remain, especially with P2A outputs, prompting suggestions to exclude them from state transactions to safeguard against unauthorized confirmations.
 
-A proposed sign-only-once scheme facilitates a more efficient and secure transaction process by optimizing fund allocation across multiple clients connected to a single leaf. This scheme suggests an innovative fund distribution model where an LSP allocates a fraction of its funds based on the number of active clients, enhancing the system's responsiveness. Furthermore, a document detailing feasible constructions for this scheme without requiring `OP_CAT` offers a foundation for developing this concept further, aiming to improve transaction security and efficiency within the Lightning Network.
+Moreover, the proposal introduced at the Lightning proto dev summit focuses on enhancing privacy and flexibility for clients exiting from one factory to another. It outlines a method where clients can transfer their private keys to an LSP via PTLCs, facilitating a seamless transition of funds without planning to return to the original factory. This system provides benefits in scenarios where a client permanently exits, allowing the LSP to reallocate the client's funds efficiently and maintain privacy through Taproot keyspend paths.
 
-Another aspect of the discussion focuses on the challenges of reallocating liquidity efficiently within the network, particularly when inbound liquidity is required by a client. A method involving `OP_CAT` is highlighted for its potential to allow LSPs to directly allocate funds from a shared leaf node to a client in need, despite the necessity for blockchain layer modifications. This approach emphasizes the importance of trust through cryptographic commitments and introduces the concept of internalized bondage to ensure fidelity in transactions, acknowledging the improbability of wide adoption due to the requisite consensus changes.
+Additionally, a sign-only-once scheme was suggested to improve transaction efficiency in multi-client environments. This strategy involves allocating funds based on the number of clients connected to a leaf, optimizing fund distribution and system responsiveness. A framework for implementing this scheme without `OP_CAT` offers practical insights into enhancing transaction security and efficiency.
 
-Operational strategies for LSPs include using Just-In-Time (JIT) channels and optimizing UTXO management to provide liquidity while minimizing blockchain resource usage. These strategies involve balancing between maintaining sufficient liquidity for transactions and reducing the overall demand on UTXOs by considering client online status and potential onchain fallback solutions. Additionally, the idea of integrating optimistic locking and advanced scheduling systems for liquidity management presents an opportunity to enhance network efficiency and client service quality.
+The discussion also touches on mechanisms for reallocating liquidity within the Lightning Network, highlighting strategies like utilizing `OP_CAT` for direct fund transfers between an LSP and a client. Despite its potential, the proposal acknowledges challenges in adoption due to the necessity of consensus changes on the blockchain.
 
-In scenarios where LSPs face unilateral exit costs, a set of incentives emerges, encouraging LSPs to offer high-quality services to reduce clients' tendencies towards unilateral exits. Aligning operations with batch processing timelines and being selective in client intake emerge as strategies to mitigate financial risks and maintain a stable service provision environment.
+In terms of managing Bitcoin transactions, there's an emphasis on efficient UTXO usage by LSPs to provide liquidity while minimizing resource requirements. The proposed system envisions leveraging mobile app notifications to ensure client activity, facilitating a trustless environment for executing transactions. This concept aims to significantly increase channel-opening capacity, potentially supporting millions of clients by optimizing the use of blockchain resources.
 
-Addressing the challenge of managing exits under a timeout condition reveals complexities in ensuring LSP availability and managing the transition from off-chain to on-chain transactions. The proposal to manage UTXO costs through a centralized LSP handling for numerous clients introduces a system where users must engage with the network periodically to decide on exits or transitions, aiming to expand the operational capacity of the Bitcoin blockchain without compromising its core principles.
+Furthermore, the document explores technological frameworks to enable small bitcoin transactions in developing countries, focusing on low fees and instant transfers. It considers the scalability of such systems, the role of liveness in maintaining a trustless setting, and the resilience of the network against regulatory shutdowns. Questions about ongoing development efforts and compatibility with existing solutions like LND or CLN are raised, pondering the need for new infrastructure developments.
 
-Lastly, the exploration of small bitcoin transactions in developing nations and the scalability of such systems raises questions about the integration within mobile applications, legal resilience, and the feasibility of supporting a vast user base without fundamental protocol changes. The conversation extends to the development and practical application of these technologies, probing into the compatibility with existing Lightning Network solutions and the potential requirement for new infrastructure to realize these advancements.
-
-The comprehensive summary encapsulates various facets of the discussions, ranging from technical implementations and proposals aimed at improving the Lightning Network's efficiency and user experience to strategic considerations for LSPs in managing liquidity and transaction costs. The focus on innovation, coupled with practical challenges and potential strategies for overcoming them, highlights the ongoing efforts to enhance the scalability, security, and accessibility of Bitcoin transactions within the Lightning Network ecosystem.</summary>
-    <published>2024-09-26T04:30:47.207000+00:00</published>
+Lastly, the SuperScalar mechanism is discussed as a solution to the Last-Mile Problem in the Bitcoin Lightning Network, combining Decker-Wattenhofer decrementing-`nSequence` mechanisms, timeout trees, and laddering strategies for efficient offchain liquidity allocation. This approach aims to secure the network against fund theft and offer a scalable and flexible system for liquidity management, addressing the challenges of user onlineness and network scalability.</summary>
+    <published>2024-09-30T00:10:27.537000+00:00</published>
   </entry>
 </feed>
