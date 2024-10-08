@@ -1,7 +1,8 @@
 import schedule
 import time
-from generate_xmls import GenerateXML, ElasticSearchClient
 from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_INDEX
+from src.elasticsearch_utils import ElasticSearchClient
+from src.xml_utils import GenerateXML
 
 
 def generate_xml(url):
