@@ -1,9 +1,8 @@
 from datetime import datetime
-import calendar
 import os
 import openai
 from dotenv import load_dotenv
-from flask import Flask, request, Response, render_template, url_for, abort, send_file
+from flask import render_template, url_for, abort, send_file
 import feedparser
 import xml.etree.ElementTree as ET
 from flask_frozen import Freezer
@@ -12,10 +11,6 @@ from flask import Flask
 from markupsafe import Markup
 import shutil
 import nltk
-
-from src.logger import setup_logger
-
-logger = setup_logger()
 
 load_dotenv()
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -237,7 +232,7 @@ def thread(dev_name, year_month):
         return render_template('thread.html', posts=posts, dev_name=dev_name, year_month=year_month, min_date=min_date,
                                max_date=max_date, type_by="thread")
     except Exception as e:
-        logger.exception(e)
+        app.logger.exception(e)
         abort(500)
 
 
@@ -309,4 +304,4 @@ if __name__ == '__main__':
         try:
             app.run(debug=True)
         except Exception as e:
-            logger.exception(e)
+            app.logger.exception(e)
