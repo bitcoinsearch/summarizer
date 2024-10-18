@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP: Sending Silent Payments in PSBTs</title>
+  <updated>2024-10-18T02:24:29.253609+00:00</updated>
+  <author>
+    <name>Andrew Toth 2024-10-17 13:40:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP: Sending Silent Payments in PSBTs</title>
+    <updated>2024-10-18T02:24:29.253640+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/cde77c84-b576-4d66-aa80-efaf4e50468fn@googlegroups.com/T/#u#ma28015d36d7afba0a7738d191ef1d63074a9b25f" rel="alternate"/>
+    <summary>This proposal introduces enhancements to the Partially Signed Bitcoin Transaction (PSBT) format, specifically Version 2 as outlined in BIP 370, to support silent payments as described in BIP352. Silent payments aim to enhance privacy by altering how transaction outputs are computed and verified, necessitating additional data fields and revised responsibilities for entities involved in the transaction process.
+
+Silent payment transactions differ from standard PSBTs in that output scripts cannot be finalized until all inputs have been added to the transaction. This is due to the requirement that any inputs controlled by the signer must be signed with SIGHASH_ALL, and no input can spend outputs with a Segwit version greater than 1. To facilitate the verification of silent payment outputs by parties not possessing the input private keys, new fields related to ECDH shares and DLEQ proofs are introduced. These include global types for an ECDH share associated with each input and a DLEQ proof to verify the correctness of these shares, alongside a per-output type for silent payment data containing the public keys necessary for generating silent payment addresses.
+
+The document specifies that silent payment capable PSBTs can be uniquely identified similarly to PSBTv2s but must use the PSBT_OUT_SP_V0_INFO field in place of PSBT_OUT_SCRIPT for silent payment outputs during transaction identification. It modifies the roles of Constructor, Signer, and Extractor within the PSBT framework to accommodate the processing of silent payments. The Constructor is responsible for adding outputs compliant with silent payment requirements, ensuring inputs do not violate specified constraints. The Signer's role extends to computing and verifying ECDH shares and DLEQ proofs for all silent payment outputs and signing inputs under specific conditions to maintain the integrity and privacy of the transaction.
+
+The proposal thoroughly outlines the technical steps for computing and verifying the DLEQ proof, which is critical for other entities to generate output scripts accurately and confirm their correctness. This involves aggregating the private keys of eligible inputs to produce a global ECDH share and subsequent DLEQ proof for each output, ensuring that silent payment outputs can be reliably generated and validated.
+
+In summary, this BIP draft seeks to integrate silent payments into the PSBT framework by introducing new data fields and updating the roles and responsibilities of participants in the transaction process. It aims to provide a method for making more private transactions on the Bitcoin network by leveraging cryptographic proofs to obscure the details of transaction outputs, while still maintaining compatibility with the existing PSBTv2 standard under certain conditions.</summary>
+    <published>2024-10-17T13:40:00+00:00</published>
+  </entry>
+</feed>
