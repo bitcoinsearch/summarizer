@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_PAIRCOMMIT as a candidate for addition to LNhance</title>
+  <updated>2024-10-26T02:16:49.318445+00:00</updated>
+  <author>
+    <name>moonsettler 2024-10-25 14:34:33.286000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_PAIRCOMMIT as a candidate for addition to LNhance</title>
+    <updated>2024-10-26T02:16:49.318476+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-paircommit-as-a-candidate-for-addition-to-lnhance/1216" rel="alternate"/>
+    <summary>The discussion focuses on optimizing the use of SHA256 iterations for a specific application, known as LN-Symmetry, by pre-computing the Tag as a mid-state. This approach reduces the validation process to one or two hash cycles in scenarios where there is a 7 byte balance commitment combined with a 32 byte CTV (CHECKTEMPLATEVERIFY) hash without any HTLCs (Hashed Time-Locked Contracts) in flight, resulting in a total preimage size of 55 bytes. This size is significant as it allows the preimage to fit within a single SHA256 block, thanks to the SHA256 length commitment.
+
+When the situation involves two 32 byte CTV hash commitments, the data handling changes. The first 64-byte block consists of these hashes, while the second block contains vectors' size and the total length commitment, typically filled mostly with zeros except for a few bits set to one. A critical concern presented is the potential for length redistribution attacks due to the concatenation of two preimages. This issue arises because CTV is designed exclusively for 32-byte templates and ignores other sizes, maintaining upgradeability through acting as a no-operation (NOP) for non-conforming template sizes.
+
+A proposed solution for mitigating stack element resizing attacks involves altering the expected number of bits that change in the preimage. Specifically, the discussion includes a code snippet demonstrating the use of a custom hash function designed to significantly alter the output for minor changes in input. This function employs a prime number multiplier and modulo operation, aiming to average a 32-bit change in the output when redistributing lengths between two input vectors. This method is illustrated with the inclusion of a `PairCommitHash` function example, which calculates a SHA256 hash based on the sizes and modified hashes of two input vectors.
+
+For further details, the original discussion and code can be found in a pull request at [GitHub](https://github.com/lnhance/bitcoin/pull/7/files). This link leads to the proposed changes and offers insights into the technical adjustments recommended for enhancing security and efficiency in the context of LN-Symmetry with CTV.</summary>
+    <published>2024-10-25T14:34:33.286000+00:00</published>
+  </entry>
+</feed>
