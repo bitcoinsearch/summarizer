@@ -29,5 +29,4 @@ ES_CLOUD_ID = os.getenv("ES_CLOUD_ID")
 ES_USERNAME = os.getenv("ES_USERNAME")
 ES_PASSWORD = os.getenv("ES_PASSWORD")
 ES_INDEX = os.getenv("ES_INDEX")
-ES_LOCAL_URL = os.getenv("ES_LOCAL_URL")
 ES_DATA_FETCH_SIZE = 10000  # No. of data to fetch and save from elastic-search
