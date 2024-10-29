@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch, NotFoundError
 from elasticsearch.helpers import scan
 from loguru import logger
 
-from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_DATA_FETCH_SIZE
+from src.config import ES_CLOUD_ID, ES_USERNAME, ES_PASSWORD, ES_DATA_FETCH_SIZE, ES_LOCAL_URL
 
 
 class ElasticSearchClient:
@@ -18,10 +18,14 @@ class ElasticSearchClient:
         self._es_username = es_username
         self._es_password = es_password
         self._es_data_fetch_size = es_data_fetch_size
-        self._es_client = Elasticsearch(
-            cloud_id=self._es_cloud_id,
-            http_auth=(self._es_username, self._es_password),
-        )
+
+        if ES_LOCAL_URL is not None and ES_CLOUD_ID is None:
+            self._es_client = Elasticsearch(ES_LOCAL_URL)
+        else:
+            self._es_client = Elasticsearch(
+                cloud_id=self._es_cloud_id,
+                http_auth=(self._es_username, self._es_password),
+            )
 
     @property
     def es_client(self):
