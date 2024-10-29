@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Libbitcoin for Core people</title>
+  <updated>2024-10-29T02:22:16.171018+00:00</updated>
+  <author>
+    <name>AntoineP 2024-10-28 19:09:55.723000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Libbitcoin for Core people</title>
+    <updated>2024-10-29T02:22:16.171050+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/libbitcoin-for-core-people/1222" rel="alternate"/>
+    <summary>Eric Voskuil recently highlighted a comparison showing Libbitcoin's Initial Block Download (IBD) performance significantly surpassing that of Bitcoin Core, achieving speeds up to 15 times faster when using the `-assumevalid` option. This revelation stems from distinctive operational methodologies between the two systems, particularly in how Libbitcoin orchestrates its processes and database management in contrast to Bitcoin Core. Libbitcoin employs an event-based system that initiates multiple asynchronous tasks through [Boost ASIO](https://www.boost.org/doc/libs/1_86_0/doc/html/boost_asio/overview/core/async.html), a framework facilitating concurrent operations which is pivotal for its enhanced performance.
+
+Libbitcoin’s database structure is conceptually relational, though it allows for abstraction and the use of various backends. This setup entails distinct tables for headers, transactions, transaction inputs, and outputs, alongside indices linking confirmations to headers and transactions to both headers and their spending transactions. Such a design aids in efficiently breaking down block validation into steps necessitating either strict, partial, or no sequencing, thereby optimizing validation checks.
+
+Block validation within Libbitcoin is dissected into tasks with varied sequencing needs. Crucially, blocks are downloaded and initial checks that don't require sequence—like block size or `nLockTime`—are executed immediately. The system concurrently processes transactions, performing script checks and other validations that only need partial ordering. A dedicated thread then verifies the existence and unspent status of inputs across a range of validated blocks, marking transactions as confirmed upon success. This parallel processing of download, validation, and confirmability stages significantly contributes to the platform's expedited IBD capability.
+
+Moreover, Libbitcoin employs strategies similar to Bitcoin Core's `-assumevalid` feature, allowing the omission of certain transaction validations to mitigate potential threats. Reorganization is managed by simply removing transactions from the relevant index, highlighting the system's capacity for straightforward adjustments to blockchain changes. While pruning is technically feasible through deletion of data for spent outputs, it currently remains unimplemented and not a priority, reflecting Eric Voskuil's stance on the feature's importance.
+
+The transaction table in Libbitcoin not only accommodates confirmed transactions but also unconfirmed ones, which can arise from peer announcements or reorganizations. Future implementations will consider minimum fee rates for transactions and their conflict graphs, aligning closely with Bitcoin Core's approach to fee handling. On the networking front, Libbitcoin defaults to connecting with a hundred outbound peers, a number intended to become dynamic post-IBD to optimize resource utilization. Peer selection and retention are based on handshake speed and response rates to block requests, incorporating measures to exclude slow or stalled connections.
+
+Despite these advancements, it's notable that Libbitcoin hasn’t fully implemented DoS protection beyond conceptual rate limiting strategies. Furthermore, comparisons between Core and Libbitcoin must account for Libbitcoin's use of an outdated libsecp version and lack of native SHA256 acceleration, factors that could influence performance benchmarks.
+
+In clarifying terminology, the document distinguishes between terms used similarly by Libbitcoin and Bitcoin Core but with nuanced differences, such as "milestone" versus `-assumevalid`, emphasizing the unique aspects of Libbitcoin’s architecture and operation. This detailed exposition, enriched by Voskuil’s insights, underscores Libbitcoin's innovative approach to blockchain management and its implications for efficiency and scalability within the cryptocurrency domain.</summary>
+    <published>2024-10-28T19:09:55.723000+00:00</published>
+  </entry>
+</feed>
