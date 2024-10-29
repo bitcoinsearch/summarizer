@@ -1,5 +1,6 @@
 import sys
 import openai
+from tqdm import tqdm
 from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
 import time
 import traceback
