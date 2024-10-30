@@ -2,12 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_PAIRCOMMIT as a candidate for addition to LNhance</title>
-  <updated>2024-10-29T02:21:51.142726+00:00</updated>
+  <updated>2024-10-30T02:21:01.151297+00:00</updated>
   <author>
-    <name>moonsettler 2024-10-28 12:05:19.886000+00:00</name>
+    <name>moonsettler 2024-10-29 11:36:58.752000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-10-28 11:16:51.953000+00:00</name>
+    <name>ajtowns 2024-10-29 10:52:30.693000+00:00</name>
+  </author>
+  <author>
+    <name>moonsettler 2024-10-29 09:38:38.311000+00:00</name>
+  </author>
+  <author>
+    <name>moonsettler  . 2024-10-28 12:05:19.886000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2024-10-28 11:16:51.953000+00:00</name>
   </author>
   <author>
     <name>moonsettler  . 2024-10-25 21:50:45.243000+00:00</name>
@@ -30,6 +39,9 @@
   <author>
     <name>moonsettler  . 2024-10-25 14:34:33.286000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Oct_2024/3437_OP-PAIRCOMMIT-as-a-candidate-for-addition-to-LNhance.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2024/3436_OP-PAIRCOMMIT-as-a-candidate-for-addition-to-LNhance.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2024/3435_OP-PAIRCOMMIT-as-a-candidate-for-addition-to-LNhance.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3431_OP-PAIRCOMMIT-as-a-candidate-for-addition-to-LNhance.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3430_OP-PAIRCOMMIT-as-a-candidate-for-addition-to-LNhance.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3409_OP-PAIRCOMMIT-as-a-candidate-for-addition-to-LNhance.xml" rel="alternate"/>
@@ -43,17 +55,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_PAIRCOMMIT as a candidate for addition to LNhance</title>
-    <updated>2024-10-29T02:21:51.142799+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/op-paircommit-as-a-candidate-for-addition-to-lnhance/1216/9" rel="alternate"/>
-    <summary>The discussion begins with addressing a potential update to the Bitcoin Improvement Proposal (BIP) concerning CheckTemplateVerify (CTV). It is suggested that having CTV return an error for 0-byte hashes could simplify the verification process by eliminating the need for a `DUP VERIFY` step. This suggestion stems from the observation that there's seldom a legitimate reason to include a 0-size argument for CTV. Additionally, it is mentioned that the PC code on a specific branch was broken, but this issue has since been resolved, as indicated by a link to a pull request on GitHub ([GitHub](https://github.com/lnhance/bitcoin/pull/6)).
+    <updated>2024-10-30T02:21:01.151438+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-paircommit-as-a-candidate-for-addition-to-lnhance/1216/12" rel="alternate"/>
+    <summary>The current discussion on the OP_PAIRCOMMIT specification, destined for a PR against BINANA, is accessible through a [shared gist](https://gist.github.com/moonsettler/d7f1fb88e3e54ee7ecb6d69ff126433b). The emphasis is on maintaining constructive dialogue and avoiding the deletion of threads unless they are non-contributory. Open discussions and presentations, rather than comprehensive document updates, are encouraged for sharing developments. A request was made to @ajtowns to delete or archive a confusing topic in favor of a more clear presentation regarding the PAIRCOMMIT thread, acknowledging an update to the spec that moves away from its draft status.
 
-The conversation shifts to the topic of optimizing SHA256 iterations, particularly within the context of LN-Symmetry, by focusing on reducing the number of hashing cycles needed in specific scenarios. For instance, when considering a situation involving a 7-byte balance commitment plus a 32-byte CTV hash without any HTLCs in flight, resulting in a total preimage size of 55 bytes, it is proposed that this can fit into a single block with the SHA256 length commitment. Concerns are raised about length redistribution attacks due to the concatenation of two preimages, given CTV's design for only 32-byte templates. A couple of hashing techniques are proposed to mitigate these concerns and enhance security, including one that involves using a custom hash function designed to significantly alter the output for minor changes in input, aimed at mitigating stack element resizing attacks.
+In the realm of Bitcoin Improvement Proposals (BIPs), a potential optimization involves eliminating the `DUP VERIFY` step through a CheckTemplateVerify (CTV) error when encountering a 0-byte hash argument. This proposal reflects a consensus against unnecessary complexity in CTV operations. A resolution to a specific PC code issue has been achieved, as detailed in a [GitHub pull request](https://github.com/lnhance/bitcoin/pull/6), showcasing the collaborative and iterative nature of Bitcoin development. Additionally, the complexity encountered in serializing `valtype` to `HashWriter` highlights the intricate considerations developers navigate to enhance Bitcoin's technology.
 
-The email highlights issues surrounding the integration of new opcodes and their impact on project timelines and complexity. There is a debate over prioritizing simplicity in development versus integrating advanced functionalities like those offered by OP_CAT. The discussion leans towards activating OP_CTV before embarking on more complex opcode integrations. This reflects a broader dialogue on development priorities, suggesting a step-by-step approach might be beneficial in the long run.
+The discussion also explores SHA256 iteration optimization for LN-Symmetry, suggesting a method minimizing hashing while accommodating preimage sizes that prevent length redistribution attacks and support future CTV upgrades. An inquiry into hashing methodologies underscores a desire for efficient and secure practices, emphasizing the balance between innovation and established protocols within project development dynamics. Furthermore, the concept of adopting a mini-hashing technique for byte distribution in stack elements proposes a shift from static padding, aiming for more adaptable data manipulation methods.
 
-Moreover, the utilization of Vector Commitments in LN-Symmetry is discussed as a method to enhance security and simplify contract scripting. Employing `OP_PAIRCOMMIT` to commit to a vector of stack elements is presented as an effective strategy against witness malleability, highlighting the importance of secure scripting practices in blockchain contracts. The detailed exploration into preliminary specifications for managing state templates emphasizes the need for accurate and secure scripting practices, showcasing a structured approach to handling contract states and securing interactions on the blockchain.
+Bitcoin script optimizations include comparisons between employing `OP_CAT` for `OP_PAIRCOMMIT` emulation and other redundancies aimed at efficiency improvements. The debate extends to new opcode proposals like OP_CAT and their implications on project simplicity and advancement, with a preference for prioritizing foundational opcodes such as OP_CTV before integrating more complex functionalities. Vector Commitments using `OP_PAIRCOMMIT` are advocated for enhancing security and simplifying contract scripting by guarding against witness malleability and streamlining script interactions.
 
-Lastly, an optimization technique for SHA256 iterations in LN-Symmetry is outlined, focusing on pre-computing the Tag as a mid-state to reduce validation processes. This technique aims to address concerns related to length redistribution attacks and proposes a solution involving the alteration of expected bit changes in the preimage for enhanced security. A link to a GitHub pull request is provided, offering insights into proposed technical adjustments to improve efficiency and security in the context of LN-Symmetry with CTV.</summary>
-    <published>2024-10-28T12:05:19.886000+00:00</published>
+Lastly, the optimization of SHA256 iterations for LN-Symmetry involves pre-computing the Tag as a mid-state, facilitating efficient validation processes. This includes handling scenarios with specific byte commitments and addressing potential length redistribution attacks through innovative hashing techniques. A custom hash function example demonstrates an approach to altering output significantly with minor input changes, offering a solution to enhance security and efficiency in LN-Symmetry applications with CTV. For technical details and proposed code adjustments, reference is made to a [GitHub pull request](https://github.com/lnhance/bitcoin/pull/7/files), which further elucidates on the subject.</summary>
+    <published>2024-10-29T11:36:58.752000+00:00</published>
   </entry>
 </feed>
