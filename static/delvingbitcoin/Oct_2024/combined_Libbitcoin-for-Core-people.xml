@@ -2,9 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Libbitcoin for Core people</title>
-  <updated>2024-11-04T02:23:12.640202+00:00</updated>
+  <updated>2024-11-05T02:20:34.949550+00:00</updated>
   <author>
-    <name>andrewtoth 2024-11-03 16:56:25.848000+00:00</name>
+    <name>evoskuil 2024-11-04 22:24:25.165000+00:00</name>
+  </author>
+  <author>
+    <name>AntoineP 2024-11-04 18:49:27.441000+00:00</name>
+  </author>
+  <author>
+    <name>josibake 2024-11-04 15:14:10.735000+00:00</name>
+  </author>
+  <author>
+    <name>josibake 2024-11-04 10:57:58.183000+00:00</name>
+  </author>
+  <author>
+    <name>andrewtoth  . 2024-11-03 16:56:25.848000+00:00</name>
   </author>
   <author>
     <name>AntoineP  . 2024-10-29 13:53:22.156000+00:00</name>
@@ -15,6 +27,10 @@
   <author>
     <name>AntoineP  . 2024-10-28 19:09:55.723000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Nov_2024/3481_Libbitcoin-for-Core-people.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3471_Libbitcoin-for-Core-people.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3468_Libbitcoin-for-Core-people.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3465_Libbitcoin-for-Core-people.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3460_Libbitcoin-for-Core-people.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3442_Libbitcoin-for-Core-people.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3439_Libbitcoin-for-Core-people.xml" rel="alternate"/>
@@ -23,15 +39,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Libbitcoin for Core people</title>
-    <updated>2024-11-04T02:23:12.640254+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/libbitcoin-for-core-people/1222/4" rel="alternate"/>
-    <summary>In a detailed exploration of Libbitcoin's operational efficiencies and methodologies, a comparison with Bitcoin Core reveals Libbitcoin's superior Initial Block Download (IBD) performance, reportedly up to 15 times faster when leveraging the `-assumevalid` option. This advantage is attributed to Libbitcoin's use of an event-based system powered by [Boost ASIO](https://www.boost.org/doc/libs/1_86_0/doc/html/boost_asio/overview/core/async.html), facilitating concurrent operations that significantly enhance its performance. The database structure of Libbitcoin, designed to be conceptually relational, supports various backends and includes separate tables for headers, transactions, inputs, and outputs. This architecture allows for efficient management of block validation processes, which can be categorized based on their sequencing requirements—ranging from non-sequential initial checks to partially ordered validations and confirmability verifications executed in parallel.
+    <updated>2024-11-05T02:20:34.949619+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/libbitcoin-for-core-people/1222/8" rel="alternate"/>
+    <summary>The conversation delves into the methodology Libbitcoin employs for transaction validation and its comparison with Bitcoin Core's approach, particularly focusing on how previous outputs are verified. Libbitcoin adopts a strategy where it searches for the outpoint's spending transaction to confirm its absence, diverging from traditional utxo set systems where prevouts are directly looked up. This process, though potentially slower due to not using a utxo set, introduces an innovative method for transaction verification.
 
-Libbitcoin implements a distinct approach towards transaction validation and blockchain reorganization, wherein it skips certain transaction validations below a defined milestone, akin to the `-assumevalid` feature in Bitcoin Core. This strategy, coupled with the assumption of unspent output validity based on block height, mirrors a blend of `-assumevalid` and `assumeutxo` functionalities, streamlining the validation process. Moreover, Libbitcoin's handling of block downloads, validation checks, and input verification across a spectrum of blocks is conducted through asynchronous tasks, underscoring its capability for rapid IBD. Despite these advancements, pruning remains unimplemented in Libbitcoin, reflecting a deliberate choice rather than a limitation.
+Further examination of Libbitcoin's operational mechanisms reveals a strategic decision to bypass transaction validation for blocks under a certain milestone, akin to Bitcoin Core's `-assumevalid` feature, which assumes authenticity for transactions within these blocks to expedite processing time. For blocks below the designated milestone, confirmability checks are omitted, allowing transactions to be sequentially logged in the confirmability thread without verifying the existence or unspent status of their inputs. This approach significantly speeds up the process by eliminating signature verifications and assuming the validity of the utxo set based on block height, effectively merging `assumevalid` and `assumeutxo` methodologies. This hybrid model highlights a pragmatic tactic to enhance transaction processing efficiency while maintaining a balanced threat model similar to established cryptocurrency transaction practices.
 
-The system's transaction table uniquely accommodates both confirmed and unconfirmed transactions, with future updates poised to address minimum fee rates and conflict graphs, aligning more closely with Bitcoin Core's fee management practices. Networking strategies in Libbitcoin aim for optimal resource utilization, initially connecting to a hundred outbound peers, with plans to adjust this number dynamically post-IBD based on network interactions and peer response metrics. However, it's important to note that despite its robust networking and validation mechanisms, Libbitcoin has yet to fully implement DoS protection measures beyond conceptual rate limiting. 
+Eric Voskuil's analysis showcases that Libbitcoin's Initial Block Download (IBD) performance considerably outperforms Bitcoin Core, partly due to employing an event-driven system facilitated by [Boost ASIO](https://www.boost.org/doc/libs/1_86_0/doc/html/boost_asio/overview/core/async.html), enhancing concurrent operations. The database structure of Libbitcoin, which is conceptually relational but allows for various backends, supports efficient block validation by breaking down tasks according to their sequencing requirements. This method enables parallel processing of download, validation, and confirmability stages, contributing significantly to Libbitcoin’s faster IBD capability.
 
-Performance comparisons must also consider technical disparities, such as Libbitcoin's use of an outdated libsecp version and the absence of native SHA256 acceleration—factors that could potentially affect its efficiency benchmarks. Furthermore, the correction from "confirmation" to "confirmation height to header" in the documentation clarifies the process of verifying transactions before dealing with associated metadata, highlighting the precision in terminology needed to accurately describe Libbitcoin's functionalities. This nuanced understanding of terms like "milestone," differing slightly from Bitcoin Core's `-assumevalid`, emphasizes the unique architectural and operational characteristics distinguishing Libbitcoin within the cryptocurrency landscape.</summary>
-    <published>2024-11-03T16:56:25.848000+00:00</published>
+Libbitcoin's strategy includes utilizing features similar to Bitcoin Core's `-assumevalid` to skip certain validations, and manages reorganizations by simply removing transactions from indices, demonstrating ease in adapting to blockchain changes. Although pruning remains unimplemented, future plans include considering minimum fee rates for transactions and their conflict graphs, mirroring Bitcoin Core's fee management approach. Networking enhancements in Libbitcoin aim to optimize resource use by adjusting the number of outbound connections post-IBD and employing selection criteria based on peer response rates to block requests. However, despite these advancements, Libbitcoin has yet to fully implement DoS protection and operates with an outdated version of libsecp, lacking native SHA256 acceleration—factors that could affect performance assessments.
+
+This comprehensive analysis, enriched by Voskuil’s insights, illuminates Libbitcoin's distinct approach to managing blockchain data, emphasizing its potential for improving efficiency and scalability within the digital currency landscape.</summary>
+    <published>2024-11-04T22:24:25.165000+00:00</published>
   </entry>
 </feed>
