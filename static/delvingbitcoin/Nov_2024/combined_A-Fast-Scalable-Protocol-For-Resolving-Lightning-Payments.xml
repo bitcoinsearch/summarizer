@@ -2,9 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A Fast, Scalable Protocol For Resolving Lightning Payments</title>
-  <updated>2024-11-06T02:20:17.175861+00:00</updated>
+  <updated>2024-11-10T02:23:52.843272+00:00</updated>
   <author>
-    <name>harding 2024-11-05 10:14:19.731000+00:00</name>
+    <name>JohnLaw 2024-11-10 00:06:59.715000+00:00</name>
+  </author>
+  <author>
+    <name>JohnLaw 2024-11-09 23:59:58.677000+00:00</name>
+  </author>
+  <author>
+    <name>JohnLaw 2024-11-09 23:21:48.538000+00:00</name>
+  </author>
+  <author>
+    <name>harding  . 2024-11-05 10:14:19.731000+00:00</name>
   </author>
   <author>
     <name>morehouse  . 2024-11-04 23:59:52.234000+00:00</name>
@@ -12,6 +21,9 @@
   <author>
     <name>JohnLaw  . 2024-10-31 22:50:15.637000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Nov_2024/3502_A-Fast-Scalable-Protocol-For-Resolving-Lightning-Payments.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3501_A-Fast-Scalable-Protocol-For-Resolving-Lightning-Payments.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3500_A-Fast-Scalable-Protocol-For-Resolving-Lightning-Payments.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3488_A-Fast-Scalable-Protocol-For-Resolving-Lightning-Payments.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3482_A-Fast-Scalable-Protocol-For-Resolving-Lightning-Payments.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3457_A-Fast-Scalable-Protocol-For-Resolving-Lightning-Payments.xml" rel="alternate"/>
@@ -19,17 +31,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - A Fast, Scalable Protocol For Resolving Lightning Payments</title>
-    <updated>2024-11-06T02:20:17.175926+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/a-fast-scalable-protocol-for-resolving-lightning-payments/1233/3" rel="alternate"/>
-    <summary>The Off-chain Payment Resolution (OPR) protocol is introduced as a groundbreaking solution designed to address several of the persistent challenges faced by the current Lightning Network protocols. A fundamental flaw in existing systems is the economic disincentive to resolve small payments on-chain, where transaction costs may surpass the payment value. Such a scenario could potentially encourage exploitative behavior, thus undermining the system's security and reliability. The OPR protocol proposes a mechanism whereby all payments are resolved off-chain within seconds, eliminating the need for costly on-chain transactions. This approach not only significantly reduces transaction costs but also enhances the scalability of the network by avoiding the blockchain's transactional clutter. Additionally, it allows participants to engage in Lightning Network transactions without the necessity for continuous online presence or reliance on external services for monitoring channel activity.
+    <updated>2024-11-10T02:23:52.843357+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-fast-scalable-protocol-for-resolving-lightning-payments/1233/6" rel="alternate"/>
+    <summary>The discussion initiates by addressing the vulnerabilities within the Offchain Payment Routing (OPR) protocol, specifically focusing on the exploitation of its fee structure through failed payment attempts known as "probes". These probes, under the current Lightning Network (LN) protocol, do not incur costs to their initiator, allowing for potential network disruptions without financial consequences to the attacker. The narrative suggests that imposing unconditional fees on every transaction attempt could mitigate this issue, ensuring that each transaction bears a cost regardless of its outcome. This leads to an analysis of the network's operational dynamics, presenting a quantitative perspective on how an increase in routing fees could theoretically compensate for the value lost from unresolved Hashed Timelock Contracts (HTLCs) due to random node failures.
 
-One of the most innovative aspects of the OPR protocol is its focus on security through a griefer-penalized framework. Unlike traditional trust-based systems that are vulnerable to theft or trust-free systems where adhering to protocol rules ensures safety, the OPR model penalizes dishonest attempts to force funds into a burn output. This penalty is proportional to the harm intended, thereby discouraging malicious behavior and securing transactions even among parties with selfish interests. Furthermore, the protocol incorporates measures such as synchronized clocks and time-stamped logs to maintain accuracy in HTLC resolutions and reduce the likelihood of disputes or fund losses due to operational errors.
+Further discussions explore alternative solutions to reduce high transaction costs associated with on-chain settlements, particularly for low-value payments. An innovative approach mentioned is probabilistic payments, which aim to balance the risk and cost of on-chain settlements by wrapping payments in higher value outputs with a chance-based outcome. This method, leveraging `OP_DETERMINISTIC_RANDOM`, presents a scalable workaround to the challenges faced by HTLC settlement costs, though it's noted that progress in this area has been minimal due to a lack of perceived urgency in resolving these issues within the LN community.
 
-Despite these advancements, the introduction of unconditional fees within the OPR protocol is proposed as a necessary measure to counteract potential abuse by bad actors who might generate a stream of probes to disrupt the network. This measure is aimed at covering the cost associated with node failures that lead to HTLC failures, which is identified as a risk factor for fund loss within the network. An analysis suggests that a minor increase in routing fees would suffice to mitigate this risk, albeit the practical implementation of such fees is subject to further scrutiny given the complexity of predicting and managing operational risks in a decentralized network environment.
+Additionally, the conversation touches upon the inherent issue in the Lightning protocol where small, unresolved HTLCs can lead to incremental theft of a channel's balance if not addressed. The OPR protocol exacerbates this problem by increasing the cost implications of force closing due to burned fees, thus creating a perverse incentive to overlook small unresolved HTLCs. The methodology for HTLC resolution involves verifying the provision of the required hash preimage before expiration, with nodes relying on synchronized clocks to mitigate discrepancies due to clock skew. However, the unreliability of networks introduces challenges in distinguishing between genuine delays and malicious actions, leading to concerns over increased complexity, implementation errors, and an uptick in costly force closures under OPR.
 
-Moreover, the protocol anticipates potential technical and operational challenges, including those related to network reliability and the accurate resolution of HTLCs amidst variable network conditions. Strategies to overcome these issues include the use of multiple communication paths for crucial messages and the strategic increase of routing fees to cover losses from node failures, though these could inadvertently raise the cost of transactions within the network.
-
-In essence, the OPR protocol aims to revolutionize Lightning Network transactions by offering rapid, off-chain resolution of payments without the need for on-chain confirmations, thereby addressing key scalability and efficiency issues. Its unique security model and operational strategies present a promising avenue for improving the reliability and accessibility of the Lightning Network, particularly for small-scale transactions that have historically been challenging to manage cost-effectively. The comprehensive exploration of the OPR protocol's design and implications offers valuable insights for future development and implementation in cryptocurrency transactions.</summary>
-    <published>2024-11-05T10:14:19.731000+00:00</published>
+In conclusion, the OPR protocol represents a significant improvement in the efficiency and security of Lightning payments, especially for transactions of small value. It facilitates rapid off-chain payment resolutions without necessitating on-chain transactions, enhancing scalability and reducing the need for constant online presence for users. The protocol introduces a griefer-penalized mechanism that deters dishonest behavior by penalizing attackers proportionate to their attempted harm. Despite potential operational risks and the possibility of fund loss due to node failures, the OPR protocol offers strategies for minimizing such risks, including synchronized clocks and multiple communication paths for crucial messages. Overall, the OPR protocol's ability to support immediate payment resolution, combined with its deterrent against dishonest behavior and operational risks, positions it as a promising solution for improving the scalability and accessibility of the Lightning Network.</summary>
+    <published>2024-11-10T00:06:59.715000+00:00</published>
   </entry>
 </feed>
