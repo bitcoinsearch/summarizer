@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Pluggable Channel Factories</title>
+  <updated>2024-11-12T02:16:44.526614+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2024-11-11 16:24:40.356000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Pluggable Channel Factories</title>
+    <updated>2024-11-12T02:16:44.526640+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/pluggable-channel-factories/1252" rel="alternate"/>
+    <summary>The concept of "pluggable channel factories" aims to enhance the flexibility and functionality of the Lightning Network by enabling channels to be hosted offchain through various designs, including the proposed SuperScalar model. These channel factories would integrate seamlessly with existing Lightning Network node software, such as CLN, LDK, Eclair, and LND, which already support plugins or extensions. This approach maintains compatibility with the BOLT specification for managing channel state and forwarding payments, even though the channels within these factories operate on a "0-conf" basis, meaning their funding transactions are unconfirmed or offchain.
+
+To implement pluggable channel factories, a new protocol is suggested that involves adding new TLVs (Type-Length-Value elements) for the `open_channel` process. These TLVs would indicate that a channel is hosted in a channel factory and specify details like a protocol identifier, an instance-of-the-protocol identifier, and a number-of-blocks-early count. This count is crucial for handling HTLC timelocks correctly, requiring earlier unilateral exits from channels in certain conditions to ensure timely enforcement of the HTLCs. The proposal also outlines how channel establishment within a factory would proceed, including handling potential failures in the establishment process and deferring `channel_ready` messages until the factory setup is complete.
+
+Furthermore, the proposal highlights the need for adapting code that manages channel states to accommodate changes inherent in channel factory operations. Specifically, it draws parallels between the challenges faced by channel splicing and those anticipated with channel factories, such as managing multiple valid funding outpoints simultaneously until consensus is reached on the state of the factory. The suggested solution leverages techniques from the splicing process, including quiescing the channel, agreeing on new funding outpoints, and using `commitment_signed` messages with `batch` TLVs to navigate between old and new factory states effectively. This approach ensures that despite the dynamic nature of channel factories, the integrity and functionality of the channels they host can be maintained efficiently.</summary>
+    <published>2024-11-11T16:24:40.356000+00:00</published>
+  </entry>
+</feed>
