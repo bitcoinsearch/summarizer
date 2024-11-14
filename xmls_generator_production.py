@@ -14,8 +14,6 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
     dev_urls = [
-        "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/",
-        "https://lists.linuxfoundation.org/pipermail/lightning-dev/",
         "https://delvingbitcoin.org/",
         "https://gnusha.org/pi/bitcoindev/",
         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
