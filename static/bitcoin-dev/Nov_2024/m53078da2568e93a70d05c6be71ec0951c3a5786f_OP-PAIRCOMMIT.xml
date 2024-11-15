@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>OP_PAIRCOMMIT</title>
+  <updated>2024-11-15T02:28:24.926949+00:00</updated>
+  <author>
+    <name>moonsettler 2024-11-15 00:00:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>OP_PAIRCOMMIT</title>
+    <updated>2024-11-15T02:28:24.926981+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/xyv6XTAFIPmbG1yvB0l2N3c9sWAt6lDTG-xjIbogOZ-lc9RfsFeJ-JPuXuXKzVea8T9TztlCvSrxZOWXKCwogCy9tqa49l3LXjF5K2cLtP4=@protonmail.com/T/#u#m53078da2568e93a70d05c6be71ec0951c3a5786f" rel="alternate"/>
+    <summary>A new opcode, `OP_PAIRCOMMIT`, is proposed to be added to tapscript as part of the LNhance opcode family. This family includes CTV, CSFS, IKEY, and PC, aimed at enabling efficient rebindable channels adaptable to various covenant tree or channel factory constructions. The `OP_PAIRCOMMIT` operation functions by removing the top two values from the stack, computing a "PairCommit" tagged SHA256 hash of these elements, and pushing this commitment back onto the stack. This proposal is detailed in a [GitHub gist](https://gist.github.com/moonsettler/d7f1fb88e3e54ee7ecb6d69ff126433b) and has been submitted as PR: 1699 to the [bitcoin/bips repository](https://github.com/bitcoin/bips).
+
+The introduction of `OP_PAIRCOMMIT` addresses the dependency on the CAT opcode for constructing efficient LN-Symmetry. If CAT were available or its activation imminent, the necessity for `OP_PAIRCOMMIT` might not be as critical. However, given the current circumstances, `OP_PAIRCOMMIT` offers a targeted solution without the broader implications associated with CAT, such as enabling the inspection of sighashes on the stack and ancestor transactions, which could lead to novel two-way peg mechanisms.
+
+`OP_PAIRCOMMIT` specifically aims to minimize the number of SHA256 iterations required in its primary use case, thereby optimizing for LN-Symmetry. This optimization is particularly relevant in scenarios involving unilateral closes, where channel peers must reconstruct the spend script of an intermediate state. By employing `OP_CHECKTEMPLATEVERIFY`, `OP_PAIRCOMMIT`, `OP_INTERNALKEY`, and `OP_CHECKSIGFROMSTACK` in sequence, a rebindable channel that remains optimal can be achieved. The opcode repurposes opcode 205 (formerly `OP_SUCCESS`) for its functionality, ensuring backward compatibility through a soft-fork deployment strategy.
+
+A reference implementation of the proposal is available for review at the [LNhance bitcoin repository](https://github.com/lnhance/bitcoin/pull/6/files). This initiative has garnered input and support from several contributors, including Jeremy Rubin, Brandon Black, Salvatore Ingala, and Anthony Towns, and is licensed under the BSD-3-Clause license. Further exploration and discussion regarding `OP_PAIRCOMMIT` and its implications for Bitcoin's scripting capabilities are encouraged within the community.</summary>
+    <published>2024-11-15T00:00:00+00:00</published>
+  </entry>
+</feed>
