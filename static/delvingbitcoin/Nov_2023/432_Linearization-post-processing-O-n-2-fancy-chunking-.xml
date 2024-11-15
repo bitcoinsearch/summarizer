@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Linearization post-processing (O(n^2) fancy chunking)</title>
+  <updated>2024-11-15T03:23:31.009015+00:00</updated>
+  <author>
+    <name>sipa 2023-11-18 19:11:20.969000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Linearization post-processing (O(n^2) fancy chunking)</title>
+    <updated>2024-11-15T03:23:31.009046+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/linearization-post-processing-o-n-2-fancy-chunking/201" rel="alternate"/>
+    <summary>The process of cluster processing primarily involves running a linearization algorithm on the cluster to output a valid topological ordering for its transactions. This step is crucial as it sets the stage for further processing, including the invocation of a "find high-feerate topologically-valid subset" algorithm. The selected algorithm could be based on ancestor set feerate or employ an exponential search mechanism. The outcome of this phase is integral in ensuring that transactions are added in an efficient and logical order. Following linearization, the transactions undergo chunking, an operation partitioned into manageable chunks through an $\mathcal{O}(n)$ algorithm. This chunking algorithm initiates with each transaction in its individual chunk, progressively merging adjacent chunks based on a comparison of their feerates until no further merging criteria are met.
+
+However, challenges arise in the chunking process, especially with the advent of per-chunk package Replace-By-Fee (RBF) policies, spotlighting the need for generating "sane" chunks. Instances have been identified where the conventional chunking method produces suboptimal results, linking transactions in a manner that doesn't reflect the most efficient processing order. A notable example highlighted involves transactions with equal size but varying feerates, where the ancestor-set based linearization fails to recognize the optimal transaction order, leading to inefficient chunk formation.
+
+Addressing these shortcomings, a refined chunking algorithm has been proposed. Unlike its predecessor, this enhanced version not only creates initial chunks for each transaction but also incorporates a mechanism for swapping the positions of chunks based on dependency and feerate comparisons. This approach can execute a significantly higher number of operations, potentially up to $\frac{n(n-1)}{2}$ swaps, categorizing it under $\mathcal{O}(n^2)$ complexity. However, if applied to an already optimal linearization, the complexity remains $\mathcal{O}(n)$. This new algorithm stands out by guaranteeing improvement or maintenance of the feerate diagram without detracting from it, thereby enhancing the overall transaction processing efficiency.
+
+Furthermore, the advanced algorithm serves a dual purpose. It can function as both an improved chunking mechanism and a post-processing step for linearization. When used post-linearization, it enables the production of a list of transactions that can be easily rechunked by simpler algorithms into correct chunks. This flexibility is particularly beneficial for adjusting linearizations without necessitating a complete overhaul, thereby streamlining the processing of transactions at the end of a block. Despite its advantages, the sophisticated chunking strategy does not eliminate the necessity for careful linearization, underscoring the significance of input quality for achieving optimal outcomes.</summary>
+    <published>2023-11-18T19:11:20.969000+00:00</published>
+  </entry>
+</feed>
