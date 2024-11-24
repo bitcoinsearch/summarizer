@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_PAIRCOMMIT as a candidate for addition to LNhance</title>
+  <updated>2024-11-24T02:35:21.247930+00:00</updated>
+  <author>
+    <name>moonsettler 2024-11-23 15:47:36.827000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_PAIRCOMMIT as a candidate for addition to LNhance</title>
+    <updated>2024-11-24T02:35:21.247969+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-paircommit-as-a-candidate-for-addition-to-lnhance/1216/13" rel="alternate"/>
+    <summary>LNhance fundamentally combines `CTV` and `CSFS`, aiming to facilitate more scalable and less interactive timeout tree and covenant pool constructions. Additionally, it seeks to enable LN-Symmetry, previously known as eltoo, by incorporating `IKEY` for accessing an internal public key from the control block. This key, typically a 2-of-2 MuSig key in lightning channels, allows for cooperative closes on the taproot keypath, thus enhancing contract efficiency. However, an implementation attempt by @instagibbs highlighted a significant drawback – the "data availability problem" of LN-Symmetry, where a channel peer cannot reconstruct the script for spending an intermediate state pushed on chain due to the non-deterministic nature of fund distribution for that particular state. To address this issue, utilizing the taproot annex was proposed as an alternative solution.
+
+The discussion around potential solutions included several alternatives. `OP_CAT` was considered for its ability to combine multiple stack elements for verification via `OP_CHECKSIGFROMSTACK` as a valid state update. Despite its potential, `OP_CAT` introduces challenges, such as enabling bigint operations and extending the arithmetic capabilities of Bitcoin script, which could be controversial. Streaming SHA256 opcodes were seen as a viable alternative, offering similar functionalities for introspection but potentially allowing custom construction of sighashes like CTV templates. Merkle operation opcodes, on the other hand, were deemed of limited use and difficult to justify without `OP_CAT` due to their complexity and resource cost. The notion of a 'Kitty' CAT was briefly entertained but ultimately dismissed due to its awkward limitations and weak introspection capabilities.
+
+Moreover, `OP_CHECKTEMPLATEVERIFY` was discussed for committing to the taproot annex in tapscript, which, despite its potential for making various protocols more efficient, faced controversy and lacked consensus on usage and structure. `OP_CHECKSIGFROMSTACK` was revisited for its application on n elements as a message, highlighting its complexity and arbitrary nature. `OP_VECTORCOMMIT` emerged as a generalized solution for committing to more than two stack elements, yet its practicality was questioned due to concerns about setting proper limits and operational complexity.
+
+Looking forward, the integration of LNhance with `OP_CHECKCONTRACTVERIFY` (or `CCV`, central to MATT by @salvatoshi) or `OP_VAULT/RECOVER` (BIP-345 by @jamesob) is seen as promising for facilitating robust vaults featuring flexible withdrawal amounts and immediate re-vaulting of change. Both improvements presuppose the availability of `OP_CHECKTEMPLATEVERIFY` and particularly benefit from `OP_PAIRCOMMIT` for handling multiple stack elements efficiently.</summary>
+    <published>2024-11-23T15:47:36.827000+00:00</published>
+  </entry>
+</feed>
