@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - ColliderScript: Covenants in Bitcoin via 160-bit hash collisions</title>
-  <updated>2024-11-14T02:20:16.807037+00:00</updated>
+  <updated>2024-11-26T02:30:20.674610+00:00</updated>
+  <author>
+    <name>Antoine Riard 2024-11-25 03:42:00+00:00</name>
+  </author>
   <author>
     <name>Ethan Heilman 2024-11-13 22:06:00+00:00</name>
   </author>
@@ -12,6 +15,7 @@
   <author>
     <name>Ethan Heilman 2024-11-07 17:44:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/Nov_2024/m97a735e2fb573d1becffc5c7920fc7c6bf80288f_ColliderScript-Covenants-in-Bitcoin-via-160-bit-hash-collisions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Nov_2024/m4278899c5d3fed1b1537d899f7445bed0389bcf6_ColliderScript-Covenants-in-Bitcoin-via-160-bit-hash-collisions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Nov_2024/m933ae211b37744e7426a9fba0e412d16e0c47640_ColliderScript-Covenants-in-Bitcoin-via-160-bit-hash-collisions.xml" rel="alternate"/>
   <link href="bitcoin-dev/Nov_2024/m22239cd0ba6fec6bb835522be315d50496fefa1c_ColliderScript-Covenants-in-Bitcoin-via-160-bit-hash-collisions.xml" rel="alternate"/>
@@ -19,17 +23,13 @@
   <entry>
     <id>2</id>
     <title>Combined summary - ColliderScript: Covenants in Bitcoin via 160-bit hash collisions</title>
-    <updated>2024-11-14T02:20:16.807082+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/CAEM=y+W2jyFoJAq9XrE9whQ7EZG4HRST01TucWHJtBhQiRTSNQ@mail.gmail.com/T/#m4278899c5d3fed1b1537d899f7445bed0389bcf6" rel="alternate"/>
-    <summary>The paper discusses a groundbreaking approach to cryptographic verification in Bitcoin transactions, particularly focusing on the balance between complexity and practicality within the scripting limitations of Bitcoin. It proposes an innovative method for creating and spending covenants in Bitcoin that does not require soft forks, using Tapscript. This technique simplifies the creation of covenants, equating it to generating a transaction with Pay-to-Witness-Script-Hash (P2WSH) output, though it admits the spending process is considerably complex. The computational demand for spending such covenants is highlighted as significantly high, necessitating resources comparable to the entire Bitcoin network's output over approximately 33 hours. This underlines a potential need for specialized ASICs to make the practical deployment of these covenants feasible.
+    <updated>2024-11-26T02:30:20.674668+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAEM=y+W2jyFoJAq9XrE9whQ7EZG4HRST01TucWHJtBhQiRTSNQ@mail.gmail.com/T/#m97a735e2fb573d1becffc5c7920fc7c6bf80288f" rel="alternate"/>
+    <summary>The conversation between Antoine and Ethan focuses on a sophisticated technique related to the development of Bitcoin transactions, specifically addressing the concept of transaction grinding to ensure specific data outcomes. The technique centers around finding a variable 'y' that confirms the equivalence of s1 and s2 within transactions, which is critical for the integrity of covenant spending in Bitcoin's multi-party systems. This process, known as grinding, ensures that y1 and y2 (derived from s1 and s2 respectively) are identical, thereby maintaining transaction consistency across different script sizes. The deterministic nature of this method, involving functions like dGen_big_script and dGen_small_script, guarantees consistent outputs, which is pivotal for the security and effectiveness of the transaction modification process. Moreover, the discussion sheds light on the importance of randomness in protecting against potential attacks, emphasizing that staticness does not inherently benefit attackers but rather increases the challenge of finding collisions due to the need for adequate randomization.
 
-Moreover, the paper elucidates on the methodology behind these covenants, clarifying that despite their computational intensity, they are not intended to replace the covenant opcode due to both their high computational cost and the restrictions imposed by transaction size limits. It hints at a delicate balance between computational cost and transaction size, suggesting inherent trade-offs in covenant design. An intriguing application of Tapscript for Lamport signatures is also discussed, suggesting its capability to future-proof Bitcoin transactions against quantum computing threats by enabling secure coin spending post-cryptographic breaches.
+The paper discussed introduces an innovative cryptographic verification method using an equivalence check between algorithms. It employs traditional signature validation processes alongside Schnorr signatures to manipulate data-carrying transactions until achieving a desired alignment with the SchnorrHash. This approach also includes "signature defragmentation" using 32-bit integers opcodes and attempts to reimplement complex cryptographic operations within the Bitcoin script framework. This methodology aims at executing basic cryptographic operations under the scripting constraints of Bitcoin, especially for scenarios like p2tr tapscript spends. The essence of this equivalence check lies in deriving a variable 'y' from both a complex and a simplified script, ensuring logical equivalence without direct comparison, thus facilitating further signature and covenant checks within a block's 4MB weight limit. The paper raises concerns about potential vulnerabilities, such as the risk of easier collision findings by adversaries and transaction data forgery, suggesting the need for protocol enhancements to mitigate these threats.
 
-The core innovation lies in the equivalence check mechanism between two algorithm sets: traditional signature validation processes and re-implemented cryptographic operations within the Bitcoin script framework. This includes executing basic cryptographic operations under Bitcoin's scripting language limitations and ensuring logical equivalence without direct comparison during script execution. The objective is to adjust data-carrying transactions until both scripts produce the same hash outcome for a variable `y`, thereby passing the equivalence check and allowing further validations related to signature restrictions and covenant checks within a block's 4MB weight limit.
-
-Security concerns regarding potential vulnerabilities and the risk of transaction data forgery despite the equivalence check are raised, suggesting the necessity for protocol enhancements. The discussion opens up avenues for robust testing and analysis in cryptographic protocol development.
-
-For those interested in a deeper understanding of the technicalities involved in constructing equivalence checks within Bitcoin scripts and the implications for Bitcoin’s future development, the full paper is accessible at [colliderscript.co/colliderscript.pdf](https://colliderscript.co/colliderscript.pdf). This detailed exploration includes the novel function dGen, which bridges conventional Bitcoin script (Big Script) with an optimized version (Small Script), thus enabling previously impractical validation of transaction conditions and enforcing covenants on the blockchain in a computationally efficient manner.</summary>
-    <published>2024-11-13T22:06:00+00:00</published>
+Furthermore, the publication details a novel method for creating and spending covenants in Bitcoin using Tapscript, without requiring soft forks. This approach represents a significant computational effort, likened to ~2^86 hash calls, markedly higher than the effort required for mining a Bitcoin block. Despite its computational intensity, this method illuminates the potential for arbitrary computation within Bitcoin transactions, limited only by the circuit size fitting within a 4MB transaction. An intriguing application of this technique is its use for Lamport signatures, potentially enabling Bitcoin transactions to resist quantum computing threats. This demonstrates the method's broader applicability beyond covenants, offering insights into how Bitcoin's scripting capabilities can be expanded. The paper underscores the trade-offs between computational cost and transaction size, presenting a foundational method for enforcing covenants on the blockchain. For those interested in the technical details and implications for Bitcoin's development, the full paper is accessible at [colliderscript.co/colliderscript.pdf](https://colliderscript.co/colliderscript.pdf), offering a comprehensive exploration of the subject matter.</summary>
+    <published>2024-11-25T03:42:00+00:00</published>
   </entry>
 </feed>
