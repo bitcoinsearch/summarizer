@@ -2,16 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Can parallel validation side-step the slow block issue?</title>
-  <updated>2024-11-29T02:28:22.110260+00:00</updated>
+  <updated>2024-11-30T02:24:25.100841+00:00</updated>
   <author>
-    <name>sjors 2024-11-28 16:28:17.599000+00:00</name>
+    <name>sjors 2024-11-29 09:00:41.882000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-28 16:08:13.104000+00:00</name>
+    <name>ajtowns 2024-11-29 03:45:38.031000+00:00</name>
   </author>
   <author>
-    <name>sjors 2024-11-28 14:05:40.685000+00:00</name>
+    <name>evoskuil 2024-11-29 02:33:14.326000+00:00</name>
   </author>
+  <author>
+    <name>evoskuil 2024-11-29 02:24:10.247000+00:00</name>
+  </author>
+  <author>
+    <name>sjors  . 2024-11-28 16:28:17.599000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-28 16:08:13.104000+00:00</name>
+  </author>
+  <author>
+    <name>sjors  . 2024-11-28 14:05:40.685000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Nov_2024/3640_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3639_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3638_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3637_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3635_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3634_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3632_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
@@ -19,15 +35,13 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Can parallel validation side-step the slow block issue?</title>
-    <updated>2024-11-29T02:28:22.110303+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/can-parallel-validation-side-step-the-slow-block-issue/1288/3" rel="alternate"/>
-    <summary>The discussion revolves around the concept of concurrent validation of competing blockchain blocks, specifically in scenarios where they possess the same amount of work. This approach is considered to be a feasible strategy for enhancing the efficiency and security of block validation, particularly in mitigating slow-block attacks. However, the implementation of such a system brings about significant changes in how blocks are validated and prioritized, potentially altering miners' behavior in both attack and non-attack situations. The notion suggests that if a block validates more swiftly than the current top block, it should be reorganized and announced accordingly, thereby giving precedence to faster-validating blocks regardless of their arrival time.
+    <updated>2024-11-30T02:24:25.100906+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/can-parallel-validation-side-step-the-slow-block-issue/1288/8" rel="alternate"/>
+    <summary>The discussion explores the intricate dynamics of blockchain block validation, particularly focusing on the challenges and potential strategies for enhancing the efficiency and security of this process. A key theme is the examination of whether blocks that have undergone identical computational efforts should be validated concurrently. This notion emerges from the scenario where blocks could take an extended period to validate, raising the possibility of multiple competing blocks at the same level of total work. The conversation suggests a strategy where blocks that validate more swiftly may be given priority, even if announced later, as a countermeasure against slow-block attacks. However, this approach could significantly alter current practices, especially in non-attack situations, by reducing the reliability of single confirmations and complicating miners' decision-making processes.
 
-The [Great Consensus Cleanup](https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710) proposal is highlighted as an attempt to address the challenges associated with worst-case block validation times through a consensus change. Despite advancements in blockchain technology through SegWit, Taproot, and Simplicity, which aim to simplify the reasoning around block validation time, there remains a concern over blocks that take excessively long to validate. The goal is to minimize the impact of slow blocks primarily to the miner who produced them, reducing their utility in potential attacks while also considering the implications for accidental slow block production.
+Further, the dialogue delves into the feasibility and benefits of validating two blocks concurrently if they share the same amount of work. It posits that while the consensus mechanism does not favor one block over another based on work alone, validating both simultaneously might be worth considering. This could lead to the discarding of the initially top block in favor of one that completes its validation quicker, without adversely affecting the consensus process. The discussion acknowledges the practical challenges and performance implications linked to synchronizing the validation between two or more blocks. It proposes a simplified approach of sequentially validating any block that matches the top block in terms of work, aiming to propagate the faster-validated block as the preferred choice.
 
-Parallel block validation emerges as a proposed solution, aiming to mitigate the risks associated with slow-to-validate blocks. This method entails validating competing blocks in parallel and selecting the one that completes first for announcement and further building. Such a strategy could potentially decrease the propagation advantage of slow blocks, thereby increasing the stale risk associated with producing them. A simplified version of this approach might involve aborting the validation of a currently processing block in favor of a newly discovered competing block, based on specific criteria related to average validation times and standard deviations. However, this poses significant technical challenges, especially regarding its implementation in Bitcoin Core, and may not fully address the underlying concerns related to block validation attacks, block propagation disparities, and the potential incentives for producing empty blocks or ignoring fast-to-validate competitor blocks. 
-
-There are additional considerations regarding the effectiveness of this approach in addressing maliciously crafted transactions and the large miner advantage, questioning whether the increased risk of reorganization for slow blocks would sufficiently deter attackers. Furthermore, the dynamics between high-end hardware capabilities of miners versus the broader network's node equipment come into play, potentially affecting block propagation uniformity and the overall health of the blockchain ecosystem.</summary>
-    <published>2024-11-28T16:28:17.599000+00:00</published>
+The [Great Consensus Cleanup](https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710) initiative addresses the issue of prolonged block validation times through a consensus change in the Bitcoin network. It highlights past solutions like SegWit and Taproot that have mitigated block validation concerns and discusses the potential of parallel block validation. This strategy allows nodes to validate competing blocks simultaneously, increasing the stale risk for slower blocks but introduces technical and strategic challenges. Concerns are raised about the complexity of implementing such mechanisms in Bitcoin Core and the potential disadvantages for nodes lacking parallel validation capabilities. The dialogue also considers how attackers could exploit block validation times and the balance between block size, validation times, and propagation advantages. Despite the theoretical benefits of strategies like parallel validation and aborting validation based on excessive deviation from average times, the practical impact on network performance and security remains uncertain. This underscores the need for careful analysis and consideration of any proposed changes to the blockchain validation process.</summary>
+    <published>2024-11-29T09:00:41.882000+00:00</published>
   </entry>
 </feed>
