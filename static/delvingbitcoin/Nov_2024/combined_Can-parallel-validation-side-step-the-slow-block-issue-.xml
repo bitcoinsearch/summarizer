@@ -2,18 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Can parallel validation side-step the slow block issue?</title>
-  <updated>2024-11-30T02:24:25.100841+00:00</updated>
+  <updated>2024-12-01T02:52:59.933835+00:00</updated>
   <author>
-    <name>sjors 2024-11-29 09:00:41.882000+00:00</name>
+    <name>evoskuil 2024-11-30 07:18:28.345000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2024-11-29 03:45:38.031000+00:00</name>
+    <name>evoskuil 2024-11-30 07:12:33.116000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-29 02:33:14.326000+00:00</name>
+    <name>sjors  . 2024-11-29 09:00:41.882000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-29 02:24:10.247000+00:00</name>
+    <name>ajtowns  . 2024-11-29 03:45:38.031000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-29 02:33:14.326000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-29 02:24:10.247000+00:00</name>
   </author>
   <author>
     <name>sjors  . 2024-11-28 16:28:17.599000+00:00</name>
@@ -24,6 +30,8 @@
   <author>
     <name>sjors  . 2024-11-28 14:05:40.685000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Nov_2024/3649_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2024/3648_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3640_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3639_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3638_Can-parallel-validation-side-step-the-slow-block-issue-.xml" rel="alternate"/>
@@ -35,13 +43,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Can parallel validation side-step the slow block issue?</title>
-    <updated>2024-11-30T02:24:25.100906+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/can-parallel-validation-side-step-the-slow-block-issue/1288/8" rel="alternate"/>
-    <summary>The discussion explores the intricate dynamics of blockchain block validation, particularly focusing on the challenges and potential strategies for enhancing the efficiency and security of this process. A key theme is the examination of whether blocks that have undergone identical computational efforts should be validated concurrently. This notion emerges from the scenario where blocks could take an extended period to validate, raising the possibility of multiple competing blocks at the same level of total work. The conversation suggests a strategy where blocks that validate more swiftly may be given priority, even if announced later, as a countermeasure against slow-block attacks. However, this approach could significantly alter current practices, especially in non-attack situations, by reducing the reliability of single confirmations and complicating miners' decision-making processes.
+    <updated>2024-12-01T02:52:59.933910+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/can-parallel-validation-side-step-the-slow-block-issue/1288/10" rel="alternate"/>
+    <summary>The discussion addresses the economic and strategic implications of blockchain reorganization (reorg) deeper than six blocks, comparing its impact to that of blocks taking an unusually long time to validate. It highlights the potential for attackers to exploit the retarget period, a phase where the blockchain adjusts its difficulty level, by timing the release of blocks to increase difficulty for honest miners while creating blocks with less cumulative difficulty. The conversation also explores preemptive measures against such attacks, like soft forks, which require foreknowledge of attack vectors. This leads to an acknowledgment of the challenges in preparing for unforeseen threats and suggests enhancing the core's ability to relay compact blocks quickly during validation as a mitigation strategy.
 
-Further, the dialogue delves into the feasibility and benefits of validating two blocks concurrently if they share the same amount of work. It posits that while the consensus mechanism does not favor one block over another based on work alone, validating both simultaneously might be worth considering. This could lead to the discarding of the initially top block in favor of one that completes its validation quicker, without adversely affecting the consensus process. The discussion acknowledges the practical challenges and performance implications linked to synchronizing the validation between two or more blocks. It proposes a simplified approach of sequentially validating any block that matches the top block in terms of work, aiming to propagate the faster-validated block as the preferred choice.
+Further, the advantage large miners have due to immediate mining on top of newly validated blocks is discussed, emphasizing the slight edge this gives them over other miners who must wait for block propagation and validation. Strategies to mitigate these advantages include improving core protocol efficiency in handling compact blocks during validation and leveraging a well-connected FIBRE relay network to reduce propagation delays. The significance of quick block validation is underscored by statistical probabilities indicating a chance for competing blocks to emerge, challenging the assumption that blocks at the same height carry equal computational work. 
 
-The [Great Consensus Cleanup](https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710) initiative addresses the issue of prolonged block validation times through a consensus change in the Bitcoin network. It highlights past solutions like SegWit and Taproot that have mitigated block validation concerns and discusses the potential of parallel block validation. This strategy allows nodes to validate competing blocks simultaneously, increasing the stale risk for slower blocks but introduces technical and strategic challenges. Concerns are raised about the complexity of implementing such mechanisms in Bitcoin Core and the potential disadvantages for nodes lacking parallel validation capabilities. The dialogue also considers how attackers could exploit block validation times and the balance between block size, validation times, and propagation advantages. Despite the theoretical benefits of strategies like parallel validation and aborting validation based on excessive deviation from average times, the practical impact on network performance and security remains uncertain. This underscores the need for careful analysis and consideration of any proposed changes to the blockchain validation process.</summary>
-    <published>2024-11-29T09:00:41.882000+00:00</published>
+The possibility of implementing a stronger measure to mitigate slow-block attacks without drastically altering behavior in non-attack scenarios is considered, focusing on the difficulty of differentiating between attack and non-attack situations. Concurrent validation of competing blocks is proposed as a potential strategy, though it introduces significant changes to current practices and presents challenges in decision-making for miners when encountering new valid blocks. 
+
+A streamlined approach for validating blocks sequentially rather than concurrently is suggested to propagate faster-validated blocks more efficiently, despite skepticism about the substantial impact on blockchain efficiency. Additionally, the [Great Consensus Cleanup](https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710) proposal aims to address issues of worst-case block validation times through consensus change, suggesting parallel block validation as a novel approach to mitigate the risks of slow blocks. However, concerns about the complexity of implementation and the effectiveness of these strategies in mitigating malicious attacks are raised, alongside considerations of how these approaches might influence the mining of empty blocks or the dynamic between block size, validation times, and propagation advantages.</summary>
+    <published>2024-11-30T07:18:28.345000+00:00</published>
   </entry>
 </feed>
