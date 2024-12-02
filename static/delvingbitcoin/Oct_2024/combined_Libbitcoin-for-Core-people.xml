@@ -2,27 +2,39 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Libbitcoin for Core people</title>
-  <updated>2024-12-01T02:52:24.695739+00:00</updated>
+  <updated>2024-12-02T02:40:55.751960+00:00</updated>
   <author>
-    <name>evoskuil 2024-11-30 21:44:53.127000+00:00</name>
+    <name>evoskuil 2024-12-01 16:34:03.462000+00:00</name>
   </author>
   <author>
-    <name>JeremyRubin 2024-11-30 17:58:01.211000+00:00</name>
+    <name>evoskuil 2024-12-01 15:05:36.079000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-30 07:54:13.591000+00:00</name>
+    <name>evoskuil 2024-12-01 14:52:52.345000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-30 07:33:40.867000+00:00</name>
+    <name>evoskuil 2024-12-01 14:40:35.174000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-30 07:02:50.536000+00:00</name>
+    <name>evoskuil  . 2024-11-30 21:44:53.127000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-30 06:53:30.523000+00:00</name>
+    <name>JeremyRubin  . 2024-11-30 17:58:01.211000+00:00</name>
   </author>
   <author>
-    <name>evoskuil 2024-11-30 06:49:18.169000+00:00</name>
+    <name>evoskuil  . 2024-11-30 07:54:13.591000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-30 07:33:40.867000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-30 07:02:50.536000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-30 06:53:30.523000+00:00</name>
+  </author>
+  <author>
+    <name>evoskuil  . 2024-11-30 06:49:18.169000+00:00</name>
   </author>
   <author>
     <name>AntoineP  . 2024-11-29 14:08:23.249000+00:00</name>
@@ -63,6 +75,10 @@
   <author>
     <name>AntoineP  . 2024-10-28 19:09:55.723000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Dec_2024/3666_Libbitcoin-for-Core-people.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2024/3664_Libbitcoin-for-Core-people.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2024/3663_Libbitcoin-for-Core-people.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2024/3661_Libbitcoin-for-Core-people.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3658_Libbitcoin-for-Core-people.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3657_Libbitcoin-for-Core-people.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2024/3651_Libbitcoin-for-Core-people.xml" rel="alternate"/>
@@ -87,19 +103,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Libbitcoin for Core people</title>
-    <updated>2024-12-01T02:52:24.695875+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/libbitcoin-for-core-people/1222/20" rel="alternate"/>
-    <summary>Libbitcoin employs a unique and efficient approach in handling blockchain transactions compared to Bitcoin Core, particularly noted in the process of Initial Block Download (IBD). It leverages an event-driven architecture to manage multiple asynchronous tasks concurrently, which is crucial for its superior performance. Utilizing [Boost ASIO](https://www.boost.org/doc/libs/1_86_0/doc/html/boost_asio/overview/core/async.html) for facilitating these concurrent operations, Libbitcoin showcases a significant improvement in IBD speeds, reportedly up to 15 times faster when the `-assumevalid` option is activated. This speed advantage arises from its distinct database structure that allows for a more relational data handling approach, incorporating tables for headers, transactions, inputs, and outputs, along with indices for linking confirmations to headers and transactions to their respective spending transactions and headers.
+    <updated>2024-12-02T02:40:55.752119+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/libbitcoin-for-core-people/1222/24" rel="alternate"/>
+    <summary>Libbitcoin employs a unique method for processing block inputs by utilizing hashmaps, significantly accelerating the verification process by ensuring constant time complexity for each input operation. This technique is integrated during the `block.check` phase, aligning with the block download process to allow full concurrency, thereby enhancing overall system efficiency. The strategic timing of this phase enhances the verification and addition of block input points, further securing and streamlining the transaction handling within Libbitcoin.
 
-The system optimizes block validation by categorizing tasks based on their sequencing requirements, thereby enabling parallel processing of transactions and validations that do not necessitate strict ordering. For instance, initial checks on blocks such as size or `nLockTime` are executed immediately upon download, without waiting for sequential order. Further validations that demand partial sequencing, like script checks, are also processed concurrently across a range of blocks. This methodological separation of tasks significantly reduces the time required for complete block validation and contributes to the platform's efficiency.
+The proposed architectural adjustments in Bitcoin's core system, as seen in pull request [14837](https://github.com/bitcoin/bitcoin/pull/14837), aim to separate transaction graph connection logic from the broader transaction processing workflow. This separation is intended to refine the current process and facilitate future improvements in script processing efficiency. Such proposals underscore the continuous exploration and implementation of refactors targeting core architectural components to boost performance.
 
-Libbitcoin’s approach to transaction validation mirrors some aspects of Bitcoin Core's `-assumevalid` feature by allowing the omission of signature verification for transactions within certain blocks, thereby mitigating potential threats without compromising security. The system's capacity for reorganization involves straightforward adjustments to the blockchain, such as removing transactions from indices, demonstrating its agility in handling blockchain changes. Although pruning of spent outputs remains unimplemented, this reflects a strategic decision rather than a limitation, prioritizing other areas of development.
+Libbitcoin outperforms traditional methods by indexing all transactions alongside spenders, providing a relational storage of chain objects with bidirectional indexation. This approach ensures swift query responses and surpasses Core benchmarks in performance, where transaction indexing is typically disabled. Additionally, Libbitcoin offers an Electrum style address index with significantly faster synchronization times than those observed with ElectrumX when extracting data from a local Core node. These enhancements not only demonstrate Libbitcoin's superior performance and reliability but also its reduced shutdown times compared to Core, highlighting its efficiency advantages.
 
-Networking within Libbitcoin is designed to maximize efficiency and connectivity. By default, it connects to a hundred outbound peers, a number intended to become dynamic after IBD to optimize network resources further. Peer selection focuses on connectivity quality, such as handshake speed and response rates, ensuring a robust and responsive network environment.
+The performance benefits of Libbitcoin are attributed to its extensive use of parallelism, which contrasts with Bitcoin Core's sequential block processing approach. Libbitcoin's architecture allows for downloading, checking, storing, and indexing data concurrently across multiple threads, optimizing efficiency and minimizing potential issues related to data locality and validation delays. This concurrent processing capability, facilitated by a lock-free design and proactor pattern, positions Libbitcoin as a robust solution for blockchain management, capable of performing full validation of blocks concurrently without being confined to processing a single block at a time.
 
-Despite these advancements, it's essential to acknowledge that comparisons between Libbitcoin and Bitcoin Core must consider certain limitations, such as Libbitcoin’s use of an outdated libsecp version and the absence of native SHA256 acceleration. These factors could influence performance benchmarks and highlight areas for future improvement.
+Disk speed is not deemed the primary limiting factor during Initial Block Download (IBD) due to the efficiency of using append-only memory maps for data storage. This insight shifts the focus towards optimizing RAM allocation and management to enhance IBD efficiency. Furthermore, Libbitcoin's IBD performance is significantly influenced by internet connection quality, with faster networks potentially reducing synchronization times, underscoring the importance of network bandwidth in achieving optimal sync times.
 
-The discussion also emphasizes the importance of clear communication regarding operational mechanisms, such as the distinction between "milestone" and `-assumevalid`, to accurately convey the nuances of Libbitcoin's architecture and functionalities. This clarity is vital for understanding the platform's innovative approaches to blockchain management and its potential impact on efficiency and scalability in the cryptocurrency domain.</summary>
-    <published>2024-11-30T21:44:53.127000+00:00</published>
+Bitcoin Core's parallel processing capabilities during IBD involve downloading blocks simultaneously but processing them sequentially, maintaining blockchain integrity and security. This methodical processing is crucial for verifying the validity of transactions and the blockchain's state. Despite the inherent limitations in sequential block processing, it ensures the reliability of the Bitcoin network by meticulously verifying each transaction.
+
+The discussion on transaction validation within Libbitcoin highlights its streamlined process by omitting checks for transaction inputs below a certain milestone, assuming their existence and unspent status. This strategy, akin to Bitcoin Core's `-assumevalid` feature, accelerates processing time by forgoing detailed scrutiny typically applied to transaction confirmation. This approach underscores a pragmatic balance between efficiency and maintaining a solid threat model in cryptocurrency transactions.
+
+Eric Voskuil's comparison of Libbitcoin's IBD performance to Bitcoin Core reveals significant speed improvements attributed to asynchronous operations and a sophisticated database structure. Libbitcoin's event-based system, leveraging Boost ASIO, allows for concurrent operations that significantly contribute to its enhanced performance. The database design facilitates efficient block validation by breaking down tasks according to their sequencing needs, optimizing validation checks. This parallel processing capability, coupled with strategies for mitigating potential threats and managing reorganizations, exemplifies Libbitcoin's innovative approach to blockchain management, emphasizing its efficiency and scalability in the cryptocurrency domain.</summary>
+    <published>2024-12-01T16:34:03.462000+00:00</published>
   </entry>
 </feed>
