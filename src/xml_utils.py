@@ -443,7 +443,7 @@ class GenerateXML:
                             'id': "2",
                             'title': 'Combined summary - ' + title,
                             'authors': combined_authors,
-                            'url': title_df.iloc[0]['url'],
+                            'url': title_df.iloc[-1]['url'],  # get the URL of the main/first post
                             'links': combined_links,
                             'created_at': add_utc_if_not_present(title_df.iloc[0]['created_at_org']),
                             'summary': combined_summary
