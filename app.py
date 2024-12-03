@@ -1,9 +1,8 @@
 from datetime import datetime
-import calendar
 import os
 import openai
 from dotenv import load_dotenv
-from flask import Flask, request, Response, render_template, url_for, abort, send_file
+from flask import render_template, url_for, abort, send_file
 import feedparser
 import xml.etree.ElementTree as ET
 from flask_frozen import Freezer
