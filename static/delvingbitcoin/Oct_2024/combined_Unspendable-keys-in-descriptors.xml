@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Unspendable keys in descriptors</title>
-  <updated>2024-12-04T02:36:14.577678+00:00</updated>
+  <updated>2024-12-05T02:37:00.588640+00:00</updated>
   <author>
-    <name>andrewtoth 2024-12-03 03:33:40.002000+00:00</name>
+    <name>andrewtoth 2024-12-04 14:33:22.126000+00:00</name>
+  </author>
+  <author>
+    <name>salvatoshi 2024-12-04 12:17:48.385000+00:00</name>
+  </author>
+  <author>
+    <name>andrewtoth  . 2024-12-03 03:33:40.002000+00:00</name>
   </author>
   <author>
     <name>andrewtoth  . 2024-10-10 22:36:12.253000+00:00</name>
@@ -87,6 +93,8 @@
   <author>
     <name>salvatoshi  . 2023-12-19 13:29:37.600000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Dec_2024/3711_Unspendable-keys-in-descriptors.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2024/3707_Unspendable-keys-in-descriptors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2024/3699_Unspendable-keys-in-descriptors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3346_Unspendable-keys-in-descriptors.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2024/3317_Unspendable-keys-in-descriptors.xml" rel="alternate"/>
@@ -119,21 +127,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Unspendable keys in descriptors</title>
-    <updated>2024-12-04T02:36:14.577857+00:00</updated>
+    <updated>2024-12-05T02:37:00.588826+00:00</updated>
     <link href="https://delvingbitcoin.org/t/unspendable-keys-in-descriptors/304" rel="alternate"/>
-    <summary>The discourse surrounding the standardization of wallet policies, especially concerning taproot and the use of Extended Public Keys (XPUBs), highlights several key challenges and proposed solutions in enhancing security and functionality within cryptocurrency systems. A notable suggestion involves sorting and removing duplicates of all XPUBs before concatenating them and applying a SHA256 hash to the result. This method aims to simplify implementation while ensuring compatibility with future wallet policies by restricting all XPUBs to specific formats without allowing optional derivation paths. Such an approach addresses the need for standardizing unspendable internal XPUBs, thereby facilitating easier integration and maintenance.
+    <summary>The dialogue on enhancing wallet policies and descriptors in cryptocurrency transactions emphasizes the need for standardizing the implementation of unspendable keys, particularly within the context of taproot technology. The primary challenge lies in formulating a system where extended public keys (xpubs) can be standardized across both descriptors and wallet policies without compromising security or functionality. A proposed solution involves sorting and removing duplicate xpubs before concatenating them and applying a SHA256 hash, ensuring uniformity and reducing redundancy. This method, however, necessitates restricting all xpubs to a specific format and excluding optional derivation paths, a move aimed at simplifying the system for legacy wallets that lack taproot support. Concerns about security arise from the potential manipulation of chain codes within XPUBs by malicious actors, suggesting the exploration of techniques like publishing a dummy XPUB out of band to protect genuine key data.
 
-Security vulnerabilities associated with the manipulation of chain codes in XPUBs are a significant concern. The absence of hashing techniques in certain scenarios could enable attackers to skew results favorably by altering the chain code. To counter this, strategies like publishing a dummy XPUB have been considered, though their effectiveness remains debatable. The discussion also delves into methods for deriving chain code from XPUBs in a sequence-independent manner, suggesting solutions such as XOR operations or addition modulo 2^256 to prevent cancellation effects in calculations. These proposals aim to safeguard sensitive information while maintaining operational transparency.
+Further, there's an ongoing discussion on deriving chain code from XPUBs independently of their order to address issues related to sequence-dependent wallet policies or descriptors. Various hashing techniques are considered to prevent repeated XPUBs from nullifying each other in calculations, aiming to maintain integrity in multi-signature setups. Another aspect under review is the ordering of keys in programming standards, which impacts the consistency of chaincodes generated through different descriptor arrangements. This raises questions about the predictability and reliability of outputs based on key sequencing.
 
-The technical aspects of programming standards, particularly in handling key arrangement and wallet policy features, underscore the importance of adaptability and efficiency. Issues arise with descriptors that are sensitive to the order of keys, indicating a need for methods that ensure consistency regardless of key sequence. Moreover, the integration of identical placeholders within wallet policies, especially with taproot technology, necessitates a stateful parser to avoid redundancy. The complexity added by these requirements calls for careful consideration in developing programming solutions that accommodate wallet policy features without overly complicating hardware signer codes.
+The discourse extends to the integration of wallet policy features, highlighting the importance of accommodating these features efficiently in hardware signers without adding undue complexity. There's an acknowledgment of the flexibility offered by programming approaches independent of specific wallet policies, underscoring the value of adaptability and broad applicability in programming practices. Additionally, technical issues relating to key order in wallet policies suggest a preference for a structure that aligns more naturally with wallet_policy's inherent organization, potentially simplifying key management and referencing.
 
-An emerging focus is on creating unspendable internal keys compatible with taproot, aiming to enhance user experience by obviating the need for key verification on devices. Salvatore's method, which recycles descriptor entropy for generating unspendable keys, is identified as a promising solution. This approach uses a specified `xpub` format and a deterministic chaincode generation process, aligning with the goal of seamless integration and standardized security frameworks across signing devices.
+An imminent focus on incorporating Taproot support into Liana emphasizes the use of unspendable internal keys to enhance user experience by signaling "no keypath spend" instead of requiring user verification of internal keys. This approach leverages the entropy of the descriptor for generating properties essential for secure and seamless integration into signing devices. Comparatively, methods for ensuring the unspendability of xpubs involve manipulating the chaincode part or regenerating a public key, each with its own set of security implications and ease of verification considerations.
 
-In parallel, discussions on cryptographic protocols stress the necessity of distinguishing between output descriptors and wallet policies based on their unique requirements. While output descriptors may benefit from explicitly defining entropy, wallet policies could rely on deterministic processes implicit in their structure. This differentiation acknowledges the distinct functionalities and aims to streamline transaction processes and policy generation.
-
-Lastly, the dialogue extends to the practical challenges of address creation using partial descriptors and the implications for privacy and security in revealing script-only taproot outputs. The consensus leans towards methodologies that encapsulate all necessary information within descriptors, minimizing dependencies on external data and preserving the decentralized ethos of Bitcoin. Additionally, the exploration of digital fingerprinting and its impact on transaction privacy emphasizes the delicate balance between transparency and confidentiality in blockchain technologies.
-
-Overall, these discussions reflect a concerted effort to address the evolving landscape of cryptocurrency security, emphasizing the need for innovative, adaptable, and secure programming practices.</summary>
-    <published>2024-12-03T03:33:40.002000+00:00</published>
+Approach s2 emerges as a straightforward and easily explained method for descriptor changes, despite increasing descriptor complexity. The conversation also delves into using XOR operations to complicate the analysis of extended public keys, proposing a blend of user-friendliness and enhanced security through obfuscation. Lastly, the discussion touches on the non-secure nature of ROT13 for encryption, digital fingerprinting in cryptocurrency transactions, and the nuanced implications of revealing script-only taproot outputs. These discussions are framed within a broader narrative seeking to refine Bitcoin's technical infrastructure while prioritizing privacy, security, and user autonomy.</summary>
+    <published>2024-12-04T14:33:22.126000+00:00</published>
   </entry>
 </feed>
