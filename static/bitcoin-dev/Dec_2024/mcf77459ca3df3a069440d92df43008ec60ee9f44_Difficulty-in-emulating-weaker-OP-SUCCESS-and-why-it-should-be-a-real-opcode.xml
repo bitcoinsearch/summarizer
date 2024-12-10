@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Difficulty in emulating "weaker" OP_SUCCESS and why it should be a real opcode</title>
+  <updated>2024-12-10T02:46:34.073501+00:00</updated>
+  <author>
+    <name>Brandon Black 2024-12-09 22:06:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Difficulty in emulating "weaker" OP_SUCCESS and why it should be a real opcode</title>
+    <updated>2024-12-10T02:46:34.073529+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/Z1dp0Jtbrkcf7Roi@console/T/#mcf77459ca3df3a069440d92df43008ec60ee9f44" rel="alternate"/>
+    <summary>In the recent discourse among developers in the Bitcoin Development Mailing List, an innovative approach to script execution within the Bitcoin scripting system has been proposed. The discussion, initiated by a developer named Brandon, centers around the potential introduction of "OP_SEGMENT" as suggested by Rusty Russell. This new operation aims to modify how scripts validate conditions of success, particularly focusing on enhancing the functionality of script restoration work. The proposal seeks to address the current limitations of the "OP_SUCCESS" behavior by introducing a mechanism that leverages the existing "OP_CODESEPARATOR". 
+
+By redefining "OP_SUCCESS" through a soft fork, the proposal suggests shifting from making the entire script unconditionally valid to only making specific segments of the script unconditionally valid. A "script segment" is defined as each lexicographic section of a script that does not contain an "OP_CODESEPARATOR". This adjustment allows for the script interpreter to maintain its SUCCESS checking until an "OP_CODESEPARATOR" is encountered. Upon encountering such a separator, a "SUCCESS" flag set to false by default is associated with it. The process of SUCCESS checking would then involve setting this flag to true for the most recently encountered "OP_CODESEPARATOR".
+
+Further into the script's execution, whenever an "OP_CODESEPARATOR" is popped (i.e., removed from the stack without being executed), its corresponding "SUCCESS" flag's value is transferred to the interpreter state. Following this conditional state setting, if the interpreter's "SUCCESS" flag is true and the script is in execution mode (fExec is true), the script is deemed immediately successful. This method could necessitate the inclusion of two "OP_CODESEPARATORS" for every occurrence of "OP_SUCCESS" in certain scripts, potentially leading to more complex logic depending on the execution state desired.
+
+Brandon's email to the mailing list opens a dialogue on this approach, inviting thoughts and perspectives from other members, including Weikeng Chen and Rusty Russell. This conversation signifies a collaborative effort to refine and enhance the Bitcoin scripting language, aiming to balance the benefits of the existing "OP_SUCCESS" feature while addressing its limitations through creative problem-solving.</summary>
+    <published>2024-12-09T22:06:00+00:00</published>
+  </entry>
+</feed>
