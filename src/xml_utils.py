@@ -1,6 +1,7 @@
 import re
 import pandas as pd
 from feedgen.feed import FeedGenerator
+from lxml import etree
 from tqdm import tqdm
 import platform
 import shutil
@@ -73,6 +74,7 @@ class XMLReader:
         tree = ET.parse(full_path)
         root = tree.getroot()
         title = root.findall(".//atom:entry/atom:title", namespaces)[0].text
+        updated = datetime.fromisoformat(root.findall(".//atom:entry/atom:updated", namespaces)[0].text)
         title_for_id = title.replace('Combined summary - ', '')
         id = 'combined_' + clean_title(title_for_id)
         summary = root.findall(".//atom:entry/atom:summary", namespaces)[0].text
@@ -107,7 +109,8 @@ class XMLReader:
             'type': "combined-summary",
             'domain': domain if domain else None,
             'thread_url': link if link else None,
-            'indexed_at': indexed_at if indexed_at else None
+            'indexed_at': indexed_at if indexed_at else None,
+            'updated': updated if updated else None
         }
 
 
@@ -466,3 +469,18 @@ class GenerateXML:
                 logger.info(f"No new files are found for: {url}")
         else:
             logger.info(f"No input data found for: {url}")
+
+    def update_url_in_xml(self, xml_file, new_url):
+        tree = etree.parse(xml_file)
+        root = tree.getroot()
+        ns = {'atom': 'http://www.w3.org/2005/Atom'}
+
+        # Find the <entry> element and update its <link> with rel="alternate"
+        for entry in root.findall('atom:entry', ns):
+            for link in entry.findall('atom:link', ns):
+                if link.attrib.get('rel') == 'alternate':
+                    link.set('href', new_url)
+                    logger.info(f"Updated link: {link.attrib}")
+
+        # Save the updated XML file
+        tree.write(xml_file, encoding='utf-8', xml_declaration=True, pretty_print=True)

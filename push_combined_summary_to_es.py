@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+
+import pytz
 import tqdm
 import traceback
 from loguru import logger
@@ -15,6 +18,8 @@ if __name__ == "__main__":
 
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
+
+    now = datetime.now(pytz.UTC)
 
     total_combined_files = []
     static_dirs = [
@@ -45,6 +50,13 @@ if __name__ == "__main__":
             if REMOVE_TIMESTAMPS_IN_AUTHORS:
                 # remove timestamps from author's names and collect unique names only
                 xml_file_data['authors'] = remove_timestamps_from_author_names(xml_file_data['authors'])
+
+            updated_at = xml_file_data['updated']
+
+            if (now - updated_at) > timedelta(days=2):
+                continue
+
+            del xml_file_data['updated']
 
             res = elastic_search.es_client.update(
                 index=ES_INDEX,
