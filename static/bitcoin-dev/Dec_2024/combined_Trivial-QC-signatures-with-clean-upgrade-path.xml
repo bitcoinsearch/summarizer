@@ -2,30 +2,48 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Trivial QC signatures with clean upgrade path</title>
-  <updated>2024-12-16T02:45:01.484311+00:00</updated>
+  <updated>2024-12-17T02:42:18.292978+00:00</updated>
+  <author>
+    <name>Tadge Dryja 2024-12-16 22:20:00+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2024-12-16 15:57:00+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2024-12-16 11:14:00+00:00</name>
+  </author>
+  <author>
+    <name>Matt Corallo 2024-12-16 01:40:00+00:00</name>
+  </author>
+  <author>
+    <name>Weikeng Chen 2024-12-16 01:30:00+00:00</name>
+  </author>
   <author>
     <name>Luke Dashjr 2024-12-15 23:54:00+00:00</name>
   </author>
   <author>
     <name>Matt Corallo 2024-12-15 21:42:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/Dec_2024/m4d5314c4692131d216b6d092573dbd74779127db_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2024/maf2e70422643415fbcee141dd40bd9e95327ab24_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2024/mc09bb86d5768d280244426776942837effcafce7_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2024/ma45fe8e83dfa83497ebfd946dc9c254e3c4f9454_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2024/m8476dec76f9aa26b72bbb9cfca5cc2964fa521c3_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2024/md01effffbf854b3914226fd20a367713515a1244_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2024/m8c9407a48d3358be40fb94ab512c3e72b95e17cc_Trivial-QC-signatures-with-clean-upgrade-path.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Trivial QC signatures with clean upgrade path</title>
-    <updated>2024-12-16T02:45:01.484349+00:00</updated>
+    <updated>2024-12-17T02:42:18.293046+00:00</updated>
     <link href="https://gnusha.org/pi/bitcoindev/52f3bfc0-9446-4400-bf7a-7e38e5777c56@dashjr.org/T/#m8c9407a48d3358be40fb94ab512c3e72b95e17cc" rel="alternate"/>
-    <summary>The discussion revolves around the preparedness of Bitcoin's transaction signature scheme for the eventuality of quantum computing (QC) breaking existing elliptic curve cryptography. It acknowledges that while the development of QCs capable of this feat might take a decade or more, based on NSA and other expert recommendations, the Bitcoin community should consider options today that would enable wallets to achieve QC security in the future. The fundamental assumption is that we will receive a reasonable warning before QCs reach a level capable of breaking current cryptographic defenses, given the immense resources required for such development.
+    <summary>The discourse among Bitcoin developers regarding the integration of post-quantum cryptography (PQC) mechanisms into Bitcoin's protocol emphasizes a proactive but cautious approach to enhancing the network's resilience against potential quantum computing threats. There is an acknowledgment of the theoretical possibility that quantum computers could, in the future, compromise current cryptographic standards, including those underpinning Bitcoin. However, this eventuality is tempered by the understanding that such technological advancements might either not materialize within the anticipated timeframe or provide sufficient advance warning for countermeasures due to their significant resource requirements.
 
-A significant portion of the conversation critiques the feasibility of incorporating certain post-QC security assumptions into Bitcoin's consensus today due to potential future advancements in cryptography research. Among the considered options, hash-based signatures stand out as the only viable candidate for enhancing Bitcoin's transaction security in anticipation of QC threats. However, the deployment of such measures directly into Bitcoin's consensus faces practical challenges, including the reluctance to lock funds with a higher on-chain footprint cost for QC security preemptively.
+Developers are considering hash-based signatures, particularly SPHINCS and SPHINCS+, as the most reliable candidates for ensuring Bitcoin's security in a post-quantum computing era. This preference stems from the limitations and uncertainties surrounding other post-quantum cryptographic assumptions, such as lattices and supersingular elliptic curve isogeny, which may be vulnerable to obsolescence through future cryptographic discoveries. The dialogue underscores the impracticality of delaying action until the addition of new opcodes, like OP_CAT, given their entanglement with complex and unresolved issues, including miner extractable value (MEV) concerns and broader questions about Bitcoin's developmental trajectory.
 
-Taproot is highlighted as offering a promising solution by allowing the construction of outputs containing an alternative spending condition that could secure transactions against QC threats without immediate changes to the consensus. This method involves preparing taproot outputs with a script-path alternative, which can be activated in response to the emergence of QC capabilities. The proposal suggests enabling this feature through the addition of an opcode, similar to OP_CHECKSIG, dedicated to verifying post-QC non-one-time-use signatures within taproot constructs. 
+A notable proposal within these discussions involves leveraging the taproot upgrade to establish a secure mechanism against quantum attacks without necessitating immediate changes from wallet developers or users. By introducing a new opcode for verifying post-quantum signatures that are not one-time use, alongside the soft-fork deactivation of key-path taproot spends in favor of quantum-secure alternatives, the network could theoretically safeguard itself against quantum decryption capabilities. However, this solution also raises critical considerations around the potential confiscation of non-upgraded funds following the advent of quantum computing technology. To address these risks, suggestions include either an explicit opt-in requirement for the new scheme or permitting key-path spends for wallets that verify their script-path as a Nothing-Up-My-Sleeve (NUMS) point, each with its own set of trade-offs related to on-chain visibility and the adaptability of existing wallet infrastructures.
 
-Furthermore, the email touches on the complexities of opting into this scheme, considering the implications for on-chain identity and the potential for a supply shock resulting from unspent Bitcoin. An alternative suggestion proposes allowing key-path spends for wallets that employ a NUMS point proof, thus offering a way to opt out of the stricter QC-proof requirements without significantly impacting existing wallet operations.
-
-This discourse encapsulates a proactive approach to securing Bitcoin against future quantum computing disruptions, emphasizing the need for adaptability in cryptographic practices and the potential for taproot to facilitate a smooth transition. The ideas presented reflect a blend of technical foresight and pragmatism, aiming to balance the security benefits against the operational and economic impacts on the Bitcoin network.</summary>
-    <published>2024-12-15T23:54:00+00:00</published>
+Further examination extends to the implications of quantum computing on Bitcoin's proof-of-work (PoW) framework, proposing adjustments to the PoW hash function as a means to mitigate the impact of quantum-enhanced mining capabilities. These reflections, while speculative, highlight the broader challenges and strategic considerations faced by the Bitcoin community in preserving the network's integrity and security in the face of advancing quantum technologies.</summary>
+    <published>2024-12-16T22:20:00+00:00</published>
   </entry>
 </feed>
