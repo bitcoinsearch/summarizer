@@ -2,28 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Disclosure: irrevocable fees---stealing from LN using revoked commitment transactions</title>
-  <updated>2024-12-13T02:38:38.542047+00:00</updated>
+  <updated>2024-12-19T02:25:12.613473+00:00</updated>
   <author>
-    <name>ariard 2024-12-12 06:42:46.666000+00:00</name>
+    <name>everythingSats 2024-12-18 12:47:43.303000+00:00</name>
+  </author>
+  <author>
+    <name>ariard  . 2024-12-12 06:42:46.666000+00:00</name>
   </author>
   <author>
     <name>harding  . 2024-12-11 00:18:59.444000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Dec_2024/3825_Disclosure-irrevocable-fees-stealing-from-LN-using-revoked-commitment-transactions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2024/3763_Disclosure-irrevocable-fees-stealing-from-LN-using-revoked-commitment-transactions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2024/3757_Disclosure-irrevocable-fees-stealing-from-LN-using-revoked-commitment-transactions.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Disclosure: irrevocable fees---stealing from LN using revoked commitment transactions</title>
-    <updated>2024-12-13T02:38:38.542086+00:00</updated>
+    <updated>2024-12-19T02:25:12.613519+00:00</updated>
     <link href="https://delvingbitcoin.org/t/disclosure-irrevocable-fees-stealing-from-ln-using-revoked-commitment-transactions/1314" rel="alternate"/>
-    <summary>In the realm of blockchain technology, particularly within the Lightning Network (LN), a critical vulnerability was identified that allowed for the potential misappropriation of up to 98% of a channel's funds by miners. This issue was not limited to malicious actions but could also manifest during regular operations, with losses generally falling below the maximum possible impact. It was discovered across major LN implementations such as Eclair, LDK, and LND under their default settings, including Core Lightning when operated with specific configurations that bypass fee limits. The flaw is rooted in the manipulation of offchain LN commitment transactions by reallocating balances and adjusting fees to divert the bulk of funds upon transaction confirmation.
+    <summary>The introduction of an upper limit on accepted feerate in the Lightning Development Kit (LDK) signifies a crucial advancement in addressing vulnerabilities associated with "irrevocable fees." This move, initiated in 2021, aimed to counter the risks posed by excessive trimmed HTLCs and dust HTLC exposure. By setting a cap on the feerate from a channel counterparty, LDK enables a more straightforward calculation of msat denominated worst-case scenarios for dust HTLCs exposure under various conditions. The implementation of this feature, marked by a specific [commit](https://github.com/lightningdevkit/rust-lightning/commit/d3af49e9f07fc28d104f1f1dbcf8e216b65e9f89), underscores LDK's commitment to enhancing both security and operational efficiency within the network.
 
-To combat this vulnerability, updates have been deployed across various LN implementations, with each aiming to mitigate the risk by tightening controls over transaction fees. Despite these efforts, the potential for exploitation remains due to the variable nature of onchain transaction fees. Addressing this issue thoroughly requires modifications at both the LN protocol level and within Bitcoin's peer-to-peer transaction relay mechanisms. The suggested remedies involve capping the amount that can be allocated to transaction fees and moving towards fixed commitment fees to eliminate the vulnerability permanently. However, these solutions call for significant updates to the protocols, including the implementation of reliable package relay for Bitcoin and adjustments to the LN protocol.
+Further developments in securing transactions against fee-related vulnerabilities came with the introduction of the Validating Lightning Signer (VLS). VLS, since its pre-production release, incorporated a `validate_fee()` function, scrutinizing proposed feerates against a predefined maximum per kiloweight unit (`max_feerate_per_kw`). This feature is particularly designed to combat "miner-fee-siphoning attacks," reinforcing the security framework around fee structures. The `max_feerate_per_kw` is set at 100 satoshi per virtual byte, offering flexibility through adjustable rates by operators to meet varying operational needs. Such measures represent proactive steps taken by developers to defend against evolving threats within the digital transaction space.
 
-The discovery and subsequent resolution process underscored the collaborative effort among LN implementation maintainers and highlighted the complexities involved in managing fee dynamics in offchain contract protocols. This incident has spurred ongoing discussions within the Bitcoin and LN communities aimed at simplifying and strengthening the management of transaction fees, thereby enhancing the security and resilience of offchain payment channels. Detailed information about the vulnerability and the steps taken to address it can be found through various resources, including [Eclair 2815](URL), [Eclair v0.10.0](URL), [LDK 3045](URL), [LDK 0.0.123](URL), [LND 8824](URL), and [LND 0.18.3-beta](URL).
+Older versions of major Lightning Network (LN) implementations, including Eclair, LDK, and LND, along with Core Lightning when improperly configured, were susceptible to attacks enabling significant fund misappropriation by miners. This vulnerability could allow up to 98% of a channel's funds to be diverted, posing risks not only from malicious actors but also under normal operational circumstances. Despite mitigation efforts by contemporary LN implementations, which include tightening fee bounds, the theoretical possibility of exploitation persists due to fluctuations in on-chain transaction fee estimates. Addressing this issue requires updates to both the LN protocol and Bitcoin's P2P transaction relay protocol, with recent releases aiming to reduce vulnerability scopes.
 
-Furthermore, an analysis of the historical deployment of feerate limits reveals that such measures were initially implemented to counter vulnerabilities linked to "irrevocable fees" by setting upper bounds on acceptable feerates from channel counterparts. These safeguards, introduced following mitigations against "excessive trimmed HTLCs / dust HTLC exposure," facilitated easier calculation of the worst-case msat denominated dust HTLCs exposure from varied scenarios since 2021. Additionally, the Validating Lightning Signer (VLS) has consistently included a `validate_fee()` check from its pre-production release to vet proposed feerates against a maximum threshold, addressing concerns related to "miner-fee-siphoning attacks." This preventive approach indicates a proactive stance towards securing transactions within the LN framework, demonstrating the evolving measures taken to shield network participants from emerging threats.</summary>
-    <published>2024-12-12T06:42:46.666000+00:00</published>
+The identification of two primary attack vectors—Type 1 and Type 2.0, along with a Type 2.5 variant—highlights the complexity of managing offchain contract protocols' fee dynamics. Type 1 involves the irreversible allocation of excessive amounts to transaction fees, while Type 2.0 and 2.5 involve exploitation of non-deterministic estimation of onchain fees between channel participants. Current mitigation strategies focus on limiting the maximum amount allocable to transaction fees and suggest adopting static commitment fees to permanently eliminate such vulnerabilities. These solutions require comprehensive protocol upgrades, including the adoption of reliable package relay for Bitcoin and corresponding LN protocol adjustments.
+
+The collaborative effort in discovering and disclosing this vulnerability among LN implementation maintainers emphasizes the intricate challenges in fee management within offchain contract protocols. It also showcases the ongoing initiatives within the Bitcoin and LN communities to simplify and strengthen the transaction fee management process, thereby contributing to the overall resilience and security of offchain payment channels.</summary>
+    <published>2024-12-18T12:47:43.303000+00:00</published>
   </entry>
 </feed>
