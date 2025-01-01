@@ -51,12 +51,13 @@ if __name__ == "__main__":
                 # remove timestamps from author's names and collect unique names only
                 xml_file_data['authors'] = remove_timestamps_from_author_names(xml_file_data['authors'])
 
-            updated_at = xml_file_data['updated']
-
+            updated_at = xml_file_data['updated_at']
+            # if the XML file has been updated in the past 2 days we push it to the ES index, else we skip it
             if (now - updated_at) > timedelta(days=2):
                 continue
 
-            del xml_file_data['updated']
+            # remove the field `updated_at` before syncing the document to ES index
+            del xml_file_data['updated_at']
 
             res = elastic_search.es_client.update(
                 index=ES_INDEX,
