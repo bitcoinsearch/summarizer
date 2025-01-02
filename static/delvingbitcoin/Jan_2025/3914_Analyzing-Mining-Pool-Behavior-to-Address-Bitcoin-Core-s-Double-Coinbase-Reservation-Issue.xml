@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Analyzing Mining Pool Behavior to Address Bitcoin Core's Double Coinbase Reservation Issue</title>
+  <updated>2025-01-02T02:19:18.109560+00:00</updated>
+  <author>
+    <name>ismaelsadeeq 2025-01-01 19:06:06.294000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Analyzing Mining Pool Behavior to Address Bitcoin Core's Double Coinbase Reservation Issue</title>
+    <updated>2025-01-02T02:19:18.109586+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/analyzing-mining-pool-behavior-to-address-bitcoin-cores-double-coinbase-reservation-issue/1351" rel="alternate"/>
+    <summary>The analysis of Bitcoin Core's block-building algorithm reveals a significant bug that affects the generation of block templates, leading to an unintentional underutilization of the available block weight. Typically designed to reserve 4000 Weight Units (WU) for miners' coinbase transactions and generate block templates with a weight of 3,996,000 WU, the system instead produces templates at 3,992,000 WU due to a double-reservation error. This discrepancy has sparked efforts to correct the issue through a proposed Pull Request (PR), which aims to adjust the block template size back to its theoretical limit, albeit with concerns regarding potential invalid block templates by miners unaware of the change. The PR suggests that mining pools using an updated version of Bitcoin Core must carefully manage the combined weight of the coinbase transaction and additional transactions to avoid exceeding the maximum block weight of 4,000,000 WU.
+
+Throughout an extensive analysis period from December 24, 2022, to December 23, 2024, encompassing over 107,313 blocks, various tools and methodologies were deployed to study block weights and mining pool behavior. This included deserializing each block to examine coinbase transaction weights and matching them to specific mining pools using data provided by [libbitcoinkernel](https://github.com/stickies-v/py-bitcoinkernel/) and [bitcoin-data/mining-pools](https://github.com/bitcoin-data/mining-pools), followed by a comprehensive data saving and analysis process facilitated by scripts available on GitHub ([analysis script](https://github.com/ismaelsadeeq/mining-analysis?tab=readme-ov-file3-generate_resultspy), [graph generation scripts](https://github.com/ismaelsadeeq/mining-analysis?tab=readme-ov-file4-graph-generation-scripts)).
+
+The findings highlight that most mining pools comply with Bitcoin Core's default settings, keeping their coinbase transaction weights well below the 4000 WU threshold. However, exceptions exist, such as Ocean.xyz and an unidentified pool, which have been observed to exceed this limit, indicating a possible adjustment in their `-blockmaxweight` settings to accommodate larger coinbase transactions. On the contrary, F2Pool optimizes the use of available block weight, producing blocks closer to the maximum allowed weight, showcasing efficient resource usage.
+
+Furthermore, the analysis underscores a general trend of underutilization among several pools, attributed to the aforementioned bug. Correcting this issue would align actual block weights with theoretical expectations, thereby enabling mining pools to maximize their efficiency by utilizing the full block weight capacity. This adjustment is anticipated to bring fairness and clarity within the mining community and for developers working with Bitcoin Core, ensuring that the network operates more closely to its intended design.</summary>
+    <published>2025-01-01T19:06:06.294000+00:00</published>
+  </entry>
+</feed>
