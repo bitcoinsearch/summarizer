@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Contract-level Relative Timelocks</title>
+  <updated>2025-01-03T02:22:56.313730+00:00</updated>
+  <author>
+    <name>instagibbs 2025-01-02 19:35:31.228000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Contract-level Relative Timelocks</title>
+    <updated>2025-01-03T02:22:56.313757+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/contract-level-relative-timelocks/1353" rel="alternate"/>
+    <summary>The concept of Contract-level Relative Timelock (CLRT) UTXO is introduced as a solution to a specific issue encountered with Eltoo constructs, namely ln-symmetry, where the relative timelock to settle contracts is reset every time an update transaction is confirmed on the blockchain. This resetting leads to extended lockup of funds and prolongs HTLC expiry in Lightning Network (LN) use cases, potentially diminishing network utility. The challenge lies in incorporating a "contract" level relative timelock that can address this issue without conflicting with Bitcoin's requirement for monotonic validity of transactions, as adversaries could exploit this by under-reporting the number of "elapsed" blocks during the contract's lifetime.
+
+A proposed resolution involves utilizing a dedicated utxo that remains static until the challenge period concludes, permitting only the concurrent spending of the contract state output and relative timelock output. This approach alters the traditional `funding-&gt;update-&gt;settle` sequence into a `funding-&gt;kickoff-&gt;update-&gt;settle` sequence. The "kickoff" transactions incorporate an additional CLRT output that commits to a relative delay for the eltoo challenge period before the settlement transaction can proceed. This output, which is minimal in value, necessitates being spent alongside an eltoo state output, requiring a recursive proof linking back to an update transaction’s state output. This setup mandates that update transactions pre-commit both to the state output(s) and the CLRT output, ensuring their mutual expenditure is a precondition for settlement.
+
+The CLRT ancestry proof becomes simpler with the assumption of TXID stability in "onchain" eltoo, facilitated by the txid stability of the eltoo chain. However, challenges emerge in scenarios lacking TXID stability, necessitating complex proof mechanisms to verify the correct sequence of transactions leading up to settlement. These complexities introduce potential for increased transaction costs, technical complications, and opportunities for dishonest counterparts to penalize their peers.
+
+Further exploration suggests possible simplifications with Chia's coinid system, leveraging SHA256 hashing of parent coin ids, puzzle hashes, and amounts to match expected outcomes through a linear process in update history. Despite these advancements, concerns remain regarding consensus changes needed to support proof construction, the added complexity and cost from kickoff transactions and additional utxos, and the feasibility of maintaining concise and enforceable proofs, particularly in the absence of operations like OP_ZKP that could theoretically enable practical, constant size enforcement of transaction ancestry.
+
+For more information, refer to [this detailed discussion on contract-level relative timelocks](https://delvingbitcoin.org/t/contract-level-relative-timelocks/1353).</summary>
+    <published>2025-01-02T19:35:31.228000+00:00</published>
+  </entry>
+</feed>
