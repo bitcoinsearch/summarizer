@@ -2,12 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Contract-level Relative Timelocks</title>
-  <updated>2025-01-04T02:22:13.252449+00:00</updated>
+  <updated>2025-01-05T02:27:41.214081+00:00</updated>
   <author>
-    <name>cguida 2025-01-03 22:02:29.608000+00:00</name>
+    <name>instagibbs 2025-01-04 20:43:29.758000+00:00</name>
   </author>
   <author>
-    <name>JeremyRubin 2025-01-03 17:32:57.946000+00:00</name>
+    <name>moonsettler 2025-01-04 19:45:53.869000+00:00</name>
+  </author>
+  <author>
+    <name>cguida  . 2025-01-03 22:02:29.608000+00:00</name>
+  </author>
+  <author>
+    <name>JeremyRubin  . 2025-01-03 17:32:57.946000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2025-01-02 19:35:31.228000+00:00</name>
@@ -15,6 +21,8 @@
   <author>
     <name>instagibbs  . 2025-01-02 19:30:47.726000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2025/3964_Contract-level-Relative-Timelocks.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/3963_Contract-level-Relative-Timelocks.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/3953_Contract-level-Relative-Timelocks.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/3949_Contract-level-Relative-Timelocks.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/3919_Contract-level-Relative-Timelocks.xml" rel="alternate"/>
@@ -23,15 +31,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Contract-level Relative Timelocks</title>
-    <updated>2025-01-04T02:22:13.252500+00:00</updated>
+    <updated>2025-01-05T02:27:41.214140+00:00</updated>
     <link href="https://delvingbitcoin.org/t/contract-level-relative-timelocks/1353/2" rel="alternate"/>
-    <summary>The current discourse in the realm of blockchain technology, specifically concerning payment channels and transaction updates, introduces a nuanced examination of Contract-level Relative Timelock (CLRT) UTXO mechanisms. This is set against the backdrop of addressing inherent challenges within Eltoo constructs and the broader Lightning Network (LN). The primary concern revolves around ln-symmetry and the consequential prolonged lockup of funds due to the resetting of relative timelocks with every update transaction confirmation. This resetting undermines the utility of LN by extending HTLC expiry times.
+    <summary>The Chain-Linked Resolution Technique (CLRT) focuses on addressing the challenge of liquidity lock-up times in protocols, particularly aiming to reduce the delays that arise when parties submit outdated states, intentionally or unintentionally. This situation creates a vulnerability where the integrity and reliability of the system are at risk due to the potential for undue advantage or genuine errors in state submission. The complexity of ensuring timely resolutions is highlighted by the possibility of delays extending beyond twice the expected time if both parties engage in submitting known outdated states as a strategy. Such complexities necessitate robust mechanisms within the CLRT framework to effectively prevent and manage these challenges.
 
-A novel approach proposed to tackle this issue involves altering the conventional sequence of transactions from `funding-&gt;update-&gt;settle` to a new sequence that includes a "kickoff" phase (`funding-&gt;kickoff-&gt;update-&gt;settle`). This additional phase incorporates a CLRT output, committing to a relative delay for the eltoo challenge period before settlement can proceed. Crucially, this CLRT output must be spent alongside an eltoo state output, necessitating a recursive proof that links back to the state output of an update transaction. Such a design ensures that update transactions pre-commit to both the state outputs and the CLRT output, making their joint expenditure a prerequisite for settlement. Despite these innovations, the introduction of CLRT and the complexities surrounding TXID stability present potential challenges, including increased transaction costs, technical hurdles, and the risk posed by dishonest actors within the network.
+A detailed examination of the MUON mechanism within transaction processes reveals its crucial role in maintaining the integrity and non-malleability of transactions. The structure of transactions, including Tx Open, Tx Kickoff, Tx Update[i], Tx Ratchet i, and Tx Exit, outlines a comprehensive sequence designed to safeguard the transaction process from unauthorized modifications. The employment of MUON within this sequence ensures that each transaction adheres to a secure and verifiable pattern, preventing maligned changes through a setup of programmable conditions and inputs/outputs. Jeremy Rubin provides further insights into the significance of MUON in transactional integrity through his work, which can be explored for a deeper understanding of its application in transaction processes.
 
-John Law's contribution to this field is exemplified through his work on hierarchical channels, which integrates two types of relative timelocks via separate unspent transaction outputs (UTXOs). These timelocks facilitate distinct operational and security functions within the payment channels, harnessing TXID stability to manage timeouts efficiently. By creating dual "lanes" for the revocation of commitment transactions and handling HTLCs, Law's system ensures seamless progression of HTLC-payment transactions once the conditions of both relative timelocks are fulfilled. An interesting feature of this setup is the use of a dust output, serving primarily to exert control within the system. This methodology underscores a sophisticated application of txid stability, offering insights into improving transaction management and contractual fidelity in payment channels.
+The introduction of Contract-level Relative Timelock (CLRT) UTXO presents a solution to the specific issue of extended fund lockup times in eltoo constructs, such as ln-symmetry. By incorporating a static utxo until the conclusion of a challenge period, the approach aims to streamline the `funding-&gt;kickoff-&gt;update-&gt;settle` sequence, thereby reducing the relative timelock's resetting impact on fund liquidity. However, this method introduces challenges related to TXID stability, transaction cost implications, and technical complexities, especially in scenarios lacking TXID stability. Despite potential simplifications suggested by leveraging Chia's coinid system, concerns remain regarding the consensus changes required to support proof construction and the feasibility of maintaining concise and enforceable proofs.
 
-For further reading on the intricacies of contract-level relative timelocks, one can refer to a [detailed discussion](https://delvingbitcoin.org/t/contract-level-relative-timelocks/1353). Additionally, John Law's innovative designs and methodologies in the context of hierarchical channels and relative timelocks are accessible via his [GitHub repository](https://github.com/JohnLaw2/ln-hierarchical-channels), providing valuable resources for those interested in the technical evolution of blockchain transaction mechanisms.</summary>
-    <published>2025-01-03T22:02:29.608000+00:00</published>
+John Law's implementation of dual relative timelocks in payment channel constructions offers an example of utilizing TXID stability to enhance the operation and security of these channels. By creating separate "lanes" for managing timeouts and employing a dust output for system control, this method demonstrates the utility of txid stability in improving the functionality and reliability of payment channels. Further exploration of these concepts is available through John Law's work on GitHub, providing insight into innovative approaches to transaction management and contractual obligations within networks.</summary>
+    <published>2025-01-04T20:43:29.758000+00:00</published>
   </entry>
 </feed>
