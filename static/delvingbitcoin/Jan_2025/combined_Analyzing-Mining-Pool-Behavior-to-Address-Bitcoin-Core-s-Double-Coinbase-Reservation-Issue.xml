@@ -2,28 +2,40 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Analyzing Mining Pool Behavior to Address Bitcoin Core's Double Coinbase Reservation Issue</title>
-  <updated>2025-01-05T02:27:09.197634+00:00</updated>
+  <updated>2025-01-14T02:15:32.158693+00:00</updated>
   <author>
-    <name>everythingSats 2025-01-04 08:00:05.509000+00:00</name>
+    <name>ismaelsadeeq 2025-01-13 20:21:16.934000+00:00</name>
+  </author>
+  <author>
+    <name>0xB10C 2025-01-13 17:55:35.370000+00:00</name>
+  </author>
+  <author>
+    <name>0xB10C 2025-01-13 16:48:04.889000+00:00</name>
+  </author>
+  <author>
+    <name>everythingSats  . 2025-01-04 08:00:05.509000+00:00</name>
   </author>
   <author>
     <name>ismaelsadeeq  . 2025-01-01 19:06:06.294000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2025/4052_Analyzing-Mining-Pool-Behavior-to-Address-Bitcoin-Core-s-Double-Coinbase-Reservation-Issue.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4047_Analyzing-Mining-Pool-Behavior-to-Address-Bitcoin-Core-s-Double-Coinbase-Reservation-Issue.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4046_Analyzing-Mining-Pool-Behavior-to-Address-Bitcoin-Core-s-Double-Coinbase-Reservation-Issue.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/3958_Analyzing-Mining-Pool-Behavior-to-Address-Bitcoin-Core-s-Double-Coinbase-Reservation-Issue.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/3914_Analyzing-Mining-Pool-Behavior-to-Address-Bitcoin-Core-s-Double-Coinbase-Reservation-Issue.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Analyzing Mining Pool Behavior to Address Bitcoin Core's Double Coinbase Reservation Issue</title>
-    <updated>2025-01-05T02:27:09.197685+00:00</updated>
+    <updated>2025-01-14T02:15:32.158766+00:00</updated>
     <link href="https://delvingbitcoin.org/t/analyzing-mining-pool-behavior-to-address-bitcoin-cores-double-coinbase-reservation-issue/1351" rel="alternate"/>
-    <summary>The discussion begins with an exploration of Ocean's DATUM server, highlighting its unique feature that allows hashers to generate their own block template and edit the miner tag. This is presented as a noteworthy detail within the broader context of blockchain and mining technologies.
+    <summary>The discussion revolves around the intricacies of Bitcoin block weights and the impact of serialization and mining strategies on the efficiency and capacity of blocks. The initial focus is on the nuanced details that contribute to the overall weight of a serialized block, such as the header size and the variable integer representing the number of transactions, which altogether define the starting point for calculating the weight units (WU) of a block. This analysis leads to the revelation of a soft-maximum limit of 3,991,999 WU for blocks, derived from ensuring the package weight does not exceed a specific threshold, thus offering insights into how closely mining pools adhere to this limit by examining their residual block weights.
 
-A critical examination of Bitcoin Core's block-building algorithm uncovers a significant bug that impacts the generation of block templates. This flaw leads to an unintentional reduction in the utilization of the available block weight. The intended design reserves 4000 Weight Units (WU) for miners' coinbase transactions while aiming to create block templates with a weight of 3,996,000 WU. However, due to a double-reservation error, the system mistakenly produces templates at 3,992,000 WU. Efforts to resolve this issue have been made through a proposed Pull Request (PR), which seeks to adjust the block template size back to its theoretical limit. Despite these efforts, concerns remain regarding the potential creation of invalid block templates by miners who may not be aware of the change. It is suggested that mining pools using an updated version of Bitcoin Core should manage the combined weight of the coinbase transaction and additional transactions carefully to prevent exceeding the maximum block weight of 4,000,000 WU.
+Further examination reveals minor discrepancies in the maximum block weights across various mining pools, hinting at slight variations in their transaction addition strategies post-block template creation. The observation extends to an unexpected finding where several pools' block weights slightly surpass the anticipated soft-maximum, suggesting a uniform behavior among them that could be attributed to additional transactions being included after receiving the template from Bitcoin Core. This raises questions about the common practices and possible optimizations within the mining process that deviate from expected behaviors.
 
-An extensive analysis was conducted over a two-year period from December 24, 2022, to December 23, 2024, examining over 107,313 blocks. This study utilized various tools and methodologies to investigate block weights and mining pool behaviors. The process involved deserializing each block to examine the weights of coinbase transactions and associating them with specific mining pools using data from [libbitcoinkernel](https://github.com/stickies-v/py-bitcoinkernel/) and [bitcoin-data/mining-pools](https://github.com/bitcoin-data/mining-pools). Additionally, scripts available on GitHub ([analysis script](https://github.com/ismaelsadeeq/mining-analysis?tab=readme-ov-file3-generate_resultspy), [graph generation scripts](https://github.com/ismaelsadeeq/mining-analysis?tab=readme-ov-file4-graph-generation-scripts)) facilitated comprehensive data saving and analysis.
+Ocean's DATUM server emerges as a significant innovation within this context, providing a decentralized approach that allows users to generate and customize their own block templates and edit miner tags. This capability introduces a new level of personalization and flexibility, enhancing user engagement and potentially improving the efficacy of data management on the platform. By empowering users with these tools, Ocean is reshaping the landscape of blockchain technology, emphasizing a user-centric model that could lead to more optimized and effective utilization of its ecosystem.
 
-The findings from this analysis reveal that most mining pools adhere to Bitcoin Core's default settings, maintaining their coinbase transaction weights well below the 4000 WU threshold. Nevertheless, exceptions were noted with Ocean.xyz and an unidentified pool, which appeared to exceed this limit, indicating a possible adjustment in their `-blockmaxweight` settings to allow for larger coinbase transactions. In contrast, F2Pool was observed to optimize the use of available block weight, producing blocks that approach the maximum allowed weight and thereby showcasing efficient resource utilization. The study also points out a general trend of underutilization among several pools, attributable to the identified bug. Addressing this discrepancy would ensure that actual block weights align with theoretical expectations, enabling mining pools to maximize efficiency by fully utilizing the available block weight capacity. Such an adjustment would promote fairness and clarity within the mining community and for developers working with Bitcoin Core, ensuring that the network functions more closely to its intended design.</summary>
-    <published>2025-01-04T08:00:05.509000+00:00</published>
+The document also uncovers a critical bug in Bitcoin Core's block-building algorithm, which inadvertently causes an underutilization of the available block weight due to a double-reservation error. This discovery has prompted efforts to rectify the issue through proposed changes that aim to realign the block template size with the theoretical limit while cautioning about the risk of generating invalid blocks. An extensive analysis covering over 107,313 blocks sheds light on the adherence to default settings by most mining pools and highlights exceptions where certain pools exceed the standard coinbase transaction weights, suggesting alterations in their `-blockmaxweight` settings. This thorough investigation underscores the need for adjustments to correct the identified discrepancy, aiming to enhance fairness and operational efficiency within the Bitcoin network by ensuring that mining activities align more closely with the system's designed capabilities.</summary>
+    <published>2025-01-13T20:21:16.934000+00:00</published>
   </entry>
 </feed>
