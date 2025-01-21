@@ -75,7 +75,7 @@ class XMLReader:
         tree = ET.parse(full_path)
         root = tree.getroot()
         title = root.findall(".//atom:entry/atom:title", namespaces)[0].text
-        updated_at = datetime.fromisoformat(root.findall(".//atom:entry/atom:updated", namespaces)[0].text)
+        updated_at = datetime.fromisoformat(root.findall(".//atom:entry/atom:updated", namespaces)[0].text).isoformat()
         title_for_id = title.replace('Combined summary - ', '')
         id = 'combined_' + clean_title(title_for_id)
         summary = root.findall(".//atom:entry/atom:summary", namespaces)[0].text
