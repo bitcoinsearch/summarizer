@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Contract-level Relative Timelocks (or, let's talk about ancestry proofs and singletons)</title>
+  <updated>2025-01-22T02:17:58.304091+00:00</updated>
+  <author>
+    <name>instagibbs 2025-01-06 13:48:48.988000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Contract-level Relative Timelocks (or, let's talk about ancestry proofs and singletons)</title>
+    <updated>2025-01-22T02:17:58.304146+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/contract-level-relative-timelocks-or-lets-talk-about-ancestry-proofs-and-singletons/1353" rel="alternate"/>
+    <summary>The exploration of Contract-level Relative Timelock (CLRT) for the Eltoo payment channel model addresses a critical limitation in current blockchain protocols, specifically within the Bitcoin ecosystem. The primary issue at hand is the reset of the relative timelock with every update transaction confirmation on the blockchain. This reset mechanism extends the lockup of funds and the expiry of Hashed Timelock Contracts (HTLCs) in the Lightning Network (LN), potentially diminishing the network's utility. To counteract this, the proposition involves the creation of a specialized unspent transaction output (UTXO) that remains static until the contract’s challenge period concludes. This UTXO allows the concurrent spending of the contract state output and the relative timelock output, thereby introducing a novel approach to managing contract states and settlement delays in a more efficient manner.
+
+The adaptation for Eltoo includes modifying the transaction sequence from `funding-&gt;update-&gt;settle` to `funding-&gt;kickoff-&gt;update-&gt;settle`, where kickoff transactions incorporate an additional CLRT output. This output commits to a relative delay for the Eltoo challenge period before a settlement can proceed and necessitates a recursive proof linking back to an update transaction's state output. Consequently, any spending of the state output mandates the concurrent spending of the CLRT output, ensuring mutual dependency for settlement transactions.
+
+Addressing the complexity of implementing such a system without transaction ID (TXID) stability, the solution simplifies under the assumption of TXID stability by leveraging consensus signatures and a straightforward conditional script. However, in the absence of TXID stability, a high-level framework suggests introspecting the "current" input's previous output and constructing a proof chain that validates each step of the transaction sequence up to the settlement. This method, while theoretically sound, faces challenges including potential requirement for consensus changes, increased transaction sizes, and vulnerability to malicious actions by a counterparty designed to inflate proof sizes beyond consensus limits.
+
+An alternative perspective utilizing Chia’s coinid mechanism is also presented, highlighting a simpler, yet still linearly complex, approach to tracking update histories through SHA256 hashing of parent coin IDs, puzzle hashes, and amounts. This method implies a less cumbersome process for validating contract states and relative timelocks, albeit with its own set of limitations in terms of update history length and transaction overhead.
+
+In summary, the proposal for a Contract-level Relative Timelock introduces a nuanced method to mitigate the drawbacks associated with time locking in blockchain contracts, especially within the LN framework. By devising a dedicated UTXO for the challenge period and enforcing concurrent spending rules, it promises to streamline updates and settlements in the Eltoo model. Despite the technical hurdles, particularly concerning proof construction and potential consensus adjustments, this concept underscores the ongoing efforts to enhance scalability and efficiency in blockchain protocols. Further details and discussions on this topic can be found through this [link](https://delvingbitcoin.org/t/contract-level-relative-timelocks/1353).</summary>
+    <published>2025-01-06T13:48:48.988000+00:00</published>
+  </entry>
+</feed>
