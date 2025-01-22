@@ -1,6 +1,3 @@
-from datetime import datetime, timedelta
-
-import pytz
 import tqdm
 import traceback
 from loguru import logger
@@ -18,8 +15,6 @@ if __name__ == "__main__":
 
     xml_reader = XMLReader()
     elastic_search = ElasticSearchClient()
-
-    now = datetime.now(pytz.UTC)
 
     total_combined_files = []
     static_dirs = [
