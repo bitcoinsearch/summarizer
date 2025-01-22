@@ -27,12 +27,12 @@ if __name__ == "__main__":
     for static_dir in static_dirs:
         combined_files = glob.glob(f"static/{static_dir}/**/{pattern}")
         total_combined_files.extend(combined_files)
-    logger.info(f"Total combined files: {(len(total_combined_files))}")
+    logger.info(f"Total combined summary files: {(len(total_combined_files))}")
 
     # get unique combined file paths
     total_combined_files_dict = {os.path.splitext(os.path.basename(i))[0]: i for i in total_combined_files}
 
-    logger.info(f"Total unique combined files: {len(total_combined_files_dict)}")
+    logger.info(f"Total unique combined summary files: {len(total_combined_files_dict)}")
 
     count_new = 0
     count_updated = 0
@@ -46,6 +46,17 @@ if __name__ == "__main__":
                 # remove timestamps from author's names and collect unique names only
                 xml_file_data['authors'] = remove_timestamps_from_author_names(xml_file_data['authors'])
 
+            latest_updated_at = xml_file_data['updated_at']
+
+            # check updated_at in ES doc
+            doc_id = xml_file_data['id']
+            doc = elastic_search.document_view(index_name=ES_INDEX, doc_id=doc_id)
+            prev_updated_at = doc['_source']['updated_at']
+
+            # sync the ES doc if there is any update in the XML File, else skip it
+            if latest_updated_at == prev_updated_at:
+                continue
+
             res = elastic_search.es_client.update(
                 index=ES_INDEX,
                 id=file_name,
@@ -55,7 +66,7 @@ if __name__ == "__main__":
                 }
             )
 
-            logger.success(f"Version-{res['_version']}, Result-{res['result']}, ID-{res['_id']}")
+            logger.success(f"Version: {res['_version']}, Result: {res['result']}, ID: {res['_id']}, Domain: {xml_file_data['domain']}")
             if res['result'] == 'created':
                 count_new += 1
             if res['result'] == 'updated':

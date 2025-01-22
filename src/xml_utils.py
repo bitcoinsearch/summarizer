@@ -1,6 +1,7 @@
 import re
 import pandas as pd
 from feedgen.feed import FeedGenerator
+from lxml import etree
 from tqdm import tqdm
 import platform
 import shutil
@@ -18,6 +19,7 @@ from src.gpt_utils import create_summary
 
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
+
 elastic_search = ElasticSearchClient()
 
 
@@ -73,6 +75,7 @@ class XMLReader:
         tree = ET.parse(full_path)
         root = tree.getroot()
         title = root.findall(".//atom:entry/atom:title", namespaces)[0].text
+        updated_at = datetime.fromisoformat(root.findall(".//atom:entry/atom:updated", namespaces)[0].text).isoformat()
         title_for_id = title.replace('Combined summary - ', '')
         id = 'combined_' + clean_title(title_for_id)
         summary = root.findall(".//atom:entry/atom:summary", namespaces)[0].text
@@ -107,7 +110,8 @@ class XMLReader:
             'type': "combined-summary",
             'domain': domain if domain else None,
             'thread_url': link if link else None,
-            'indexed_at': indexed_at if indexed_at else None
+            'indexed_at': indexed_at if indexed_at else None,
+            'updated_at': updated_at if updated_at else None
         }
 
 
@@ -195,11 +199,11 @@ class GenerateXML:
 
         # For each individual summary (XML file) that exists for the
         # given thread, extract and append their content to the dictionary
-        # TODO: 
+        # TODO:
         # This method is called for every post without a summary, which means that
         # existing inidividual summaries for a thread are added n-1 times the amount
         # of new posts in the thread at the time of execution of the cron job.
-        # this is not an issue because we then drop duplicates, but it's extra complexity. 
+        # this is not an issue because we then drop duplicates, but it's extra complexity.
         for file in files_list:
             file = file.replace("\\", "/")
             if os.path.exists(file):
@@ -232,7 +236,7 @@ class GenerateXML:
         summary exists, it extracts the content of individual summaries, appending it
         to the data dictionary.
         """
-        combined_file_fullpath = None # the combined XML file if found
+        combined_file_fullpath = None  # the combined XML file if found
         # List to keep track of the month folders that contain
         # the XML files for the posts of the current thread
         month_folders = []
@@ -288,7 +292,7 @@ class GenerateXML:
     def generate_new_emails_df(self, main_dict_data, dev_url):
         # Define XML namespace for parsing XML files
         namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
- 
+
         # Retrieve all existing XML files (summaries) for the given source
         files_list = self.get_local_xml_file_paths(dev_url)
 
@@ -299,9 +303,9 @@ class GenerateXML:
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
-        # Process each document in the input data   
+        # Process each document in the input data
         for idx in range(len(main_dict_data)):
-            xmls_list = [] # the existing XML files for the thread that the fetched document is part of
+            xmls_list = []  # the existing XML files for the thread that the fetched document is part of
             thread_title = main_dict_data[idx]["_source"]["title"]
             if thread_title in seen_titles:
                 continue
