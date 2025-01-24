@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disclosure: LDK Invalid Claims Liquidity Griefing</title>
+  <updated>2025-01-24T02:17:29.963212+00:00</updated>
+  <author>
+    <name>morehouse 2025-01-23 16:08:59.376000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disclosure: LDK Invalid Claims Liquidity Griefing</title>
+    <updated>2025-01-24T02:17:29.963246+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-ldk-invalid-claims-liquidity-griefing/1400" rel="alternate"/>
+    <summary>The blog post discusses a significant vulnerability in the Lightning Development Kit (LDK) version 0.0.125 and below, which affects anchor channels through a liquidity griefing attack. This attack makes funds unrecoverable unless a valid claim transaction is manually constructed and broadcasted. To resolve this issue, users are urged to update to LDK 0.1 and replay the sequence of commitment and HTLC transactions that led to the lockup. The root cause of this vulnerability lies in the logic LDK uses to handle conflicting HTLC claims on force-closed channels. Specifically, if a counterparty's HTLC claim gets confirmed first, LDK's aggregated transactions become invalid due to already-spent inputs. The flaw in the pre-0.1 version is that LDK stops processing once it finds the first conflict, leaving other potential conflicting aggregated transactions unaddressed.
+
+The attacker's strategy involves opening an anchor channel and routing HTLCs in a manner that exploits this bug, leading to the locking up of funds. Critically, the logic failure stems from how LDK processes confirmed transactions, removing conflicting inputs only from the first detected aggregated transaction. This oversight allows an attacker to lock up HTLCs by spending them in a way that conflicts with multiple aggregated LDK transactions.
+
+In response to discovering this vulnerability, a fix was implemented in LDK 0.1, rectifying the invalid claims bug through a simple code change. This issue was initially unnoticed for years due to the complex and unreadable nature of the codebase, highlighting the importance of code readability and simplicity in preventing bugs. The discovery and subsequent patching of this vulnerability underscore the continuous need for vigilance and regular auditing in software development, especially in critical financial applications like those built on the LDK.
+
+For users and developers relying on LDK for building Bitcoin Lightning Network applications, updating to version 0.1 is crucial for security. This update not only addresses the described vulnerability but also serves as a reminder of the ever-present risk of attacks in the cryptocurrency space and the importance of maintaining and reviewing codebases for potential weaknesses. The detailed disclosure and timeline of events leading to the fix provide valuable insights into the process of identifying and correcting software vulnerabilities in a transparent and responsible manner.</summary>
+    <published>2025-01-23T16:08:59.376000+00:00</published>
+  </entry>
+</feed>

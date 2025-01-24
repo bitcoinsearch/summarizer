@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Reiterating centralized coinjoin (Wasabi &amp; Samourai) deanonymization attacks</title>
-  <updated>2025-01-08T02:34:09.599151+00:00</updated>
+  <updated>2025-01-24T02:19:02.124986+00:00</updated>
+  <author>
+    <name>Peter Todd 2025-01-23 16:25:00+00:00</name>
+  </author>
   <author>
     <name>Yuval Kogman 2025-01-07 21:33:00+00:00</name>
   </author>
@@ -18,6 +21,7 @@
   <author>
     <name>Yuval Kogman 2024-12-21 14:16:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/Jan_2025/mc39015045fa52306c60a7325d2dcf28a9805a536_Reiterating-centralized-coinjoin-Wasabi-Samourai-deanonymization-attacks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2025/mc443b9fe5281ff0e052fbf07ef8658cb9f58e8b3_Reiterating-centralized-coinjoin-Wasabi-Samourai-deanonymization-attacks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2025/m5a87b0da2ce605b2c2ec98bf923623c964737a57_Reiterating-centralized-coinjoin-Wasabi-Samourai-deanonymization-attacks.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2025/m67d35c282feb10ffc6980888dece47e68b7b95d4_Reiterating-centralized-coinjoin-Wasabi-Samourai-deanonymization-attacks.xml" rel="alternate"/>
@@ -27,19 +31,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Reiterating centralized coinjoin (Wasabi &amp; Samourai) deanonymization attacks</title>
-    <updated>2025-01-08T02:34:09.599204+00:00</updated>
+    <updated>2025-01-24T02:19:02.125046+00:00</updated>
     <link href="https://gnusha.org/pi/bitcoindev/CAAQdECCdRVV+3ZoJhOotKEvmUV4yrV7EYWE8SOWCE1CF9tZ6Yg@mail.gmail.com/T/#u#m995ad0da6c23dfb6ac4c420e17a4358181e3567e" rel="alternate"/>
-    <summary>The conversation delves into the intricacies of maintaining anonymity within cryptocurrency mixing services, pinpointing specific vulnerabilities and challenges that could compromise user privacy. It elaborates on the necessity of a meticulous approach to blind signatures in mixing processes, citing a correction made in Wasabi 1 to prevent potential disruptions. The possibility of deanonymization through observation attacks is acknowledged, albeit with skepticism regarding their feasibility given the current client software protections.
+    <summary>The discussion revolves around the security and privacy concerns associated with coinjoin implementations, particularly focusing on Wasabi and its vulnerabilities to sybil attacks and issues arising from failed rounds. Sybil attacks, where an adversary can flood the coinjoin mechanism with their requests, although costly, are highlighted as a significant threat due to the possibility of anonymity compromise. The critique extends to the potential for attacks through failed rounds, which may allow attackers to learn about the linkage between inputs and outputs without incurring transaction fees. This risk is exacerbated if Wasabi were to reuse outputs in subsequent rounds, a practice that has not been confirmed but poses a substantial privacy concern.
 
-A significant portion of the discussion is dedicated to exploring how servers might covertly deanonymize users by manipulating UTXO placements in mixing rounds. This strategy is highlighted as a subtle yet potent risk, especially if a server can align targeted UTXOs with those under adversary control. The dialogue also touches upon Wasabi's logging practices concerning round IDs and the potential privacy risks emanating from mishandled logs. Despite some efforts towards mitigating these risks, such as log scrubbing and pre-publication of round IDs, concerns linger about their efficacy against history intersection attacks. Proposed measures like redundant queries and deterministic shuffling aim to bolster privacy and security, underscoring the ongoing efforts to navigate the complex landscape of user anonymity in mixing services.
+The conversation further explores the implications of lite clients in the context of verifying unspent transactions. It's argued that the focus on lite client support by Wasabi might be misplaced since the Bitcoin consensus mechanism inherently validates the existence of coins, rendering the verification by clients unnecessary for the success of a coinjoin round. However, this does not negate the potential for sybil attacks facilitated by manipulating round identity consistency, leveraging a form of MITM attack to reuse liquidity and fees across fake participants. The feasibility of validating round ID consistency post-transaction to ensure the round was not compromised is considered, alongside the cryptographic challenge of ensuring the authenticity of public keys used in signing these transactions.
 
-Yuval Kogman's inquiries shed light on the methodological aspects of detecting system attacks, particularly the importance of consistent key usage and the potential for proactive or retrospective attack identification through diligent log management. The discourse raises critical questions about the ability to track and safeguard against malicious activities within the system, emphasizing the need for robust log management practices.
+Yuval Kogman's email brings to light additional vulnerabilities specific to the role of coordinators in coinjoins. The ability of coordinators to compromise user anonymity either by selectively excluding entities or incorporating their own into the join represents a fundamental weakness. The decentralization of coordination roles and imposing costs on participation are discussed as potential mitigations, though not foolproof solutions. Furthermore, the vulnerability stemming from the manipulation of elements like blinding keys and round IDs emphasizes the delicate nature of user identity within these systems, reliant solely on the contributed coins.
 
-Furthermore, the critique extends to the foundational trust issues plaguing Wasabi &amp; GingerWallet, alongside the CoinJoin protocols of both wallets and Samourai wallet, highlighting a deep-seated vulnerability to deanonymization. The discussion reflects on personal experiences with WabiSabi protocol development, abandoned due to fitness-for-purpose concerns, and scrutinizes the Whirlpool and WabiSabi protocols for allowing malicious coordinators to deanonymize transactions. This vulnerability, primarily linked to the manipulation of blind signing keys in Whirlpool and inconsistent round IDs in WabiSabi, showcases fundamental design flaws that undermine privacy assurances.
+Technical analysis reveals a bug in Wasabi 1, corrected in the Samourai Wallet's codebase, which prevented clients from accumulating blind signatures across rounds, addressing a possible disruption vector in the mixing process. The risk of deanonymization through server manipulation of UTXO placement in mixing rounds is also highlighted, illustrating a method for covertly breaching user privacy. Concerns regarding the publication and logging of round IDs, potentially compromising privacy through history intersection attacks, are underscored, despite proposed mitigations such as log scrubbing and pre-publication of round IDs.
 
-The narrative also examines the broader implications of these vulnerabilities, including poor coin selection practices, timing issues in input registrations, and Tor circuit management deficiencies. These factors collectively exacerbate the risk of deanonymization. Additionally, the use of JSON and HTTP introduces serialization variability that could further endanger user privacy. Economic incentives within the system, such as coordination fees and anonymous credential mechanisms, initially intended to ensure fair compensation, are critiqued for failing to prevent user fund thefts, reflecting a significant oversight in balancing privacy protection with financial security.
-
-This summary encapsulates a multifaceted dialogue within the Bitcoin development community, illustrating the dynamic tension between advancing privacy-enhancing technologies and maintaining high standards of security and trust. It underscores the complexities involved in evolving cryptocurrency protocols to satisfy privacy-conscious users while addressing exploitation and misuse risks.</summary>
-    <published>2025-01-07T21:33:00+00:00</published>
+Finally, the broader dialogue encapsulates the persistent trust issues between users and coordinators, amplified by rent-seeking behaviors and competence questions. The historical context of WabiSabi's abandonment due to fitness concerns is mentioned, alongside the critical flaw in both Whirlpool and WabiSabi protocols allowing malicious coordinators to deanonymize transactions fully. Despite technical attempts to address these vulnerabilities, core issues related to key consistency and effective verification mechanisms remain unresolved, raising significant concerns over coin selection practices, timing leaks, and protocol-level privacy compromises. This summary underscores ongoing efforts and debates within the Bitcoin community to balance privacy enhancement with security and user trust, highlighting the complex challenges in evolving cryptocurrency protocols.</summary>
+    <published>2025-01-23T16:25:00+00:00</published>
   </entry>
 </feed>

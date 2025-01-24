@@ -2,12 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2025-01-21T02:16:03.182573+00:00</updated>
+  <updated>2025-01-24T02:16:55.426170+00:00</updated>
   <author>
-    <name>ajtowns 2025-01-20 14:43:27.958000+00:00</name>
+    <name>ajtowns 2025-01-24 00:42:29.140000+00:00</name>
   </author>
   <author>
-    <name>0xB10C 2025-01-20 10:51:08.698000+00:00</name>
+    <name>sipa 2025-01-23 22:37:29.313000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns 2025-01-23 21:00:49.186000+00:00</name>
+  </author>
+  <author>
+    <name>jungly 2025-01-23 17:14:31.157000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs 2025-01-23 14:46:08.743000+00:00</name>
+  </author>
+  <author>
+    <name>jungly 2025-01-23 08:49:12.690000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2025-01-20 14:43:27.958000+00:00</name>
+  </author>
+  <author>
+    <name>xBC  . 2025-01-20 10:51:08.698000+00:00</name>
   </author>
   <author>
     <name>ismaelsadeeq  . 2025-01-19 15:21:50.002000+00:00</name>
@@ -30,6 +48,12 @@
   <author>
     <name>xBC  . 2024-08-02 12:08:52.409000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Jan_2025/4094_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4093_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4092_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4090_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4088_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4087_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/4080_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/4079_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/4078_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -43,19 +67,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2025-01-21T02:16:03.182669+00:00</updated>
+    <updated>2025-01-24T02:16:55.426275+00:00</updated>
     <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052" rel="alternate"/>
-    <summary>The recent discussions and analyses surrounding Bitcoin transaction processing have shed light on multiple facets of the blockchain's operational intricacies, focusing particularly on the management of orphan transactions and the optimization of block reconstructions. A pivotal development in this area is the modification suggested by a recent pull request, as seen in [Bitcoin's GitHub repository](https://github.com/bitcoin/bitcoin/pull/31397), which aims to enhance the process of requesting parents for orphan transactions from peers. This improvement is further exemplified by the implementation of a specific patch ([see patch](https://github.com/0xB10C/bitcoin/commit/90181a45651fdebc7cc5dc5262416f0f83fa4c48)), which has been actively tested across various nodes to monitor its efficacy.
+    <summary>The discussion revolves around various technical nuances concerning the handling of Bitcoin transactions, particularly focusing on aspects like the mempool, transaction eviction policies, and blockchain efficiency. A notable point of interest is the limit on extra transactions, which stands at 100 transactions by default, a considerably small figure compared to a 20MB data cap. This distinction underscores the operational mechanics within Bitcoin's transaction management, where all evicted transactions are processed through an extra transactions pool without prioritizing those at the top of the mempool. The implications of such mechanisms extend towards potential vulnerabilities, including denial-of-service (DoS) attacks that could escalate from bandwidth waste to disk filling.
 
-The logs from these tests, as illustrated in an example log ([view log](https://gist.github.com/0xB10C/bc24f1406443faf92fe30efd16555327)), indicate a need for a detailed analysis into why certain transactions were not known or were evicted from a node's memory pool, potentially due to factors like low fee rates, expiration, or non-standard characteristics. These observations have led to suggestions such as increasing the `-blockreconstructionextratxn` parameter beyond its default setting to improve transaction processing performance and examining the orphan pool for missing transactions.
+The conversation further delves into strategies aimed at mitigating round trips during block relay by proposing restrictions on transaction retention based on their age and size. Such measures suggest keeping transactions that were in the mempool within the last 20 minutes and limiting storage to the most recent 20MB of transactions. Additionally, the dialogue touches on the concept of backing the mempool with a database store to manage transactions pushed out due to better fees, thereby facilitating easier retrieval from disk rather than over the network. This approach is juxtaposed with libbitcoin's methodology, which does not delete any received transactions, offering a contrast in how transactions might be managed to avoid network fetches for required transactions later.
 
-In a broader context, the examination of blocks with low numbers of transactions reveals insights into the prevalence of non-standard transactions and their impact on network efficiency. Such analysis highlights how prioritization mechanisms outside of standard queues, possibly through inconsistent eviction policies or external transaction relaying, can influence network dynamics. This inquiry underlines the importance of understanding the underlying causes of observed phenomena to enhance the fairness, efficiency, and transparency of the blockchain transaction processing system.
+A significant update in the Bitcoin repository highlights an enhancement in managing orphan transactions, aiming to streamline their verification and inclusion in the blockchain by requesting parent transactions directly from peers. This advancement reflects a broader effort to address scalability and efficiency challenges within the Bitcoin network. Moreover, an examination of node behavior via specific patches reveals insights into transaction handling discrepancies, suggesting improvements such as increasing the `-blockreconstructionextratxn` setting for better recall of transactions and investigating the orphan pool for potentially unacknowledged transactions.
 
-Furthermore, the discussion extends to the technical aspects of Bitcoin Core, specifically its maintenance of a specialized pool for compact block reconstructions. The `-blockreconstructionextratxn` parameter plays a significant role in this mechanism by specifying the number of additional transactions retained to assist in reconstructing compact blocks. This feature underscores the efforts to optimize blockchain efficiency, distinguishing between the impacts of mempool size variations and the strategic management of internal transaction pools.
+The analysis extends to the evaluation of blocks containing low numbers of transactions to determine the prevalence of non-standard transactions, which might indicate undue advantages in transaction processing times or inconsistencies in eviction practices. Furthermore, the discourse explores the operational dynamics of compact block reconstructions, differentiating between low- and high-bandwidth modes in terms of efficiency and the need for additional transaction requests. Observations suggest areas for optimization, particularly in pre-filling transactions to reduce reliance on subsequent requests, and highlight the potential impact of network congestion on block reconstruction efficiency. 
 
-Exploration into the efficiency of block reconstructions in different bandwidth modes reveals that high-bandwidth mode, which accounts for the majority of compact block deliveries, generally requires fewer requests for transactions compared to low-bandwidth mode. This observation suggests avenues for optimizing low-bandwidth delivery by pre-filling transactions, a potential improvement noted but not yet implemented in Bitcoin Core’s codebase. The upcoming release of Bitcoin Core v28.0, introducing full-RBF, presents an opportunity to reassess and potentially enhance the efficiency of compact block delivery and reconstruction across both bandwidth modes.
-
-Lastly, the analysis facilitated by `debug=cmpctblock` logging offers valuable insights into the frequency and conditions under which additional transaction requests are made during block reconstructions. Variations in node configurations and their impact on block reconstruction efficiency highlight the importance of tailored settings, such as the adjustment of maximum connections and the adoption of `mempoolfullrbf=1`, in improving network performance. This comprehensive review of block reconstruction practices and the associated challenges underscores the ongoing efforts to refine Bitcoin transaction processing and the critical role of community contributions and technical advancements in achieving these objectives.</summary>
-    <published>2025-01-20T14:43:27.958000+00:00</published>
+Finally, the exploration underlines the importance of adjusting node configurations and policies, such as enabling `mempoolfullrbf` by default, to enhance block propagation times and overall network performance. The inquiry into block reconstruction times across various nodes stresses the significance of network positioning and hardware capabilities in influencing blockchain efficiency, raising questions about the comparative needs for extra transactions and the historical performance of block reconstructions prior to certain policy adoptions. This comprehensive analysis encapsulates the complexities and challenges inherent in optimizing transaction processing and block reconstruction within the Bitcoin network, pointing towards continued research and adjustments to improve scalability and robustness.</summary>
+    <published>2025-01-24T00:42:29.140000+00:00</published>
   </entry>
 </feed>
