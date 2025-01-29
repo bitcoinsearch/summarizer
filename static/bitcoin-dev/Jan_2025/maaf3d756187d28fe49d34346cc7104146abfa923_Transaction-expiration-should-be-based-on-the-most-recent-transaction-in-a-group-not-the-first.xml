@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Transaction expiration should be based on the most recent transaction in a group, not the first</title>
+  <updated>2025-01-29T02:17:46.678355+00:00</updated>
+  <author>
+    <name>Peter Todd 2025-01-28 22:25:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Transaction expiration should be based on the most recent transaction in a group, not the first</title>
+    <updated>2025-01-29T02:17:46.678388+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/Z5lZc28t9-tCxdHN@petertodd.org/T/#u#maaf3d756187d28fe49d34346cc7104146abfa923" rel="alternate"/>
+    <summary>In the realm of Bitcoin Core development, a notable function concerns the expiration of transactions within the mempool, based on their entry time. This process involves iterating through transactions that have been in the mempool until a specified time and then removing them. Interestingly, this mechanism does not account for whether these transactions have descendants, leading to potential issues where a transaction and its subsequent dependent transaction could be removed together once the original transaction reaches its expiration.
+
+Critiques of this system are multifaceted. Firstly, it's pointed out as inefficient, especially for users attempting to facilitate a Child Pays For Parent (CPFP) scenario, where one is willing to pay extra to prioritize an old transaction. The requirement to rebroadcast a transaction upon its expiration is seen as unnecessary. Secondly, there's an argument that this approach could be exploited for a free-relay Denial of Service (DoS) attack, allowing an actor to broadcast a large transaction right before the expiration of another, consuming bandwidth without cost. Lastly, there's concern over the potential for leveraging transaction expiration in transaction cycling attacks, a sophisticated form of network abuse.
+
+Despite these criticisms, the rationale behind transaction expiration primarily hinges on the mitigation of risks associated with accepting non-mineable transactions due to soft-fork complications or other anomalies. However, this reasoning is contested with the observation that transactions, even those several months old, do eventually get mined, questioning the necessity of expiring them from the mempool and the consequent bandwidth used for rebroadcasting.
+
+The discussion extends beyond technical critiques to the philosophical stance on whether transaction expiration serves a beneficial role within Bitcoin's network management practices. The debate encapsulates concerns over network efficiency, security vulnerabilities, and the broader implications of mempool management strategies on transaction longevity and miner incentives. Further exploration and debate on this topic can be found through contributors like Peter Todd, whose insights into Bitcoin’s intricate dynamics offer a deep dive into the complexities of blockchain technology and network management ([Peter Todd](https://petertodd.org)).</summary>
+    <published>2025-01-28T22:25:00+00:00</published>
+  </entry>
+</feed>

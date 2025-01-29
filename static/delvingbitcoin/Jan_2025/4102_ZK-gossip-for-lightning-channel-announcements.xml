@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>ZK-gossip for lightning channel announcements</title>
+  <updated>2025-01-29T02:15:22.223831+00:00</updated>
+  <author>
+    <name>halseth 2025-01-28 13:10:04.280000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>ZK-gossip for lightning channel announcements</title>
+    <updated>2025-01-29T02:15:22.223860+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/zk-gossip-for-lightning-channel-announcements/1407" rel="alternate"/>
+    <summary>The proposal at hand extends the taproot gossip protocol, aiming to enhance privacy by enabling channels to avoid revealing their outpoint. This extension is built on Utreexo and zero-knowledge proofs (ZK-proofs) and comes with a proof-of-concept Rust implementation. It is designed as an addition to the existing gossip v1.75 proposal, specifically targeting privacy-conscious users. The proposed system introduces a new message type, `channel_announcement_2`, which includes a Musig2 signature to prove control over a UTXO without directly linking to it.
+
+Elle's detailed examination of the gossip v1.75 proposal provides a foundational understanding of these mechanisms. The core idea revolves around the use of ZK-proofs to dissociate the channel from its on-chain output, thus preserving anonymity while maintaining network security against DOS attacks. For creating a ZK-proof, essential data are derived from the current taproot gossip channel announcement such as node IDs, bitcoin keys, and channel capacity. A Utreexo accumulator and a proof of the channel output’s inclusion in this accumulator are also utilized. The process validates several key elements, including the aggregation and sorting of bitcoin keys and node IDs, the channel capacity vis-a-vis the UTXO value, and the verification of the UTXO within the set using the Utreexo proof.
+
+Moreover, a novel `channel_announcement_zk` message format is proposed to incorporate these ZK-proofs efficiently within the protocol. This message contains identifiers like the chain hash, capacity, node IDs, Utreexo root, a unique ZK-type identifier for the verification program, the ZK-proof itself, and a PKHash that serves as a unique channel identifier. This structure enables nodes to verify channel announcements without direct linkage to on-chain transactions, addressing privacy concerns.
+
+Handling the reception of `channel_announcement_zk` messages requires nodes to check the PKHash for known channels and validate the proof if recognized. Given the inability to detect channel closings on-chain with this method, it is suggested that channels periodically refresh their announcements, potentially every two weeks, to confirm their active status within the UTXO set.
+
+For practical demonstration, a branch containing code and documentation outlines the creation process of a proof based on the original channel announcement. This work leverages RiscZero, indicating ease of integrating additional constraints into UTXO verification. Further insights into proof types, advantages, disadvantages, and the overall concept are available through detailed documentation, contributing to the broader discussion on privacy-preserving approaches in Lightning Network gossip protocols. Feedback on this innovative extension is highly valued as it represents a significant step towards more private and secure Lightning Network operations.</summary>
+    <published>2025-01-28T13:10:04.280000+00:00</published>
+  </entry>
+</feed>
