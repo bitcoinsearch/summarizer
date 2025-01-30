@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disclosure: LDK Duplicate HTLC Force Close Griefing</title>
+  <updated>2025-01-30T02:19:24.685091+00:00</updated>
+  <author>
+    <name>morehouse 2025-01-29 18:02:41.349000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disclosure: LDK Duplicate HTLC Force Close Griefing</title>
+    <updated>2025-01-30T02:19:24.685123+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-ldk-duplicate-htlc-force-close-griefing/1410" rel="alternate"/>
+    <summary>The Lightning Development Kit (LDK) version 0.1 and earlier was found to be vulnerable to a specific griefing attack that could force the closure of a victim's channels. This issue was addressed in LDK version 0.1.1, with the update available on [GitHub](https://github.com/lightningdevkit/rust-lightning/releases/tag/v0.1.1). The vulnerability stemmed from how channel commitment transactions are updated for each new or settled payment via lightning channels. Specifically, a brief period exists where a party may hold two valid commitment transactions, leading to potential mismatches between confirmed commitment transactions and the set of current HTLCs (Hashed Time-Locked Contracts).
+
+During an audit of LDK's chain module, it was discovered that once a counterparty's commitment transaction had been revoked, LDK would forget the HTLC source data for that transaction to conserve memory. This approach led to issues if a revoked commitment transaction later confirmed, as LDK would then attempt to match HTLCs solely based on payment hashes and amounts, without considering the HTLC source data. The logic employed for this matching inadvertently allowed a single HTLC on a revoked commitment transaction to prevent all duplicate outstanding HTLCs from being failed back immediately, leaving them outstanding indefinitely.
+
+An attack exploiting this vulnerability involved routing multiple HTLCs with the same payment hash and amount through different channels to a target node (B), then confirming a revoked commitment transaction containing only one of these HTLCs at node M2. This resulted in only one HTLC being failed back, with the rest becoming stuck, eventually leading all affected channels to be force-closed by their respective nodes to reclaim the stuck HTLCs. The cost of executing such an attack is minimal compared to the potential damage, as the attacker can minimize their channel balance before carrying out the attack.
+
+The resolution introduced in LDK version 0.1.1 preemptively fails back HTLCs as their deadlines approach if the downstream channel has been force-closed or is in the process of closing, thereby addressing the bug and preventing the indefinite stalling of duplicate HTLCs. This fix also aims to mitigate cascading force closures due to spikes in mempool fee rates.
+
+This incident underscores the importance of thorough documentation in software development. It was noted that better documentation of the original behavior might have prevented the introduction of this vulnerability. A comment explaining the rationale behind failing back all outstanding HTLCs upon confirmation of a revoked commitment could have provided valuable context to prevent future oversights.</summary>
+    <published>2025-01-29T18:02:41.349000+00:00</published>
+  </entry>
+</feed>
