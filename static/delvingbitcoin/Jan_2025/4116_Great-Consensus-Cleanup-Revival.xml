@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Great Consensus Cleanup Revival</title>
+  <updated>2025-01-31T02:15:38.367026+00:00</updated>
+  <author>
+    <name>AntoineP 2025-01-30 23:31:58.155000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Great Consensus Cleanup Revival</title>
+    <updated>2025-01-31T02:15:38.367061+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/66" rel="alternate"/>
+    <summary>The discussion about the implementation of a grace period for the timewarp fix in Bitcoin mining operations highlights several key concerns and perspectives from various contributors. One significant point of contention is the scenario involving large, powerful mining machines that could potentially exhaust the permissible timestamp rolling period of 600 seconds due to their high computational power. This issue was initially raised with the example of a hypothetical 3PH machine that might need to adjust its timestamps by 10 seconds every second, posing a challenge in mining the first block of a period if the preceding block's timestamp was set far into the future. Matt Corallo and Anthony Towns contributed insights to this concern, noting the unlikelihood of such aggressive timestamp manipulation by miners due to existing limitations in pool software and the capabilities provided by SV2 for miners to roll the extranonce instead. They argue that as long as the timestamp isn't rolled beyond 600 seconds, the potential attack scenario would be invalidated since such blocks would be too far in the future and rejected.
+
+Another aspect discussed was the behavior of pool software that ignores the timestamp in the Bitcoin Core provided block template, opting to use the wall clock time instead. While recognized as technically flawed due to the Median Time Past (MTP) rule, it was noted that this unlikely causes issues under current conditions because no one advances time in such a manner that would result in a block having a timestamp too far back. However, post-implementation of the 600-second grace period timewarp fix, such software could become directly vulnerable, leading to the production of an invalid first block of a period. Despite these concerns, there was a consensus against making protocol decisions based on accommodating hypothetical or inferior software that would already conflict with current consensus rules.
+
+Furthermore, Sjors referred to Fabian Jahr's implementation of the timewarp fix on testnet4, which included a 2-hour grace period. This characteristic allows the use of current time regardless of the previous block's timestamp, even if it's up to 2 hours in the future. The argument for maintaining a 2-hour grace period over a shorter 10-minute one was also considered regarding its impact on block rate increase and the aesthetic consistency of block intervals under potential attack scenarios.
+
+Ultimately, the decision to opt for a 2-hour grace period over a 10-minute one was made despite acknowledging the relatively weak arguments in favor of such an increase. The choice was justified by the preference to err on the side of caution, considering the marginal additional risks posed to already incompatible or hypothetical software configurations, and the broader implications of maintaining operational integrity within Bitcoin's mining ecosystem.</summary>
+    <published>2025-01-30T23:31:58.155000+00:00</published>
+  </entry>
+</feed>
