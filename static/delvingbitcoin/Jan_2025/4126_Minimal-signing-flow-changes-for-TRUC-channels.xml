@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Minimal signing flow changes for TRUC channels</title>
+  <updated>2025-02-01T02:25:07.162376+00:00</updated>
+  <author>
+    <name>morehouse 2025-01-31 19:19:09.535000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Minimal signing flow changes for TRUC channels</title>
+    <updated>2025-02-01T02:25:07.162406+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/minimal-signing-flow-changes-for-truc-channels/1414" rel="alternate"/>
+    <summary>In the evolving landscape of cryptocurrency transactions, particularly within the Lightning Network, there is a continuous effort to enhance security and efficiency. A crucial aspect of this endeavor involves optimizing the handling of Hashed Time-Locked Contracts (HTLCs), which are fundamental for conditional transactions across the network. The current discussion revolves around the management of local and remote commitment preimage claims, emphasizing the need to presign these transactions to accommodate Taproot's scriptless scripts, specifically referred to as TRUC.
+
+For local commitment preimage claims, it has been established that presigned HTLC-Success transactions are utilized. The proposed enhancement entails updating these transactions to version 3, aligning with recent advancements. Conversely, the approach to remote commitment preimage claims has identified a gap; these claims are not currently presigned, thus hindering the forced application of TRUC. To bridge this gap, there is a consensus on the necessity to presign these claims as version 3 transactions. This process mandates an exchange of signatures during the commitment update flow, ensuring both parties hold the necessary proofs to execute or dispute the transactions as needed.
+
+The implementation of this solution introduces a modification to the protocol, specifically adding what is termed as a half round-trip in the communication sequence between transacting parties. This concept, suggested by @t-bast, aims to streamline the signature exchange process. In essence, when a party is ready to update their commitment transaction, they initiate by sending a `commitment_proposed` message that includes signatures for the relevant HTLC transactions. This proactive step allows the other party to then send a `commitment_signed` message, which contains all necessary signatures for the updated commitment transaction. Finally, a `revoke_and_ack` message is transmitted to revoke the previous commitment, ensuring both parties maintain synchronized and valid commitment states.
+
+However, this adjustment introduces a potential complexity due to a race condition in the signing flow. Specifically, the initiating party must send out the `commitment_proposed` message without complete knowledge of pending updates from the counterparty, who might still be in the process of sending updates. This necessitates a robust mechanism to verify and incorporate the correct HTLC transactions into the new commitment transaction, safeguarding against errors that could jeopardize the integrity of the transaction.
+
+A simpler alternative to this elaborate process was also mentioned, where HTLC-Remote-Success signatures could be attached directly to the `revoke_and_ack` message. This method ostensibly reduces the complexity and maintains the security premises by ensuring that at no point are either party's funds unjustly exposed to risk throughout the transaction update process. This nuanced approach underscores the importance of carefully managed state transitions in cryptographic protocols, ensuring that despite the evolving nature of transactions, the integrity and security of participant funds remain paramount.</summary>
+    <published>2025-01-31T19:19:09.535000+00:00</published>
+  </entry>
+</feed>

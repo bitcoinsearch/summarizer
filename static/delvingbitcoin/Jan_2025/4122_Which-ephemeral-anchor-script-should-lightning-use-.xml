@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Which ephemeral anchor script should lightning use?</title>
+  <updated>2025-02-01T02:24:08.681762+00:00</updated>
+  <author>
+    <name>t-bast 2025-01-31 15:49:30.771000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Which ephemeral anchor script should lightning use?</title>
+    <updated>2025-02-01T02:24:08.681809+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/which-ephemeral-anchor-script-should-lightning-use/1412" rel="alternate"/>
+    <summary>Exploring the options for ephemeral anchor outputs in future lightning commitment transactions, we delve into the nuanced mechanics and strategic implications of each potential path. The ephemeral anchor output, integral to the operation of lightning channels, especially when dealing with dust HTLCs, presents a unique set of challenges and opportunities. When there are no pending dust HTLCs, the anchor's value is zero sats. It becomes significant when HTLCs below the `dust_limit` are present, as these amounts are redirected from the sender's main output to the anchor output. This mechanism can facilitate CPFP (Child Pays for Parent) without necessitating additional inputs from external wallets, although it risks creating a competitive scenario for claiming excess funds if the anchor output exceeds required on-chain fees.
+
+The first option discussed is the unkeyed anchor, utilizing the `P2A` output type, which allows anyone to spend it. This approach is lauded for its simplicity and economic efficiency, as it eliminates the need for witness data. However, it also introduces a risk where miners could prioritize transactions that divert funds to themselves, potentially leading to inflated on-chain fee payments. Despite this concern, the absence of other highlighted drawbacks leaves room for further consideration.
+
+The second option proposes a single-participant keyed anchor, specifically designed to restrict spending to the channel participant associated with the node's `local_funding_pubkey`. This method addresses the miner overpayment issue prevalent in the first option by ensuring only the rightful owner can claim the output. While offering security against external theft, it does limit the ability to delegate fee payments and necessitates publishing one's local commitment under certain conditions, introducing potential complications.
+
+In the third strategy, a shared key anchor is examined, offering a balance between accessibility and security. By employing a publicly shared private key between channel participants from the outset, this model retains the flexibility of allowing both parties to execute CPFP while safeguarding against unauthorized miner access. Nonetheless, the risk of over-payment theft remains if the private key is shared beyond the intended parties, alongside an increase in witness size.
+
+Lastly, the dual-keyed anchor concept is introduced, leveraging taproot outputs to accommodate both channel participants through distinct key paths. This variant optimizes for efficient CPFP execution and minimizes the risk of fee over-payment theft to within the channel itself. Despite its merits, it shares the limitation of restricted fee payment delegation seen in the second option.
+
+The selection among these options hinges on the priority given to mitigating on-chain fee overpayment versus operational flexibility and security. Given the potential for controlling dust exposure through channel settings, the trade-offs between these methodologies merit careful consideration in the evolving landscape of lightning network transactions.</summary>
+    <published>2025-01-31T15:49:30.771000+00:00</published>
+  </entry>
+</feed>

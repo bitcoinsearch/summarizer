@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Erlay: Overview and current approach</title>
+  <updated>2025-02-01T02:25:40.851990+00:00</updated>
+  <author>
+    <name>sr-gi 2025-01-31 21:15:29.508000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Erlay: Overview and current approach</title>
+    <updated>2025-02-01T02:25:40.852023+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/erlay-overview-and-current-approach/1415" rel="alternate"/>
+    <summary>The development of Erlay for Bitcoin Core represents a significant stride towards optimizing the efficiency of transaction propagation within the Bitcoin P2P network. The core objective of Erlay is to minimize the bandwidth consumption that occurs when transactions are announced between peers. This protocol leverages the concept of set reconciliation, allowing connected nodes to identify only the transactions that are absent from their respective sets, thereby reducing the redundancy inherent in the current method of transaction announcement which involves inventory messages (INV) and getdata messages (GETDATA). INV messages announce transaction hashes among peers, prompting the receipt of a getdata message if a peer lacks any of the announced transactions. Set reconciliation occurs at predetermined intervals, with nodes exchanging sketches of their transaction sets to compute the differences efficiently.
+
+Erlay introduces a nuanced approach to transaction relay, aiming to limit the use of traditional fanout—where transactions are broadly announced through the network—without completely eliminating it. The protocol acknowledges that a minimal level of fanout remains necessary for optimal function, as it ensures quicker dissemination of transactions not known by receiving nodes. This balance seeks to retain the speed of transaction spread while curtailing bandwidth usage. The implementation challenges of Erlay include determining the optimal size of fanout and selecting peers for both fanout and reconciliation processes. Decisions around these aspects involve trade-offs between bandwidth savings and latency in transaction propagation. For instance, the choice between inbound and outbound peers for fanout can significantly impact the effectiveness and security of transaction announcements.
+
+The current strategy for Erlay implementation in Bitcoin Core involves a hybrid of choosing peers for fanout on a per-transaction basis rather than a connection basis, enhancing fairness and preventing manipulative behaviors. Transactions are made available for either fanout or reconciliation following a delay, protecting against potential privacy breaches. This methodology also incorporates considerations for handling transaction dependencies to prevent orphan transactions. 
+
+Moreover, the process of selecting transactions for fanout or reconciliation has been meticulously designed to ensure that dependencies among transactions are respected, avoiding scenarios where an earlier transaction's propagation could inadvertently orphan subsequent dependent transactions. This aspect of Erlay's design underscores the protocol's aim to maintain or improve upon the robustness of transaction relaying in Bitcoin's network.
+
+In preparation for finalizing Erlay's implementation, extensive simulations are being conducted to refine the protocol's parameters and strategies. These efforts are critically supported by contributions and insights from various members of the Bitcoin Core community and beyond, highlighting the collaborative nature of this endeavor. As part of the ongoing development, future updates will delve deeper into the results and implications of these simulations.
+
+For further details and discussions on the Erlay protocol and its integration into Bitcoin Core, interested readers can refer to the discrete time network event simulator developed for this purpose, available at [Hyperion: A Discrete Time Network Event Simulator for Bitcoin Core](https://delvingbitcoin.org/t/hyperion-a-discrete-time-network-event-simulator-for-bitcoin-core), and continue following the series of posts dedicated to exploring various facets of Erlay's implementation and optimization.</summary>
+    <published>2025-01-31T21:15:29.508000+00:00</published>
+  </entry>
+</feed>

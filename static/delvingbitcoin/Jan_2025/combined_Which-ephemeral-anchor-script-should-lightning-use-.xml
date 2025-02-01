@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Which ephemeral anchor script should lightning use?</title>
+  <updated>2025-02-01T02:24:26.972646+00:00</updated>
+  <author>
+    <name>ariard 2025-01-31 18:00:52.355000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs 2025-01-31 15:58:28.246000+00:00</name>
+  </author>
+  <author>
+    <name>t-bast 2025-01-31 15:49:30.771000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/Jan_2025/4125_Which-ephemeral-anchor-script-should-lightning-use-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4123_Which-ephemeral-anchor-script-should-lightning-use-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2025/4122_Which-ephemeral-anchor-script-should-lightning-use-.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Which ephemeral anchor script should lightning use?</title>
+    <updated>2025-02-01T02:24:26.972690+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/which-ephemeral-anchor-script-should-lightning-use/1412" rel="alternate"/>
+    <summary>In the realm of future lightning commitment transactions, particularly those using `nVersion = 3`, various strategies for managing ephemeral anchor outputs have been proposed. These anchors are crucial in scenarios where no pending dust HTLCs are present, effectively enabling nodes to facilitate Child Pays for Parent (CPFP) without necessitating additional inputs for fee payment. This system becomes complex when considering how to manage these anchors, especially in light of potential on-chain fee overpayments and the risk of transaction hijacking by miners.
+
+A key concern with ephemeral anchors is how to structure them to prevent unauthorized access or misuse. One suggestion is to avoid unkeyed anchors, which can be spent by anyone and pose a risk of transaction hijack, as indicated in discussions such as those found in [Bitcoin development forums](https://groups.google.com/g/bitcoindev/c/ZspZzO4sBys). Instead, there's a preference for solutions that allow each counterparty to manage their own commitment transactions plus CPFP independently, thus avoiding tampering by others.
+
+Several options are on the table for how to implement these anchors, each with its own set of advantages and drawbacks. The first option involves unkeyed anchors that, while economical and easy for both participants to spend, risk having the entire anchor output claimed by miners should the amount exceed the required on-chain fees. This issue is not unique to ephemeral anchors but is an inherent risk in the current handling of dust HTLCs in lightning channels.
+
+The second approach proposes a single-participant keyed anchor, limiting the ability to spend the anchor output to the node associated with the local funding public key. This method aims to reduce the potential for miners to claim on-chain fee overpayments but restricts the flexibility of fee payment delegation and requires careful management of commitment transactions.
+
+A third strategy introduces a shared key anchor, utilizing a public key known to both channel participants from the outset. This model retains the benefits of being spendable by either party while safeguarding against unauthorized fee overpayment claims by miners. However, it does come at the cost of a larger witness size due to the shared key mechanism.
+
+Lastly, a dual-keyed anchor approach leverages taproot outputs, offering a balance between efficiency and security. It allows both participants to spend the anchor through different mechanisms: a key-path spend for the local commitment transaction and a script-path spend for the remote transaction. This method effectively limits the risk of on-chain fee overpayment theft to the channel peers themselves.
+
+Deciding on the best approach depends largely on the value placed on preventing on-chain fee overpayment. Given the ability of nodes to regulate dust limits within their commitment transactions, some may argue that the risk of overpayment does not warrant significant concern. Each option presents a trade-off between ease of use, security against unauthorized access, and efficiency in terms of transaction costs and complexity.</summary>
+    <published>2025-01-31T18:00:52.355000+00:00</published>
+  </entry>
+</feed>
