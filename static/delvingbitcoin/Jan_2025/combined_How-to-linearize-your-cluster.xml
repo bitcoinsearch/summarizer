@@ -2,12 +2,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - How to linearize your cluster</title>
-  <updated>2025-02-01T02:19:56.954954+00:00</updated>
+  <updated>2025-02-02T02:19:19.033655+00:00</updated>
   <author>
-    <name>sipa 2025-01-31 21:10:38.510000+00:00</name>
+    <name>sipa 2025-02-01 23:32:56.872000+00:00</name>
   </author>
   <author>
-    <name>sipa 2025-01-31 21:03:05.366000+00:00</name>
+    <name>stefanwouldgo 2025-02-01 18:27:06.013000+00:00</name>
+  </author>
+  <author>
+    <name>stefanwouldgo 2025-02-01 18:23:23.796000+00:00</name>
+  </author>
+  <author>
+    <name>sipa 2025-02-01 18:23:07.915000+00:00</name>
+  </author>
+  <author>
+    <name>stefanwouldgo 2025-02-01 18:06:59.299000+00:00</name>
+  </author>
+  <author>
+    <name>sipa 2025-02-01 18:06:05.384000+00:00</name>
+  </author>
+  <author>
+    <name>stefanwouldgo 2025-02-01 07:35:35.235000+00:00</name>
+  </author>
+  <author>
+    <name>stefanwouldgo 2025-02-01 07:33:33.885000+00:00</name>
+  </author>
+  <author>
+    <name>sipa  . 2025-01-31 21:10:38.510000+00:00</name>
+  </author>
+  <author>
+    <name>sipa  . 2025-01-31 21:03:05.366000+00:00</name>
   </author>
   <author>
     <name>stefanwouldgo  . 2025-01-29 14:35:08.640000+00:00</name>
@@ -42,6 +66,14 @@
   <author>
     <name>sipa  . 2023-12-20 03:59:33.881000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2025/4145_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4142_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4141_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4140_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4139_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4138_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4135_How-to-linearize-your-cluster.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2025/4136_How-to-linearize-your-cluster.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/4131_How-to-linearize-your-cluster.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/4132_How-to-linearize-your-cluster.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2025/4110_How-to-linearize-your-cluster.xml" rel="alternate"/>
@@ -59,19 +91,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - How to linearize your cluster</title>
-    <updated>2025-02-01T02:19:56.955046+00:00</updated>
+    <updated>2025-02-02T02:19:19.033792+00:00</updated>
     <link href="https://delvingbitcoin.org/t/how-to-linearize-your-cluster/303" rel="alternate"/>
-    <summary>The subject matter revolves around the intricacies of solving a particular problem known as the "maximum-ratio closure problem," which is an algorithmic challenge focusing on optimizing transaction selections within a network based on fee rates. This optimization is essential in contexts where transactions have dependencies, and fees can vary, including negative values. The initial step involves structuring the transaction graph appropriately by incorporating two special nodes to facilitate the application of a minimum cut algorithm, aiming to isolate the subset of transactions that maximizes fees while maintaining topological validity.
+    <summary>The discussion begins with an analysis of the inherent challenges in optimizing transaction processing within cryptocurrency networks, focusing on the need for efficient algorithms that can handle large clusters of transactions. The primary goal is to sort these transactions based not only on their fee rates but also while maintaining a topological order that respects the dependencies among transactions. This task involves not just a straightforward linearization based on fee rates but also potentially complex post-processing to achieve optimal results. For smaller and more common clusters, advanced techniques beyond simple sorting methods are necessary to optimize the processing efficiently.
 
-In-depth analysis introduces different methodologies to approach this problem, highlighting three distinct algorithms with varying complexities based on the number of nodes (transactions) and edges (dependencies). These methods include a bisection search technique offering a balance between precision and computational demands, an FP algorithm that iteratively refines the solution by adjusting the feerate parameter $\lambda$, and a parametric min-cut strategy that directly manipulates the graph according to $\lambda$. Each method presents a unique angle on efficiently extracting the highest-fee or highest-feerate subset under given constraints, demonstrating the evolution of thought and technique in tackling this computational challenge.
+The conversation then shifts to the exploration of advanced linearization strategies, particularly those that address the connectivity within transaction clusters. By identifying and optimizing connected components within a cluster, the process becomes more manageable, allowing for individual groups within the larger cluster to be processed separately. One highlighted approach is bottleneck splitting, which targets transactions that are central to the cluster's structure, thus enabling the remainder of the cluster to be processed in a piecemeal fashion. However, the core challenge in this optimization process remains the identification of the highest-feerate subsets within a cluster, a problem that is recognized as NP-hard. Iterative search approaches aim to solve this by evaluating potential subsets and refining them through branching paths, with efficiency gains achieved by bounding the evaluation of subsets and employing techniques like 'jump ahead' to expedite the inclusion of certain transactions based on their ancestry.
 
-Moreover, the discussion extends into the realm of practical application and theoretical exploration, emphasizing the potential for applying these algorithms beyond their initial scope. A significant breakthrough is noted with the adaptation of the Goldberg-Tarjan push-relabel algorithm for a fast parametric maximum flow calculation, showcasing a methodologically efficient way to determine the optimal set of transactions. This advancement underscores the importance of revisiting and leveraging classical algorithms in novel contexts.
+Further, the dialogue delves into the specifics of improving the efficiency of these algorithms. Strategies such as using conservative upper bounds to limit the evaluation of subsets, employing a Last-In-First-Out stack approach for processing work items, and caching strategies to minimize recalculations are discussed. Early comparisons between the potential set's feerate and the current best subset help prevent unnecessary computations, streamlining the overall process. The initial setup of the algorithm with the best ancestor set ensures that the performance is at least equal to simpler linearization methods, setting a foundation for further optimizations.
 
-Additionally, the conversation delves into the specifics of optimizing transaction processing within blockchain networks, a critical concern given the complexity and volume of transactions. It outlines a proposed algorithm that seeks to refine how transactions are selected and ordered, maximizing overall fee rates while adhering to necessary transactional dependencies. This proposition involves a nuanced understanding of transactional dynamics and offers a fresh perspective on improving processing efficiency through strategic selection and linearization techniques.
-
-Lastly, the dialog touches upon the conceptual foundation and logical proofs underlying the selection criteria for transaction subsets, aiming to maximize the fee rate. It critically examines the conditions and assumptions that guide the inclusion or exclusion of transactions from the optimal set, providing a mathematical rationale for these choices. This part of the discussion not only clarifies the theoretical underpinnings of the problem but also invites further scrutiny and refinement to ensure the robustness and applicability of the proposed solutions.
-
-In summary, this comprehensive examination of algorithmic strategies for optimizing transaction selections sheds light on the multifaceted challenges and innovative solutions inherent in managing complex dependency networks. Through a blend of theoretical rigor and practical insight, it contributes significantly to the ongoing discourse on enhancing computational efficiency and transaction processing performance in digital currency systems.</summary>
-    <published>2025-01-31T21:10:38.510000+00:00</published>
+The [current implementation](https://github.com/sipa/bitcoin/blob/wip_memepool_fuzz/src/cluster_linearize.h) of this selection algorithm, while diverging slightly from its theoretical underpinning by not universally implementing connected-component splitting, still incorporates many of the proposed ideas. It benefits from managing work items across multiple LIFO stacks and strategically selecting transactions to minimize the search space, highlighting the ongoing efforts to refine and enhance the efficiency of transaction processing within the blockchain framework. This discourse underscores the complexity and dynamism involved in optimizing cryptocurrency transaction processing, illustrating both the challenges and innovative approaches being explored to improve scalability and efficiency in network operations.</summary>
+    <published>2025-02-01T23:32:56.872000+00:00</published>
   </entry>
 </feed>
