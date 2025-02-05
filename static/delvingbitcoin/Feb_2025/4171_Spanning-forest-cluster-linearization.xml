@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Spanning-forest cluster linearization</title>
+  <updated>2025-02-05T02:25:55.888378+00:00</updated>
+  <author>
+    <name>sipa 2025-02-05 01:08:43.125000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Spanning-forest cluster linearization</title>
+    <updated>2025-02-05T02:25:55.888426+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/spanning-forest-cluster-linearization/1419" rel="alternate"/>
+    <summary>The write-up discusses a work in progress on a cluster linearization algorithm, specifically the spanning-forest cluster linearization algorithm, which is promising as a potential replacement for existing algorithms referenced in Bitcoin Core PRs and Delving posts. This new approach, despite lacking known complexity bounds, showcases elegance, speed, and practicality in prototype implementations. It aims to offer insights or possibly prove more practical for real-life problems compared to more advanced algorithms.
+
+The concept of cluster linearization is introduced through the lens of a Linear Programming (LP) problem, where the objective is to find the highest-feerate topologically-valid subset of transactions within a cluster. By treating each transaction as a variable within an LP framework, and enforcing topology constraints alongside a normalization constraint, the problem can be solved in polynomial time using LP solving algorithms such as the Interior Point Methods. This establishes that the problem is not NP-hard and opens the door to applying linear programming solution techniques.
+
+The simplex algorithm's application to this problem space is detailed, highlighting how it partitions the transaction graph into "chunks" through its iterative process. These chunks are connected internally by a spanning tree of free variables, and the algorithm's state corresponds to a partitioning of the transaction graph into these chunks, with one being the solution set. Simplifications made to the simplex algorithm allow for the optimization of all chunks, effectively optimizing the included chunk implicitly.
+
+The article then elaborates on the spanning forest linearization algorithm, derived from modifying the simplex approach. This algorithm operates by maintaining a boolean for each dependency in the graph, indicating whether it is active. Through permitted operations of merging and splitting chunks based on feerate comparisons, the algorithm seeks to achieve an optimal linearization for the entire cluster. The output is the final chunks, sorted from high to low feerate, each in a valid topological order.
+
+Regarding correctness, the algorithm outputs an optimal linearization if it terminates, ensuring that no higher-feerate chunk depends on a lower-feerate chunk. Several changes made to the simplex algorithm along the way are recounted, emphasizing the transition to the spanning forest algorithm and the conditions under which it remains correct.
+
+Further refinements to the algorithm include prioritizing merges over splits and selecting dependencies to activate or deactivate based on maximizing feerate differences or a specific function designed to ensure progress without repeating states. Starting with a known linearization allows for an initial state that already forms a linearization at least as good as the input, with any subsequent work aimed at further improvement.
+
+Lastly, the discussion speculates about the algorithm's complexity based on a prototype implementation, acknowledging that while the worst-case complexity may appear daunting, the practical focus is on achieving a "good enough" linearization within a very short timeframe for a defined cluster size. This pragmatic approach considers the improvement per unit of time as a critical metric for evaluating the algorithm's utility in real-world applications.</summary>
+    <published>2025-02-05T01:08:43.125000+00:00</published>
+  </entry>
+</feed>

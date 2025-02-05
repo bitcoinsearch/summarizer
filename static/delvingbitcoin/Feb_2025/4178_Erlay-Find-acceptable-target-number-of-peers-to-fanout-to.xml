@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Erlay: Find acceptable target number of peers to fanout to</title>
+  <updated>2025-02-05T02:25:34.935503+00:00</updated>
+  <author>
+    <name>sr-gi 2025-02-04 19:21:59.372000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Erlay: Find acceptable target number of peers to fanout to</title>
+    <updated>2025-02-05T02:25:34.935534+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/erlay-find-acceptable-target-number-of-peers-to-fanout-to/1420" rel="alternate"/>
+    <summary>This post elaborates on the experiments conducted as part of implementing Erlay, a protocol aimed at enhancing Bitcoin's network efficiency. The primary thesis posits that for Erlay to function optimally, it necessitates a certain extent of transaction fanout - a method ensuring a quick and wide-reaching transaction dissemination among peers. This mechanism is particularly bandwidth-efficient when nodes receiving the transaction have not previously seen it. However, its efficiency diminishes when transactions are sent to nodes already aware of them, making fanout somewhat redundant and introducing unnecessary latency in the transaction exchange process.
+
+To address this, the proposition is to utilize fanout until a transaction is sufficiently widespread across the network and then switch to reconciliation—a strategy for nodes to compare their sets of transactions without directly exchanging them, thus saving bandwidth. Given the impracticality of knowing a transaction’s propagation extent in real-time, a pragmatic approach involves setting a minimum fanout rate and allowing reconciliation to manage subsequent dissemination. This ensures a targeted portion of the network receives the transaction through fanout, with reconciliation facilitating broader distribution.
+
+The experimentation phase utilizes a simulated network comprising 110,000 nodes (10,000 reachable and 100,000 unreachable) to test various configurations of Erlay. By adjusting the number of outbound connections per node and varying the `OUTBOUND_FANOUT_DESTINATIONS` and `INBOUND_FANOUT_DESTINATIONS_FRACTION`, the experiments aim to identify optimal settings for balancing bandwidth savings against increased latency. The simulations, detailed in commands provided within the text and facilitated by a multi-run script for efficiency, yield comprehensive data analyzed to discern the impact of different fanout rates on network performance.
+
+Results from these experiments underscore a tradeoff between bandwidth savings and latency. Lower fanout rates significantly reduce data volume per transaction, indicating better bandwidth utilization but at the cost of higher latency. Conversely, higher fanout rates decrease latency but offer diminished bandwidth savings. Notably, configurations with minimal fanout (1 outbound/0-100% inbounds) demonstrate substantial bandwidth savings, approximately 35% with 8 outbound connections, escalating to around 45% as connectivity increases to 12 outbounds. However, increasing the fanout rate reduces these savings markedly, especially in highly connected networks.
+
+Analyzing bandwidth versus latency reveals the inherent compromise between the two metrics. The 1/10% configuration, which aligns with Erlay’s current design, offers considerable bandwidth efficiency but at the expense of a significant increase in propagation time. Adjusting the configuration to 4/10% curtails this delay but reduces bandwidth savings. 
+
+In conclusion, the experiments validate the intricate balance between minimizing bandwidth usage and ensuring timely transaction propagation within the Bitcoin network using Erlay. While constant fanout rates present a viable strategy, they necessitate a careful consideration of the acceptable latency for potential bandwidth savings. Future research might explore variable fanout rates or heuristic-based optimizations to refine this balance further. The findings serve as a valuable benchmark for comparing alternative strategies and understanding the nuanced relationship between latency and bandwidth in network protocols like Erlay. For a detailed examination of the experimental outcomes, the complete set of results can be viewed [here](https://docs.google.com/spreadsheets/d/1YGG3Lm6__xmKsd9HlmNuQOaw_Lg7rLwsBNcWYJsUsIw/edit?usp=sharing).</summary>
+    <published>2025-02-04T19:21:59.372000+00:00</published>
+  </entry>
+</feed>
