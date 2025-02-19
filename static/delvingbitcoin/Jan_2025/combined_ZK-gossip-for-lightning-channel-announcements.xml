@@ -2,15 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - ZK-gossip for lightning channel announcements</title>
-  <updated>2025-02-07T02:24:47.480475+00:00</updated>
+  <updated>2025-02-19T02:18:57.884478+00:00</updated>
   <author>
-    <name>Davidson 2025-02-06 17:11:33.635000+00:00</name>
+    <name>halseth 2025-02-18 21:43:39.633000+00:00</name>
   </author>
   <author>
-    <name>halseth 2025-02-06 13:44:44.539000+00:00</name>
+    <name>Davidson  . 2025-02-06 17:11:33.635000+00:00</name>
   </author>
   <author>
-    <name>halseth 2025-02-06 11:42:05.040000+00:00</name>
+    <name>halseth  . 2025-02-06 13:44:44.539000+00:00</name>
+  </author>
+  <author>
+    <name>halseth  . 2025-02-06 11:42:05.040000+00:00</name>
   </author>
   <author>
     <name>AdamISZ  . 2025-02-05 23:33:28.574000+00:00</name>
@@ -84,6 +87,7 @@
   <author>
     <name>halseth  . 2025-01-28 13:10:04.280000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2025/4323_ZK-gossip-for-lightning-channel-announcements.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4203_ZK-gossip-for-lightning-channel-announcements.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4196_ZK-gossip-for-lightning-channel-announcements.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4195_ZK-gossip-for-lightning-channel-announcements.xml" rel="alternate"/>
@@ -115,19 +119,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - ZK-gossip for lightning channel announcements</title>
-    <updated>2025-02-07T02:24:47.480657+00:00</updated>
+    <updated>2025-02-19T02:18:57.884664+00:00</updated>
     <link href="https://delvingbitcoin.org/t/zk-gossip-for-lightning-channel-announcements/1407" rel="alternate"/>
-    <summary>The discussion opens with an acknowledgment of the efficiency gains afforded by Elliptic Curve Cryptography (ECC) in programming environments, noting specifically its impact on performance relative to other factors such as code bottlenecks. The conversation then shifts towards the potential of algebraic hash functions within the context of proof generation, as facilitated by the `rustreexo` project. This inclusion allows for customization of hash functions, with algebraic hashes significantly reducing computational load, especially noted within proving environments. The exploration into algebraic hash functions is motivated by a curiosity regarding their effect on proving times, particularly in relation to utreexo proofs, which are implicated in the broader profiling of key aggregation times in Musig signature verification processes.
+    <summary>The discussion revolves around a novel approach to enhance privacy within the Lightning Network through an extension of the taproot gossip protocol, leveraging Utreexo and zero-knowledge proofs (ZK-proofs) to obscure channels from directly associating with their on-chain outputs. This method introduces a `channel_announcement_2` message, incorporating Musig2 signatures to demonstrate control over a UTXO without revealing its direct link, aiming to cater to privacy-conscious users. The proposal builds upon the gossip v1.75 proposal, with Elle providing a thorough analysis of the underlying mechanisms, emphasizing the use of ZK-proofs to separate the channel's identity from its blockchain footprint, thus securing anonymity while safeguarding the network against DOS attacks.
 
-Further deliberations touch upon Rusty Russell's model for channel management within the Bitcoin Lightning Network, emphasizing a strategic shift away from direct blockchain engagement for anti-DOS measures and the maintenance of vagueness in capacity claims. This model, contrasting with Zero-Knowledge Proof (ZKP) applications, suggests efficiencies in non-ZKP scenarios through the allowance of alternative UTXO commitments, thereby not necessitating direct channel UTXO revelation. The discourse extends into the mechanics of channel creation, highlighting scalability challenges posed by dual-funder requirements versus single-funder channels, where the latter could potentially leverage ZKPs to initiate channels without revealing specific UTXOs. Russell's proposal hints at evolving thoughts around channel claims and funding dynamics, encapsulated within the `channel_update_v2` messages, demonstrating a nuanced approach towards managing channel operations and ownership claims within the Lightning Network.
+The creation of ZK-proofs involves extracting essential information from the existing taproot channel announcements, including node IDs, bitcoin keys, channel capacity, alongside utilizing a Utreexo accumulator for affirming the channel output’s inclusion without explicit disclosure. This process ensures the verification of several critical aspects, such as the correct aggregation and sorting of keys and IDs, the comparison of channel capacity against UTXO value, and the authentication of the UTXO set via Utreexo proof. A new message format, `channel_announcement_zk`, is proposed to integrate these ZK-proofs seamlessly into the network, containing various identifiers and the PKHash which acts as a unique channel identifier, allowing nodes to validate channel announcements while preserving transactional privacy.
 
-The dialogue intricately weaves through the technical intricacies of zk prover technologies, spotlighting Halseth's contributions and the introduction of customizable hash functions in `rustreexo`, aiming at efficiency improvements within proof generation. The employment of algebraic hashes underlines a collaborative effort towards optimizing proving times, underpinned by a shared interest in leveraging advancements like Poseidon 2 for data conversion to facilitate Bitcoin zk prover development. This cooperative narrative underscores the iterative nature of software development, particularly within cryptographic optimizations aimed at enhancing privacy and efficiency in blockchain networks.
+Furthermore, the handling of `channel_announcement_zk` messages by nodes entails checking the PKHash against known channels and validating the proof accordingly. Given the privacy-preserving nature of this method, it suggests that channels should periodically refresh their announcements to confirm their active presence in the UTXO set, proposing a renewal every two weeks. This approach highlights a practical demonstration through code and documentation hosted on a specific branch, showcasing the proof creation process based on initial channel announcements using RiscZero, suggesting the feasibility of integrating additional constraints into UTXO verification effortlessly.
 
-In delving into privacy enhancement strategies within the Lightning Network, the conversation evaluates the transition towards utilizing ZKP for UTXO possession, proposing a paradigm shift from explicit UTXO disclosure towards a more privacy-preserving mechanism. This approach, while fostering user privacy, navigates the economic implications tied to M*N channel value propositions, advocating for a balanced integration of MuSig2 within ZKP frameworks to reconcile economic viability with privacy concerns. The dialogue reflects ongoing efforts to harmonize technological innovation with practical utility, marking a critical juncture in the evolution of privacy-centric protocols within blockchain networks.
-
-The discussion further explores the application of cryptographic schemes, emphasizing the role of distinctness in preventing UTXO reuse through mechanisms akin to nullifiers or key images. This technical discourse extends into the realm of Curve Trees and zk-STARKs, showcasing a collective endeavor towards identifying efficient cryptographic solutions that address key operational challenges within Bitcoin coding and the Lightning Network. The narrative encapsulates a vibrant exploration of cryptographic advancements, underscoring a concerted push towards enhancing transaction privacy, verification efficiency, and the overall robustness of cryptographic protocols in blockchain technology.
-
-Lastly, the conversation pivots towards the implementation considerations surrounding Utreexo and Groth16 within a blockchain context, juxtaposed against simpler methods like UTXO snapshots and log-scale ring signatures. This comprehensive examination highlights the trade-offs between complexity and efficiency in advancing blockchain systems, underscoring the imperative of optimizing network operations without imposing undue burdens on participants. Through a detailed exposition of technical strategies and potential future adaptations, the dialogue enriches the discourse on balancing scalability, privacy, and usability within the burgeoning landscape of blockchain technologies.</summary>
-    <published>2025-02-06T17:11:33.635000+00:00</published>
+The documentation provides deeper insights into proof types, outlining the benefits and drawbacks of this privacy-enhancing method. It represents a significant advancement towards achieving more private and secure operations within the Lightning Network, inviting feedback on this innovative extension. This proposal not only addresses privacy concerns but also contributes to ongoing discussions about preserving confidentiality and integrity in financial transactions over decentralized networks.</summary>
+    <published>2025-02-18T21:43:39.633000+00:00</published>
   </entry>
 </feed>
