@@ -90,6 +90,20 @@ class GenerateJSON:
         response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=summ_prompt, max_tokens=1000)
         return response_str
 
+    def generate_descriptive_title(self, text: str) -> str:
+        logger.info("generating a descriptive title for given text")
+        title_prompt = f"""Generate a concise and engaging title that summarizes the key themes and topics discussed in the following text. The title should be:
+            - Informative, capturing the core focus of the newsletter.
+            - Clear, professional, and attention-grabbing.
+            - No longer than 15 words.
+            - Avoid generic phrases like 'Weekly Update' or 'Latest News.'
+            \n CONTEXT:\n\n{text}"""
+        response_str = generate_chatgpt_summary_for_prompt(summarization_prompt=title_prompt, max_tokens=80)
+        if response_str.startswith("Title:"):
+            response_str = response_str[6:].strip()
+        return response_str
+
+
     def create_single_entry(self, data, base_url_for_xml="static", look_for_combined_summary=False,
                             remove_xml_extension=False, add_combined_summary_field=False):
         number = get_id(data["_source"]["id"])

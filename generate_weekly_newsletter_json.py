@@ -149,6 +149,7 @@ if __name__ == "__main__":
                     new_threads_page_data = []
                     active_page_data = []
                     new_threads_summary = ""
+                    newsletter_title = ""
 
                     if new_threads_list:
                         new_threads_summary += gen.generate_recent_posts_summary(new_threads_list, verbose=True)
@@ -190,7 +191,12 @@ if __name__ == "__main__":
                             logger.error(
                                 f"Error occurred for doc id: {data['_source']['id']}\n{ex} \n{traceback.format_exc()}")
 
+                    # generate a descriptive Title based on the new_threads_summary
+                    newsletter_title = gen.generate_descriptive_title(text=new_threads_summary)
+                    logger.success(f"Title: {newsletter_title}")
+
                     json_string = {
+                        "newsletter_title": newsletter_title,
                         "summary_of_threads_started_this_week": new_threads_summary,
                         "new_threads_this_week": new_threads_page_data,
                         "active_posts_this_week": active_page_data
