@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Zero-fee commitments for mobile wallets</title>
+  <updated>2025-02-20T02:19:01.419235+00:00</updated>
+  <author>
+    <name>morehouse 2025-02-19 18:28:29.521000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Zero-fee commitments for mobile wallets</title>
+    <updated>2025-02-20T02:19:01.419270+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/zero-fee-commitments-for-mobile-wallets/1453/10" rel="alternate"/>
+    <summary>The discussion centers on a proposal aimed at addressing the challenges associated with handling HTLC (Hashed Time-Locked Contracts) transactions, specifically in the context of ensuring appropriate fee rates are applied to these transactions within the Lightning Network. The crux of the proposal is to have peers sign two versions of HTLC transactions: one with a default fee that requires additional on-chain inputs for confirmation, and another within a custom TLV (Type-Length-Value) of `commitment_signed` that carries a high feerate matching the current network conditions. This approach allows for a safeguard mechanism where, if a peer fails to provide these signatures, the mobile wallet has the leverage to force-close the channel before revoking the commitment that doesn't include the new HTLCs, thus preventing potential issues arising from outdated fee rates.
+
+The negotiation of feerates between the user and the Light Service Provider (LSP) introduces complexity into the system. Under the current framework, users must periodically send `update_fee` messages to the LSP to ensure the latter can apply the correct feerate when forwarding HTLCs. However, this method faces challenges, particularly when users are offline for extended periods—a common scenario for mobile users—which could result in the LSP forwarding an HTLC with an inadequately low feerate. In such cases, users would need a mechanism to negatively acknowledge (NACK) the HTLC. Presently, there are three ways to address this issue, each with its own set of drawbacks concerning security and user experience. These include accepting the HTLC and then failing it, forcing a channel close, or disconnecting and later reconnecting with the peer, though practical limitations exist with each method.
+
+Further complications arise from the aspect of decision-making power over the feerate. If the LSP decides on the feerate independently and the user deems it inappropriate, there's a necessity for a NACK mechanism to reject the HTLC effectively. The dialogue around adding such a mechanism to the `option_simplified_update` has been considered, as evidenced by ongoing discussions and specific proposals like the one found in [the current spec proposal](https://github.com/lightning/bolts/pull/867). Implementing a new NACK mechanism, however, is recognized as potentially requiring more effort than desired, highlighting the inherent complexities and trade-offs involved in optimizing HTLC transactions for better fee rate management and overall transaction efficiency within the Lightning Network.</summary>
+    <published>2025-02-19T18:28:29.521000+00:00</published>
+  </entry>
+</feed>

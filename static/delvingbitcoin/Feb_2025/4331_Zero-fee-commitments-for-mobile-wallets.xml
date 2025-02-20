@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Zero-fee commitments for mobile wallets</title>
+  <updated>2025-02-20T02:19:37.665430+00:00</updated>
+  <author>
+    <name>morehouse 2025-02-19 16:11:27.993000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Zero-fee commitments for mobile wallets</title>
+    <updated>2025-02-20T02:19:37.665461+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/zero-fee-commitments-for-mobile-wallets/1453/8" rel="alternate"/>
+    <summary>The proposal introduces an alternative signing method for a specific type of bitcoin transaction associated with the Lightning Network, known as the HTLC-success transaction. This transaction is part of a mechanism designed to ensure secure and trustless payments across the network. Typically, an HTLC-success transaction includes one input, which is the HTLC output from a commitment transaction valued at 20,000 satoshis, and one output, which under the current scheme may be set to a different value depending on the chosen feerate, for instance, 17,500 satoshis. The current practice involves signing this transaction with `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` flags, which offers flexibility in handling transaction fees by allowing the mobile user to add their own inputs and outputs.
+
+The suggested change aims to switch the signing method to use the `SIGHASH_ALL` flag instead. The rationale behind this recommendation is multifaceted. Primarily, using `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY` facilitates scenarios where a mobile user can augment the transaction with additional inputs and outputs. This flexibility, while advantageous in some contexts, introduces the potential for users to claim excess mining fees for themselves. Specifically, when broadcasting a revoked commitment along with the HTLC package, a user could potentially manipulate the transaction to appropriate a portion of the satoshis intended to cover transaction fees, which in the given example amounts to 2,500 satoshis.
+
+Furthermore, the ability to exploit this aspect of the transaction structure could lead to profitable scenarios for users, especially in situations where the channel's size and the policies of the Lightning Service Provider (LSP), such as permitting zero-reserve channels, make it feasible to do so. The proposal implies that switching to `SIGHASH_ALL` would mitigate these concerns by preventing users from altering the transaction to their benefit in terms of claiming unintended mining fees. This adjustment seeks to close a loophole that could otherwise be exploited under the current signing protocol.</summary>
+    <published>2025-02-19T16:11:27.993000+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Zero-fee commitments for mobile wallets</title>
+  <updated>2025-02-20T02:20:02.438166+00:00</updated>
+  <author>
+    <name>t-bast 2025-02-19 14:46:22.347000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Zero-fee commitments for mobile wallets</title>
+    <updated>2025-02-20T02:20:02.438203+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/zero-fee-commitments-for-mobile-wallets/1453/6" rel="alternate"/>
+    <summary>The discussion focuses on the technical details of handling a pending incoming Hash Time-Locked Contract (HTLC) transaction within the context of Lightning Network protocols, specifically following the BOLT standards. It outlines a scenario involving a pre-signed HTLC-success transaction, which is crucial for ensuring the successful transfer of 20,000 satoshis (sats) through the network from one party to another. This process involves two distinct versions of the HTLC-success transaction to accommodate different fee strategies, both signed with `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY`, allowing for flexibility in transaction fees and ensuring that the transaction can be completed even if only one side agrees to the fee amount.
+
+The first version of this transaction does not allocate funds for transaction fees, thereby dedicating the entire 20,000 sats to the recipient. The second version, however, deducts a portion of the total amount (proposing 17,500 sats out of the original 20,000) to cover transaction fees, based on the chosen feerate. This approach ensures that fees can be paid without requiring additional inputs or altering the transaction's fundamental structure.
+
+In cases where the Lightning Service Provider (LSP) is uncooperative during a force-close situation, the mobile wallet is designed to publish a transaction package. This package includes the wallet's commitment transaction, featuring several components: the main output with a long CheckSequenceVerify (CSV) delay, the LSP's main output, a shared anchor (typically zero sats), and the HTLC output. To address the transaction fees, the second version of the pre-signed HTLC-success transaction is used, modified to also spend the shared anchor. The mobile wallet adds a `SIGHASH_ALL` signature to this transaction, committing to the transaction in its entirety, including all inputs and outputs. This method ensures the allocation of 2,500 sats towards transaction fees, aiming to comply with the network's ephemeral dust policy and facilitate the smooth execution of the force-close process.</summary>
+    <published>2025-02-19T14:46:22.347000+00:00</published>
+  </entry>
+</feed>
