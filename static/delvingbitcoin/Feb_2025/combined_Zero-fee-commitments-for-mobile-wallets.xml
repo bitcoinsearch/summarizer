@@ -2,27 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Zero-fee commitments for mobile wallets</title>
-  <updated>2025-02-20T02:20:54.188587+00:00</updated>
+  <updated>2025-02-21T02:21:50.089724+00:00</updated>
   <author>
-    <name>morehouse 2025-02-19 18:28:29.521000+00:00</name>
+    <name>t-bast 2025-02-20 08:43:54.342000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2025-02-19 16:18:32.286000+00:00</name>
+    <name>morehouse  . 2025-02-19 18:28:29.521000+00:00</name>
   </author>
   <author>
-    <name>morehouse 2025-02-19 16:11:27.993000+00:00</name>
+    <name>tbast  . 2025-02-19 16:18:32.286000+00:00</name>
   </author>
   <author>
-    <name>harding 2025-02-19 15:14:08.326000+00:00</name>
+    <name>morehouse  . 2025-02-19 16:11:27.993000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2025-02-19 14:46:22.347000+00:00</name>
+    <name>harding  . 2025-02-19 15:14:08.326000+00:00</name>
   </author>
   <author>
-    <name>harding 2025-02-19 14:21:01.845000+00:00</name>
+    <name>tbast  . 2025-02-19 14:46:22.347000+00:00</name>
   </author>
   <author>
-    <name>t-bast 2025-02-19 09:44:53.454000+00:00</name>
+    <name>harding  . 2025-02-19 14:21:01.845000+00:00</name>
+  </author>
+  <author>
+    <name>tbast  . 2025-02-19 09:44:53.454000+00:00</name>
   </author>
   <author>
     <name>tbast  . 2025-02-18 14:54:25.455000+00:00</name>
@@ -33,6 +36,7 @@
   <author>
     <name>tbast  . 2025-02-18 13:06:24.718000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Feb_2025/4337_Zero-fee-commitments-for-mobile-wallets.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4333_Zero-fee-commitments-for-mobile-wallets.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4332_Zero-fee-commitments-for-mobile-wallets.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4331_Zero-fee-commitments-for-mobile-wallets.xml" rel="alternate"/>
@@ -47,15 +51,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Zero-fee commitments for mobile wallets</title>
-    <updated>2025-02-20T02:20:54.188689+00:00</updated>
+    <updated>2025-02-21T02:21:50.089809+00:00</updated>
     <link href="https://delvingbitcoin.org/t/zero-fee-commitments-for-mobile-wallets/1453" rel="alternate"/>
-    <summary>In the complex landscape of Lightning Network transactions, addressing the mechanics of fee payments in Hash Time Locked Contracts (HTLCs) is crucial for both the efficiency and security of these transactions. A nuanced understanding emerges where traditionally, it might seem that channel openers bear the costs of transaction fees. However, a more balanced approach allocates this responsibility to the HTLC transaction owner, typically a mobile wallet user, ensuring that peers are not unfairly burdened with additional costs. This structure plays a pivotal role in maintaining the economic equilibrium within the network, safeguarding against potential exploitation by malicious actors who might attempt to manipulate transaction fees to their advantage.
+    <summary>The discussion highlights a nuanced approach to improving the management of HTLC (Hashed Time-Locked Contracts) transactions within the Lightning Network, specifically targeting the optimization of fee rates. A key proposal involves allowing peers to sign two versions of HTLC transactions: a standard version without a transaction fee and another with a high feerate enclosed in a custom TLV within `commitment_signed`, tailored to current network conditions. This dual-signing strategy aims to enhance transaction efficiency by ensuring fees are sufficient for prompt processing while considering the economic implications for mobile wallet users and their peers. The inclusion of a high feerate is financially borne by the channel opener, usually a mobile wallet user, encouraging its use only when necessary, such as for security reasons or to recover liquidity from inactive channels. This method cleverly integrates economic incentives with technical solutions to address both efficiency and safety concerns in transaction handling.
 
-A proposed solution to enhance transaction handling introduces a dual-signature model for HTLC transactions. This model mandates peers to sign two versions of an HTLC transaction: a default version with no included fee requiring supplementary on-chain inputs, and a second version with a high feerate enclosed within a custom TLV of `commitment_signed` that mirrors the current observed feerate. This innovative approach aims to mitigate risks associated with transaction fees while ensuring optimal operation under varying network conditions. The proposal emphasizes economic incentives, suggesting a system where the cost implications of different feerate options are strategically managed to encourage prudent use of resources, enhancing both transaction security and liquidity management in inactive or obsolete channels.
+Further technical discussions delve into the integrity and security of blockchain transactions, emphasizing the importance of employing `SIGHASH_ALL` for pre-signed transactions to ensure their reliability. This approach is contrasted with the existing practice of using `SIGHASH_SINGLE | SIGHASH_ANYONECANPAY`, which, although offering flexibility for adjusting transaction fees, potentially allows users to claim excess mining fees. The proposed shift towards `SIGHASH_ALL` seeks to mitigate the risk of exploiting transaction structures for undue gain, highlighting ongoing efforts to refine blockchain transactional security and trustworthiness.
 
-Addressing the specific needs of mobile wallets in the cryptocurrency ecosystem, the development towards integrating zero-fee commitments into lightning channels marks a significant advancement. This initiative is designed to cater to the unique operational and threat models inherent to mobile wallet usage, focusing on securing funds without necessitating on-chain utxos for force-closure of transactions. It outlines a mechanism whereby mobile wallets can efficiently manage the risks associated with revoked commitments, leveraging immediate spending of channel outputs to cover on-chain fees and enabling the publication of penalty transactions if necessary. The proposal delineates clear strategies for managing received and sent HTLCs, highlighting the distinct security considerations and operational flexibilities in each scenario. 
+Moreover, the dialogue addresses a notable vulnerability within the Lightning Network related to the exploitation of pre-signed HTLC transactions by malicious actors. It outlines strategies that could be employed by a malicious wallet to shift on-chain fee burdens to peers, undermining the network's financial stability. Despite this vulnerability, several mitigating factors are identified, suggesting that the overall risk is manageable. The conversation underscores the delicate balance between operational efficiency, security, and economic dynamics within digital currency transactions and the continuous search for optimal solutions.
 
-Furthermore, the proposal introduces an essential measure for enhancing mobile wallet resilience through additional signatures on HTLC transactions. This measure allows for unilateral close actions by mobile wallets in the face of uncooperative peers, particularly vital for managing HTLCs in adverse conditions. Although it acknowledges limitations, such as scenarios lacking pending HTLCs, the overall framework signifies a progressive step toward improving mobile wallet experiences within the Lightning Network. The community's feedback is instrumental in refining this approach, aiming for eventual formalization through a bLIP to solidify these enhancements within the network's protocol, as detailed in the ongoing discussions and proposals found at [current spec proposal](https://github.com/lightning/bolts/pull/867) and [zero-fee commitments](https://github.com/lightning/bolts/pull/1228).</summary>
-    <published>2025-02-19T18:28:29.521000+00:00</published>
+In addition, the proposal to incorporate zero-fee commitments into lightning channels represents a significant advancement towards enhancing mobile wallet functionality and security. This initiative aims to simplify the handling of revoked commitments and improve the resilience of mobile wallets against specific adversarial conditions. By enabling peers to sign two versions of HTLC transactions, one with no fee for standard operations and another with a higher feerate for unilateral close situations, mobile wallets are better equipped to manage uncooperative peers. This development not only simplifies operational requirements but also potentially increases the adoption and utility of mobile wallets for cryptocurrency transactions.
+
+Collectively, these discussions reflect the complex interplay between technical innovation, operational efficiency, security considerations, and economic incentives in the evolution of blockchain technology and digital currencies. The ongoing efforts to refine and enhance the Lightning Network through such proposals underscore the community's commitment to addressing challenges and improving the ecosystem for all participants.</summary>
+    <published>2025-02-20T08:43:54.342000+00:00</published>
   </entry>
 </feed>
