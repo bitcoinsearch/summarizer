@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>How to linearize your cluster</title>
+  <updated>2025-03-07T02:24:12.702892+00:00</updated>
+  <author>
+    <name>sipa 2025-03-06 04:40:15.719000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>How to linearize your cluster</title>
+    <updated>2025-03-07T02:24:12.702924+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/how-to-linearize-your-cluster/303/50" rel="alternate"/>
+    <summary>The exploration of the optimal way to represent capacities and flows in the implementation of a prototype for GGT (Generic Graph Theoretic) algorithm has raised several considerations. Initially, the use of floating-point data types was identified as the most apparent choice due to their ability to represent real numbers. However, this approach is fraught with potential issues, such as rounding errors, and it raises questions about the circumstances under which they can yield exact results.
+
+An alternative proposal involved the representation of capacities and flows as exact fractions. This method relies on the observation that within a single min-cut scenario—excluding the slicing process inherent in GGT—all capacities could be represented as integer multiples of $1/S$, where $S$ represents the sum of sizes within a graph. Despite its initial appeal, this approach encounters complications when applied to the slicing process of GGT, where descending into one side of the cut transfers the flow problems to a child problem requiring a different denominator. This change necessitates a complex adjustment of denominators, potentially leading to numerators that increase indefinitely.
+
+To address the challenges posed by changing denominators, a technique involving the conversion of problems from one denominator to another through flow rounding was considered. This method, detailed in a study available at [Flow Rounding](https://arxiv.org/pdf/1507.08139), seeks to find a flow with integer numerators for subproblems based on a flow with integer numerators for the parent problem. Although not overly burdensome computationally, this solution is regarded as nontrivial and somewhat unnecessary.
+
+A more straightforward solution is presented in another study, which suggests multiplying flows and capacities by a fixed constant to represent them as rounded integer multiples. This approach, outlined in the paper [Max-Flow Min-Cut Theorems for Flow Networks](https://www.cs.cmu.edu/~jonderry/maxflow.pdf), recommends choosing a multiplier that ensures no two chunk feerates, when multiplied by this constant, are less than 2 units apart. By setting the multiplier to $2S^2$, it is possible to achieve exact results for min-cuts, given that no two chunk feerates can differ by less than $1/(S^2 - S)$. Though this method involves significant internal multiplication, the use of 128-bit integers is expected to be adequate for practical purposes.</summary>
+    <published>2025-03-06T04:40:15.719000+00:00</published>
+  </entry>
+</feed>
