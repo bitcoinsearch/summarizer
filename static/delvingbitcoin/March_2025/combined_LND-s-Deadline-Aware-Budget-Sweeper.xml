@@ -2,18 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - LND's Deadline-Aware Budget Sweeper</title>
-  <updated>2025-03-14T02:27:25.081462+00:00</updated>
+  <updated>2025-03-15T02:24:21.769661+00:00</updated>
   <author>
-    <name>t-bast 2025-03-13 16:41:31.265000+00:00</name>
+    <name>yyforyongyu 2025-03-14 10:02:03.325000+00:00</name>
   </author>
   <author>
-    <name>ismaelsadeeq 2025-03-13 16:11:31.211000+00:00</name>
+    <name>tbast  . 2025-03-13 16:41:31.265000+00:00</name>
   </author>
   <author>
-    <name>morehouse 2025-03-13 15:31:06.716000+00:00</name>
+    <name>ismaelsadeeq  . 2025-03-13 16:11:31.211000+00:00</name>
   </author>
   <author>
-    <name>ismaelsadeeq 2025-03-13 10:58:51.690000+00:00</name>
+    <name>morehouse  . 2025-03-13 15:31:06.716000+00:00</name>
+  </author>
+  <author>
+    <name>ismaelsadeeq  . 2025-03-13 10:58:51.690000+00:00</name>
   </author>
   <author>
     <name>instagibbs  . 2025-03-12 18:54:19.443000+00:00</name>
@@ -21,6 +24,7 @@
   <author>
     <name>morehouse  . 2025-03-11 16:38:50.003000+00:00</name>
   </author>
+  <link href="delvingbitcoin/March_2025/4528_LND-s-Deadline-Aware-Budget-Sweeper.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2025/4517_LND-s-Deadline-Aware-Budget-Sweeper.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2025/4515_LND-s-Deadline-Aware-Budget-Sweeper.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2025/4514_LND-s-Deadline-Aware-Budget-Sweeper.xml" rel="alternate"/>
@@ -31,15 +35,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - LND's Deadline-Aware Budget Sweeper</title>
-    <updated>2025-03-14T02:27:25.081538+00:00</updated>
+    <updated>2025-03-15T02:24:21.769731+00:00</updated>
     <link href="https://delvingbitcoin.org/t/lnds-deadline-aware-budget-sweeper/1512" rel="alternate"/>
-    <summary>The discussion revolves around the recent advancements and strategies employed by various Lightning Network implementations, such as eclair and LND (Lightning Network Daemon), to optimize transaction fee management and enhance network security. Eclair has adopted an approach that shifts to exponential fee bumping as transaction deadlines approach, aiming for a more cost-effective way of handling fees when the urgency is less critical. This method contrasts with their previous strategy, indicating a move towards efficiency and economy by introducing a grace period before implementing fee bumps based on a new budget-based fee function.
+    <summary>The exploration of innovative fee functions within the blockchain realm, particularly in the context of the Lightning Network (LN), has led to significant discussions and developments aimed at optimizing transaction fee management. A notable aspect of this discourse involves the implementation of a grace period facilitated by a differentiated fee function, as highlighted in ongoing research. This concept introduces the possibility of adjusting fee functions based on the current deadline, addressing the inherent uncertainty in fee spikes or declines with each new block. This approach not only acknowledges the opportunity cost associated with skipping fee bumping but also considers the user's desire for quick liquidity access, underscoring the balance between time value and economic efficiency.
 
-In tackling the challenges of fee estimation, there's a consensus that calling Bitcoin Core’s `estimateSmartFee` with a high confirmation target (`n`) expecting immediate confirmation is impractical. Instead, it's suggested to use a target of `1` to aim for confirmation within the next 1–2 blocks, adjusting the fee rate accordingly based on the node's budget and a predetermined fee curve. This adjustment is crucial for LN nodes where timely transaction confirmation is essential, highlighting the discrepancy between expected and actual confirmation times as a significant concern. The proposal for an improved fee estimator by Bitcoin Core aims to provide more accurate data for making informed decisions, addressing issues with third-party estimators and unpredictable transaction confirmations due to external factors like mempool congestion or targeted attacks.
+In the specific cases of Eclair and LDK, two prominent systems managing transaction fees, there is a consensus on the efficiency of exponential fee bumping as deadlines near. Eclair employs this strategy to ensure transactions are processed timely, leveraging the exponential model especially when traditional estimators do not recommend higher fees. The dialogue around these practices suggests a move toward integrating a budget-based fee function that incorporates a grace period before initiating fee adjustments. This proposed method aims to delay fee bumping until a significant portion of the expected timeline has elapsed, potentially offering a more cost-effective solution without compromising on timeliness.
 
-LND's introduction of a new sweeper in version 0.18.0 marks a pivotal development in managing transaction fees and enhancing security against specific attack vectors, such as replacement cycling and HTLC expiry bribe attacks. By setting fee budgets proportional to HTLC values, this methodology aims to deter attackers by making such strategies economically unfeasible. The update incorporates a sophisticated fee bumping mechanism that dynamically adjusts fees based on the urgency and economic constraints of each transaction. This system not only addresses vulnerabilities found in previous versions but also introduces a more calculated approach to handling transactions, improving upon reliance on external estimators and simplifying the fee bumping process.
+Further insights into transaction fee optimization reveal a strategic approach that postpones fee bumping until just beyond the midpoint of the transaction count, utilizing a new budget-based fee function. This method seeks to minimize costs while still ensuring transactions are processed efficiently, challenging the conventional rush to increase fees close to the transaction deadline. By considering both economic and timing factors, this strategy offers a nuanced way to manage transaction fees, balancing urgency against resource allocation.
 
-These developments signify a broader effort within the Lightning Network community to refine on-chain logic, prioritize transaction urgency through a structured framework, and secure the network against evolving threats. By integrating budget-aware mechanisms and leveraging detailed analysis of mempool conditions, these improvements represent a step forward in achieving a more reliable, efficient, and secure Lightning Network.</summary>
-    <published>2025-03-13T16:41:31.265000+00:00</published>
+The challenge of achieving timely confirmations without overspending on fees is also evident in the utilization of the `estimateSmartFee` function by LN nodes. There exists a nuanced strategy that contradicts common misconceptions about achieving the fastest confirmations by setting the lowest possible confirmation target. The discussion underscores the importance of a balanced approach that aims for confirmations within a reasonable number of blocks while managing costs, highlighting the limitations and uncertainties involved in relying on fee estimators.
+
+Lastly, the introduction of a revised sweeper subsystem in LND version 0.18.0 marks a significant advancement in managing transaction fees and security. By incorporating HTLC deadlines and budget considerations, the new system allows for dynamic fee adjustment, prioritizing transactions based on their urgency and enhancing protections against various attacks. This development reflects a broader effort to optimize transaction processing within the LN, emphasizing the importance of security, efficiency, and cost-effectiveness in network operations. Additionally, discussions about improving Bitcoin Core's fee estimation highlight the ongoing efforts to refine the accuracy and utility of fee predictions, further contributing to the robustness and reliability of blockchain transactions.</summary>
+    <published>2025-03-14T10:02:03.325000+00:00</published>
   </entry>
 </feed>
