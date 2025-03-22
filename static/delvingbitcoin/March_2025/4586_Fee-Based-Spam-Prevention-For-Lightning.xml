@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Fee-Based Spam Prevention For Lightning</title>
+  <updated>2025-03-22T02:26:57.223594+00:00</updated>
+  <author>
+    <name>JohnLaw 2025-03-21 21:08:20.002000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Fee-Based Spam Prevention For Lightning</title>
+    <updated>2025-03-22T02:26:57.223626+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/fee-based-spam-prevention-for-lightning/1524/3" rel="alternate"/>
+    <summary>In addressing the issue raised concerning the handling of Hold Fees for HTLCs (Hash Time-Locked Contracts) in blockchain technology, a two-step update process for the downstream node's Commitment transaction is proposed to mitigate the identified problem. This process involves initially increasing the burn funds to cover both Upfront and Hold Fees, alongside matching funds for the offered HTLC, followed by adding the HTLC output to the downstream node's Commitment transaction. The downstream node is required to revoke its previous Commitment transaction before committing to this first update, thereby safely incorporating the increased burn funds which include the upstream node's matching funds.
+
+The current operational flow within the Bolt 02 specification for adding an HTLC undergoes several states, from being pending on the receiver's end to the revocation of the sender's previous Commitment transaction. To rectify the discovered bug, it's suggested that this flow be modified to introduce a stage where increased burn funds are included in the receiver's latest commitment transaction without an HTLC output, which is then followed by the inclusion of both increased burn funds and the HTLC output in subsequent transactions. This ensures that only the downstream node's Commitment transaction requires updating in two distinct steps.
+
+Furthermore, the mechanism ensures that if the downstream node fails to revoke its previous Commitment transaction before the expiry of the new HTLC's grace period, the upstream node has the prerogative to fail the HTLC. This action can be taken without incurring any Hold Fees if done prior to the HTLC's grace period expiry in the channel with the upstream partner. An illustrative scenario provided details how Bob could avoid Hold Fees with Alice if Mallory fails to revoke his previous Commitment transaction in time. 
+
+Additionally, the possibility of refining these protocol updates to support asynchronous Commitment transaction updates is discussed, alongside Rusty's suggestion to simplify the protocol to eliminate races between such updates. Implementing the two-stage update process in a race-free channel environment is deemed more feasible.
+
+Lastly, the concept of utilizing burn outputs with matching funds as a solution to charge fees based on the duration an HTLC was held is explored. This approach circumvents the need for proof of message transmission between partners and introduces a method for fee theft prevention. However, it acknowledges potential limitations, such as the complete failure of a partner resulting in the loss of funds in the burn output. This proposition, coupled with the aforementioned fix, aims to implement a charging mechanism for fees contingent on the length of time an HTLC is held, effectively addressing the highlighted concerns.</summary>
+    <published>2025-03-21T21:08:20.002000+00:00</published>
+  </entry>
+</feed>
