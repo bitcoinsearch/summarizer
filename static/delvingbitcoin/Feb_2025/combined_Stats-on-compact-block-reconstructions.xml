@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2025-02-06T02:21:18.657701+00:00</updated>
+  <updated>2025-03-25T02:27:58.790606+00:00</updated>
   <author>
-    <name>ajtowns 2025-02-05 04:51:21.150000+00:00</name>
+    <name>0xB10C 2025-03-24 19:26:58.876000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2025-02-05 04:51:21.150000+00:00</name>
   </author>
   <author>
     <name>xBC  . 2025-02-04 14:03:58.047000+00:00</name>
@@ -69,6 +72,7 @@
   <author>
     <name>xBC  . 2024-08-02 12:08:52.409000+00:00</name>
   </author>
+  <link href="delvingbitcoin/March_2025/4596_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4180_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4167_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4163_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -95,23 +99,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2025-02-06T02:21:18.657848+00:00</updated>
+    <updated>2025-03-25T02:27:58.790782+00:00</updated>
     <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052" rel="alternate"/>
-    <summary>The exploration into optimizing blockchain transactions, particularly within the Bitcoin network, reveals a multifaceted approach to enhancing data transfer efficiency and robustness. The application of FIBRE (Fast Internet Bitcoin Relay Engine) in a decentralized model presents a notable effort to circumvent delays attributed to TCP retransmissions by leveraging UDP for transaction data dissemination. Notably, the integration of FIBRE code into Bitcoin's peer-to-peer network must navigate licensing incompatibilities, indicating a need for either code rewrite or relicense to align with Bitcoin's framework. This strategic measure aims to expedite block relay between selected peers, demonstrating a potential shift towards optimizing network performance through high-bandwidth compact block relay.
+    <summary>In an extensive exploration of Bitcoin's network performance, particularly in terms of transaction handling and block reconstruction efficiency, several key modifications and findings have been highlighted. The adjustment to one node's configuration to run with `blockreconstructionextratxn=10000` and the update of two nodes to include a significant patch ([p2p: track and use all potential peers for orphan resolution 31397](https://github.com/bitcoin/bitcoin/pull/31397)) are central to this analysis. These changes aim at enhancing the system's capacity to manage transactions effectively, especially during periods of increased mempool activity. The observed impact of these adjustments provides insight into potential optimizations for transaction dissemination protocols within the Bitcoin network.
 
-The investigation extends to the empirical analysis of `getblocktxn` messages, seeking to identify patterns in missing transactions among peers and evaluating the feasibility of pre-filling such transactions to improve network throughput. A significant update from the GitHub repository introduces adjustments aimed at enhancing transaction pre-filling, especially under full mempool conditions, showcasing a proactive step towards reducing additional communication rounds required for transaction verification.
+An investigative effort has commenced, focusing on the efficiency of populating prefilled transactions in blockchain networks. This approach suggests a proactive strategy by sending certain transactions immediately to improve network performance. The initiation of recording the contents of inbound and outbound `getblocktxn` messages marks a step towards gathering empirical evidence on transaction management practices. The anticipation of evaluating the effects of these modifications during heightened mempool activity underscores a broader strategy to optimize the overall efficiency and robustness of blockchain technology.
 
-Furthermore, the discourse underscores the importance of prioritizing impactful enhancements, as exemplified by the decision to update and maintain the FIBRE patch set. This direction reflects a calculated approach to development, favoring tangible improvements over exploration. In parallel, considerations around incorporating orphan transactions directly into blocks highlight a nuanced challenge in maintaining transaction integrity and completeness, prompting further research into optimizing transaction dissemination protocols.
+The integration of FIBRE code into the Bitcoin peer-to-peer network is discussed, emphasizing the licensing challenges and the potential need for either a complete rewrite or a relicense of the code due to compatibility issues between AGPL and Bitcoin's licensing requirements. Moreover, the discussion touches upon the possibility of allowing users to select specific peers for ultra-high-bandwidth compact block relay, highlighting considerations around access and security measures in the decentralized nature of Bitcoin.
 
-The operational intricacy of managing compact blocks within blockchain structures is detailed, emphasizing the technical constraints encountered in predicting short ID requirements for block processing. This complexity necessitates an exhaustive search through orphanage blocks, underscoring the dynamic nature of blockchain validation and the continuous effort to streamline transaction handling.
+Further, the conversation shifts towards prioritizing updates and maintaining the FIBRE patch set, suggesting a renewed focus on straightforward, impactful enhancements. The suggestion to explore a peer-to-peer version of FIBRE indicates an interest in innovative approaches to optimization and efficiency within the project's scope. Additionally, the importance of managing "orphans" or transactions without a readily identifiable parent transaction within a block is underscored. A strategic approach to enhance transaction processing through the iteration of an "orphanage" alongside the existing "vextra buffer" is proposed.
 
-In addressing Bitcoin Core's transaction management, several strategies are proposed to refine the system's functionality. Expanding the `-blockreconstructionextratxn` parameter and investigating the orphan pool for unacknowledged transactions represent tactical adjustments aimed at improving node efficiency. Moreover, the discussion reveals considerations for handling received transactions, proposing a database-backed mempool to enhance transaction retrieval processes. This method contrasts with traditional practices, offering a potentially more efficient mechanism for managing transaction lifecycles.
+The handling of orphanage blocks and the necessity to iterate through the entire collection due to technical constraints related to short IDs are discussed. This exhaustive search ensures no potential connections are missed, which is vital for maintaining the continuity of the blockchain. The dialogue also covers the evaluation of the `-blockreconstructionextratxn` parameter and its potential impact on block reconstruction efficiency.
 
-The recent merge of an update into Bitcoin's master branch marks a significant stride towards optimizing orphan transaction handling, illustrating a concerted effort to refine blockchain integrity through direct parental data requests from peers. Additionally, a programmer's testing of a specific patch sheds light on transaction management nuances, advocating for increased transaction recall capacity and deeper exploration of the orphan pool to mitigate discrepancies in node behavior.
+The discussion further delves into the "extra pool" in compact block reconstruction, aiming to optimize bandwidth usage and improve the speed of block propagation. By leveraging the "extra pool," nodes can more efficiently manage their resources, contributing to a more scalable blockchain infrastructure. Additionally, strategies to mitigate denial-of-service (DoS) attacks, focusing on optimizing data management and minimizing unnecessary resource usage, are proposed.
 
-An analytical perspective on blockchain transaction processing suggests examining blocks with low numbers to ascertain the impact of non-standard transactions. This approach aims to discern the influence of prioritized transactions on network behavior, probing the consistency of eviction practices and their implications on transaction processing efficiency.
+Libbitcoin's approach to transaction handling raises concerns regarding its vulnerability to DoS attacks, emphasizing the need for robust data management and security measures. The proposition of backing the mempool with a database store for improved transaction handling introduces a novel approach to managing transactions more efficiently while addressing spam concerns.
 
-Lastly, the examination of compact block reconstructions via `debug=cmpctblock` logging offers valuable insights into the procedural efficacy of these operations. Observations during specific timeframes illustrate the correlation between mempool size and the necessity for additional transaction requests, highlighting areas for potential optimization in block reconstruction methodologies. This comprehensive analysis encapsulates ongoing efforts and considerations to bolster the Bitcoin network's efficiency, integrity, and scalability.</summary>
-    <published>2025-02-05T04:51:21.150000+00:00</published>
+Lastly, the recent merge of a significant update into the Bitcoin repository ([GitHub](https://github.com/bitcoin/bitcoin/pull/31397)) showcases an enhanced mechanism for handling orphan transactions. This development, along with an extensive examination of node behavior and block reconstruction statistics, underscores ongoing efforts to bolster the reliability and efficiency of Bitcoin nodes. Through targeted adjustments and further research, these initiatives aim to enhance the performance of the Bitcoin network, reflecting a methodical examination of transaction management and block reconstruction processes.</summary>
+    <published>2025-03-24T19:26:58.876000+00:00</published>
   </entry>
 </feed>
