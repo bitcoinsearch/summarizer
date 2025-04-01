@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cluster mempool partitioning attacks</title>
+  <updated>2025-04-01T02:50:43.464443+00:00</updated>
+  <author>
+    <name>stefanwouldgo 2025-03-31 14:57:05.826000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cluster mempool partitioning attacks</title>
+    <updated>2025-04-01T02:50:43.464473+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cluster-mempool-partitioning-attacks/1548" rel="alternate"/>
+    <summary>The discussion initiated in the "How to linearize your cluster" topic has branched into a new conversation to specifically address how the requirement for linearizations or chunkings during Replace-By-Fee (RBF) transactions with non-trivial mempool dependencies might inadvertently facilitate mempool partitioning attacks. This separation was made to prevent overcrowding the original topic and to give due attention to what is perceived as a significant, independent issue. The concern is rooted in an attack scenario where an attacker simultaneously submits several versions of a transaction group, dependent on an existing transaction cluster, to different mempools. These submissions conflict with each other without any version being able to replace another due to their fee structures being either identical or not directly comparable. Such a strategy leads to network mempools being divided, housing mutually exclusive versions of the transaction cluster, thereby undermining the network's cohesion.
+
+This potential vulnerability exists under current RBF rules, which do not mandate comparing the fee structures (diagrams) of mempool transactions. The argument against requiring such linearizations posits that an honest network participant, familiar only with one version of the transaction cluster, could only propose optimizations (chunkings) for that specific version. These optimizations may not be effective or applicable across the different versions created by an attacker, thus limiting the relay of new transactions across the divisions created by the attacker. It is suggested that linearizations should only be mandated when replacing existing transactions via RBF in scenarios where time constraints exist during relay, acknowledging that this approach may not fully mitigate the outlined attack vector.
+
+In the context of the aforementioned attack, the intricacies of the proposed RBF rules become apparent. If an attacker crafts transaction versions with incomparable fee diagrams, it effectively prevents any RBF transaction from being relayed across the partitions they've created, assuming the current proposal requires strictly improving upon the existing transaction fee diagram for a replacement to occur. This challenge is magnified by the partial order nature of these diagrams, as opposed to a strict scalar fee hierarchy. The ongoing discourse seeks to validate the current standing of the RBF rules within the Bitcoin community, referencing a specific [GitHub proposal](https://github.com/bitcoin/bitcoin/blob/20e42a4a7423d7bc62326cdb6405bc6d5900953e/doc/policy/mempool-replacements.md) as a point of inquiry. The implications of this potential vulnerability warrant further examination and discussion amongst community members to ensure the robustness of network operations against such partitioning strategies.</summary>
+    <published>2025-03-31T14:57:05.826000+00:00</published>
+  </entry>
+</feed>
