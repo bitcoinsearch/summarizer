@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>IBD Booster -- Speeding up IBD with pre-generated hints (PoC)</title>
+  <updated>2025-04-03T02:29:40.580881+00:00</updated>
+  <author>
+    <name>theStack 2025-04-02 17:26:06.981000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>IBD Booster -- Speeding up IBD with pre-generated hints (PoC)</title>
+    <updated>2025-04-03T02:29:40.580912+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ibd-booster-speeding-up-ibd-with-pre-generated-hints-poc/1562" rel="alternate"/>
+    <summary>Ruben Somsen recently introduced a proposal aimed at accelerating the Initial Block Download (IBD) phase in Bitcoin Core. This method proposes reducing chainstate operations by utilizing pre-generated hints, which diverges from the current optimization that primarily relies on skipping script verification up to a specified block, indicated by the `-assumevalid` parameter. The existing approach, while effective in its domain, leaves other block validation checks, such as UTXO set lookups and removals, active. These operations are resource-intensive, involving significant disk I/O due to their interaction with the coin cache and leveldb.
+
+The core of this innovative proposal revolves around the selective addition of coins to the UTXO set. Specifically, it suggests adding only those coins that will remain unspent at a predetermined block height, thereby eliminating the need for adding or removing other coins during the IBD process. This is facilitated through a hints data structure that contains a boolean flag for each transaction output created up to a certain block. These flags indicate whether a transaction output will end up in the UTXO set at a specific block height, allowing for a more streamlined validation process by bypassing unnecessary UTXO set lookups and removals.
+
+A practical implementation of this concept, termed "IBD Booster," has been developed. It includes a Python script that generates the bit-encoded hints file and a modified version of Bitcoin Core capable of reading this file and implementing the described optimizations. The process begins with generating the hints data by running a non-pruned node synced to the desired target height, dumping the UTXO set at that height, and converting it into an SQLite3 database. The generated hints file significantly reduces the resources required for block validation, enabling potential parallel processing and offering an impressive speed-up in the IBD phase, as evidenced by preliminary benchmarks.
+
+However, the proposal is not without its drawbacks. One notable limitation is the inability to create undo data, which affects the functionality of nodes operating in this mode, limiting some indexes and RPC calls. Despite these challenges, the IBD Booster represents a promising avenue for future research and development, potentially benefiting projects aimed at optimizing blockchain performance.
+
+For further exploration and testing, the IBD Booster's proof-of-concept implementation and the necessary tools are publicly available. The hints generation script can be found within a dedicated GitHub repository ([ibd-booster-hints-gen](https://github.com/theStack/ibd-booster-hints-gen)), and the modified Bitcoin Core branch supporting this feature is also accessible online ([Bitcoin Core IBD Booster branch](https://github.com/theStack/bitcoin/tree/ibd_booster_v0)). Feedback and contributions to this ongoing project are welcomed, as the community seeks to refine and enhance this novel approach to blockchain optimization.</summary>
+    <published>2025-04-02T17:26:06.981000+00:00</published>
+  </entry>
+</feed>
