@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>IBD Booster -- Speeding up IBD with pre-generated hints (PoC)</title>
+  <updated>2025-04-07T02:41:05.826791+00:00</updated>
+  <author>
+    <name>theStack 2025-04-06 23:38:42.713000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>IBD Booster -- Speeding up IBD with pre-generated hints (PoC)</title>
+    <updated>2025-04-07T02:41:05.826819+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ibd-booster-speeding-up-ibd-with-pre-generated-hints-poc/1562/7" rel="alternate"/>
+    <summary>The discussion revolves around optimizing blockchain synchronization methods, specifically for Bitcoin's Initial Block Download (IBD) process. A novel approach is suggested, diverging from the traditional use of the MuHash algorithm for aggregate hashing. Instead, it proposes utilizing a regular hash function such as sha256 with added salt to prevent birthday attacks. This method involves a simple arithmetic operation that checks if the sum of hashes of two sets of UTXO data (unspent transaction outputs), each appended with a salt, equals zero, thereby indicating matching pairs in a more efficient manner than MuHash.
+
+Despite the apparent efficiency gains, concerns are raised regarding the security implications of substituting MuHash with sha256, particularly because this adjustment significantly reduces the modulo field size from 3072 bits to 256 bits and shifts from multiplication to addition operations. There's an acknowledgment of the intuitive skepticism about whether these changes might compromise security. However, it's highlighted that the primary objective differs between the original MuHash application and the proposed method, suggesting that even if there's a reduction in security, it could still suffice for the SwiftSync use-case aimed at speeding up the IBD process.
+
+An implementation of the suggested method has already been undertaken, showcasing promising results. The adapted approach has led to a significant improvement in IBD speed, demonstrating about a fivefold increase compared to the baseline assumevalid method. These findings are documented in a GitHub repository, with specific commits highlighted for reference ([theStack's bitcoin repository](https://github.com/theStack/bitcoin/tree/ibd_booster_v1_addsub_sha256), commit [494692ebc57e159c36b0a2042abca59f539ca0c2](https://github.com/theStack/bitcoin/commit/494692ebc57e159c36b0a2042abca59f539ca0c2)). The comparison table presented underscores the efficacy of the salted sha256 method over both the assumevalid only scenario and the MuHash-based SwiftSync, marking a substantial advancement in IBD performance metrics.
+
+Looking ahead, the next logical step discussed is incorporating parallel block validation into the proof-of-concept. This endeavor, however, is acknowledged as requiring more extensive modifications to the codebase, implying a need for further development work to realize the full potential of the proposed improvements in blockchain synchronization.</summary>
+    <published>2025-04-06T23:38:42.713000+00:00</published>
+  </entry>
+</feed>
