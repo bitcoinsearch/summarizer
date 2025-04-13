@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+  <updated>2025-04-13T03:46:31.447873+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2025-04-12 20:12:21.932000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+    <updated>2025-04-13T03:46:31.447905+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checkcontractverify-and-its-amount-semantic/1527/8" rel="alternate"/>
+    <summary>The discussion revolves around the technical intricacies of Bitcoin's UTXO (Unspent Transaction Output) management, specifically addressing concerns regarding UTXOs that possess mutually exclusive spend conditions. This complexity is highlighted through an example involving two distinct types of `OP_CLTV` scripts: one that depends on block height and another that operates based on wall clock time. Given the nature of Bitcoin transactions, which can only have a single `nLockTime` value, it becomes impossible to satisfy both conditions simultaneously within the same transaction. This limitation underscores an inherent design challenge in managing UTXOs with differing conditions for spendability.
+
+Bitcoin Improvement Proposal 65 ([BIP65](https://github.com/bitcoin/bips/blob/8375f71ee64cda848b159fa4a0c3719a48037492/bip-0065.mediawiki)) is referenced to provide background on the mechanism of operation for `OP_CLTV` scripts. These scripts utilize an "indirect validation" approach by relying on transaction-level fields (`nLockTime` for `OP_CLTV` and `nSequence` for `OP_CSV`) prior to execution within the script interpreter. This design allows each input in a transaction to specify its own relative locktime when `OP_CSV` is used, circumventing the conflict encountered with `OP_CLTV` scripts. The conversation highlights the philosophical stance that transactions serve as the atomic unit of validation on the Bitcoin network, emphasizing the necessity of internal transaction introspection over external factors such as block time or height.
+
+Further exploration into the functionality of these scripts reveals how their indirect validation method, while clever, may lead to situations where transactions are valid under network relay policies but are nonetheless unmineable due to conflicts with other Bitcoin Improvement Proposals, such as [BIP113](https://github.com/bitcoin/bips/blob/8375f71ee64cda848b159fa4a0c3719a48037492/bip-0113.mediawiki)'s median-time-past rules. An illustrative example is provided through a [pull request](https://github.com/bitcoin/bitcoin/pull/32229) in the Bitcoin Core repository, showcasing instances of `OP_CLTV` transactions that meet relay standards but fail to be mined, highlighting the practical implications of these theoretical considerations.</summary>
+    <published>2025-04-12T20:12:21.932000+00:00</published>
+  </entry>
+</feed>

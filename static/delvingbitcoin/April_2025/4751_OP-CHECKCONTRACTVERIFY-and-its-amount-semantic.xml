@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+  <updated>2025-04-13T03:46:47.814960+00:00</updated>
+  <author>
+    <name>salvatoshi 2025-04-12 15:37:45.129000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+    <updated>2025-04-13T03:46:47.814994+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checkcontractverify-and-its-amount-semantic/1527/7" rel="alternate"/>
+    <summary>The discussion revolves around the complexity and potential pitfalls of introducing validation rules that span across multiple inputs within a transaction, contrasting with the existing transaction-level validations such as `CHECKSIG`. The concern is raised about the undesirable effects of adding more cross-input logic, termed "spillover effects," which are already present through mechanisms like `CLTV`. There's a suggestion to refactor the validation code in the `ConnectBlock` function to process transactions rather than input scripts. This change aims to simplify implementation and possibly enhance performance by eliminating the need for added synchronization inherent in input-level parallelism, though this hypothesis requires empirical verification through benchmarks.
+
+A proposed solution to address these challenges involves employing an indirect method similar to `CSV`, where constraints on output amounts could be specified in a new field within each input, potentially included in the annex. This field would outline a list of constraints per input, including the type of constraint (e.g., sweep or deduct), the output index, and an optional amount. However, there are reservations about this approach, particularly concerning the redundancy and increased byte cost due to the necessity of fully enforcing these constraints via opcodes like `CCV` or others that might utilize this feature. It is emphasized that for the constraints to be meaningful, they must be enforceable at the opcode level, which could double the data needed to express these constraints, although optimizations may reduce the overhead.
+
+Additionally, there's an acknowledgment of potential implementation complexities similar to those encountered in previous attempts to introduce cross-input validation logic, citing a specific instance of complexity in the [deferred checks framework](https://github.com/bitcoin-inquisition/bitcoin/commit/32c9b122d72b3748051c979ce2d46f07a48c44cc) from an OP_VAULT Pull Request by James O'Beirne. This comparison suggests that while the annex-based approach might mitigate some issues related to explicit synchronization, it does not significantly simplify the overall complexity of the validation logic, as reflected in a detailed examination of implementation efforts documented in a comparison between different code versions on GitHub ([view diff](https://github.com/bitcoin-inquisition/bitcoin/compare/4e23c3a9867eedadb9e20387936ec9f0eca6e918..Merkleize:bitcoin:34f05028661932b417b59bdcdd58f4453f19cec5)). The dialogue underscores the nuanced challenges in evolving transaction validation mechanisms within blockchain protocols, highlighting the delicate balance between enhancing functionality and maintaining or improving system performance and security.</summary>
+    <published>2025-04-12T15:37:45.129000+00:00</published>
+  </entry>
+</feed>
