@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+  <updated>2025-04-15T02:42:07.324769+00:00</updated>
+  <author>
+    <name>AntoineP 2025-04-14 15:06:40.974000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+    <updated>2025-04-15T02:42:07.324802+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checkcontractverify-and-its-amount-semantic/1527/10" rel="alternate"/>
+    <summary>The discussion revolves around the intricacies of implementing validation rules at the transaction level within a blockchain context, specifically addressing the concept of "spill-over" and its implications for validation processes. At the heart of the debate is the comparison between the proposed validation approach and the current method embodied by the CHECKSIG operation, which is precomputed prior to script execution. The suggestion put forward aims to replicate this mechanism for amount constraints, positing that such an approach would not only streamline validation but also potentially allow for a more efficient refactoring of the codebase. This would involve shifting the focus from input scripts to transactions themselves within the `ConnectBlock` function, thereby simplifying the validation process by eliminating the complexity introduced by cross-input logic and the need for added synchronization code. However, concerns are raised about the practicality of reducing parallelization, which could diminish efficiency without offering a clear advantage over maintaining the current level of parallelization.
+
+Criticism of the suggested approach includes the potential loss of benefits provided by input-level parallelization, which plays a crucial role in minimizing validation times for unconfirmed transactions and improving overall block validation times. Such parallelization is deemed essential for defending against possible attacks where the attacker does not have to perform proof of work (PoW) to impose costs on a node. Despite these drawbacks, proponents argue that the new method would preserve cross-input parallelization, ensure cleaner implementation, and facilitate a more composable primitive through the separation of concerns. Yet, the necessity of repeating the constraint as stated in the annex, thus doubling the required number of bytes, is acknowledged as a less-than-ideal requirement, albeit one that represents a worthwhile tradeoff considering the potential for non-malleability and overall simplicity in implementation.
+
+Further discussion touches on the importance of ensuring the annex's immutability to prevent malleability issues, especially in cases where the input Script might utilize certain verification mechanisms without any signature, underlining the significance of signatures in maintaining transaction integrity. Reference is made to a specific implementation demonstrating the feasibility and relative simplicity of the proposed validation approach, contrasting it with existing features like absolute locktimes, which perform transaction-level checks before executing input scripts. This comparison underscores a preference for preemptive checks, which, unlike deferred checks, offer a clearer and more straightforward validation pathway. The debate is enriched by references to various diffs and commits, including a [demonstrated implementation](https://github.com/bitcoin/bitcoin/compare/v29.0..darosior:2504_hack_poc_annex_amounts) and a notable commit from James O’Beirne’s OP_VAULT PR ([this commit](https://github.com/bitcoin-inquisition/bitcoin/commit/32c9b122d72b3748051c979ce2d46f07a48c44cc)), which provide concrete examples of the concepts discussed and their potential application within the blockchain infrastructure.</summary>
+    <published>2025-04-14T15:06:40.974000+00:00</published>
+  </entry>
+</feed>
