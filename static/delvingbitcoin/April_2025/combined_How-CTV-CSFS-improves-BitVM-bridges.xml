@@ -2,24 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - How CTV+CSFS improves BitVM bridges</title>
-  <updated>2025-04-17T02:39:23.402569+00:00</updated>
+  <updated>2025-04-21T02:44:21.492968+00:00</updated>
   <author>
-    <name>JeremyRubin 2025-04-16 20:02:02.814000+00:00</name>
+    <name>JeremyRubin 2025-04-20 21:24:17.688000+00:00</name>
   </author>
   <author>
-    <name>AntoineP 2025-04-16 14:21:48.816000+00:00</name>
+    <name>JeremyRubin 2025-04-20 21:20:33.878000+00:00</name>
   </author>
   <author>
-    <name>JeremyRubin 2025-04-16 13:49:57.554000+00:00</name>
+    <name>JeremyRubin 2025-04-20 21:18:58.708000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2025-04-16 11:19:31.759000+00:00</name>
+    <name>JeremyRubin  . 2025-04-16 20:02:02.814000+00:00</name>
   </author>
   <author>
-    <name>instagibbs 2025-04-16 10:58:29.928000+00:00</name>
+    <name>AntoineP  . 2025-04-16 14:21:48.816000+00:00</name>
   </author>
   <author>
-    <name>ajtowns 2025-04-16 09:48:04.727000+00:00</name>
+    <name>JeremyRubin  . 2025-04-16 13:49:57.554000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2025-04-16 11:19:31.759000+00:00</name>
+  </author>
+  <author>
+    <name>instagibbs  . 2025-04-16 10:58:29.928000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns  . 2025-04-16 09:48:04.727000+00:00</name>
   </author>
   <author>
     <name>bytes  . 2025-04-15 00:00:02.028000+00:00</name>
@@ -33,6 +42,9 @@
   <author>
     <name>Cyimon  . 2025-04-10 14:28:23.711000+00:00</name>
   </author>
+  <link href="delvingbitcoin/April_2025/4842_How-CTV-CSFS-improves-BitVM-bridges.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2025/4841_How-CTV-CSFS-improves-BitVM-bridges.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2025/4840_How-CTV-CSFS-improves-BitVM-bridges.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2025/4812_How-CTV-CSFS-improves-BitVM-bridges.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2025/4806_How-CTV-CSFS-improves-BitVM-bridges.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2025/4804_How-CTV-CSFS-improves-BitVM-bridges.xml" rel="alternate"/>
@@ -47,17 +59,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - How CTV+CSFS improves BitVM bridges</title>
-    <updated>2025-04-17T02:39:23.402648+00:00</updated>
+    <updated>2025-04-21T02:44:21.493064+00:00</updated>
     <link href="https://delvingbitcoin.org/t/how-ctv-csfs-improves-bitvm-bridges/1591/4" rel="alternate"/>
-    <summary>The discussion centers around the intricacies of implementing Bitcoin transactions, specifically focusing on the challenges and potential solutions regarding signatures and script execution. The conversation highlights a technical challenge with using `CHECKSIG` in both the scriptSig and scriptPubKey due to differences in message signing, which results from the distinct ways EvalScript is called for each. This discrepancy makes it impossible to reuse a signature across both checks, leading to either one failing. An interesting workaround involving a `CODESEPARATOR` trick to make the scriptCode identical for both checks is mentioned but appears to have limitations.
+    <summary>The discussion opens with an intriguing approach to Bitcoin transactions that negates the need for an `OP_CODESEPARATOR`. This technique involves including the `DUP` opcode in both the `scriptSig` and `scriptPubKey` sections, following the signature. Such a method allows for the specific spending of one output with another, albeit with potential vulnerabilities due to third-party malleability, such as scriptSig NOP injection. This vulnerability means that while one transaction output can be designated to be spent only when another specific output is spent, the latter can still be spent separately, possibly leading to unintended consequences.
 
-Moreover, the dialogue delves into the concept of Bitcoin covenants as a means to create more secure transaction protocols by setting conditions on how bitcoins can be spent. These covenants can enhance security for wallet technologies, facilitate the creation of Bitcoin savings accounts or vaults, and offer innovative solutions for inheritance planning. A specific focus is placed on employing covenants for developing advanced wallet security features, such as limiting fund transfers to authorized addresses and requiring multi-signature authentication.
+A practical demonstration provided illustrates the application of non-standard scripts in constructing a Bitcoin transaction. The process outlined includes generating a fake funding transaction, creating a spending transaction skeleton, and performing a signature operation that uniquely applies to both the `scriptSig` and `scriptPubKey` through a nuanced use of `OP_CODESEPARATOR`. This experiment, conducted in a controlled regtest environment due to its deviation from mainnet policy rules, highlights the technical feasibility of achieving consensus verification under specific, non-standard conditions.
 
-A correction is made regarding the use of sighash flags, emphasizing the correct combination as `ANYONECANPAY|NONE` for certain transaction signing scenarios. This adjustment is crucial for developers working with Bitcoin transactions that require selective signing, enabling more flexible and secure transaction constructions.
+Further exploration delves into the potential of using `CHECKSIG` directly in `scriptSig`, presenting both the challenges and novel applications of such a method. This discussion extends into the realms of Bitcoin covenants and advanced transaction structures, offering insights into how these techniques can enhance security, enable innovative use cases like inheritance solutions, and optimize collateral utilization in complex systems. Specific attention is given to the correct usage of sighash flags, particularly the importance of `ANYONECANPAY|NONE` in scenarios requiring selective signing of transactions.
 
-The conversation also outlines a system designed to optimize collateral utilization by operators, detailing the process from deposit phase through to reimbursement. It emphasizes the need for a Bitcoin light client to verify transactions and maintain trust-minimized safety within the system. Additionally, it touches on the challenge of publishing all operators' signatures given the limited block space on the Bitcoin network, pointing out the necessity for alternative solutions to ensure data availability and secure operations.
-
-In essence, the exchange encapsulates significant technical aspects of Bitcoin transactions, including script execution nuances, the application of covenants for improved security and functionality, the importance of understanding sighash flags for transaction signing, and the operational challenges in optimizing collateral utilization within a proposed system.</summary>
-    <published>2025-04-16T20:02:02.814000+00:00</published>
+Additionally, the dialogue touches upon the necessity for improved documentation and understanding regarding Bitcoin's scripting capabilities, especially in the context of ensuring transaction integrity and exploring the limits of current standardness rules. The conversation underscores a collective pursuit amongst programmers to refine, innovate, and secure cryptocurrency transactions beyond conventional methodologies, reflecting a dynamic engagement with the evolving landscape of blockchain technology.</summary>
+    <published>2025-04-20T21:24:17.688000+00:00</published>
   </entry>
 </feed>

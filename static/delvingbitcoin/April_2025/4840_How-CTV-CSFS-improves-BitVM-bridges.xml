@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>How CTV+CSFS improves BitVM bridges</title>
+  <updated>2025-04-21T02:44:08.541621+00:00</updated>
+  <author>
+    <name>JeremyRubin 2025-04-20 21:18:58.708000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>How CTV+CSFS improves BitVM bridges</title>
+    <updated>2025-04-21T02:44:08.541653+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/how-ctv-csfs-improves-bitvm-bridges/1591/14" rel="alternate"/>
+    <summary>The provided script demonstrates a technical exploration into Bitcoin transaction scripts, specifically focusing on the use of `OP_CODESEPARATOR` in non-standard transactions. This experiment is set in a regtest environment to avoid conflict with mainnet policy rules that would typically reject such transactions.
+
+The process begins by creating a network and key-pair setup, utilizing a `CBitcoinSecret` object to generate a secret key from a byte string, paired with its corresponding public key generated through `CPubKey`. Following this, a fake funding transaction is constructed, allocating 1 BTC to a scriptPubKey consisting solely of the receiver's public key followed by an `OP_CHECKSIGVERIFY` operation. This transaction is identified by a unique transaction ID (txid) obtained through hashing.
+
+To spend the fake funds, a spending transaction is created with an input referencing the fake funding transaction and an output directing 90 million satoshis to an arbitrary script containing `OP_DUP`. The crux of the experiment lies in the crafting of the signature for this transaction. Notably, for the `OP_CHECKSIG` operation within the scriptSig, only the bytes following the last occurrence of `OP_CODESEPARATOR`—in this case, `[pubkey] OP_CHECKSIG`—are hashed and signed. This sequence is identical to the scriptPubKey of the funding transaction, allowing a single `SIGHASH_ALL` signature to validate both checks.
+
+The complete scriptSig assembled for the spending transaction comprises `OP_TRUE`, the signature, `OP_DUP`, `OP_CODESEPARATOR`, the public key, and `OP_CHECKSIGVERIFY`. Upon serialization and hashing of this transaction, consensus verification is conducted under minimal policy flags to ensure the transaction adheres to consensus rules. The successful validation reinforces the viability of using `OP_CODESEPARATOR` in constructing valid, albeit non-standard, Bitcoin transactions.
+
+An optional tighter scriptSig method is suggested, potentially reducing unnecessary data by ensuring that the scriptSig and scriptPubKey contain a single item that gets duplicated and then verified through `OP_CHECKSIGVERIFY`, further streamlining the transaction structure.
+
+This exploration underscores the flexibility and complexity of Bitcoin scripting, highlighting how traditional transaction validation mechanisms can be adapted for specific scenarios, albeit within the confines of a controlled test environment to circumvent the restrictions of Bitcoin's mainnet policies.</summary>
+    <published>2025-04-20T21:18:58.708000+00:00</published>
+  </entry>
+</feed>
