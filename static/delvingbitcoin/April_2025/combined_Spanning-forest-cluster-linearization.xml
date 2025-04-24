@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Spanning-forest cluster linearization</title>
-  <updated>2025-04-19T02:27:16.703560+00:00</updated>
+  <updated>2025-04-24T02:42:37.716894+00:00</updated>
   <author>
-    <name>sipa 2025-04-18 12:31:09.945000+00:00</name>
+    <name>sipa 2025-04-23 11:11:19.978000+00:00</name>
+  </author>
+  <author>
+    <name>sipa  . 2025-04-18 12:31:09.945000+00:00</name>
   </author>
   <author>
     <name>sipa  . 2025-02-07 20:20:58.258000+00:00</name>
@@ -12,6 +15,7 @@
   <author>
     <name>sipa  . 2025-02-05 01:08:43.125000+00:00</name>
   </author>
+  <link href="delvingbitcoin/April_2025/4861_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2025/4826_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4223_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4171_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
@@ -19,17 +23,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Spanning-forest cluster linearization</title>
-    <updated>2025-04-19T02:27:16.703605+00:00</updated>
+    <updated>2025-04-24T02:42:37.716949+00:00</updated>
     <link href="https://delvingbitcoin.org/t/spanning-forest-cluster-linearization/1419" rel="alternate"/>
-    <summary>The programmer's exploration into optimizing Bitcoin Core's `Linearize()` function has yielded substantial advancements, as illustrated through their updated version hosted on [GitHub](https://github.com/sipa/bitcoin/commits/spanning_tree_linearization). This new implementation significantly enhances performance in linearizing challenging transaction clusters encountered within the network. Such improvements are quantified by benchmark comparisons, which demonstrate considerable reductions in processing time for a range of transaction scenarios. For instance, one example showcased a reduction from 70.6 microseconds to 21.1 microseconds, with other transactions experiencing even more dramatic decreases in processing time. These enhancements indicate not only increased efficiency but also the potential for improved robustness in handling complex transactions.
+    <summary>The analysis of the spanning-forest linearization (SFL) algorithm presents an in-depth comparison with other algorithms like the GGT and CSS, focusing on optimizing linearization processes within computational systems. The SFL algorithm is highlighted for its potential to guarantee optimal linearization outcomes upon successful termination. However, concerns are raised regarding its consistency in achieving termination. Fuzzing tests indicate that the heuristic approach of merging chunks based on maximum feerate differences could mitigate the risk of repetitive states, attributing to the finite nature of possible states and suggesting a path towards ensuring algorithmic termination. Despite this, the complexity bound of the SFL algorithm remains a challenge, with a basic upper limit deduced from the finite state space providing little practical insight due to its vastness. A more refined approach considers the active dependencies arranged as a spanning forest, yielding an exponential complexity bound but within a slightly more constrained context.
 
-In parallel, there is ongoing work on developing a new cluster linearization algorithm, identified as the spanning-forest cluster linearization algorithm. This novel approach has shown promise over existing algorithms employed in Bitcoin Core and various discussions within the domain. The algorithm's foundation lies in treating the linearization problem as a Linear Programming (LP) challenge, aiming to identify the highest-feerate topologically-valid subset of transactions within a cluster. Utilizing LP solving techniques such as Interior Point Methods indicates that the problem can be resolved in polynomial time, thus suggesting it is not NP-hard. This revelation paves the way for applying linear programming solutions more broadly in this context.
+The discussion further delves into the issues surrounding equal-feerate chunk splitting within the SFL algorithm's framework. The current design necessitates a delicate balance between splitting and merging chunks based on their feerate differences to circumvent infinite loops or non-topological outcomes. This underscores an ongoing quest for an efficient method to split chunks into topologically valid, separate equal-feerate components. Additionally, the granularity within chunks poses another layer of complexity, as the SFL framework lacks a mechanism for ordering transactions at a sub-chunk level, thus impacting block building processes that require finer granularity. The exploration of LIMO-like improvements is deemed valuable, suggesting that directed steps within an SFL state could result in linearizations at least as beneficial as rearranging subsets, thereby enhancing the algorithm's efficiency through ancestor set integration.
 
-The article further delves into specifics about how the simplex algorithm is adapted for this purpose, detailing the process of partitioning the transaction graph into chunks connected by a spanning tree of free variables. The crux of the spanning forest linearization algorithm is its ability to merge and split these chunks based on feerate comparisons, striving for an optimal linearization. The algorithm ensures correctness by terminating with an optimal linearization, where no higher-feerate chunk depends on a lower-feerate one.
+The programmer’s contribution to improving the `Linearize()` function in Bitcoin Core is notable, with the updated version demonstrating significant performance enhancements over the master branch across various challenging clusters encountered on the network. Benchmark comparisons reveal substantial reductions in processing time, highlighting the new implementation's efficiency gains and its potential in handling transactions previously considered difficult by existing standards.
 
-Moreover, the discussion touches upon several pivotal areas of concern and potential improvement within the current state of the algorithm. These include issues related to termination guarantees, complexity bounds, equal-feerate chunk splitting, sub-chunk linearization, LIMO-like improvements, and merging states. Each area presents its own set of challenges and opportunities for further refinement of the algorithm. Despite the absence of definitive complexity bounds, the focus remains on achieving practical, "good enough" linearizations swiftly for specified cluster sizes.
+A work in progress on a cluster linearization algorithm, specifically the spanning-forest cluster linearization algorithm, introduces a novel approach potentially superior for real-life applications compared to existing algorithms. The simplicity, speed, and elegance of this new method, despite lacking known complexity bounds, provide a promising alternative. The concept of cluster linearization as a Linear Programming (LP) problem facilitates a polynomial-time solution via LP solving algorithms, such as Interior Point Methods. This revelation that the problem is not NP-hard opens avenues for employing linear programming techniques. Moreover, the simplex algorithm's adaptation to this problem area showcases an iterative process that partitions the transaction graph into "chunks," optimizing the LP problem within a feasible time frame.
 
-This dual narrative of technical enhancement and theoretical exploration underscores the dynamic evolution of Bitcoin Core's transaction processing capabilities. Through rigorous benchmarking and conceptual innovation, the programmer is actively contributing to the scalability and efficiency of blockchain technology.</summary>
-    <published>2025-04-18T12:31:09.945000+00:00</published>
+Significant modifications to the simplex algorithm have led to the development of the spanning forest linearization algorithm. This algorithm maintains a boolean for each dependency in the graph, with operations of merging and splitting chunks based on feerate comparisons aiming for optimal linearization. The output is an ordered set of chunks, sorted from high to low feerate, each in a valid topological order. The refinements made to ensure correctness and efficiency, including prioritizing merges over splits and selecting dependencies to activate or deactivate based on specific criteria, underscore the algorithm's potential for real-world application. The pragmatic focus remains on achieving a "good enough" linearization swiftly for defined cluster sizes, considering improvement per unit of time as essential for evaluating the algorithm's practical utility.</summary>
+    <published>2025-04-23T11:11:19.978000+00:00</published>
   </entry>
 </feed>
