@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>How CTV+CSFS improves BitVM bridges</title>
+  <updated>2025-04-30T02:42:29.062499+00:00</updated>
+  <author>
+    <name>RobinLinus 2025-04-29 16:01:48.456000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>How CTV+CSFS improves BitVM bridges</title>
+    <updated>2025-04-30T02:42:29.062531+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/how-ctv-csfs-improves-bitvm-bridges/1591/23" rel="alternate"/>
+    <summary>The scriptSig trick introduces a novel method to link two inputs, inputA and inputB, in such a way that inputA can only be spent together with inputB. This is achieved by utilizing the CheckTemplateVerify (CTV) mechanism, which commits to the scriptSig of all inputs. The process starts by defining inputB as a legacy Pay to Script Hash (P2SH) output. A signature is then pre-signed for inputB using the sighash flag `ANYONECANPAY|NONE`, which commits to inputB alone since P2SH does not utilize SegWit, thus embedding the signature within inputB's scriptSig. Subsequently, inputA is defined as a Pay to Taproot (P2TR) output and includes a CTV condition that commits to the scriptSigs, encapsulating the pre-signed signature for inputB. Consequently, inputA inherently commits to the signature for inputB, which in turn commits to inputB itself, mandating that inputA can only be spent alongside inputB.
+
+However, this technique encounters specific limitations related to its implementation. If both inputA and inputB are generated within the same transaction, the method becomes unfeasible due to the creation of a hash cycle. Similarly, the trick cannot be applied to any subsequent inputs derived from either inputA or inputB, known as child inputs, if they are connected through a series of CTV hashes. This restriction ensures the integrity of the commitment chain but limits the flexibility of the trick's application. To address potential misuse, it's recommended that inputB employs the sighash flag `ANYONECANPAY|ALL` to secure the intended output. Despite these precautions, it remains possible for inputB to be spent without the presence of inputA, posing a risk to the desired exclusivity of the spending condition.</summary>
+    <published>2025-04-29T16:01:48.456000+00:00</published>
+  </entry>
+</feed>
