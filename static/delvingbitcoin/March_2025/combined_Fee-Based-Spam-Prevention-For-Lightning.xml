@@ -2,9 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Fee-Based Spam Prevention For Lightning</title>
-  <updated>2025-05-13T02:51:39.982572+00:00</updated>
+  <updated>2025-05-23T02:47:55.886884+00:00</updated>
   <author>
-    <name>JohnLaw 2025-05-12 17:47:12.512000+00:00</name>
+    <name>JohnLaw 2025-05-22 21:20:03.071000+00:00</name>
+  </author>
+  <author>
+    <name>JohnLaw  . 2025-05-12 17:47:12.512000+00:00</name>
   </author>
   <author>
     <name>JohnLaw  . 2025-04-25 21:20:40.305000+00:00</name>
@@ -30,6 +33,7 @@
   <author>
     <name>JohnLaw  . 2025-03-14 23:58:49.861000+00:00</name>
   </author>
+  <link href="delvingbitcoin/May_2025/5092_Fee-Based-Spam-Prevention-For-Lightning.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2025/4993_Fee-Based-Spam-Prevention-For-Lightning.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2025/4878_Fee-Based-Spam-Prevention-For-Lightning.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2025/4877_Fee-Based-Spam-Prevention-For-Lightning.xml" rel="alternate"/>
@@ -43,23 +47,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Fee-Based Spam Prevention For Lightning</title>
-    <updated>2025-05-13T02:51:39.982647+00:00</updated>
+    <updated>2025-05-23T02:47:55.886962+00:00</updated>
     <link href="https://delvingbitcoin.org/t/fee-based-spam-prevention-for-lightning/1524" rel="alternate"/>
-    <summary>The Fee-Based Spam Reduction Protocol outlined proposes an innovative approach towards minimizing spam and enhancing transaction efficiency within payment channels, specifically focusing on the Lightning Network. It introduces a structured fee system comprising Upfront Fees, Hold Fees, and Success Fees aimed at covering various operational costs and risks associated with routing payments. Each node along a payment route is responsible for charging these fees, which are designed to mitigate the financial burdens of calculation, communication, slot allocation, fund allocation risk, and potential delays in payment processing.
+    <summary>The Fee-Based Spam Reduction Protocol introduces a sophisticated approach to managing payments across networks, particularly focusing on a scenario involving a 10-hop payment with 10,000 satoshis. It details three types of fees: Upfront Fees, Hold Fees, and Success Fees, each designed to cover the costs and risks associated with processing payments. Upfront Fees consist of a fixed component and two proportional components aimed at covering immediate expenses and risks related to channel funds allocation and potential loss from failed payments. Hold Fees compensate nodes for the opportunity cost tied to funds locked in pending transactions, calculated to yield a 19% annual return. Success Fees, collected upon completing a transaction, incentivize efficient processing through both fixed and proportional components. This protocol also introduces matching fund requirements for burn outputs as a countermeasure to griefing attacks, ensuring mutual interest in transaction success and security.
 
-The protocol assumes uniform parameters across all routing nodes, including fixed and proportional parts of the Upfront Fee, a compounded annual rate for the Hold Fee based on hourly charges, and a combination of fixed and proportional elements for the Success Fee. This structure ensures that nodes are compensated for their services while also deterring malicious activities through financial disincentives. The inclusion of nonreimbursable stakes for Hold Fees further protects nodes from undue losses caused by delays attributable to downstream nodes.
+An update to the paper includes an extensive specification for a lower-latency bug fix, indicating a commitment to continuous improvement and addressing challenges presented in spam mitigation within payment channels. This improvement focuses on retaining network efficiency and user experience despite necessary adjustments for handling not-immediately-settled payments. The clarification around the misconception of needing collateral equivalent to a channel's capacity further refines the protocol by specifying that only the maximum amount of Upfront and Hold fees for current Hashed Time-Locked Contracts (HTLCs) plus a fixed fraction is required. This adjustment signifies a more efficient approach than previously suggested, leveraging psychological insights and automated protocols to safeguard users from exploitation during transactions.
 
-An integral component of this protocol is the detailed calculation of fees and stakes, including Upfront Fees unrelated to Hold Fees, matching stake contributions for burn outputs, and total stakes for ensuring compliance and fairness in fee allocation. This meticulous framework ensures transparency and accountability in fee charging, aiming to reduce spam by making it economically unviable.
+The correspondence elucidates several aspects of implementing a new protocol within the Lightning Network, highlighting solutions to latency issues introduced by a bug fix and proposing a streamlined transaction process. It suggests excluding `update_add_htlc` messages and assuming symmetric commitment transactions to simplify the operational flow. Despite the potential increase in full resolution time, the discussion posits hold fees within Modified Adjusted Duration (MAD)-based Optimistic Payment Routing (OPR)-style protocols as a means to ensure fair compensation for delayed payments. Furthermore, it explores the adoption of hold invoices to cater to demands for not immediately settling payments while ensuring equitable remuneration for involved nodes.
 
-Moreover, the proposal highlights the significance of cooperation among channel partners to avoid the burning of funds, suggesting that matching funds increase the cost of griefing attacks and thus discourage them. This mechanism not only secures the network against deliberate spam but also fosters a cooperative environment conducive to efficient payment routing.
+In discussing the handling of Hold Fees for HTLCs, a two-step update process for the downstream node's Commitment transaction is proposed. This process aims to mitigate the identified problem by safely incorporating increased burn funds to cover both Upfront and Hold Fees. The suggested modification to the current operational flow involves adding a stage where increased burn funds are included without an HTLC output, followed by their inclusion in subsequent transactions. This ensures a race-free channel environment and explores the use of burn outputs with matching funds as a solution to charge fees based on the duration an HTLC was held. 
 
-A comparison with the current protocol reveals the potential advantages of the Fee-Based Spam Prevention protocol in terms of handling successful and delayed payments as well as failed transactions due to unresponsive destinations or insufficient funds. Scenarios depicted illustrate how the proposed protocol could offer more equitable outcomes for both senders and routing nodes, compensating for capital costs and reducing the impact of delays and failures on the overall network performance.
-
-Subsequent correspondence delves into enhancements to address latency issues introduced by bug fixes, proposing a two-step update process for managing Hold Fees more efficiently and minimizing delay penalties. These adjustments aim to streamline payment processing, maintaining low latency while ensuring secure and fair compensation for delayed transactions.
-
-Further discussions explore theoretical vulnerabilities and practical concerns related to the handling of HTLCs, emphasizing the importance of safeguards against manipulative strategies that exploit the protocol's mechanisms for financial gain. By addressing these concerns with detailed examples and proposed solutions, the discourse underscores the ongoing efforts to refine the Lightning Network's functionality and resilience against potential abuses.
-
-In conclusion, the series of communications present a comprehensive analysis and iterative refinement of protocols designed to enhance the Lightning Network's efficiency, security, and spam resistance. Through a combination of fee structuring, strategic incentives, and technical adjustments, these proposals aim to optimize the network's operation, ensuring fair compensation for nodes while deterring malicious activities and improving the overall user experience.</summary>
-    <published>2025-05-12T17:47:12.512000+00:00</published>
+Addressing criticisms concerning the handling of held HTLCs, the proposal highlights the absence of a universal clock and the challenge of proving message delivery, which could lead to exploitation and unwarranted hold fees. This scenario underscores the potential financial vulnerabilities for parties forced to consider force-closing the channel to avoid further losses. Lastly, the refined protocols propose mechanisms for fee allocation that incentivize cooperation and deter malicious behavior, offering a comprehensive framework for enhancing network performance and reducing spam. This includes strategies for precise fee distribution while protecting privacy and ensuring fair compensation for delayed capital, marking significant progress towards a more secure and cooperative Lightning Network ecosystem.</summary>
+    <published>2025-05-22T21:20:03.071000+00:00</published>
   </entry>
 </feed>
