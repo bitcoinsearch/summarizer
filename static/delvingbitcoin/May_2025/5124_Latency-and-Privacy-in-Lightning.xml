@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Latency and Privacy in Lightning</title>
+  <updated>2025-05-27T02:46:10.252567+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2025-05-26 20:23:54.347000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Latency and Privacy in Lightning</title>
+    <updated>2025-05-27T02:46:10.252599+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/latency-and-privacy-in-lightning/1723/4" rel="alternate"/>
+    <summary>The discussion last month brought up several important points regarding the enhancement of privacy within web communications, specifically addressing the limitations of "HTTPS Everywhere" and proposing a new method to improve privacy through the randomization of forwarding times in network nodes. The primary issue identified was that while HTTPS can be enforced by user-agents, there is no mechanism to compel forwarding nodes to randomize their forwarding times, which is crucial for privacy. This gap in the privacy mechanism led to a proposal emphasizing the need for a more sophisticated approach to handling Hashed Timelock Contracts (HTLCs), which are integral to certain types of secure and private communications.
+
+The proposed solution involves a shift from processing individual `update_add_htlc` messages to batching HTLCs, introducing a novel protocol for "receiver-enforced forwarding randomization." This protocol includes a sequence of message exchanges starting with `you_have_incoming_htlcs`, indicating an intention to send one or more HTLCs, followed by `gimme_the_incoming_htlcs` as a response, prompting the actual sending of the HTLCs in a batch. This method mandates that a batch of `update_add_htlc` messages can only be sent after receiving a `gimme_the_incoming_htlcs` message, culminating in a `commitment_signed` message to end the batch. This process inherently introduces additional latency due to the required message exchange before HTLCs can be sent, representing a significant change from the previous low-latency forwarding protocols.
+
+To mitigate the potential drawbacks of increased latency, the implementation of this new protocol can be limited to endpoint receivers, allowing them to enforce its use through specific feature bits while enabling pure forwarders to continue using the original, faster protocols amongst themselves. This selective application ensures that the system remains efficient while enhancing privacy where it is most needed. Additionally, the capability for receivers to delay their response to the `you_have_incoming_htlcs` message provides an opportunity for further randomization and aggregation of multiple HTLCs, potentially improving both throughput for multipath payments and overall privacy.
+
+This innovative approach highlights the ongoing efforts to balance efficiency and privacy in digital communications, recognizing the distinct roles and incentives of different network participants in enhancing the privacy of transactions and information exchange.</summary>
+    <published>2025-05-26T20:23:54.347000+00:00</published>
+  </entry>
+</feed>

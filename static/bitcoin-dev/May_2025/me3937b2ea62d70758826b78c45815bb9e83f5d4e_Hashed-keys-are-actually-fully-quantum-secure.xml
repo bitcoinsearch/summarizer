@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Hashed keys are actually fully quantum secure</title>
+  <updated>2025-05-27T02:51:17.464868+00:00</updated>
+  <author>
+    <name>Nagaev Boris 2025-05-26 10:03:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Hashed keys are actually fully quantum secure</title>
+    <updated>2025-05-27T02:51:17.464895+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAFC_Vt4wjLV_iAHYDMcAJYP=PRo=jNWQzmrUfJUK2_GXTiPnjA@mail.gmail.com/T/#me3937b2ea62d70758826b78c45815bb9e83f5d4e" rel="alternate"/>
+    <summary>The discussion initiates with an exploration of a technical challenge related to the use of EC signatures in Bitcoin transactions, particularly highlighting a circular dependency issue where the EC signature for a second transaction depends on the transaction ID (txid) of a QR output, which itself relies on the precommitted EC signature. To address this circular dependency, two solutions are proposed: utilizing the SIGHASH ANYONECANPAY modifier to exclude the QR output from the scope of the EC signature or employing an inscription method that commits to the EC signature without impacting the txid of the first transaction.
+
+Further elaboration introduces an alternative approach aimed at enhancing practical convenience and security against quantum attacks. This method involves committing to the SHA256 hash of the EC public key rather than the EC signature itself. By including this hash in a QR output a specified number of blocks in advance, it theoretically provides equivalent security by assuming a quantum attacker could recover the private key from the public key. However, a vulnerability is identified where an attacker could preemptively commit to the same SHA256(pubkey) by observing the creation of QR outputs.
+
+To mitigate this risk, the proposal suggests hiding the commitment to the EC pubkey hash from observers by embedding the SHA256(pubkey) within a Taproot leaf. This approach takes advantage of Taproot leaves' invisibility on the blockchain until they are spent, thereby preventing attackers from identifying committed pubkeys ahead of time. A new consensus rule would be needed to ensure that spending such an EC output must be accompanied by a QR output committed to the SHA256 hash of the same EC pubkey, created and spent within the specified block timeframe.
+
+The email also discusses the usability and efficiency benefits of this alternative strategy. It allows users to precommit to the SHA256 of their EC pubkey well in advance and decide on subsequent spends later, offering a simpler and more efficient process for managing multiple EC UTXOs. Instead of requiring separate QR outputs for each EC UTXO under the original scheme, users can create a single QR output with multiple tapleaves committing to the SHA256 hashes of various EC pubkeys. This significantly reduces the number of required QR outputs for fund consolidation from a single EC key. The email concludes by inviting further discussion on this alternative approach, acknowledging its potential to streamline transactions while maintaining security against quantum threats.</summary>
+    <published>2025-05-26T10:03:00+00:00</published>
+  </entry>
+</feed>
