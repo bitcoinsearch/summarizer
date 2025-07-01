@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>CTV + CSFS: a letter</title>
+  <updated>2025-07-01T04:10:32.119148+00:00</updated>
+  <author>
+    <name>Antoine Riard 2025-06-10 23:42:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>CTV + CSFS: a letter</title>
+    <updated>2025-07-01T04:10:32.119179+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CALiT-Zr3KO0fw1_DCpDVvA1Z1aLrvM-HFtvdsyLKhXxWvR=hvA@mail.gmail.com/T/#m4a4840a8b60dbd6463d39a9b807160f1e4ab2ae8" rel="alternate"/>
+    <summary>The discussion revolves around a potential vulnerability within the current version of CheckTemplateVerify (CTV) due to its implementation as a NOP refurbishment, specifically identified as OP_NOP4, which categorizes it under legacy scripts. This brings to light the significant limitation imposed by the `MAX_BLOCK_SIGOPS_COST`, which is set at 80,000 signature operations per block across all types of scripts including legacy, P2SH, and SegWit, as enforced during the `Chainstate::ConnectBlock` process. The mechanism for counting signature operations encompasses three categories: legacy, P2SH (if enabled and excluding coinbase transactions), and witness (also if enabled and excluding coinbase). Exceeding this limit results in block rejection by full nodes for having too many signature operations, a measure designed to prevent blocks with excessive signature operations from being accepted.
+
+This scenario illustrates the broader implications for second-layer or contract protocol designs, highlighting that while certain assumptions may be made concerning off-chain constructions (e.g., a maximum of 1000 signatures in the redeem script for coinpool), developers must nonetheless consider the signature operation limit during block template construction to ensure network validation without wasteful expenditure of computational resources. Notably, despite the presence of customized block construction algorithms by miners, the existence of the signature operation limit is presumed universal, although the criteria for transaction selection by miners, especially regarding fee rate versus signature operations, remain less clear.
+
+An interesting exploitation avenue arises in scenarios involving timelocks, where an adversary could potentially prevent the redemption of funds by prioritizing high-fee, high-signature-operation transactions over legitimate ones. This is demonstrated through a testcase on a Bitcoin Core branch, showcasing the use of empty CHECKMULTISIG transactions to exploit the highest ratio of signature operations per unit of fee rate. Despite the possibility for honest parties to outbid adversaries in fee rate to prioritize their time-sensitive transactions, there exists a finite limit based on the locked funds amount, beyond which the honest party cannot economically justify further expenditure.
+
+The conversation also touches upon a suggestion to mitigate these concerns by redesigning CTV on top of an OP_SUCCESS or another tapscript upgrade path, given that tapscript spends are not subject to the per-block signature operation limit. However, the challenge then shifts to ensuring that transactions spending the script are kept within reasonable bounds by the designers of these use-cases.
+
+Finally, the email reflects on the historical context of this issue, noting that the potential risks associated with shared UTXOs, timelocks, and competing interests have been present since the activation of SegWit in 2017 but have not been widely discussed within development circles. The author expresses a commitment to reviewing proposals aimed at addressing these concerns, indicating an ongoing dialogue within the community about ensuring the security and functionality of future Bitcoin soft forks and related use cases.</summary>
+    <published>2025-06-10T23:42:00+00:00</published>
+  </entry>
+</feed>

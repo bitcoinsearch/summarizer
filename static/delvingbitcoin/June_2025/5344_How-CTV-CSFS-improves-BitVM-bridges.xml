@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>How CTV+CSFS improves BitVM bridges</title>
+  <updated>2025-07-01T04:23:18.511872+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2025-06-25 19:39:15.940000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>How CTV+CSFS improves BitVM bridges</title>
+    <updated>2025-07-01T04:23:18.511906+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/how-ctv-csfs-improves-bitvm-bridges/1591/25" rel="alternate"/>
+    <summary>The exploration of OP_CTV (OP_CheckTemplateVerify) within the context of Bitcoin scripting presents an innovative approach to enhancing transaction security and specificity. The core idea revolves around using OP_CTV to ensure that one input (inputA) is only spendable in conjunction with another specified input (inputB), effectively linking two transactions in a secure manner. This concept leverages the commitment of CTV to the scriptSig of all inputs, creating a scenario where inputA, defined as a P2TR output containing a CTV condition, commits to a signature specifically for inputB. InputB is pre-signed with a sighash type `SINGLE|NONE`, which commits it to being part of the transaction without SegWit, thus embedding the signature within inputB's scriptSig.
+
+This method was initially put into practice through a test implementation inspired by Robin Linus's original idea, which is accessible for review and experimentation [here](https://github.com/Christewart/bitcoin/blob/c3431957a9d6dfcf68e00ceb3c5e02c3fdcdc6dc/test/functional/feature_bitvmctvcsfs_bridge.pyL234). However, upon further analysis, this scheme revealed limitations due to the potential for substituting inputB with another UTXO (utxo C), which could satisfy the transaction conditions without adhering to the intended protocol. This loophole signifies a critical vulnerability in enforcing the exclusive coupling of inputA and inputB, as demonstrated in a subsequent test case [found here](https://github.com/Christewart/bitcoin/blob/c3431957a9d6dfcf68e00ceb3c5e02c3fdcdc6dc/test/functional/feature_bitvmctvcsfs_bridge.pyL249).
+
+Further attempts to refine this process encountered complexities related to generating valid signatures for the scriptSig's OP_CHECKSIG operation. These challenges arise from the distinct scriptcodes required for digital signatures to satisfy both the redeem script and the embedded OP_CHECKSIG within the scriptSignature. Efforts to navigate these intricacies involved producing two digital signatures, one for the p2sh output script and another for the scriptSignature's OP_CHECKSIG operation. While theoretically feasible, practical implementation hurdles, particularly regarding the non-standard nature of the transaction and limitations of the [`signrawtransactionwithkey`](https://github.com/bitcoin/bitcoin/blob/ad654a4807cd584be9ffcd8640f628ab40cb5170/src/rpc/rawtransaction.cppL710) RPC call, pose significant barriers to progress.
+
+This exploration into leveraging OP_CTV for enhanced transaction linkage and security showcases the ongoing innovation within Bitcoin scripting. Despite facing technical challenges and limitations, such endeavors contribute to the broader understanding and potential application of sophisticated transaction mechanisms within the Bitcoin ecosystem.</summary>
+    <published>2025-06-25T19:39:15.940000+00:00</published>
+  </entry>
+</feed>
