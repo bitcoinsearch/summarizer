@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>JIT fees with TXHASH: comparing options for sponsorring and stacking</title>
+  <updated>2025-07-01T05:25:22.444153+00:00</updated>
+  <author>
+    <name>stevenroose 2025-06-09 10:29:38.803000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>JIT fees with TXHASH: comparing options for sponsorring and stacking</title>
+    <updated>2025-07-01T05:25:22.444188+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/jit-fees-with-txhash-comparing-options-for-sponsorring-and-stacking/1760" rel="alternate"/>
+    <summary>In the realm of Bitcoin transactions, particularly with the advent of second layer solutions, the issue of fee payment has become increasingly complex. Traditional methods like CPFP (Child Pays for Parent) allow for just-in-time fee payments by creating a new transaction that spends from the original one, thus covering the fees for both transactions as a package. This method, while using existing transaction dependency rules, proves to be costly due to the need for an additional fee anchor output and a new child transaction.
+
+An alternative proposal comes in the form of Tx Sponsors, which introduces a more elegant and efficient solution. By allowing a transaction to specify another by its txid, and requiring their simultaneous inclusion in a block, the new transaction sponsors the fees of the specified transaction without the need for altering the sponsored transaction or creating additional outputs. David Harding's recent ideas on implementing this concept suggest a potentially free input/output marker for indicating sponsorship, along with a commitment to the sponsored txids within the sponsor transaction’s input sighash.
+
+However, the concept of TXSIGHASH presents an even more intriguing solution, especially when considering the stacking of transactions. This approach is based on TXHASH, allowing for a specification of parts of the transaction to be included in the tx hash through a `TxFieldSelector`. This powerful feature supports selecting various fields, inputs, and outputs, providing flexibility in how transactions are constructed and identified. For p2tr outputs, this means the signature field would include the `TxFieldSelector`, changing how the txid is calculated and thereby affecting transactions built on stable txid requirements, such as Lightning and Ark protocols. Yet, these protocols could adapt to use rebindable signatures, circumventing the need for stable txids.
+
+Various scenarios illustrate the cost-effectiveness and efficiency of using TXSIGHASH for both single transactions and stacks of transactions. When comparing the virtual byte cost for single transactions across CPFP, Tx Sponsors, and TXSIGHASH methods, TXSIGHASH consistently shows a reduction in cost. The advantage extends to multi-transaction sponsoring or stacking, where TXSIGHASH allows for multiple transactions to be incorporated into a single, larger transaction. This method not only lowers the per-transaction cost but also simplifies the process by treating multiple transactions as a single entity. The stacking strategy involves generating multiple signatures to facilitate different stacking configurations, ensuring atomicity in the inclusion of all related transactions.
+
+While TXSIGHASH offers significant benefits in terms of cost and efficiency, it does come with the overhead of creating, storing, and relaying multiple signature variants for each transaction. This complexity poses a challenge, particularly when compared to the relatively straightforward approach of Tx Sponsors, which requires no special preparation from the transactions wishing to be sponsored.
+
+In conclusion, the utilization of TXSIGHASH for fee sponsorship and transaction stacking presents a promising avenue for reducing the costs and complexities associated with Bitcoin transactions. Its ability to effectively manage fees for both individual and grouped transactions, while maintaining flexibility and efficiency, marks a significant advancement in blockchain transaction management. However, the added complexity of managing signature variants necessitates careful consideration, especially for applications requiring streamlined transaction processing.</summary>
+    <published>2025-06-09T10:29:38.803000+00:00</published>
+  </entry>
+</feed>

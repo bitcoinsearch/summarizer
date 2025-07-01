@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Pre-emptive commit/reveal for quantum-safe migration (poison-pill)</title>
+  <updated>2025-07-01T05:51:04.621261+00:00</updated>
+  <author>
+    <name>Leo Wandersleb 2025-06-05 08:18:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Pre-emptive commit/reveal for quantum-safe migration (poison-pill)</title>
+    <updated>2025-07-01T05:51:04.621294+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/ejSZyf9UmYgOm9D40yAcKNk03pKBLk82dAmdgjq0xNGRZK4R2jd0DcbZqiXoSiYNBBzMpGcezGwTe3wLN96VCl7R0yqPbChWlsKWTphUqUw=@proton.me/T/#m8a3ebec4148e62b1da66dca71ac4fc34a8f72647" rel="alternate"/>
+    <summary>The discussion revolves around the implications of EC cryptography vulnerability on Bitcoin transactions and proposes a new scheme to safeguard against potential attacks. The concern is centered on situations where an attacker might exploit the weak announcement of a transaction, breaking the encryption before the transaction is mined. However, it's argued that strong announcements, which include the full transaction details, remain secure. This is because they demonstrate a prior commitment to a specific transaction, ensuring its legitimacy even if it's mined later than the attacker's transaction.
+
+The proposed solution outlines a process initiated after a specified block height, designed to protect vulnerable Unspent Transaction Outputs (UTXOs). Initially, these UTXOs cannot be directly spent; they require a declaration of intent through a commitment to a wTXID (witness transaction ID) that specifies the spending of the vulnerable UTXO. These commitments could be aggregated within a hash tree stored in an OP_RETURN output for efficiency.
+
+Following this commitment phase, the actual transaction, accompanied by proof of the previous commitment, is revealed but not executed as a conventional transaction. This stage serves to confirm the spender's intention without finalizing the transaction. To further enhance security, there's a counter-reveal period lasting 144 blocks during which others can disclose older commitments, thus prioritizing earlier claims and protecting exposed public keys.
+
+After this counter-reveal phase, the transaction can proceed based on the strongest (oldest) valid commitment, effectively implementing a soft fork that remains backward compatible with existing transactions, including those for which the original keys are lost. This approach, however, implies at least a doubling of on-chain costs for transactions involving vulnerable UTXOs, given the necessity of storing complete transaction details twice. Nonetheless, the proposal mentions the possibility of making these announcements prunable to mitigate such drawbacks, suggesting a strategy to balance security enhancements with operational efficiency.</summary>
+    <published>2025-06-05T08:18:00+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>CTV+CSFS: Can we reach consensus on a first step towards covenants?</title>
+  <updated>2025-07-01T05:01:27.026537+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2025-06-05 21:47:46.280000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>CTV+CSFS: Can we reach consensus on a first step towards covenants?</title>
+    <updated>2025-07-01T05:01:27.026569+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ctv-csfs-can-we-reach-consensus-on-a-first-step-towards-covenants/1509/69" rel="alternate"/>
+    <summary>The discussion between @RobinLinus and @ajtowns on the BitVM &amp; CTV+CSFS thread sheds light on a nuanced vulnerability associated with OP_CTV when used as either an OP_NOP or OP_SUCCESS, particularly in the context of supporting legacy Script. This vulnerability was identified through their interaction, which followed debates on the support for OP_NOP within the same thread. The crux of the issue lies in how OP_CTV locks in the destination of an output and the scriptSig of the second input. However, it only commits to the scriptSig of the second input, enabling the construction of an alternative UTXO that can bypass intended spend conditions, illustrated by a hypothetical scenario where a non-standard scriptPubKey allows spending of UTXO A via the CTV path, irrespective of the spend status of UTXO B.
+
+This loophole could potentially disrupt the protocol's integrity by facilitating unintended spends, especially when considering complex spend conditions beyond simple `CHECKSIG` operations. The suggested workaround involves directly including the `CHECKSIG` opcode in the scriptSig, though this contravenes standardness rules and introduces complexity. The dialogue points towards a fundamental flaw in using OP_CTV with P2SH types, as it fails to guarantee the execution of a specific script type, allowing for the substitution with legacy scripts that perform different operations. This is contrasted with the inability to replace a P2SH script with another performing a different operation under normal circumstances, highlighting a unique confusion in behavior.
+
+Jeremy Rubin's acknowledgment of the issue with OP_CTV in the context of P2SH underscores the challenge of ensuring security and intended functionality when integrating OP_CTV with legacy script mechanisms. The conversation suggests that without a mechanism to ensure the integrity of the script type being executed, utilizing OP_CTV in conjunction with any P2SH type may be inherently flawed. The only remaining secure application of OP_CTV appears to involve transactions that commit to meaningful data in the scriptSig with "raw" or "bare" outputs, raising questions about the practical value of committing to scriptSig data within this framework. This discussion emphasizes the need for careful documentation and perhaps reevaluation of how OP_CTV is implemented to avoid undermining the protocol's intended security measures.</summary>
+    <published>2025-06-05T21:47:46.280000+00:00</published>
+  </entry>
+</feed>

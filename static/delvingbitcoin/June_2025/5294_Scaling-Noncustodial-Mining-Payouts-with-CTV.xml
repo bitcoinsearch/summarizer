@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Scaling Noncustodial Mining Payouts with CTV</title>
+  <updated>2025-07-01T05:21:18.466133+00:00</updated>
+  <author>
+    <name>plebhash 2025-06-13 15:01:56.233000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Scaling Noncustodial Mining Payouts with CTV</title>
+    <updated>2025-07-01T05:21:18.466165+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/scaling-noncustodial-mining-payouts-with-ctv/1753/14" rel="alternate"/>
+    <summary>The discussions surrounding the Coinbase Output allocation within Stratum V2, particularly highlighted in the specification repository's recent pull request, address a fundamental sequencing challenge inherent to the Job Declaration (JD) process. This issue primarily revolves around the coordination of messages between the JD Client/Miner and the JD Server/Pool during the bootstrapping phase of the Sv2 JD. The sequence initiates with the `AllocateMiningJobToken` message from the JD Client/Miner to the JD Server/Pool, followed by a confirmation of success through the `AllocateMiningJobToken.Success` from the JD Server/Pool back to the JD Client/Miner. Subsequently, the `CoinbaseOutputConstraints` message is sent from the JD Client/Miner to the Template Provider/Miner to convey the blockspace and sigops budget available for creating the mining template.
+
+A critical aspect of this process is the initial indication of pooled mining revenue allocation provided by the `AllocateMiningJobToken.Success.coinbase_tx_outputs`. This stage involves informing a 0 valued output as the first Coinbase Output, which sets a precedent for the allocation of pooled mining rewards. This convention allows the JD Client/Miner to subsequently specify the amount allocated towards pooled mining in later messages without breaching any preliminary agreements with the Pool. However, this setup introduces a significant limitation regarding non-custodial payouts due to the Pool/JD Server's inability to determine these payouts without prior knowledge of the template revenue, a figure that the Miner/JD Client cannot provide without understanding the blockspace/sigops budget.
+
+The dilemma presents a "chicken-and-egg" problem that complicates the seamless execution of non-custodial payouts under the canonical Sv2 JD specification. To navigate this challenge, an extension to the protocol may be necessary. Such an adaptation could involve the introduction of multi-output or CTV-based solutions to facilitate non-custodial payouts without compromising the established sequence of communication and agreements between the involved parties. This situation underscores the intricate balance required to maintain the integrity of the mining process while also exploring avenues to accommodate more flexible payout structures within the Stratum V2 framework.</summary>
+    <published>2025-06-13T15:01:56.233000+00:00</published>
+  </entry>
+</feed>

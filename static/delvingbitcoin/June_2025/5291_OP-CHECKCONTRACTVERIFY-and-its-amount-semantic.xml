@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+  <updated>2025-07-01T05:03:54.746617+00:00</updated>
+  <author>
+    <name>halseth 2025-06-13 11:11:19.444000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>OP_CHECKCONTRACTVERIFY and its amount semantic</title>
+    <updated>2025-07-01T05:03:54.746647+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/op-checkcontractverify-and-its-amount-semantic/1527/12" rel="alternate"/>
+    <summary>The exploration of different methods for input script validation during transaction or block processing in `btcd`, similar to practices in `bitcoind`, reveals a complex landscape weighed between parallelism and the necessity for managing shared mutable states. The implementation attempts in `btcd` highlight the adaptability of Go's goroutines for distributing tasks, as detailed in the [script validation section](https://github.com/btcsuite/btcd/blob/1eb974aab6ef11097571f9517b4b6b0c639ab63b/blockchain/scriptval.goL148-L170) of the project's documentation. This flexibility introduces a decision-making process on whether to incorporate a shared state guarded by mutexes to facilitate parallel input validation or to opt for alternative approaches that might avoid such complexities.
+
+One such alternative involves pre-checking the flow of intended amounts and utilizing `CCV` for data assertion during script execution, a method that simplifies integration into the script engine by minimizing direct interactions with it. This approach, referred to as "annex hints," offers a separation of concerns and paves the way for future enhancements, such as adding more functionalities via soft forks without modifying the script engine. It also opens up considerations for leveraging this technique alongside other script primitives, potentially allowing for the specification of fund flows per input which could be advantageous for creating partially signed transactions where the fund's direction is predetermined but outputs remain unspecified.
+
+Another concept under consideration is the deferred checks framework, which might align well with `btcd`'s capabilities. This framework suggests performing additional validations after a set of dependent inputs have been initially checked, fitting into the broader vision of enhancing batch signature validation processes. The idea of cross-input signature validation, or batch validation, is identified as an important feature to support in the future, indicating that none of the discussed approaches—shared state, annex hints, or deferred checks—should inherently obstruct the development of such a capability. Each method, however, comes with its own set of tradeoffs, emphasizing the need for careful consideration in choosing the path forward, especially in light of potential real-world applications and benchmarking outcomes.</summary>
+    <published>2025-06-13T11:11:19.444000+00:00</published>
+  </entry>
+</feed>
