@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>CTV+CSFS: Can we reach consensus on a first step towards covenants?</title>
+  <updated>2025-07-03T02:53:18.839330+00:00</updated>
+  <author>
+    <name>ajtowns 2025-07-02 05:06:22.811000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>CTV+CSFS: Can we reach consensus on a first step towards covenants?</title>
+    <updated>2025-07-03T02:53:18.839363+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ctv-csfs-can-we-reach-consensus-on-a-first-step-towards-covenants/1509/82" rel="alternate"/>
+    <summary>The discussion revolves around the challenges and limitations present in implementing PTLCs (Point Time-Locked Contracts) more efficiently within the Bitcoin ecosystem, especially when considering the integration with musig2 for 2-of-2 multisignature transactions and general transaction signatures. The efficient implementation of PTLCs would ideally leverage a partially pre-signed musig2 signature for the redeem transaction. This approach would facilitate revealing the PTLC secret to the counterparty upon completing the signature. However, this method encounters a significant hurdle as adaptor signature support for musig2 is not included in the current specification and was notably removed from the secp256k1 library's implementation, as highlighted by a [GitHub pull request](https://github.com/bitcoin-core/secp256k1/pull/1479). Although less efficient alternatives exist, such as using separate adaptor signatures, these too face limitations since plain adaptor signatures for Schnorr signatures are also unavailable in secp256k1. 
+
+Furthermore, even the more experimental secp256k1-zkp project does not include support for Schnorr-based adaptor signatures, as indicated by another [pull request](https://github.com/BlockstreamResearch/secp256k1-zkp/pull/299). While secp256k1-zkp supports ECDSA-based adaptor signatures and those in the older musig scheme preceding musig2, as detailed in [secp256k1-zkp documentation](https://github.com/BlockstreamResearch/secp256k1-zkp/blob/6152622613fdf1c5af6f31f74c427c4e9ee120ce/src/modules/musig/musig.md) and related to [BIP-327](https://github.com/bitcoin/bips/blob/36618d1c3c6b1559d0ce69fd958191b8789f350a/bip-0327.mediawiki), it still falls short of providing a complete solution for PTLCs in the context of musig2.
+
+The lack of prioritization for standardizing and refining the cryptographic underpinnings necessary for PTLC support suggests that its adoption might be delayed until there's a wider recognition of its importance. The potential for making the "unhappy path" more efficient exists but would likely only be pursued on a per-peer basis to circumvent the immediate tooling issues without significantly impacting on-chain efficiency. The alternative mechanisms like CAT+CSFS could mitigate some tooling challenges at the expense of increased on-chain space consumption during unhappy paths, utilizing 102 witness bytes for a PTLC reveal compared to 56/67 witness bytes for an HTLC reveal. These script operations facilitate straightforward ECC mathematics for calculating preimages without necessitating secret keys. However, relying solely on CSFS poses additional challenges as it necessitates the use of adaptor signatures to prevent counterparties from selecting alternate R values for signatures, underscoring the broader issue of tooling inadequacies independent of protocol complexities and updates described by other contributors in the field.</summary>
+    <published>2025-07-02T05:06:22.811000+00:00</published>
+  </entry>
+</feed>

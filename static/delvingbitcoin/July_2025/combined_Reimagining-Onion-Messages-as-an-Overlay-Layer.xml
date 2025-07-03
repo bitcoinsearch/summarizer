@@ -2,18 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Reimagining Onion Messages as an Overlay Layer</title>
-  <updated>2025-07-02T02:58:16.059875+00:00</updated>
+  <updated>2025-07-03T02:58:45.038027+00:00</updated>
   <author>
-    <name>roasbeef 2025-07-01 22:49:08.450000+00:00</name>
+    <name>ZmnSCPxj 2025-07-03 01:13:14.353000+00:00</name>
   </author>
   <author>
-    <name>roasbeef 2025-07-01 22:18:36.539000+00:00</name>
+    <name>gijswijs 2025-07-02 13:50:39.749000+00:00</name>
   </author>
   <author>
-    <name>MattCorallo 2025-07-01 12:55:02.045000+00:00</name>
+    <name>roasbeef  . 2025-07-01 22:49:08.450000+00:00</name>
   </author>
   <author>
-    <name>ZmnSCPxj 2025-07-01 12:00:57.803000+00:00</name>
+    <name>roasbeef  . 2025-07-01 22:18:36.539000+00:00</name>
+  </author>
+  <author>
+    <name>MattCorallo  . 2025-07-01 12:55:02.045000+00:00</name>
+  </author>
+  <author>
+    <name>ZmnSCPxj  . 2025-07-01 12:00:57.803000+00:00</name>
   </author>
   <author>
     <name>roasbeef  . 2025-06-30 19:23:57.410000+00:00</name>
@@ -27,6 +33,8 @@
   <author>
     <name>roasbeef  . 2025-06-28 01:56:34.150000+00:00</name>
   </author>
+  <link href="delvingbitcoin/July_2025/5399_Reimagining-Onion-Messages-as-an-Overlay-Layer.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2025/5395_Reimagining-Onion-Messages-as-an-Overlay-Layer.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2025/5389_Reimagining-Onion-Messages-as-an-Overlay-Layer.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2025/5388_Reimagining-Onion-Messages-as-an-Overlay-Layer.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2025/5384_Reimagining-Onion-Messages-as-an-Overlay-Layer.xml" rel="alternate"/>
@@ -39,13 +47,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Reimagining Onion Messages as an Overlay Layer</title>
-    <updated>2025-07-02T02:58:16.059943+00:00</updated>
+    <updated>2025-07-03T02:58:45.038111+00:00</updated>
     <link href="https://delvingbitcoin.org/t/reimagining-onion-messages-as-an-overlay-layer/1799" rel="alternate"/>
-    <summary>The discussion begins by addressing the limitations and inefficiencies of using onion messaging (OM) within the Lightning Network (LN), pointing out that despite its conceptual alignment with the network's characteristics, OM lacks substantial production value. It suggests that decoupling OMs from their limited utility could worsen reliability issues. The conversation then shifts towards advocating for Nostr as an improved communication overlay within the LN ecosystem. Nostr is praised for its ability to separate concerns effectively, enhance web compatibility, and simplify or eliminate the need for identity coupling, depending on application needs. This approach is contrasted with the current reliance on outdated mechanisms like LNURL, positioning Nostr and [CLINK](https://clinkme.dev) as superior solutions. CLINK, in particular, is highlighted for addressing coordination challenges between nodes and apps in the LN's peer-to-peer topology. It supports static payment offers, enabling the retrieval of bolt11 invoices via simple web pages and bypassing complex technologies such as WebAssembly.
+    <summary>The discussions delve into the integration and optimization of onion messaging within the Lightning Network (LN), highlighting several critical aspects and proposals aimed at enhancing the network's efficiency and security. At the core, there is a focus on how nodes manage `node_announcement` messages and the criteria for accepting `onion_link_proof`, which is contingent upon nodes having active channels. This mechanism ensures the LN remains efficient by eliminating unnecessary data, thereby streamlining operations. Furthermore, the elaboration on creating fake nodes to generate numerous onion links illustrates a potential vulnerability in the system, underscoring the necessity for each channel to have an underlying UTXO on the blockchain to prevent exploitation.
 
-The email transitions into a detailed critique of the current deployment strategy for onion messaging within the LN. It outlines the drawbacks of the tight integration of OM with the channel graph, including slow adoption, a large messaging graph diameter, mixed networking concerns, and inadequate support for native key management. A proposed overlay layer for OM, bootstrapped using the LN gossip layer, is presented as a solution to these challenges. This new model would allow for rapid, incremental deployment, segregate operational concerns, and potentially improve reliability and reachability through a dynamic overlay topology. By decoupling OM from the channel graph, the proposal aims to reduce the number of node hops required for message traversal, thereby decreasing latency and enhancing the payment experience. Additionally, it addresses privacy concerns related to the use of static keys for OM, suggesting that an overlay layer could facilitate key rotation and preserve message forward secrecy.
+The discourse extends to the operational dynamics and theoretical improvements concerning onion messaging. It touches upon the limitations imposed by current TCP connection practices, suggesting that adopting separate TCP or QUIC connections for onion messages could alleviate processing delays. This adjustment aims to address head-of-line blocking issues inherent in TCP connections, which can significantly hamper latency and payment transaction efficiency. The conversation also explores the concept of utilizing an overlay layer for onion messaging, distinct from the LN channel graph. This approach proposes a decoupled framework that could potentially enhance message privacy through key rotation and reduce overall latency by minimizing the number of node hops required for message traversal.
 
-Technical aspects of implementing the proposed overlay layer are discussed, including the use of TLV-based handshake messages (`onion_link_req`, `onion_link_resp`, `onion_link_sign`, and `onion_link_proof`) to authenticate onion messaging links between nodes. This process ensures the establishment of verifiable connections, reducing spoofing risks. The overlay architecture is portrayed as conducive to rapid experimentation and feature development, potentially introducing innovations such as payment-level acknowledgments and retryable payments to improve pathfinding efficiency and payment reliability. The proposal concludes with a detailed overview of connection establishment, emphasizing mutual authentication and verification between nodes through Musig2 signatures for secure link setup. Overall, the adoption of an overlay layer for OM within the LN is posited as a strategic move to overcome existing limitations, enabling faster deployment, enhanced privacy, and a more efficient messaging graph while maintaining interoperability with current deployments.</summary>
-    <published>2025-07-01T22:49:08.450000+00:00</published>
+Another pivotal part of the discussion centers on safeguarding against Denial of Service (DoS) attacks, with suggestions including requiring existing channels for onion link creation, upfront payments, and UTXO locks. These measures aim to increase the cost and complexity associated with establishing onion links, thereby deterring malicious actors. However, concerns are raised about the practicality and effectiveness of such strategies, particularly regarding the ease of fabricating `onion_link_proof` messages and the implications of imposing on-chain actions as deterrents.
+
+In addition to addressing technical vulnerabilities and optimization strategies, the conversation advocates for alternative solutions to improve network communication. Notably, there is support for Nostr as a more efficient overlay network for communication within the LN ecosystem, citing its ability to better separate concerns and enhance web compatibility. The email also introduces [CLINK](https://clinkme.dev), a project designed to tackle node-to-app coordination challenges, presenting a more reliable approach for retrieving bolt11 invoices and simplifying the payment process within the LN.
+
+Ultimately, the discussions underscore the complexity of deploying onion messaging within the LN, emphasizing the need for innovative architectural decisions to enhance message transmission efficiency, reliability, and security. By exploring various facets of network operation, including DoS protection, connection management, and the potential for an overlay layer, the conversation contributes valuable insights into the ongoing evolution of the Lightning Network's infrastructure.</summary>
+    <published>2025-07-03T01:13:14.353000+00:00</published>
   </entry>
 </feed>
