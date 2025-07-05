@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Understanding and Mitigating a OP_CTV Footgun: The Unsatisfiable UTXO</title>
+  <updated>2025-07-05T02:46:01.015702+00:00</updated>
+  <author>
+    <name>Chris_Stewart_5 2025-07-04 18:07:40.193000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Understanding and Mitigating a OP_CTV Footgun: The Unsatisfiable UTXO</title>
+    <updated>2025-07-05T02:46:01.015735+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/understanding-and-mitigating-a-op-ctv-footgun-the-unsatisfiable-utxo/1809/4" rel="alternate"/>
+    <summary>The integration of vaults with a notification service or watchtower presents a nuanced approach to monitoring and managing transactions, particularly in the context of `OP_CTV` templates that commit to exactly one input. Such an approach underscores the limitations inherent in attempting to "replace" an already created, unsatisfiable `UTXO` – a challenge that becomes insurmountable once the transaction is confirmed. Given the immutable nature of the `OP_CTV` script requirements post-confirmation, any discrepancy between the expected and received amounts locks the funds irreversibly, casting a spotlight on the critical need for precision in transaction execution.
+
+A traditional watchtower's role is primarily envisioned as monitoring spending attempts of the `OP_CTV` `UTXO`, which falls short in scenarios where underfunding occurs. This limitation signals a gap in the current mechanism, as the watchtower's utility is circumscribed by its inability to preemptively address or rectify amount mismatches during the funding phase. The solution proposed necessitates a watchtower's capability to be pre-informed of the `OP_CTV` hash preimage prior to the `UTXO`'s creation, enabling it to accurately monitor and compare the intended versus actual transaction amounts even before confirmation. This proactive stance hinges on the watchtower's ability to alert users of any discrepancies while the transaction remains unconfirmed, potentially leveraging RBF (Replace-By-Fee) mechanisms for correction.
+
+However, the crux of the issue lies in the opaqueness of the specific amount committed within the `OP_CTV` hash - information that remains obscured until an attempt to spend the `UTXO` is made by revealing the pre-image and the full transaction template. This revelation underscores the inherent design flaw of committing to a single input within the `OP_CTV` template, advocating instead for a design that commits to at least two inputs. Such a design paradigmatically shifts the potential for corrective action, offering a "rescue path" for amending amount mismatches after the `UTXO` has been established, thereby mitigating the risk of permanently locking funds due to underfunding. This sophisticated interplay between transaction templates, watchtower functionality, and the immutable nature of blockchain technology illuminates the intricate challenges and considerations in optimizing transaction security and efficiency.</summary>
+    <published>2025-07-04T18:07:40.193000+00:00</published>
+  </entry>
+</feed>
