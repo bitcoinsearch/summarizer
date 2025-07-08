@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_CAT Enables Winternitz Signatures</title>
-  <updated>2025-07-06T03:05:51.337652+00:00</updated>
+  <updated>2025-07-08T02:58:02.223729+00:00</updated>
+  <author>
+    <name>Jonas Nick 2025-07-07 10:40:00+00:00</name>
+  </author>
   <author>
     <name>Anthony Towns 2025-07-05 12:18:00+00:00</name>
   </author>
@@ -12,6 +15,7 @@
   <author>
     <name>conduition 2025-06-08 03:20:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/July_2025/m02a0a9dd3244e0889e2ee51b0701f6bfcf25c9dc_OP-CAT-Enables-Winternitz-Signatures.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2025/m6e2db009658e3ce72178db1938f0d12985c2b8a5_OP-CAT-Enables-Winternitz-Signatures.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2025/mac1ad68ca081e99c5d53a904aede63b3ea1a0ffb_OP-CAT-Enables-Winternitz-Signatures.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2025/ma850005e5a88518e4921ac339b24fc203c3b08eb_OP-CAT-Enables-Winternitz-Signatures.xml" rel="alternate"/>
@@ -19,15 +23,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_CAT Enables Winternitz Signatures</title>
-    <updated>2025-07-06T03:05:51.337703+00:00</updated>
+    <updated>2025-07-08T02:58:02.223778+00:00</updated>
     <link href="https://gnusha.org/pi/bitcoindev/PEvUekkEdjFXIGBrX3GTMxPkeD6Bn6q_UnsVGUSWmjdWfiRJzOXxg6oSoLQBju65BVwoKYaA3YwwhzvTlUvM1MXcWO_K5-ub9_lBkoC28Nk=@proton.me/T/#ma850005e5a88518e4921ac339b24fc203c3b08eb" rel="alternate"/>
-    <summary>The discourse within the Bitcoin development community is intensively focused on refining the network's resilience against quantum computing threats, particularly through the exploration of more efficient cryptographic schemes. A central theme in these discussions is the pursuit of a quantum-resistant signature mechanism that would not only ensure security but also maintain, if not enhance, the network's transaction per second (TPS) rate without necessitating an increase in block size. Lattice-based cryptography emerges as a promising solution for its potential to offer quantum resistance while keeping signature sizes manageable, addressing the limitations posed by currently available hash-based signatures like Lamport, WOTS, or SPHINCS. These existing methods, despite being operational, are criticized for their large signature sizes which could impede network efficiency. They are considered more as interim solutions pending the adoption of a more compact and efficient signature system.
+    <summary>The email in discussion brings to light several key points regarding the optimization of signature schemes for Bitcoin, particularly with a focus on post-quantum resilience and efficiency. The initial suggestion explores the "Target Sum Winternitz" method as a means to reduce the size of signatures by hardcoding the checksum into the verifier, thereby increasing signing complexity but potentially decreasing the overall size of the script. This technique necessitates a process where the signer hashes their message with randomness, encodes this into chunks, and iterates until the sum of these chunks matches a predetermined checksum. Additionally, there's mention of recent research indicating a 20% to 40% improvement in verification costs of signatures, though it's noted that the increase in Bitcoin Script size might negate these theoretical savings.
 
-Efforts are underway to identify or create a quantum-resistant signature scheme that significantly shrinks the signature size to about 64 bytes. Such a breakthrough would likely require the introduction of new opcodes or address formats to facilitate adoption across the network. The discussions underscore the importance of diversification in cryptographic methods to fortify the network against quantum threats comprehensively. One particular proposal gaining attention suggests leveraging Conditional Array Transfer (CAT) over General Script Reduction (GSR) to minimize script size. This approach, coupled with advancements in opcode availability (specifically OP_LSHIFT), promises considerable reductions in witness sizes and script complexity.
+Further into the email, the conversation shifts towards the exploration of quantum-resistant cryptographic methods to maintain or enhance transaction per second (TPS) rates without the need to increase block size. Lattice-based cryptography is highlighted as a promising direction, despite current hash-based alternatives like Lamport, WOTS, or SPHINCS being considered bulky and inefficient for long-term use. These are viewed as temporary solutions or an emergency quantum-resistant option until a more efficient, compact scheme is developed or discovered. The community aims to find a quantum-resistant signature scheme that could significantly reduce the signature size to around 64 bytes, which would likely require new opcodes or address formats for implementation.
 
-Jeremy Rubin's contributions highlight the feasibility of employing OP_CAT for Lamport signatures, leading to a more space-efficient script pubkey and witness stack. The conversation further evolves towards optimizing post-quantum algorithms, such as Winternitz One Time Signatures (WOTS), enabled by OP_CAT. Implementations using SHA256 hash chains and checksum compression techniques promise more compact scripts and witness stacks. A prototype demonstrating this methodology ([view prototype](https://gist.github.com/conduition/c6fd78e90c21f669fad7e3b5fe113182)) showcases potential for additional optimizations that could further reduce size without compromising security. Suggestions for improvement include adopting RMD-160 hash chains for better compactness or exploring shorter Winternitz chains to balance security with practicality in a quantum-resistant context.
+The email also details a specific proposal that claims improvements over previous constructions by utilizing only Conditional Array Transfer (CAT) instead of General Script Reduction (GSR), suggesting possible script size reductions with additional opcode support. A notable advancement is the reduction of witness sizes from 24kb to 8kb using a variant of WOTS with checksum compression, albeit limited by the current opcode availability.
 
-These advancements are part of a broader, collaborative effort within the Bitcoin developer community to address the imminent challenges posed by quantum computing. Through sharing tools, resources, and prototypes, developers are actively engaging in innovative solutions that not only promise to safeguard the network against quantum vulnerabilities but also seek to optimize its overall performance and efficiency.</summary>
-    <published>2025-07-05T12:18:00+00:00</published>
+Jeremy Rubin's work on enabling Lamport signatures through OP_CAT, leading to a more compact script pubkey and witness stack using RMD-160 hashes, sets the stage for further innovations. The discussion proceeds to Winternitz One Time Signatures (WOTS) enabled by OP_CAT, offering a more efficient alternative to Lamport signatures. A prototype implementation showcases the potential for further optimizations, such as employing RMD-160 hash chains for compactness or experimenting with shorter Winternitz chains for a balance between security and practicality.
+
+Finally, the effectiveness of these cryptographic advancements is tested using a Bitcoin Inquisition regtest node, with example transactions demonstrating the viability of these approaches. The community's collaborative efforts, exemplified by shared resources like the btcdeb debugging tool, underscore the ongoing quest to refine cryptographic solutions in anticipation of quantum computing challenges, showcasing a proactive approach to securing the Bitcoin network's future.</summary>
+    <published>2025-07-07T10:40:00+00:00</published>
   </entry>
 </feed>
