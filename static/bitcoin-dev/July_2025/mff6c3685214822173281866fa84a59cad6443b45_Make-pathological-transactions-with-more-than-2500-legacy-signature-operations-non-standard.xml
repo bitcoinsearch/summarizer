@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Make pathological transactions with more than 2500 legacy signature operations non-standard</title>
+  <updated>2025-07-13T03:14:43.067622+00:00</updated>
+  <author>
+    <name>Antoine Riard 2025-07-12 04:12:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Make pathological transactions with more than 2500 legacy signature operations non-standard</title>
+    <updated>2025-07-13T03:14:43.067659+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/49dyqqkf5NqGlGdinp6SELIoxzE_ONh3UIj6-EB8S804Id5yROq-b1uGK8DUru66eIlWuhb5R3nhRRutwuYjemiuOOBS2FQ4KWDnEh0wLuA=@protonmail.com/T/#mff6c3685214822173281866fa84a59cad6443b45" rel="alternate"/>
+    <summary>In the discussion of Bitcoin transaction security and flexibility, a specific technique involving the multi-signing of the first input of a second-stage transaction with SIGHASH_SINGLE | ANYONECANPAY is highlighted. This method does not commit to `hashPrevouts` and `hashSequence`, allowing the addition of a legacy input even if it's altered in-flight without affecting the signature hash for the multi-signed "contract" input. This strategy proves particularly useful for unilateral fee-bumping but poses challenges in multi-stage off-chain constructions due to commitments to the `outpoint` field and the parent transaction ID of the malleable second input.
+
+BIP54 addresses the limitation on the number of executable signature operations during transaction validation, excluding coinbase transactions. It specifies counting the CHECKSIG and CHECKMULTISIG operations in both the input's scriptSig and the previous output's scriptPubKey, including P2SH redeemScripts. However, it lacks clarity on the exclusion of Segwit spends, which inherently have an empty scriptSig and contain witness programs that do not include CHECKSIG operations, thus always accounting to zero. The definition of what constitutes a "legacy" input remains vague, described only by its distinction from Segwit spends.
+
+The current implementation and verification of legacy versus witness programs are disassociated, raising concerns about accurately enforcing the signature operation limit. Questions arise regarding the exact nature and identification of legacy inputs under this BIP proposal, suggesting a need for more precise definitions and code specifications.
+
+Furthermore, implications for use-case designers, especially concerning large-scale Coinjoin transactions, are discussed. If a scriptpubkey with an excessive number of signatures is proposed within a collaborative transaction, without verifying script sanity against the new rule, participates may contribute to a transaction destined to be invalid. This scenario presents a potential denial-of-service risk, initially mitigated by the proposal to remove opt-in RBF. While not a concern for Lightning Network transactions due to explicit requirements for segwit inputs, other multi-party transactions could face new DoS vectors as this policy becomes widespread. The deployment of such a rule necessitates greater communication with multi-party use-case maintainers and developers about its implications, advocating for preparedness and adaptation to policy changes.</summary>
+    <published>2025-07-12T04:12:00+00:00</published>
+  </entry>
+</feed>
