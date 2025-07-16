@@ -2,9 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2025-05-23T02:45:30.492143+00:00</updated>
+  <updated>2025-07-16T02:59:53.227860+00:00</updated>
   <author>
-    <name>davidgumberg 2025-05-22 02:56:14.741000+00:00</name>
+    <name>davidgumberg 2025-07-16 00:00:24.606000+00:00</name>
+  </author>
+  <author>
+    <name>gmaxwell 2025-05-31 16:14:28.359000+00:00</name>
+  </author>
+  <author>
+    <name>Crypt-iQ 2025-05-30 16:05:05.715000+00:00</name>
+  </author>
+  <author>
+    <name>davidgumberg  . 2025-05-22 02:56:14.741000+00:00</name>
   </author>
   <author>
     <name>gmaxwell  . 2025-05-21 08:29:08.649000+00:00</name>
@@ -93,6 +102,9 @@
   <author>
     <name>xBC  . 2024-08-02 12:08:52.409000+00:00</name>
   </author>
+  <link href="delvingbitcoin/July_2025/5488_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2025/5179_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2025/5164_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2025/5086_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2025/5071_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2025/5065_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -127,25 +139,15 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2025-05-23T02:45:30.492363+00:00</updated>
+    <updated>2025-07-16T02:59:53.228073+00:00</updated>
     <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052" rel="alternate"/>
-    <summary>The conversation begins with an analysis of the efficiency and challenges associated with prefilling in compact block transactions within Bitcoin's network. Prefilling, although initially designed to streamline transactions by reducing the necessity for additional round-trip messaging, has encountered issues that could potentially exacerbate bandwidth wastage, especially when transactions are prefilled unnecessarily due to their availability from multiple sources. The introduction of Fiber technology, which is underpinned by the AGPL license, proposes a solution to these inefficiencies by enhancing data transmission through UDP, overcoming TCP's limitations. Despite its potential, concerns about the feasibility of widespread UDP adoption due to technical hurdles remain prevalent.
+    <summary>The exploration into Bitcoin Core nodes' behavior regarding compact block reconstructions offers valuable insights into the intricacies of blockchain data propagation and the potential for optimizing network performance. By analyzing the statistics from various nodes, it becomes evident that the efficiency of block reconstructions significantly depends on the node's ability to prefill transactions in the compact block, utilize transactions from its mempool, and draw from an extra pool when necessary. The analysis highlights periods where the need for additional transaction requests was notably high, coinciding with increased mempool sizes. This suggests a direct correlation between mempool activity and the efficiency of block reconstructions.
 
-Further exploration into blockchain efficiency delves into innovative testing methodologies for compact block transmissions and privacy enhancements. The utilization of secondary nodes configured for selective CMPCTBLOCK processing emerges as a viable method for assessing improvements without extensive network-wide implementation. Privacy considerations, particularly concerning node transaction policies, raise significant concerns. Proposals include segregating transactions into a separate mempool instance to minimize privacy risks associated with policy fingerprinting. Technical discussions extend to the congestion control mechanisms within TCP/IP protocols, highlighting the importance of dynamic adjustments in data transmission strategies based on network conditions, as detailed in RFC 5681.
+Adjustments made to node configurations during the observation period, such as increasing maximum connections or adopting `mempoolfullrbf=1`, appear to have tangible effects on the rate of compact block reconstructions that do not require additional transaction requests. Particularly, the shift towards enabling `mempoolfullrbf` by default is posited as a strategy to potentially enhance block reconstruction efficiency across the network, indicating a reevaluation of default Bitcoin Core policies might be beneficial for network-wide block propagation times.
 
-The mechanics of transaction announcements and the strategic limitation of prefill amounts are scrutinized to mitigate potential bandwidth waste. A critical examination of the suggestion to cap prefill at approximately 10kB points to the necessity of balancing between efficient processing and maintaining network performance. This discourse aligns with broader concerns regarding the optimization of network protocol operations within Bitcoin.
+Furthermore, the investigation points out significant disparities in median block reconstruction duration, especially between scenarios requiring transaction requests and those that do not. This variance underscores the impact of network congestion and node configuration on the blockchain's operational efficiency. The inquiry also opens up avenues for further research, such as examining the role of extra transactions in low- versus high-bandwidth block reconstructions and understanding how different extra pool sizes affect reconstruction efficiency.
 
-Insights into the "extra pool" mechanism within nodes reveal its limited capacity and distinctive function from the primary mempool, primarily focusing on transactions replaced via the RBF protocol. This system's efficacy is debated, considering the diversity of extra pool contents across different nodes and the impact on transaction inclusion by miners. The consideration extends to the strategic inclusion of transactions from the extra pool in the prefill process, questioning the redundancy and efficiency of such practices.
-
-Operational adjustments to various nodes to enhance Bitcoin network performance during periods of high mempool activity are discussed. Modifications range from adjusting parameters to improve block reconstruction to updating software versions for better support of network protocols. The emphasis on inbound connection capabilities underscores the correlation between node connectivity and overall network health. Innovative approaches to compact block announcement optimization are proposed, aiming to reduce propagation time and bandwidth usage.
-
-The narrative transitions into a discussion on the selection of communication protocols for decentralized networks, emphasizing the implications of choosing between UDP and TCP for system responsiveness and efficiency. The exploration of prefilled transactions in blockchain networks seeks to empirically evaluate the benefits of proactive transaction dissemination, highlighting ongoing experimental adjustments to nodes for this purpose.
-
-The integration of FIBRE code into the Bitcoin network, subject to licensing constraints, prompts a debate on the feasibility and methodology of incorporating high-bandwidth compact block relay features. The prioritization of FIBRE patch set updates and the potential reconsideration of peer-to-peer versions of FIBRE underscore a strategic focus on optimizing network communications.
-
-Discussions on transaction management within blockchain-like environments explore strategies for handling orphan transactions and refining the prefilling mechanism. The operational detail surrounding the handling of orphanage blocks elucidates the technical complexities involved in blockchain transaction processing and validation.
-
-In summary, the discourse encapsulates a comprehensive exploration into optimizing Bitcoin's network protocol, addressing challenges ranging from transaction prefilling inefficiencies to privacy concerns and the technical nuances of data transmission protocols. Through a combination of innovative testing methodologies, strategic operational adjustments, and the potential integration of advanced technologies like FIBRE, the conversation underscores an ongoing commitment to enhancing the efficiency, reliability, and security of blockchain technology.</summary>
-    <published>2025-05-22T02:56:14.741000+00:00</published>
+By delving into these aspects, the discussion illuminates the complex balance between maintaining network security, ensuring efficient data propagation, and optimizing system resources. It encapsulates the ongoing efforts within the cryptocurrency community to refine and improve the underlying mechanisms of blockchain technology, striving for a more robust, efficient, and scalable network infrastructure.</summary>
+    <published>2025-07-16T00:00:24.606000+00:00</published>
   </entry>
 </feed>

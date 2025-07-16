@@ -2,9 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A simple backup scheme for wallet accounts</title>
-  <updated>2025-07-13T03:08:23.238128+00:00</updated>
+  <updated>2025-07-16T03:02:22.624986+00:00</updated>
   <author>
-    <name>dr-orlovsky 2025-07-12 12:49:23.515000+00:00</name>
+    <name>salvatoshi 2025-07-15 12:06:03.412000+00:00</name>
+  </author>
+  <author>
+    <name>pyth 2025-07-15 08:34:22.826000+00:00</name>
+  </author>
+  <author>
+    <name>drorlovsky  . 2025-07-12 12:49:23.515000+00:00</name>
   </author>
   <author>
     <name>jdlcdl  . 2025-06-22 10:33:44.879000+00:00</name>
@@ -69,6 +75,8 @@
   <author>
     <name>reardencode  . 2025-04-16 13:52:53.883000+00:00</name>
   </author>
+  <link href="delvingbitcoin/July_2025/5480_A-simple-backup-scheme-for-wallet-accounts.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2025/5478_A-simple-backup-scheme-for-wallet-accounts.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2025/5445_A-simple-backup-scheme-for-wallet-accounts.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2025/5326_A-simple-backup-scheme-for-wallet-accounts.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2025/5186_A-simple-backup-scheme-for-wallet-accounts.xml" rel="alternate"/>
@@ -95,23 +103,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - A simple backup scheme for wallet accounts</title>
-    <updated>2025-07-13T03:08:23.238275+00:00</updated>
+    <updated>2025-07-16T03:02:22.625144+00:00</updated>
     <link href="https://delvingbitcoin.org/t/a-simple-backup-scheme-for-wallet-accounts/1607/2" rel="alternate"/>
-    <summary>The exchange revolves around an innovative approach to enhance the security and accessibility of cryptographic keys and descriptors within digital wallets, particularly focusing on multisig setups in the Bitcoin network. The proposal advocates for using a master xpub chain code as a secret for symmetrically encrypting backups of wallet descriptors. This method aims to streamline access control by allowing all descriptors that keys derived from the master xpub are part of, to be accessed without necessitating a shared secret among multisig participants. Each participant is responsible for creating their own encrypted backups, enhancing privacy and security.
+    <summary>The email conversation delves into several key areas of cryptographic security, focusing on the enhancement of access control and the secure management of backups within a system that utilizes master extended public keys (xpubs) for more effective control over descriptors. The sender criticizes the need for an additional secret to access descriptors, proposing instead a method where the encryption of a common secret is part of the backup, eliminating the need for extra secrets to be stored individually. This approach is particularly beneficial in scenarios where the goal is to limit decryption capabilities to specific conditions, such as requiring the cooperation of multiple heirs before accessing a backup. The discussion also references possible extensions to this scheme, citing work by @josh that explores adding complexity to this simple scheme, potentially affecting its adoption despite the theoretical benefits.
 
-A deep dive into the cryptographic nuances explores the utilization of XOR operations among individual secrets (Ci) and a shared secret (S) in deciphering a ciphertext payload. The discourse elaborates on the theoretical and practical aspects of applying XOR in scenarios involving multiple public keys (xpubs), highlighting the complexities and limitations when attempting to isolate or manipulate Ci values to derive the shared secret S. It becomes evident that achieving a definitive result through simple XOR operations among individual secrets is not straightforward due to the structured constraints of cryptographic protocols designed for robust security measures.
+A significant portion of the dialogue addresses the use of XOR operations in revealing or constructing a shared secret necessary for decrypting a ciphertext payload, challenging the practicality of straightforward XOR operations among individual secrets given the structured constraints of cryptographic frameworks. Furthermore, the emails touch upon the handling of account numbers in reused devices across multiple setups, advocating for a non-mandatory predictable derivation method to enhance privacy by concealing the total number of participants in any given setup.
 
-The conversation also addresses optimal practices for managing account numbers within digital wallets, especially when devices are repurposed across different setups. A preference for a non-mandatory but predictable derivation method for account numbers is suggested to conceal the setup's participant count, thus bolstering privacy. This recommendation aligns with a balance between user convenience and security, suggesting fresh account numbers for each setup yet acknowledging the feasibility of reusing account numbers under certain conditions.
+Key management within digital wallets is another focal point, with discussions around whether incorporating a component, referred to as 'T', would compromise the predictability and recoverability of xpubs. A proposed solution involves adding a '/T' step to the derivation path rather than altering the descriptor template, suggesting flexibility in maintaining the integrity of existing systems while accommodating necessary functionalities.
 
-Key management intricacies are further examined, particularly concerning the T component's role alongside extended public keys (xpubs). The discussion suggests keeping derivation paths unencrypted within wallet backups could alleviate concerns over the predictability and recoverability of xpubs. This nuanced perspective underscores the ongoing debate on achieving a harmonious balance between security prerequisites and practical recovery processes.
+The conversation extends to strategies for avoiding xpub derivation reuse across wallets, proposing a derivation path format that incorporates UNIX time to uniquely distinguish between paths. This method not only enhances security but also aids in user-friendliness by providing a rescan hint based on a universally understandable metric—time.
 
-Technical challenges associated with integrating the T component within Bitcoin operations are scrutinized. Issues arise from how Bitcoin Core processes descriptors, leading to potential complications in maintaining T's distinctiveness in key structures due to normalization processes and BIP32 limitations. A workaround involving timestamp division is proposed to circumvent these issues, aiming for compatibility and uniqueness within the system's operational framework.
+Packaging complex solutions into a Rust crate combined with WebAssembly (WASM) is mentioned as a way to simplify adoption despite inherent complexities. This part of the discussion acknowledges the dual advantages and challenges of multi-party wallets, emphasizing stronger privacy protections at the cost of potentially complicated recovery processes.
 
-Furthermore, the discourse introduces `descriptor-encrypt`, a Rust library offering a novel solution for encrypting descriptors, ensuring that only authorized spenders can decrypt them. This development marks a significant stride in cryptographic security, providing a robust encryption solution tailored to complex wallet setups. The library's compatibility with various descriptors and miniscript, coupled with its innovative encoding scheme, paves the way for advanced data security methodologies.
+Recursive secret splitting is explored as an innovative approach to generalize existing schemes, allowing for flexible participant configurations and thresholds aligned with miniscript rules. However, the sender expresses a preference for simpler choices due to the potential barriers imposed by implementation complexity on user adoption.
 
-The importance of backing up wallet descriptors is emphasized, contrasting with traditional emphasis on seeds and private keys. This shift highlights the need for a comprehensive backup strategy encompassing public keys and wallet policies, addressing the challenges associated with their loss or compromise. The discussion sheds light on emerging perspectives regarding cryptographic information backup, suggesting methodologies for preserving the integrity and availability of public keys and wallet policies critical for digital asset systems' seamless operation.
+The creation of `descriptor-encrypt`, a Rust library, is highlighted as a significant advancement, offering a tailored encryption approach that aligns access control policies directly with the spending policies of the descriptor. This development promises enhanced security and privacy of digital assets by enabling only authorized spenders to decrypt the descriptor.
 
-In summary, the exchange encapsulates a forward-thinking dialogue on cryptographic security, key management, and data backup strategies within the context of Bitcoin and digital wallets. The discussions range from theoretical considerations to practical solutions, underscoring the dynamic interplay between enhancing security measures and maintaining practical usability across cryptographic frameworks.</summary>
-    <published>2025-07-12T12:49:23.515000+00:00</published>
+Finally, the discussion touches upon the importance of a robust backup strategy for public keys and descriptors, underscoring the shift from focusing solely on safeguarding secrets to ensuring the recoverability of public-facing cryptographic components. This perspective is crucial for maintaining operational continuity and security in digital asset management.</summary>
+    <published>2025-07-15T12:06:03.412000+00:00</published>
   </entry>
 </feed>

@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Make pathological transactions with more than 2500 legacy signature operations non-standard</title>
-  <updated>2025-07-13T03:14:56.429890+00:00</updated>
+  <updated>2025-07-16T03:12:56.586382+00:00</updated>
+  <author>
+    <name>Antoine Poinsot 2025-07-14 14:44:00+00:00</name>
+  </author>
   <author>
     <name>Antoine Riard 2025-07-12 04:12:00+00:00</name>
   </author>
@@ -15,6 +18,7 @@
   <author>
     <name>Antoine Poinsot 2025-07-02 08:47:00+00:00</name>
   </author>
+  <link href="bitcoin-dev/July_2025/m5377690db677d561c1650c8cc2b3119cb6feb7f5_Make-pathological-transactions-with-more-than-2500-legacy-signature-operations-non-standard.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2025/mff6c3685214822173281866fa84a59cad6443b45_Make-pathological-transactions-with-more-than-2500-legacy-signature-operations-non-standard.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2025/m5b8668d2e9146f2341d84195234743a5afc7240e_Make-pathological-transactions-with-more-than-2500-legacy-signature-operations-non-standard.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2025/m99f3e79ebe253215558a9197666f3504415004f4_Make-pathological-transactions-with-more-than-2500-legacy-signature-operations-non-standard.xml" rel="alternate"/>
@@ -23,13 +27,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Make pathological transactions with more than 2500 legacy signature operations non-standard</title>
-    <updated>2025-07-13T03:14:56.429940+00:00</updated>
+    <updated>2025-07-16T03:12:56.586436+00:00</updated>
     <link href="https://gnusha.org/pi/bitcoindev/49dyqqkf5NqGlGdinp6SELIoxzE_ONh3UIj6-EB8S804Id5yROq-b1uGK8DUru66eIlWuhb5R3nhRRutwuYjemiuOOBS2FQ4KWDnEh0wLuA=@protonmail.com/T/#u#mef6b7bfe28a931d7674bf5be6ce9ae6c1293e5c4" rel="alternate"/>
-    <summary>In a recent discussion among Bitcoin developers, the focus was on the challenges associated with managing legacy and Segwit inputs within transactions, particularly in the context of transaction malleability and its implications for off-chain transaction constructions. The conversation highlighted the vulnerability of non-Segwit (legacy) transactions to ID alterations before block confirmation, which could compromise transaction integrity. This emphasizes the critical role of Segwit inputs in enhancing the security of off-chain transactions by preventing such malleability issues. These insights are part of ongoing technical discussions aimed at refining Bitcoin's underlying technology, shared within the "Bitcoin Development Mailing List" group, indicating the advanced nature of the discourse targeted at developers engaged in Bitcoin's evolution.
+    <summary>The discourse within the Bitcoin Development community primarily addresses the technical nuances and potential security implications of proposed changes to the Bitcoin protocol, specifically focusing on BIP54. This proposal introduces a consensus limit on the number of signature operations (sigops) in transactions, setting a cap at 2500 sigops to mitigate the risk of denial-of-service (DoS) attacks by limiting the size and complexity of transactions. This measure, while aimed at enhancing network security, raises concerns regarding its impact on the scalability and flexibility of off-chain constructions, which are crucial for increasing transaction throughput on the network.
 
-The discourse also delved into potential limitations imposed by introducing a consensus cap on signature operations, specifically addressing concerns over how such a cap could affect the scalability and flexibility of off-chain constructions. A particular scenario discussed was the impact of a 2500 signature operation cap on large-scale off-chain payment pools, which could hinder development efforts without resorting to less efficient alternatives. This cap aims to mitigate DoS attack risks but also presents significant constraints on network growth and innovation in off-chain solutions. The dialogue further explored possibilities for bypassing these limitations through new opcodes or SegWit version scripts that could offer scalable solutions without undermining network integrity. However, the absence of a reference implementation in the current BIP54 documentation underscored the need for accessible code to fully assess the proposed changes' long-term effects on protocol adaptability.
+One highlighted technique involves the use of SIGHASH_SINGLE | ANYONECANPAY for the multi-signing of the first input in a second-stage transaction. This method allows for the addition of a legacy input without affecting the signature hash of the multi-signed "contract" input, even if the legacy input is altered in-flight. Such a strategy is beneficial for unilateral fee-bumping but poses challenges for multi-stage off-chain constructions due to commitments to specific transaction fields that may become malleable.
 
-Moreover, the discussion underscored the calculated choice of the 2500 signature operation limit in BIP54, aiming to prevent the invalidation of any standard transaction under current Bitcoin Core policy standards. Despite no historical instances of transactions breaching both the sigop limit and standards, there remains a theoretical risk of creating standard yet pathological transactions that would conflict with BIP54, potentially exposing miners to DoS attacks if BIP54 were activated without comprehensive system upgrades. This aspect of the conversation reflects the intricate balance between implementing necessary security measures and ensuring the network's continuous adaptation and resilience against emerging threats.</summary>
-    <published>2025-07-12T04:12:00+00:00</published>
+BIP54 specifically targets the limitation of executable sigops within transactions, excluding coinbase transactions, by counting the CHECKSIG and CHECKMULTISIG operations in both the input's scriptSig and the previous output's scriptPubKey. However, the proposal does not clearly address Segwit spends, which feature an empty scriptSig and contain witness programs without CHECKSIG operations, leading to questions about the accurate enforcement of this sigop limit. The ambiguity surrounding the definition of "legacy" inputs under BIP54 suggests a need for more precise specifications and clarity for developers and use-case designers, particularly in the context of large-scale Coinjoin transactions where the lack of script sanity verification could lead to invalid transactions, introducing new vectors for DoS attacks.
+
+Furthermore, the discussion touches upon the essential role of Segwit inputs in maintaining transaction integrity against ID malleability risks, underscoring their significance in securing off-chain transactions. The conversation also explores the delicate balance required between imposing security measures and ensuring the network's capacity for growth and innovation, particularly in the realm of off-chain solutions. Potential avenues for circumventing the proposed sigop limits through the introduction of new opcodes or SegWit version scripts are considered, highlighting the ongoing dialogue among developers to carefully evaluate consensus rule changes against the network's long-term evolution.
+
+Lastly, the selection of the 2500 sigop limit reflects a cautious approach to prevent invalidating any currently standard transactions under today's Bitcoin Core policy, acknowledging the theoretical possibility of creating a standard yet pathological transaction that would conflict with BIP54. This scenario underscores the importance of preparing for potential DoS attacks against miners who have not upgraded to accommodate BIP54, emphasizing the critical nature of these discussions in safeguarding the network's integrity while fostering future development.</summary>
+    <published>2025-07-14T14:44:00+00:00</published>
   </entry>
 </feed>

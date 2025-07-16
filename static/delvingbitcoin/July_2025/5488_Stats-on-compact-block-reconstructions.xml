@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Stats on compact block reconstructions</title>
+  <updated>2025-07-16T02:59:12.003316+00:00</updated>
+  <author>
+    <name>davidgumberg 2025-07-16 00:00:24.606000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Stats on compact block reconstructions</title>
+    <updated>2025-07-16T02:59:12.003353+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/34" rel="alternate"/>
+    <summary>In an experiment designed to assess the efficacy of prefilling transactions in Bitcoin Core nodes, two mainnet nodes were connected, with one node prefilling transactions to another that only received `CMPCTBLOCK` announcements. The premise behind this setup was to explore whether prefilling could mitigate the need for additional round-trips required for block reconstructions through `GETBLOCKTXN-&gt;BLOCKTXN` and if it could overall reduce block propagation times. The findings confirmed that prefilling indeed prevents failed block reconstructions and can contribute to a net reduction in block propagation times when executed under certain conditions.
+
+The data analysis revealed that a node receiving prefilled `CMPCTBLOCK` announcements achieved a 98.25% reconstruction rate, significantly higher than the 61.81% observed in a node not receiving prefilled blocks. This improvement underscores the potential network-wide benefits of implementing prefilling strategies. However, it was also noted that some prefills exceeded the TCP window size, potentially negating prefilling advantages by necessitating an additional round-trip. Despite this, the majority (85.78%) of prefills did fit within the available TCP window space, suggesting that with careful management of prefill sizes, the effectiveness of prefilling could be optimized.
+
+Further elaborations on the methodology highlighted the calculation of latency costs associated with prefilling, laying out a formula to determine situations where prefilling could be advantageous. This involved considering factors like the bandwidth-delay product, redundant data transmission probabilities, and the impact of exceeding TCP window limits. It was established that prefilling is most beneficial when it does not cause data to exceed the current TCP window, as overflowing could result in additional round-trips, thereby increasing latency.
+
+The study also touched upon external factors that might influence the success of prefilling, such as the reliability of network connections and the inherent cost of bandwidth. By comparing the behavior of TCP congestion control mechanisms to the decision-making process around prefilling, the research suggests that nodes could rely on their operating system's congestion control algorithms to estimate optimal message sizes for prefilling.
+
+Concluding observations from the experiment pointed towards specific improvements in the prefilling process, including limiting prefill sizes to the next TCP window boundary and prioritizing transactions not in the `vExtraTxn` for prefilling. These recommendations aim to enhance the efficiency of prefilling without imposing unnecessary data transmission costs or risking additional latency due to retransmissions.
+
+For a more detailed examination of the data and statistical analysis, readers are encouraged to explore the provided links to GitHub repositories and documents ([Warnet](https://github.com/bitcoin-dev-project/warnet), [0xB10C/2025-03-prefill-compactblocks](https://github.com/0xB10C/bitcoin/commits/2025-03-prefill-compactblocks/), [RFC 5681](https://datatracker.ietf.org/doc/html/rfc5681), [RFC 9438](https://datatracker.ietf.org/doc/html/rfc9438)), which include python scripts for logs parsing, statistics, plots, and CSV datasets detailing the experiment's findings.</summary>
+    <published>2025-07-16T00:00:24.606000+00:00</published>
+  </entry>
+</feed>
