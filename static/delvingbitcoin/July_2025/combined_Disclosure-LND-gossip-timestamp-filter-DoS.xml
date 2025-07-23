@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Disclosure: LND gossip_timestamp_filter DoS</title>
+  <updated>2025-07-23T03:04:52.048832+00:00</updated>
+  <author>
+    <name>Crypt-iQ 2025-07-22 20:39:23.805000+00:00</name>
+  </author>
+  <author>
+    <name>morehouse 2025-07-22 18:46:25.316000+00:00</name>
+  </author>
+  <link href="delvingbitcoin/July_2025/5540_Disclosure-LND-gossip-timestamp-filter-DoS.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2025/5537_Disclosure-LND-gossip-timestamp-filter-DoS.xml" rel="alternate"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Disclosure: LND gossip_timestamp_filter DoS</title>
+    <updated>2025-07-23T03:04:52.048868+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-lnd-gossip-timestamp-filter-dos/1859" rel="alternate"/>
+    <summary>The recent discovery of a vulnerability within LND versions 0.18.2 and below has shed light on a critical issue affecting the Lightning Network's stability and security. This flaw, which allows for a denial-of-service (DoS) attack through repeated gossip requests, can lead to nodes running out of memory (OOM), thereby causing crashes or hangs. The ease of exploiting this vulnerability highlights an urgent need for node operators to update their software to LND 0.18.3 or later, where a mitigation strategy has been implemented. Alternatively, setting `ignore-historical-gossip-filters=true` in the node configuration offers another form of protection.
+
+The underlying problem stems from how LND handles `gossip_timestamp_filter` requests by default, loading all requested messages into memory simultaneously before sending them to the peer. This process, especially when abused by an attacker requesting the entire graph history, can overwhelm a node's memory resources. A successful DoS attack was demonstrated, showing significant degradation in LND performance, eventually leading to system failure. The introduction of a global semaphore in LND 0.18.3 aims to limit the number of concurrent `gossip_timestamp_filter` requests, thus addressing the immediate impact on memory usage without fully resolving the excessive consumption per request.
+
+This incident underscores a broader issue within the development and maintenance of critical infrastructure like the Lightning Network. The initial introduction of gossip filtering in 2018, through a substantial pull request, received minimal review and lacked adversarial thinking regarding security implications. This oversight emphasizes the importance of adopting a more careful approach to development, prioritizing security to foster user trust and prevent potential disasters. 
+
+The timeline of events surrounding this vulnerability, from its discovery, failed initial mitigation attempts, to the eventual deployment of a proper fix, illustrates the challenges and delays inherent in addressing security issues within open-source projects. The public disclosure, following the confirmation of a viable solution, serves as a call to action for the community to prioritize and invest in the security of the Lightning Network. For detailed information and updates, refer to the original [blog post](https://morehouse.github.io/lightning/lnd-gossip-timestamp-filter-dos/) and the official [LND release notes](https://github.com/lightningnetwork/lnd/releases/tag/v0.18.3-beta).</summary>
+    <published>2025-07-22T20:39:23.805000+00:00</published>
+  </entry>
+</feed>
