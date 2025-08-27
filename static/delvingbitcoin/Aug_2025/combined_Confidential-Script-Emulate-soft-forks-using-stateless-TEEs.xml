@@ -2,28 +2,46 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Confidential Script: Emulate soft forks using stateless TEEs</title>
-  <updated>2025-08-16T02:49:10.472314+00:00</updated>
+  <updated>2025-08-27T02:35:21.299325+00:00</updated>
   <author>
-    <name>sanket1729 2025-08-15 05:09:15.910000+00:00</name>
+    <name>JeremyRubin 2025-08-18 02:45:37.348000+00:00</name>
+  </author>
+  <author>
+    <name>stutxo 2025-08-18 02:37:52.830000+00:00</name>
+  </author>
+  <author>
+    <name>josh 2025-08-16 02:51:53.063000+00:00</name>
+  </author>
+  <author>
+    <name>sanket  . 2025-08-15 05:09:15.910000+00:00</name>
   </author>
   <author>
     <name>josh  . 2025-08-12 21:11:24.910000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Aug_2025/5734_Confidential-Script-Emulate-soft-forks-using-stateless-TEEs.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2025/5733_Confidential-Script-Emulate-soft-forks-using-stateless-TEEs.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2025/5723_Confidential-Script-Emulate-soft-forks-using-stateless-TEEs.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2025/5715_Confidential-Script-Emulate-soft-forks-using-stateless-TEEs.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2025/5695_Confidential-Script-Emulate-soft-forks-using-stateless-TEEs.xml" rel="alternate"/>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <entry>
     <id>2</id>
     <title>Combined summary - Confidential Script: Emulate soft forks using stateless TEEs</title>
-    <updated>2025-08-16T02:49:10.472353+00:00</updated>
+    <updated>2025-08-27T02:35:21.299380+00:00</updated>
     <link href="https://delvingbitcoin.org/t/confidential-script-emulate-soft-forks-using-stateless-tees/1918" rel="alternate"/>
-    <summary>The "confidential-script-lib" library was unveiled at the BTC++ hackathon in Austin, offering a new architecture designed to confidentially execute complex scripts that the Bitcoin protocol does not currently support. This innovative approach aims to facilitate developer testing of features such as `OP_CAT`, `OP_CTV`, `OP_CCV`, and Simplicity on the mainnet in a way that is permissionless and relies minimally on trust. It represents a potential compromise in ongoing discussions about soft forks by demonstrating real demand for certain upgrades. Central to this system is the use of a Trusted Execution Environment (TEE), specifically AWS's Nitro Enclave, which provides a secure space for code execution isolated from external threats, thereby protecting sensitive information from side-channel and physical attacks. This secure environment also offers reliable attestations regarding the executed code and its outcomes.
+    <summary>The conversation begins with a reference to the CTV emulator and a generalized formalism for covenant-oracle with script as key tweak paradigm, as detailed in Jeremy Rubin's work, indicating a close alignment but also noting an extension towards implementing integrity checks using BitVM. This points to an ongoing development and refinement in the area of Bitcoin protocol enhancements, specifically around covenant support and integrity verification mechanisms.
 
-The library operates through a two-step emulation and signing process. Initially, it creates a transaction with an input spending a real previous outpoint but emulates a script-path spend from a P2TR `script_pubkey`. This transaction is then validated through a Verifier compatible with `rust-bitcoinkernel`, allowing for the emulation of Bitcoin protocol features not yet adopted. If validation succeeds, the transaction is signed using a derived child private key from the parent private key and the merkle root of the emulated script path. This methodology decouples script execution from on-chain settlement, improving privacy and enabling new functionalities with minimal trust dependence. Additionally, a failsafe mechanism through a backup script path ensures fund recovery if the primary TEE-based execution path fails.
+A developer expresses enthusiasm for the idea and mentions working on a fork of `bitcoinkernel` that adds covenant support, including opcodes such as `OP_CTV`, `OP_CSFS`, and `OP_CAT`. This effort highlights a proactive approach to enhancing Bitcoin's scripting capabilities, with an openness to further expand this support to include simplicity, underscoring a commitment to evolving Bitcoin's transactional functionality.
 
-For security, developers are advised to run the library within a Nitro Enclave tightly integrated with AWS Key Management System (KMS). This configuration secures the master private key and allows any AWS account to deploy a similar enclave, making the deployment nearly permissionless. It highlights the crucial role of irrevocable KMS policies for key creation, which prevent deletion and restrict access exclusively to specific, verified enclaves.
+The discussion then shifts towards the practical aspects of deployment, particularly around Trusted Execution Environments (TEEs) and their potential to bolster security. The original author acknowledges the absence of deployment in a TEE but identifies it as a critical next step, inviting collaboration from those experienced in TEE deployments. This conversation underscores the importance of TEEs in enhancing computational trust and security, suggesting that incorporating all desired functionalities into a single kernel could simplify TEE deployments.
 
-In essence, the "confidential-script-lib" introduces an advanced method for executing Bitcoin scripts confidentially and securely. By leveraging TEEs like AWS's Nitro Enclave and integrating with AWS KMS, it offers a powerful platform for developers to experiment with and implement new features on the Bitcoin mainnet, maintaining high security standards and minimal trust requirements.</summary>
-    <published>2025-08-15T05:09:15.910000+00:00</published>
+The narrative introduces the "confidential-script-lib" library, which emerged from a BTC++ hackathon presentation. It proposes an architecture for the confidential execution of scripts not supported by the current Bitcoin protocol, aiming to enable testing of new features in a secure, permissionless manner. This initiative is recognized for its ambition to provide a platform for demonstrating genuine demand for soft fork upgrades.
+
+A Trusted Execution Environment, like AWS's Nitro Enclave, plays a pivotal role in this architecture by offering a secure space for code execution isolated from external threats. This setup ensures the protection of sensitive information and provides reliable attestations about executed code. The library employs a two-step emulation and signing process, initially constructing a transaction with an emulated script-path spend, followed by a validation and signing phase. This approach aims to separate script execution from on-chain settlement, enhancing privacy and enabling new functionalities with minimal reliance on trust.
+
+The library supports experimentation with proposed soft fork upgrades and integrates tightly with AWS Key Management System (KMS) for securing significant funds. The suggested setup involves running the library inside a Nitro Enclave integrated with KMS, emphasizing security and near-permissionless deployment. This framework stresses the importance of irrevocable KMS policies for key creation, ensuring a high level of security and trust minimization.
+
+In conclusion, the "confidential-script-lib" library represents a significant advancement in executing advanced Bitcoin scripts confidentially and securely. By leveraging cutting-edge technologies like TEEs and integrating with cloud-based services, it offers a robust platform for the Bitcoin community to explore and implement new functionalities, paving the way for future enhancements in the Bitcoin protocol.</summary>
+    <published>2025-08-18T02:45:37.348000+00:00</published>
   </entry>
 </feed>

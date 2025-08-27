@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Proposal] Elliptic Curve Operations for Bitcoin Script</title>
+  <updated>2025-08-27T02:49:11.814526+00:00</updated>
+  <author>
+    <name>jeremy 2025-08-25 16:45:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Proposal] Elliptic Curve Operations for Bitcoin Script</title>
+    <updated>2025-08-27T02:49:11.814565+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAO3Pvs-Cwj=5vJgBfDqZGtvmoYPMrpKYFAYHRb_EqJ5i0PG0cA@mail.gmail.com/T/#m47aca0b8c4a248d3be1637a936a32fbedd571068" rel="alternate"/>
+    <summary>The proposal under discussion includes a suggestion to introduce an operation named *OP_EC_LIFT_X_EVEN*, which aims to reverse the effects of *OP_EC_POINT_X_COORD*, albeit imprecisely due to parity considerations. This addition is particularly useful when utilizing *OP_IKEY*. Furthermore, the introduction of *OP_EC_GENERATOR* is proposed to enhance script composability by pushing the generator point G directly onto the stack, avoiding the ambiguity of using 0 to represent G. The current mechanism allows for the multiplication of elliptic curve points but does so in a less intuitive manner, especially when dealing with the point at infinity.
+
+By integrating *OP_EC_GENERATOR*, scripts could achieve more straightforward execution of operations involving the point at infinity, thus enabling more accurate multiplication chaining. For instance, the operation sequence &lt;blah&gt; SHA256 &lt;[0; 32]&gt; OP_EC_GENERATOR OP_EC_POINT_MUL OP_EC_POINT_MUL would result in the point at infinity, highlighting the benefits of this approach compared to the existing method, which may not handle such scenarios as elegantly.
+
+This change also impacts the implementation of *OP_TWEAKADD*, offering a more streamlined process. With the proposed modifications, *OP_TWEAKADD* would be executed by first generating a point using *OP_EC_GENERATOR*, followed by multiplication and lifting via *OP_EC_LIFT_X_EVEN*, before finally adding the points together. This contrasts with the current procedure that involves a tweak and an internal key, which according to the Bitcoin Improvement Proposal (BIP), requires the internal key to be lifted before addition—a step that is incorrectly omitted in the BIP's presented process.
+
+These suggestions aim to refine and clarify the procedures involved in elliptic curve operations within Bitcoin's scripting language, addressing specific shortcomings and inaccuracies in the current definitions and implementations.</summary>
+    <published>2025-08-25T16:45:00+00:00</published>
+  </entry>
+</feed>
