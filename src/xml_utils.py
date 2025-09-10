@@ -424,8 +424,17 @@ class GenerateXML:
                     # Generate XML files (if not exist) for each post in the thread, collecting their paths into combined_links
                     combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
                     # Generate a list of strings, each combining the first author's name with their post's creation date
-                    combined_authors = list(
-                        title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
+                    # Also include threading information if available
+                    def format_author_with_threading(row):
+                        author_str = f"{row['authors'][0]} {row['created_at']}"
+                        if 'thread_depth' in row and row['thread_depth'] > 0:
+                            # Add depth indicator for threading
+                            author_str += f" [depth:{row['thread_depth']}]"
+                        if 'message_id' in row and row['message_id']:
+                            author_str += f" [id:{row['message_id']}]"
+                        return author_str
+                    
+                    combined_authors = list(title_df.apply(format_author_with_threading, axis=1))
                     # Group emails by month and year based on their creation date to process them in time-based segments
                     month_year_group = \
                         title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
