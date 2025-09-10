@@ -299,7 +299,7 @@ class GenerateXML:
         # Initialize a dictionary to store data for DataFrame construction, with predefined columns
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
-                       'url', 'authors']
+                       'url', 'authors', 'thread_depth', 'message_id']
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
@@ -383,10 +383,15 @@ class GenerateXML:
                     # No summary was found, we need to create one
                     logger.info(f"Not found: {file_path}")
                     summary = create_summary(cols['body'])
+                    # Include threading metadata in author string
+                    thread_depth = cols.get('thread_depth', 0)
+                    message_id = cols.get('message_id', '')
+                    author_with_metadata = f"{cols['authors'][0]} [depth:{thread_depth}][id:{message_id}] {cols['created_at']}"
+                    
                     feed_data = {
                         'id': combine_flag,
                         'title': cols['title'],
-                        'authors': [f"{cols['authors'][0]} {cols['created_at']}"],
+                        'authors': [author_with_metadata],
                         'url': cols['url'],
                         'links': [],
                         'created_at': cols['created_at_org'],
@@ -423,9 +428,15 @@ class GenerateXML:
                     xml_name = clean_title(title)
                     # Generate XML files (if not exist) for each post in the thread, collecting their paths into combined_links
                     combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
-                    # Generate a list of strings, each combining the first author's name with their post's creation date
-                    combined_authors = list(
-                        title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
+                    # Generate a list of strings, each combining the first author's name with their post's creation date and threading info
+                    def create_author_with_threading(row):
+                        author_name = row['authors'][0]
+                        created_at = row['created_at']
+                        thread_depth = row.get('thread_depth', 0)
+                        message_id = row.get('message_id', '')
+                        return f"{author_name} [depth:{thread_depth}][id:{message_id}] {created_at}"
+                    
+                    combined_authors = list(title_df.apply(create_author_with_threading, axis=1))
                     # Group emails by month and year based on their creation date to process them in time-based segments
                     month_year_group = \
                         title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
