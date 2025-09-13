@@ -2,9 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Sharing block templates</title>
-  <updated>2025-09-12T02:22:23.895502+00:00</updated>
+  <updated>2025-09-13T02:16:39.684887+00:00</updated>
   <author>
-    <name>mcelrath 2025-09-11 16:30:35.810000+00:00</name>
+    <name>AntoineP 2025-09-12 13:22:41.990000+00:00</name>
+  </author>
+  <author>
+    <name>mcelrath 2025-09-12 10:08:39.803000+00:00</name>
+  </author>
+  <author>
+    <name>ajtowns 2025-09-12 06:35:51.054000+00:00</name>
+  </author>
+  <author>
+    <name>mcelrath  . 2025-09-11 16:30:35.810000+00:00</name>
   </author>
   <author>
     <name>ajtowns  . 2025-08-22 11:59:35.986000+00:00</name>
@@ -57,6 +66,9 @@
   <author>
     <name>ajtowns  . 2025-08-05 19:08:31.704000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Sept_2025/5866_Sharing-block-templates.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5863_Sharing-block-templates.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5862_Sharing-block-templates.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2025/5861_Sharing-block-templates.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2025/5765_Sharing-block-templates.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2025/5764_Sharing-block-templates.xml" rel="alternate"/>
@@ -79,19 +91,27 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Sharing block templates</title>
-    <updated>2025-09-12T02:22:23.895628+00:00</updated>
+    <updated>2025-09-13T02:16:39.685028+00:00</updated>
     <link href="https://delvingbitcoin.org/t/sharing-block-templates/1906" rel="alternate"/>
-    <summary>The discourse underscores the nuanced aspects of blockchain transaction processing, particularly emphasizing the balance between security measures and efficiency in transaction relay policies. A critical point raised challenges the utility of sendtemplate as a mechanism, suggesting that a focus on enhancing transaction relay by increasing the orphan pool size could be more beneficial. The argument is rooted in the observation that generating a template is cost-effective but introduces unnecessary complexity without guaranteeing that the sender is actively mining the block. This leads to potential vulnerabilities, such as the intentional flooding of an orphan pool with non-standard transactions, highlighting the need for a more robust relay policy against Denial of Service (DoS) attacks. Further examination reveals the strategic value in optimizing the handling of short ids in transaction processing. By shifting the responsibility of choosing the salt for hashing to the recipient, who can effectively cache it, the system becomes less susceptible to attacks aiming to induce hash collisions. This method enhances the resilience of the transaction processing mechanism against targeted attempts to disrupt the hashing process, proposing a periodic change in the salt and reindexing transactions within the mempool to prevent exploitation by attackers.
+    <summary>The email discussion delves into the intricacies of blockchain transaction relay mechanisms, focusing on the challenges and proposed enhancements to improve efficiency and security. Initially, skepticism surrounds the utility of the `sendtemplate` feature, with concerns about its potential to complicate transaction relays without offering substantial improvements. The discourse further explores the idea of increasing the orphan pool size to better manage transactions temporarily disconnected from their parent block. However, this raises concerns about vulnerability to denial-of-service attacks by malicious actors. References to GitHub pull requests and comments indicate an active engagement in community discussions around optimizing blockchain transaction processing, albeit with doubts about the community's receptiveness to such contributions.
 
-The utilization of minisketches emerges as a promising technique for improving the accuracy of decoded data. Minisketches offer a refined method for identifying and correcting errors associated with short-id collisions, facilitating a more efficient error correction process without imposing significant computational costs. The discussion highlights the importance of selecting an appropriate minisketch size to minimize the risk of false decodes, suggesting that even lower sizes could be explored based on further verification. This approach not only addresses known collisions efficiently but also streamlines the reconstruction of transaction templates, proposing a tiered method for data exchange that could potentially reduce network bandwidth consumption.
+A significant portion of the conversation addresses the optimization of handling short ids in transaction processing. It suggests that allowing the recipient to choose the salt for hashing and caching it effectively can reduce resource intensity and protect against targeted hash collision attacks. This strategy underscores the balance between operational efficiency and robust security practices in managing transaction identifiers.
 
-Exploring the dynamics of computational costs reveals an imbalance between the sender and receiver in managing transaction identifiers, with the receiver bearing a disproportionate workload. This discrepancy exposes the receiver to potential security threats, underscoring the necessity for continuous vigilance against attacks exploiting this vulnerability. The conversation also delves into strategies for enhancing blockchain efficiency and censorship resistance through improved block propagation techniques, focusing on maintaining a small subset of peers' top blocks in the mempool. Such methodologies underscore the critical role of compact blocks and the extrapool in mitigating one hop divergence issues, albeit acknowledging their limitations in fully addressing policy divergence concerns.
+The utilization of minisketches is highlighted as a novel method for verifying the accuracy of decoded data, particularly beneficial in resolving short-id collisions with minimal errors. Despite computational simplicity, the practicality of employing advanced decoding techniques remains under debate, considering the current limitations of decoder technology and the effectiveness of simpler solutions like periodic salt changes and reindexing transactions within the mempool.
 
-The dialogue navigates through the complexities of network policies and their alignment with miner activities, presenting a spectrum of scenarios ranging from uniform adherence to diverse policy coexistence within the network. This diversity, while posing challenges, also harbors advantages in fostering a resilient network structure capable of accommodating multiple divergent policies without compromising operational efficiency. In addition, the concept of pre-sharing Proof of Work (PoW) block templates among nodes is examined for its potential to facilitate quicker block reconciliation, raising questions about its effectiveness for indirectly connected peers.
+The concept of using a minisketch for enhancing transaction template reception and reconstruction in blockchain technology is discussed. Its ability to detect unknown collisions and optimize the reconstruction process by identifying missing wtxid suffixes presents a promising avenue for improving transaction integrity and processing efficiency. Additionally, strategic communication methods for reducing bandwidth usage through tiered data exchange protocols are considered.
 
-Innovative approaches to optimizing bandwidth usage for blockchain transactions are discussed, with a focus on employing sorted transaction short identifiers and leveraging Golomb-Rice coding for more efficient data transmission. This strategy, complemented by the application of edit encoding relative to previous templates, presents a compelling case for rethinking traditional methods to achieve significant bandwidth savings. Furthermore, the exploration of Minisketch's utility in block relay processes and set reconciliation introduces new perspectives on optimizing communication between peers, emphasizing the potential benefits of sharing transaction templates and considering novel solutions for handling larger datasets efficiently.
+The dialogue transitions to discussing the computational cost dynamics between sender and receiver in transaction processing, emphasizing the necessity of a low-cost strategy like transmitting a small minisketch to enhance reliability in the face of potential collisions. Furthermore, the importance of maintaining a small number of peers' top blocks in the mempool is examined in relation to quick block propagation, censorship resistance, and the mitigation of policy divergence effects.
 
-The document concludes by inviting feedback on a draft Bitcoin Improvement Proposal (BIP), signaling an open call for community engagement to refine and enhance Bitcoin's protocol. It also references Stratum's infrastructure for template timing insights and discusses concerns regarding the potential misuse of a proposal combined with the GETDATA function, highlighting privacy risks associated with accessing transactions deemed private by miners. The involvement of entities like Antpool, MARA Pool, and Rebar Labs in practices prioritizing certain transactions underscores the need for greater scrutiny and the development of standards to protect user privacy and network integrity. Lastly, the text reflects on recent shifts in mempool policies among Bitcoin nodes and miners, indicating a broader trend towards optimizing network performance and security through innovative solutions like weak blocks and template sharing.</summary>
-    <published>2025-09-11T16:30:35.810000+00:00</published>
+Exploring the extrapool's role in addressing one-hop divergence illustrates its potential effectiveness, though not without limitations, especially concerning policy divergence related to minimum fees. The diversity of network policies and their alignment with miner activities are also scrutinized, showcasing the benefits of a balanced ecosystem where multiple divergent policies coexist without hindering operational harmony.
+
+The efficiency of propagating Proof of Work (PoW) block templates and the impact on both direct and indirect peers is questioned, alongside the exploration of optimizing bandwidth usage through transaction ordering techniques and Golomb-Rice coding. These approaches suggest innovative ways to enhance bandwidth efficiency and transaction processing.
+
+Minisketch's utility in block relay processes is acknowledged, highlighting its efficiency despite quadratic complexity relative to set differences. Alternatives to full reconciliation, like using edits from recent templates, are considered for improving peer-to-peer communication efficiency.
+
+The concept of set reconciliation, specifically with the application of minisketch and BIP330, faces challenges due to developmental status and computational inefficiency with larger datasets. A simplified method for updating peers on the latest template by indicating which transactions to omit or add offers a more efficient transmission strategy.
+
+Finally, the document outlines a draft for a Bitcoin Improvement Proposal (BIP) inviting community feedback and reviews. It also references Stratum's infrastructure for template timing data points and discusses concerns regarding the potential misuse of the GETDATA function, highlighting privacy risks associated with transaction accessibility. The involvement of major mining pools in prioritizing certain transactions underscores the need for new standards to safeguard user privacy and network integrity. The dynamic shift in mempool policies among Bitcoin nodes and miners reflects an evolving landscape aimed at optimizing network operations and addressing challenges like mining centralization and security threats.</summary>
+    <published>2025-09-12T13:22:41.990000+00:00</published>
   </entry>
 </feed>
