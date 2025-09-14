@@ -255,7 +255,16 @@ class GenerateXML:
                 datetime_obj = add_utc_if_not_present(dict_data[data]['_source'][col], iso_format=False)
                 df_dict[col].append(datetime_obj)
             else:
-                df_dict[col].append(dict_data[data]['_source'][col])
+                # Handle threading fields that might not exist in older documents
+                if col in ['thread_depth', 'thread_position', 'parent_id', 'reply_to_author']:
+                    value = dict_data[data]['_source'].get(col, None)
+                    if col == 'thread_depth' and value is None:
+                        value = 0  # Default depth for root messages
+                    elif col == 'thread_position' and value is None:
+                        value = 0  # Default position
+                    df_dict[col].append(value)
+                else:
+                    df_dict[col].append(dict_data[data]['_source'][col])
 
         # For each individual summary (XML file) that exists for the
         # given thread, extract and append their content to the dictionary
@@ -359,7 +368,7 @@ class GenerateXML:
         # Initialize a dictionary to store data for DataFrame construction, with predefined columns
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
-                       'url', 'authors']
+                       'url', 'authors', 'thread_depth', 'thread_position', 'parent_id', 'reply_to_author']
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
