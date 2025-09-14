@@ -139,6 +139,54 @@ class GenerateXML:
         with open(xml_file, 'wb') as f:
             f.write(feed_xml)
 
+    def generate_threaded_xml(self, feed_data, xml_file, thread_data=None):
+        """Generate XML with threading information preserved"""
+        # create feed generator
+        fg = FeedGenerator()
+        fg.id(feed_data['id'])
+        fg.title(feed_data['title'])
+        
+        # If we have thread data, organize authors by threading structure
+        if thread_data:
+            # Sort thread data by thread position and depth
+            sorted_threads = sorted(thread_data, key=lambda x: (x.get('thread_position', 0), x.get('thread_depth', 0)))
+            
+            for thread_item in sorted_threads:
+                author_name = thread_item['author']
+                timestamp = thread_item.get('created_at', '')
+                thread_depth = thread_item.get('thread_depth', 0)
+                reply_to = thread_item.get('reply_to_author', '')
+                
+                # Format author name with threading info
+                if thread_depth > 0 and reply_to:
+                    # Indent with spaces to show threading depth
+                    indent = "  " * thread_depth
+                    author_display = f"{indent}↳ {author_name} {timestamp} (replying to {reply_to})"
+                else:
+                    author_display = f"{author_name} {timestamp}"
+                
+                fg.author({'name': author_display})
+        else:
+            # Fallback to original behavior
+            for author in feed_data['authors']:
+                fg.author({'name': author})
+        
+        for link in feed_data['links']:
+            fg.link(href=link, rel='alternate')
+            
+        # add entries to the feed
+        fe = fg.add_entry()
+        fe.id(feed_data['id'])
+        fe.title(feed_data['title'])
+        fe.link(href=feed_data['url'], rel='alternate')
+        fe.published(feed_data['created_at'])
+        fe.summary(feed_data['summary'])
+
+        # generate the feed XML
+        feed_xml = fg.atom_str(pretty=True)
+        with open(xml_file, 'wb') as f:
+            f.write(feed_xml)
+
     def append_columns(self, df_dict, file, title, namespace):
         """
         Extract specific information from the given XML file corresponding to
@@ -443,6 +491,20 @@ class GenerateXML:
                         # - the individual summaries of previous posts
                         # - the actual content of newer posts
                         combined_summary = create_summary(combined_body)
+                        
+                        # Prepare threading data if available
+                        thread_data = []
+                        if 'thread_depth' in title_df.columns:
+                            for _, row in title_df.iterrows():
+                                thread_data.append({
+                                    'author': row['authors'][0] if row['authors'] else 'Unknown',
+                                    'created_at': str(row['created_at']),
+                                    'thread_depth': row.get('thread_depth', 0),
+                                    'thread_position': row.get('thread_position', 0),
+                                    'reply_to_author': row.get('reply_to_author', ''),
+                                    'parent_id': row.get('parent_id', '')
+                                })
+                        
                         feed_data = {
                             'id': "2",
                             'title': 'Combined summary - ' + title,
@@ -455,8 +517,11 @@ class GenerateXML:
                         # We use a flag to check if the XML file for the
                         # combined summary is generated for the first time
                         if not flag:
-                            # Generate XML only once for the first month-year and keep its path
-                            self.generate_xml(feed_data, file_path)
+                            # Generate XML with threading information if available
+                            if thread_data:
+                                self.generate_threaded_xml(feed_data, file_path, thread_data)
+                            else:
+                                self.generate_xml(feed_data, file_path)
                             std_file_path = file_path
                             flag = True
                         else:
