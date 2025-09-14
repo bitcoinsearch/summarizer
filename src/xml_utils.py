@@ -141,6 +141,10 @@ class GenerateXML:
 
     def generate_threaded_xml(self, feed_data, xml_file, thread_data=None):
         """Generate XML with threading information preserved"""
+        
+        logger.info(f"🧵 XML THREADING: Starting threaded XML generation for {xml_file}")
+        logger.info(f"📊 XML THREADING: Thread data provided: {'Yes' if thread_data else 'No'}")
+        
         # create feed generator
         fg = FeedGenerator()
         fg.id(feed_data['id'])
@@ -148,10 +152,12 @@ class GenerateXML:
         
         # If we have thread data, organize authors by threading structure
         if thread_data:
+            logger.info(f"📋 XML THREADING: Processing {len(thread_data)} threaded items")
             # Sort thread data by thread position and depth
             sorted_threads = sorted(thread_data, key=lambda x: (x.get('thread_position', 0), x.get('thread_depth', 0)))
+            logger.info("📑 XML THREADING: Sorted threads by position and depth")
             
-            for thread_item in sorted_threads:
+            for i, thread_item in enumerate(sorted_threads):
                 author_name = thread_item['author']
                 timestamp = thread_item.get('created_at', '')
                 thread_depth = thread_item.get('thread_depth', 0)
@@ -162,14 +168,20 @@ class GenerateXML:
                     # Indent with spaces to show threading depth
                     indent = "  " * thread_depth
                     author_display = f"{indent}↳ {author_name} {timestamp} (replying to {reply_to})"
+                    logger.info(f"    📧 XML THREADING: #{i}: REPLY depth={thread_depth} '{author_name}' -> '{reply_to}'")
                 else:
                     author_display = f"{author_name} {timestamp}"
+                    logger.info(f"    📧 XML THREADING: #{i}: ROOT '{author_name}'")
                 
                 fg.author({'name': author_display})
+                
+            logger.success(f"✅ XML THREADING: Added {len(sorted_threads)} threaded authors to XML")
         else:
+            logger.warning("⚠️ XML THREADING: No thread data, falling back to flat author list")
             # Fallback to original behavior
             for author in feed_data['authors']:
                 fg.author({'name': author})
+                logger.info(f"    📧 XML THREADING: Added flat author: {author}")
         
         for link in feed_data['links']:
             fg.link(href=link, rel='alternate')
@@ -494,16 +506,26 @@ class GenerateXML:
                         
                         # Prepare threading data if available
                         thread_data = []
+                        logger.info(f"🧵 SUMMARIZER THREADING: Checking for threading data in {len(title_df)} documents")
+                        logger.info(f"📋 SUMMARIZER THREADING: Available columns: {list(title_df.columns)}")
+                        
                         if 'thread_depth' in title_df.columns:
-                            for _, row in title_df.iterrows():
-                                thread_data.append({
+                            logger.success(f"✅ SUMMARIZER THREADING: Threading columns found! Processing...")
+                            for idx, row in title_df.iterrows():
+                                thread_item = {
                                     'author': row['authors'][0] if row['authors'] else 'Unknown',
                                     'created_at': str(row['created_at']),
                                     'thread_depth': row.get('thread_depth', 0),
                                     'thread_position': row.get('thread_position', 0),
                                     'reply_to_author': row.get('reply_to_author', ''),
                                     'parent_id': row.get('parent_id', '')
-                                })
+                                }
+                                thread_data.append(thread_item)
+                                logger.info(f"    📧 SUMMARIZER THREADING: #{idx}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}'")
+                            
+                            logger.success(f"✅ SUMMARIZER THREADING: Collected {len(thread_data)} items with threading data")
+                        else:
+                            logger.warning("⚠️ SUMMARIZER THREADING: No 'thread_depth' column found - documents may not have threading data")
                         
                         feed_data = {
                             'id': "2",
@@ -519,11 +541,15 @@ class GenerateXML:
                         if not flag:
                             # Generate XML with threading information if available
                             if thread_data:
+                                logger.success(f"🎯 SUMMARIZER THREADING: Using THREADED XML generation for {file_path}")
+                                logger.info(f"📊 SUMMARIZER THREADING: Will process {len(thread_data)} threaded items")
                                 self.generate_threaded_xml(feed_data, file_path, thread_data)
                             else:
+                                logger.warning(f"⚠️ SUMMARIZER THREADING: Using FLAT XML generation (no threading data) for {file_path}")
                                 self.generate_xml(feed_data, file_path)
                             std_file_path = file_path
                             flag = True
+                            logger.success(f"✅ SUMMARIZER THREADING: XML file generated successfully: {file_path}")
                         else:
                             # For subsequent month-year groups, copy the initially
                             # created XML file instead of creating a new one
