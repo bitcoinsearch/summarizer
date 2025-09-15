@@ -238,6 +238,17 @@ class GenerateXML:
         author_result = author_result.replace(":", "")
         author_result = author_result.replace("-", "")
         df_dict["authors"].append([author_result.strip()])
+        
+        # Extract the body/summary from the XML
+        summary = root.find('atom:entry/atom:summary', namespace).text
+        df_dict["body"].append(summary)
+        
+        # Add default values for threading fields (since XML files don't contain this data)
+        # These will be None/0 for existing XML files, as threading data only comes from ElasticSearch
+        df_dict["thread_depth"].append(0)  # Default to root level
+        df_dict["thread_position"].append(0)  # Default position
+        df_dict["parent_id"].append(None)  # No parent info in XML
+        df_dict["reply_to_author"].append(None)  # No reply info in XML
 
     def file_not_present_df(self, columns, source_cols, df_dict, files_list, dict_data, data,
                             title, combined_filename, namespace):
@@ -282,18 +293,6 @@ class GenerateXML:
 
                 if title == file_title:
                     self.append_columns(df_dict, file, title, namespace)
-
-                    if combined_filename in file:
-                        # TODO: the code will never reach this point
-                        # as we are already filtering per thread title so no
-                        # "Combined summary - X" filename will pass though
-                        tree = ET.parse(file)
-                        root = tree.getroot()
-                        summary = root.find('atom:entry/atom:summary', namespace).text
-                        df_dict["body"].append(summary)
-                    else:
-                        summary = root.find('atom:entry/atom:summary', namespace).text
-                        df_dict["body"].append(summary)
             else:
                 logger.info(f"file not present: {file}")
 
@@ -340,10 +339,6 @@ class GenerateXML:
             logger.info("individual summaries are present but not combined ones ...")
             for file in individual_summaries_xmls_list:
                 self.append_columns(df_dict, file, title, namespace)
-                tree = ET.parse(file)
-                root = tree.getroot()
-                summary = root.find('atom:entry/atom:summary', namespace).text
-                df_dict["body"].append(summary)
 
     def preprocess_authors_name(self, author_tuple):
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
