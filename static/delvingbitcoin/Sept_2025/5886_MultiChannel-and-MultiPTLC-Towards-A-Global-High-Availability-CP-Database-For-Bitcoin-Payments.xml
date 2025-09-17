@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>MultiChannel and MultiPTLC: Towards A Global High-Availability CP Database For Bitcoin Payments</title>
+  <updated>2025-09-17T02:25:08.781337+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2025-09-16 20:14:26.169000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>MultiChannel and MultiPTLC: Towards A Global High-Availability CP Database For Bitcoin Payments</title>
+    <updated>2025-09-17T02:25:08.781369+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/multichannel-and-multiptlc-towards-a-global-high-availability-cp-database-for-bitcoin-payments/1983/5" rel="alternate"/>
+    <summary>The proposed solution introduces a concept where Lightning Service Providers (LSPs) generate a unique scalar, known as the receiver-can-claim scalar, for each payment attempt by Ursula. This mechanism is designed to enhance security and efficiency in the handling of parallel payment attempts on the network. By restricting the knowledge of the receiver-can-claim scalar to the LSPs, it prevents potential misuse by malicious actors such as Ursula, who could be a hacker in disguise. The LSPs determine the number of parallel attempts Ursula can make by providing a specific number of receiver-can-claim points upon request. This process, however, complicates the scenario for mobile users as Ursula must now query LSPs for these points before proceeding with the offline preparation of routes, signatures, and revocation keys.
+
+The MultiPTLC system evolves into a multi-headed PTLC, where all transaction points are calculated by adding the delta (the sum of the hiding scalar at each hop) and the proof-of-payment, then multiplying by the generator point G. At the final point, the delta is offset, leaving the combination of proof-of-payment and receiver-can-claim multiplied by G. Only the LSP has the authority to decide whether to disclose the receiver-can-claim scalar. This setup allows LSPs to retract the MultiPTLC lock without disclosing the receiver-can-claim scalars, even in situations where a PTLC-chain gets locked due to global availability issues. This rollback capability is crucial as it ensures that Ursula remains unaffected by global low-availability problems, shifting the burden to LSPs who are better positioned to manage such issues due to their larger fund reserves in public channels.
+
+Furthermore, the receiver-can-claim scalar leverages a cryptographic method similar to LDK's approach for generating "stateless" invoices. When Ursula requests receiver-can-claim points, the LSP provides a random 256-bit number along with the receiver-can-claim point, and derives the scalar using an HMAC function that incorporates a secret key specific to the LSP. This approach minimizes the risk associated with key loss since the impact is limited to lost routing funds rather than channel or onchain funds. The scalability of this model is ensured as Ursula must return the receiver-can-claim scalar to the LSP as part of the MultiPTLC package, justifying the LSP's storage costs and mitigating potential denial of service attacks.
+
+The email also emphasizes that the Lightning network operates as a global CP (Consistency Protocol) database primarily because of its reliance on the 2-node Poon-Dryja consistency algorithm for local consistency, and the HTLC lock-chain for global consistency. However, the existing models suffer from low availability issues, highlighted by the risk of funds being locked for extended periods due to node failures. To address these challenges, the introduction of the MultiChannel and MultiPTLC constructs are proposed as novel solutions aimed at enhancing the overall availability and reliability of the network. These innovations are deemed necessary to circumvent the limitations posed by the current channel and HTLC frameworks, signaling a significant step forward in the development of more resilient and efficient payment systems within the Lightning network infrastructure.</summary>
+    <published>2025-09-16T20:14:26.169000+00:00</published>
+  </entry>
+</feed>
