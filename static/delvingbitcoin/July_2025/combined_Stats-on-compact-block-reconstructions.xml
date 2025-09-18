@@ -2,9 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2025-08-27T02:28:48.979401+00:00</updated>
+  <updated>2025-09-18T02:23:50.977271+00:00</updated>
   <author>
-    <name>Crypt-iQ 2025-08-17 17:07:38.096000+00:00</name>
+    <name>orangesurf 2025-09-17 14:17:10.836000+00:00</name>
+  </author>
+  <author>
+    <name>1440000bytes 2025-09-17 12:29:01.185000+00:00</name>
+  </author>
+  <author>
+    <name>0xB10C 2025-09-17 11:33:40.240000+00:00</name>
+  </author>
+  <author>
+    <name>1440000bytes 2025-09-17 09:19:48.053000+00:00</name>
+  </author>
+  <author>
+    <name>0xB10C 2025-09-17 08:51:38.470000+00:00</name>
+  </author>
+  <author>
+    <name>CryptiQ  . 2025-08-17 17:07:38.096000+00:00</name>
   </author>
   <author>
     <name>xBC  . 2025-08-05 15:27:54.849000+00:00</name>
@@ -108,6 +123,11 @@
   <author>
     <name>xBC  . 2024-08-02 12:08:52.409000+00:00</name>
   </author>
+  <link href="delvingbitcoin/Sept_2025/5899_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5894_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5892_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5890_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5889_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2025/5730_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Aug_2025/5649_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2025/5488_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -147,21 +167,23 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2025-08-27T02:28:48.979625+00:00</updated>
+    <updated>2025-09-18T02:23:50.977551+00:00</updated>
     <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052" rel="alternate"/>
-    <summary>David Gumberg's work has been acknowledged for its contribution to understanding transaction reconstructions and the potential benefits of prefilling strategies in Bitcoin Core nodes. An experiment involving two mainnet nodes highlighted the advantages of prefilling transactions, showing a significant increase in reconstruction rates when one node prefilled transactions to another. This suggests that prefilling can reduce block propagation times by preventing failed block reconstructions. However, concerns were raised regarding prefills that exceed TCP window sizes, potentially negating some benefits. Despite this, the majority of prefills fit within the available space, indicating careful management could optimize prefill effectiveness.
+    <summary>The discussion centers on the analysis and improvement of Bitcoin's compact block reconstruction performance, with a focus on various strategies and configurations tested across different nodes within the network. A notable concern addressed is the occasional inefficiency in block reconstructions, particularly during periods of increased mempool activity, which prompts a deeper investigation into the underlying causes and potential optimizations.
 
-The discussion extends into the realms of IP and TCP transmissions, clarifying their distinct roles in network communication protocols. While IP fragmentation and reassembly address packet size and efficiency across networks, TCP reassembly focuses on data integrity and organization within a TCP session. Understanding these mechanisms is crucial for optimizing network communications, including blockchain transactions. The interplay between the receiver-advertised window and the congestion window in TCP performance highlights the balance between throughput efficiency and the challenges of managing large messages that may lead to congestion or require IP fragmentation.
+A specific patch aimed at enhancing transaction handling was scrutinized for its impact on node behavior, highlighting a need to understand why certain transactions may not be acknowledged by nodes immediately or after some time. The exploration considers factors such as transaction fee rates, age, and standardness, alongside a methodical approach to track down the root cause of discrepancies. The examination reveals that many unacknowledged transactions were orphaned, leading to proposals for running nodes with an increased `-blockreconstructionextratxn` setting and searching for transactions within the orphan pool to improve acknowledgment rates.
 
-Further insights into the optimization of Bitcoin network protocol focus on the mechanics of transaction announcement and prefilling in compact block messages. Limiting the prefill amount to about 10kB is suggested to avoid bandwidth waste, highlighting a trade-off between prefilling transactions for faster processing and maintaining network efficiency. The concept of an "extra pool" within nodes introduces a nuanced approach to handling transactions not immediately relayed across the network, emphasizing the need for strategic prefilling and efficient network resource use.
+Further discussions delve into the nuances of blockchain transaction processing, proposing innovative approaches such as not deleting transactions from the received transaction pool but instead backing them up in a database for better management and accessibility. This concept is inspired by libbitcoin's methodology, which does not delete any received transactions, allowing for an efficient construction of new blocks without the need to remove spent transactions.
 
-In addressing issues related to network communications, the design choice of using FIBRE for UDP to minimize latency exemplifies the complexities of protocol selection in decentralized networks. The shift towards optimizing prefilled transactions in blockchain networks underscores the importance of accurate message sizing and dynamic adjustment based on connection speeds, suggesting reliance on the operating system's congestion control algorithms.
+An update merged into the Bitcoin repository introduces an optimized mechanism for managing orphan transactions, aiming to streamline their verification and integration into the blockchain. This development reflects ongoing efforts within the cryptocurrency sphere to address scalability and efficiency challenges by refining transaction processing mechanisms.
 
-The integration of FIBRE code into the Bitcoin peer-to-peer network, subject to licensing considerations, illuminates the challenges of incorporating AGPL licensed code into Bitcoin's framework. Discussions around updating and maintaining the FIBRE patch set focus on enhancing network efficiency and reliability, acknowledging the necessity of robust data management and security measures to prevent vulnerabilities that could be exploited in denial-of-service attacks.
+In exploring the efficacy of compact block transmissions, distinctions between low-bandwidth and high-bandwidth modes are highlighted, showing that high-bandwidth mode, which accounts for the majority of compact block deliveries, generally requires fewer transaction requests than low-bandwidth mode. This suggests an area for optimization in low-bandwidth mode to pre-fill transactions previously unknown to the sender, potentially reducing the necessity for additional transaction requests.
 
-Exploring transaction handling improvements, a new mechanism introduced in a significant update aims at optimizing orphan transaction management by requesting parental data directly from peers. This strategy intends to streamline transaction verification and integration into the blockchain, reflecting broader efforts to address scalability and efficiency challenges within the cryptocurrency sphere.
+The analysis of compact block reconstruction statistics sheds light on the efficiency of this process across the network. Various node configurations are examined, revealing how adjustments, such as increasing maximum connections or adopting specific settings like `blocksonly=1` and `mempoolfullrbf=1`, can influence block reconstruction performance. Periods of heightened mempool activity are identified as having a significant impact on the rate of compact block reconstructions that do not necessitate additional transaction requests. Moreover, the implementation of `mempoolfullrbf=1` on specific nodes suggests that deviations from the default Bitcoin Core policy could enhance block reconstruction efficiency network-wide.
 
-The analysis of blocks containing low numbers of transactions for non-standard transactions could reveal insights into prioritized processing outside standard mechanisms. This exploration might uncover operational challenges and inform strategies to enhance fairness, efficiency, and transparency in blockchain transaction processing. Furthermore, the examination of compact block reconstructions sheds light on the efficiency differentials between low-bandwidth and high-bandwidth modes, suggesting areas for optimization to improve block propagation times and network resilience.</summary>
-    <published>2025-08-17T17:07:38.096000+00:00</published>
+Investigations into median block reconstruction durations reveal disparities based on whether additional transactions needed to be requested, with well-connected nodes in data centers showcasing varying times. This leads to considerations regarding the comparative need for extra transactions in different reconstruction scenarios, the impact of extra pool sizes on efficiency, and the performance implications of enabling `mempoolfullrbf` by default.
+
+Overall, the discussions and analyses presented underscore the complexity of optimizing block reconstruction processes within the Bitcoin network. They highlight the importance of empirical testing, configuration adjustments, and the adoption of innovative strategies to enhance the efficiency and reliability of blockchain technology.</summary>
+    <published>2025-09-17T14:17:10.836000+00:00</published>
   </entry>
 </feed>
