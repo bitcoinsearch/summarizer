@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>A Decker-Wattenhofer MultiChannel For Reduced Inter-LSP Trust</title>
+  <updated>2025-09-19T02:28:45.486614+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2025-09-18 14:45:54.213000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>A Decker-Wattenhofer MultiChannel For Reduced Inter-LSP Trust</title>
+    <updated>2025-09-19T02:28:45.486646+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-decker-wattenhofer-multichannel-for-reduced-inter-lsp-trust/1994/3" rel="alternate"/>
+    <summary>In an effort to address the complexities and inefficiencies associated with managing onchain fees within the Lightning Network, a novel approach has been outlined that leverages the concept of exogenous fee UTXOs and modifies the existing protocol for channel management and unilateral exits. Traditionally, participants in the Lightning Network had to maintain consensus on onchain feerates to avoid costly channel closures. However, the introduction of Pay-to-EndPoint (P2A) transactions has somewhat alleviated this issue by allowing offchain constructions to have separate UTXOs dedicated to paying onchain fees for future unilateral exits, termed exogenous fee UTXOs. Despite this advancement, the requirement for each participant to maintain such a UTXO introduces additional onchain resource consumption and restricts liquidity since these funds cannot be utilized within the Lightning Network itself.
+
+To mitigate these drawbacks, a proposal has been made where Lightning Service Providers (LSPs) would assume the responsibility of covering the onchain fees for unilateral exits. This centralization of fee payment is expected to reduce overall onchain resource usage and free up participant liquidity by aggregating the maintenance of exogenous fee UTXOs to a few entities that can achieve economies of scale. This change necessitates a modification in the handling of revocation and state updates within channels.
+
+The proposed solution involves incorporating a dual-branch condition in the input script of decrementing-`nSequence` transactions related to channel management. One branch would require unanimous consent from all participants, while the other would allow a specific entity, referred to as Ursula, to claim funds if the transaction is not confirmed within a certain timeframe post its validity period. This mechanism ensures that LSPs expedite the confirmation of the latest channel state to prevent funds from being claimed by an unintended party, potentially a malicious actor.
+
+For updating the decrementing-`nSequence` to reflect a newer state, a process borrowing from the "sign, then revoke" practice is suggested. First, all parties sign the next state with an `nSequence` value one hour less than the current state. After this, LSPs sign a zero-fee transaction that spends the current state's output directly to Ursula, effectively revoking the previous state and validating the new state for continuation post-cleanup operation. This procedure simplifies the handling of intermediate states and specifically addresses the management of Spilman Complex channels through revocation and conditional execution paths designed to ensure the latest state is always favored for confirmation.
+
+Furthermore, to account for scenarios where the LSP-sourced channels necessitate endogenous fees due to their reserve fund requirements, a protocol-fixed feerate can be applied, allowing LSPs discretion in confirming transactions while ensuring propagation through the network. The outlined approach also contemplates the dynamic nature of outputs in later states, enabling Ursula to directly pay fees from significant outputs or marking insignificant ones with `OP_RETURN` to manage onchain costs effectively.
+
+This comprehensive reimagining of fee management and channel state updates within the Lightning Network aims to optimize onchain resource utilization, enhance liquidity flexibility for participants, and streamline the processes involved in maintaining and updating channel states, all while safeguarding against potential abuses by consolidating the role of fee payment to LSPs.</summary>
+    <published>2025-09-18T14:45:54.213000+00:00</published>
+  </entry>
+</feed>

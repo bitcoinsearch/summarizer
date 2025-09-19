@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Measuring minrelaytxfee across the Bitcoin network</title>
+  <updated>2025-09-19T02:28:03.129769+00:00</updated>
+  <author>
+    <name>0xB10C 2025-09-18 08:55:46.165000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Measuring minrelaytxfee across the Bitcoin network</title>
+    <updated>2025-09-19T02:28:03.129795+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/measuring-minrelaytxfee-across-the-bitcoin-network/1989/3" rel="alternate"/>
+    <summary>The peculiar case of the `9170997` entries observed in Bitcoin nodes has sparked a detailed examination into the mechanics behind Bitcoin Core's handling of `minfeefilter` values. An investigation into these anomalies revealed that Bitcoin Core intentionally adjusts feerate filters to prevent potential node fingerprinting across networks. This adjustment is facilitated through the `FeeFilterRounder` mechanism within the Bitcoin Core source code, which specifically targets the optimization of feerate filters by placing them into predefined bins. The `FeeFilterRounder` holds a maximum filter feerate (`MAX_FILTER_FEERATE`) of `1e7` (10,000,000), a value that intriguingly rounds to `9170997`. This rounding process is not arbitrary but is a calculated measure as reflected in both the code and associated tests found on GitHub, demonstrating how `MAX_MONEY` translates to the same `9170997` figure under certain testing conditions.
+
+Further insights into this matter are provided by examining the behavior of nodes during the Initial Block Download (IBD) phase. It is noted that nodes set a feefilter of `MAX_MONEY` when in IBD, leading to the appearance of the `9170997` feefilter value. This observation suggests that the nodes displaying this specific feefilter value were likely in the midst of IBD at the time of connection. This hypothesis is supported by log examinations showing a recurring pattern where connected peers initially communicate a feefilter of `9170997`, which is then reduced to `1000` after a brief period. Such behavior underscores the dynamic nature of feefilters within Bitcoin's network protocol and illustrates the intricate balance between privacy, security, and efficiency achieved through these mechanisms. The aforementioned links to the Bitcoin GitHub repository, such as the [`FeeFilterRounder`](https://github.com/bitcoin/bitcoin/blob/1444ed855f438f1270104fca259ce61b99ed5cdb/src/policy/fees.hL322-L343) and tests related to policy fees and net processing code ([policy fee tests](https://github.com/bitcoin/bitcoin/blob/1444ed855f438f1270104fca259ce61b99ed5cdb/src/test/policy_fee_tests.cppL31-L32), [net processing](https://github.com/bitcoin/bitcoin/blob/1444ed855f438f1270104fca259ce61b99ed5cdb/src/net_processing.cppL5382-L5386)), provide concrete examples and further elucidate the technical rationale behind these observations.</summary>
+    <published>2025-09-18T08:55:46.165000+00:00</published>
+  </entry>
+</feed>
