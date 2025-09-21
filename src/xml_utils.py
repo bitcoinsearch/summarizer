@@ -245,7 +245,7 @@ class GenerateXML:
     
     def _build_threaded_structure(self, parent_element, thread_data):
         """Build nested thread structure with parent-child relationships"""
-        from xml.etree.ElementTree import SubElement
+        from xml.etree.ElementTree import Element, SubElement
         
         # Sort by thread position to maintain chronological order
         sorted_threads = sorted(thread_data, key=lambda x: x.get('thread_position', 0))
