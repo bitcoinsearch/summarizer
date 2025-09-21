@@ -187,26 +187,25 @@ class GenerateXML:
         logger.info(f"📊 XML THREADING: Thread data provided: {'Yes' if thread_data else 'No'}")
         
         # Create the base XML structure manually for better control
-        from xml.etree.ElementTree import Element, SubElement, tostring
         from xml.dom import minidom
         
         # Create root feed element
-        feed = Element('feed', xmlns='http://www.w3.org/2005/Atom')
+        feed = ET.Element('feed', xmlns='http://www.w3.org/2005/Atom')
         
         # Add basic feed metadata
-        SubElement(feed, 'id').text = str(feed_data['id'])
-        SubElement(feed, 'title').text = feed_data['title']
-        SubElement(feed, 'updated').text = datetime.now(timezone.utc).isoformat()
+        ET.SubElement(feed, 'id').text = str(feed_data['id'])
+        ET.SubElement(feed, 'title').text = feed_data['title']
+        ET.SubElement(feed, 'updated').text = datetime.now(timezone.utc).isoformat()
         
         # Add generator info
-        generator = SubElement(feed, 'generator', uri='https://lkiesow.github.io/python-feedgen', version='0.9.0')
+        generator = ET.SubElement(feed, 'generator', uri='https://lkiesow.github.io/python-feedgen', version='0.9.0')
         generator.text = 'python-feedgen'
         
         if thread_data:
             logger.info(f"📋 XML THREADING: Processing {len(thread_data)} threaded items")
             
             # Create thread structure
-            thread_element = SubElement(feed, 'thread')
+            thread_element = ET.SubElement(feed, 'thread')
             
             # Build thread hierarchy
             self._build_threaded_structure(thread_element, thread_data)
@@ -216,24 +215,24 @@ class GenerateXML:
             logger.warning("⚠️ XML THREADING: No thread data, using flat author structure")
             # Fallback to flat author list
             for author in feed_data['authors']:
-                author_elem = SubElement(feed, 'author')
-                SubElement(author_elem, 'name').text = author
+                author_elem = ET.SubElement(feed, 'author')
+                ET.SubElement(author_elem, 'name').text = author
         
         # Add links
         for link in feed_data['links']:
-            SubElement(feed, 'link', href=link, rel='alternate')
+            ET.SubElement(feed, 'link', href=link, rel='alternate')
             
         # Add main entry with summary
-        entry = SubElement(feed, 'entry')
-        SubElement(entry, 'id').text = str(feed_data['id'])
-        SubElement(entry, 'title').text = feed_data['title']
-        SubElement(entry, 'updated').text = datetime.now(timezone.utc).isoformat()
-        SubElement(entry, 'link', href=feed_data['url'], rel='alternate')
-        SubElement(entry, 'published').text = feed_data['created_at']
-        SubElement(entry, 'summary').text = feed_data['summary']
+        entry = ET.SubElement(feed, 'entry')
+        ET.SubElement(entry, 'id').text = str(feed_data['id'])
+        ET.SubElement(entry, 'title').text = feed_data['title']
+        ET.SubElement(entry, 'updated').text = datetime.now(timezone.utc).isoformat()
+        ET.SubElement(entry, 'link', href=feed_data['url'], rel='alternate')
+        ET.SubElement(entry, 'published').text = feed_data['created_at']
+        ET.SubElement(entry, 'summary').text = feed_data['summary']
 
         # Pretty print and save XML
-        rough_string = tostring(feed, 'unicode')
+        rough_string = ET.tostring(feed, 'unicode')
         reparsed = minidom.parseString(rough_string)
         pretty_xml = reparsed.toprettyxml(indent="  ")
         
@@ -245,7 +244,6 @@ class GenerateXML:
     
     def _build_threaded_structure(self, parent_element, thread_data):
         """Build nested thread structure with parent-child relationships"""
-        from xml.etree.ElementTree import Element, SubElement
         
         # Sort by thread position to maintain chronological order
         sorted_threads = sorted(thread_data, key=lambda x: x.get('thread_position', 0))
@@ -264,7 +262,7 @@ class GenerateXML:
             parent_id = thread_item.get('parent_id', '')
             
             # Create message element
-            message = Element('message')
+            message = ET.Element('message')
             message.set('id', msg_id)
             message.set('depth', str(thread_depth))
             message.set('position', str(thread_item.get('thread_position', i)))
@@ -275,8 +273,8 @@ class GenerateXML:
                 message.set('parent_id', str(parent_id))
             
             # Add message content
-            SubElement(message, 'author').text = author_name
-            SubElement(message, 'timestamp').text = timestamp
+            ET.SubElement(message, 'author').text = author_name
+            ET.SubElement(message, 'timestamp').text = timestamp
             
             # Store in map and track roots
             thread_item['message_element'] = message
@@ -300,7 +298,7 @@ class GenerateXML:
                       and item.get('thread_depth', 0) == message_item.get('thread_depth', 0) + 1]
             
             if replies:
-                replies_elem = SubElement(message_elem, 'replies')
+                replies_elem = ET.SubElement(message_elem, 'replies')
                 logger.info(f"        📧 Adding {len(replies)} replies to '{message_item['author']}'")
                 
                 for reply_item in replies:
