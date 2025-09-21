@@ -82,8 +82,49 @@ class XMLReader:
         published = root.findall(".//atom:entry/atom:published", namespaces)[0].text
         # published = add_utc_if_not_present(published)
         indexed_at = ((datetime.now(timezone.utc)).replace(microsecond=0)).isoformat()
+        # Handle both old format (flat authors) and new format (threaded structure)
         authors = root.findall('atom:author/atom:name', namespaces)
-        author_list = [author.text for author in authors]
+        author_list = []
+        
+        if authors:
+            # Old format: flat author list
+            author_list = [author.text for author in authors]
+            logger.info(f"📄 XML READER: Found {len(author_list)} authors in flat format")
+        else:
+            # New format: check for threaded structure
+            thread_elem = root.find('atom:thread', namespaces)
+            if thread_elem is not None:
+                # Extract authors from threaded structure
+                messages = thread_elem.findall('.//message')
+                author_list = []
+                
+                def extract_authors_from_messages(parent_elem, depth=0):
+                    for message in parent_elem.findall('./message'):
+                        author_elem = message.find('author')
+                        if author_elem is not None and author_elem.text:
+                            # Format with threading info for display
+                            reply_to = message.get('reply_to', '')
+                            timestamp_elem = message.find('timestamp')
+                            timestamp = timestamp_elem.text if timestamp_elem is not None else ''
+                            
+                            if depth > 0 and reply_to:
+                                indent = "  " * depth
+                                author_display = f"{indent}↳ {author_elem.text} {timestamp} (replying to {reply_to})"
+                            else:
+                                author_display = f"{author_elem.text} {timestamp}"
+                            
+                            author_list.append(author_display)
+                        
+                        # Recursively process replies
+                        replies_elem = message.find('replies')
+                        if replies_elem is not None:
+                            extract_authors_from_messages(replies_elem, depth + 1)
+                
+                extract_authors_from_messages(thread_elem)
+                logger.info(f"📄 XML READER: Found {len(author_list)} authors in threaded format")
+            else:
+                logger.warning("📄 XML READER: No authors found in either format")
+                author_list = []
 
         link = root.findall(".//atom:entry/atom:link", namespaces)[0].get('href')
         if "bitcoin-dev" in link:
@@ -139,6 +180,138 @@ class GenerateXML:
         with open(xml_file, 'wb') as f:
             f.write(feed_xml)
 
+    def generate_threaded_xml(self, feed_data, xml_file, thread_data=None):
+        """Generate XML with threading information preserved using nested structure"""
+        
+        logger.info(f"🧵 XML THREADING: Starting threaded XML generation for {xml_file}")
+        logger.info(f"📊 XML THREADING: Thread data provided: {'Yes' if thread_data else 'No'}")
+        
+        # Create the base XML structure manually for better control
+        from xml.etree.ElementTree import Element, SubElement, tostring
+        from xml.dom import minidom
+        
+        # Create root feed element
+        feed = Element('feed', xmlns='http://www.w3.org/2005/Atom')
+        
+        # Add basic feed metadata
+        SubElement(feed, 'id').text = str(feed_data['id'])
+        SubElement(feed, 'title').text = feed_data['title']
+        SubElement(feed, 'updated').text = datetime.now(timezone.utc).isoformat()
+        
+        # Add generator info
+        generator = SubElement(feed, 'generator', uri='https://lkiesow.github.io/python-feedgen', version='0.9.0')
+        generator.text = 'python-feedgen'
+        
+        if thread_data:
+            logger.info(f"📋 XML THREADING: Processing {len(thread_data)} threaded items")
+            
+            # Create thread structure
+            thread_element = SubElement(feed, 'thread')
+            
+            # Build thread hierarchy
+            self._build_threaded_structure(thread_element, thread_data)
+            
+            logger.success(f"✅ XML THREADING: Built nested thread structure with {len(thread_data)} messages")
+        else:
+            logger.warning("⚠️ XML THREADING: No thread data, using flat author structure")
+            # Fallback to flat author list
+            for author in feed_data['authors']:
+                author_elem = SubElement(feed, 'author')
+                SubElement(author_elem, 'name').text = author
+        
+        # Add links
+        for link in feed_data['links']:
+            SubElement(feed, 'link', href=link, rel='alternate')
+            
+        # Add main entry with summary
+        entry = SubElement(feed, 'entry')
+        SubElement(entry, 'id').text = str(feed_data['id'])
+        SubElement(entry, 'title').text = feed_data['title']
+        SubElement(entry, 'updated').text = datetime.now(timezone.utc).isoformat()
+        SubElement(entry, 'link', href=feed_data['url'], rel='alternate')
+        SubElement(entry, 'published').text = feed_data['created_at']
+        SubElement(entry, 'summary').text = feed_data['summary']
+
+        # Pretty print and save XML
+        rough_string = tostring(feed, 'unicode')
+        reparsed = minidom.parseString(rough_string)
+        pretty_xml = reparsed.toprettyxml(indent="  ")
+        
+        # Remove extra blank lines
+        pretty_xml = '\n'.join([line for line in pretty_xml.split('\n') if line.strip()])
+        
+        with open(xml_file, 'w', encoding='utf-8') as f:
+            f.write(pretty_xml)
+    
+    def _build_threaded_structure(self, parent_element, thread_data):
+        """Build nested thread structure with parent-child relationships"""
+        from xml.etree.ElementTree import SubElement
+        
+        # Sort by thread position to maintain chronological order
+        sorted_threads = sorted(thread_data, key=lambda x: x.get('thread_position', 0))
+        
+        # Create a mapping of messages by their IDs for quick lookup
+        message_map = {}
+        root_messages = []
+        
+        # First pass: create all message elements and identify roots
+        for i, thread_item in enumerate(sorted_threads):
+            msg_id = f"msg_{i+1}"
+            author_name = thread_item['author']
+            timestamp = thread_item.get('created_at', '')
+            thread_depth = thread_item.get('thread_depth', 0)
+            reply_to = thread_item.get('reply_to_author', '')
+            parent_id = thread_item.get('parent_id', '')
+            
+            # Create message element
+            message = Element('message')
+            message.set('id', msg_id)
+            message.set('depth', str(thread_depth))
+            message.set('position', str(thread_item.get('thread_position', i)))
+            
+            if reply_to:
+                message.set('reply_to', reply_to)
+            if parent_id:
+                message.set('parent_id', str(parent_id))
+            
+            # Add message content
+            SubElement(message, 'author').text = author_name
+            SubElement(message, 'timestamp').text = timestamp
+            
+            # Store in map and track roots
+            thread_item['message_element'] = message
+            thread_item['msg_id'] = msg_id
+            message_map[msg_id] = thread_item
+            
+            if thread_depth == 0:
+                root_messages.append(thread_item)
+                logger.info(f"    📧 XML THREADING: ROOT #{i+1}: '{author_name}'")
+            else:
+                logger.info(f"    📧 XML THREADING: REPLY #{i+1}: '{author_name}' -> '{reply_to}' (depth: {thread_depth})")
+        
+        # Second pass: build hierarchy by nesting replies under parents
+        def add_message_with_replies(message_item, parent_elem):
+            message_elem = message_item['message_element']
+            parent_elem.append(message_elem)
+            
+            # Find direct replies to this message
+            replies = [item for item in sorted_threads 
+                      if item.get('reply_to_author') == message_item['author'] 
+                      and item.get('thread_depth', 0) == message_item.get('thread_depth', 0) + 1]
+            
+            if replies:
+                replies_elem = SubElement(message_elem, 'replies')
+                logger.info(f"        📧 Adding {len(replies)} replies to '{message_item['author']}'")
+                
+                for reply_item in replies:
+                    add_message_with_replies(reply_item, replies_elem)
+        
+        # Add all root messages and their reply trees
+        for root_item in root_messages:
+            add_message_with_replies(root_item, parent_element)
+        
+        logger.success(f"✅ XML THREADING: Built hierarchy with {len(root_messages)} root messages")
+
     def append_columns(self, df_dict, file, title, namespace):
         """
         Extract specific information from the given XML file corresponding to
@@ -178,6 +351,17 @@ class GenerateXML:
         author_result = author_result.replace(":", "")
         author_result = author_result.replace("-", "")
         df_dict["authors"].append([author_result.strip()])
+        
+        # Extract the body/summary from the XML
+        summary = root.find('atom:entry/atom:summary', namespace).text
+        df_dict["body"].append(summary)
+        
+        # Add default values for threading fields (since XML files don't contain this data)
+        # These will be None/0 for existing XML files, as threading data only comes from ElasticSearch
+        df_dict["thread_depth"].append(0)  # Default to root level
+        df_dict["thread_position"].append(0)  # Default position
+        df_dict["parent_id"].append(None)  # No parent info in XML
+        df_dict["reply_to_author"].append(None)  # No reply info in XML
 
     def file_not_present_df(self, columns, source_cols, df_dict, files_list, dict_data, data,
                             title, combined_filename, namespace):
@@ -195,7 +379,16 @@ class GenerateXML:
                 datetime_obj = add_utc_if_not_present(dict_data[data]['_source'][col], iso_format=False)
                 df_dict[col].append(datetime_obj)
             else:
-                df_dict[col].append(dict_data[data]['_source'][col])
+                # Handle threading fields that might not exist in older documents
+                if col in ['thread_depth', 'thread_position', 'parent_id', 'reply_to_author']:
+                    value = dict_data[data]['_source'].get(col, None)
+                    if col == 'thread_depth' and value is None:
+                        value = 0  # Default depth for root messages
+                    elif col == 'thread_position' and value is None:
+                        value = 0  # Default position
+                    df_dict[col].append(value)
+                else:
+                    df_dict[col].append(dict_data[data]['_source'][col])
 
         # For each individual summary (XML file) that exists for the
         # given thread, extract and append their content to the dictionary
@@ -213,18 +406,6 @@ class GenerateXML:
 
                 if title == file_title:
                     self.append_columns(df_dict, file, title, namespace)
-
-                    if combined_filename in file:
-                        # TODO: the code will never reach this point
-                        # as we are already filtering per thread title so no
-                        # "Combined summary - X" filename will pass though
-                        tree = ET.parse(file)
-                        root = tree.getroot()
-                        summary = root.find('atom:entry/atom:summary', namespace).text
-                        df_dict["body"].append(summary)
-                    else:
-                        summary = root.find('atom:entry/atom:summary', namespace).text
-                        df_dict["body"].append(summary)
             else:
                 logger.info(f"file not present: {file}")
 
@@ -271,10 +452,6 @@ class GenerateXML:
             logger.info("individual summaries are present but not combined ones ...")
             for file in individual_summaries_xmls_list:
                 self.append_columns(df_dict, file, title, namespace)
-                tree = ET.parse(file)
-                root = tree.getroot()
-                summary = root.find('atom:entry/atom:summary', namespace).text
-                df_dict["body"].append(summary)
 
     def preprocess_authors_name(self, author_tuple):
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
@@ -299,7 +476,7 @@ class GenerateXML:
         # Initialize a dictionary to store data for DataFrame construction, with predefined columns
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
-                       'url', 'authors']
+                       'url', 'authors', 'thread_depth', 'thread_position', 'parent_id', 'reply_to_author']
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
@@ -443,6 +620,30 @@ class GenerateXML:
                         # - the individual summaries of previous posts
                         # - the actual content of newer posts
                         combined_summary = create_summary(combined_body)
+                        
+                        # Prepare threading data if available
+                        thread_data = []
+                        logger.info(f"🧵 SUMMARIZER THREADING: Checking for threading data in {len(title_df)} documents")
+                        logger.info(f"📋 SUMMARIZER THREADING: Available columns: {list(title_df.columns)}")
+                        
+                        if 'thread_depth' in title_df.columns:
+                            logger.success(f"✅ SUMMARIZER THREADING: Threading columns found! Processing...")
+                            for idx, row in title_df.iterrows():
+                                thread_item = {
+                                    'author': row['authors'][0] if row['authors'] else 'Unknown',
+                                    'created_at': str(row['created_at']),
+                                    'thread_depth': row.get('thread_depth', 0),
+                                    'thread_position': row.get('thread_position', 0),
+                                    'reply_to_author': row.get('reply_to_author', ''),
+                                    'parent_id': row.get('parent_id', '')
+                                }
+                                thread_data.append(thread_item)
+                                logger.info(f"    📧 SUMMARIZER THREADING: #{idx}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}'")
+                            
+                            logger.success(f"✅ SUMMARIZER THREADING: Collected {len(thread_data)} items with threading data")
+                        else:
+                            logger.warning("⚠️ SUMMARIZER THREADING: No 'thread_depth' column found - documents may not have threading data")
+                        
                         feed_data = {
                             'id': "2",
                             'title': 'Combined summary - ' + title,
@@ -455,10 +656,17 @@ class GenerateXML:
                         # We use a flag to check if the XML file for the
                         # combined summary is generated for the first time
                         if not flag:
-                            # Generate XML only once for the first month-year and keep its path
-                            self.generate_xml(feed_data, file_path)
+                            # Generate XML with threading information if available
+                            if thread_data:
+                                logger.success(f"🎯 SUMMARIZER THREADING: Using THREADED XML generation for {file_path}")
+                                logger.info(f"📊 SUMMARIZER THREADING: Will process {len(thread_data)} threaded items")
+                                self.generate_threaded_xml(feed_data, file_path, thread_data)
+                            else:
+                                logger.warning(f"⚠️ SUMMARIZER THREADING: Using FLAT XML generation (no threading data) for {file_path}")
+                                self.generate_xml(feed_data, file_path)
                             std_file_path = file_path
                             flag = True
+                            logger.success(f"✅ SUMMARIZER THREADING: XML file generated successfully: {file_path}")
                         else:
                             # For subsequent month-year groups, copy the initially
                             # created XML file instead of creating a new one
