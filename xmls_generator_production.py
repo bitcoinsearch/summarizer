@@ -20,7 +20,7 @@ if __name__ == "__main__":
     ]
 
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=150)  # Extended for testing to include March 2025
+    start_date = end_date - timedelta(days=30)  # Extended for testing to include March 2025
 
     # yyyy-mm-dd
     end_date_str = end_date.strftime("%Y-%m-%d")
