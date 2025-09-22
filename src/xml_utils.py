@@ -245,20 +245,14 @@ class GenerateXML:
     def _build_threaded_structure(self, parent_element, thread_data):
         """Build nested thread structure with parent-child relationships"""
         
-        logger.info(f"🔍 XML THREADING: Analyzing thread data for {len(thread_data)} messages")
-        
         # Sort by thread position to maintain chronological order
         sorted_threads = sorted(thread_data, key=lambda x: x.get('thread_position', 0))
         
-        # Debug: Log what we received
-        for i, item in enumerate(sorted_threads):
-            logger.info(f"    📧 #{i}: '{item.get('author')}' depth={item.get('thread_depth', 0)} pos={item.get('thread_position', 0)} reply_to='{item.get('reply_to_author', '')}'")
+        # Create a mapping of messages by their IDs for quick lookup
+        message_map = {}
+        root_messages = []
         
-        # Create message elements and build hierarchy
-        message_elements = []
-        author_to_message = {}  # Map author to their message element for easy lookup
-        
-        # First pass: create all message elements
+        # First pass: create all message elements and identify roots
         for i, thread_item in enumerate(sorted_threads):
             msg_id = f"msg_{i+1}"
             author_name = thread_item['author']
@@ -282,77 +276,44 @@ class GenerateXML:
             ET.SubElement(message, 'author').text = author_name
             ET.SubElement(message, 'timestamp').text = timestamp
             
-            # Store the message element and metadata
-            message_data = {
-                'element': message,
-                'author': author_name,
-                'depth': thread_depth,
-                'reply_to': reply_to,
-                'position': thread_item.get('thread_position', i),
-                'added_to_tree': False
-            }
+            # Add anchor_id if available (for linking to individual XML files)
+            anchor_id = thread_item.get('anchor_id', '')
+            if anchor_id:
+                message.set('anchor_id', anchor_id)
             
-            message_elements.append(message_data)
-            author_to_message[author_name] = message_data
+            # Store in map and track roots
+            thread_item['message_element'] = message
+            thread_item['msg_id'] = msg_id
+            message_map[msg_id] = thread_item
             
-            logger.info(f"    📝 Created message: '{author_name}' depth={thread_depth} reply_to='{reply_to}'")
+            if thread_depth == 0:
+                root_messages.append(thread_item)
+                logger.info(f"    📧 XML THREADING: ROOT #{i+1}: '{author_name}'")
+            else:
+                logger.info(f"    📧 XML THREADING: REPLY #{i+1}: '{author_name}' -> '{reply_to}' (depth: {thread_depth})")
         
-        # Second pass: Build the hierarchy by finding parent-child relationships
-        def add_message_to_parent(message_data, parent_elem):
-            """Add a message and all its replies to a parent element"""
-            if message_data['added_to_tree']:
-                return  # Already added
-                
-            message_elem = message_data['element']
+        # Second pass: build hierarchy by nesting replies under parents
+        def add_message_with_replies(message_item, parent_elem):
+            message_elem = message_item['message_element']
             parent_elem.append(message_elem)
-            message_data['added_to_tree'] = True
             
-            # Find all direct replies to this message
-            replies = []
-            for other_msg in message_elements:
-                if (other_msg['reply_to'] == message_data['author'] and 
-                    not other_msg['added_to_tree'] and
-                    other_msg['depth'] > message_data['depth']):
-                    replies.append(other_msg)
-            
-            # Sort replies by position
-            replies.sort(key=lambda x: x['position'])
+            # Find direct replies to this message
+            replies = [item for item in sorted_threads 
+                      if item.get('reply_to_author') == message_item['author'] 
+                      and item.get('thread_depth', 0) == message_item.get('thread_depth', 0) + 1]
             
             if replies:
                 replies_elem = ET.SubElement(message_elem, 'replies')
-                logger.info(f"        📧 Adding {len(replies)} replies to '{message_data['author']}'")
+                logger.info(f"        📧 Adding {len(replies)} replies to '{message_item['author']}'")
                 
-                for reply_data in replies:
-                    logger.info(f"            ↳ '{reply_data['author']}' (depth {reply_data['depth']})")
-                    add_message_to_parent(reply_data, replies_elem)
-        
-        # Find root messages (no reply_to or reply_to not found in our messages)
-        root_messages = []
-        for msg_data in message_elements:
-            if not msg_data['reply_to'] or msg_data['reply_to'] not in author_to_message:
-                root_messages.append(msg_data)
-                logger.info(f"    🌟 ROOT message: '{msg_data['author']}'")
-        
-        # If no clear roots found, take the first message as root
-        if not root_messages and message_elements:
-            root_messages = [message_elements[0]]
-            logger.warning(f"    ⚠️ No clear roots found, using first message as root: '{message_elements[0]['author']}'")
+                for reply_item in replies:
+                    add_message_with_replies(reply_item, replies_elem)
         
         # Add all root messages and their reply trees
-        for root_data in root_messages:
-            logger.info(f"    🏗️ Building tree from root: '{root_data['author']}'")
-            add_message_to_parent(root_data, parent_element)
+        for root_item in root_messages:
+            add_message_with_replies(root_item, parent_element)
         
-        # Check for any orphaned messages that weren't added
-        orphaned = [msg for msg in message_elements if not msg['added_to_tree']]
-        if orphaned:
-            logger.warning(f"    ⚠️ Found {len(orphaned)} orphaned messages, adding as roots:")
-            for orphan in orphaned:
-                logger.warning(f"        - '{orphan['author']}' (reply_to: '{orphan['reply_to']}')")
-                parent_element.append(orphan['element'])
-                orphan['added_to_tree'] = True
-        
-        logger.success(f"✅ XML THREADING: Built hierarchy with {len(root_messages)} root messages and {len([m for m in message_elements if m['added_to_tree']])} total messages")
+        logger.success(f"✅ XML THREADING: Built hierarchy with {len(root_messages)} root messages")
 
     def append_columns(self, df_dict, file, title, namespace):
         """
