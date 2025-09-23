@@ -247,8 +247,9 @@ class GenerateXML:
         
         logger.info(f"🔍 XML THREADING: Analyzing thread data for {len(thread_data)} messages")
         
-        # Sort by thread position to maintain chronological order
-        sorted_threads = sorted(thread_data, key=lambda x: x.get('thread_position', 0))
+        # Use the already properly sorted thread data from sort_by_thread_display_order
+        # No need to re-sort here as the data is already in correct display order
+        sorted_threads = thread_data
         
         # Debug: Log what we received
         for i, item in enumerate(sorted_threads):
@@ -499,6 +500,97 @@ class GenerateXML:
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
         return author_tuple
 
+    def sort_by_thread_display_order(self, df):
+        """
+        Sort messages by proper mailing list display order (thread hierarchy)
+        instead of chronological order.
+        
+        This ensures that:
+        1. Root messages come first
+        2. Replies immediately follow their parent
+        3. Nested replies maintain proper indentation order
+        """
+        if len(df) <= 1:
+            return df
+            
+        # Check if we have threading data
+        if 'thread_depth' not in df.columns or 'thread_position' not in df.columns:
+            logger.warning("⚠️ No threading data available, falling back to chronological sort")
+            return df.sort_values('created_at', ascending=True)
+        
+        logger.info(f"🔄 THREADING SORT: Sorting {len(df)} messages by thread display order")
+        
+        # Create a copy to work with
+        df_copy = df.copy().reset_index(drop=True)
+        
+        # Build a hierarchical structure for proper sorting
+        result_order = []
+        processed = set()
+        
+        def add_message_and_replies(parent_author=None, depth=0, parent_id=None):
+            """Recursively add messages in proper thread order"""
+            # Find all messages that should come at this level
+            matching_indices = []
+            
+            if parent_author is None and depth == 0:
+                # Root messages (depth 0, no reply_to_author)
+                for idx, row in df_copy.iterrows():
+                    reply_to = row.get('reply_to_author', '')
+                    if (row['thread_depth'] == depth and 
+                        (not reply_to or reply_to == '' or str(reply_to) == 'nan')):
+                        matching_indices.append(idx)
+            else:
+                # Find messages that reply to the parent
+                for idx, row in df_copy.iterrows():
+                    reply_to = row.get('reply_to_author', '')
+                    row_parent_id = row.get('parent_id', '')
+                    
+                    # Check if this message replies to our parent
+                    author_name_match = (parent_author and reply_to and 
+                                       parent_author.lower() in reply_to.lower())
+                    parent_id_match = (parent_id and row_parent_id and 
+                                     str(parent_id).lower() in str(row_parent_id).lower())
+                    
+                    # Accept if either author name matches or parent_id matches
+                    if row['thread_depth'] == depth and (author_name_match or parent_id_match):
+                        matching_indices.append(idx)
+            
+            # Create candidates dataframe from matching indices
+            candidates = df_copy.loc[matching_indices] if matching_indices else df_copy.iloc[0:0]
+            
+            # Sort candidates by creation time to maintain chronological order within same level
+            candidates = candidates.sort_values('created_at', ascending=True)
+            
+            for idx, row in candidates.iterrows():
+                if idx not in processed:
+                    result_order.append(idx)
+                    processed.add(idx)
+                    author_name = row['authors'][0] if row['authors'] else 'Unknown'
+                    logger.info(f"    {'  ' * depth}📧 Adding: '{author_name}' (depth {depth})")
+                    
+                    # Recursively add replies to this message
+                    row_parent_id = row.get('parent_id', '')
+                    add_message_and_replies(author_name, depth + 1, row_parent_id)
+        
+        # Start with root messages (depth 0)
+        add_message_and_replies(None, 0)
+        
+        # Add any remaining messages that weren't processed (orphaned messages)
+        remaining_indices = set(df_copy.index) - processed
+        if remaining_indices:
+            logger.warning(f"⚠️ Found {len(remaining_indices)} orphaned messages, adding them at the end")
+            for idx in sorted(remaining_indices):
+                result_order.append(idx)
+                row = df_copy.loc[idx]
+                author_name = row['authors'][0] if row['authors'] else 'Unknown'
+                logger.warning(f"    🔸 Orphaned: '{author_name}' (depth {row.get('thread_depth', 'unknown')})")
+        
+        # Reorder the dataframe according to our calculated order
+        sorted_df = df_copy.loc[result_order].reset_index(drop=True)
+        
+        logger.success(f"✅ THREADING SORT: Successfully sorted {len(sorted_df)} messages")
+        return sorted_df
+
     def get_local_xml_file_paths(self, dev_url):
         """
         Retrieve paths for all relevant local XML files based on the given domain
@@ -626,7 +718,8 @@ class GenerateXML:
                     title_df['authors'] = title_df['authors'].apply(convert_to_tuple)
                     title_df = title_df.drop_duplicates()
                     title_df['authors'] = title_df['authors'].apply(self.preprocess_authors_name)
-                    title_df = title_df.sort_values(by='created_at', ascending=False)
+                    # Sort by proper thread display order instead of chronological order
+                    title_df = self.sort_by_thread_display_order(title_df)
                     logger.info(f"Number of docs for title: {title}: {len(title_df)}")
 
                     # Handle threads with single and multiple documents differently
@@ -669,20 +762,23 @@ class GenerateXML:
                         logger.info(f"📋 SUMMARIZER THREADING: Available columns: {list(title_df.columns)}")
                         
                         if 'thread_depth' in title_df.columns:
-                            logger.success(f"✅ SUMMARIZER THREADING: Threading columns found! Processing...")
-                            for idx, row in title_df.iterrows():
+                            logger.success("✅ SUMMARIZER THREADING: Threading columns found! Processing...")
+                            # Process rows in the order they appear in the sorted DataFrame
+                            # This preserves the proper thread display order from sort_by_thread_display_order
+                            for display_position, (idx, row) in enumerate(title_df.iterrows()):
                                 thread_item = {
                                     'author': row['authors'][0] if row['authors'] else 'Unknown',
                                     'created_at': str(row['created_at']),
                                     'thread_depth': row.get('thread_depth', 0),
-                                    'thread_position': row.get('thread_position', 0),
+                                    'thread_position': display_position,  # Use display position, not original position
+                                    'original_position': row.get('thread_position', 0),  # Keep original for reference
                                     'reply_to_author': row.get('reply_to_author', ''),
                                     'parent_id': row.get('parent_id', '')
                                 }
                                 thread_data.append(thread_item)
-                                logger.info(f"    📧 SUMMARIZER THREADING: #{idx}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}'")
+                                logger.info(f"    📧 SUMMARIZER THREADING: #{display_position}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}' (orig_pos: {thread_item['original_position']})")
                             
-                            logger.success(f"✅ SUMMARIZER THREADING: Collected {len(thread_data)} items with threading data")
+                            logger.success(f"✅ SUMMARIZER THREADING: Collected {len(thread_data)} items with threading data in proper display order")
                         else:
                             logger.warning("⚠️ SUMMARIZER THREADING: No 'thread_depth' column found - documents may not have threading data")
                         
