@@ -6,7 +6,7 @@ import time
 import traceback
 from loguru import logger
 
-from src.config import TOKENIZER, OPENAI_API_KEY, OPENAI_ORG_KEY, CHAT_COMPLETION_MODEL, COMPLETION_MODEL, TEST_MODE
+from src.config import TOKENIZER, OPENAI_API_KEY, OPENAI_ORG_KEY, CHAT_COMPLETION_MODEL, COMPLETION_MODEL
 
 openai.organization = OPENAI_ORG_KEY
 openai.api_key = OPENAI_API_KEY
@@ -275,13 +275,13 @@ def gpt_api(body, custom_prompt=None):
 
 
 def create_summary(body, custom_prompt=None):
-    if TEST_MODE:
-        # In test mode, return a placeholder summary for threading tests
-        logger.info("🧪 TEST MODE: Using placeholder summary instead of AI generation")
-        return f"[TEST MODE] This is a placeholder summary for testing threading functionality. Original body length: {len(body) if body else 0} characters. Threading fix test summary."
+    # TEMPORARILY DISABLED: AI calls commented out for threading testing
+    # summ = gpt_api(body, custom_prompt)
+    # return summ
     
-    summ = gpt_api(body, custom_prompt)
-    return summ
+    # Return placeholder summary for threading tests (no AI tokens used)
+    logger.info("🧪 AI DISABLED: Using placeholder summary for threading testing")
+    return f"[THREADING TEST] Placeholder summary for testing. Original body length: {len(body) if body else 0} characters. No AI tokens used."
 
 
 def generate_chatgpt_summary_for_prompt(summarization_prompt, max_tokens):
