@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>LN routing and caveats</title>
+  <updated>2025-09-23T13:52:36.015039+00:00</updated>
+  <author>
+    <name>aqua 2025-09-22 13:20:14.767000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>LN routing and caveats</title>
+    <updated>2025-09-23T13:52:36.015067+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/ln-routing-and-caveats/2003" rel="alternate"/>
+    <summary>In the process of sending 1 BTC from Alice to Bob via the Lightning Network (LN) without a direct channel, Alice first needs to establish a connection to the LN. This is typically done by opening a channel with a node like ACINQ, which serves as a Trampoline Node. Trampoline Nodes simplify routing by having a complete map of the LN, allowing them to efficiently find paths between nodes using Dijkstra’s algorithm. Once Alice funds her channel with the ACINQ node, she can consider herself part of the LN mesh network.
+
+Upon initiating a transaction to Bob, Electrum creates and signs a contract that transfers 1 BTC to ACINQ once Bob's invoice is settled. ACINQ then determines the optimal route to Bob using Dijkstra’s algorithm and establishes contracts with each intermediary node along the path. These nodes sequentially agree to the contract terms, ensuring the transaction can proceed across the network. This method reflects a decentralized negotiation process, where each node only communicates with its immediate neighbors to forward the payment based on the predecided path, rather than any node unilaterally altering the route.
+
+Several inquiries arise concerning this procedure, including whether ACINQ could refuse to open a channel for reasons such as anti-money laundering (AML) concerns and if intermediary nodes might also deny participation due to perceived AML risks associated with subsequent nodes. Questions also cover the specifics of route determination, questioning if the sender strictly enforces the payment route or if intermediary nodes have flexibility in choosing different paths. Additionally, there is curiosity about the meaning of "capacity" within the LN context. Capacity, exemplified by ACINQ's 424 BTC capacity, refers to the total value of all channels open with a node but does not directly indicate the ease of routing large transactions through the network. The concept of inbound/outbound efficiency and the practicality of routing significant amounts, such as 50 BTC, through the network are explored, considering the limitations posed by individual channel capacities and the overall network topology.
+
+The challenge of transmitting large sums over the LN is acknowledged, with questions regarding whether splitting a large transaction into smaller segments could facilitate routing. The sender wonders if Electrum's implementation of Dijkstra’s algorithm automatically manages such chunking to improve the likelihood of successful transmission for substantial sums. Finally, the discussion touches on the broader technical constraints of using the LN for business-to-business (B2B) transactions, especially for entities like exchanges handling a wide range of transaction sizes. Concerns include determining the minimum viable entry channel capacity, estimating fees, and understanding the time frames involved in settling transactions over the LN, aiming to gauge the feasibility and efficiency of large-scale operations on the network.</summary>
+    <published>2025-09-22T13:20:14.767000+00:00</published>
+  </entry>
+</feed>
