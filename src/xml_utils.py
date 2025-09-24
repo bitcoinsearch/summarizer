@@ -253,7 +253,7 @@ class GenerateXML:
         
         # Debug: Log what we received
         for i, item in enumerate(sorted_threads):
-            logger.info(f"    📧 #{i}: '{item.get('author')}' depth={item.get('thread_depth', 0)} pos={item.get('thread_position', 0)} reply_to='{item.get('reply_to_author', '')}'")
+            logger.info(f"    📧 #{i}: '{item.get('author')}' depth={item.get('thread_depth', 0)} pos={item.get('thread_position', 0)} reply_to='{item.get('reply_to_author', '')}' anchor='{item.get('anchor_id', '')}'")
         
         # Create message elements and build hierarchy
         message_elements = []
@@ -267,6 +267,7 @@ class GenerateXML:
             thread_depth = thread_item.get('thread_depth', 0)
             reply_to = thread_item.get('reply_to_author', '')
             parent_id = thread_item.get('parent_id', '')
+            anchor_id = thread_item.get('anchor_id', '')
             
             # Create message element
             message = ET.Element('message')
@@ -278,6 +279,8 @@ class GenerateXML:
                 message.set('reply_to', reply_to)
             if parent_id:
                 message.set('parent_id', str(parent_id))
+            if anchor_id:
+                message.set('anchor', str(anchor_id))
             
             # Add message content
             ET.SubElement(message, 'author').text = author_name
@@ -290,13 +293,14 @@ class GenerateXML:
                 'depth': thread_depth,
                 'reply_to': reply_to,
                 'position': thread_item.get('thread_position', i),
+                'anchor_id': anchor_id,
                 'added_to_tree': False
             }
             
             message_elements.append(message_data)
             author_to_message[author_name] = message_data
             
-            logger.info(f"    📝 Created message: '{author_name}' depth={thread_depth} reply_to='{reply_to}'")
+            logger.info(f"    📝 Created message: '{author_name}' depth={thread_depth} reply_to='{reply_to}' anchor='{anchor_id}'")
         
         # Second pass: Build the hierarchy by finding parent-child relationships
         def add_message_to_parent(message_data, parent_elem):
@@ -405,6 +409,7 @@ class GenerateXML:
         df_dict["thread_position"].append(0)  # Default position
         df_dict["parent_id"].append(None)  # No parent info in XML
         df_dict["reply_to_author"].append(None)  # No reply info in XML
+        df_dict["anchor_id"].append(None)  # No anchor info in XML
 
     def file_not_present_df(self, columns, source_cols, df_dict, files_list, dict_data, data,
                             title, combined_filename, namespace):
@@ -423,7 +428,7 @@ class GenerateXML:
                 df_dict[col].append(datetime_obj)
             else:
                 # Handle threading fields that might not exist in older documents
-                if col in ['thread_depth', 'thread_position', 'parent_id', 'reply_to_author']:
+                if col in ['thread_depth', 'thread_position', 'parent_id', 'reply_to_author', 'anchor_id']:
                     value = dict_data[data]['_source'].get(col, None)
                     if col == 'thread_depth' and value is None:
                         value = 0  # Default depth for root messages
@@ -610,7 +615,7 @@ class GenerateXML:
         # Initialize a dictionary to store data for DataFrame construction, with predefined columns
         columns = ['_index', '_id', '_score']
         source_cols = ['body_type', 'created_at', 'id', 'title', 'body', 'type',
-                       'url', 'authors', 'thread_depth', 'thread_position', 'parent_id', 'reply_to_author']
+                       'url', 'authors', 'thread_depth', 'thread_position', 'parent_id', 'reply_to_author', 'anchor_id']
         df_dict = {col: [] for col in (columns + source_cols)}
 
         seen_titles = set()
@@ -766,6 +771,18 @@ class GenerateXML:
                             # Process rows in the order they appear in the sorted DataFrame
                             # This preserves the proper thread display order from sort_by_thread_display_order
                             for display_position, (idx, row) in enumerate(title_df.iterrows()):
+                                # Extract anchor ID from the document ID (Elasticsearch format)
+                                anchor_id = ''
+                                if row.get('id'):
+                                    # ES document ID format: mailing-list-2025-07-m376871ab5341f27343e4e85b66d86ca373a5b857
+                                    doc_id = str(row['id'])
+                                    if 'm' in doc_id and len(doc_id) > 20:
+                                        # Extract the hash part after the last 'm'
+                                        parts = doc_id.split('-m')
+                                        if len(parts) > 1:
+                                            anchor_id = 'm' + parts[-1]
+                                    logger.info(f"    🔗 ANCHOR EXTRACTION: doc_id='{doc_id}' -> anchor_id='{anchor_id}'")
+                                
                                 thread_item = {
                                     'author': row['authors'][0] if row['authors'] else 'Unknown',
                                     'created_at': str(row['created_at']),
@@ -773,10 +790,11 @@ class GenerateXML:
                                     'thread_position': display_position,  # Use display position, not original position
                                     'original_position': row.get('thread_position', 0),  # Keep original for reference
                                     'reply_to_author': row.get('reply_to_author', ''),
-                                    'parent_id': row.get('parent_id', '')
+                                    'parent_id': row.get('parent_id', ''),
+                                    'anchor_id': anchor_id
                                 }
                                 thread_data.append(thread_item)
-                                logger.info(f"    📧 SUMMARIZER THREADING: #{display_position}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}' (orig_pos: {thread_item['original_position']})")
+                                logger.info(f"    📧 SUMMARIZER THREADING: #{display_position}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}' anchor='{anchor_id}' (orig_pos: {thread_item['original_position']})")
                             
                             logger.success(f"✅ SUMMARIZER THREADING: Collected {len(thread_data)} items with threading data in proper display order")
                         else:
