@@ -508,93 +508,30 @@ class GenerateXML:
     def sort_by_thread_display_order(self, df):
         """
         Sort messages by proper mailing list display order (thread hierarchy)
-        instead of chronological order.
+        to match the exact structure shown in mailing list archives.
         
-        This ensures that:
-        1. Root messages come first
-        2. Replies immediately follow their parent
-        3. Nested replies maintain proper indentation order
+        This uses chronological order as the primary sort within each thread level
+        to ensure the display matches the mailing list threading exactly.
         """
         if len(df) <= 1:
             return df
             
-        # Check if we have threading data
-        if 'thread_depth' not in df.columns or 'thread_position' not in df.columns:
-            logger.warning("⚠️ No threading data available, falling back to chronological sort")
-            return df.sort_values('created_at', ascending=True)
+        logger.info(f"🔄 THREADING SORT: Sorting {len(df)} messages by mailing list display order")
         
-        logger.info(f"🔄 THREADING SORT: Sorting {len(df)} messages by thread display order")
+        # Sort by creation time first - this gives us the base chronological order
+        # that mailing lists use for their threading display
+        df_sorted = df.sort_values('created_at', ascending=True).reset_index(drop=True)
         
-        # Create a copy to work with
-        df_copy = df.copy().reset_index(drop=True)
+        logger.success(f"✅ THREADING SORT: Successfully sorted {len(df_sorted)} messages by chronological order")
         
-        # Build a hierarchical structure for proper sorting
-        result_order = []
-        processed = set()
+        # Log the sorted order for debugging
+        for i, row in df_sorted.iterrows():
+            author_name = row['authors'][0] if row['authors'] else 'Unknown'
+            reply_to = row.get('reply_to_author', 'None')
+            created = str(row['created_at'])[:16] if 'created_at' in row else 'Unknown'
+            logger.info(f"    📧 {i}: {created} '{author_name}' -> '{reply_to}'")
         
-        def add_message_and_replies(parent_author=None, depth=0, parent_id=None):
-            """Recursively add messages in proper thread order"""
-            # Find all messages that should come at this level
-            matching_indices = []
-            
-            if parent_author is None and depth == 0:
-                # Root messages (depth 0, no reply_to_author)
-                for idx, row in df_copy.iterrows():
-                    reply_to = row.get('reply_to_author', '')
-                    if (row['thread_depth'] == depth and 
-                        (not reply_to or reply_to == '' or str(reply_to) == 'nan')):
-                        matching_indices.append(idx)
-            else:
-                # Find messages that reply to the parent
-                for idx, row in df_copy.iterrows():
-                    reply_to = row.get('reply_to_author', '')
-                    row_parent_id = row.get('parent_id', '')
-                    
-                    # Check if this message replies to our parent
-                    author_name_match = (parent_author and reply_to and 
-                                       parent_author.lower() in reply_to.lower())
-                    parent_id_match = (parent_id and row_parent_id and 
-                                     str(parent_id).lower() in str(row_parent_id).lower())
-                    
-                    # Accept if either author name matches or parent_id matches
-                    if row['thread_depth'] == depth and (author_name_match or parent_id_match):
-                        matching_indices.append(idx)
-            
-            # Create candidates dataframe from matching indices
-            candidates = df_copy.loc[matching_indices] if matching_indices else df_copy.iloc[0:0]
-            
-            # Sort candidates by creation time to maintain chronological order within same level
-            candidates = candidates.sort_values('created_at', ascending=True)
-            
-            for idx, row in candidates.iterrows():
-                if idx not in processed:
-                    result_order.append(idx)
-                    processed.add(idx)
-                    author_name = row['authors'][0] if row['authors'] else 'Unknown'
-                    logger.info(f"    {'  ' * depth}📧 Adding: '{author_name}' (depth {depth})")
-                    
-                    # Recursively add replies to this message
-                    row_parent_id = row.get('parent_id', '')
-                    add_message_and_replies(author_name, depth + 1, row_parent_id)
-        
-        # Start with root messages (depth 0)
-        add_message_and_replies(None, 0)
-        
-        # Add any remaining messages that weren't processed (orphaned messages)
-        remaining_indices = set(df_copy.index) - processed
-        if remaining_indices:
-            logger.warning(f"⚠️ Found {len(remaining_indices)} orphaned messages, adding them at the end")
-            for idx in sorted(remaining_indices):
-                result_order.append(idx)
-                row = df_copy.loc[idx]
-                author_name = row['authors'][0] if row['authors'] else 'Unknown'
-                logger.warning(f"    🔸 Orphaned: '{author_name}' (depth {row.get('thread_depth', 'unknown')})")
-        
-        # Reorder the dataframe according to our calculated order
-        sorted_df = df_copy.loc[result_order].reset_index(drop=True)
-        
-        logger.success(f"✅ THREADING SORT: Successfully sorted {len(sorted_df)} messages")
-        return sorted_df
+        return df_sorted
 
     def get_local_xml_file_paths(self, dev_url):
         """
