@@ -243,19 +243,24 @@ class GenerateXML:
             f.write(pretty_xml)
     
     def _build_threaded_structure(self, parent_element, thread_data):
-        """Build nested thread structure matching mailing list display order exactly"""
+        """
+        Build nested thread structure that exactly matches mailing list display order
         
-        logger.info(f"🔍 XML THREADING: Building nested structure for {len(thread_data)} messages in mailing list order")
+        This creates a FLAT chronological list of messages with proper nesting attributes
+        for UI threading display, exactly like the mailing list shows.
+        """
         
-        # Build nested structure that preserves mailing list chronological order
-        # but maintains parent-child relationships for UI threading
+        logger.info(f"🔍 XML THREADING: Building structure for {len(thread_data)} messages in mailing list order")
         
-        # Create a mapping of messages for easy lookup
-        messages_by_author = {}
-        processed_indices = set()
+        # Sort by thread_position to get mailing list chronological order
+        sorted_data = sorted(thread_data, key=lambda x: x.get('thread_position', 0))
         
-        def create_message_element(i, thread_item):
-            """Create a message element with all attributes"""
+        logger.info("📋 Mailing list chronological order:")
+        for i, item in enumerate(sorted_data):
+            logger.info(f"  {i+1}: {item['author']} (pos={item.get('thread_position', 0)}, depth={item.get('thread_depth', 0)})")
+        
+        # Create message elements in exact mailing list order - NO DEEP NESTING
+        for i, thread_item in enumerate(sorted_data):
             msg_id = f"msg_{i+1}"
             author_name = thread_item['author']
             timestamp = thread_item.get('created_at', '')
@@ -279,70 +284,12 @@ class GenerateXML:
             ET.SubElement(message, 'author').text = author_name
             ET.SubElement(message, 'timestamp').text = timestamp
             
-            return message, author_name
+            # Add directly to parent - FLAT structure in chronological order
+            parent_element.append(message)
+            
+            logger.info(f"    📧 {i+1}: '{author_name}' added (depth={thread_depth})")
         
-        def add_message_and_immediate_replies(i, parent_elem):
-            """Add a message and any immediate replies that follow chronologically"""
-            if i in processed_indices or i >= len(thread_data):
-                return i
-            
-            thread_item = thread_data[i]
-            message, author_name = create_message_element(i, thread_item)
-            parent_elem.append(message)
-            processed_indices.add(i)
-            
-            logger.info(f"    📧 {i+1}: '{author_name}' added")
-            
-            # Look for immediate replies (next messages that reply to this author)
-            replies_elem = None
-            j = i + 1
-            
-            while j < len(thread_data):
-                if j in processed_indices:
-                    j += 1
-                    continue
-                    
-                next_item = thread_data[j]
-                next_reply_to = next_item.get('reply_to_author', '')
-                
-                # If next message replies to current author, add it as a reply
-                if next_reply_to == author_name:
-                    if replies_elem is None:
-                        replies_elem = ET.SubElement(message, 'replies')
-                        logger.info(f"        📧 Creating replies section for '{author_name}'")
-                    
-                    # Recursively add the reply and its sub-replies
-                    j = add_message_and_immediate_replies(j, replies_elem)
-                else:
-                    j += 1
-            
-            return i + 1
-        
-        # Process messages in chronological order, building nested structure
-        i = 0
-        while i < len(thread_data):
-            if i not in processed_indices:
-                thread_item = thread_data[i]
-                reply_to = thread_item.get('reply_to_author', '')
-                
-                # If this message doesn't reply to anyone (or replies to root), 
-                # it's a top-level message
-                if not reply_to or 'A Post Quantum Migration Proposal' in reply_to:
-                    i = add_message_and_immediate_replies(i, parent_element)
-                else:
-                    # Skip for now, it will be processed as a reply
-                    i += 1
-            else:
-                i += 1
-        
-        # Add any remaining unprocessed messages (shouldn't happen with correct data)
-        for i, thread_item in enumerate(thread_data):
-            if i not in processed_indices:
-                message, author_name = create_message_element(i, thread_item)
-                parent_element.append(message)
-                logger.warning(f"    ⚠️ Added orphaned message: '{author_name}'")
-        
-        logger.success(f"✅ XML THREADING: Built nested structure with {len(thread_data)} messages preserving mailing list order")
+        logger.success(f"✅ XML THREADING: Built flat structure with {len(sorted_data)} messages in perfect mailing list order")
 
     def append_columns(self, df_dict, file, title, namespace):
         """
