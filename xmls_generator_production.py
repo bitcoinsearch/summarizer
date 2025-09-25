@@ -15,7 +15,7 @@ if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
     dev_urls = [
-        "https://delvingbitcoin.org/",
+        # "https://delvingbitcoin.org/",  # Excluded from threading update
         "https://gnusha.org/pi/bitcoindev/",
         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
     ]
