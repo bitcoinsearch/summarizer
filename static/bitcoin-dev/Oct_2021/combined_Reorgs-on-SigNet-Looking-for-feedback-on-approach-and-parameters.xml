@@ -1,62 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Reorgs on SigNet - Looking for feedback on approach and parameters</title>
-  <updated>2023-08-02T04:41:16.248558+00:00</updated>
-  <author>
-    <name>Anthony Towns 2021-10-15 04:41:50+00:00</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-09-15 15:24:43+00:00</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2021-09-14 04:56:10+00:00</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-09-13 16:24:29+00:00</name>
-  </author>
-  <author>
-    <name>Michael Folkson 2021-09-13 12:30:31+00:00</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-09-13 05:33:24+00:00</name>
-  </author>
-  <author>
-    <name>Greg Sanders 2021-09-12 14:54:33+00:00</name>
-  </author>
-  <author>
-    <name>vjudeu at gazeta.pl 2021-09-12 14:29:08+00:00</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2021-09-12 07:53:05+00:00</name>
-  </author>
-  <author>
-    <name>David A. Harding 2021-09-10 20:00:05+00:00</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-09-10 19:22:00+00:00</name>
-  </author>
-  <author>
-    <name>Michael Folkson 2021-09-10 19:00:39+00:00</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-09-10 18:24:15+00:00</name>
-  </author>
-  <author>
-    <name>Michael Folkson 2021-09-10 13:05:40+00:00</name>
-  </author>
-  <author>
-    <name>Matt Corallo 2021-09-10 00:50:08+00:00</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2021-09-08 07:59:04+00:00</name>
-  </author>
-  <author>
-    <name>Jeremy 2021-09-07 16:44:17+00:00</name>
-  </author>
-  <author>
-    <name>0xB10C 2021-09-07 16:07:47+00:00</name>
-  </author>
+  <updated>2025-09-25T23:15:15.113847+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Oct_2021/019544_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019463_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019452_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
@@ -75,13 +22,13 @@
   <link href="bitcoin-dev/Sept_2021/019416_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019414_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019413_Reorgs-on-SigNet-Looking-for-feedback-on-approach-and-parameters.xml" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-October/019544.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Reorgs on SigNet - Looking for feedback on approach and parameters</title>
-    <updated>2023-08-02T04:41:16.249560+00:00</updated>
+    <updated>2025-09-25T23:15:15.113947+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-October/019544.html" rel="alternate"/>
-    <summary>The discussion on the Bitcoin Signet revolved around simplifying testing and addressing re-org behavior. The aim of Signet is to replicate mainnet as closely as possible, allowing software to use it without modification. However, there were suggestions for improving the simulation of mainnet behavior.One proposal suggested having existing block producers generate new keys and only sign reorgs with those keys. This would give users the option to accept signatures from both sets of keys or only non-reorg keys, providing a more reliable simulation of mainnet behavior. Importantly, this suggestion wouldn't require users to sign blocks themselves.There was a debate about the frequency of reorgs on the default Signet. Some argued for more regular reorgs (e.g., every 8 hours) to test applications' ability to withstand different flavors of re-orgs. Others believed that making reorgs too frequent would deviate significantly from mainnet behavior and recommended testing normal mainnet behavior before focusing on reorgs.Another proposal was to introduce a version bit for blocks, requiring users to sign blocks. However, the added complexity of this approach was questioned, as the default Signet currently leaves block signing to network block signers. It was suggested that a flag set via a configuration argument could be used instead, with no-reorgs or 8-hour re-orgs as the default.To further resemble mainnet, the random generation of batches of transactions to fill up blocks and create a fee market was proposed. This would facilitate testing features like RBF and Lightning unhappy paths on the default Signet in the future.The discussions also explored various aspects related to reorgs on Signet. One proposal suggested using a version bit flag for blocks that won't end up in the most work chain, giving users the choice to opt-out of reorgs. The frequency and depth of reorgs were debated, with suggestions for frequent reorgs (e.g., every block) or less frequent ones (e.g., once per week). The depth of reorgs was considered, with different depths serving different testing purposes. It was proposed that the depth of reorgs be deterministically random within a minimum and maximum range based on block hash or nonce.Two scenarios were suggested for testing reorg handling: a race between two chains and a chain rollback scenario. Questions arose regarding the frequency of reorgs on the default Signet and how engineers currently test their applications' reorg handling.Developers sought feedback on implementing support for planned chain reorganizations in Signet. Two scenarios were proposed: races between chains and chain rollbacks. Users would have the option to opt-out of reorgs by setting a version bit flag on affected blocks. The frequency and depth of reorgs would depend on user needs, considering users across different time zones. The first step would be to implement the race scenario and set up a public test-Signet. If there is interest, chain rollbacks could be implemented, and conflicting transactions could be included in the branches.Overall, the discussions aimed to find the best approach to simulate mainnet behavior while providing an easy testing environment for applications. Feedback from developers and users was crucial in determining the optimal parameters for reorgs and ensuring a reliable testing environment for Bitcoin developers.</summary>
     <published>2021-10-15T04:41:50+00:00</published>
+    <summary>The discussion on the Bitcoin Signet revolved around simplifying testing and addressing re-org behavior. The aim of Signet is to replicate mainnet as closely as possible, allowing software to use it without modification. However, there were suggestions for improving the simulation of mainnet behavior.One proposal suggested having existing block producers generate new keys and only sign reorgs with those keys. This would give users the option to accept signatures from both sets of keys or only non-reorg keys, providing a more reliable simulation of mainnet behavior. Importantly, this suggestion wouldn't require users to sign blocks themselves.There was a debate about the frequency of reorgs on the default Signet. Some argued for more regular reorgs (e.g., every 8 hours) to test applications' ability to withstand different flavors of re-orgs. Others believed that making reorgs too frequent would deviate significantly from mainnet behavior and recommended testing normal mainnet behavior before focusing on reorgs.Another proposal was to introduce a version bit for blocks, requiring users to sign blocks. However, the added complexity of this approach was questioned, as the default Signet currently leaves block signing to network block signers. It was suggested that a flag set via a configuration argument could be used instead, with no-reorgs or 8-hour re-orgs as the default.To further resemble mainnet, the random generation of batches of transactions to fill up blocks and create a fee market was proposed. This would facilitate testing features like RBF and Lightning unhappy paths on the default Signet in the future.The discussions also explored various aspects related to reorgs on Signet. One proposal suggested using a version bit flag for blocks that won't end up in the most work chain, giving users the choice to opt-out of reorgs. The frequency and depth of reorgs were debated, with suggestions for frequent reorgs (e.g., every block) or less frequent ones (e.g., once per week). The depth of reorgs was considered, with different depths serving different testing purposes. It was proposed that the depth of reorgs be deterministically random within a minimum and maximum range based on block hash or nonce.Two scenarios were suggested for testing reorg handling: a race between two chains and a chain rollback scenario. Questions arose regarding the frequency of reorgs on the default Signet and how engineers currently test their applications' reorg handling.Developers sought feedback on implementing support for planned chain reorganizations in Signet. Two scenarios were proposed: races between chains and chain rollbacks. Users would have the option to opt-out of reorgs by setting a version bit flag on affected blocks. The frequency and depth of reorgs would depend on user needs, considering users across different time zones. The first step would be to implement the race scenario and set up a public test-Signet. If there is interest, chain rollbacks could be implemented, and conflicting transactions could be included in the branches.Overall, the discussions aimed to find the best approach to simulate mainnet behavior while providing an easy testing environment for applications. Feedback from developers and users was crucial in determining the optimal parameters for reorgs and ensuring a reliable testing environment for Bitcoin developers.</summary>
   </entry>
 </feed>

@@ -1,29 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Adding xpub field to PSBT to make multisig more secure</title>
-  <updated>2023-08-02T00:44:57.994125+00:00</updated>
-  <author>
-    <name>Dmitry Petukhov 2019-05-09 17:08:47+00:00</name>
-  </author>
-  <author>
-    <name>jan matejek 2019-05-08 07:54:53+00:00</name>
-  </author>
-  <author>
-    <name>Dmitry Petukhov 2019-05-07 13:40:34+00:00</name>
-  </author>
-  <author>
-    <name>Stepan Snigirev 2019-05-07 09:23:44+00:00</name>
-  </author>
-  <author>
-    <name>Peter D. Gray 2019-05-03 13:29:45+00:00</name>
-  </author>
-  <author>
-    <name>Andrew Chow 2019-05-01 16:57:38+00:00</name>
-  </author>
-  <author>
-    <name>Stepan Snigirev 2019-04-26 15:21:06+00:00</name>
-  </author>
+  <updated>2025-09-25T23:09:35.754171+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/May_2019/016926_Adding-xpub-field-to-PSBT-to-make-multisig-more-secure.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2019/016925_Adding-xpub-field-to-PSBT-to-make-multisig-more-secure.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2019/016917_Adding-xpub-field-to-PSBT-to-make-multisig-more-secure.xml" rel="alternate"/>
@@ -31,13 +11,13 @@
   <link href="bitcoin-dev/May_2019/016909_Adding-xpub-field-to-PSBT-to-make-multisig-more-secure.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2019/016907_Adding-xpub-field-to-PSBT-to-make-multisig-more-secure.xml" rel="alternate"/>
   <link href="bitcoin-dev/April_2019/016894_Adding-xpub-field-to-PSBT-to-make-multisig-more-secure.xml" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-April/016894.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Adding xpub field to PSBT to make multisig more secure</title>
-    <updated>2023-08-02T00:44:57.994125+00:00</updated>
+    <updated>2025-09-25T23:09:35.754249+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-April/016894.html" rel="alternate"/>
-    <summary>In a bitcoin-dev thread, the author proposes a solution to aggregate spending from different wallets into one transaction for efficiency and convenience. They suggest using stateful signers that store trusted xpubs to apply it to stateless hardware wallets. This would allow distinguishing trusted outputs even if the inputs are not derived from the same set of xpubs. However, this idea is seen as an attempt at a different and broader problem.Dmitry Petukhov suggests in the thread that a hardware wallet can sign a message consisting of xpubs of participants and auxiliary text during the setup phase. However, this method seems overly complicated and its purpose is unclear. The thread discusses the threat model and suggests that each individual multisig signature signs the set of signers. This ensures that if an attacker provides bad xpubs, the signature won't be valid for the given multisig output. The weak spot in the process is generating the receiving address, but this issue is unrelated to PSBT.To safely show an incoming address to the user, PSBT-signing devices still need to store the xpubs of their co-signers. However, hardware wallets need to be stateless for easy wiping and recovering. To solve this, the user can verify a multisignature address or xpub on the screens of all devices during the setup phase. Hardware wallets can then mark outputs that use the pubkeys derived from 'verified' xpubs as 'trusted' outputs. This allows distinguishing trusted outputs even if the inputs are not all derived from the same set of xpubs.The proposal suggests sharing xpubs in the global section of the file, with a restriction that they must only include the hardened prefix of the path. The existing bip32 derivation path included in individual inputs and outputs should be merged in as needed. However, it is not necessary to restrict xpubs to have only hardened derivation. PSBT-signing devices still need to store the xpubs of their co-signers for safe verification of incoming addresses. The proposal also suggests using the extension serialization format without any encodings for PSBT, and keeping the prefix that defines if the key is used for testnet or mainnet may also be useful.Stepan Snigirev raises concerns about the possibility of user funds being stolen in multisignature setups using the current specifications for PSBT. An attacker could replace half of the keys in the change address with their own keys and still get the transaction signed. To fix this issue, Snigirev suggests adding an xpub field to the inputs and outputs metadata so that signers can verify that the same xpubs are used for public keys in inputs and outputs. He proposes two new key-value pairs to be added to PSBT: `PSBT_IN_BIP32_XPUB` and `PSBT_OUT_BIP32_XPUB`. This would ensure that the output is indeed a change. Snigirev also suggests reviewing the communication protocols of existing hardware and multisignature wallets to see if there are other solutions to this issue. If the proposal is accepted, he plans to prepare a pull request to the bip.</summary>
     <published>2019-05-09T17:08:47+00:00</published>
+    <summary>In a bitcoin-dev thread, the author proposes a solution to aggregate spending from different wallets into one transaction for efficiency and convenience. They suggest using stateful signers that store trusted xpubs to apply it to stateless hardware wallets. This would allow distinguishing trusted outputs even if the inputs are not derived from the same set of xpubs. However, this idea is seen as an attempt at a different and broader problem.Dmitry Petukhov suggests in the thread that a hardware wallet can sign a message consisting of xpubs of participants and auxiliary text during the setup phase. However, this method seems overly complicated and its purpose is unclear. The thread discusses the threat model and suggests that each individual multisig signature signs the set of signers. This ensures that if an attacker provides bad xpubs, the signature won't be valid for the given multisig output. The weak spot in the process is generating the receiving address, but this issue is unrelated to PSBT.To safely show an incoming address to the user, PSBT-signing devices still need to store the xpubs of their co-signers. However, hardware wallets need to be stateless for easy wiping and recovering. To solve this, the user can verify a multisignature address or xpub on the screens of all devices during the setup phase. Hardware wallets can then mark outputs that use the pubkeys derived from 'verified' xpubs as 'trusted' outputs. This allows distinguishing trusted outputs even if the inputs are not all derived from the same set of xpubs.The proposal suggests sharing xpubs in the global section of the file, with a restriction that they must only include the hardened prefix of the path. The existing bip32 derivation path included in individual inputs and outputs should be merged in as needed. However, it is not necessary to restrict xpubs to have only hardened derivation. PSBT-signing devices still need to store the xpubs of their co-signers for safe verification of incoming addresses. The proposal also suggests using the extension serialization format without any encodings for PSBT, and keeping the prefix that defines if the key is used for testnet or mainnet may also be useful.Stepan Snigirev raises concerns about the possibility of user funds being stolen in multisignature setups using the current specifications for PSBT. An attacker could replace half of the keys in the change address with their own keys and still get the transaction signed. To fix this issue, Snigirev suggests adding an xpub field to the inputs and outputs metadata so that signers can verify that the same xpubs are used for public keys in inputs and outputs. He proposes two new key-value pairs to be added to PSBT: `PSBT_IN_BIP32_XPUB` and `PSBT_OUT_BIP32_XPUB`. This would ensure that the output is indeed a change. Snigirev also suggests reviewing the communication protocols of existing hardware and multisignature wallets to see if there are other solutions to this issue. If the proposal is accepted, he plans to prepare a pull request to the bip.</summary>
   </entry>
 </feed>
