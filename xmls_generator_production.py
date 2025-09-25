@@ -15,15 +15,26 @@ warnings.filterwarnings("ignore")
 if __name__ == "__main__":
     # Get parameters from environment variables
     start_year = os.environ.get('START_YEAR')
+    start_month = os.environ.get('START_MONTH')
+    months_limit = os.environ.get('MONTHS_LIMIT')
     update_threading_only = os.environ.get('UPDATE_THREADING_ONLY', 'false').lower() == 'true'
     
-    logger.info(f"🚀 XML GENERATOR: Starting with START_YEAR={start_year}, UPDATE_THREADING_ONLY={update_threading_only}")
+    # Convert to integers
+    try:
+        start_year = int(start_year) if start_year else None
+        start_month = int(start_month) if start_month else None
+        months_limit = int(months_limit) if months_limit else None
+    except ValueError as e:
+        logger.error(f"Invalid parameter format: {e}")
+        sys.exit(1)
+    
+    logger.info(f"🚀 XML GENERATOR: Starting with START_YEAR={start_year}, START_MONTH={start_month}, MONTHS_LIMIT={months_limit}, UPDATE_THREADING_ONLY={update_threading_only}")
     
     # If only updating threading, run the threading updater and exit
     if update_threading_only:
         logger.info("🧵 XML GENERATOR: Running in threading update mode only")
         updater = XMLThreadingUpdater()
-        updater.update_all_threading(start_year=start_year)
+        updater.update_all_threading(start_year=start_year, start_month=start_month, months_limit=months_limit)
         logger.info("✅ XML GENERATOR: Threading update completed")
         sys.exit(0)
     
@@ -43,8 +54,8 @@ if __name__ == "__main__":
     
     if start_year:
         # Use specified year as start date
-        start_date = datetime(int(start_year), 1, 1)
-        logger.info(f"📅 XML GENERATOR: Using custom start year: {start_year}")
+        start_date = datetime(start_year, start_month or 1, 1)
+        logger.info(f"📅 XML GENERATOR: Using custom start date: {start_date.strftime('%Y-%m-%d')}")
     else:
         # Use default 90 days
         start_date = end_date - timedelta(days=90)
@@ -82,7 +93,7 @@ if __name__ == "__main__":
     logger.info("🧵 XML GENERATOR: Starting threading update for all XMLs...")
     try:
         updater = XMLThreadingUpdater()
-        updater.update_all_threading(start_year=start_year)
+        updater.update_all_threading(start_year=start_year, start_month=start_month, months_limit=months_limit)
         logger.success("✅ XML GENERATOR: Threading update completed successfully")
     except Exception as e:
         logger.error(f"❌ XML GENERATOR: Error during threading update: {e}")

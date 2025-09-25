@@ -9,6 +9,16 @@ on:
         required: false
         default: ''
         type: string
+      start_month:
+        description: 'Start month (1-12). Only used with start_year. If not specified, starts from January.'
+        required: false
+        default: ''
+        type: string
+      months_limit:
+        description: 'Limit processing to N months from start date. Helps avoid ES overload (e.g., 6 for 6 months).'
+        required: false
+        default: ''
+        type: string
       update_threading_only:
         description: 'Only update threading structure without generating new files'
         required: false
@@ -30,6 +40,8 @@ jobs:
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       ES_INDEX: ${{ secrets.ES_INDEX }}
       START_YEAR: ${{ github.event.inputs.start_year }}
+      START_MONTH: ${{ github.event.inputs.start_month }}
+      MONTHS_LIMIT: ${{ github.event.inputs.months_limit }}
       UPDATE_THREADING_ONLY: ${{ github.event.inputs.update_threading_only }}
 
     steps:
@@ -63,9 +75,27 @@ jobs:
           echo "No changes to commit"
         else
           if [ "${{ github.event.inputs.update_threading_only }}" = "true" ]; then
-            git commit -m "Updated XML files with threading structure (threading update only)"
+            COMMIT_MSG="Updated XML files with threading structure (threading update only)"
+            if [ -n "${{ github.event.inputs.start_year }}" ]; then
+              COMMIT_MSG="$COMMIT_MSG from ${{ github.event.inputs.start_year }}"
+              if [ -n "${{ github.event.inputs.start_month }}" ]; then
+                COMMIT_MSG="$COMMIT_MSG/${{ github.event.inputs.start_month }}"
+              fi
+              if [ -n "${{ github.event.inputs.months_limit }}" ]; then
+                COMMIT_MSG="$COMMIT_MSG (${github.event.inputs.months_limit} months)"
+              fi
+            fi
+            git commit -m "$COMMIT_MSG"
           elif [ -n "${{ github.event.inputs.start_year }}" ]; then
-            git commit -m "Updated XML files from year ${{ github.event.inputs.start_year }} with threading structure"
+            COMMIT_MSG="Updated XML files from year ${{ github.event.inputs.start_year }}"
+            if [ -n "${{ github.event.inputs.start_month }}" ]; then
+              COMMIT_MSG="$COMMIT_MSG/${{ github.event.inputs.start_month }}"
+            fi
+            if [ -n "${{ github.event.inputs.months_limit }}" ]; then
+              COMMIT_MSG="$COMMIT_MSG (${github.event.inputs.months_limit} months)"
+            fi
+            COMMIT_MSG="$COMMIT_MSG with threading structure"
+            git commit -m "$COMMIT_MSG"
           else
             git commit -m "Updated newly generated XML files with threading structure"
           fi

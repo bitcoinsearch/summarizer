@@ -68,53 +68,69 @@ class XMLThreadingUpdater:
             logger.error(f"Error extracting data from {xml_file_path}: {e}")
             return None
 
-    def get_threading_data_for_title(self, title, dev_url):
-        """Fetch threading data from Elasticsearch for a specific title"""
-        try:
-            title_dict_data = self.elastic_search.fetch_data_based_on_title(
-                es_index=ES_INDEX, title=title, url=dev_url
-            )
-            
-            if not title_dict_data:
-                logger.warning(f"No data found in ES for title: {title}")
-                return []
-            
-            thread_data = []
-            logger.info(f"🔍 THREADING UPDATER: Found {len(title_dict_data)} documents for title: {title}")
-            
-            # Sort by creation time to get proper chronological order
-            title_dict_data.sort(key=lambda x: x['_source']['created_at'])
-            
-            for display_position, doc in enumerate(title_dict_data):
-                source = doc['_source']
+    def get_threading_data_for_title(self, title, dev_url, max_retries=3):
+        """Fetch threading data from Elasticsearch with retry logic and proper error handling"""
+        for attempt in range(max_retries):
+            try:
+                # Add delay between attempts to let ES recover
+                if attempt > 0:
+                    delay = 5 * attempt  # Increasing delay: 5s, 10s, 15s
+                    logger.warning(f"🔄 RETRY {attempt}/{max_retries}: Waiting {delay}s before retry for '{title}'")
+                    time.sleep(delay)
                 
-                # Extract anchor ID from document ID
-                anchor_id = ''
-                if source.get('id'):
-                    doc_id = str(source['id'])
-                    if 'm' in doc_id and len(doc_id) > 20:
-                        parts = doc_id.split('-m')
-                        if len(parts) > 1:
-                            anchor_id = 'm' + parts[-1]
+                title_dict_data = self.elastic_search.fetch_data_based_on_title(
+                    es_index=ES_INDEX, title=title, url=dev_url
+                )
                 
-                thread_item = {
-                    'author': source.get('authors', ['Unknown'])[0] if source.get('authors') else 'Unknown',
-                    'created_at': source.get('created_at', ''),
-                    'thread_depth': source.get('thread_depth', 0),
-                    'thread_position': display_position,
-                    'reply_to_author': source.get('reply_to_author', ''),
-                    'parent_id': source.get('parent_id', ''),
-                    'anchor_id': anchor_id
-                }
-                thread_data.append(thread_item)
+                if not title_dict_data:
+                    logger.warning(f"No data found in ES for title: {title}")
+                    return []
                 
-                logger.info(f"    📧 THREADING UPDATER: #{display_position}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}' anchor='{anchor_id}'")
-            
-            return thread_data
-            
-        except Exception as e:
-            logger.error(f"Error fetching threading data for title '{title}': {e}")
-            return []
+                thread_data = []
+                logger.info(f"🔍 THREADING UPDATER: Found {len(title_dict_data)} documents for title: {title}")
+                
+                # Sort by creation time to get proper chronological order
+                title_dict_data.sort(key=lambda x: x['_source']['created_at'])
+                
+                for display_position, doc in enumerate(title_dict_data):
+                    source = doc['_source']
+                    
+                    # Extract anchor ID from document ID
+                    anchor_id = ''
+                    if source.get('id'):
+                        doc_id = str(source['id'])
+                        if 'm' in doc_id and len(doc_id) > 20:
+                            parts = doc_id.split('-m')
+                            if len(parts) > 1:
+                                anchor_id = 'm' + parts[-1]
+                    
+                    thread_item = {
+                        'author': source.get('authors', ['Unknown'])[0] if source.get('authors') else 'Unknown',
+                        'created_at': source.get('created_at', ''),
+                        'thread_depth': source.get('thread_depth', 0),
+                        'thread_position': display_position,
+                        'reply_to_author': source.get('reply_to_author', ''),
+                        'parent_id': source.get('parent_id', ''),
+                        'anchor_id': anchor_id
+                    }
+                    thread_data.append(thread_item)
+                    
+                    logger.info(f"    📧 THREADING UPDATER: #{display_position}: '{thread_item['author']}' depth={thread_item['thread_depth']} -> '{thread_item['reply_to_author']}' anchor='{anchor_id}'")
+                
+                return thread_data
+                
+            except Exception as e:
+                error_msg = str(e)
+                if "scroll" in error_msg.lower() or "500" in error_msg:
+                    logger.error(f"❌ ES SCROLL ERROR (attempt {attempt+1}/{max_retries}) for title '{title}': {e}")
+                    if attempt == max_retries - 1:
+                        logger.error(f"❌ MAX RETRIES REACHED for title '{title}' - returning empty thread data")
+                        return []
+                else:
+                    logger.error(f"❌ ES ERROR for title '{title}': {e}")
+                    return []
+        
+        return []
 
     def update_xml_with_threading(self, xml_file_path, thread_data, existing_data):
         """Update XML file with threading structure while preserving existing summary"""
@@ -206,35 +222,90 @@ class XMLThreadingUpdater:
             logger.error(f"Error extracting title from {xml_file_path}: {e}")
             return None
 
-    def update_all_threading(self, start_year=None):
+    def parse_date_from_path(self, xml_file_path):
+        """Extract year and month from XML file path"""
+        try:
+            path_parts = xml_file_path.split('/')
+            for part in path_parts:
+                if '_' in part and part.split('_')[-1].isdigit():
+                    month_name, year_str = part.split('_')
+                    year = int(year_str)
+                    
+                    # Convert month name to number
+                    month_map = {
+                        'Jan': 1, 'Feb': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
+                        'July': 7, 'Aug': 8, 'Sept': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
+                    }
+                    month = month_map.get(month_name, 0)
+                    return year, month
+            return None, None
+        except Exception as e:
+            logger.error(f"Error parsing date from path {xml_file_path}: {e}")
+            return None, None
+
+    def should_process_file(self, xml_file_path, start_year=None, start_month=None, months_limit=None):
+        """Determine if file should be processed based on date filters"""
+        if not start_year:
+            return True
+        
+        file_year, file_month = self.parse_date_from_path(xml_file_path)
+        if not file_year or not file_month:
+            return True  # Process if we can't parse date
+        
+        # Check if file is before start date
+        if file_year < start_year:
+            return False
+        if file_year == start_year and start_month and file_month < start_month:
+            return False
+        
+        # Check if file is within months limit
+        if months_limit:
+            start_date = datetime(start_year, start_month or 1, 1)
+            file_date = datetime(file_year, file_month, 1)
+            months_diff = (file_date.year - start_date.year) * 12 + (file_date.month - start_date.month)
+            if months_diff >= months_limit:
+                return False
+        
+        return True
+
+    def update_all_threading(self, start_year=None, start_month=None, months_limit=None):
         """Update all combined XML files with threading structure"""
         dev_url = "https://gnusha.org/pi/bitcoindev/"  # Only bitcoin-dev
         
         logger.info("🚀 THREADING UPDATER: Starting threading update for bitcoin-dev")
         if start_year:
-            logger.info(f"📅 THREADING UPDATER: Processing from year {start_year}")
+            date_info = f"from {start_year}"
+            if start_month:
+                date_info += f"/{start_month:02d}"
+            if months_limit:
+                date_info += f" (limit: {months_limit} months)"
+            logger.info(f"📅 THREADING UPDATER: Processing {date_info}")
         
         # Find all combined XML files
         combined_files = self.find_combined_xml_files()
+        
+        # Filter files by date criteria
+        files_to_process = []
+        for xml_file_path in combined_files:
+            if self.should_process_file(xml_file_path, start_year, start_month, months_limit):
+                files_to_process.append(xml_file_path)
+            else:
+                file_year, file_month = self.parse_date_from_path(xml_file_path)
+                logger.info(f"⏭️ THREADING UPDATER: Skipping {xml_file_path} ({file_year}/{file_month:02d} outside range)")
+        
+        logger.info(f"📋 THREADING UPDATER: Will process {len(files_to_process)} files (skipped {len(combined_files) - len(files_to_process)})")
+        
+        combined_files = files_to_process
         
         updated_count = 0
         skipped_count = 0
         error_count = 0
         
-        for xml_file_path in combined_files:
+        for i, xml_file_path in enumerate(combined_files):
             try:
-                # Skip if filtering by year
-                if start_year:
-                    # Extract year from path (e.g., "March_2022")
-                    path_parts = xml_file_path.split('/')
-                    for part in path_parts:
-                        if '_' in part and part.split('_')[-1].isdigit():
-                            file_year = int(part.split('_')[-1])
-                            if file_year < int(start_year):
-                                logger.info(f"⏭️ THREADING UPDATER: Skipping {xml_file_path} (year {file_year} < {start_year})")
-                                skipped_count += 1
-                                continue
-                            break
+                logger.info(f"📁 PROGRESS: Processing file {i+1}/{len(combined_files)}: {xml_file_path}")
+                
+                # Files are already filtered, no need to skip here
                 
                 # Check if already has threading
                 if self.has_threading_structure(xml_file_path):
@@ -258,7 +329,7 @@ class XMLThreadingUpdater:
                     error_count += 1
                     continue
                 
-                # Get threading data from Elasticsearch
+                # Get threading data from Elasticsearch with retry logic
                 thread_data = self.get_threading_data_for_title(title, dev_url)
                 
                 # Update XML with threading
@@ -267,8 +338,14 @@ class XMLThreadingUpdater:
                 else:
                     error_count += 1
                 
-                # Small delay to avoid overwhelming the system
-                time.sleep(0.1)
+                # Longer delay between ES queries to avoid scroll context exhaustion
+                if i < len(combined_files) - 1:  # Don't sleep after last file
+                    logger.info("⏸️ Waiting 2 seconds to avoid ES overload...")
+                    time.sleep(2)
+                
+                # Progress report every 10 files
+                if (i + 1) % 10 == 0:
+                    logger.info(f"📊 PROGRESS: {i+1}/{len(combined_files)} files processed. Updated: {updated_count}, Skipped: {skipped_count}, Errors: {error_count}")
                 
             except Exception as e:
                 logger.error(f"❌ THREADING UPDATER: Error processing {xml_file_path}: {e}")
