@@ -703,3 +703,121 @@ class GenerateXML:
                 logger.info(f"No new files are found for: {url}")
         else:
             logger.info(f"No input data found for: {url}")
+
+    def update_xml_threading(self, dict_data, url, target_year):
+        """
+        Update existing XML files with threading information without regenerating AI content.
+        Only processes XMLs from the specified target year.
+        """
+        if len(dict_data) == 0:
+            logger.info(f"No input data found for: {url}")
+            return
+
+        logger.info(f"🔄 XML THREADING UPDATE: Starting processing for {url} (year {target_year})")
+        
+        # Generate DataFrame with threading data from ElasticSearch
+        emails_df = self.generate_new_emails_df(dict_data, url)
+        if len(emails_df) == 0:
+            logger.info(f"No emails found for: {url}")
+            return
+
+        logger.info(f"📧 XML THREADING UPDATE: Processing {len(emails_df)} emails from ElasticSearch")
+        
+        # Process each thread (unique title)
+        titles = emails_df['title'].unique()
+        logger.info(f"🧵 XML THREADING UPDATE: Found {len(titles)} unique threads")
+        
+        for title in titles:
+            title_df = emails_df[emails_df['title'] == title]
+            
+            # Filter by target year - only process XMLs from the target year
+            title_df['created_at'] = pd.to_datetime(title_df['created_at'])
+            year_filtered_df = title_df[title_df['created_at'].dt.year == target_year]
+            
+            if len(year_filtered_df) == 0:
+                logger.info(f"⏭️ XML THREADING UPDATE: Skipping '{title}' - no messages from {target_year}")
+                continue
+                
+            logger.info(f"🎯 XML THREADING UPDATE: Processing '{title}' - {len(year_filtered_df)} messages from {target_year}")
+            
+            # Sort by proper thread display order
+            year_filtered_df = self.sort_by_thread_display_order(year_filtered_df)
+            
+            # Only update combined XML files if they exist
+            xml_name = clean_title(title)
+            combined_filename = f"combined_{xml_name}.xml"
+            
+            # Find existing combined XML files for this thread
+            current_directory = os.getcwd()
+            directory = get_base_directory(url)
+            
+            # Look for combined XMLs in all month folders for this target year
+            year_pattern = f"static/{directory}/*_{target_year}/{combined_filename}"
+            existing_combined_files = glob.glob(os.path.join(current_directory, year_pattern))
+            
+            for combined_file_path in existing_combined_files:
+                logger.info(f"📝 XML THREADING UPDATE: Updating {combined_file_path}")
+                
+                # Prepare threading data
+                thread_data = []
+                if 'thread_depth' in year_filtered_df.columns:
+                    for idx, (_, row) in enumerate(year_filtered_df.iterrows()):
+                        thread_item = {
+                            'author': row['authors'][0] if row['authors'] else 'Unknown',
+                            'created_at': row['created_at_org'] if 'created_at_org' in row else str(row['created_at']),
+                            'thread_depth': row.get('thread_depth', 0),
+                            'thread_position': idx,  # Use display position
+                            'reply_to_author': row.get('reply_to_author', ''),
+                            'parent_id': row.get('parent_id', ''),
+                            'anchor_id': row.get('anchor_id', '')
+                        }
+                        thread_data.append(thread_item)
+                
+                # Update the XML file with threading information
+                self._update_existing_xml_with_threading(combined_file_path, thread_data)
+                
+        logger.success(f"✅ XML THREADING UPDATE: Completed processing for {url} (year {target_year})")
+
+    def _update_existing_xml_with_threading(self, xml_file_path, thread_data):
+        """
+        Update an existing XML file by adding threading structure while preserving all existing content.
+        """
+        try:            
+            logger.info(f"📄 UPDATING XML: Reading {xml_file_path}")
+            
+            # Parse existing XML
+            tree = ET.parse(xml_file_path)
+            root = tree.getroot()
+            namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+            
+            # Check if threading structure already exists
+            existing_thread = root.find('atom:thread', namespaces)
+            if existing_thread is not None:
+                logger.info(f"🔄 UPDATING XML: Removing existing thread structure from {xml_file_path}")
+                root.remove(existing_thread)
+            
+            # Add new threading structure if thread_data is provided
+            if thread_data and len(thread_data) > 0:
+                logger.info(f"🧵 UPDATING XML: Adding new thread structure with {len(thread_data)} messages")
+                
+                # Create thread element
+                thread_element = ET.SubElement(root, 'thread')
+                
+                # Build threading structure using existing method
+                self._build_threaded_structure(thread_element, thread_data)
+                
+                logger.success(f"✅ UPDATING XML: Added threading structure with {len(thread_data)} messages")
+            else:
+                logger.warning(f"⚠️ UPDATING XML: No thread data provided for {xml_file_path}")
+            
+            # Write updated XML back to file
+            logger.info(f"💾 UPDATING XML: Saving updated XML to {xml_file_path}")
+            
+            # Use proper XML declaration and formatting
+            tree.write(xml_file_path, encoding='UTF-8', xml_declaration=True)
+            
+            logger.success(f"✅ UPDATING XML: Successfully updated {xml_file_path}")
+            
+        except Exception as e:
+            logger.error(f"❌ UPDATING XML: Error updating {xml_file_path}: {str(e)}")
+            logger.error(traceback.format_exc())

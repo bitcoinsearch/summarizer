@@ -1,8 +1,14 @@
-name: Daily XML Generation Script
+name: Daily XML Generation Scriptjob
 on:
   schedule:
     - cron: "0 1 * * *" # every day at 01:00 AM UTC
   workflow_dispatch:
+    inputs:
+      target_year:
+        description: 'Year to process (e.g. 2024)'
+        required: true
+        default: '2025'
+        type: string
   repository_dispatch:
 
 permissions:
@@ -18,6 +24,7 @@ jobs:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       ES_INDEX: ${{ secrets.ES_INDEX }}
+      TARGET_YEAR: ${{ github.event.inputs.target_year || '2025' }}
 
     steps:
     - uses: actions/checkout@v2
