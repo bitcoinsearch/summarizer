@@ -565,6 +565,11 @@ class GenerateXML:
                         logger.info(f"Exist: {file_path}")
                         return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
 
+                    # For years before 2025, don't create new XML files
+                    if cols['created_at'].year < 2025:
+                        logger.info(f"Skipping creation of new XML for year {cols['created_at'].year} < 2025: {file_path}")
+                        return None
+
                     # No summary was found, we need to create one
                     logger.info(f"Not found: {file_path}")
                     summary = create_summary(cols['body'])
@@ -608,7 +613,9 @@ class GenerateXML:
                     combined_body = '\n\n'.join(title_df['body'].apply(str))
                     xml_name = clean_title(title)
                     # Generate XML files (if not exist) for each post in the thread, collecting their paths into combined_links
-                    combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
+                    combined_links_raw = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
+                    # Filter out None values (when XML creation is skipped for years < 2025)
+                    combined_links = [link for link in combined_links_raw if link is not None]
                     # Generate a list of strings, each combining the first author's name with their post's creation date
                     combined_authors = list(
                         title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
@@ -625,6 +632,12 @@ class GenerateXML:
 
                         directory = get_base_directory(url)
                         file_path = fr"static/{directory}/{str_month_year}/combined_{xml_name}.xml"
+                        
+                        # For years before 2025, only update existing combined XMLs, don't create new ones
+                        if month_year[1] < 2025 and not os.path.exists(file_path):
+                            logger.info(f"Skipping creation of new combined XML for year {month_year[1]} < 2025: {file_path}")
+                            continue
+                        
                         # Generate a single combined thread summary using:
                         # - the individual summaries of previous posts
                         # - the actual content of newer posts

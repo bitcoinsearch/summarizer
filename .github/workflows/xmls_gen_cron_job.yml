@@ -3,6 +3,19 @@ on:
   schedule:
     - cron: "0 1 * * *" # every day at 01:00 AM UTC
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode: full_generation or threading_update'
+        required: false
+        default: 'threading_update'
+      years:
+        description: 'Years to process for threading update (comma-separated, e.g., 2024,2025)'
+        required: false
+        default: ''
+      single_year:
+        description: 'Process only a single year for threading update'
+        required: false
+        default: ''
   repository_dispatch:
 
 permissions:
@@ -35,8 +48,46 @@ jobs:
          pip install --upgrade pip setuptools
          pip install -r requirements.txt
 
+    - name: Determine script mode and arguments
+      id: script_config
+      run: |
+        MODE="${{ github.event.inputs.mode }}"
+        
+        # Default to threading_update for scheduled runs and manual runs without explicit mode
+        if [ -z "$MODE" ] || [ "$MODE" = "threading_update" ]; then
+          SCRIPT="update_threading_structure.py"
+          ARGS=""
+          
+          # Handle single year input
+          if [ -n "${{ github.event.inputs.single_year }}" ]; then
+            ARGS="$ARGS --single-year ${{ github.event.inputs.single_year }}"
+          fi
+          
+          # Handle multiple years input
+          if [ -n "${{ github.event.inputs.years }}" ]; then
+            YEARS_ARG=$(echo "${{ github.event.inputs.years }}" | tr ',' ' ')
+            ARGS="$ARGS --years $YEARS_ARG"
+          fi
+          
+          # If no specific years provided, process recent years
+          if [ -z "${{ github.event.inputs.single_year }}" ] && [ -z "${{ github.event.inputs.years }}" ]; then
+            CURRENT_YEAR=$(date +%Y)
+            LAST_YEAR=$((CURRENT_YEAR - 1))
+            ARGS="--years $LAST_YEAR $CURRENT_YEAR"
+          fi
+          
+        else
+          # Full generation mode
+          SCRIPT="xmls_generator_production.py"
+          ARGS=""
+        fi
+        
+        echo "script=$SCRIPT" >> $GITHUB_OUTPUT
+        echo "args=$ARGS" >> $GITHUB_OUTPUT
+        echo "Selected script: $SCRIPT with args: $ARGS"
+
     - name: Execute Python script
-      run: python xmls_generator_production.py
+      run: python ${{ steps.script_config.outputs.script }} ${{ steps.script_config.outputs.args }}
     
     - name: Configure Git
       run: |
@@ -49,6 +100,10 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Updated newly generated xml files"
+          if [ "${{ steps.script_config.outputs.script }}" = "update_threading_structure.py" ]; then
+            git commit -m "Updated XML files with threading structure"
+          else
+            git commit -m "Updated newly generated xml files"
+          fi
           git push
         fi
