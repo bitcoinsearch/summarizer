@@ -34,6 +34,9 @@ if __name__ == "__main__":
     logger.info(f"start_date: {start_date_str}")
     logger.info(f"end_date_str: {end_date_str}")
 
+    # Counter for total updated XML files across all sources
+    total_updated_xmls = 0
+
     for dev_url in dev_urls:
         data_list = elastic_search.extract_data_from_es(
             ES_INDEX, dev_url, start_date_str, end_date_str, exclude_combined_summary_docs=True
@@ -47,7 +50,8 @@ if __name__ == "__main__":
         while True:
             try:
                 # Call new method to update threading data only
-                gen.update_xml_threading(data_list, dev_url, target_year)
+                updated_count = gen.update_xml_threading(data_list, dev_url, target_year)
+                total_updated_xmls += updated_count
                 break
             except (APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError) as ex:
                 logger.error(str(ex))
@@ -57,4 +61,4 @@ if __name__ == "__main__":
                 if count_main > 5:
                     sys.exit(ex)
 
-    logger.info("Process Complete.")
+    logger.success(f"🎉 PROCESS COMPLETE: Updated threading data in {total_updated_xmls} XML files for year {target_year}")

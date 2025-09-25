@@ -711,7 +711,7 @@ class GenerateXML:
         """
         if len(dict_data) == 0:
             logger.info(f"No input data found for: {url}")
-            return
+            return 0
 
         logger.info(f"🔄 XML THREADING UPDATE: Starting processing for {url} (year {target_year})")
         
@@ -719,9 +719,12 @@ class GenerateXML:
         emails_df = self.generate_new_emails_df(dict_data, url)
         if len(emails_df) == 0:
             logger.info(f"No emails found for: {url}")
-            return
+            return 0
 
         logger.info(f"📧 XML THREADING UPDATE: Processing {len(emails_df)} emails from ElasticSearch")
+        
+        # Counter for updated XML files
+        updated_xml_count = 0
         
         # Process each thread (unique title)
         titles = emails_df['title'].unique()
@@ -774,13 +777,16 @@ class GenerateXML:
                         thread_data.append(thread_item)
                 
                 # Update the XML file with threading information
-                self._update_existing_xml_with_threading(combined_file_path, thread_data)
+                if self._update_existing_xml_with_threading(combined_file_path, thread_data):
+                    updated_xml_count += 1
                 
-        logger.success(f"✅ XML THREADING UPDATE: Completed processing for {url} (year {target_year})")
+        logger.success(f"✅ XML THREADING UPDATE: Completed processing for {url} (year {target_year}) - Updated {updated_xml_count} XML files")
+        return updated_xml_count
 
     def _update_existing_xml_with_threading(self, xml_file_path, thread_data):
         """
         Update an existing XML file by adding threading structure while preserving all existing content.
+        Returns True if the file was successfully updated, False otherwise.
         """
         try:            
             logger.info(f"📄 UPDATING XML: Reading {xml_file_path}")
@@ -809,6 +815,7 @@ class GenerateXML:
                 logger.success(f"✅ UPDATING XML: Added threading structure with {len(thread_data)} messages")
             else:
                 logger.warning(f"⚠️ UPDATING XML: No thread data provided for {xml_file_path}")
+                return False
             
             # Write updated XML back to file
             logger.info(f"💾 UPDATING XML: Saving updated XML to {xml_file_path}")
@@ -817,7 +824,9 @@ class GenerateXML:
             tree.write(xml_file_path, encoding='UTF-8', xml_declaration=True)
             
             logger.success(f"✅ UPDATING XML: Successfully updated {xml_file_path}")
+            return True
             
         except Exception as e:
             logger.error(f"❌ UPDATING XML: Error updating {xml_file_path}: {str(e)}")
             logger.error(traceback.format_exc())
+            return False
