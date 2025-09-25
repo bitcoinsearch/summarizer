@@ -1,4 +1,5 @@
 import time
+import os
 from datetime import datetime, timedelta
 import sys
 from loguru import logger
@@ -7,25 +8,52 @@ from openai.error import APIError, PermissionError, AuthenticationError, Invalid
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import GenerateXML
+from xml_threading_updater import XMLThreadingUpdater
 
 warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
+    # Get parameters from environment variables
+    start_year = os.environ.get('START_YEAR')
+    update_threading_only = os.environ.get('UPDATE_THREADING_ONLY', 'false').lower() == 'true'
+    
+    logger.info(f"🚀 XML GENERATOR: Starting with START_YEAR={start_year}, UPDATE_THREADING_ONLY={update_threading_only}")
+    
+    # If only updating threading, run the threading updater and exit
+    if update_threading_only:
+        logger.info("🧵 XML GENERATOR: Running in threading update mode only")
+        updater = XMLThreadingUpdater()
+        updater.update_all_threading(start_year=start_year)
+        logger.info("✅ XML GENERATOR: Threading update completed")
+        sys.exit(0)
+    
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
+    
+    # Only process bitcoin-dev, skip delvingbitcoin as requested
     dev_urls = [
-        "https://delvingbitcoin.org/",
         "https://gnusha.org/pi/bitcoindev/",
         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
     ]
+    
+    logger.info("📋 XML GENERATOR: Processing only bitcoin-dev domains (skipping delvingbitcoin)")
 
+    # Calculate date range
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=90)  # Extended for testing to include March 2025
+    
+    if start_year:
+        # Use specified year as start date
+        start_date = datetime(int(start_year), 1, 1)
+        logger.info(f"📅 XML GENERATOR: Using custom start year: {start_year}")
+    else:
+        # Use default 90 days
+        start_date = end_date - timedelta(days=90)
+        logger.info("📅 XML GENERATOR: Using default 90 days range")
 
     # yyyy-mm-dd
     end_date_str = end_date.strftime("%Y-%m-%d")
     start_date_str = start_date.strftime("%Y-%m-%d")
-    logger.info(f"start_data: {start_date_str}")
+    logger.info(f"start_date: {start_date_str}")
     logger.info(f"end_date_str: {end_date_str}")
 
     for dev_url in dev_urls:
@@ -50,4 +78,13 @@ if __name__ == "__main__":
                 if count_main > 5:
                     sys.exit(ex)
 
-    logger.info("Process Complete.")
+    # After processing, update threading for all XMLs (including newly created ones)
+    logger.info("🧵 XML GENERATOR: Starting threading update for all XMLs...")
+    try:
+        updater = XMLThreadingUpdater()
+        updater.update_all_threading(start_year=start_year)
+        logger.success("✅ XML GENERATOR: Threading update completed successfully")
+    except Exception as e:
+        logger.error(f"❌ XML GENERATOR: Error during threading update: {e}")
+
+    logger.info("🎉 Process Complete.")

@@ -3,6 +3,17 @@ on:
   schedule:
     - cron: "0 1 * * *" # every day at 01:00 AM UTC
   workflow_dispatch:
+    inputs:
+      start_year:
+        description: 'Start year for processing (e.g., 2022). If not specified, uses default 90 days.'
+        required: false
+        default: ''
+        type: string
+      update_threading_only:
+        description: 'Only update threading structure without generating new files'
+        required: false
+        default: false
+        type: boolean
   repository_dispatch:
 
 permissions:
@@ -18,6 +29,8 @@ jobs:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       ES_INDEX: ${{ secrets.ES_INDEX }}
+      START_YEAR: ${{ github.event.inputs.start_year }}
+      UPDATE_THREADING_ONLY: ${{ github.event.inputs.update_threading_only }}
 
     steps:
     - uses: actions/checkout@v2
@@ -49,6 +62,12 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Updated newly generated xml files"
+          if [ "${{ github.event.inputs.update_threading_only }}" = "true" ]; then
+            git commit -m "Updated XML files with threading structure (threading update only)"
+          elif [ -n "${{ github.event.inputs.start_year }}" ]; then
+            git commit -m "Updated XML files from year ${{ github.event.inputs.start_year }} with threading structure"
+          else
+            git commit -m "Updated newly generated XML files with threading structure"
+          fi
           git push
         fi
