@@ -1,31 +1,38 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Zero-knowledge proofs e.g. Schnorr are incompatible with address signing without compromise</title>
-  <updated>2023-08-02T07:13:50.255363+00:00</updated>
-  <author>
-    <name>Pieter Wuille 2022-07-28 15:58:03+00:00</name>
-  </author>
-  <author>
-    <name>Ali Sherief 2022-07-28 15:51:18+00:00</name>
-  </author>
-  <author>
-    <name>Pieter Wuille 2022-07-28 15:27:05+00:00</name>
-  </author>
-  <author>
-    <name>Ali Sherief 2022-07-28 07:27:02+00:00</name>
-  </author>
+  <updated>2025-09-26T14:24:08.456387+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="mbd080a53c4e52c1a351248dd40f6b8c9dadc67b8">
+      <author>[bitcoin-dev] Zero-knowledge proofs e.g. Schnorr are incompatible with address signing without compromise Ali Sherief</author>
+      <timestamp>2022-07-28T07:27:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Zero-knowledge proofs e.g. Schnorr are incompatible with address signing without compromise Ali Sherief" parent_id="mailing-list-2022-07-mbd080a53c4e52c1a351248dd40f6b8c9dadc67b8" anchor="m18717e61459e14ee8d35ff6359d7b222e5352137">
+      <author>Pieter Wuille</author>
+      <timestamp>2022-07-28T15:27:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Pieter Wuille" parent_id="mailing-list-2022-07-m18717e61459e14ee8d35ff6359d7b222e5352137" anchor="mbcefaaf511eea058564bc4ac22618ad2928f4c4a">
+      <author>Ali Sherief</author>
+      <timestamp>2022-07-28T15:51:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Ali Sherief" parent_id="mailing-list-2022-07-mbcefaaf511eea058564bc4ac22618ad2928f4c4a" anchor="m6c1de31f6fb8647eff9809641ddc537f2a1cb0fe">
+      <author>Pieter Wuille</author>
+      <timestamp>2022-07-28T15:58:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/July_2022/020807_Zero-knowledge-proofs-e-g-Schnorr-are-incompatible-with-address-signing-without-compromise.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2022/020806_Zero-knowledge-proofs-e-g-Schnorr-are-incompatible-with-address-signing-without-compromise.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2022/020805_Zero-knowledge-proofs-e-g-Schnorr-are-incompatible-with-address-signing-without-compromise.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2022/020803_Zero-knowledge-proofs-e-g-Schnorr-are-incompatible-with-address-signing-without-compromise.xml" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020803.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Zero-knowledge proofs e.g. Schnorr are incompatible with address signing without compromise</title>
-    <updated>2023-08-02T07:13:50.255363+00:00</updated>
+    <updated>2025-09-26T14:24:08.456992+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020803.html" rel="alternate"/>
-    <summary>In a discussion about Bitcoin Improvement Proposal (BIP) 340, Ali Sherief sought clarification on the recovery of public keys from single-key signatures. The response clarified that BIP340 does not support key recovery and that a choice had to be made between supporting batch validation or public key recovery. Ultimately, it was decided to prioritize batch validation. The conversation then shifted to the implementation of BIP340 in taproot compatible wallets. It was stated that while some wallets lack a sign message feature, every taproot compatible wallet has a BIP340 implementation for transaction signing. If a wallet supports taproot signing, it already has the necessary code for producing BIP340 signatures, making message signing irrelevant if taproot signing is not supported.During the BIP340 discussion, it was emphasized that the intentional design choice in BIP340 is either batch verifiability or public key recovery. The topic of recovering a public key from a single-key signature was also addressed. Ali Sherief planned to concatenate the public key after the signature, rather than appending it after the Taproot address due to its unruly nature. The suggestion was made to work on BIP322, which is compatible with all script types, not limited to single-key policies, and easily adaptable to future schemes. Pieter Wuille added that every Taproot compatible wallet already incorporates a BIP340 implementation.A recent message on the bitcoin-dev mailing list discussed the compatibility of zero-knowledge proofs, such as Schnorr, with address message signing. It was noted that retrieving the public key from the address or signature is not possible, posing a challenge in proving the authenticity of a Schnorr signature. This limitation was an intentional design choice in BIP340, prioritizing batch verifiability over public key recovery. The author of the message expressed regret regarding the use of public key recovery when introducing the legacy message signing scheme, suggesting that script signatures like those proposed in BIP322 would have been a better choice. It was also mentioned that including the public key + BIP340 signature in the encoded signature could avoid reliance on public key recovery. To address compatibility concerns with address signing mechanisms, the author proposed sacrificing the zero-knowledge aspect of their BIP or creating a separate message signing format exclusively for Taproot. However, they believed that this redundancy could be avoided by advancing BIP322, which can verify all script types and accommodate any requirements.In a post on Bitcointalk, the author discussed the implementation of address/message signing support for Taproot, specifically focusing on Schnorr signatures. The author noted that BIP340 has already standardized this, eliminating the need for re-implementation. However, there are certain considerations to keep in mind before implementing this signing format, such as encoding and public key requirements. The article further explained the default signing and verification algorithms for Schnorr signatures, highlighting the incompatibility of zero-knowledge proofs (like Schnorr) with address message signing due to the inability to retrieve the public key from the address or signature. To achieve compatibility with the address signing mechanism, either the zero-knowledge aspect would have to be sacrificed or a separate message signing format would be necessary. The article concluded by questioning whether the community truly desires message signatures considering the increasing discrepancy between legacy addresses and other address types.</summary>
     <published>2022-07-28T15:58:03+00:00</published>
+    <summary>In a discussion about Bitcoin Improvement Proposal (BIP) 340, Ali Sherief sought clarification on the recovery of public keys from single-key signatures. The response clarified that BIP340 does not support key recovery and that a choice had to be made between supporting batch validation or public key recovery. Ultimately, it was decided to prioritize batch validation. The conversation then shifted to the implementation of BIP340 in taproot compatible wallets. It was stated that while some wallets lack a sign message feature, every taproot compatible wallet has a BIP340 implementation for transaction signing. If a wallet supports taproot signing, it already has the necessary code for producing BIP340 signatures, making message signing irrelevant if taproot signing is not supported.During the BIP340 discussion, it was emphasized that the intentional design choice in BIP340 is either batch verifiability or public key recovery. The topic of recovering a public key from a single-key signature was also addressed. Ali Sherief planned to concatenate the public key after the signature, rather than appending it after the Taproot address due to its unruly nature. The suggestion was made to work on BIP322, which is compatible with all script types, not limited to single-key policies, and easily adaptable to future schemes. Pieter Wuille added that every Taproot compatible wallet already incorporates a BIP340 implementation.A recent message on the bitcoin-dev mailing list discussed the compatibility of zero-knowledge proofs, such as Schnorr, with address message signing. It was noted that retrieving the public key from the address or signature is not possible, posing a challenge in proving the authenticity of a Schnorr signature. This limitation was an intentional design choice in BIP340, prioritizing batch verifiability over public key recovery. The author of the message expressed regret regarding the use of public key recovery when introducing the legacy message signing scheme, suggesting that script signatures like those proposed in BIP322 would have been a better choice. It was also mentioned that including the public key + BIP340 signature in the encoded signature could avoid reliance on public key recovery. To address compatibility concerns with address signing mechanisms, the author proposed sacrificing the zero-knowledge aspect of their BIP or creating a separate message signing format exclusively for Taproot. However, they believed that this redundancy could be avoided by advancing BIP322, which can verify all script types and accommodate any requirements.In a post on Bitcointalk, the author discussed the implementation of address/message signing support for Taproot, specifically focusing on Schnorr signatures. The author noted that BIP340 has already standardized this, eliminating the need for re-implementation. However, there are certain considerations to keep in mind before implementing this signing format, such as encoding and public key requirements. The article further explained the default signing and verification algorithms for Schnorr signatures, highlighting the incompatibility of zero-knowledge proofs (like Schnorr) with address message signing due to the inability to retrieve the public key from the address or signature. To achieve compatibility with the address signing mechanism, either the zero-knowledge aspect would have to be sacrificed or a separate message signing format would be necessary. The article concluded by questioning whether the community truly desires message signatures considering the increasing discrepancy between legacy addresses and other address types.</summary>
   </entry>
 </feed>
