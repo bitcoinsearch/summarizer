@@ -1,35 +1,43 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposed BIP for MuSig2 PSBT Fields</title>
-  <updated>2023-10-15T01:59:39.156314+00:00</updated>
-  <author>
-    <name>Jonas Nick 2023-10-12 07:43:21+00:00</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2023-10-12 07:39:32+00:00</name>
-  </author>
-  <author>
-    <name>Andrew Chow 2023-10-11 23:59:16+00:00</name>
-  </author>
-  <author>
-    <name>Anthony Towns 2023-10-11 23:47:58+00:00</name>
-  </author>
-  <author>
-    <name>Andrew Chow 2023-10-10 22:28:37+00:00</name>
-  </author>
+  <updated>2025-09-26T09:51:54.745022+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m8333fee57f85ee1f711408408b66e619336c18cd">
+      <author>[bitcoin-dev] Proposed BIP for MuSig2 PSBT Fields Andrew Chow</author>
+      <timestamp>2023-10-10T22:28:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Proposed BIP for MuSig2 PSBT Fields Andrew Chow" parent_id="mailing-list-2023-10-m8333fee57f85ee1f711408408b66e619336c18cd" anchor="md01d96e9be2a7cbd7ff146a9dcc278d0a462e308">
+      <author>Anthony Towns</author>
+      <timestamp>2023-10-11T23:47:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Anthony Towns" parent_id="mailing-list-2023-10-md01d96e9be2a7cbd7ff146a9dcc278d0a462e308" anchor="m80cd9a13ec23a4f49266ae2638f1bb0863cb5068">
+      <author>Andrew Chow</author>
+      <timestamp>2023-10-11T23:59:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Andrew Chow" parent_id="mailing-list-2023-10-m80cd9a13ec23a4f49266ae2638f1bb0863cb5068" anchor="mc080b67e874ee2e3a0369b025ad74ef88abd5b10">
+      <author>Anthony Towns</author>
+      <timestamp>2023-10-12T07:39:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="2" position="4" reply_to="Anthony Towns" parent_id="mailing-list-2023-10-md01d96e9be2a7cbd7ff146a9dcc278d0a462e308" anchor="me8cd51c7d603a8b413df990e3f26d4ebfdb0bf5e">
+      <author>Jonas Nick</author>
+      <timestamp>2023-10-12T07:43:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Oct_2023/021995_Proposed-BIP-for-MuSig2-PSBT-Fields.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/021993_Proposed-BIP-for-MuSig2-PSBT-Fields.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/021992_Proposed-BIP-for-MuSig2-PSBT-Fields.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/021991_Proposed-BIP-for-MuSig2-PSBT-Fields.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/021988_Proposed-BIP-for-MuSig2-PSBT-Fields.xml" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/021995.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Proposed BIP for MuSig2 PSBT Fields</title>
-    <updated>2023-10-15T01:59:39.156379+00:00</updated>
+    <updated>2025-09-26T09:51:54.745723+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/021995.html" rel="alternate"/>
-    <summary>The email thread discusses the absence of adaptor signatures in BIP 327 ("MuSig2") and the rationale behind this decision. The author mentions that the BIP is already long and complicated enough without including adaptor signatures. However, it is possible to propose a separate adaptor signature BIP on top of MuSig2 in a modular fashion. The author also notes that there is no security proof for adaptor signatures except for a sketch that was written a few years ago. At the time, there seemed to be a higher demand for single-signer adaptor signatures.Despite the missing specification, some version of adaptor signatures has been added to the libsecp256k1-zkp MuSig2 module to allow experimentation. However, it is worth mentioning that alternative designs to the implementation in the libsecp256k1-zkp module exist. There is a current libsecp256k1-zkp PR for single-signer Schnorr adaptor signatures with the adaptor signature, where the point is extracted from an adaptor signature. This simplifies the API and reduces communication but makes batch verification of multiple adaptor signatures impossible.The email also touches upon the topic of anti-exfil and provides a link to libwally's protocol for anti-exfil with ecdsa signatures. The author suggests that adding support for anti-exfil and tweaks/adaptor signatures to musig capable signers would be beneficial. They mention that for signers who don't care about these features, the only difference is adding the tweak to the musig nonces before hashing/signing, which is straightforward. However, the author believes that specifying these features as part of the BIP would be an easy win, although it shouldn't be a blocker.In another email, a participant expresses disappointment at the absence of adaptor signature support in BIP 327. They mention that libsecp256k1-zkp has implemented it and provide links to the relevant code. The participant suggests adding additional fields to specify the adaptor and adaptor secret, along with changes to the PartialSigAgg. They note that signers who don't know the adaptor secret would need to ensure the validity of partial signatures provided by signers who do/might know the secret, but this depends on the protocol and cannot be automated at the PSBT level.Finally, the email includes a message from the author who shares a BIP draft for MuSig2 PSBT fields. They provide a link to the draft and mention some notable differences compared to a previous gist. The participant pubkeys field is keyed by only the aggregate xonly key, and the participant pubkeys themselves are compressed rather than xonly.</summary>
     <published>2023-10-12T07:43:21+00:00</published>
+    <summary>The email thread discusses the absence of adaptor signatures in BIP 327 (&quot;MuSig2&quot;) and the rationale behind this decision. The author mentions that the BIP is already long and complicated enough without including adaptor signatures. However, it is possible to propose a separate adaptor signature BIP on top of MuSig2 in a modular fashion. The author also notes that there is no security proof for adaptor signatures except for a sketch that was written a few years ago. At the time, there seemed to be a higher demand for single-signer adaptor signatures.Despite the missing specification, some version of adaptor signatures has been added to the libsecp256k1-zkp MuSig2 module to allow experimentation. However, it is worth mentioning that alternative designs to the implementation in the libsecp256k1-zkp module exist. There is a current libsecp256k1-zkp PR for single-signer Schnorr adaptor signatures with the adaptor signature, where the point is extracted from an adaptor signature. This simplifies the API and reduces communication but makes batch verification of multiple adaptor signatures impossible.The email also touches upon the topic of anti-exfil and provides a link to libwally's protocol for anti-exfil with ecdsa signatures. The author suggests that adding support for anti-exfil and tweaks/adaptor signatures to musig capable signers would be beneficial. They mention that for signers who don't care about these features, the only difference is adding the tweak to the musig nonces before hashing/signing, which is straightforward. However, the author believes that specifying these features as part of the BIP would be an easy win, although it shouldn't be a blocker.In another email, a participant expresses disappointment at the absence of adaptor signature support in BIP 327. They mention that libsecp256k1-zkp has implemented it and provide links to the relevant code. The participant suggests adding additional fields to specify the adaptor and adaptor secret, along with changes to the PartialSigAgg. They note that signers who don't know the adaptor secret would need to ensure the validity of partial signatures provided by signers who do/might know the secret, but this depends on the protocol and cannot be automated at the PSBT level.Finally, the email includes a message from the author who shares a BIP draft for MuSig2 PSBT fields. They provide a link to the draft and mention some notable differences compared to a previous gist. The participant pubkeys field is keyed by only the aggregate xonly key, and the participant pubkeys themselves are compressed rather than xonly.</summary>
   </entry>
 </feed>
