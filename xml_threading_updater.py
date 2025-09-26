@@ -29,6 +29,48 @@ class XMLThreadingUpdater:
             logger.error(f"Error checking threading structure in {xml_file_path}: {e}")
             return False
 
+    def recover_authors_from_individual_files(self, links):
+        """Recover author information from individual XML files"""
+        authors = []
+        namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+        
+        for link in links:
+            # Skip external links
+            if link.startswith('http'):
+                continue
+                
+            try:
+                # Convert relative link to file path
+                if link.startswith('bitcoin-dev/'):
+                    file_path = f"static/{link}"
+                else:
+                    file_path = link
+                    
+                if os.path.exists(file_path):
+                    tree = ET.parse(file_path)
+                    root = tree.getroot()
+                    
+                    author_elem = root.find('.//atom:author/atom:name', namespaces)
+                    published_elem = root.find('.//atom:entry/atom:published', namespaces)
+                    
+                    if author_elem is not None and published_elem is not None:
+                        # Combine author and date like original format
+                        author_with_date = f"{author_elem.text} {published_elem.text}"
+                        authors.append(author_with_date)
+                        
+            except Exception as e:
+                logger.warning(f"Could not read individual file {link}: {e}")
+                continue
+        
+        # Sort by date (chronological order)
+        try:
+            authors.sort(key=lambda x: x.split()[-1])
+        except:
+            pass  # If sorting fails, keep original order
+            
+        logger.info(f"🔧 AUTHOR RECOVERY: Recovered {len(authors)} authors from individual files")
+        return authors
+
     def extract_existing_summary_and_metadata(self, xml_file_path):
         """Extract existing summary and metadata from XML file"""
         try:
@@ -57,12 +99,25 @@ class XMLThreadingUpdater:
                 if href:
                     links.append(href)
             
+            # Extract existing authors (IMPORTANT: preserve original authors)
+            authors = []
+            author_elements = root.findall('.//atom:author/atom:name', namespaces)
+            for author_elem in author_elements:
+                if author_elem.text:
+                    authors.append(author_elem.text)
+            
+            # If no authors found, try to recover from individual files
+            if not authors and links:
+                logger.warning("🔧 No authors found in combined file, attempting recovery from individual files...")
+                authors = self.recover_authors_from_individual_files(links)
+            
             return {
                 'title': title,
                 'summary': summary,
                 'url': url,
                 'published': published,
-                'links': links
+                'links': links,
+                'authors': authors
             }
         except Exception as e:
             logger.error(f"Error extracting data from {xml_file_path}: {e}")
@@ -156,6 +211,12 @@ class XMLThreadingUpdater:
                 self.gen._build_threaded_structure(thread_element, thread_data)
             else:
                 logger.warning("⚠️ THREADING UPDATER: No thread data available, keeping flat structure")
+                # PRESERVE ORIGINAL AUTHORS when no threading data
+                if existing_data.get('authors'):
+                    logger.info(f"📋 THREADING UPDATER: Preserving {len(existing_data['authors'])} original authors")
+                    for author_text in existing_data['authors']:
+                        author_elem = ET.SubElement(feed, 'author')
+                        ET.SubElement(author_elem, 'name').text = author_text
             
             # Add links to individual XML files
             for link in existing_data['links']:
@@ -268,9 +329,25 @@ class XMLThreadingUpdater:
         
         return True
 
+    def get_threading_data_for_title_multi_domain(self, title):
+        """Try to fetch threading data from multiple bitcoin-dev domains"""
+        dev_urls = [
+            "https://mailing-list.bitcoindevs.xyz/bitcoindev/",  # Primary
+            "https://gnusha.org/pi/bitcoindev/"  # Fallback
+        ]
+        
+        for dev_url in dev_urls:
+            logger.info(f"🔍 Trying domain: {dev_url}")
+            thread_data = self.get_threading_data_for_title(title, dev_url)
+            if thread_data:
+                logger.success(f"✅ Found threading data in domain: {dev_url}")
+                return thread_data
+        
+        logger.warning(f"❌ No threading data found in any domain for: {title}")
+        return []
+
     def update_all_threading(self, start_year=None, start_month=None, months_limit=None):
         """Update all combined XML files with threading structure"""
-        dev_url = "https://gnusha.org/pi/bitcoindev/"  # Only bitcoin-dev
         
         logger.info("🚀 THREADING UPDATER: Starting threading update for bitcoin-dev")
         if start_year:
@@ -329,8 +406,8 @@ class XMLThreadingUpdater:
                     error_count += 1
                     continue
                 
-                # Get threading data from Elasticsearch with retry logic
-                thread_data = self.get_threading_data_for_title(title, dev_url)
+                # Get threading data from Elasticsearch with multi-domain retry logic
+                thread_data = self.get_threading_data_for_title_multi_domain(title)
                 
                 # Update XML with threading
                 if self.update_xml_with_threading(xml_file_path, thread_data, existing_data):
