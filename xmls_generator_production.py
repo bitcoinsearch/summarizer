@@ -14,27 +14,25 @@ warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
     # Get parameters from environment variables
-    start_year = os.environ.get('START_YEAR')
-    start_month = os.environ.get('START_MONTH')
-    months_limit = os.environ.get('MONTHS_LIMIT')
+    from_year = os.environ.get('FROM_YEAR')
+    to_year = os.environ.get('TO_YEAR')
     update_threading_only = os.environ.get('UPDATE_THREADING_ONLY', 'false').lower() == 'true'
     
     # Convert to integers
     try:
-        start_year = int(start_year) if start_year else None
-        start_month = int(start_month) if start_month else None
-        months_limit = int(months_limit) if months_limit else None
+        from_year = int(from_year) if from_year else None
+        to_year = int(to_year) if to_year else None
     except ValueError as e:
         logger.error(f"Invalid parameter format: {e}")
         sys.exit(1)
     
-    logger.info(f"🚀 XML GENERATOR: Starting with START_YEAR={start_year}, START_MONTH={start_month}, MONTHS_LIMIT={months_limit}, UPDATE_THREADING_ONLY={update_threading_only}")
+    logger.info(f"🚀 XML GENERATOR: Starting with FROM_YEAR={from_year}, TO_YEAR={to_year}, UPDATE_THREADING_ONLY={update_threading_only}")
     
     # If only updating threading, run the threading updater and exit
     if update_threading_only:
         logger.info("🧵 XML GENERATOR: Running in threading update mode only")
         updater = XMLThreadingUpdater()
-        updater.update_all_threading(start_year=start_year, start_month=start_month, months_limit=months_limit)
+        updater.update_all_threading(from_year=from_year, to_year=to_year)
         logger.info("✅ XML GENERATOR: Threading update completed")
         sys.exit(0)
     
@@ -52,10 +50,18 @@ if __name__ == "__main__":
     # Calculate date range
     end_date = datetime.now()
     
-    if start_year:
-        # Use specified year as start date
-        start_date = datetime(start_year, start_month or 1, 1)
-        logger.info(f"📅 XML GENERATOR: Using custom start date: {start_date.strftime('%Y-%m-%d')}")
+    if from_year:
+        # Use specified year range
+        start_date = datetime(from_year, 1, 1)
+        if to_year:
+            # Use end of to_year as end date
+            end_date = datetime(to_year, 12, 31, 23, 59, 59)
+            logger.info(f"📅 XML GENERATOR: Processing year range {from_year}-{to_year}")
+        else:
+            # Process only from_year
+            end_date = datetime(from_year, 12, 31, 23, 59, 59)
+            logger.info(f"📅 XML GENERATOR: Processing single year {from_year}")
+        logger.info(f"📅 XML GENERATOR: Date range: {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
     else:
         # Use default 90 days
         start_date = end_date - timedelta(days=90)
@@ -93,7 +99,7 @@ if __name__ == "__main__":
     logger.info("🧵 XML GENERATOR: Starting threading update for all XMLs...")
     try:
         updater = XMLThreadingUpdater()
-        updater.update_all_threading(start_year=start_year, start_month=start_month, months_limit=months_limit)
+        updater.update_all_threading(from_year=from_year, to_year=to_year)
         logger.success("✅ XML GENERATOR: Threading update completed successfully")
     except Exception as e:
         logger.error(f"❌ XML GENERATOR: Error during threading update: {e}")

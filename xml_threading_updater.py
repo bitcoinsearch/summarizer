@@ -304,30 +304,49 @@ class XMLThreadingUpdater:
             logger.error(f"Error parsing date from path {xml_file_path}: {e}")
             return None, None
 
-    def should_process_file(self, xml_file_path, start_year=None, start_month=None, months_limit=None):
+    def should_process_file(self, xml_file_path, from_year=None, to_year=None, start_year=None, start_month=None, months_limit=None):
         """Determine if file should be processed based on date filters"""
-        if not start_year:
-            return True
-        
-        file_year, file_month = self.parse_date_from_path(xml_file_path)
-        if not file_year or not file_month:
-            return True  # Process if we can't parse date
-        
-        # Check if file is before start date
-        if file_year < start_year:
-            return False
-        if file_year == start_year and start_month and file_month < start_month:
-            return False
-        
-        # Check if file is within months limit
-        if months_limit:
-            start_date = datetime(start_year, start_month or 1, 1)
-            file_date = datetime(file_year, file_month, 1)
-            months_diff = (file_date.year - start_date.year) * 12 + (file_date.month - start_date.month)
-            if months_diff >= months_limit:
+        # Support both new (from_year/to_year) and old (start_year/start_month/months_limit) parameters for backward compatibility
+        if from_year or to_year:
+            # Use new year range logic
+            if not from_year and not to_year:
+                return True
+            
+            file_year, file_month = self.parse_date_from_path(xml_file_path)
+            if not file_year or not file_month:
+                return True  # Process if we can't parse date
+            
+            # Check if file is within the year range
+            if from_year and file_year < from_year:
                 return False
-        
-        return True
+            if to_year and file_year > to_year:
+                return False
+            
+            return True
+        else:
+            # Use old logic for backward compatibility
+            if not start_year:
+                return True
+            
+            file_year, file_month = self.parse_date_from_path(xml_file_path)
+            if not file_year or not file_month:
+                return True  # Process if we can't parse date
+            
+            # Check if file is before start date
+            if file_year < start_year:
+                return False
+            if file_year == start_year and start_month and file_month < start_month:
+                return False
+            
+            # Check if file is within months limit
+            if months_limit:
+                start_date = datetime(start_year, start_month or 1, 1)
+                file_date = datetime(file_year, file_month, 1)
+                months_diff = (file_date.year - start_date.year) * 12 + (file_date.month - start_date.month)
+                if months_diff >= months_limit:
+                    return False
+            
+            return True
 
     def get_threading_data_for_title_multi_domain(self, title):
         """Try to fetch threading data from multiple bitcoin-dev domains"""
@@ -346,11 +365,21 @@ class XMLThreadingUpdater:
         logger.warning(f"❌ No threading data found in any domain for: {title}")
         return []
 
-    def update_all_threading(self, start_year=None, start_month=None, months_limit=None):
+    def update_all_threading(self, from_year=None, to_year=None, start_year=None, start_month=None, months_limit=None):
         """Update all combined XML files with threading structure"""
         
         logger.info("🚀 THREADING UPDATER: Starting threading update for bitcoin-dev")
-        if start_year:
+        
+        # Log the date range being processed
+        if from_year or to_year:
+            if from_year and to_year:
+                date_info = f"for years {from_year}-{to_year}"
+            elif from_year:
+                date_info = f"for year {from_year}"
+            elif to_year:
+                date_info = f"up to year {to_year}"
+            logger.info(f"📅 THREADING UPDATER: Processing {date_info}")
+        elif start_year:
             date_info = f"from {start_year}"
             if start_month:
                 date_info += f"/{start_month:02d}"
@@ -364,7 +393,7 @@ class XMLThreadingUpdater:
         # Filter files by date criteria
         files_to_process = []
         for xml_file_path in combined_files:
-            if self.should_process_file(xml_file_path, start_year, start_month, months_limit):
+            if self.should_process_file(xml_file_path, from_year, to_year, start_year, start_month, months_limit):
                 files_to_process.append(xml_file_path)
             else:
                 file_year, file_month = self.parse_date_from_path(xml_file_path)
@@ -433,16 +462,28 @@ class XMLThreadingUpdater:
 
 if __name__ == "__main__":
     # Get parameters from environment or command line
+    from_year = os.environ.get('FROM_YEAR')
+    to_year = os.environ.get('TO_YEAR')
+    # Support old environment variables for backward compatibility
     start_year = os.environ.get('START_YEAR')
     update_threading_only = os.environ.get('UPDATE_THREADING_ONLY', 'false').lower() == 'true'
+    
+    # Convert to integers
+    try:
+        from_year = int(from_year) if from_year else None
+        to_year = int(to_year) if to_year else None
+        start_year = int(start_year) if start_year else None
+    except ValueError as e:
+        logger.error(f"Invalid parameter format: {e}")
+        sys.exit(1)
     
     if len(sys.argv) > 1:
         start_year = sys.argv[1] if sys.argv[1] else None
     
     updater = XMLThreadingUpdater()
     
-    if update_threading_only or start_year:
+    if update_threading_only or from_year or to_year or start_year:
         logger.info("🧵 THREADING UPDATER: Running in threading update mode")
-        updater.update_all_threading(start_year=start_year)
+        updater.update_all_threading(from_year=from_year, to_year=to_year, start_year=start_year)
     else:
         logger.info("ℹ️ THREADING UPDATER: No threading update requested")
