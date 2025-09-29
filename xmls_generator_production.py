@@ -1,4 +1,5 @@
 import time
+import os
 from datetime import datetime, timedelta
 import sys
 from loguru import logger
@@ -7,6 +8,7 @@ from openai.error import APIError, PermissionError, AuthenticationError, Invalid
 from src.config import ES_INDEX
 from src.elasticsearch_utils import ElasticSearchClient
 from src.xml_utils import GenerateXML
+from xml_threading_updater import XMLThreadingUpdater
 
 warnings.filterwarnings("ignore")
 
@@ -18,14 +20,18 @@ if __name__ == "__main__":
         "https://gnusha.org/pi/bitcoindev/",
         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
     ]
+    
+    logger.info("📋 XML GENERATOR: Processing bitcoin-dev and delvingbitcoin domains")
 
+    # Calculate date range - 30 days as per original main branch
     end_date = datetime.now()
     start_date = end_date - timedelta(days=30)
+    logger.info("📅 XML GENERATOR: Using default 30 days range")
 
     # yyyy-mm-dd
     end_date_str = end_date.strftime("%Y-%m-%d")
     start_date_str = start_date.strftime("%Y-%m-%d")
-    logger.info(f"start_data: {start_date_str}")
+    logger.info(f"start_date: {start_date_str}")
     logger.info(f"end_date_str: {end_date_str}")
 
     for dev_url in dev_urls:
@@ -50,4 +56,13 @@ if __name__ == "__main__":
                 if count_main > 5:
                     sys.exit(ex)
 
-    logger.info("Process Complete.")
+    # After processing, update threading for all XMLs (including newly created ones)
+    logger.info("🧵 XML GENERATOR: Starting threading update for all XMLs...")
+    try:
+        updater = XMLThreadingUpdater()
+        updater.update_all_threading()
+        logger.success("✅ XML GENERATOR: Threading update completed successfully")
+    except Exception as e:
+        logger.error(f"❌ XML GENERATOR: Error during threading update: {e}")
+
+    logger.info("🎉 Process Complete.")
