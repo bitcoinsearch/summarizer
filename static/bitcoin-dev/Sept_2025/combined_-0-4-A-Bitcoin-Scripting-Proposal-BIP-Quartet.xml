@@ -2,7 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [0/4] A Bitcoin Scripting Proposal BIP Quartet</title>
-  <updated>2025-09-28T02:47:05.177675+00:00</updated>
+  <updated>2025-09-30T02:28:44.611595+00:00</updated>
+  <author>
+    <name>Brandon Black 2025-09-29 22:55:00+00:00</name>
+  </author>
   <author>
     <name>Rusty Russell 2025-09-27 11:29:00+00:00</name>
   </author>
@@ -18,8 +21,9 @@
   <author>
     <name>Rusty Russell 2025-09-27 08:12:00+00:00</name>
   </author>
-  <link href="bitcoin-dev/Sept_2025/m33ecdca29207192ddd510d322b9dbae2550dea97_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2025/m3c3d7d5e67e917d2547995a45be1d578bfeb18d1_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2025/md44d8e3672e4b9bdd461ece657805a8b0d0da8e1_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Sept_2025/m33ecdca29207192ddd510d322b9dbae2550dea97_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2025/m94ca41bcf6ebc63f28b787c9af97110cc87c4b66_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2025/m1c24ddd36e9b0549c17301da63df7aee0f42fde5_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2025/m20f4efc6f3423e540b6d43644db14cc2b4db5581_-0-4-A-Bitcoin-Scripting-Proposal-BIP-Quartet.xml" rel="alternate"/>
@@ -27,19 +31,17 @@
   <entry>
     <id>2</id>
     <title>Combined summary - [0/4] A Bitcoin Scripting Proposal BIP Quartet</title>
-    <updated>2025-09-28T02:47:05.177729+00:00</updated>
+    <updated>2025-09-30T02:28:44.611654+00:00</updated>
     <link href="https://gnusha.org/pi/bitcoindev/877bxknwk6.fsf@rustcorp.com.au/T/#m20f4efc6f3423e540b6d43644db14cc2b4db5581" rel="alternate"/>
-    <summary>Rusty Russell, along with Julian Moik, has proposed a series of enhancements aimed at restoring and expanding the capabilities of Bitcoin's scripting language, Script. The essence of these proposals is encapsulated within four Bitcoin Improvement Proposals (BIPs), each addressing a different aspect of the scripting system. The overarching goal is to navigate the fine balance between ensuring rapid script evaluation for security and efficiency while unlocking the original, more extensive scripting powers envisioned for Bitcoin.
+    <summary>The recent Bitcoin Improvement Proposal (BIP) spearheaded by Rusty Russell, with contributions from Julian Moik, marks a pivotal advancement in the evolution of Bitcoin's scripting language. This proposal is meticulously designed to enhance the flexibility and functionality of Tapscript v2 by introducing several new opcodes and reinstating functionalities previously disabled. Central to this enhancement is the creation of OP_TX, an opcode that significantly expands the scripting system's ability to introspect current transactions efficiently. By facilitating direct access to transaction data, OP_TX empowers scripts to execute a broader range of conditional spending scenarios autonomously, adhering to Bitcoin's foundational principle of minimizing reliance on trusted third parties.
 
-The first proposal introduces a "varops budget," which builds upon and extends the concept of the sigops budget from BIP342. This new framework proposes a transaction-wide budget based on the transaction's weight, designed to limit the computational intensity of scripts without unduly restricting scripting potential. The varops budget mechanism relies on detailed benchmarks across various machines, ensuring that the limitations set forth are rooted in empirical data and practical considerations.
+The proposal outlines the introduction of additional opcodes such as OP_CHECKSIGFROMSTACK, OP_SEGMENT, OP_BYTEREV, OP_ECPOINTADD, OP_INTERNALKEY, and OP_MULTI. Each opcode serves a specific purpose in optimizing script functionality, ranging from improving the efficiency of signature verification with OP_TX and OP_SHA256 to enabling script composability and facilitating the construction of ordered Merkle trees and Taproot spends. Notably, OP_MULTI offers a novel approach to handling multiple inputs or outputs, simplifying transaction element management and potentially streamlining fee calculations. These enhancements are grounded in addressing the limitations of pre-Taproot Bitcoin scripting, aiming to restore and expand upon its capabilities for creating Taproot trees and supporting sophisticated script operations.
 
-Following the establishment of the varops budget, the second proposal outlines the restoration of previously disabled script functionalities. With the safety net provided by the varops budget, it becomes feasible to re-enable disabled opcodes, increase stack object sizes and total capacities, and reintroduce arbitrary-length arithmetic operations, albeit with the stipulation that numbers are always treated as unsigned.
+A key aspect of the draft is the introduction of a "varops budget," a concept evolved from the traditional "sigops budget" framework established by SegWit. This new budgeting model aims to provide a more comprehensive and flexible method for assessing script operation costs, focusing on stack data interactions. By establishing systematic cost evaluations based on worst-case behavior, the varops budget seeks to balance script execution efficiency with the need for expanded scripting capabilities. The proposal carefully details the cost model, emphasizing operand size over value and setting upper limits on script and stack object sizes to ensure performance reliability even under extreme conditions.
 
-The third proposal, OP_TX, addresses the need for improved introspection within scripts. By allowing scripts to push parts of the current transaction onto the stack, this opcode significantly simplifies the process of introspection. The concrete design of OP_TX opens up a rich field for discussion and refinement, highlighting its potential impact on script functionality.
+Moreover, the BIP proposes upgrading the tapleaf version to 0xc2, re-enabling functionalities disabled since version 0.3.1, and addressing the operational limitations imposed by prior restrictions. Key features of this upgrade include the restoration of previously disabled opcodes, an increase in the maximum stack object size, and modifications to support arbitrary-length arithmetic operations. These changes reflect a concerted effort to rejuvenate Bitcoin's scripting potential, aligning with the vision of a programmable monetary system free from third-party dependencies.
 
-Finally, the fourth proposal ventures into speculative territory by suggesting several new opcodes for Tapscript v2. These include OP_CHECKSIGFROMSTACK, OP_SEGMENT, OP_BYTEREV, OP_ECPOINTADD, OP_INTERNALKEY, and OP_MULTI. Some of these proposals revive older ideas, while others introduce novel concepts to the scripting language. This mix of familiar and new elements underscores the innovative spirit of the proposals, inviting feedback and debate from the community.
-
-In addition to these proposals, a prototype implementation has been shared, offering a practical basis for testing and further development. Through these comprehensive proposals, Rusty Russell and Julian Moik aim to rejuvenate Bitcoin's scripting capabilities, aligning them more closely with the platform's original vision while ensuring robustness and efficiency in script processing.</summary>
-    <published>2025-09-27T11:29:00+00:00</published>
+The development and refinement of these proposals are documented in a [reference implementation](https://github.com/jmoik/bitcoin/tree/gsr), highlighting the collaborative nature of this initiative. Rusty and Julian's work underscores a significant milestone in Bitcoin scripting, aiming not only to restore its original capabilities but also to introduce innovative solutions that broaden its applicability. Their openness to community feedback and contributions signals a commitment to a participatory development process, inviting further discussion and input to shape the future of Bitcoin scripting.</summary>
+    <published>2025-09-29T22:55:00+00:00</published>
   </entry>
 </feed>
