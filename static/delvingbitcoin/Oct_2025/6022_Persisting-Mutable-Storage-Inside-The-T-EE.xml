@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Persisting Mutable Storage Inside The "T"EE</title>
+  <updated>2025-10-09T02:26:54.750372+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2025-10-08 11:29:24.545000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Persisting Mutable Storage Inside The "T"EE</title>
+    <updated>2025-10-09T02:26:54.750416+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/persisting-mutable-storage-inside-the-t-ee/2029/2" rel="alternate"/>
+    <summary>The discussion revolves around a critical issue known as the RAID5 write hole and attempts to address the problem with a proposed solution that ultimately proves ineffective. The RAID5 write hole phenomenon occurs when a power failure or system crash happens during a write operation, leading to potential data inconsistency or loss. This is because, in RAID5 configurations, data and parity information are distributed across multiple disks to provide fault tolerance and improve performance. However, if a system crash prevents the completion of these updates, the parity will not match the data, causing what is known as the write hole.
+
+An initial example illustrates the problem using a simplified model with minimal disks storing only one bit each. In this scenario, an attempt to change a bit on one disk without successfully updating the corresponding parity bit due to a crash results in inconsistent data upon recovery, especially if one of the disks is completely lost. This simplistic model serves to highlight how data integrity can be compromised when updates to data and parity bits are not atomic.
+
+In response to the RAID5 write hole issue, a theoretical fix involving "T"EE storage disks was discussed but found to be inadequate. This approach attempted to use provisional writes to address the write hole problem. However, it fails to ensure data consistency in scenarios involving partial writes followed by system crashes, especially when considering the possibility of disk failures during or after the crash. The core challenge lies in determining the correct state of the data when a crash occurs during an update operation, a problem that this solution cannot reliably solve.
+
+The real solution proposed for mitigating the RAID5 write hole involves ensuring true atomicity of write operations across the array through the implementation of a journal or write-ahead log, concepts traditionally used in filesystems and databases respectively. This method involves reserving a journal area on all disks within the array, where write operations are first logged before being executed. This journal is maintained in a RAID1 configuration across the disks for redundancy. The inclusion of a version number in the journal entries ensures that in the event of a discrepancy between journals on different disks, the version with the highest number is considered authoritative.
+
+The process described ensures that once a write operation is journaled and acknowledged by a sufficient number of disks, it can then be safely applied to the actual storage areas. This strategy introduces a delay in write operations but guarantees data consistency even in the face of crashes by ensuring that any partially completed operations can be correctly finalized upon system recovery. Further optimizations, such as a "copy sector" command, are suggested to streamline the application of journaled writes and minimize network bandwidth usage, enhancing overall efficiency.
+
+Additionally, the mechanism for ensuring the integrity of journaled entries involves writing an "atomicity sector" containing checksums (MACs) for the journaled data. This allows the array management code to verify whether the journaled operations were fully completed before applying them. If checksums do not match, indicating incomplete writes, the system refrains from applying the corrupt data. This approach ensures that operations are either fully completed or not applied at all, thus maintaining the integrity of the data stored in the array.
+
+In conclusion, addressing the RAID5 write hole effectively requires mechanisms that guarantee the atomicity and integrity of write operations, safeguarding against data corruption and loss in the event of unforeseen crashes or hardware failures. The journaling solution presented offers a robust framework for achieving these objectives, enhancing the reliability and resilience of RAID5 storage configurations.</summary>
+    <published>2025-10-08T11:29:24.545000+00:00</published>
+  </entry>
+</feed>
