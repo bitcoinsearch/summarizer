@@ -275,13 +275,8 @@ def gpt_api(body, custom_prompt=None):
 
 
 def create_summary(body, custom_prompt=None):
-    # TEMPORARILY DISABLED: AI calls commented out for threading testing
-    # summ = gpt_api(body, custom_prompt)
-    # return summ
-    
-    # Return placeholder summary for threading tests (no AI tokens used)
-    logger.info("🧪 AI DISABLED: Using placeholder summary for threading testing")
-    return f"[THREADING TEST] Placeholder summary for testing. Original body length: {len(body) if body else 0} characters. No AI tokens used."
+    summ = gpt_api(body, custom_prompt)
+    return summ
 
 
 def generate_chatgpt_summary_for_prompt(summarization_prompt, max_tokens):
