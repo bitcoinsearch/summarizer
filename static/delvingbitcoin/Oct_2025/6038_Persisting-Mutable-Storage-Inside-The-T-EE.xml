@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Persisting Mutable Storage Inside The "T"EE</title>
+  <updated>2025-10-11T02:21:27.204662+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2025-10-10 06:21:59.582000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Persisting Mutable Storage Inside The "T"EE</title>
+    <updated>2025-10-11T02:21:27.204703+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/persisting-mutable-storage-inside-the-t-ee/2029/4" rel="alternate"/>
+    <summary>In exploring the intricacies of disk encryption and integrity verification, a fundamental discovery was made regarding the use of LUKSv2, which integrates dm-crypt and dm-integrity to form a potent combination akin to an authenticated encryption (AE) scheme. This setup is designed to ensure data integrity before decryption, embodying the Encrypt-then-MAC philosophy where dm-integrity checks for modifications or corruption, followed by decryption via dm-crypt. However, this dual-layer approach necessitates a unique solution to maintain atomic updates of both the integrity tags and the actual data sectors, leading to the implementation of a journaling system.
+
+The utilization of a journal within this framework presents a challenge reminiscent of a "log on a log" scenario, as detailed in a [USENIX conference paper](https://www.usenix.org/system/files/conference/inflow14/inflow14-yang.pdf). This situation arises when a journaling layer is stacked atop another, resulting in quadruple writing operations for every single data write. Such redundancy not only complicates the storage process but also significantly increases wear on the storage medium. This issue is particularly pronounced in configurations where RAID array management employs a journal for atomicity across devices, further compounded when an additional layer for AE (dm-integrity+dm-crypt, or LUKS2) introduces its own journal.
+
+A promising resolution to this complexity is found in the consolidation of logging layers, exemplified by ZFS’s approach. ZFS elegantly combines the functionalities of atomicity logging, transactional filesystem operations, cryptographic-quality checksums, and encryption into a single log layer. This innovation effectively addresses the log-on-a-log dilemma by reducing redundancy and streamlining writes. Furthermore, XFS is mentioned as exploring extensions to incorporate database logs into its file system logs, aiming to provide atomicity for upper-layer databases and alleviate the compounded logging issue.
+
+The evolution of filesystem design towards a model where the entire disk functions as a log, exemplified by ZFS's copy-on-write system, represents a significant advancement. In such systems, data writes are appended to any available space, eliminating the need for separate storage rewrites. This method ensures that data integrity is verified before marking old storage locations as free, thereby optimizing the write process. However, challenges arise in specific applications, such as statechain signers, where the permanence of journal entries poses risks for key deletion and exfiltration. To mitigate these risks, a nuanced approach is suggested, combining the benefits of atomicity in AE and RAID configurations without resorting to extensive journaling. By employing a minimal journal size and precise control over data erasure, it is possible to safeguard against unintended backups of sensitive keys.
+
+Furthermore, the discussion touches upon the choice of cryptographic components, advocating for HMAC over Poly1305 due to HMAC's inherent resistance to key-commitment issues. This consideration is crucial in ensuring the integrity and confidentiality of encrypted data, highlighting the importance of selecting appropriate cryptographic primitives for secure system design.</summary>
+    <published>2025-10-10T06:21:59.582000+00:00</published>
+  </entry>
+</feed>

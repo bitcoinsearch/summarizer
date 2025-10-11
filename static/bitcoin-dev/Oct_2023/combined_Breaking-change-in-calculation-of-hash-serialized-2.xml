@@ -1,27 +1,19 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Breaking change in calculation of hash_serialized_2</title>
-  <updated>2023-10-22T01:59:07.871656+00:00</updated>
-  <author>
-    <name>Fabian 2023-10-20 22:01:40+00:00</name>
-  </author>
-  <author>
-    <name>Peter Todd 2023-10-20 17:34:28+00:00</name>
-  </author>
-  <author>
-    <name>Fabian 2023-10-20 17:19:19+00:00</name>
-  </author>
+  <updated>2025-10-11T02:25:55.866272+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Oct_2023/022052_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022039_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2023/022038_Breaking-change-in-calculation-of-hash-serialized-2.xml" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022052.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Breaking change in calculation of hash_serialized_2</title>
-    <updated>2023-10-22T01:59:07.871709+00:00</updated>
+    <updated>2025-10-11T02:25:55.866358+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/022052.html" rel="alternate"/>
-    <summary>A recent email discussion raised the question of using the SHA256 hash in a snapshot file. James suggested that instead of hashing the snapshot file separately, it would be more efficient to use the hash of the file itself as the canonical hash. This approach would eliminate any malleability issues. James argued that since the function "gettxoutsetinfo" already requires walking through the entire UTXO set to calculate the hash, it makes sense for this function to generate the actual contents of the dump file and calculate the hash of it. He provided a link to Peter Todd's website (https://petertodd.org), although the content of the linked resource was not included in the email.It is important to note that a potential malleability issue was discovered in the UTXO set dump files used by assumeutxo. The issue was caused by a bug in the serialization of UTXOs for the calculation of hash_serialized_2, which is used by Bitcoin Core to check if the UTXO set loaded from a dump file matches the expected value. A fix for this bug is currently being worked on and is scheduled for release in v26.0 in November. As a result of the fix, the serialization will change and all historical UTXO set hash results will also change after upgrading to v26.0. The version number returned in gettxoutset will be renamed to hash_serialized_3.The decision to switch the serialization completely was made due to additional potentially problematic issues found during fuzz testing. If anyone is currently using hash_serialized_2 for any security critical purposes, it is recommended to check if the bugs in the serialization code could cause issues. Switching to hash_serialized_3 or considering using MuHash is advised. For projects that rely on hash_serialized_2 and require time to upgrade and adapt to the changes, it is requested to inform the team. Although breaking changes in APIs without deprecation warning are typically avoided, it is currently believed that keeping the buggy hash_serialized_2 is not necessary as there are no known substantial use cases and its usage may even pose security risks.The team is open to reconsidering the decision if keeping hash_serialized_2 holds serious value for downstream projects. Contact can be made directly with Fabian or through commenting on the PR or the mailing list.</summary>
     <published>2023-10-20T22:01:40+00:00</published>
+    <summary>A recent email discussion raised the question of using the SHA256 hash in a snapshot file. James suggested that instead of hashing the snapshot file separately, it would be more efficient to use the hash of the file itself as the canonical hash. This approach would eliminate any malleability issues. James argued that since the function &quot;gettxoutsetinfo&quot; already requires walking through the entire UTXO set to calculate the hash, it makes sense for this function to generate the actual contents of the dump file and calculate the hash of it. He provided a link to Peter Todd's website (https://petertodd.org), although the content of the linked resource was not included in the email.It is important to note that a potential malleability issue was discovered in the UTXO set dump files used by assumeutxo. The issue was caused by a bug in the serialization of UTXOs for the calculation of hash_serialized_2, which is used by Bitcoin Core to check if the UTXO set loaded from a dump file matches the expected value. A fix for this bug is currently being worked on and is scheduled for release in v26.0 in November. As a result of the fix, the serialization will change and all historical UTXO set hash results will also change after upgrading to v26.0. The version number returned in gettxoutset will be renamed to hash_serialized_3.The decision to switch the serialization completely was made due to additional potentially problematic issues found during fuzz testing. If anyone is currently using hash_serialized_2 for any security critical purposes, it is recommended to check if the bugs in the serialization code could cause issues. Switching to hash_serialized_3 or considering using MuHash is advised. For projects that rely on hash_serialized_2 and require time to upgrade and adapt to the changes, it is requested to inform the team. Although breaking changes in APIs without deprecation warning are typically avoided, it is currently believed that keeping the buggy hash_serialized_2 is not necessary as there are no known substantial use cases and its usage may even pose security risks.The team is open to reconsidering the decision if keeping hash_serialized_2 holds serious value for downstream projects. Contact can be made directly with Fabian or through commenting on the PR or the mailing list.</summary>
   </entry>
 </feed>

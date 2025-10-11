@@ -1,56 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - `OP_EVICT`: An Alternative to `OP_TAPLEAFUPDATEVERIFY`</title>
-  <updated>2023-08-02T05:42:21.822854+00:00</updated>
-  <author>
-    <name>ZmnSCPxj 2022-02-23 11:42:54+00:00</name>
-  </author>
-  <author>
-    <name>Antoine Riard 2022-02-22 00:17:52+00:00</name>
-  </author>
-  <author>
-    <name>Billy Tetrud 2022-02-19 21:59:41+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2022-02-19 11:41:42+00:00</name>
-  </author>
-  <author>
-    <name>Billy Tetrud 2022-02-19 07:21:56+00:00</name>
-  </author>
-  <author>
-    <name>Greg Sanders 2022-02-19 01:46:07+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2022-02-19 01:17:20+00:00</name>
-  </author>
-  <author>
-    <name>Jeremy Rubin 2022-02-19 00:56:05+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2022-02-18 23:39:49+00:00</name>
-  </author>
-  <author>
-    <name>Antoine Riard 2022-02-18 18:09:07+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2022-02-18 16:06:39+00:00</name>
-  </author>
-  <author>
-    <name>Erik Aronesty 2022-02-18 15:50:02+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2022-02-18 14:48:38+00:00</name>
-  </author>
-  <author>
-    <name>Jonas Nick 2022-02-18 13:55:31+00:00</name>
-  </author>
-  <author>
-    <name>Erik Aronesty 2022-02-18 13:53:09+00:00</name>
-  </author>
-  <author>
-    <name>ZmnSCPxj 2022-02-18 02:45:23+00:00</name>
-  </author>
+  <updated>2025-10-11T02:32:29.053374+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Feb_2022/019977_-OP-EVICT-An-Alternative-to-OP-TAPLEAFUPDATEVERIFY-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2022/019969_-OP-EVICT-An-Alternative-to-OP-TAPLEAFUPDATEVERIFY-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2022/019953_-OP-EVICT-An-Alternative-to-OP-TAPLEAFUPDATEVERIFY-.xml" rel="alternate"/>
@@ -67,13 +20,13 @@
   <link href="bitcoin-dev/Feb_2022/019935_-OP-EVICT-An-Alternative-to-OP-TAPLEAFUPDATEVERIFY-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2022/019934_-OP-EVICT-An-Alternative-to-OP-TAPLEAFUPDATEVERIFY-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2022/019926_-OP-EVICT-An-Alternative-to-OP-TAPLEAFUPDATEVERIFY-.xml" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-February/019926.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - `OP_EVICT`: An Alternative to `OP_TAPLEAFUPDATEVERIFY`</title>
-    <updated>2023-08-02T05:42:21.822854+00:00</updated>
+    <updated>2025-10-11T02:32:29.053460+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-February/019926.html" rel="alternate"/>
-    <summary>In a recent email conversation between Antoine and ZmnSCPxj, they discuss the differences between `OP_TLUV` and `OP_EVICT` in terms of their assumptions about cooperation among construction participants once the Taproot tree is set up. While `OP_TLUV` leaves the transaction output with the remaining Tapleaves intact, `OP_EVICT` assumes cooperation among the remaining construction participants to satisfy the final CHECKSIG. In order to revive the construct with `OP_TLUV`, a separate transaction that spends the change output is required, whereas `OP_EVICT` does another CHECKSIG without requiring a separate transaction.The discussion then moves onto the topic of withdrawing funds unilaterally without affecting the stability of the off-chain pool and without cooperation with other users, which is currently a restriction of channel factories fault-tolerance. The blockchain is the only entity that can reliably enforce timeouts, hence, if a channel has an HTLC/PTLC time out, it may be necessary to evict the participant who is not behaving properly, and that is what `OP_EVICT` does. ZmnSCPxj came up with the idea of `OP_EVICT` after musing on this topic.The conversation between Antoine Riard and ZmnSCPxj discusses the implementation of a CoinPool hosted inside a Decker-Wattenhofer or Decker-Russell-Osuntokun construction, with a focus on the eviction mechanism. TLUV is discussed as a possible way to create an "N-of-N With Eviction" construction, which enables the remaining participants to evict offline participants and continue operating in their absence. However, TLUV enforces a constraint in the spends path ordering. In contrast, OP_EVICT removes the constraint in the spends paths ordering and also allows for multiple evictions and the revival of the CoinPool in a single transaction. The disadvantage of OP_EVICT is that it requires point operations.The conversation also explores the possibility of preventing eviction abuse where one counterparty threatens to evict everyone as all the output signatures are known among participants and free to sum. The conclusion is that on-chain fees are currently the only mechanism to avoid such abuse. Finally, the advantage of TLUV over CTV is discussed in terms of revivable constructs with eviction of participants.ZmnSCPxj clarified that the Decker-Russell-Osunstokun paper does not prevent imposing a penalty for cheating attempts in fully punitive channels. He suggested that participants could still retain per-participant versions of update+state transactions and deduct the fee from their main owned funds, similar to the per-participant commitment transactions of Poon-Dryja. The paper just focuses on the mechanism without regard to fees, assuming that the reader already knows they exist and need to be paid.Bitcoin developers are discussing the tradeoffs of punitive channels and their impact on large value channels. While fully punitive channels can encourage correct behavior, they can also make such channels more dangerous from the perspective of bugs causing old states to be published. Non-punitive channels like Eltoo may not be suitable for high-value channels as they do not provide enough punishment to deter cheating attempts.The discussion also covers evictions, revivals, CTV, TLUV, and OP_EVICT, a redesigned version of OP_TLUV that allows participants to evict an offline participant and continue operating with a smaller N-of-N group.In a Bitcoin-dev email thread, the topic of statechains and commitment schemes for multi-party constructions was discussed. The use of LN-Penalty in the context of a multi-party construction remains an unsolved issue. However, safe constructions for N&gt;2 include Decker-Wattenhofer and Decker-Russell-Osuntokun (eltoo). The conversation also delved into the use of Taproot Leaf Versioning (TLV) and its ability to create an "N-of-N With Eviction" construction. However, TLUV imposes an arbitrary ordering due to tapleaf revelation. In contrast, OP_EVICT does not require any ordering during commitment. It allows participants to evict an offline participant, creating a smaller N-of-N where all participants are online, and continue operating. OP_EVICT requires participant cooperation after the state update to allow a single participant to withdraw their funds unilaterally.To prevent signature replay, each update of an updateable scheme like CoinPool should use a different pubkey for each participant for each state. Additionally, non-punitive channels may not be suitable for high-value channels in a congested blockspace world, as punishments incentivize correct behavior. Thus, both fully punitive and non-punitive channels will likely exist for N==2.In a discussion between Erik and ZmnSCPxj, counterproposals for evicting participants in a channel were explored. One counterproposal suggested publishing one transaction per evicted participant, but concerns were raised about the potential combinatorial explosion and</summary>
     <published>2022-02-23T11:42:54+00:00</published>
+    <summary>In a recent email conversation between Antoine and ZmnSCPxj, they discuss the differences between `OP_TLUV` and `OP_EVICT` in terms of their assumptions about cooperation among construction participants once the Taproot tree is set up. While `OP_TLUV` leaves the transaction output with the remaining Tapleaves intact, `OP_EVICT` assumes cooperation among the remaining construction participants to satisfy the final CHECKSIG. In order to revive the construct with `OP_TLUV`, a separate transaction that spends the change output is required, whereas `OP_EVICT` does another CHECKSIG without requiring a separate transaction.The discussion then moves onto the topic of withdrawing funds unilaterally without affecting the stability of the off-chain pool and without cooperation with other users, which is currently a restriction of channel factories fault-tolerance. The blockchain is the only entity that can reliably enforce timeouts, hence, if a channel has an HTLC/PTLC time out, it may be necessary to evict the participant who is not behaving properly, and that is what `OP_EVICT` does. ZmnSCPxj came up with the idea of `OP_EVICT` after musing on this topic.The conversation between Antoine Riard and ZmnSCPxj discusses the implementation of a CoinPool hosted inside a Decker-Wattenhofer or Decker-Russell-Osuntokun construction, with a focus on the eviction mechanism. TLUV is discussed as a possible way to create an &quot;N-of-N With Eviction&quot; construction, which enables the remaining participants to evict offline participants and continue operating in their absence. However, TLUV enforces a constraint in the spends path ordering. In contrast, OP_EVICT removes the constraint in the spends paths ordering and also allows for multiple evictions and the revival of the CoinPool in a single transaction. The disadvantage of OP_EVICT is that it requires point operations.The conversation also explores the possibility of preventing eviction abuse where one counterparty threatens to evict everyone as all the output signatures are known among participants and free to sum. The conclusion is that on-chain fees are currently the only mechanism to avoid such abuse. Finally, the advantage of TLUV over CTV is discussed in terms of revivable constructs with eviction of participants.ZmnSCPxj clarified that the Decker-Russell-Osunstokun paper does not prevent imposing a penalty for cheating attempts in fully punitive channels. He suggested that participants could still retain per-participant versions of update+state transactions and deduct the fee from their main owned funds, similar to the per-participant commitment transactions of Poon-Dryja. The paper just focuses on the mechanism without regard to fees, assuming that the reader already knows they exist and need to be paid.Bitcoin developers are discussing the tradeoffs of punitive channels and their impact on large value channels. While fully punitive channels can encourage correct behavior, they can also make such channels more dangerous from the perspective of bugs causing old states to be published. Non-punitive channels like Eltoo may not be suitable for high-value channels as they do not provide enough punishment to deter cheating attempts.The discussion also covers evictions, revivals, CTV, TLUV, and OP_EVICT, a redesigned version of OP_TLUV that allows participants to evict an offline participant and continue operating with a smaller N-of-N group.In a Bitcoin-dev email thread, the topic of statechains and commitment schemes for multi-party constructions was discussed. The use of LN-Penalty in the context of a multi-party construction remains an unsolved issue. However, safe constructions for N&gt;2 include Decker-Wattenhofer and Decker-Russell-Osuntokun (eltoo). The conversation also delved into the use of Taproot Leaf Versioning (TLV) and its ability to create an &quot;N-of-N With Eviction&quot; construction. However, TLUV imposes an arbitrary ordering due to tapleaf revelation. In contrast, OP_EVICT does not require any ordering during commitment. It allows participants to evict an offline participant, creating a smaller N-of-N where all participants are online, and continue operating. OP_EVICT requires participant cooperation after the state update to allow a single participant to withdraw their funds unilaterally.To prevent signature replay, each update of an updateable scheme like CoinPool should use a different pubkey for each participant for each state. Additionally, non-punitive channels may not be suitable for high-value channels in a congested blockspace world, as punishments incentivize correct behavior. Thus, both fully punitive and non-punitive channels will likely exist for N==2.In a discussion between Erik and ZmnSCPxj, counterproposals for evicting participants in a channel were explored. One counterproposal suggested publishing one transaction per evicted participant, but concerns were raised about the potential combinatorial explosion and</summary>
   </entry>
 </feed>
