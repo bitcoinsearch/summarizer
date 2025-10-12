@@ -2,18 +2,41 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Covenants and feebumping</title>
-  <updated>2025-10-11T02:30:20.074491+00:00</updated>
+  <updated>2025-10-12T01:55:41.339815+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="mc4e5ce1c3df4ff5b10064c3644167b42f38f8377">
+      <author>[bitcoin-dev] Covenants and feebumping darosior</author>
+      <timestamp>2022-03-12T18:08:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Covenants and feebumping darosior" parent_id="mailing-list-2022-03-mc4e5ce1c3df4ff5b10064c3644167b42f38f8377" anchor="m415a632ad8d32a5f4ba85c7132723aa0d34d76d6">
+      <author>Jeremy Rubin</author>
+      <timestamp>2022-03-13T02:33:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Jeremy Rubin" parent_id="mailing-list-2022-03-m415a632ad8d32a5f4ba85c7132723aa0d34d76d6" anchor="mfcbd3506d7088dbc72561b3402e13dafbc3f2f54">
+      <author>darosior</author>
+      <timestamp>2022-03-14T14:49:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="darosior" parent_id="mailing-list-2022-03-mfcbd3506d7088dbc72561b3402e13dafbc3f2f54" anchor="m614da543a87825506168b2e8207263da3e445389">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-03-16T23:29:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="4" position="4" reply_to="ZmnSCPxj" parent_id="mailing-list-2022-03-m614da543a87825506168b2e8207263da3e445389" anchor="m7b3e8aa00a753f40c881ad243b894427ffd9b0c4">
+      <author>darosior</author>
+      <timestamp>2022-03-21T12:06:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/March_2022/020155_Covenants-and-feebumping.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020138_Covenants-and-feebumping.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020125_Covenants-and-feebumping.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020123_Covenants-and-feebumping.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020122_Covenants-and-feebumping.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020122.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020122.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Covenants and feebumping</title>
-    <updated>2025-10-11T02:30:20.074617+00:00</updated>
+    <updated>2025-10-12T01:55:41.340594+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020122.html" rel="alternate"/>
     <published>2022-03-21T12:06:54+00:00</published>
     <summary>The email conversation between Antoine and ZmnSCPxj revolves around the use of a signature challenge for ensuring the uptime of hot contracts. However, they acknowledge that this method has drawbacks, such as the need to presign multiple versions of a transaction with varying feerates and the issue of third-party trust. To address these concerns, ZmnSCPxj suggests using a DLC (Discreet Log Contract) oracle, which would provide a set of points corresponding to different feerate ranges. The oracle would commit to publishing the scalar of one of those points at a future block height. Adaptor signatures would be created for each feerate version, and multiple watchtowers would be sent these signatures to prevent any single watchtower from publishing the highest-feerate version. Despite the advantages of this approach, there are still limitations, including third-party trust, time-bound DLCs, and the inability to invoke the oracle at any time for hot dynamic protocols.In another part of the conversation, Antoine proposes using covenants for fee bumping in Bitcoin contracts, although this would require a soft fork. He explains that covenant-based fee bumping has appealing properties, but finding a similar solution for other protocols has proven challenging. Antoine suggests attaching an increasing relative timelock to each leaf as the committed revocation feerate increases, allowing the feerate to adapt to the block space market. This approach also provides anti-fee sniping protection if the revocation transaction pays a significant amount of fees. However, paying fees from internal funds introduces the possibility of blackmail for multi-party contracts. Precommitted levels of fee bumping may work, but they come with substantial costs. Another option is using sponsors, which are similar to CPFP (Child Pays For Parent) and simplify the management of transaction chains in the mempool. Sponsors allow the allocation of funds later on but require pre-committing to all possible fee-bumped levels, preventing the dynamic addition of more fees.The conversation also highlights the differences between &quot;cold contracts&quot; (vaults) and &quot;hot contracts&quot; in terms of fee bumping. Timelocks are used for cold contracts to prevent the denial-of-service (DOS) attacks that can occur with high feerates. On the other hand, hot contracts utilize a signature challenge for the same purpose. However, this method has its flaws, as the lower the uptime risk, the higher the DOS risk. The use of sponsor-type solutions allows for the design of protocols without native fee payment methods, relying on external systems to achieve the desired effect. A recent post on the Bitcoin-dev mailing list proposes a timelocked-covenant approach to fee bumping for multi-party contracts like vaults, using shared funds to pay for fees and avoiding perverse incentives.Jeremy Rubin contributes to the discussion by suggesting transaction sponsors as a form of covenant for fee bumping. He emphasizes their efficiency, particularly pre-committed levels and fancier covenants, as well as their capital efficiency. Sponsors can also address protocol design concerns and RBF (Replace-By-Fee) pinning issues. In response to darosior's soft fork proposal for dynamic fee bumping, Jeremy suggests using a covenant-based approach instead. He provides an example of designing a covenant for a vault wallet software with five participants, committing to the revocation transaction with increasing feerate and relative timelock. This enables fee adaptation and anti-fee sniping protection.Antoine Riard introduces a new fee bumping method for Bitcoin transactions. It involves adding a single input and output to a Taproot transaction, costing 520 weight units or 105 virtual bytes. This method offers more granularity in fee bumps at a relatively low cost. However, it is not applicable for bumping the first transaction of a chain, such as HTLC transactions in Lightning. A workaround is to use a different covenant per participant behind a signature check, requiring funds to already be in the contract for unilateral close. While not as optimal and usable as other methods like CPFP or adding input/output pairs, it remains more efficient for many use cases.The conversation also touches on the idea of using a soft fork to fix dynamic fee bumping, given the complexity of designing with current primitives. One proposed solution is using covenants for fee bumping, which have attractive properties. An Unvaulting transaction triggers a timelock, after which a revocation transaction may be confirmed. With a covenant, one can commit to the revocation transaction instead of presigning it. Using a Taproot tree, different versions of the revocation transaction with increasing feerates can be committed to. However, careful consideration is needed to avoid wrecking miner incentives. Paying fees from shared funds eliminates the need for refilling and managing a fee-bumping wallet. Antoine Riard's covenant-based approach to fee bumping in multi-party vault setups is seen as a promising solution. It involves creating a Taproot tree with a depth of 7</summary>

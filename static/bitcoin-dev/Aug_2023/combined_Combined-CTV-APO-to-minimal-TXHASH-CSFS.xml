@@ -2,17 +2,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Combined CTV+APO to minimal TXHASH+CSFS</title>
-  <updated>2025-10-11T02:27:18.257057+00:00</updated>
+  <updated>2025-10-12T01:16:43.200786+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="me75e43aaffa6ae4ee46d0a10d3cfa532332a6852">
+      <author>[bitcoin-dev] Combined CTV+APO to minimal TXHASH+CSFS Brandon Black</author>
+      <timestamp>2023-08-22T17:04:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Combined CTV+APO to minimal TXHASH+CSFS Brandon Black" parent_id="mailing-list-2023-08-me75e43aaffa6ae4ee46d0a10d3cfa532332a6852" anchor="mfff4bbbdad15a6d05356bfa3c66442365183938d">
+      <author>Brandon Black</author>
+      <timestamp>2023-08-22T19:08:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="1" position="2" reply_to="[bitcoin-dev] Combined CTV+APO to minimal TXHASH+CSFS Brandon Black" parent_id="mailing-list-2023-08-me75e43aaffa6ae4ee46d0a10d3cfa532332a6852" anchor="m66568fe179fe746f737ecde8115278c27b801877">
+      <author>Greg Sanders</author>
+      <timestamp>2023-08-22T19:22:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="2" position="3" reply_to="Greg Sanders" parent_id="mailing-list-2023-08-m66568fe179fe746f737ecde8115278c27b801877" anchor="ma1f583867cce31c8f00d7b69e441d10c1d8e9b39">
+      <author>Brandon Black</author>
+      <timestamp>2023-08-22T20:23:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Aug_2023/021910_Combined-CTV-APO-to-minimal-TXHASH-CSFS.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2023/021908_Combined-CTV-APO-to-minimal-TXHASH-CSFS.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2023/021909_Combined-CTV-APO-to-minimal-TXHASH-CSFS.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2023/021907_Combined-CTV-APO-to-minimal-TXHASH-CSFS.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021907.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021907.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Combined CTV+APO to minimal TXHASH+CSFS</title>
-    <updated>2025-10-11T02:27:18.257168+00:00</updated>
+    <updated>2025-10-12T01:16:43.201389+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-August/021907.html" rel="alternate"/>
     <published>2023-08-22T20:23:09+00:00</published>
     <summary>In this email exchange, Greg provides additional information related to a previous conversation with Brandon. He suggests replacing the term &quot;OP_2&quot; with &quot;OP_4&quot; and mentions that BIP118 allows for the use of the pubkey &quot;1&quot; as a substitute for the taproot inner pubkey. Greg proposes adding an opcode called &quot;OP_INNER_PUBKEY&quot; to achieve the same effect. He also highlights that BIP118 addresses taproot malleability bugs by allowing non-APO signatures to have a sighash digest that commits to additional data.Greg includes a link to a discussion on GitHub for further exploration of this topic. He acknowledges that these details are not crucial but suggests addressing them if possible.In another email, Brandon provides a quick update to his proposal based on feedback from James O'Beirne. He states that CTV is less expensive than previously thought when used alone. He clarifies that script success requires exactly &quot;OP_TRUE&quot; instead of just a CastToBool()=true value on the stack. This means that his proposal is slightly larger than CTV when both are used in Tapscript.Brandon then presents a proposal that combines the functionality of bip118 and bip119 while addressing objections and providing clear upgrade paths. The aim of this proposal is to clarify the similarities and differences between the two proposals and promote consensus through discussion.The proposal introduces three new Tapscript-only opcodes: OP_TXHASH, OP_CHECKSIGFROMSTACK, and OP_CHECKSIGFROMSTACKVERIFY. These opcodes replace existing opcodes and provide different hashing and signature checking behaviors depending on the arguments popped from the stack.The motivation behind this proposal is to address objections to bip118 and bip119 and provide a more general solution. Objections to bip119 include it not being general enough, inefficiency when validating the hash, and using extension semantics instead of available OP_SUCCESSx. Objections to bip118 include it not being general enough, enabling inefficient and hard-to-use covenants accidentally, and requiring a new Tapscript key version for safety.The proposal aims to provide the behavior of both bip118 and bip119, offer explicit upgrade hooks for further generality, split the hashing from the validation in bip119, enable some sighash-based covenants accidentally enabled by bip118, and use new signature checking opcodes without requiring a new Tapscript key version.The specification of the proposal defines the behavior of OP_TXHASH and OP_CHECKSIGFROMSTACK(VERIFY) in Tapscript validation. OP_TXHASH hashes the transaction based on a minimally encoded numeric argument popped from the stack, while OP_CHECKSIGFROMSTACK(VERIFY) verifies a signature against a message and public key according to bip340.The email also discusses the efficiency of this proposal compared to bip118 and bip119 in terms of witness bytes. Examples and calculations are provided for different scenarios, and it is concluded that this proposal may be slightly more costly than bare CTV but offers compatibility with ln-symmetry, PTLCs, and OP_VAULT.The email concludes with a discussion on the fields that are hashed in different modes of the proposal and mentions some notes related to validation and signature lengths. Brandon seeks feedback on this proposal and aims to contribute to the discussion on bitcoin script development, specifically regarding bip118 and bip119.</summary>

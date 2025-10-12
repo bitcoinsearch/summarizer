@@ -2,8 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - PSBT Addition (BIP 174) for authenticating source/output PSBT files</title>
-  <updated>2025-10-11T02:29:12.834961+00:00</updated>
+  <updated>2025-10-12T01:42:15.542491+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="mebd50c8d568cb33dc0e76b18cc8489275ef652b2">
+      <author>[bitcoin-dev] PSBT Addition (BIP 174) for authenticating source/output PSBT files Peter D. Gray</author>
+      <timestamp>2020-01-11T17:29:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] PSBT Addition (BIP 174) for authenticating source/output PSBT files Peter D. Gray" parent_id="mailing-list-2020-01-mebd50c8d568cb33dc0e76b18cc8489275ef652b2" anchor="m43c492a2703e99ee617a04d4d9734da7c75904d9">
+      <author>Dmitry Petukhov</author>
+      <timestamp>2020-01-11T20:17:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Dmitry Petukhov" parent_id="mailing-list-2020-01-m43c492a2703e99ee617a04d4d9734da7c75904d9" anchor="m744a085072878ed9b339016fabb71ba9d60d2d6f">
+      <author>Andrew Chow</author>
+      <timestamp>2020-01-13T06:39:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Andrew Chow" parent_id="mailing-list-2020-01-m744a085072878ed9b339016fabb71ba9d60d2d6f" anchor="m6d7ce5c7f957fc0ecd56fabe6074dcafa1494a6c">
+      <author>Peter D. Gray</author>
+      <timestamp>2020-01-13T14:28:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="4" position="4" reply_to="Peter D. Gray" parent_id="mailing-list-2020-01-m6d7ce5c7f957fc0ecd56fabe6074dcafa1494a6c" anchor="m920dda66531eaf3b18d00d8bd756bfd1c72e4af5">
+      <author>Andrew Chow</author>
+      <timestamp>2020-01-13T17:05:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="5" position="5" reply_to="Andrew Chow" parent_id="mailing-list-2020-01-m920dda66531eaf3b18d00d8bd756bfd1c72e4af5" anchor="m3cae33cac432198820ec017716872d1629abe701">
+      <author>Peter D. Gray</author>
+      <timestamp>2020-01-13T20:29:00.000Z</timestamp>
+    </message>
+    <message id="msg_7" depth="6" position="6" reply_to="Peter D. Gray" parent_id="mailing-list-2020-01-m3cae33cac432198820ec017716872d1629abe701" anchor="mf0cce9a0594437b75938e03ca2a5bf54532a3273">
+      <author>Andrew Chow</author>
+      <timestamp>2020-01-13T23:18:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Jan_2020/017573_PSBT-Addition-BIP-174-for-authenticating-source-output-PSBT-files.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2020/017569_PSBT-Addition-BIP-174-for-authenticating-source-output-PSBT-files.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2020/017565_PSBT-Addition-BIP-174-for-authenticating-source-output-PSBT-files.xml" rel="alternate"/>
@@ -12,10 +42,11 @@
   <link href="bitcoin-dev/Jan_2020/017555_PSBT-Addition-BIP-174-for-authenticating-source-output-PSBT-files.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2020/017554_PSBT-Addition-BIP-174-for-authenticating-source-output-PSBT-files.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017554.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017554.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - PSBT Addition (BIP 174) for authenticating source/output PSBT files</title>
-    <updated>2025-10-11T02:29:12.835063+00:00</updated>
+    <updated>2025-10-12T01:42:15.543416+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017554.html" rel="alternate"/>
     <published>2020-01-13T23:18:34+00:00</published>
     <summary>The Bitcoin-dev mailing list recently had a discussion on how to protect against man-in-the-middle (MiTM) attacks in partially-signed bitcoin transactions (PSBTs). One proposal was to add authentication signatures to the PSBT structure, with one signature over the source PSBT file and another over all the bytes of the resulting signed PSBT up to that point. However, some participants argued that this would add unnecessary complexity to the PSBT structure and suggested using out-of-band communication for MiTM protection instead. They also noted that if participants received the same PSBT at the start, they could check the signature by an authority on the 'correctness' of the original PSBT.During the discussion, Peter D. Gray proposed adding signatures in fixed-width without DER-encoding as a way to detect errors or attacks in PSBTs. He suggested putting signatures at the end of the file with fixed byte offset, which would allow for a conservative PSBT parser to verify the signature before parsing the rest of the file. Andrew Chow raised concerns about the threat model and what was being protected, questioning how useful the signature would be if the signer had bugs and parsing issues. He also pointed out that Gray's proposal only protects against specific legs of the entire protocol, and not every MiTM.Another suggestion was to separate the signature from the PSBT and send it along with the PSBT as part of the transport protocol. The proposal aimed to protect against PSBT parsing bugs by using byte-level signatures on the complete file content. It was suggested that pre-sharing a public key with the signer could help authenticate incoming PSBTs. Some participants suggested implementing the scheme with proprietary keys, while others recommended waiting for officially-assigned key numbers.The discussion also covered issues related to deserialization bugs and reconstruction of original fields in the PSBT. Finally, it was acknowledged that if an attacker controlled both directions of the PSBT, then the proposed solutions could not prevent the intended harm.In summary, the Bitcoin-dev mailing list discussed adding signature fields to partially signed Bitcoin transactions (PSBTs) to protect against man-in-the-middle attacks. Participants expressed concerns about bugs in PSBT signers that could reveal private keys or corrupt the transaction display while also noting that currently, it is challenging to determine what is signed without a complete understanding of the transaction, input UTXO, and PSBT file contents. One proposed solution is to add byte-level signatures on the whole file content to safeguard against PSBT parsing bugs. Another suggestion was to pre-share a public key with the signer to reduce the chance of MiTM attacks. However, critics argue that a signature separate from the PSBT could be used for MiTM protection, making additional fields unnecessary. The discussion focused on adding two signatures to PSBT for MiTM protection. One signature would cover all the bytes of the original PSBT file in the PSBT globals section, while the second would be added to the last key/value pair in the output section. However, some participants proposed placing these signatures in a container separate from the PSBT itself. There are concerns about adding complexity to the basic level of PSBT and increasing the chance of bugs. Additionally, if there is a MiTM who can modify the PSBT, they can modify the result of the signed PSBT to drop the auth signatures. Therefore, one should already have a signature covering everything one's auth signature would cover when processing a PSBT. Participants agreed that verification of these signatures is crucial. Lastly, some suggested doing the protection via out-of-band communication such as PGP signing the PSBT or sending the signature separately. The participants discussed the pros and cons of adding signatures to PSBT for MiTM protection, highlighting different perspectives.In a bitcoin-dev thread, Peter D. Gray suggested adding signatures to the Partially Signed Bitcoin Transactions (PSBT) to detect and mitigate some broad &quot;bug-classes.&quot; However, in a Bitcoin mailing list, Andrew Chow disagreed with Gray's proposal to add man-in-the-middle (MiTM) protection within the PSBT structure itself. He argued that it is largely unnecessary to add new fields and recommended verifying the signatures of each participant in the transaction. Chow also suggested PGP signing the PSBT as a means of MiTM protection.Dmitry Petukhov expressed skepticism about Gray's proposal, arguing that authenticating the contents of the PSBT is independent of the signing action and that participants should check the signature by an authority who created the PSBT. Petukhov believed that adding additional ordering or other structural requirements over a simple key-value structure would add complexity to PSBT processing, increasing the chance of bugs. However, he acknowledged that if Gray's scheme shows its usefulness, it could become a de-facto standard with proprietary keys.Gray's proposal is byte-level on the whole file contents, not based on sub-sections or fields inside the file. He wants these signatures to protect against PSBT parsing bugs, but there are non-linear</summary>

@@ -2,8 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP-0322 (generic signmessage) improvements</title>
-  <updated>2025-10-11T02:32:46.870272+00:00</updated>
+  <updated>2025-10-12T02:24:09.923579+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m8e6a469693689479bbd033116cfb660ca958d8da">
+      <author>[bitcoin-dev] BIP-0322 (generic signmessage) improvements Andrew Poelstra</author>
+      <timestamp>2020-12-18T15:27:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] BIP-0322 (generic signmessage) improvements Andrew Poelstra" parent_id="mailing-list-2020-12-m8e6a469693689479bbd033116cfb660ca958d8da" anchor="mec2a97008cae6ad98e0d13963e4d648a0d2e7584">
+      <author>Karl-Johan Alm</author>
+      <timestamp>2020-12-21T05:37:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Karl-Johan Alm" parent_id="mailing-list-2020-12-mec2a97008cae6ad98e0d13963e4d648a0d2e7584" anchor="macf1fc2b3ffd201d9330fa20b9805876bda79e4e">
+      <author>Pieter Wuille</author>
+      <timestamp>2020-12-21T22:57:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Pieter Wuille" parent_id="mailing-list-2020-12-macf1fc2b3ffd201d9330fa20b9805876bda79e4e" anchor="m42576e27c8102a7fc2e676f4289730ecb787d810">
+      <author>Pieter Wuille</author>
+      <timestamp>2020-12-22T00:22:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="4" position="4" reply_to="Pieter Wuille" parent_id="mailing-list-2020-12-m42576e27c8102a7fc2e676f4289730ecb787d810" anchor="m18f2242ce8e86f6b1a888a4fec1548c31ab779f4">
+      <author>Andrew Poelstra</author>
+      <timestamp>2020-12-22T01:11:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="4" position="5" reply_to="Pieter Wuille" parent_id="mailing-list-2020-12-m42576e27c8102a7fc2e676f4289730ecb787d810" anchor="maef600f55dc12d1d31484b9cfdea541dfdeeb105">
+      <author>Andrew Poelstra</author>
+      <timestamp>2020-12-23T15:55:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Dec_2020/018324_BIP-0322-generic-signmessage-improvements.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2020/018317_BIP-0322-generic-signmessage-improvements.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2020/018316_BIP-0322-generic-signmessage-improvements.xml" rel="alternate"/>
@@ -11,10 +37,11 @@
   <link href="bitcoin-dev/Dec_2020/018314_BIP-0322-generic-signmessage-improvements.xml" rel="alternate"/>
   <link href="bitcoin-dev/Dec_2020/018313_BIP-0322-generic-signmessage-improvements.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-December/018313.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-December/018313.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - BIP-0322 (generic signmessage) improvements</title>
-    <updated>2025-10-11T02:32:46.870351+00:00</updated>
+    <updated>2025-10-12T02:24:09.924398+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-December/018313.html" rel="alternate"/>
     <published>2020-12-23T15:55:42+00:00</published>
     <summary>Pieter Wuille and Andrew Poelstra had a discussion on the bitcoin-dev mailing list regarding the proposed text for consensus-only validation extension. Pieter Wuille was uncertain about whether this extension would replace the inconclusive-due-to-consensus-and-standardness-differ state. Andrew suggested a way to specify it, where every signature has a well-defined result of valid, invalid, or inconclusive. If validators do not understand anything, they may choose to report it as inconclusive.Andrew updated his PR at Github with four differences. These include compacting all the validation states into three categories, removing extensions sections, removing &quot;to_sign&quot; transaction from wire serialization, and not complicating the protocol for obscure things like bare public keys or multisigs.On December 22, 2020, Pieter Wuille made a proposal on the bitcoin-dev mailing list regarding the &quot;consensus-only validation&quot; extension. Andrew Poelstra responded with his thoughts on standardness vs consensus rules and his desire to enforce standardness rules for anti-malleability reasons. However, he acknowledged the difficulty of enforcing these rules as an implementer because libbitcoinconsensus does not expose them. He also agreed with Wuille's idea of allowing validators to signal when a signature appears to use future consensus rules and using the &quot;inconclusive&quot; state as an elegant way to achieve this.Both Pieter and Andrew agreed that confirming validators should never disagree on valid vs invalid. Poelstra added a commit to his PR at https://github.com/bitcoin/bips/pull/1048 which reflects their thoughts.Pieter Wuille responded to Karl-Johan Alm's request for feedback on changes to the BIP (Bitcoin Improvement Proposal) by suggesting a modification to the proposal. He agreed with the idea of allowing incomplete validators to return &quot;inconclusive&quot; results, making it more accessible to various software. However, he pointed out that this suggestion would break the original use of &quot;inconclusive&quot; as a way to detect future features used in the signature.Pieter suggested that whenever validation fails due to any of the standardness features listed in the BIP, validators should report &quot;inconclusive&quot; instead of &quot;invalid&quot;. This ensures that every signature has a well-defined result of valid, invalid, or inconclusive. Validators may choose to report &quot;inconclusive&quot; for anything they don't understand. This modification ensures that no two validators will ever claim valid and invalid for the same signature, only valid+inconclusive or invalid+inconclusive.Karl-Johan Alm expressed his support for recent changes to the BIP in an email to bitcoin-dev. He agreed with the idea of allowing incomplete validators to return inconclusive results, considering it a clear improvement. However, he noted that this suggestion breaks the original use of inconclusive as a way to detect future features used in the signature. He suggested a fix by requiring reporting inconclusive instead of invalid whenever validation fails due to any standardness features unless something is actually invalid. Pieter also supported Karl-Johan's suggestion.A developer has rewritten the text of BIP-0322, a standard for interoperable signed messages based on the Bitcoin Script format, to simplify and clarify the protocol. The changes include merging &quot;consensus&quot; and &quot;upgradeable&quot; rules into one set of rules consisting of consensus checks plus additional restrictions. The BIP specifies three formats for signing messages: legacy, simple, and full. Validators must output one of four states: valid, valid at time t and age s, consensus-valid, or inconclusive. The BIP outlines additional states that can be output instead of &quot;valid&quot; or &quot;invalid&quot; to ease implementation.The author of BIP-0322 has rewritten the text to make it easier to follow and address objections regarding signmessage functionality. The consensus and upgradeable rules have been merged, and a new &quot;Extensions&quot; section allows validators to output the state &quot;consensus-valid&quot; if they don't want to check additional restrictions. The author welcomes comments on Github.In addition to BIP-0322, the document outlines a specification for a new message signing scheme called &quot;signet.&quot; These signatures serve as proof of funds, indicating that a set of coins is under the control of a particular address. Validators require access to the current UTXO set and scriptPubKeys to confirm the claimed inputs exist on the blockchain. The specification includes detailed restrictions and requirements for all signature types except legacy. The validation process involves confirming message_hash, message_challenge, and more. If all conditions are met, the signature is considered valid; otherwise, it's invalid. The document also includes information on signing, extensions, compatibility, and references.</summary>

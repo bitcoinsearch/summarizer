@@ -2,8 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Block size adjustment idea - expedience fees + difficulty scaling proportional to block size (+ fee pool)</title>
-  <updated>2025-10-11T02:27:00.246903+00:00</updated>
+  <updated>2025-10-12T01:12:28.726033+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="100" position="0" anchor="m9fe06fe9d10ce39f56e7296fa20873a65caa604b">
+      <author>[bitcoin-dev] Block size adjustment idea - expedience fees + difficulty scaling proportional to block size (+ fee pool) Natanael</author>
+      <timestamp>2017-03-30T09:34:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="101" position="1" reply_to="[bitcoin-dev] Block size adjustment idea - expedience fees + difficulty scaling proportional to block size (+ fee pool) Natanael" parent_id="mailing-list-2017-03-m9fe06fe9d10ce39f56e7296fa20873a65caa604b" anchor="m4217965e62f153b903ed1878f6f44b1f84230e17">
+      <author>Luke Dashjr</author>
+      <timestamp>2017-03-30T10:04:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="104" position="2" anchor="me96dd66d9ceef6e3391d6e2ec984581d3ca07907">
+      <author>Natanael</author>
+      <timestamp>2017-03-30T10:19:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="101" position="3" reply_to="[bitcoin-dev] Block size adjustment idea - expedience fees + difficulty scaling proportional to block size (+ fee pool) Natanael" parent_id="mailing-list-2017-03-m9fe06fe9d10ce39f56e7296fa20873a65caa604b" anchor="m806953f1908c0bf112d94225dfc47f22de03184c">
+      <author>Natanael</author>
+      <timestamp>2017-03-30T18:41:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="102" position="4" reply_to="Natanael" parent_id="mailing-list-2017-03-m806953f1908c0bf112d94225dfc47f22de03184c" anchor="mf65bc874b4016dd4bb6e40bb0992978c3e4fbf98">
+      <author>Natanael</author>
+      <timestamp>2017-03-31T04:14:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="103" position="5" reply_to="Natanael" parent_id="mailing-list-2017-03-mf65bc874b4016dd4bb6e40bb0992978c3e4fbf98" anchor="m321c0eafd5ba62623d3062a472b55232f5580c80">
+      <author>Natanael</author>
+      <timestamp>2017-03-31T04:15:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/March_2017/013908_Block-size-adjustment-idea-expedience-fees-difficulty-scaling-proportional-to-block-size-fee-pool-.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013907_Block-size-adjustment-idea-expedience-fees-difficulty-scaling-proportional-to-block-size-fee-pool-.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013897_Block-size-adjustment-idea-expedience-fees-difficulty-scaling-proportional-to-block-size-fee-pool-.xml" rel="alternate"/>
@@ -11,10 +37,11 @@
   <link href="bitcoin-dev/March_2017/013886_Block-size-adjustment-idea-expedience-fees-difficulty-scaling-proportional-to-block-size-fee-pool-.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013885_Block-size-adjustment-idea-expedience-fees-difficulty-scaling-proportional-to-block-size-fee-pool-.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013885.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013885.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Block size adjustment idea - expedience fees + difficulty scaling proportional to block size (+ fee pool)</title>
-    <updated>2025-10-11T02:27:00.246972+00:00</updated>
+    <updated>2025-10-12T01:12:28.726937+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013885.html" rel="alternate"/>
     <published>2017-03-31T04:15:17+00:00</published>
     <summary>On March 30, 2017, a proposal was made to alter the difficulty scaling of block size. The proposal suggests that larger blocks would mean greater difficulty, but this doesn't scale linearly. Miners can take a penalty in difficulty to claim a greater number of high fee transactions in the same amount of time, effectively increasing their profits. However, when such profitable fees aren't available, they have to reduce the block size. In other words, users pay miners to increase block size, or don't pay, which reduces it.The proposal suggests that the process could be simplified if a fee pool is created through softfork code instead of hardfork code. However, the effect will be partially reduced by the mining subsidy until it reaches parity with average total fees. Instead of altering the difficulty calculation, the proposal suggests altering the percentage of fees that the miner gets to claim versus what they have to donate to the pool based on the size of the block they generated. Larger blocks would mean a smaller percentage of fees. This is another way to pay for block size, and on average, miners that generate smaller blocks take a share of what otherwise would be part of the mining profits of those generating larger blocks. It is necessary to keep pieces of the section from above on expected blocksize calculation because the closer one is to the expected blocksize, the more they keep. Thus, adjustments need to be made according to usage.In an email from Luke Dashjr on March 30th, 2017, he expressed his skepticism towards a proposal that suggested miners could potentially delay some transactions with lower fees in order to include them in the next block. He argued that miners always mine as if it's their only chance to get the fee, because if they don't, another miner will. Thus, after one block, the fee effectively drops to zero already. However, Dashjr proposed that with correctly configured incentives, making it more profitable to delay certain transactions with lower fees and including them in the next block would smooth out transaction inclusion.One suggestion was to change difficulty scaling from using a simple logarithm to a function that first behaves like a logarithm up to some multiple of the standard block size, after which difficulty starts increasing faster and reaches a greater-than-linear ratio in expected required hash per mined bit. Dashjr also suggested tipping over at around a block size three times the standard block size, since the standard block size increases with continuous load after retargeting, the block size at which this happens also increases.Additionally, Dashjr noted that the fee pool does counteract the idea of delaying transactions with lower fees, as miners will still receive a share via the pool when there are fewer transactions available the next time they create a block, similar to insurance. Therefore, he questioned the incentive for a user to pay an individual miner the fee directly.In a Bitcoin development mailing list, a proposal to expedite transactions by adding a second fee type was made. This would involve a specially labeled anyone-can-spend output with a defined &quot;best-before&quot; block number and a function describing the decline of the fee value for every future block. Miners can claim the full expedience fee plus a standard fee before block N, a reduced expedience fee plus standard fee between block N+1 and N+X, and only the standard fee after that. However, it was pointed out that OP_RETURN wouldn't work in this scenario and a new signature-check opcode would be required. Additionally, there is no real purpose to this proposal as miners already mine for fees as if it's their only chance to get the fee, so the fee effectively drops to 0 after one block. Another proposal that was softfork compatible was made for a fee pool to prevent miners from publishing their own &quot;out of band fee&quot; address and collecting all the fees directly.The author proposes a set of ideas to incentivize behavior improvement in Bitcoin. The first idea is called Expedience fees, which would allow transactions to have a second fee type that would grant miners the ability to claim a &quot;best-before&quot; block number for a given function that describes the decline of the fee value for every future block. When a transaction is processed late, the remainder of the expedience fee output is returned to the specified address among the inputs/outputs. The second idea is called Fee Pool, which is intended to act as a &quot;buffer&quot; to smooth out fee payments and prevent deliberate forking to steal fees. The third idea is Block size dependent difficulty scaling, which proposes that larger blocks mean greater difficulty, but it doesn't scale linearly. In order for a miner to profit from additional transactions, their fees must exceed the calculated cost of the resulting difficulty penalty to make it worth creating a larger block. The author believes that combining Expedience fees with Block size dependent difficulty scaling makes it even more effective.</summary>

@@ -2,8 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Fraud proofs for block size/weight</title>
-  <updated>2025-10-11T02:27:00.411755+00:00</updated>
+  <updated>2025-10-12T01:12:31.003520+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m186b412750d95ba58338eaed354954160eb7eda4">
+      <author>[bitcoin-dev] Fraud proofs for block size/weight Luke Dashjr</author>
+      <timestamp>2017-03-22T08:47:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Fraud proofs for block size/weight Luke Dashjr" parent_id="mailing-list-2017-03-m186b412750d95ba58338eaed354954160eb7eda4" anchor="m9936e2565c69c9550db93cbde56bbe134bcc303e">
+      <author>Bram Cohen</author>
+      <timestamp>2017-03-22T20:49:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Bram Cohen" parent_id="mailing-list-2017-03-m9936e2565c69c9550db93cbde56bbe134bcc303e" anchor="mc58615fdfdc22ce6d917490c4c73f891a3ba7a8f">
+      <author>Matt Corallo</author>
+      <timestamp>2017-03-22T21:51:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Matt Corallo" parent_id="mailing-list-2017-03-mc58615fdfdc22ce6d917490c4c73f891a3ba7a8f" anchor="mea921e02d9086dfbd1a0b376601df41eed6eda2a">
+      <author>Jorge Timón</author>
+      <timestamp>2017-03-23T18:27:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="4" position="4" reply_to="Jorge Timón" parent_id="mailing-list-2017-03-mea921e02d9086dfbd1a0b376601df41eed6eda2a" anchor="m7856a05d7d7bf514e1a6e2ff0947de031ffd7425">
+      <author>Luke Dashjr</author>
+      <timestamp>2017-03-25T05:16:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="5" position="5" reply_to="Luke Dashjr" parent_id="mailing-list-2017-03-m7856a05d7d7bf514e1a6e2ff0947de031ffd7425" anchor="m637603785f95e4173e39787d7bf8a428af783752">
+      <author>Chris Pacia</author>
+      <timestamp>2017-03-26T14:16:00.000Z</timestamp>
+    </message>
+    <message id="msg_7" depth="5" position="6" reply_to="Luke Dashjr" parent_id="mailing-list-2017-03-m7856a05d7d7bf514e1a6e2ff0947de031ffd7425" anchor="m2f717367a4e6c2dc833d6bbdb2bca8d8b0a98c0d">
+      <author>Matt Corallo</author>
+      <timestamp>2017-03-28T22:35:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/March_2017/013839_Fraud-proofs-for-block-size-weight.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013790_Fraud-proofs-for-block-size-weight.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013780_Fraud-proofs-for-block-size-weight.xml" rel="alternate"/>
@@ -12,10 +42,11 @@
   <link href="bitcoin-dev/March_2017/013762_Fraud-proofs-for-block-size-weight.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2017/013756_Fraud-proofs-for-block-size-weight.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013756.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013756.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Fraud proofs for block size/weight</title>
-    <updated>2025-10-11T02:27:00.411844+00:00</updated>
+    <updated>2025-10-12T01:12:31.004537+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013756.html" rel="alternate"/>
     <published>2017-03-28T22:35:05+00:00</published>
     <summary>In a discussion about the validity of blocks in Bitcoin, a user questions the assumption that all blocks are valid aside from size. They argue that as long as it can be assumed that the block is valid and a SHA256 midstate cannot be forged to result in a given hash value, it is not necessary to show that a leaf in the merkle tree is a parseable transaction. However, they concede that accuracy in counting the minimum number of transactions is important due to parts of the merkle tree being repeated. Luke Dashjr expresses concern about the proposal, stating that the only way to establish the number of transactions is to show that a leaf is a parsable transaction, and asks for any ideas.On March 25, 2017, Luke Dashjr asked for ideas in the bitcoin-dev mailing list. He proposed a solution where the size can be aggregated up the tree such that each midstate hash is the hash of branches below plus the aggregate of the sizes below. This would result in the root hash being (left + right + size/weight), and the proof would simply be the preimage.A recent email exchange between Jorge Timón and Luke Dashjr on the bitcoin-dev mailing list discussed the need for better organization in Bitcoin's full block validation specification. Timón suggested that the &quot;Creation of proofs&quot; section should precede &quot;Proof verification,&quot; and recommended a clearer definition for &quot;full-weight block proof.&quot; Dashjr added a definitions section to the spec and clarified language around rechecking blocks known to be invalid. The two also discussed the need for establishing the correct number of transactions in a block and how a &quot;full tx size proof&quot; can help achieve this, although it was noted that current methods may not be sufficient.Luke Dashjr has presented a draft BIP for fraud proofs and how light clients can detect blockchains that are simply invalid due to excess size and/or weight. This specific attack can be proven, and reliably so, since the proof cannot be broken without also breaking their attempted hardfork at the same time. This is necessary to establish that the claimed block transaction count is correct. The proposed system would allow light clients to verify that a full node they're connected to is not lying to them about the state of the network or the validity of transactions. The draft BIP for fraud proofs includes the creation of proofs, proof verification, proof format, network protocol, rationale, and more. Some questions have been raised regarding the draft BIP, such as whether it requires information to be added to blocks or if it can work on the existing format, does it count the number of transactions or their total length, and does it allow for proofs of length in the positive direction demonstrating that a block is good.The Bitcoin blockchain is at risk of being attacked by miners using oversized blocks to force a hard fork, which could be proven. Users who do not use their own full node for validation may need protection from these attacks to ensure they remain on the Bitcoin blockchain. Luke Dashjr has written a draft BIP for fraud proofs and how light clients can detect blockchains that are invalid due to excess size and/or weight. This draft may be ready for implementation, but suggestions are welcome for improvement. The key observation is that all you need to show the length and hash of a transaction is the final SHA256 midstate and chunk, which can prove the exact size of a transaction. A valid transaction must be at least 60 bytes long for compression. However, much of the compression possibility goes away if you're proving something other than &quot;too large&quot;. It is ideal to have an extension to SPV protocol so light clients require proofs of blocks not being too big, given the credible threat of there being an extremely large-scale attack on the network of that form.Luke Dashjr, a Bitcoin developer, has proposed a draft BIP (Bitcoin Improvement Proposal) for fraud proofs which could help light clients detect blockchains that are invalid due to excess size and/or weight resulting from miners attacking with oversized blocks in an attempt to force a hardfork. While ideally all users should use their own full node for validation, many Bitcoin holders still do not and may require protection from these attacks to ensure they remain on the Bitcoin blockchain. The proposed solution can prove if a specific attack is happening and can reliably protect users by ensuring that the proof cannot be broken without also breaking the attempted hardfork at the same time. The draft is available on GitHub and is potentially ready for implementation, though suggestions for improvement are welcome.The generalised case of fraud proofs being impossible has been challenged by recent proposals of miners using oversized blocks to force a hardfork. This specific attack can be proven as the proof cannot be broken without also breaking their attempted hardfork. However, not all bitcoin holders use their own full node for validation leaving them vulnerable to such attacks. To address this, a draft BIP has been written that proposes fraud proofs and how light clients can detect invalid blockchains due to excess size and/or</summary>

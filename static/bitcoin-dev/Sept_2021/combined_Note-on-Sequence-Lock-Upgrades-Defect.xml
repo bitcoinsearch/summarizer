@@ -2,8 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Note on Sequence Lock Upgrades Defect</title>
-  <updated>2025-10-11T02:32:19.759974+00:00</updated>
+  <updated>2025-10-12T02:18:16.827729+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m9f7260bf4e8d7f4adc15dca23fd673d6279a2347">
+      <author>[bitcoin-dev] Note on Sequence Lock Upgrades Defect Jeremy</author>
+      <timestamp>2021-09-04T03:32:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Note on Sequence Lock Upgrades Defect Jeremy" parent_id="mailing-list-2021-09-m9f7260bf4e8d7f4adc15dca23fd673d6279a2347" anchor="ma0b9d2244fe2f7f7b6d8718667bc9b31bca9a6e8">
+      <author>Jeremy</author>
+      <timestamp>2021-09-05T03:19:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="1" position="2" reply_to="[bitcoin-dev] Note on Sequence Lock Upgrades Defect Jeremy" parent_id="mailing-list-2021-09-m9f7260bf4e8d7f4adc15dca23fd673d6279a2347" anchor="mae82dcce8d76e42d3e35154a931b399675d99418">
+      <author>David A. Harding</author>
+      <timestamp>2021-09-06T02:35:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="2" position="3" reply_to="David A. Harding" parent_id="mailing-list-2021-09-mae82dcce8d76e42d3e35154a931b399675d99418" anchor="m655194aec7dcf21b1abbd6c7de2cf838a124624f">
+      <author>Jeremy</author>
+      <timestamp>2021-09-06T03:17:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="3" position="4" reply_to="Jeremy" parent_id="mailing-list-2021-09-m655194aec7dcf21b1abbd6c7de2cf838a124624f" anchor="m934114001ff6a85935dd6dbe7621c14e7ad246af">
+      <author>darosior</author>
+      <timestamp>2021-09-06T06:16:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="1" position="5" reply_to="[bitcoin-dev] Note on Sequence Lock Upgrades Defect Jeremy" parent_id="mailing-list-2021-09-m9f7260bf4e8d7f4adc15dca23fd673d6279a2347" anchor="m02eb832a3793b6225c4d9c322b51e04a419db496">
+      <author>Antoine Riard</author>
+      <timestamp>2021-09-09T00:02:00.000Z</timestamp>
+    </message>
+    <message id="msg_7" depth="2" position="6" reply_to="Antoine Riard" parent_id="mailing-list-2021-09-m02eb832a3793b6225c4d9c322b51e04a419db496" anchor="me7fa8a8caa53d7dd528c1521f3e55f28ff7ad218">
+      <author>Jeremy</author>
+      <timestamp>2021-09-09T01:04:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Sept_2021/019418_Note-on-Sequence-Lock-Upgrades-Defect.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019421_Note-on-Sequence-Lock-Upgrades-Defect.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019407_Note-on-Sequence-Lock-Upgrades-Defect.xml" rel="alternate"/>
@@ -12,10 +42,11 @@
   <link href="bitcoin-dev/Sept_2021/019401_Note-on-Sequence-Lock-Upgrades-Defect.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2021/019400_Note-on-Sequence-Lock-Upgrades-Defect.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-September/019400.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-September/019400.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Note on Sequence Lock Upgrades Defect</title>
-    <updated>2025-10-11T02:32:19.760061+00:00</updated>
+    <updated>2025-10-12T02:18:16.828532+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-September/019400.html" rel="alternate"/>
     <published>2021-09-09T01:04:53+00:00</published>
     <summary>Jeremy Rubin has proposed a patch to fix a flaw in the Sequence lock implementation related to upgradability. The flaw is that the current mempool policies signaling are not separated from consensus data, which can cause problems for L2 nodes and counterparties who want to update their mempool policies non-interactively. Jeremy suggests introducing a new field to signal policy through p2p packages, but notes that this could be vulnerable to tampering by malicious peers.The discussion also revolves around the implications of taking back the `nSequence` field for consensus-semantic sounds. It is argued that this could deprive the application-layer from a discrete, zero-cost payload, while increasing the price of such applications if they still relay application-specific data through the p2p network. Different types of policy deployments are distinguished: loosening changes, tightening changes, and new feature introductions. Loosening changes do not require much ecosystem coordination, whereas flag day activations might make sense for tightening changes to create a higher level of commitment by the base layer software.Regarding the proposed policy change in #22871, the suggestion is to deploy full-rbf first, give time for higher applications to free up the `nSequence` field, and then start discouraging its usage. The user warns against reversing the process and asking for Bitcoin applications/higher layers to update first, as it could result in never making the change. Introducing discouragement waivers would move away from the policy design principle of separating mempool policies signaling from consensus data.In addition to Jeremy's proposed patch, other discussions revolve around using tx.version=2 for new nSequence rules and whether transactions with a version less than 2 are supported. There is also a discussion about the sequence values used by wallet implementations and whether any numbers besides 0xfffffffd are expected to be broadcastable with the DISABLE flag set. The advantages of using 0xfffffffd versus just 0 are debated, and the consensus on common usage is unclear.Overall, Jeremy Rubin's patch aims to fix a flaw in the Sequence lock implementation related to upgradability. The proposal includes separating mempool policies signaling from consensus data, introducing a new field for policy signaling through p2p packages, and deploying changes in a phased manner to ensure smooth policy deployment without disrupting existing applications.</summary>

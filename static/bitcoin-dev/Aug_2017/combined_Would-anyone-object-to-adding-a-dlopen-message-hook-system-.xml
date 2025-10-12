@@ -2,18 +2,41 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Would anyone object to adding a dlopen message hook system?</title>
-  <updated>2025-10-11T02:31:19.467800+00:00</updated>
+  <updated>2025-10-12T02:06:37.941236+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m761eed28bb3950c4f75264ec3963ce7be6e05f0b">
+      <author>[bitcoin-dev] Would anyone object to adding a dlopen message hook system? Erik Aronesty</author>
+      <timestamp>2017-08-13T18:46:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Would anyone object to adding a dlopen message hook system? Erik Aronesty" parent_id="mailing-list-2017-08-m761eed28bb3950c4f75264ec3963ce7be6e05f0b" anchor="m23ca24f86805f16b3fdcd6798b95acad4df1091a">
+      <author>Jonas Schnelli</author>
+      <timestamp>2017-08-13T20:00:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Jonas Schnelli" parent_id="mailing-list-2017-08-m23ca24f86805f16b3fdcd6798b95acad4df1091a" anchor="mab732e1789a0381a7d2124b0774e853ae3c86e20">
+      <author>Mark Friedenbach</author>
+      <timestamp>2017-08-13T20:56:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Mark Friedenbach" parent_id="mailing-list-2017-08-mab732e1789a0381a7d2124b0774e853ae3c86e20" anchor="mf85063d9c49fe60f1623c631a8645d170b0fc8e5">
+      <author>Erik Aronesty</author>
+      <timestamp>2017-08-15T01:33:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="5" position="4" anchor="m287d0f8be25e3bad0957262f46aee1a0b4531584">
+      <author>Erik Aronesty</author>
+      <timestamp>2017-08-15T04:44:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Aug_2017/014829_Would-anyone-object-to-adding-a-dlopen-message-hook-system-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2017/014826_Would-anyone-object-to-adding-a-dlopen-message-hook-system-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2017/014825_Would-anyone-object-to-adding-a-dlopen-message-hook-system-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2017/014824_Would-anyone-object-to-adding-a-dlopen-message-hook-system-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2017/014823_Would-anyone-object-to-adding-a-dlopen-message-hook-system-.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014823.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014823.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Would anyone object to adding a dlopen message hook system?</title>
-    <updated>2025-10-11T02:31:19.467907+00:00</updated>
+    <updated>2025-10-12T02:06:37.942018+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014823.html" rel="alternate"/>
     <published>2017-08-15T04:44:52+00:00</published>
     <summary>The discussion revolves around extending the P2P layer of Bitcoin through the addition of module extensions. Erik Voorhees proposed this idea, suggesting that these modules could be loaded via dlopen() and would allow for the creation of enhanced features that certain peers could support. The main goal is to enable lightning network micropayments, allowing users to pay for better node access and ultimately creating a market for node services.However, Jonas Schnelli expressed concern about the security implications of adding modules like dlopen() to the core client. He argued that the current setup, where the consensus logic, p2p system, wallet, and GUI all share the same process, already poses security risks. Instead, he suggested utilizing existing IPC interfaces like RPC/ZMQ, which can provide bidirectional communication using long poll.Erik's proposal involved calling module hooks with message data when messages are received. These hooks would then have the ability to handle the message, mark the peer as invalid, push a message to the peer, or pass through an alternate command. Modules would also have the option to include their own private commands prefixed by &quot;x:&quot;. To implement this, Erik suggested having linked-in modules that can be optionally compiled and added to the bitcoin conf file, and then loaded via dlopen(). These modules should be robust enough to handle changes in Bitcoin versions, but not if there are changes in the network layer. Incompatibility between modules should throw an exception to ensure broken peers don't stay online.In general, the writer believes that the core reference could benefit from the ability to create subnetworks within the Bitcoin ecosystem. The proposed MessageHookIn, MessageHookOut, and MessageHook classes illustrate how such a module/hook system could be implemented to extend the functionality of the P2P layer.</summary>

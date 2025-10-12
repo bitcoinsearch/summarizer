@@ -2,16 +2,31 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Bringing a nuke to a knife fight: Transaction introspection to stop RBF pinning</title>
-  <updated>2025-10-11T02:31:30.811469+00:00</updated>
+  <updated>2025-10-12T02:08:39.673180+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m525a00cf41d7d0eee5a9d3c4199bc134dfb17e6f">
+      <author>[bitcoin-dev] Bringing a nuke to a knife fight: Transaction introspection to stop RBF pinning Greg Sanders</author>
+      <timestamp>2022-05-10T18:53:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Bringing a nuke to a knife fight: Transaction introspection to stop RBF pinning Greg Sanders" parent_id="mailing-list-2022-05-m525a00cf41d7d0eee5a9d3c4199bc134dfb17e6f" anchor="m53675ba09f37795c0c7df1999adfa76ccbf06ade">
+      <author>David A. Harding</author>
+      <timestamp>2022-05-12T07:17:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="David A. Harding" parent_id="mailing-list-2022-05-m53675ba09f37795c0c7df1999adfa76ccbf06ade" anchor="m0be8be8853f8f927c5545f50cc609c304e32dffc">
+      <author>Greg Sanders</author>
+      <timestamp>2022-05-12T13:31:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/May_2022/020474_Bringing-a-nuke-to-a-knife-fight-Transaction-introspection-to-stop-RBF-pinning.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2022/020469_Bringing-a-nuke-to-a-knife-fight-Transaction-introspection-to-stop-RBF-pinning.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2022/020458_Bringing-a-nuke-to-a-knife-fight-Transaction-introspection-to-stop-RBF-pinning.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-May/020458.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-May/020458.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Bringing a nuke to a knife fight: Transaction introspection to stop RBF pinning</title>
-    <updated>2025-10-11T02:31:30.811561+00:00</updated>
+    <updated>2025-10-12T02:08:39.673752+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-May/020458.html" rel="alternate"/>
     <published>2022-05-12T13:31:02+00:00</published>
     <summary>A proposed update transaction aims to set an upper bound on the final transaction weight. This proposal includes OPTX_SELECT_WEIGHT to push tx weight to stack and conditionally commit to the change output's scriptpubkey for each contract participant. However, concerns arise about pinning an unsubmitted update[-1] under 25,000 vbytes of junk. One suggestion is to raise mempool ancestor/descendant limits in the future. Another idea is to relative-time lock update transactions' state input by one block to close off the vector, allowing for one &quot;update transaction package&quot; at a time in the mempool. The use of ANYONECANPAY-like behavior, such as vault structures, may avoid these issues.The author notes that making the 1,000 vbytes limit smaller would limit the amount of pinning possible but could also discourage people from holding bitcoins in deep taproot trees or sophisticated tapscripts.Another proposal involves adding OPTX_SELECT_WEIGHT to the &quot;state&quot; input's script in an update transaction to set an upper bound on the final transaction weight. Additionally, there would be a conditional commitment to the change output's scriptpubkey via OPTX_SELECT_OUTPUT_SCRIPTPUBKEY and OPTX_SELECT_OUTPUTCOUNT==2 for each contract participant. However, this proposal is met with skepticism due to concerns about mempool spending reintroducing pinning. It is possible for malicious actors to submit unencumbered UTXOs to the mempool, preventing update[-1] from being committed on-chain before its (H|P)TLC timeout.If the proposal of `OPTX_SELECT_WEIGHT OP_TX` is implemented and each update's weight is limited to 1,000 vbytes, Mallory can still pin the unsubmitted update[-1] under 25,000 vbytes of junk. While this proposal makes escaping the pinning cheaper, it does not eliminate the underlying concern. Furthermore, relying on mempool ancestor/descendant limits makes it harder to raise those limits in the future, increasing the risk of node memory/CPU DoS. Therefore, any increase in these limits must be carefully ensured not to increase the risk.A developer shares their thoughts on eltoo designs for Elements and eventual inclusion into Bitcoin, specifically addressing the issue of BIP125 rule#3. This rule requires replacement transactions to pay an absolute fee of at least the sum paid by the original transactions. However, this poses a problem in scenarios like eltoo where fees are required to be brought by the counterparty. This can lead to illicit HTLC timeouts due to low feerate update transactions or bloated inputs/outputs, causing users to pay more sats.To mitigate this pinning, the developer suggests using policy or transaction introspection opcodes. They provide an example using Rusty's OP_TX proposal and continuously spent off-chain state outputs sent to a committed set of outputs. By adding OPTX_SELECT_WEIGHT to the state input's script and conditionally committing to the change output's scriptpubkey via OPTX_SELECT_OUTPUT_SCRIPTPUBKEY and OPTX_SELECT_OUTPUTCOUNT==2, the size of the transaction package submitted to mempools is restricted. The developer also proposes encumbering change outputs to either 1 block CSV encumbered outputs or another OPTX_SELECT_WEIGHT recursively, allowing each counterparty to CPFP N times with each transaction having a maximum weight. The 1 block CSV acts as an &quot;escape hatch&quot; to retrieve the fee output from the covenant structure.In conclusion, the developer acknowledges that dealing with the mempool is challenging, but they suggest that transaction weight, output count, output scriptpubkey, and introspection can be utilized to address these challenges effectively.</summary>
