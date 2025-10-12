@@ -2,15 +2,16 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Trickle and transaction propogation</title>
-  <updated>2025-10-11T02:30:10.262930+00:00</updated>
+  <updated>2025-10-12T02:38:24.670374+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/July_2014/006328_Trickle-and-transaction-propogation.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2014/006327_Trickle-and-transaction-propogation.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-July/006327.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-July/006327.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Trickle and transaction propogation</title>
-    <updated>2025-10-11T02:30:10.263015+00:00</updated>
+    <updated>2025-10-12T02:38:24.670461+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-July/006327.html" rel="alternate"/>
     <published>2014-07-20T22:02:39+00:00</published>
     <summary>The inv trickling mechanism in Bitcoin serves two main purposes: protecting users' privacy and reducing unnecessary invs between nodes. However, it also slows down transaction propagation and delays mutual knowledge of transactions between nodes. These drawbacks will become more significant as optimizations based on mutually-known transactions are developed. While trickling helps protect privacy by obscuring transaction origins, it has its limitations.To make the staggering of introducing new invs more effective, a structure similar to mapAskFor could be used to schedule staggered pushes of wallet transactions to each peer. However, this method is vulnerable to sybil attacks. To address this, a policy of ending staggering and pushing to all peers once another peer has received the transaction from elsewhere can reduce the likelihood of inv origin information being obtained by a partial sybil.In terms of redundant invs, trickling reduces the number of invs sent between nodes when they receive transactions at around the same time. To solve the who-sends-first problem, connections could have directional parity. This means that a node initiating a connection would announce its parity (even or odd), and an inv would be sent right away to peers with matching parity, but only sent against parity if a certain timeout has elapsed without the inv being received. Parity could also be specified as a mask to allow for nodes with few peers or nodes on local connections that might flood everything to each other.Currently, most users are not using the Core wallet anymore, but rather use either SPV wallets or more centralized blockchain/coinbase style gateways to the network. SPV wallets don't relay, so any transaction sent from them must be originated by that wallet. Centralized services can improve user privacy by sending transactions out via a node that isn't listening. Optimizing the network for the common use case rather than just helping Core wallet users would benefit everyone.Overall, while eliminating trickling would double inv traffic, there are more efficient solutions to the problems caused by it. The proposed techniques of push staggering and directional parity could solve these issues more efficiently and still protect user privacy. By implementing these techniques, Bitcoin can have its cake and eat it too. However, if the proposed techniques do not achieve this, removing tx trickling should be considered.</summary>
