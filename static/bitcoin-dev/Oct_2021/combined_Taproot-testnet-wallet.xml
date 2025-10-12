@@ -2,8 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Taproot testnet wallet</title>
-  <updated>2025-10-12T02:41:07.727042+00:00</updated>
+  <updated>2025-10-12T02:23:03.423307+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <author>
+    <name>Andreas Schildbach 2021-10-09 15:36:47 2021-10-09T15:36:47+00:00</name>
+  </author>
+  <author>
+    <name>Pieter Wuille 2021-10-09 16:49:42 2021-10-09T16:49:42+00:00</name>
+  </author>
+  <author>
+    <name>Anthony Towns 2021-10-15 01:05:12 2021-10-15T01:05:12+00:00</name>
+  </author>
+  <author>
+    <name>vjudeu at gazeta.pl 2021-10-15 11:51:45 2021-10-15T11:51:45+00:00</name>
+  </author>
+  <author>
+    <name>Prayank 2021-10-15 14:12:23 2021-10-15T14:12:23+00:00</name>
+  </author>
   <link href="bitcoin-dev/Oct_2021/019547_Taproot-testnet-wallet.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2021/019546_Taproot-testnet-wallet.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2021/019543_Taproot-testnet-wallet.xml" rel="alternate"/>
@@ -14,7 +29,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Taproot testnet wallet</title>
-    <updated>2025-10-12T02:41:07.727125+00:00</updated>
+    <updated>2025-10-12T02:23:03.423466+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-October/019532.html" rel="alternate"/>
     <published>2021-10-15T14:12:23+00:00</published>
     <summary>The email discusses the implementation of Bitcoin's Taproot addresses in bitcoinj and the need for testing against a wallet that can receive to P2TR and spend back. The author shares a transaction they did days ago which creates a P2TR output and provides detailed steps taken for the transaction. They suggest adding test vectors in BIP 86 for TPRV as suggested by Anthony Towns in a previous email.On October 15th, 2021, Anthony Towns posted on the bitcoin-dev forum discussing whether any testnet faucets would accept bech32m addresses directly. Although unsure, he mentioned that the same process works with testnet. It is noted that there are faucets that accept such addresses, including Bitcoin Faucet, but they require the use of a bech32 checksum instead of bech32m.Bitcoin Core users can create a taproot-capable wallet following several steps. Firstly, they need to have or create a descriptor wallet with descriptors=true using the createwallet RPC command. Secondly, they should import a taproot descriptor in the form &quot;tr(KEY)&quot;, where KEY can be a tprv.../* or any other supported key expression. Thirdly, they can get a new address with addresstype=bech32m. It is mentioned that this process is currently somewhat cumbersome, especially prior to taproot activating on mainnet.To create a taproot-capable wallet in Bitcoin Core using the master branch, there are five steps involved. First, users should create a descriptor wallet using the command 'bitcoin-cli -signet -named createwallet wallet_name=descwallet descriptors=true load_on_startup=true'. Second, they need to get the associated bip32 tprv private key using 'TPRV=$(bitcoin-cli -rpcwallet=descwallet -signet listdescriptors true | jq '.descriptors | .[].desc' | sed 's/^.*(//;s/[)/].*//' | uniq | head -n1)'. Note that this step requires an updated version of bitcoin-cli due to PR#21500. Third, users should construct the taproot descriptor per BIP 86 using 'DESC=&quot;tr($TPRV/86'/1'/0'/0/*)&quot;' and 'CHK=&quot;$(bitcoin-cli -rpcwallet=descwallet -signet getdescriptorinfo &quot;$DESC&quot; | jq -r .checksum)&quot;'. Fourth, import the descriptor using 'bitcoin-cli -rpcwallet=descwallet -signet importdescriptors &quot;[{\&quot;desc\&quot;: \&quot;$DESC#$CHK\&quot;, \&quot;active\&quot;: true, \&quot;timestamp\&quot;: \&quot;now\&quot;, \&quot;range\&quot;: [0,1000], \&quot;next_index\&quot;: 1}]&quot;'. Finally, get an address using 'bitcoin-cli -rpcwallet=descwallet -signet getnewaddress '' bech32m'.Andreas Schildbach via bitcoin-dev is trying to finish off bitcoinj's implementation for sending to taproot addresses. They are requesting a testnet wallet that can receive to P2TR and spend back in order to complete this task. Despite their efforts, they have been unable to obtain a taproot address from Bitcoin Core 22.0. Pieter has responded to Andreas' request by providing instructions on how to construct a taproot-capable wallet in Bitcoin Core. This involves having or creating a descriptor wallet with descriptors=true, importing a taproot descriptor (of the form &quot;tr(KEY)&quot;) as active descriptor with active=true, where KEY can be a tprv.../* or any other supported key expression, and getting a new address with addresstype=bech32m. Pieter has also provided a taproot address for testing purposes: tb1p84x2ryuyfevgnlpnxt9f39gm7r68gwtvllxqe5w2n5ru00s9aquslzggwq. If testnet coins are sent there, Pieter has requested an email address to return them.The individual working on implementing bitcoinj's sending feature for taproot addresses is requesting a testnet wallet that can receive to P2TR and spend back. They have been unable to obtain a taproot address from Bitcoin Core 22.0 and are seeking assistance. They do not care about the safety of their testnet coins, so there is no need to worry about compromised private keys.</summary>

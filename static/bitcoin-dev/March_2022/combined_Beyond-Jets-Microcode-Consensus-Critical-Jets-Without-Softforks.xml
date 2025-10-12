@@ -2,8 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks</title>
-  <updated>2025-10-12T02:38:33.093486+00:00</updated>
+  <updated>2025-10-12T01:55:28.197222+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m40f35a00f0bb05764b75b45ccd1464a4e9191895">
+      <author>[bitcoin-dev] Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks ZmnSCPxj</author>
+      <timestamp>2022-03-22T05:37:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks ZmnSCPxj" parent_id="mailing-list-2022-03-m40f35a00f0bb05764b75b45ccd1464a4e9191895" anchor="m9e947e7f08c0140d4f7c23ee13ae7074ec7c64e6">
+      <author>Russell O'Connor</author>
+      <timestamp>2022-03-22T15:08:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Russell O'Connor" parent_id="mailing-list-2022-03-m9e947e7f08c0140d4f7c23ee13ae7074ec7c64e6" anchor="mb2a1eb84f3b3282f9e2cbd69181cb53ba30d300a">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-03-22T16:22:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="ZmnSCPxj" parent_id="mailing-list-2022-03-mb2a1eb84f3b3282f9e2cbd69181cb53ba30d300a" anchor="m7d3d8b7b2c71c4f97185fc47d5a091e916c6fddc">
+      <author>Russell O'Connor</author>
+      <timestamp>2022-03-22T16:28:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="4" position="4" reply_to="Russell O'Connor" parent_id="mailing-list-2022-03-m7d3d8b7b2c71c4f97185fc47d5a091e916c6fddc" anchor="m7027c4532dd7a276bea948b8d1c404338e2757a6">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-03-22T16:39:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="5" position="5" reply_to="ZmnSCPxj" parent_id="mailing-list-2022-03-m7027c4532dd7a276bea948b8d1c404338e2757a6" anchor="m3f316d54c5507ced288b10d65168e7087a7e0183">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-03-22T16:47:00.000Z</timestamp>
+    </message>
+    <message id="msg_7" depth="1" position="6" reply_to="[bitcoin-dev] Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks ZmnSCPxj" parent_id="mailing-list-2022-03-m40f35a00f0bb05764b75b45ccd1464a4e9191895" anchor="m7087632aa6e96a86382b0d66bb4cbcd2c0c0d365">
+      <author>Anthony Towns</author>
+      <timestamp>2022-03-22T23:11:00.000Z</timestamp>
+    </message>
+    <message id="msg_8" depth="2" position="7" reply_to="Anthony Towns" parent_id="mailing-list-2022-03-m7087632aa6e96a86382b0d66bb4cbcd2c0c0d365" anchor="m98177918721af73cb6ed623d1ce1637d4c90497c">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-03-23T00:20:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/March_2022/020174_Beyond-Jets-Microcode-Consensus-Critical-Jets-Without-Softforks.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020171_Beyond-Jets-Microcode-Consensus-Critical-Jets-Without-Softforks.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2022/020165_Beyond-Jets-Microcode-Consensus-Critical-Jets-Without-Softforks.xml" rel="alternate"/>
@@ -17,7 +51,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Beyond Jets: Microcode: Consensus-Critical Jets Without Softforks</title>
-    <updated>2025-10-12T02:38:33.093584+00:00</updated>
+    <updated>2025-10-12T01:55:28.198330+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-March/020158.html" rel="alternate"/>
     <published>2022-03-23T00:20:16+00:00</published>
     <summary>A proposal has been made to introduce microcodes for Bitcoin SCRIPT. The idea is to define a generic low-level language, called RISC, and map specific high-level languages to it. Users can sacrifice Bitcoins to define new microcodes that extend the functionality of Bitcoin SCRIPT. The proposed RISC language includes general instructions like arithmetic, SECP256K1 scalar and point math, bytevector concatenation, sha256 midstates, bytevector bit manipulation, transaction introspection, and more.The microcodes are compiled using LLVM and stored in a 256-long array of functions, where the array index corresponds to the `OP_` code. This allows for faster execution compared to expanding an OP-code SCRIPT to a UOP-code SCRIPT and interpreting it in a loop. However, there are concerns about introducing a significant new dependency to the consensus definition.To fix bugs in existing microcodes, a new microcode can be based on the existing one and the buggy implementation can be redefined. However, this requires existing Tapscripts to be re-spent to point to the new bug-fixed microcode, which incurs an on-chain spend.There is also a discussion about referencing microcodes in a simpler way. It is suggested that each microcode represents a language based on the current OG Bitcoin SCRIPT language. Tapscript versions can be replaced with microcodes, where each version is a slot for a microcode. The current OG Bitcoin SCRIPT would be just one of those slots. This approach reduces the cost of indicating a microcode to just one byte, as required currently.Efficiency in referencing microcodes is also considered. It is proposed to use a hash to refer to an entire language of redefined `OP_` codes, rather than individual opcodes. The use of a 50-bit hash or a 160-bit RIPEMD . SHA256 hash is sufficient to specify the microcodes with a low probability of collision. However, there is a concern about potential deliberate attacks if users of different SCRIPTs collaborate to define a single microcode.Specific microcodes can be used in Tapscript by opting for a specific `0xce` version and referring to the microcode through its hash. Race conditions can occur when reorganizing a newly-defined microcode, but this can be avoided by waiting for deep confirmation. Fullnodes may need to maintain multiple microcodes, which makes creating new ones expensive due to JIT compilation and the requirement to keep an index that cannot have items deleted. The advantage of using microcodes is that the size of the SCRIPT can be used as a proxy for CPU load, allowing for bounded CPU load without requiring a softfork.Namespace management is another issue discussed. Simplicity is suggested as a better platform than Bitcoin Script due to its narrow interface. However, specific microcodes are proposed as a solution to namespace management issues. They require opt-in usage and specific Tapscript versions, along with a hash to refer to the microcode. The only race condition occurs during reorganization, which can be avoided by waiting for deep confirmation. CPU load is bounded as long as there are no looping constructs and the number of `UOP_` micro-opcodes is limited.Another discussion focuses on the use of microcodes as a means of enabling new functionality in the Bitcoin consensus layer. The proposal suggests defining a generic low-level language and mapping specific high-level languages to it. This allows existing Bitcoin SCRIPT `OP_` codes to be mapped to `UOP_` micro-opcodes. Bugs in implementations can be fixed by uploading new microcodes based on the existing ones. To avoid trivial triggering of JIT-compilation, users petitioning for the jettification of operations must sacrifice Bitcoins.Overall, the use of microcodes in Bitcoin SCRIPT offers a way to extend functionality, fix bugs, and manage namespaces. It provides faster execution through LLVM compilation and allows for bounded CPU load. However, there are concerns about introducing dependencies, the cost of new functionality, and potential centralization pressure.</summary>

@@ -2,8 +2,35 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Mailman incompatibility with DKIM ...</title>
-  <updated>2025-10-12T02:32:47.670591+00:00</updated>
+  <updated>2025-10-12T00:53:54.890209+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <author>
+    <name>Warren Togami Jr. 2015-06-19 09:51:50 2015-06-19T09:51:50+00:00</name>
+  </author>
+  <author>
+    <name>Mike Hearn 2015-06-19 09:56:16 2015-06-19T09:56:16+00:00</name>
+  </author>
+  <author>
+    <name>Warren Togami Jr. 2015-06-19 10:10:25 2015-06-19T10:10:25+00:00</name>
+  </author>
+  <author>
+    <name>Mike Hearn 2015-06-19 10:24:01 2015-06-19T10:24:01+00:00</name>
+  </author>
+  <author>
+    <name>Warren Togami Jr. 2015-06-19 10:38:30 2015-06-19T10:38:30+00:00</name>
+  </author>
+  <author>
+    <name>Mike Hearn 2015-06-19 10:49:40 2015-06-19T10:49:40+00:00</name>
+  </author>
+  <author>
+    <name>Adam Weiss 2015-06-19 19:47:56 2015-06-19T19:47:56+00:00</name>
+  </author>
+  <author>
+    <name>Jeff Garzik 2015-06-19 20:44:52 2015-06-19T20:44:52+00:00</name>
+  </author>
+  <author>
+    <name>Adam Weiss 2015-06-20 18:43:31 2015-06-20T18:43:31+00:00</name>
+  </author>
   <link href="bitcoin-dev/June_2015/008933_Mailman-incompatibility-with-DKIM-.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2015/008906_Mailman-incompatibility-with-DKIM-.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2015/008902_Mailman-incompatibility-with-DKIM-.xml" rel="alternate"/>
@@ -18,7 +45,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Mailman incompatibility with DKIM ...</title>
-    <updated>2025-10-12T02:32:47.670655+00:00</updated>
+    <updated>2025-10-12T00:53:54.890369+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/008835.html" rel="alternate"/>
     <published>2015-06-20T18:43:31+00:00</published>
     <summary>In an email exchange between Adam Weiss and Jeff Garzik in June 2015, they discussed a feature that would rewrite the envelope-from address to the list's address when someone posts from a domain with strict signature checking. This behavior is not well-specified in RFC822 and is considered an edge case. However, with the adoption of strict DMARC, rewriting envelopes has become more common. If this feature proves problematic, it could be switched to follow the lkml route. Jeff Garzik expressed concern that this change may accidentally direct mail intended for DKIM-user + list to DKIM-user.Adam Weiss suggested a way to detect when someone posts from a domain with strict signature checking by setting dmarc_moderation_action to &quot;Munge from.&quot; This would rewrite the envelope-from to the list's address and add a Reply-to field set to the original sender. However, Jeff Garzik raised concerns about changing reply behavior for some recipients and potentially directing mail intended for DKIM-user + list to DKIM-user.Warren Togami Jr and Adam also discussed the issue of DKIM signature checking for all mails originating from a domain. They considered setting dmarc_moderation_action to &quot;Munge from&quot; as a workaround until the issue matures further. Warren expressed displeasure with the need to remove the subject tag and footer for compatibility with DKIM users. He asked if mailing list software resigns for messages themselves, to which Mike Hearn explained that lists can do so, but Mailman does not. DKIM is used by most mail on the internet, and DMARC rules are enforced by major webmail providers like Gmail. Rusty geek infrastructure has problems with this, while the majority of email users benefit from it. Warren understood the reason to protect heavily phished domains but noted that LKML does not modify the subject or add a footer.Mailman, a popular mailing list management software, currently does not sign emails with DKIM. However, DKIM signing is highly recommended to help spam filters identify the 'owner' of the mail. Mailing lists that edit people's emails do resign, but Mailman does not. Removing subject tags and footers may be acceptable if there is no other choice, as email clients can still extract information from the headers. Gmail is capable of using these headers programmatically.Mike Hearn expressed his displeasure with the need to remove subject tags and footers for compatibility with DKIM users. He also noted that lists can effectively perform MITM attacks on messages if they resign for the messages themselves. DKIM is enforced using DMARC rules published in DNS statements. Major webmail providers enforce these rules, but some infrastructure has issues. LKML does not modify the subject or add a footer, likely to maintain compatibility with big corporate domains participating in DKIM. It is acceptable to remove subject tags and footers if there is no other choice.The discussion revolves around removing footers during testing of a new mailing list for compatibility with DKIM users. DKIM/DMARC rules are used by heavily phished domains like Google, PayPal, eBay, and BitPay. The poster suggests everyone should use DKIM/DMARC as it adds cryptographic integrity to email. SourceForge does not drop DKIM enforced mail, but it may get caught in spam filters.Mike Hearn and Warren discuss the issue of compatibility with DKIM signing. They removed the footer due to incompatibility and consider removing the subject tag as well. There is concern about DKIM enforcement being uncommon, and suggestions are made to auto-reject DKIM-enforced domain postings. Spam may have to be silently dropped to avoid Mailman servers becoming spammers.The footer has been removed from the mailing list to be more compatible with DKIM signing. The &quot;[Bitcoin-dev] &quot; prepend tag in the subject is only compatible if manually added by the poster. However, SourceForge still adds footers to the list. The best solution is to use a mailing list operator that operates correctly with DKIM/DMARC and does not modify messages in transit or re-send them under their own identity. The latter approach is risky as it puts the responsibility of spamming on the list operator. To avoid this, it is important to ensure that everyone's mail does not go to the spam folder.Both the sender and recipient of an email experienced their mail being sent to Gmail's spam folder due to DKIM. The sender is concerned about DKIM compatibility with mailing lists. The footer has been removed as it was incompatible with DKIM signing. However, keeping the &quot;[Bitcoin-dev]&quot; prepend tag in the subject is only compatible if manually added by the poster. Removing the subject tag might improve DKIM enforcement but could confuse subscribers. The lack of a Mailman footer may make it difficult for subscribers to unsubscribe or access archives. The sender seeks opinions on how to proceed, and Arthur suggests manually adding &quot;[Bitcoin-dev]&quot; to the beginning of the subject.</summary>

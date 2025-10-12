@@ -2,8 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [PROPOSAL] OP_TX: generalized covenants reduced to OP_CHECKTEMPLATEVERIFY</title>
-  <updated>2025-10-12T02:39:45.308553+00:00</updated>
+  <updated>2025-10-12T02:08:21.986901+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="mb663a8efa989740619f2db7e2d1bd2a30bfbb35b">
+      <author>[bitcoin-dev] [PROPOSAL] OP_TX: generalized covenants reduced to OP_CHECKTEMPLATEVERIFY Rusty Russell</author>
+      <timestamp>2022-05-10T10:35:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] [PROPOSAL] OP_TX: generalized covenants reduced to OP_CHECKTEMPLATEVERIFY Rusty Russell" parent_id="mailing-list-2022-05-mb663a8efa989740619f2db7e2d1bd2a30bfbb35b" anchor="m07d54537359009f0c7b4c7855fa3a6b13a2d8dda">
+      <author>Brandon Black</author>
+      <timestamp>2022-05-10T15:16:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="1" position="2" reply_to="[bitcoin-dev] [PROPOSAL] OP_TX: generalized covenants reduced to OP_CHECKTEMPLATEVERIFY Rusty Russell" parent_id="mailing-list-2022-05-mb663a8efa989740619f2db7e2d1bd2a30bfbb35b" anchor="ma15b896b8352a304b1ac5db434e000a5f42130db">
+      <author>Alex Schoof</author>
+      <timestamp>2022-05-11T23:32:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="1" position="3" reply_to="[bitcoin-dev] [PROPOSAL] OP_TX: generalized covenants reduced to OP_CHECKTEMPLATEVERIFY Rusty Russell" parent_id="mailing-list-2022-06-mb663a8efa989740619f2db7e2d1bd2a30bfbb35b" anchor="mde79aeb792a71266021608f59399698e8a90bbc6">
+      <author>Anthony Towns</author>
+      <timestamp>2022-06-24T06:06:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="2" position="4" reply_to="Anthony Towns" parent_id="mailing-list-2022-06-mde79aeb792a71266021608f59399698e8a90bbc6" anchor="ma5993bbc02544b9157b921ff4b492a0133afc155">
+      <author>Jeremy Rubin</author>
+      <timestamp>2022-06-24T18:05:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/June_2022/020600_-PROPOSAL-OP-TX-generalized-covenants-reduced-to-OP-CHECKTEMPLATEVERIFY.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2022/020599_-PROPOSAL-OP-TX-generalized-covenants-reduced-to-OP-CHECKTEMPLATEVERIFY.xml" rel="alternate"/>
   <link href="bitcoin-dev/May_2022/020470_-PROPOSAL-OP-TX-generalized-covenants-reduced-to-OP-CHECKTEMPLATEVERIFY.xml" rel="alternate"/>
@@ -14,7 +36,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - [PROPOSAL] OP_TX: generalized covenants reduced to OP_CHECKTEMPLATEVERIFY</title>
-    <updated>2025-10-12T02:39:45.308626+00:00</updated>
+    <updated>2025-10-12T02:08:21.987733+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-May/020450.html" rel="alternate"/>
     <published>2022-06-24T18:05:50+00:00</published>
     <summary>In a recent discussion on the bitcoin-dev mailing list, the use of merkle trees for Commitment Transaction Verification (CTV) was debated. While there was recognition that merkle trees could offer advantages in terms of API perspective, the main concern raised was related to validation performance. It was argued that using a merkle tree would add unnecessary work for CTV, with its value only evident in scenarios involving multiple outputs and random-index insertions. For cases where editing the last output is common, SHA-STREAM was proposed as an alternative option, enabling efficient editing of the tail. The conversation also touched upon the OPTX_SEPARATELY and OPTX_UNHASHED fields, as well as the OPTX_SELECT_OUTPUT_AMOUNT32x2* and OPTX_SELECT_OUTPUT_SCRIPTPUBKEY* fields. The issue of upgradability was highlighted, particularly in relation to committing to specific outputs, which currently poses challenges for both OP_TX and CTV. One potential solution suggested was the use of a merkle path to prove the consumption of an entire output. Overall, the discussion centered around weighing the tradeoffs between employing a merkle tree versus other methods for CTV.On May 10, 2022, Rusty Russell shared some ideas on the bitcoin-dev mailing list regarding the OPTX_SEPARATELY and OPTX_UNHASHED fields. He proposed treating these fields separately instead of concatenating them and pushing them on the stack without hashing. The discussion revolved around updating the CTV hash by committing to specific outputs, but it was acknowledged that both approaches were less efficient compared to using a merkle path. The challenge of proving the consumption of an output in its entirety was linked to concerns about upgradability, especially if additional features like CAT or TLUV were to be added. Both OP_TX and CTV aimed to account for upgradability in advance. These concepts have the potential to enhance the efficiency and security of the Bitcoin network.A proposal has been introduced for a v1 tapscript opcode that enables generic covenants. The proposal suggests utilizing an OP_SUCCESS opcode, unless it is used similarly to OP_CHECKTEMPLATEVERIFY, which offers a clear use case and allows for future expansion. If experience demonstrates that repurposing OP_NOP4 as a shortcut is a useful optimization, it may be considered in the future. The proposal builds upon Russell O'Connor's TXHASH, incorporating Anthony Towns' modification through opcode extension. Certain bits are defined specifically for this soft fork, while others can have their semantics determined later. To ensure clarity, the proposal outlines potential future uses. Notably, BIP-342 resource limits impose restrictions, such as failing when more than 1000 elements are pushed on the stack or when an element exceeds 512 bytes. By precisely enumerating what can be committed to, it becomes unequivocally clear what is and isn't committed. The bits separating concatenation and hashing provide a straightforward mechanism for template-style commitments (like CTV) or programmatic treatment of individual elements, such as amounts. The absence of double-hashing for scriptsigs and other fields means that the hashing done for SIGHASH_ALL cannot be reused. It is important to note that the OP_SUCCESS semantic is only applicable in tapscript v1, making it incompatible with covenants for v0 segwit or pre-segwit inputs. If covenants prove beneficial, dedicated opcodes can be provided for those cases.Brandon responded to Rusty Russell's previous email regarding the proposal for a v1 tapscript opcode for generic covenants. Brandon emphasized one major limitation of CTV, which is the script's specificity to the amount of the input being spent. He suggested adding OPTX_SELECT_IN_OUT_AMOUNT32x2 to the initial set of flags, enabling the reuse of a single script and facilitating the construction of a small script for relocatable, batchable operations. The proposed soft fork involves OP_TX followed by 4 bytes of flags. Only the flags marked with an asterisk need to be defined for this soft fork, while others can have their semantics determined later. The proposed flag combinations aim to approximate OP_CHECKTEMPLATEVERIFY, with other combinations resulting in OP_SUCCESS. By enumerating what can be committed to, it becomes explicitly clear what is and isn't committed. The bits separating concatenation and hashing provide a simple mechanism for template-style commitments or programmatic treatment of individual elements. The absence of double-hashing for scriptsigs and other fields means that the hashing done for SIGHASH_ALL cannot be reused. The OP_SUCCESS semantic is only valid in tapscript v1, meaning it does not allow for covenants in v0 segwit or pre-segwit inputs. If covenants prove useful, dedicated opcodes can be provided for those cases, similar to OP_CHECKTEMPLATEVERIFY.A proposal has been made to introduce a v1 tapscript opcode for generic covenants, with only an OP_SUCCESS opcode if used similarly</summary>

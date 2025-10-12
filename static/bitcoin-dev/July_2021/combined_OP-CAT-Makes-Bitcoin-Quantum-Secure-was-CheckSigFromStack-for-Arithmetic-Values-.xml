@@ -2,8 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - OP_CAT Makes Bitcoin Quantum Secure [was CheckSigFromStack for Arithmetic Values]</title>
-  <updated>2025-10-12T02:35:45.007209+00:00</updated>
+  <updated>2025-10-12T01:25:29.842286+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m174a92905cab68ce5fe636f7e9ee40fa60ff07f9">
+      <author>[bitcoin-dev] OP_CAT Makes Bitcoin Quantum Secure [was CheckSigFromStack for Arithmetic Values] Jeremy</author>
+      <timestamp>2021-07-07T05:58:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] OP_CAT Makes Bitcoin Quantum Secure [was CheckSigFromStack for Arithmetic Values] Jeremy" parent_id="mailing-list-2021-07-m174a92905cab68ce5fe636f7e9ee40fa60ff07f9" anchor="me53ea258ad6b5b6df88481d92863d7514b68e97f">
+      <author>ZmnSCPxj</author>
+      <timestamp>2021-07-08T08:12:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="ZmnSCPxj" parent_id="mailing-list-2021-07-me53ea258ad6b5b6df88481d92863d7514b68e97f" anchor="m8332df92bd79b8a5c775f925947a350581d9ba4a">
+      <author>Ethan Heilman</author>
+      <timestamp>2021-07-09T19:02:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Ethan Heilman" parent_id="mailing-list-2021-07-m8332df92bd79b8a5c775f925947a350581d9ba4a" anchor="mda8b07b9766fea21a6432ef8cc3d97fbd96520ce">
+      <author>ZmnSCPxj</author>
+      <timestamp>2021-07-09T22:38:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="3" position="4" reply_to="Ethan Heilman" parent_id="mailing-list-2021-07-m8332df92bd79b8a5c775f925947a350581d9ba4a" anchor="mf362f9923dbc21964e4ddf4c252da3cfd04e77d1">
+      <author>Jeremy</author>
+      <timestamp>2021-07-09T22:52:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="4" position="5" reply_to="ZmnSCPxj" parent_id="mailing-list-2021-07-mda8b07b9766fea21a6432ef8cc3d97fbd96520ce" anchor="me899322939a597b79020edf958abf4192d1c75c4">
+      <author>Ethan Heilman</author>
+      <timestamp>2021-07-09T23:25:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/July_2021/019255_OP-CAT-Makes-Bitcoin-Quantum-Secure-was-CheckSigFromStack-for-Arithmetic-Values-.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2021/019253_OP-CAT-Makes-Bitcoin-Quantum-Secure-was-CheckSigFromStack-for-Arithmetic-Values-.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2021/019252_OP-CAT-Makes-Bitcoin-Quantum-Secure-was-CheckSigFromStack-for-Arithmetic-Values-.xml" rel="alternate"/>
@@ -15,7 +41,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - OP_CAT Makes Bitcoin Quantum Secure [was CheckSigFromStack for Arithmetic Values]</title>
-    <updated>2025-10-12T02:35:45.007296+00:00</updated>
+    <updated>2025-10-12T01:25:29.843131+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-July/019233.html" rel="alternate"/>
     <published>2021-07-09T23:25:06+00:00</published>
     <summary>The implementation of Winternitz signatures in Bitcoin is not straightforward due to the lack of a limited-repeat construct in SCRIPT. However, it can be emulated using `OP_IF` and brute force, although this would result in a more complex and longer SCRIPT. Winternitz signatures offer smaller signature sizes but require more instructions in SCRIPT. Merkle signatures, on the other hand, trade shorter pubkeys for longer signatures, which is not advantageous in the post-SegWit Bitcoin context where both pubkeys and signatures are stored in the witness area.Jeremy Rubin proposed using OP_CAT or a similar operation to make Bitcoin &quot;quantum safe&quot; by signing an EC signature. This scheme uses Lamport signatures, which are quantum secure but require at least 20 contiguous bytes. To implement Winternitz, a limited-repeat construct is needed, but it is not available in SCRIPT. The commitment scheme in Taproot allows secure opening of the commitment to a message even with a quantum computer. Additionally, Schnorr signatures have a stronger non-malleability property than ECDSA, making them binding to the approved transaction. Once Lamport signed in Schnorr, even a quantum computer cannot steal the funds.Ethan Heilman suggested using Winternitz one-time signatures or OP_CAT to compress Lamport signatures and make Bitcoin &quot;quantum safe&quot;. Jeremy Rubin explored using OP_CAT for signing EC signatures in Segwit V0 and Tapscript. Rubin's proposal involves signing a HASH160 digest of the signature, which is resistant to quantum computers even if they crack ECDSA keys. The script required for this approach is long but fits within the program space and stack size limits for Bitcoin scripts. Rubin suggests that expanding to a ternary representation could further reduce the cost.ZmnSCPxj responded to Rubin's proposal, noting that while Lamport signatures are resistant to quantum computing, they are large in size. ZmnSCPxj suggested using Winternitz OTS instead, but it requires a limited-repeat construct not available in SCRIPT. Merkle signatures trade shorter pubkeys for longer signatures, which is a loss compared to Lamport in the post-SegWit Bitcoin context. ZmnSCPxj also pointed out that OP_CAT cannot be directly soft-forked to Segwit V0 because it modifies the stack, requiring a new opcode. Taproot and Schnorr signatures are mentioned as potential options for making Bitcoin quantum-proof.A proposal has been made to use Lamport signatures to sign longer messages in Bitcoin script arithmetic and make it quantum-proof. However, Lamport signatures are too large for the current block size limit. It may be possible to compress them using Winternitz OTS or OP_CAT to build a merkle tree and derive the full signature during script execution from shorter seed values. Rubin's construction uses an OP_CAT-like operation to sign up to 20 bytes, combined with the HASH160 digest, to create a &quot;quantum safe&quot; signature algorithm. The commitment scheme in Taproot can nest this script inside a Tapscript path, adding more security. More analysis is needed to ensure the security against quantum computers before using it in production.Jeremy Rubin proposed using an OP_CAT operation to sign an EC signature and make Bitcoin &quot;quantum safe&quot;. The construction uses Lamport signatures, which are quantum secure but require at least 20 contiguous bytes. The commitment scheme can nest inside a Tapscript path, providing additional security. Schnorr signatures are mentioned as having a stronger non-malleability property than ECDSA. The large size of Lamport signatures raises questions about their implementation.In his blog post, Jeremy Rubin explains how OP_CAT or a similar operation can be used to make Bitcoin &quot;quantum safe&quot; by signing an EC signature. This approach works in both Segwit V0 and Tapscript. By signing the HASH160 digest of the signature, even if a quantum computer cracks ECDSA, it cannot malleate the content of what was signed. Lamport signatures are mentioned as a 5-byte signing scheme that is quantum secure but requires at least 20 contiguous bytes. Rubin suggests using a new opcode, OP_SUBSTRINGEQUALVERIFY, to check a splice of a string for equality. The script fits within the limits, and expanding to a ternary representation could make it more efficient. The commitment scheme in Taproot can be securely opened to a message even with a quantum computer. Additionally, Schnorr signatures have a stronger non-malleability property than ECDSA, making them binding to the approved transaction. Many Lamport keys can be committed inside a taproot tree to make keys reusable.In summary, there have been proposals to use Winternitz signatures, OP_CAT, and other methods to make Bitcoin quantum-proof. These approaches aim to enhance security against quantum computers by using quantum-secure signatures and alternative operations. However, there are challenges such as limited-repeat constructs, size limitations, and the need for further analysis. Taproot and Schnorr signatures are also mentioned as potential</summary>

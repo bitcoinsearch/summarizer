@@ -2,8 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Properties of an ideal PoW algorithm &amp; implementation</title>
-  <updated>2025-10-12T02:36:25.861413+00:00</updated>
+  <updated>2025-10-12T01:32:45.797756+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="72" position="0" anchor="mdd7b0bae91b9ccad686373bad0df9382ad10ccdd">
+      <author>[bitcoin-dev] Properties of an ideal PoW algorithm &amp; implementation Natanael</author>
+      <timestamp>2017-04-18T10:34:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="73" position="1" reply_to="[bitcoin-dev] Properties of an ideal PoW algorithm &amp; implementation Natanael" parent_id="mailing-list-2017-04-mdd7b0bae91b9ccad686373bad0df9382ad10ccdd" anchor="m04e7dbef3785afb2f3ee27843b3c798fa05c16e1">
+      <author>praxeology_guy</author>
+      <timestamp>2017-04-18T19:14:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="73" position="2" reply_to="[bitcoin-dev] Properties of an ideal PoW algorithm &amp; implementation Natanael" parent_id="mailing-list-2017-04-mdd7b0bae91b9ccad686373bad0df9382ad10ccdd" anchor="mf46e48556ae6036712e15d8974b3431954eae133">
+      <author>Tim Ruffing</author>
+      <timestamp>2017-04-19T11:08:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="73" position="3" reply_to="[bitcoin-dev] Properties of an ideal PoW algorithm &amp; implementation Natanael" parent_id="mailing-list-2017-04-mdd7b0bae91b9ccad686373bad0df9382ad10ccdd" anchor="mb4c407c13e683541cd37a20198683c05fbc4b0d7">
+      <author>Bram Cohen</author>
+      <timestamp>2017-04-19T17:43:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/April_2017/014211_Properties-of-an-ideal-PoW-algorithm-implementation.xml" rel="alternate"/>
   <link href="bitcoin-dev/April_2017/014205_Properties-of-an-ideal-PoW-algorithm-implementation.xml" rel="alternate"/>
   <link href="bitcoin-dev/April_2017/014209_Properties-of-an-ideal-PoW-algorithm-implementation.xml" rel="alternate"/>
@@ -13,7 +31,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Properties of an ideal PoW algorithm &amp; implementation</title>
-    <updated>2025-10-12T02:36:25.861512+00:00</updated>
+    <updated>2025-10-12T01:32:45.798434+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-April/014196.html" rel="alternate"/>
     <published>2017-04-19T17:43:03+00:00</published>
     <summary>The author suggests using a repeated hashing method with blake2b to prevent lossy implementations and avoid relying on a single crypto primitive. Blake2b is conservative due to its large block size, which prevents asicboost-style attacks and eliminates the need for building logic for multiple blocks. Memory hard functions are effective but fail catastrophically when they do, limiting their use to hardware from a single vendor. The best PoW function for commodity mining hardware is repeatedly hashing with blake2b ten or a hundred times. However, the author believes that hard forking the PoW function is not a good idea.Natanael discusses the idea of proving optimal implementation for hash functions in an email thread. While it is a good idea in theory, it seems impossible to prove currently. He also suggests avoiding internal state reuse through measures such as &quot;whitening&quot; and pre-hashing to prevent ASICBOOST type optimizations. A slower hash function or iterating the hash function multiple times could be used practically. PoW verification will still be fast enough, and memory-hard functions are currently the best option for PoW functions.The cost of producing a chip depends on the number of metal layers required for routing interconnects in a particular area. Fewer layers mean quicker and easier manufacturing, and fewer patentable costs. A paper discussing factors impacting chip design costs has been linked, although its validity cannot be vouched for. To minimize asicboost-like optimizations, there needs to be early nonce mixing with variable-length input that has near-constant work. The entirety of the input should be mixed with the nonce data as soon as possible to prevent unexpected optimizations. A hash algorithm with more linear computation time versus input size would be ideal. It would consist of a first-stage Merkle tree hash to pre-lossy-mix-compress the variable length input stream to the size of the second-stage state vector. Each bit of input should have about equal influence on each of the output bits. Then there would be multi-round mixing of the second stage, which would be significantly more work than the first stage.In an email dated April 18, 2017, Natanael proposed that the best option for changing proof-of-work (PoW) is an algorithm that is moderately processing heavy and resists partial state reuse. The algorithm should have an existing reference implementation for hardware that is provably close in performance to the theoretical ideal implementation. For miners, cost primarily depends on correctly computed hashes per joule, which is related to the number of transistor activations per computed hash. An implementation must be near optimal with a minimum number of necessary transistor activations per computed hash. To prevent ASICBOOST-style optimization, the implementation should not allow much internal state reuse and the PoW step should always be the most expensive part of creating a complete block candidate. Any proof of an implementation being near optimal must consider the possibility of designs that deliberately allow errors to reduce the total count of transistor activations. The algorithm should be reasonably easy to verify, have adjustable difficulty, cryptographic strength, predictable and constant PoW computation performance, no significant reusable state, no meaningful precomputation possible, and rely only on transistors for implementation. The mining PoW should be highly parallelizable, with minimal or no gain from batch computation, and performance scaling should be linear with increased chip size and cycle speed. Overall, the algorithm should have a constant verification speed, be reasonably fast even on slow hardware, have no hidden shortcuts, and be reasonably compact in implementation with small inputs and outputs.</summary>

@@ -2,8 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Payswap</title>
-  <updated>2025-10-12T02:37:19.439382+00:00</updated>
+  <updated>2025-10-12T01:42:17.713701+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="mce7386f828e45cc1d9b7297db788c15e7a2013cc">
+      <author>[bitcoin-dev] Payswap ZmnSCPxj</author>
+      <timestamp>2020-01-21T04:38:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Payswap ZmnSCPxj" parent_id="mailing-list-2020-01-mce7386f828e45cc1d9b7297db788c15e7a2013cc" anchor="m97f9dd71f5131c2a26f4fa96244653ad7f70d56d">
+      <author>ZmnSCPxj</author>
+      <timestamp>2020-01-24T10:11:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Jan_2020/017596_Payswap.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2020/017595_Payswap.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017595.html" rel="alternate"/>
@@ -11,7 +21,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Payswap</title>
-    <updated>2025-10-12T02:37:19.439481+00:00</updated>
+    <updated>2025-10-12T01:42:17.714152+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017595.html" rel="alternate"/>
     <published>2020-01-24T10:11:55+00:00</published>
     <summary>ZmnSCPxj, a contributor on the lightning-dev forum, has proposed a circular self-payment mechanism for hiding payment direction from third-party nodes. The mechanism involves the source paying a larger amount to the destination and the destination returning the difference. This can be achieved using CoinSwap, which misleads onchain analysis.To implement this mechanism, the Payswap payment flow is used. The sender locates UTXOs totaling an amount equal to or greater than the payment amount and reveals this sum to the destination. The destination then locates UTXOs totaling an amount equal to or greater than the difference between the sender's total and the payment amount. A setup is created where the destination receives all the sender's coins and the sender receives the difference as change. This setup is executed through a CoinSwap transaction, completing the payment protocol. However, this approach requires more transactions than Payjoin, making it more expensive in terms of blockspace.It should be noted that the protocol can be aborted by one participant, resulting in spending onchain fees to back out of the protocol. Additionally, the CoinSwap overhead is comparable to setting up a temporary Lightning Network channel. As a result, it might be more efficient to implement all CoinSwap protocols over Lightning.ZmnSCPxj suggests that the correct order for this mechanism would be for the payer to initiate the Scriptless Script payment to the payee first, followed by the payee instantiating the change back to the payer. By using some form of Scriptless Script, it is possible to implement a proof-of-payment system similar to Lightning. This system could be useful for proving to an auditor that a payment has been made without revealing this information to anyone other than the auditor.Both the payer and payee can generate a scalar, with the payee providing a signed invoice (using the Lightning BOLT11 invoice format) attesting to the payment point. The payment point is calculated as the generator point multiplied by the payee scalar. The payer then instantiates the Scriptless Script PTLC, requiring knowledge of both the payee and payer scalars. The payee subsequently instantiates the change Scriptless Script PTLC, requiring knowledge of the payer scalar.Finally, the payee claims the change, allowing the payer to claim the full transfer while revealing the payee scalar as a proof-of-payment. This proposal is currently being considered by the community as a way to enhance privacy and security in transactions.</summary>

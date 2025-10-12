@@ -2,8 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Mitigating Differential Power Analysis in BIP-340</title>
-  <updated>2025-10-12T02:33:55.349312+00:00</updated>
+  <updated>2025-10-12T01:05:58.232779+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m0cdfc2021c1ac4b268990131b9d479bbaa350307">
+      <author>[bitcoin-dev] Mitigating Differential Power Analysis in BIP-340 Lloyd Fournier</author>
+      <timestamp>2020-03-24T13:00:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Mitigating Differential Power Analysis in BIP-340 Lloyd Fournier" parent_id="mailing-list-2020-03-m0cdfc2021c1ac4b268990131b9d479bbaa350307" anchor="m5d747b57c0acc84f23158c0c53a9ec42896e4393">
+      <author>Pieter Wuille</author>
+      <timestamp>2020-03-24T18:56:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Pieter Wuille" parent_id="mailing-list-2020-03-m5d747b57c0acc84f23158c0c53a9ec42896e4393" anchor="m06499cca15b700f28c88a670d178dedbedd632c3">
+      <author>Lloyd Fournier</author>
+      <timestamp>2020-03-25T15:07:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/March_2020/017715_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2020/017711_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
   <link href="bitcoin-dev/March_2020/017709_Mitigating-Differential-Power-Analysis-in-BIP-340.xml" rel="alternate"/>
@@ -12,7 +26,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Mitigating Differential Power Analysis in BIP-340</title>
-    <updated>2025-10-12T02:33:55.349405+00:00</updated>
+    <updated>2025-10-12T01:05:58.233355+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-March/017709.html" rel="alternate"/>
     <published>2020-03-25T15:07:48+00:00</published>
     <summary>On March 24, 2020, Lloyd Fournier posted a message to the bitcoin-dev mailing list regarding proposed changes to BIP-340. These changes included adding random auxiliary data into the nonce derivation function to enhance security against &quot;differential power analysis&quot; (DPA) attacks. However, Pieter Wuille responded to the email, expressing agreement with Lloyd but also providing a summary of the discussion that led to the decision to use a non-standard scheme.Pieter pointed out an issue that Lloyd may have overlooked in a BIP32/Taproot scenario. The private key used in the signing algorithm functions as both a secret and something known to the attacker. This means that interactions between bits inside the hash operation, which all come from the private key, can potentially leak bit-level information. To address this, Pieter suggested XORing the private key with another value before passing it to the hash function. This would prevent the leakage of bit-level information.However, Pieter acknowledged that DPA issues are challenging to reason about, as finding a realistic attack model that only leaks some information without immediately exposing the entire key is difficult. The discussion also touched upon concerns such as efficiency, the risk of midstate leakage in the hash function, and the presence of public keys from an attacker in the signing algorithm.The proposed solution discussed in the thread, H(priv XOR H(aux) || pub || msg), seemed to satisfy most of the requirements. Pieter emphasized that different prioritizations might lead to different conclusions. He welcomed further input and suggestions on the matter.In summary, the post on the mailing list delves into the security of a proposed change to BIP-340 involving the addition of random auxiliary data to prevent DPA attacks. The author questions whether this new approach offers any significant advantages over the current simpler and more efficient method. They argue that the current method is already secure against DPA attacks and provide explanations of how DPA attacks work, along with relevant papers and sources for further reading. The author suggests that if there are justifications for the new approach that they do not understand, these should be documented.</summary>

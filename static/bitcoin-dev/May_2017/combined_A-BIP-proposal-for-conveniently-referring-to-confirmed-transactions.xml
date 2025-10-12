@@ -2,8 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - A BIP proposal for conveniently referring to confirmed transactions</title>
-  <updated>2025-10-12T02:39:18.085482+00:00</updated>
+  <updated>2025-10-12T02:03:32.482720+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m6dc8950416da098aea3d6fc2c6af1be8a84cb3bb">
+      <author>[bitcoin-dev] A BIP proposal for conveniently referring to confirmed transactions Велеслав</author>
+      <timestamp>2017-05-23T15:30:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1" anchor="mf841e252ff484de1672d6e929621fdf5c739d11e">
+      <author>Clark Moody</author>
+      <timestamp>2017-07-14T18:43:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="1" position="2" reply_to="Clark Moody" parent_id="mailing-list-2017-07-mf841e252ff484de1672d6e929621fdf5c739d11e" anchor="m6ade8f4274ccd5b973cf466180bdc8557d567f7b">
+      <author>Велеслав</author>
+      <timestamp>2017-07-15T05:00:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="1" position="3" reply_to="Clark Moody" parent_id="mailing-list-2017-07-mf841e252ff484de1672d6e929621fdf5c739d11e" anchor="md06c74e0acafa4d4f5470370e0036ec3eda45d8a">
+      <author>Tom Zander</author>
+      <timestamp>2017-07-17T13:40:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/July_2017/014801_A-BIP-proposal-for-conveniently-referring-to-confirmed-transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2017/014800_A-BIP-proposal-for-conveniently-referring-to-confirmed-transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2017/014799_A-BIP-proposal-for-conveniently-referring-to-confirmed-transactions.xml" rel="alternate"/>
@@ -13,7 +31,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - A BIP proposal for conveniently referring to confirmed transactions</title>
-    <updated>2025-10-12T02:39:18.085563+00:00</updated>
+    <updated>2025-10-12T02:03:32.483402+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-May/014396.html" rel="alternate"/>
     <published>2017-07-17T13:40:29+00:00</published>
     <summary>In a bitcoin-dev discussion, Clark Moody expressed understanding for keeping all reference strings to the 14-character version by keeping the data payload to 40 bits. However, he questioned the point of having a user-readable tx-reference. He argued that in the actual blockchain, the txid would still be used and a less readable but more compact format is useful because space optimization is prioritized over human comprehension. Moody suggested that one possible use case could be wanting to spend a specific output or reporting a specific transaction as proof to a merchant or tax office. However, for any such use cases, an individual would still need to provide a proof of holding the private keys. Therefore, using a human-readable format does not make much sense since a cryptographic proof of ownership cannot be read no matter how hard one tries.Tom Zander asked for one or two use cases where human-readable formats might be useful. The message is a response to a review of a proposal by Clark Moody. The proposal involves conveniently referring to confirmed transactions. The pull request can be found at https://github.com/bitcoin/bips/pull/555 while the proposed specification is at https://github.com/veleslavs/bips/blob/Bech32_Encoded_TxRef/bip-XXXX-Bech32_Encoded_Transaction_Position_References.mediawiki.The author of the message notes that various variable length encodings were considered and found to have too high an overhead. Instead, the concept of &quot;Display Formats&quot; was proposed. These formats are tailored to specific purposes and can be optimized to a much greater extent. In case there is a hard fork extending Bitcoin's block transaction capacity beyond 8191 transactions, a &quot;Bitcoin Display Format 1&quot; will be defined. In case of a Drive-Chain style extension or other indirect extension to Bitcoin's transactional capacity, a new magic value will be created to define a tailored Display Format for the new system. The author believes that it makes no sense to define an undefined format now. A new format can be defined in the future when the needs of Bitcoin users can be better understood.Clark Moody suggests that the proposal places artificial limitations on the format. The author responds that a variable-length encoding similar to Bitcoin's variable ints could be used. Bit-packing to the 40 bits might also be overkill as one bit-packed byte could suffice. The protocol version would occupy the first two bits, supporting values 0-3.In a GitHub discussion, users expressed concern over the limitations of the current format for reference strings. The 14-character version is desirable, but it restricts the data payload to 40 bits, limiting the format to year 2048 and 8191 transactions. While Version 1 encoding may address this issue, current blocks are still approaching the transaction limit.A suggestion was made to use variable-length encoding similar to Bitcoin's variable ints, which would allow for a format that can handle very large blocks and future growth. Additionally, it was noted that Bech32 reference libraries can encode from byte arrays into the base-5 arrays native to Bech32, making bit-packing to the 40 bits unnecessary. Instead, one bit-packed byte could be used to start, with the first two bits indicating the protocol version (0-3). Overall, there are concerns about the artificial limitations of the current format and potential solutions to address them.The author has proposed a BIP that suggests a way to reference transactions that have been successfully inserted into the blockchain. The format of the proposal utilizes Bech32 encoding and is designed to be both short and useful for human usage. The draft also includes a C reference implementation. The author has taken special care to ensure that this BIP can be extended naturally to support future upgrades to Bitcoin, Bitcoin Sidechains, or even other blockchain projects. However, the current draft only specifies support for the Bitcoin Main Chain and the Test Network. The author hopes that the bitcoin-development mailing list participants find this draft BIP interesting and useful. The BIP can be read in full at https://github.com/veleslavs/bips/blob/Bech32_Encoded_TxRef/bip-XXXX-Bech32_Encoded_Transaction_Postion_References.mediawiki. If assigned with a BIP number, some small updates to the specification will be made in accommodation.</summary>

@@ -2,8 +2,26 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposal to stop processing of unrequested transactions in Bitcoin Core</title>
-  <updated>2025-10-12T02:38:10.243192+00:00</updated>
+  <updated>2025-10-12T01:51:22.256368+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="mcdb0463707814315255e1065242e147bab1de9c2">
+      <author>[bitcoin-dev] Proposal to stop processing of unrequested transactions in Bitcoin Core Antoine Riard</author>
+      <timestamp>2021-02-10T13:13:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Proposal to stop processing of unrequested transactions in Bitcoin Core Antoine Riard" parent_id="mailing-list-2021-02-mcdb0463707814315255e1065242e147bab1de9c2" anchor="m4bb4afad671269453ada8f851802623132b3ea9f">
+      <author>Jeremy</author>
+      <timestamp>2021-02-11T18:29:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Jeremy" parent_id="mailing-list-2021-02-m4bb4afad671269453ada8f851802623132b3ea9f" anchor="mcc1907da63d8d4d52ee1ffa32884afad9b316836">
+      <author>Pieter Wuille</author>
+      <timestamp>2021-02-11T21:15:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="Pieter Wuille" parent_id="mailing-list-2021-02-mcc1907da63d8d4d52ee1ffa32884afad9b316836" anchor="me67835b91e45af21aff8ed938e91db8ade0f12a1">
+      <author>Antoine Riard</author>
+      <timestamp>2021-02-12T11:49:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Feb_2021/018405_Proposal-to-stop-processing-of-unrequested-transactions-in-Bitcoin-Core.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2021/018403_Proposal-to-stop-processing-of-unrequested-transactions-in-Bitcoin-Core.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2021/018399_Proposal-to-stop-processing-of-unrequested-transactions-in-Bitcoin-Core.xml" rel="alternate"/>
@@ -13,7 +31,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Proposal to stop processing of unrequested transactions in Bitcoin Core</title>
-    <updated>2025-10-12T02:38:10.243274+00:00</updated>
+    <updated>2025-10-12T01:51:22.257092+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018391.html" rel="alternate"/>
     <published>2021-02-12T11:49:42+00:00</published>
     <summary>In an email exchange, Antoine and Pieter discuss the potential privacy implications of a proposed change regarding the discovery of a node's tx-relay topology. Antoine suggests that if an unrequested-tx peer is sending an attack, it likely learned the transaction from somewhere else, such as the tx owner. He also points out that the same outcome can already be achieved by sending an INV and observing if a GETDATA is replied back, which can help determine the presence of another peer with knowledge of the txid. Additionally, connecting to this other peer and waiting for an announcement can also provide insight. However, Pieter expresses concern about the privacy implications of the change and requests clarification on why it is not a concern.Antoine acknowledges the need for further study on the privacy properties of transaction announcements/requests, especially considering recent changes and upcoming Erlay changes. Despite this concern, Antoine fails to see how the proposed change would make it easier for attackers compared to the existing heuristics. The proposed change in Bitcoin Core 22.0+ involves stopping the processing of unrequested transactions at TX message reception. This change aims to reduce the CPU DoS surface of Bitcoin Core related to mempool acceptance. Currently, attackers can send expensive-to-validate junk transactions to a node through multiple inbound connections. The proposal would disrupt the tx-relay capabilities on the p2p network and require adaptation from certain Bitcoin clients who do not follow the INV/GETDATA sequence. However, a permissioned peer (PF_RELAY) would still be able to bypass these restrictions.An unrequested transaction refers to one for which a &quot;getdata&quot; message has not been previously issued by the node. Once the canonical INV/GETDATA sequence is enforced on the network, additional protection can be implemented, such as deprioritizing bandwidth and validation resources allocation or severing connections with DoSy peers. Some Bitcoin clients currently do not bother with the INV/GETDATA sequence, as raw TX message processing has always been tolerated by Core. Therefore, this change would impact their tx-relay capabilities on the p2p network and necessitate adaptation from them. Antoine hopes to gather feedback on this proposal and emphasizes the need for a sufficient window of time before the old tx-processing behavior becomes the minority. Feedback is particularly sought regarding whether this change is overly restrictive or implemented too quickly in Bitcoin software.Antoine's proposal aims to address the CPU DoS surface of Bitcoin Core by halting the processing of unrequested transactions at TX message reception. While privacy concerns are raised, Antoine believes that the proposed change does not make it easier for attackers compared to existing heuristics. The change would disrupt tx-relay capabilities on the p2p network and require adaptation from certain Bitcoin clients. Antoine welcomes feedback on the proposal's constraining nature and speed of implementation in Bitcoin software.</summary>

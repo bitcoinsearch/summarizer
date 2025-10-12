@@ -2,8 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Draft BIP: OP_TXHASH and OP_CHECKTXHASHVERIFY</title>
-  <updated>2025-10-12T02:33:02.958986+00:00</updated>
+  <updated>2025-10-12T00:56:39.235488+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m18f6b41d309cde16640e8fe113d6ea9a95f616d1">
+      <author>[bitcoin-dev] Draft BIP: OP_TXHASH and OP_CHECKTXHASHVERIFY Steven Roose</author>
+      <timestamp>2023-09-30T11:44:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Draft BIP: OP_TXHASH and OP_CHECKTXHASHVERIFY Steven Roose" parent_id="mailing-list-2023-10-m18f6b41d309cde16640e8fe113d6ea9a95f616d1" anchor="m08062c6163f1d3fd91bacc917e8540933d0d6ef8">
+      <author>Steven Roose</author>
+      <timestamp>2023-10-06T17:38:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/Oct_2023/021983_Draft-BIP-OP-TXHASH-and-OP-CHECKTXHASHVERIFY.xml" rel="alternate"/>
   <link href="bitcoin-dev/Sept_2023/021975_Draft-BIP-OP-TXHASH-and-OP-CHECKTXHASHVERIFY.xml" rel="alternate"/>
   <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/021983.html" rel="alternate"/>
@@ -11,7 +21,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - Draft BIP: OP_TXHASH and OP_CHECKTXHASHVERIFY</title>
-    <updated>2025-10-12T02:33:02.959071+00:00</updated>
+    <updated>2025-10-12T00:56:39.235966+00:00</updated>
     <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2023-October/021983.html" rel="alternate"/>
     <published>2023-10-06T17:38:22+00:00</published>
     <summary>In the email, Steven discusses the concept of a TxHash (Transaction Hash) and its formalization. He has been working on a specification and gathering feedback for several weeks. The full Bitcoin Improvement Proposal (BIP) text can be found in the attachment and also on the GitHub link provided.The BIP introduces the concept of a TxFieldSelector, which is a serialized data structure used to select data inside a transaction. It defines various global fields such as version, locktime, number of inputs, number of outputs, current input index, and current input control block. It also specifies the fields available for each input and output. The BIP introduces support for selecting inputs and outputs based on certain criteria, including all in/outputs, a single in/output at the same index as the input being executed, any number of leading in/outputs, and up to 64 individually selected in/outputs.Two new opcodes, OP_TXHASH and OP_CHECKTXHASHVERIFY, are introduced by the BIP. OP_TXHASH is enabled only in tapscript and takes a serialized TxFieldSelector from the stack and pushes on the stack a hash committing to all the selected data. OP_CHECKTXHASHVERIFY is enabled in all script contexts and expects a single item on the stack, interpreted as a 32-byte hash value concatenated with a serialized TxFieldSelector. Execution fails if the hash value in the data push doesn't match the calculated hash value based on the TxFieldSelector.The BIP also addresses concerns related to resource usage, particularly quadratic hashing. A potential caching strategy is proposed to prevent excessive hashing. Individual selection is limited to 64 items, and it suggests that selecting &quot;all&quot; in/outputs can mostly use the same caches as sighash calculations. Storing intermediate SHA256 contexts for prefix hashing is also mentioned as a possibility to minimize the number of items that need to be hashed repeatedly.The email highlights the achievements of this proposal, mentioning that the default TxFieldSelector is functionally equivalent to OP_CHECKTEMPLATEVERIFY, making it a strict upgrade of BIP-119. The flexibility of selecting transaction fields and in/outputs makes this construction more useful in designing protocols where users want to add fees to their transactions without breaking a transaction chain or when constructing transactions together with specific conditions on in/outputs. Additionally, OP_TXHASH, along with other opcodes like OP_CHECKSIGFROMSTACK, could be used as a replacement for complex sighash constructions.Some open questions are mentioned in the email. One question pertains to whether the proposal adequately addresses concerns around resource usage and quadratic hashing. Another question relates to including the TxFieldSelector as part of the hash, which would affect the ability to prove equality of fields. A potential solution is suggested, involving assigning additional bits in the &quot;in/output selector&quot; bytes to include the TxFieldSelector in the hash. The email seeks general feedback on the proposal and whether it should be implemented as a softfork.In conclusion, Steven is seeking wider feedback and community interest in this proposal for a TxHash concept. He expresses his willingness to spend time formalizing the BIP and working on an implementation for Bitcoin Core if there is community interest.</summary>

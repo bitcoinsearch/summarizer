@@ -2,8 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - How to do Proof of Micro-Burn?</title>
-  <updated>2025-10-12T02:33:49.943874+00:00</updated>
+  <updated>2025-10-12T01:05:00.744008+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0" anchor="m6c87869a74e287f8eb1f73bdb6736cab247f8507">
+      <author>[bitcoin-dev] How to do Proof of Micro-Burn? Велеслав</author>
+      <timestamp>2022-07-17T13:28:00.000Z</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] How to do Proof of Micro-Burn? Велеслав" parent_id="mailing-list-2022-07-m6c87869a74e287f8eb1f73bdb6736cab247f8507" anchor="md9bd5ad9b320eb8b6fe26f4ca6978b9f5b49eb8f">
+      <author>Ruben Somsen</author>
+      <timestamp>2022-07-17T20:40:00.000Z</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Ruben Somsen" parent_id="mailing-list-2022-07-md9bd5ad9b320eb8b6fe26f4ca6978b9f5b49eb8f" anchor="ma7e33d0f20486d0296c4f0226f49e14e3fd83be6">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-07-17T22:34:00.000Z</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="ZmnSCPxj" parent_id="mailing-list-2022-07-ma7e33d0f20486d0296c4f0226f49e14e3fd83be6" anchor="m3a979b0ed5e84e9f7694763baea5689654f60247">
+      <author>Ruben Somsen</author>
+      <timestamp>2022-07-18T22:32:00.000Z</timestamp>
+    </message>
+    <message id="msg_5" depth="4" position="4" reply_to="Ruben Somsen" parent_id="mailing-list-2022-07-m3a979b0ed5e84e9f7694763baea5689654f60247" anchor="m334b4b170baca407e6466643343bf729a15b0756">
+      <author>ZmnSCPxj</author>
+      <timestamp>2022-07-19T14:48:00.000Z</timestamp>
+    </message>
+    <message id="msg_6" depth="5" position="5" reply_to="ZmnSCPxj" parent_id="mailing-list-2022-07-m334b4b170baca407e6466643343bf729a15b0756" anchor="m254c123a0c938f7ecae2fbba3e9d4cfc80e33460">
+      <author>Ruben Somsen</author>
+      <timestamp>2022-07-19T22:23:00.000Z</timestamp>
+    </message>
+    <message id="msg_7" depth="6" position="6" reply_to="Ruben Somsen" parent_id="mailing-list-2022-07-m254c123a0c938f7ecae2fbba3e9d4cfc80e33460" anchor="m6b0109a2b29a27e5c974796452bd2e047765e58d">
+      <author>Peter Todd</author>
+      <timestamp>2022-07-19T23:13:00.000Z</timestamp>
+    </message>
+  </thread>
   <link href="bitcoin-dev/July_2022/020757_How-to-do-Proof-of-Micro-Burn-.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2022/020756_How-to-do-Proof-of-Micro-Burn-.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2022/020754_How-to-do-Proof-of-Micro-Burn-.xml" rel="alternate"/>
@@ -16,7 +46,7 @@
   <entry>
     <id>2</id>
     <title>Combined summary - How to do Proof of Micro-Burn?</title>
-    <updated>2025-10-12T02:33:49.943965+00:00</updated>
+    <updated>2025-10-12T01:05:00.745004+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020745.html" rel="alternate"/>
     <published>2022-07-19T23:13:41+00:00</published>
     <summary>In a recent email exchange on the Bitcoin-dev mailing list, Ruben Somsen proposed a new method for burning multiple amounts in a single OP_RETURN. He suggested using a merkle sum tree with two levels, where the top level represents the total amount burned and the bottom level represents the specific use cases for the funds. However, this method is only practical when burning significantly less than a transaction fee. ZmnSCPxj raised concerns about the atomicity issue and the risk being moved to the seller side. Ruben argued that the lack of an opening of the commitment means the buyer cannot prove the commitment, giving them an incentive to actually pay.The conversation between Ruben and ZmnSCPxj delved into the concept of commitment in cryptography. ZmnSCPxj pointed out that Ruben's proposal did not qualify as a true commitment since it could easily be opened to an uncommitted value. He suggested using Pedersen commitments instead, where only someone who knows 'k' can open the commitment. ZmnSCPxj also explained the merkle sum tree property missing from Ruben's proposal, which allows for the possibility of &quot;double spending&quot; a burn. They also discussed the atomicity issue, where the risk is shifted to the seller if the buyer refuses to finalize the purchase after the on-chain commitment is made. ZmnSCPxj noted that without an opening of the commitment, the buyer cannot prove the commitment and therefore has an incentive to pay.On the bitcoin-dev mailing list, ZmnSCPxj proposed a method for committing to multiple burns in a single transaction using a basic merkle sum tree. To prevent double spending, the leaf hash would need to commit to the intent or recipient of the burn. ZmnSCPxj also suggested outsourcing the burn to an aggregating third party and paying them over Lightning Network (LN), but acknowledged that this would not be atomic. To address this, he proposed an alternative method using private keys and sum commitments. However, ZmnSCPxj cautioned that this approach could have cryptographic failures.Veleslav posted on the mailing list seeking a solution to the proof of burn problem. He suggested using OP_RETURN with application-specific data as the current working solution, but noted the scalability constraint due to finite block space. Veleslav proposed a second layer protocol similar to Lightning Network for public evidence of burns. However, he has not found a solution to the double-spend problem yet. Ruben responded by suggesting a basic merkle sum tree that commits to the intent or recipient of the burn. He also mentioned the possibility of outsourcing the burn to an aggregating third party, but warned about the atomicity issue. Ruben further suggested placing the root hash in a double taproot commitment in the change output, and performing the burn on a spacechain to avoid using mainchain block space and improve scalability. He believes this approach could revitalize the original hashcash use case and combat spam.In conclusion, Veleslav is looking for a solution to the scalability constraint in proof-of-burn use cases. The current solution of using OP_RETURN has limitations, and Veleslav is considering a second layer protocol similar to Lightning Network. However, a reliable solution has not been found yet, and pre-committing burns in the blockchain with additional outputs presents challenges with double spending. Veleslav also explores the possibility of using a liquid type sidechain to fix burns back into the main chain within a Merkel tree proof structure. The goal is to enable micro-burns through the Lightning network and quickly obtain valid burn proofs that are cost-effective to verify.</summary>
