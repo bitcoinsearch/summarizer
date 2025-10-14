@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Determining BlockTemplate Fee Increase Using Fee Rate Diagram</title>
+  <updated>2025-10-14T02:25:46.664950+00:00</updated>
+  <author>
+    <name>sipa 2025-10-13 14:52:48.326000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Determining BlockTemplate Fee Increase Using Fee Rate Diagram</title>
+    <updated>2025-10-14T02:25:46.664980+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/determining-blocktemplate-fee-increase-using-fee-rate-diagram/2052/2" rel="alternate"/>
+    <summary>The communication delves into a sophisticated method for estimating block fees within the `TxGraph` component, which abstracts the complexities of cluster linearization from the mempool in blockchain systems. The proposed technique bypasses the need to explicitly maintain a set of transaction templates, opting instead for an implicit block template approach. This method leverages an index within `TxGraph` that organizes all transaction chunks by descending feerate, facilitating not only block building and eviction processes but also serving additional purposes.
+
+The core of this strategy involves maintaining a running total of fees and sizes for all transaction chunks included in the implicit block template, up to a specified chunk that does not fit within the block size limit. This is achieved by calculating the sum of fees ($F$) and sizes ($S$) for all qualifying chunks, stopping before adding a chunk ($c_\mathrm{nf}$) that would exceed the maximum block size (39920000 bytes). The system tracks $F$, $S$, and a pointer to the non-fitting chunk, updating these variables after any operation that alters the `TxGraph`.
+
+Updates to the `TxGraph` are handled efficiently: adding or removing chunks that fit within the constraints adjusts $F$ and $S$ accordingly, while changes involving the non-fitting chunk prompt an adjustment of the pointer, ensuring the implicit template remains accurate. These operations are designed to be computationally efficient, requiring constant memory and linear time relative to the number of modified chunks.
+
+An innovative aspect of this methodology is the calculation of two block fee estimates: a conservative lower bound represented by $F$, and a conservative upper bound calculated by adding to $F$ the prorated fee of the non-fitting chunk, based on the remaining space in the block. These estimates offer a range that can be used to approximate the optimal fee structure for a new block.
+
+To facilitate real-time updates and decision-making, the proposal includes the integration of a callback function within `TxGraph`. This function would be triggered whenever there is a significant change in the lower or upper fee bounds, enabling dynamic adjustments to the block templating process. This approach ensures that block templates are generated with an optimal balance of efficiency and accuracy, adapting to changes in the transaction pool without necessitating a complete rebuild of the template.</summary>
+    <published>2025-10-13T14:52:48.326000+00:00</published>
+  </entry>
+</feed>

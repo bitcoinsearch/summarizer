@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Determining BlockTemplate Fee Increase Using Fee Rate Diagram</title>
+  <updated>2025-10-14T02:26:08.374220+00:00</updated>
+  <author>
+    <name>ismaelsadeeq 2025-10-13 18:42:54.780000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Determining BlockTemplate Fee Increase Using Fee Rate Diagram</title>
+    <updated>2025-10-14T02:26:08.374250+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/determining-blocktemplate-fee-increase-using-fee-rate-diagram/2052" rel="alternate"/>
+    <summary>The innovative approach introduced in Bitcoin Core v30, featuring the `waitnext()` RPC, marks a significant advancement in how miners can optimize their block template selection process. This method allows miners to wait for a new block template when there's a noticeable increase in transaction fees or a change in the blockchain tip, potentially reducing redundant block template builds. Despite its advantages, this system still regenerates block templates every second, which can lock critical Bitcoin Core mutexes during the build process, thus slowing down transaction processing and relay due to thread safety measures.
+
+To enhance efficiency, a novel strategy leverages the Cluster Mempool feature to track potential fee increases from mempool updates without necessitating a full rebuild of the block template. This approach relies on understanding the effective chunk fee rate of transactions, a metric that becomes significantly more accessible with the Cluster Mempool's capabilities. By calculating the total fee and size of all chunks in the current block template and adjusting these values based on mempool changes, nodes can determine if the fee increase justifies a new block template build. Essential prerequisites for grasping this concept include familiarizing oneself with Cluster Mempool Definitions, Mempool Incentive Compatibility, and Cluster Mempool RBF Thoughts, available through various [delvingbitcoin.org](https://delvingbitcoin.org) links.
+
+The method distinguishes between two main scenarios following a new transaction's entry into the mempool: additions without in-mempool conflicts and additions with in-mempool conflicts. Both situations involve evaluating the transaction's impact on the existing fee rate diagram, with the goal being to accept the addition only if it results in a strictly better fee rate diagram. In cases where the mempool update doesn't generate a new diagram, such as when the mempool is full, this rare scenario is also accounted for, emphasizing the method's comprehensive nature.
+
+Upon successful mempool updates, the process entails removing evicted chunks from the block template and performing a naive merge followed by an iterative merge if necessary. These steps aim to assess whether the updated block template's potential fee increase surpasses a predefined threshold, warranting its rebuild. If the improvement is insufficient, the process halts. This sophisticated evaluation mechanism offers a dynamic and efficient way to manage block templates in response to evolving mempool conditions.
+
+Implementing this solution requires asynchronous handling by a Block Template Manager, proposed in a [Bitcoin Core GitHub issue](https://github.com/bitcoin/bitcoin/issues/33389). This component would operate independently from the core locking mechanisms, utilizing validation interface notifications post-mempool updates to ensure smooth operation without impeding transaction processing. However, it's important to note the limitation concerning bin-packing effects at the block template tail, highlighting an area for potential future refinement.</summary>
+    <published>2025-10-13T18:42:54.780000+00:00</published>
+  </entry>
+</feed>

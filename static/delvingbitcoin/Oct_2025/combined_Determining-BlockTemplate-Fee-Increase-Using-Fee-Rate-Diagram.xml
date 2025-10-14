@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Determining BlockTemplate Fee Increase Using Fee Rate Diagram</title>
+  <updated>2025-10-14T02:26:28.002538+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>sipa</author>
+      <timestamp>2025-10-13 14:52:48.326000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>ismaelsadeeq</author>
+      <timestamp>2025-10-13 15:18:01.531000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>ismaelsadeeq</author>
+      <timestamp>2025-10-13 18:42:54.780000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2025/6056_Determining-BlockTemplate-Fee-Increase-Using-Fee-Rate-Diagram.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2025/6057_Determining-BlockTemplate-Fee-Increase-Using-Fee-Rate-Diagram.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2025/6055_Determining-BlockTemplate-Fee-Increase-Using-Fee-Rate-Diagram.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Determining BlockTemplate Fee Increase Using Fee Rate Diagram</title>
+    <updated>2025-10-14T02:26:28.003237+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/determining-blocktemplate-fee-increase-using-fee-rate-diagram/2052" rel="alternate"/>
+    <published>2025-10-13 14:52:48.326000+00:00</published>
+    <summary>The concept of maintaining an implicit block template within the `TxGraph` component is introduced as a means to streamline the process of estimating potential fee increases for block templates without necessitating the maintenance of a separate template set. This methodology leverages the indexing of transaction chunks by descending fee rate within `TxGraph`, utilizing this ordered index to compile an implicit block template up to a threshold defined by chunk $c_\mathrm{nf}$, where adding another chunk would exceed the maximum block size limit. By adjusting this implicit template dynamically in response to transactions being added or removed, the system can efficiently calculate updated fee estimates for the next block template. These estimates are derived from the sum of fees and sizes of transactions included up to the non-fitting chunk, facilitating a balance between computational efficiency and memory usage. The proposal also suggests implementing a callback function within `TxGraph` to enable real-time adjustments based on these estimations.
+The motivation behind this approach stems from the desire to optimize the process by which miners determine the necessity for generating new block templates in response to changes in transaction fee rates. Historically, miners have relied on polling the `getblocktemplate` RPC to identify opportunities for higher-fee block templates. However, this method can lead to unnecessary computational overhead due to frequent template regeneration. The introduction of the `waitnext()` function in Bitcoin Core v30 represented a step forward by mitigating some of the inefficiencies associated with the polling method. Nonetheless, the underlying challenge of identifying significant fee rate improvements without continuously rebuilding block templates remains.
+To address this, the proposed method capitalizes on the capabilities of the Cluster Mempool feature, specifically its ability to group transactions into chunks with identifiable fee rates. By calculating the total fees and sizes of these chunks within a current block template and monitoring for changes resulting from mempool updates, it becomes possible to assess whether a significant fee rate improvement has occurred. This assessment relies on comparing the modified total fees and sizes after each update against predefined thresholds, thus determining if the potential increase justifies the generation of a new block template.
+The process encompasses several key phases, including the removal of evicted chunks from the block template, a naive merge of newly added high-fee-rate chunks, and potentially, an iterative merge process for more precise optimization. Each stage is designed to incrementally refine the estimation of fee rate improvements, culminating in a decision on whether to rebuild the block template based on the net change in fees relative to the set threshold.
+A noteworthy aspect of this framework is its asynchronous operation, facilitated by a Block Template Manager that operates independently of core mempool locks. This design choice ensures that the evaluation of fee rate improvements does not impede other critical operations, such as transaction processing and relay. Despite its advantages, it's important to acknowledge the limitation posed by bin-packing effects at the tail end of the block template, which the current approach does not account for.
+In conclusion, this innovative method offers a pragmatic solution to the computational challenges associated with dynamic block template generation, leveraging the structured analysis of mempool transactions to make informed decisions about when template regeneration is truly beneficial.</summary>
+  </entry>
+</feed>
