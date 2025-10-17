@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Proposal: OP_STARK_VERIFY - Native STARK Proof Verification in Bitcoin Script</title>
+  <updated>2025-10-17T02:28:53.574902+00:00</updated>
+  <author>
+    <name>Abdel 2025-10-16 16:45:25.792000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Proposal: OP_STARK_VERIFY - Native STARK Proof Verification in Bitcoin Script</title>
+    <updated>2025-10-17T02:28:53.574930+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/proposal-op-stark-verify-native-stark-proof-verification-in-bitcoin-script/2056/3" rel="alternate"/>
+    <summary>Exploring the potential avenues for implementing STARK on Bitcoin involves a careful consideration of trade-offs between proving speed, proof size, and verification efficiency. The process can be finely tuned to either enhance the speed of proving at the expense of generating larger proofs and requiring slower verification times or to minimize the proof size which could, however, lead to slower proving speeds and necessitate higher machine specifications, especially in terms of RAM. A multistage pipeline is typically employed to optimize these parameters. Initially, fast proving techniques are utilized for processing payload jobs such as rollup blocks and for recursive proof folding, aimed at consolidating multiple jobs into a single proof. Subsequent stages focus on maximizing proof compression to make the proofs as verifier-friendly as possible. This often involves switching the hash function and tweaking the parameters to favor slow proving but fast verification, sometimes even adopting different proving systems based on the requirements of the settlement layer.
+
+The final measurement of proof size and verification time pertains to the last stage of this pipeline. There are several variants of proof compression pipelines in use, with distinctions based on their compression steps and the resulting proof sizes and verification times. For instance, the Stwo single step compression offers the fastest option with approximately 500KB proof size (using bzip2) and around 25 milliseconds of verification time, making it suitable for off-chain verification. In contrast, the multi-step compression strategy, intended for production, substantially reduces the proof size to about 50KB (bzip2) with a slight increase in verification time to approximately 30 milliseconds. Another approach tailored for optimizing within the Bitcoin script context results in a proof size of roughly 100KB.
+
+When considering the on-chain costs associated with these proofs, two main scenarios emerge. Proof settlement via the OP_CAT verifier indicates a requirement for 175 transactions, cumulating to a total size of about 7.3MB. Alternatively, the current implementation of Simplicity, although not yet fully compatible with the output from the third proving pipeline mentioned above, results in a script size around 2.5 MB. Due to the additional overhead from dividing this into multiple transactions, the total cost is anticipated to be comparable to that of using OP_CAT. This analysis highlights the intricate balance between optimizing for proof size, proving and verification speeds, and the on-chain costs, all critical factors shaping the practical deployment of STARK proofs on Bitcoin.</summary>
+    <published>2025-10-16T16:45:25.792000+00:00</published>
+  </entry>
+</feed>

@@ -2,30 +2,35 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Proposal: OP_STARK_VERIFY - Native STARK Proof Verification in Bitcoin Script</title>
-  <updated>2025-10-15T02:32:46.012210+00:00</updated>
+  <updated>2025-10-17T02:29:10.307752+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
-      <author>Abdel</author>
+      <author>Abdel  .</author>
       <timestamp>2025-10-14 10:55:51.298000+00:00</timestamp>
     </message>
     <message id="msg_2" depth="0" position="1">
-      <author>instagibbs</author>
+      <author>instagibbs  .</author>
       <timestamp>2025-10-14 16:09:26.470000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>Abdel</author>
+      <timestamp>2025-10-16 16:45:25.792000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/Oct_2025/6071_Proposal-OP-STARK-VERIFY-Native-STARK-Proof-Verification-in-Bitcoin-Script.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2025/6080_Proposal-OP-STARK-VERIFY-Native-STARK-Proof-Verification-in-Bitcoin-Script.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2025/6097_Proposal-OP-STARK-VERIFY-Native-STARK-Proof-Verification-in-Bitcoin-Script.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Proposal: OP_STARK_VERIFY - Native STARK Proof Verification in Bitcoin Script</title>
-    <updated>2025-10-15T02:32:46.012656+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/proposal-op-stark-verify-native-stark-proof-verification-in-bitcoin-script/2056/2" rel="alternate"/>
+    <updated>2025-10-17T02:29:10.308337+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/proposal-op-stark-verify-native-stark-proof-verification-in-bitcoin-script/2056/3" rel="alternate"/>
     <published>2025-10-14 10:55:51.298000+00:00</published>
-    <summary>The proposal for adding an `OP_STARK_VERIFY` opcode to Tapscript in Bitcoin Script aims to enable the on-chain verification of STARK (Scalable Transparent ARgument of Knowledge) proofs, facilitating zero-knowledge proof applications such as validity rollups, post-quantum signatures, and privacy-preserving transactions. The introduction of this opcode is intended to bypass the complexities and limitations associated with off-chain computation and on-chain challenge mechanisms currently employed by solutions like BitVM-style optimistic fraud proofs. The proposed implementation would specifically verify vanilla STARKs, leveraging their post-quantum secure, transparent nature, and efficient verification process that scales logarithmically with computation size.
-The motivation behind integrating STARK verification directly into Bitcoin stems from its ability to support a range of applications that could enhance Bitcoin's functionality and scalability. This includes enabling state transition verification for scaling Bitcoin's Layer 1 through validity rollups, aggregating post-quantum signatures into a single succinct proof, and facilitating privacy features like shielded transactions. Furthermore, potential use cases extend to proving reserves or liabilities for platforms like Cashu, enabling account abstraction, and supporting peer-to-peer exchanges between BTC and fiat currencies using zero-knowledge proofs.
-However, the proposal acknowledges several limitations and challenges. These include the larger proof sizes associated with STARKs compared to pairing-based SNARKs, which could increase transaction weight and fees; the risk of enshrining a specific proof system, potentially limiting flexibility; the requirement of a soft fork and the associated risks; and the variability in verification times due to the non-constant time nature of the verification process. The issue of credible neutrality arises from the necessity of choosing a particular STARK protocol, highlighting the importance of selecting a well-understood, generic protocol close to the original STARK paper.
-Alternatives to a native `OP_STARK_VERIFY` opcode include utilizing `OP_CAT`-based verifiers or arithmetic opcodes to construct a verifier within script, each presenting various trade-offs in terms of efficiency, complexity, and protocol enshrinement. The proposed approach aims for a balance by enshrining a single verification algorithm with strict bounds, offering a clean runtime and policy framework while acknowledging the need for careful consideration regarding pricing, resource usage, and potential DoS vectors.
-In summary, the integration of STARK verification into Bitcoin through an `OP_STARK_VERIFY` opcode presents an opportunity to advance Bitcoin's capabilities in terms of scalability, security, and privacy. Despite the identified challenges and the need for further discussion and consensus within the community, the proposal sets the stage for exploring the practical implications and technical feasibility of enhancing Bitcoin's script capabilities to accommodate advanced cryptographic proofs.</summary>
+    <summary>The proposal to introduce a new opcode, `OP_STARK_VERIFY`, into Tapscript for the Bitcoin blockchain aims to enhance its functionality by enabling on-chain verification of STARK (Scalable Transparent ARgument of Knowledge) proofs. This development is motivated by the potential for various applications such as Validity rollups, post-quantum signatures, and privacy-preserving transactions, which could significantly benefit from direct zero-knowledge proof verification capabilities within Bitcoin. The initiative focuses on leveraging vanilla STARKs, particularly those exemplified by the Stone prover, due to their transparent and post-quantum-secure nature, along with their poly-logarithmic verification complexity and sublinear proof sizes relative to computation size. These features are deemed critical for scaling Bitcoin's Layer 1, facilitating post-quantum signature aggregation, and implementing privacy enhancements through shielded transactions.
+Despite the promising aspects of `OP_STARK_VERIFY`, the proposal acknowledges numerous challenges, including maintaining credible neutrality when selecting a specific STARK protocol, managing the relatively large proof sizes associated with STARKs compared to other systems like SNARKs, and addressing the technical and consensus risks of integrating a particular proof system into Bitcoin's consensus mechanism. To address these concerns, alternative methods such as `OP_CAT`-based verifiers and arithmetic opcodes for constructing a verifier within Script are discussed. These alternatives present varying degrees of efficiency, flexibility, and protocol integration complexity but also introduce their own set of challenges and inefficiencies.
+The proposed implementation strategy for `OP_STARK_VERIFY` involves incorporating the Stone verifier, a univariate STARK verifier implemented in C++, into Bitcoin Core. This approach emphasizes the need for stringent limits on proof size to ensure denial-of-service (DoS) safety, predictable runtime via fixed verifier parameter sets, and policy limits to manage resource usage effectively. However, this proposal does not come without risks, including the complexity of integrating the verifier's C++ code into Bitcoin, the challenge of ensuring credible neutrality, and the broader implications of enshrining a specific proof system into the Bitcoin consensus model.
+Further analysis highlights the practical considerations of implementing such proof systems, especially concerning proof sizes and verification times. There's an emphasis on understanding how these factors affect the decentralization and efficiency of blockchains. Proof sizes, which can vary significantly and may be reduced through compression techniques, play a crucial role in the feasibility of decentralized block building and relay activities. Verification times, consuming a significant portion of the verification budget of a block, are also under scrutiny, underscoring the importance of establishing targets for &quot;average&quot; block sizes and verifying times to maintain consistency across different scenarios.
+In conclusion, while the introduction of `OP_STARK_VERIFY` presents a forward-looking approach to enhancing Bitcoin's capabilities with native zero-knowledge proof verification, it raises important considerations regarding flexibility, security, and neutrality. The proposal calls for further discussion and feedback on various aspects, including scope, parameter bounding, pricing, alternatives, and the technical challenges ahead, aiming to refine and optimize the integration of STARK proofs within Bitcoin.</summary>
   </entry>
 </feed>
