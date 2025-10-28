@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP54 implementation and test vectors</title>
+  <updated>2025-10-28T02:45:58.407872+00:00</updated>
+  <author>
+    <name>Antoine Riard 2025-10-27 05:21:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP54 implementation and test vectors</title>
+    <updated>2025-10-28T02:45:58.407906+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/V0qeILOW1CuH3NS2O8IUdQBK8i3o8LwzLNGf7xh1UO0S_Gzui1CpdP5NhdT3EtrW6NgqxJ538egeag6bVZoBX8C8E46ZYTCyPg1qBxkwCXs=@protonmail.com/T/#me452efeffe3d1976b6b6d23c0d5297fcf2243d5f" rel="alternate"/>
+    <summary>The email from Antoine addresses a significant concern regarding the proposed 2500 signature operations (sigops) limit per transaction in the context of Bitcoin's full-node performance. The discussion begins with an examination of how a denial-of-service (DoS) adversary could exploit the current system without the sigops limit, creating a transaction that severely strains node resources due to its computational complexity. Specifically, it mentions a hypothetical attack where a 1-MB transaction containing 80,000 sigops from a single satoshi UTXO (Unspent Transaction Output) would necessitate a node to perform an excessive amount of SHA256 computations, illustrating an O(n^2) complexity issue.
+
+With the implementation of a 2500 sigops limit per transaction, the attack vector changes but does not necessarily diminish in effectiveness. An attacker could create multiple transactions within a 1 MB block, each spending from small UTXOs, thus forcing a node to fetch a large number of UTXOs for validation. This scenario shifts the burden from computational complexity to memory and disk access times, particularly highlighting concerns when these UTXOs are not stored in high-speed cache and must be fetched from slower storage media like RAM or even a disk drive. This is especially problematic for devices with limited resources, such as Raspberry Pis, despite modern computers having sufficient RAM to store the current UTXO set.
+
+Antoine raises questions about the thoroughness of the considerations behind setting the 2500 sigops limit. He speculates whether worst-case scenarios have been examined, specifically if transactions have been crafted to maximize the strain on UTXO fetching processes under this new limit. The assumption that fetching UTXOs is cost-free is challenged, suggesting that while modern instruction set architectures (ISAs) may offer dedicated hashing instructions to alleviate some computational burdens, memory management and disk I/O are still significant factors affecting node performance.
+
+Furthermore, the email critiques the current Bitcoin Improvement Proposal (BIP54) for its lack of discussion on how full-node performance metrics, such as CPU cycles, disk I/O operations, and network bandwidth consumption, were considered when deciding on the 2500 sigops limit. Antoine suggests that BIP54 should explicitly state that the new sigops limit aims primarily to mitigate CPU-based DoS attacks, acknowledging that it might not address other aspects of node performance degradation, such as memory management efficiency.
+
+This correspondence underscores the complexity of balancing security measures against potential performance trade-offs in blockchain network protocols. It calls for a more nuanced approach to protocol updates, one that thoroughly evaluates the multifaceted impacts of proposed changes on the ecosystem’s resilience and scalability.</summary>
+    <published>2025-10-27T05:21:00+00:00</published>
+  </entry>
+</feed>
