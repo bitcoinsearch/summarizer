@@ -22,7 +22,7 @@ def generate_summary(prompt):
         5. The farewell part of the email should be completely ignored.
         6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
         7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.
-        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text. IMPORTANT: You MUST separate each paragraph with a blank line (double newline). Each major topic or point should be its own paragraph.
         9. Do not refer to cryptocurrency or cryptocurrencies. This is a summary for the Bitcoin community. Substitute all instances of cryptocurrencies with Bitcoin and Lightning as appropriate.
         10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
@@ -49,7 +49,7 @@ def consolidate_summary(prompt):
         5. The farewell part of the email should be completely ignored.
         6. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
         7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
-        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+        8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text. IMPORTANT: You MUST separate each paragraph with a blank line (double newline). Each major topic or point should be its own paragraph.
         9. Do not refer to cryptocurrency or cryptocurrencies. This is a summary for the Bitcoin community. Substitute all instances of cryptocurrencies with Bitcoin and Lightning as appropriate.
         10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
@@ -94,7 +94,7 @@ def generate_chatgpt_summary(body, custom_prompt=None):
             5. The farewell part of the email should be completely ignored.
             6. Ensure that the summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
             7. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email.  
-            8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+            8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text. IMPORTANT: You MUST separate each paragraph with a blank line (double newline). Each major topic or point should be its own paragraph.
             9. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility. 
         \n\nCONTEXT:\n\n{body}"""
     response = openai.ChatCompletion.create(
@@ -127,7 +127,7 @@ def consolidate_chatgpt_summary(body, custom_prompt=None):
             6. Mention full names (both the first name and last name) of the authors if applicable. If the conversation involves more than two authors, you may use 'et al.' or explicitly list all authors such as 'John Doe, Jane Smith, and three others'.
             7. Ensure that summary is not simply a rephrase of the original content with minor word changes, but a restructured and simplified rendition of the main points.
             8. Most importantly, this extracted information should be relative of the size of the email. If it is a bigger email, the extracted summary can be longer than a very short email. 
-            9. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
+            9. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text. IMPORTANT: You MUST separate each paragraph with a blank line (double newline). Each major topic or point should be its own paragraph.
             10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
         \n\nCONTEXT:\n\n{body}"""
     response = openai.ChatCompletion.create(
@@ -304,6 +304,8 @@ def generate_summary_for_transcript(body, speaker=None):
     The length of the summary will depend on the length of the transcript segment. 
     Each paragraph should capture a unique aspect of the discussion, neatly packaging the information into a comprehensive and approachable synthesis for readers.
 
+    IMPORTANT: You MUST separate each paragraph with a blank line (double newline). Each major topic or point should be its own paragraph.
+    
     Remember to directly integrate information and points without referring to the transcript or source material contextually. 
     Start each paragraph with a clear topic sentence and ensure that the following sentences elaborate on that topic concisely before transitioning smoothly to the next point of discussion. 
     Reflect the significance and narrative of the podcast fully, respecting its original message and intent. 
