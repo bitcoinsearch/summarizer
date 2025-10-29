@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - RFC: empty scriptPubKeys and OP_RETURN for marking unspendable txouts</title>
-  <updated>2025-10-29T02:58:31.691742+00:00</updated>
+  <updated>2025-10-29T13:12:27.969678+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Feb_2013/002163_RFC-empty-scriptPubKeys-and-OP-RETURN-for-marking-unspendable-txouts.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2013/002162_RFC-empty-scriptPubKeys-and-OP-RETURN-for-marking-unspendable-txouts.xml" rel="alternate"/>
@@ -27,10 +27,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-February/002159.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-February/002159.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-February/002159.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-February/002159.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - RFC: empty scriptPubKeys and OP_RETURN for marking unspendable txouts</title>
-    <updated>2025-10-29T02:58:31.691820+00:00</updated>
+    <updated>2025-10-29T13:12:27.969789+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-February/002159.html" rel="alternate"/>
     <published>2013-02-13T10:00:35+00:00</published>
     <summary>The OP_RETURN bug in Bitcoin was fixed by Satoshi, and it was related to how scripts were executed. In the previous system, the scripts were concatenated and run as a single unit, allowing users to set a scriptSig to OP_RETURN and make the script always evaluate to true. The fix involved moving to the current system where the two scripts are executed independently but share a stack, and only the return value of the scriptPubKey matters. The scripting system was added late in the design process and there is evidence that it was rushed, with many opcodes being disabled later.In a discussion about the fidelity bond concept, Gavin Andresen expressed his opposition to using the OP_RETURN opcode due to its history of causing bugs. Instead, he suggested using OP_FALSE or OP_INVALIDOPCODE for &quot;unspendable&quot; transactions. However, Todd pointed out that using anyone-can-spend transactions might lead to a &quot;spend storm&quot; on the network if there were suddenly a large amount of BTC sitting in unclaimed txouts. To address this, Todd proposed making empty scriptPubKeys standard and adding code so that miners would always try to spend such outputs at the same time. He also discussed various issues and potential optimization problems that could arise from implementing fidelity bonds.In an email exchange between Peter Todd and Gavin Andresen, Todd expressed his support for the fidelity bond concept but had reservations about using the OP_RETURN opcode. He suggested using OP_FALSE or OP_INVALIDOPCODE for &quot;provably unspendable&quot; transactions instead. He also speculated that anyone-can-spend transactions could cause a race among users to spend the available funds before others.The author of the discussion proposes two new features for the fidelity bond protocol. The first feature involves using OP_RETURN at the end of a scriptPubkey to mark an unspendable txout, ensuring immediate pruning. This is preferable to using a spendable scriptPubkey like OP_CHECKSIG, as it could lead to non-standard outputs being created and polluting the UTXO set. The second feature proposed is using an empty scriptPubkey with OP_TRUE or similar to create easily spendable outputs, increasing the incentive to scan the blockchain for sacrifices. This could be used as a way for multiple parties to collectively sign an assurance contract donating to miners. However, there are concerns about buggy custom transaction code accidentally losing funds. Feedback on both ideas is requested.</summary>
