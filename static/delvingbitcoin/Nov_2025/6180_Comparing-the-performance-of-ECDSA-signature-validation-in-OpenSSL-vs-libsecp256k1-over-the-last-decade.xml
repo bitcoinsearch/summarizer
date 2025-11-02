@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Comparing the performance of ECDSA signature validation in OpenSSL vs. libsecp256k1 over the last decade</title>
+  <updated>2025-11-02T02:49:10.287997+00:00</updated>
+  <author>
+    <name>theStack 2025-11-01 09:18:07.737000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Comparing the performance of ECDSA signature validation in OpenSSL vs. libsecp256k1 over the last decade</title>
+    <updated>2025-11-02T02:49:10.288032+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/comparing-the-performance-of-ecdsa-signature-validation-in-openssl-vs-libsecp256k1-over-the-last-decade/2087" rel="alternate"/>
+    <summary>The upcoming v31.0 release of Bitcoin Core marks a significant milestone, commemorating ten years since the transition from OpenSSL to libsecp256k1 for ECDSA signature validation in its consensus code. This switch, initially integrated with the patch [6954](https://github.com/bitcoin/bitcoin/pull/6954) in November 2015 and released in version 0.12 a few months later, brought about a notable performance enhancement, rendering signature validation 2.5 to 5.5 times faster than its OpenSSL counterpart according to Pieter Wuille, the creator of libsecp256k1. This improvement in performance is just the tip of the iceberg, as continuous enhancements over the years have further widened the gap between the two libraries. Despite OpenSSL's broader scope as a "full-featured toolkit for general-purpose cryptography," it has not kept pace with the specific advancements made by libsecp256k1 in the realm of elliptic curve cryptography, particularly for the secp256k1 curve.
+
+A unique benchmarking method was employed to measure the speed improvements across different versions of both OpenSSL and libsecp256k1, utilizing dynamic loading to sequentially test each library version against a set of benchmarks. This approach allowed for a direct comparison of performance across different library versions without the need for multiple binaries. The benchmarking process, described in detail and available for replication on GitHub ([secp256k1-plugbench](https://github.com/theStack/secp256k1-plugbench)), involves generating input data with a statically linked version of libsecp256k1, then dynamically loading each library version to test signature verification speeds. This methodology ensures a fair and consistent comparison of the libraries' performances over time.
+
+The results from this benchmarking exercise unequivocally demonstrate libsecp256k1's superior performance over OpenSSL in verifying ECDSA signatures on the secp256k1 curve, with no significant performance improvements observed in OpenSSL over the years. Notably, specific versions of libsecp256k1 introduced considerable speedups: approximately 28% from bc-0.19 to bc-0.20 through the enabling of the GLV endomorphism optimization and around 30% from bc-0.20 to bc-22.0 due to the introduction of safegcd-based modular inverses. These results underscore libsecp256k1's ongoing commitment to performance optimization, making it more than 8x faster than the latest version of OpenSSL for the specific task of verifying ECDSA signatures on the secp256k1 curve.
+
+The exploration into performance disparities between OpenSSL and libsecp256k1 reveals a focused effort on behalf of the latter to optimize operations for the secp256k1 curve, a priority that does not seem to be mirrored by OpenSSL outside the Bitcoin ecosystem. However, interest in enhancing OpenSSL's handling of the secp256k1 curve has been noted, as evidenced by a recent pull request ([#26097](https://github.com/openssl/openssl/pull/26097)) aiming to improve its performance. This initiative indicates a potential shift towards recognizing the importance of optimized support for secp256k1 within broader cryptographic applications. Moving forward, the benchmarking framework established for this analysis offers a valuable tool for quantifying performance improvements and ensuring the absence of regressions in future releases of libsecp256k1 and Bitcoin Core, potentially extending to include additional performance-critical functionalities such as Schnorr signature verification.</summary>
+    <published>2025-11-01T09:18:07.737000+00:00</published>
+  </entry>
+</feed>
