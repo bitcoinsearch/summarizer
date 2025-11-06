@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - var_int ambiguous serialization consequences</title>
-  <updated>2025-11-05T02:49:29.655543+00:00</updated>
+  <updated>2025-11-06T02:52:11.836851+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Feb_2015/007260_var-int-ambiguous-serialization-consequences.xml" rel="alternate"/>
   <link href="bitcoin-dev/Feb_2015/007251_var-int-ambiguous-serialization-consequences.xml" rel="alternate"/>
@@ -34,10 +34,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-February/007249.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-February/007249.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-February/007249.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-February/007249.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - var_int ambiguous serialization consequences</title>
-    <updated>2025-11-05T02:49:29.655663+00:00</updated>
+    <updated>2025-11-06T02:52:11.836975+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-February/007249.html" rel="alternate"/>
     <published>2015-02-01T15:00:39+00:00</published>
     <summary>In a discussion about the consequences of using longer than necessary forms of var_int in Bitcoin protocol documentation, Tamas Blummer raised concerns about the potential implications. However, it was clarified by Wladimir that the topic being discussed was actually CompactSize and not VarInt. CompactSizes have redundancy in their representation, allowing the same number to be represented in up to four different byte sequences. On the other hand, VARINTs were designed without any redundancy in their representation but are currently not used anywhere in the block chain.Tamas expressed interest in the possible consequences of applying size limits to a block, specifically regarding the transaction count which is var_int but not included in the hashed header or merkle tree. He suggested that using longer than necessary forms of var_int could create variants of the same transaction message by altering the representation of txIn and txOut counts. These variants would remain valid as long as the signatures validate with the shortest form.Wladimir questioned the relevance of this concern, pointing out that non-canonical CompactSizes are forbidden. This is flagged in the serialize.h's ReadCompactSize function. Therefore, he implied that the current concern regarding longer than necessary forms of var_int may not be significant.The author, Tamas Blummer, also highlighted some potential issues that could arise from using longer than necessary forms of var_int. For example, an implementation that holds mempool by raw message hashes could be tricked into believing that a modified encoded version of the same transaction is a real double spend. Additionally, one could mine a valid block with transactions that have a different hash if they are regularly parsed and re-serialized. Furthermore, an SPV client could be confused by such a transaction as it would appear in the merkle tree proof with a different hash compared to its own serialization or the raw message.In conclusion, the discussion revolved around the use of CompactSize and VarInt in Bitcoin protocol documentation. While Tamas expressed concerns about the consequences of using longer than necessary forms of var_int, Wladimir clarified that the topic being discussed was actually CompactSize. The redundancy in CompactSize representation and the absence of VARINT usage in the block chain were highlighted. Additionally, potential implications such as creating variants of transaction messages and tricking implementations and clients were mentioned. Ultimately, both individuals signed off from the conversation.</summary>
