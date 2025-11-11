@@ -350,7 +350,7 @@ class GenerateXML:
         # logger.info(f"Shape of emails_df: {emails_df.shape}")
         return emails_df
 
-    def start(self, dict_data, url):
+    def start(self, dict_data, url, skip_ai=False):
         if len(dict_data) > 0:
             emails_df = self.generate_new_emails_df(dict_data, url)
             if len(emails_df) > 0:
@@ -375,14 +375,35 @@ class GenerateXML:
                     file_path = f"{dir_path}/{number}_{xml_name}.xml"
 
                     # Check if we already created a summary for this post in the past
-                    if os.path.exists(file_path):
+                    if os.path.exists(file_path) and not skip_ai:
                         # if XML file exists, we already created a summary
                         logger.info(f"Exist: {file_path}")
                         return fr"{directory}/{str_month_year}/{number}_{xml_name}.xml"
 
-                    # No summary was found, we need to create one
-                    logger.info(f"Not found: {file_path}")
-                    summary = create_summary(cols['body'])
+                    # Get existing summary from XML or create new one
+                    if skip_ai and os.path.exists(file_path):
+                        logger.info(f"Regenerating (skip AI): {file_path}")
+                        # Read existing summary from XML
+                        try:
+                            namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+                            tree = ET.parse(file_path)
+                            root = tree.getroot()
+                            summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
+                            if summ_list:
+                                summary = "\n".join([summ.text for summ in summ_list if summ.text])
+                            else:
+                                summary = cols['body'][:500] + "..."  # fallback
+                        except Exception as e:
+                            logger.error(f"Error reading XML: {e}, using body preview")
+                            summary = cols['body'][:500] + "..."
+                    else:
+                        # No summary was found, we need to create one
+                        logger.info(f"Not found: {file_path}")
+                        if skip_ai:
+                            summary = cols['body'][:500] + "..."  # Use preview if no XML exists
+                        else:
+                            summary = create_summary(cols['body'])
+                    
                     feed_data = {
                         'id': combine_flag,
                         'title': cols['title'],
@@ -439,10 +460,31 @@ class GenerateXML:
 
                         directory = get_base_directory(url)
                         file_path = fr"static/{directory}/{str_month_year}/combined_{xml_name}.xml"
-                        # Generate a single combined thread summary using:
-                        # - the individual summaries of previous posts
-                        # - the actual content of newer posts
-                        combined_summary = create_summary(combined_body)
+                        
+                        # Get existing combined summary or create new one
+                        if skip_ai and os.path.exists(file_path):
+                            logger.info(f"Regenerating combined (skip AI): {file_path}")
+                            try:
+                                namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+                                tree = ET.parse(file_path)
+                                root = tree.getroot()
+                                summ_list = root.findall(".//atom:entry/atom:summary", namespaces)
+                                if summ_list:
+                                    combined_summary = "\n".join([summ.text for summ in summ_list if summ.text])
+                                else:
+                                    combined_summary = combined_body[:1000] + "..."
+                            except Exception as e:
+                                logger.error(f"Error reading combined XML: {e}")
+                                combined_summary = combined_body[:1000] + "..."
+                        else:
+                            # Generate a single combined thread summary using:
+                            # - the individual summaries of previous posts
+                            # - the actual content of newer posts
+                            if skip_ai:
+                                combined_summary = combined_body[:1000] + "..."
+                            else:
+                                combined_summary = create_summary(combined_body)
+                        
                         feed_data = {
                             'id': "2",
                             'title': 'Combined summary - ' + title,

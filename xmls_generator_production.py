@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 import sys
 from loguru import logger
 import warnings
@@ -13,20 +13,23 @@ warnings.filterwarnings("ignore")
 if __name__ == "__main__":
     gen = GenerateXML()
     elastic_search = ElasticSearchClient()
+    
+    # Only process bitcoin-dev mailing lists
     dev_urls = [
-        "https://delvingbitcoin.org/",
         "https://gnusha.org/pi/bitcoindev/",
         "https://mailing-list.bitcoindevs.xyz/bitcoindev/"
     ]
 
+    # Process ALL threads (no date limit) to regenerate all XMLs
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=30)
-
+    start_date = datetime(2009, 1, 1)  # Bitcoin genesis date
+    
     # yyyy-mm-dd
     end_date_str = end_date.strftime("%Y-%m-%d")
     start_date_str = start_date.strftime("%Y-%m-%d")
     logger.info(f"start_data: {start_date_str}")
     logger.info(f"end_date_str: {end_date_str}")
+    logger.info("REGENERATING ALL XMLs - AI SUMMARIZATION DISABLED")
 
     for dev_url in dev_urls:
         data_list = elastic_search.extract_data_from_es(
@@ -40,7 +43,8 @@ if __name__ == "__main__":
 
         while True:
             try:
-                gen.start(data_list, dev_url)
+                # Pass skip_ai=True to use existing summaries instead of calling OpenAI API
+                gen.start(data_list, dev_url, skip_ai=True)
                 break
             except (APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError) as ex:
                 logger.error(str(ex))
