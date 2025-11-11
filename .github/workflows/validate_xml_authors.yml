@@ -1,0 +1,62 @@
+name: Validate XML Files Have Authors
+
+on:
+  pull_request:
+    paths:
+      - 'static/**/*.xml'
+  workflow_dispatch:  # Allow manual runs
+
+jobs:
+  validate_authors:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 2  # Need previous commit to compare
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip setuptools
+        pip install -r requirements.txt
+
+    - name: Check all XML files have authors
+      id: check_authors
+      run: |
+        echo "=========================================="
+        echo "🔍 VALIDATING XML FILES"
+        echo "=========================================="
+        python check_missing_authors.py > check_results.txt
+        cat check_results.txt
+        
+        # Extract the count of missing authors
+        MISSING=$(grep "Files missing authors:" check_results.txt | grep -oE '[0-9]+')
+        echo "missing_count=$MISSING" >> $GITHUB_OUTPUT
+        
+        if [ "$MISSING" -gt 0 ]; then
+          echo "❌ VALIDATION FAILED: $MISSING files are missing authors!"
+          exit 1
+        else
+          echo "✅ VALIDATION PASSED: All files have author information!"
+          exit 0
+        fi
+
+    - name: Comment on PR (if validation fails)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const missing = '${{ steps.check_authors.outputs.missing_count }}';
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## ⚠️ XML Validation Failed\n\n${missing} XML files are missing author information!\n\nThis usually happens when:\n- Threading updater runs without ES data\n- XMLs are manually edited incorrectly\n- Author tags are accidentally deleted\n\nPlease check the workflow logs for details on which files are affected.\n\n**To fix:** Run the "Restore Missing Authors" workflow or check \`ISSUE_ANALYSIS_AND_FIX.md\` for more information.`
+          })
+

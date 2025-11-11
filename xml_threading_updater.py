@@ -49,6 +49,14 @@ class XMLThreadingUpdater:
             published_elem = root.find('.//atom:entry/atom:published', namespaces)
             published = published_elem.text if published_elem is not None else None
             
+            # Extract existing authors (OLD FORMAT) if they exist
+            authors = []
+            author_elements = root.findall('.//atom:author/atom:name', namespaces)
+            for author_elem in author_elements:
+                if author_elem.text:
+                    authors.append(author_elem.text)
+            logger.info(f"📄 THREADING UPDATER: Extracted {len(authors)} authors from old format")
+            
             # Extract links to individual XML files
             links = []
             link_elements = root.findall('.//atom:link[@rel="alternate"]', namespaces)
@@ -62,7 +70,8 @@ class XMLThreadingUpdater:
                 'summary': summary,
                 'url': url,
                 'published': published,
-                'links': links
+                'links': links,
+                'authors': authors  # Include old authors
             }
         except Exception as e:
             logger.error(f"Error extracting data from {xml_file_path}: {e}")
@@ -139,7 +148,13 @@ class XMLThreadingUpdater:
                 thread_element = ET.SubElement(feed, 'thread')
                 self.gen._build_threaded_structure(thread_element, thread_data)
             else:
-                logger.warning("⚠️ THREADING UPDATER: No thread data available, keeping flat structure")
+                logger.warning("⚠️ THREADING UPDATER: No thread data available, preserving old author format")
+                # Preserve old author format if no threading data is available
+                if existing_data.get('authors'):
+                    for author in existing_data['authors']:
+                        author_elem = ET.SubElement(feed, 'author')
+                        ET.SubElement(author_elem, 'name').text = author
+                    logger.info(f"✅ THREADING UPDATER: Preserved {len(existing_data['authors'])} authors in old format")
             
             # Add links to individual XML files
             for link in existing_data['links']:
@@ -260,6 +275,12 @@ class XMLThreadingUpdater:
                 
                 # Get threading data from Elasticsearch
                 thread_data = self.get_threading_data_for_title(title, dev_url)
+                
+                # Only update if we have threading data, otherwise skip to preserve existing structure
+                if not thread_data:
+                    logger.warning(f"⏭️ THREADING UPDATER: Skipping {xml_file_path} - no threading data available from ES")
+                    skipped_count += 1
+                    continue
                 
                 # Update XML with threading
                 if self.update_xml_with_threading(xml_file_path, thread_data, existing_data):
