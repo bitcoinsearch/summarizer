@@ -1,0 +1,114 @@
+name: Restore Missing Authors in XML Files
+
+on:
+  workflow_dispatch:  # Manual trigger only
+    inputs:
+      dry_run:
+        description: 'Dry run (check only, no restoration)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  restore_authors:
+    runs-on: ubuntu-latest
+
+    env:
+      ES_CLOUD_ID: ${{ secrets.ES_CLOUD_ID }}
+      ES_USERNAME: ${{ secrets.ES_USERNAME }}
+      ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
+      ES_INDEX: ${{ secrets.ES_INDEX }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip setuptools
+        pip install -r requirements.txt
+
+    - name: Check current status (before restoration)
+      run: |
+        echo "=========================================="
+        echo "📊 CHECKING CURRENT STATUS"
+        echo "=========================================="
+        python check_missing_authors.py
+      continue-on-error: true
+
+    - name: Run restoration script
+      if: ${{ github.event.inputs.dry_run != 'true' }}
+      run: |
+        echo "=========================================="
+        echo "🔧 RESTORING MISSING AUTHORS"
+        echo "=========================================="
+        python restore_missing_authors.py
+
+    - name: Check status after restoration
+      if: ${{ github.event.inputs.dry_run != 'true' }}
+      run: |
+        echo "=========================================="
+        echo "✅ VERIFYING RESTORATION"
+        echo "=========================================="
+        python check_missing_authors.py
+      continue-on-error: true
+
+    - name: Configure Git
+      if: ${{ github.event.inputs.dry_run != 'true' }}
+      run: |
+        git config user.email "${{ secrets.GIT_AUTHOR_EMAIL }}"
+        git config user.name "${{ secrets.GIT_AUTHOR_NAME }}"
+
+    - name: Commit and push changes
+      if: ${{ github.event.inputs.dry_run != 'true' }}
+      run: |
+        echo "=========================================="
+        echo "💾 COMMITTING CHANGES"
+        echo "=========================================="
+        git add static/
+        if git diff --staged --quiet; then
+          echo "✅ No changes to commit (all files already had authors)"
+        else
+          CHANGED_FILES=$(git diff --staged --name-only | wc -l)
+          echo "📝 Committing $CHANGED_FILES changed files"
+          git commit -m "fix: restore missing author tags in XML files
+
+- Restored author information for XML files missing <author> tags
+- Author data fetched from Elasticsearch
+- This fixes the issue where threading updater deleted authors
+- Related: ISSUE_ANALYSIS_AND_FIX.md
+
+Total files restored: Check workflow logs for details"
+          git push
+          echo "✅ Changes pushed successfully!"
+        fi
+
+    - name: Summary
+      if: always()
+      run: |
+        echo "=========================================="
+        echo "📋 WORKFLOW SUMMARY"
+        echo "=========================================="
+        if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+          echo "🔍 DRY RUN MODE - No changes were made"
+          echo "Run without dry_run to actually restore files"
+        else
+          echo "✅ Restoration workflow completed"
+          echo "Check the logs above for detailed results"
+        fi
+        echo "=========================================="
+
