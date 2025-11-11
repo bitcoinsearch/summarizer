@@ -1,16 +1,12 @@
 name: Restore Missing Authors in XML Files
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  workflow_dispatch:  # Manual trigger only - same as other workflows
     inputs:
       dry_run:
         description: 'Dry run (check only, no restoration)'
         required: false
         default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
 
 permissions:
   contents: write
@@ -27,20 +23,36 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.10'
+        python-version: 3.10.x
 
     - name: Install dependencies
       run: |
         pip install --upgrade pip setuptools
         pip install -r requirements.txt
+
+    - name: Debug - Check environment
+      run: |
+        echo "=========================================="
+        echo "🔍 DEBUGGING INFORMATION"
+        echo "=========================================="
+        echo "Current directory: $(pwd)"
+        echo "Python version: $(python --version)"
+        echo ""
+        echo "Checking for required scripts:"
+        ls -la check_missing_authors.py 2>/dev/null && echo "✅ check_missing_authors.py found" || echo "❌ check_missing_authors.py NOT FOUND"
+        ls -la restore_missing_authors.py 2>/dev/null && echo "✅ restore_missing_authors.py found" || echo "❌ restore_missing_authors.py NOT FOUND"
+        echo ""
+        echo "Checking for static directory:"
+        ls -la static/ 2>/dev/null && echo "✅ static/ directory found" || echo "❌ static/ directory NOT FOUND"
+        echo "=========================================="
 
     - name: Check current status (before restoration)
       run: |
