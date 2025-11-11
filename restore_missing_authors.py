@@ -87,6 +87,9 @@ class AuthorRestorer:
     def restore_authors_in_xml(self, xml_file_path, authors):
         """Add missing authors back to XML file in old format"""
         try:
+            # Register namespace to avoid ns0 prefix
+            ET.register_namespace('', 'http://www.w3.org/2005/Atom')
+            
             namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
             tree = ET.parse(xml_file_path)
             root = tree.getroot()
