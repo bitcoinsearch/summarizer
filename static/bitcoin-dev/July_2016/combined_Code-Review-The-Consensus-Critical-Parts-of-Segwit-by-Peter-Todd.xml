@@ -1,51 +1,63 @@
 <?xml version="1.0" ?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>2</id>
-  <title>Combined summary - Code Review: The Consensus Critical Parts of Segwit by Peter Todd</title>
-  <updated>2025-11-11T02:53:33.921398+00:00</updated>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
-  <link href="bitcoin-dev/July_2016/012886_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
-  <link href="bitcoin-dev/July_2016/012881_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
-  <link href="bitcoin-dev/July_2016/012880_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
-  <link href="bitcoin-dev/June_2016/012831_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-  <entry>
-    <id>2</id>
-    <title>Combined summary - Code Review: The Consensus Critical Parts of Segwit by Peter Todd</title>
-    <updated>2025-11-11T02:53:33.921534+00:00</updated>
-    <link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
-    <published>2016-07-04T23:27:15+00:00</published>
-    <summary>In a discussion about the implementation of Segregated Witness (SegWit) on the Bitcoin network, one issue raised is the odd result that occurs when a transaction spends a witness output with an unknown version. Surprisingly, this transaction is valid even if it doesn't have any witnesses. One suggestion is to leave these unknown witness programs as any-one-can-spend without looking at the witness. However, this creates a special case in the code, allowing spending of a witness output without a witness.There is a debate about whether to allow the use of 160-bit commitments for multisig transactions, which may require 256-bit security. The argument is that using shorter hash and pubkey for storing a small amount of Bitcoin could save bytes. However, concerns are raised about potential hash collisions and the reuse of signatures for different signature hashes. To address this, tagged hashing is proposed as a way to ensure that signatures cannot be reused in different contexts. XORing the magic tag prior to its use is suggested as sufficient for signature applications.Unfortunately, this method is not compatible with timestamping schemes like OpenTimestamps, which rely on all operations being cryptographically secure. Another concern is the difficulty of adding new commitments with soft forks. It is pointed out that anything after 38 bytes in the reserve value of a 32-byte hash has no consensus meaning, making it inefficient to add new commitments with softforks.In an email exchange between Johnson Lau and Bitcoin developer Peter Todd, various issues related to SegWit implementation are discussed. They discuss the possibility of allowing users to choose a less secure 160-bit commitment if their use-case doesn't require the full 256-bit security level. Additionally, the maximum size of serialized witness scripts is debated, with the constraint being set at 520 bytes. Lastly, there is a mention of concern about hash collision, although it is unclear how it could be possible.Overall, the discussion revolves around the complexities and potential vulnerabilities of implementing Segregated Witness on the Bitcoin network, with various suggestions and concerns being raised by different participants. The goal is to find solutions that ensure the security and efficiency of transactions while avoiding any potential issues or conflicts.</summary>
-  </entry>
-</feed>
+<ns0:feed xmlns:ns0="http://www.w3.org/2005/Atom">
+  <ns0:id>2</ns0:id>
+  <ns0:title>Combined summary - Code Review: The Consensus Critical Parts of Segwit by Peter Todd</ns0:title>
+  <ns0:updated>2025-11-11T02:53:33.921398+00:00</ns0:updated>
+  <ns0:generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</ns0:generator>
+  <ns0:author>
+    <ns0:name>Johnson Lau 2016-06-28T16:22:45.000Z</ns0:name>
+  </ns0:author>
+  <ns0:author>
+    <ns0:name>Peter Todd 2016-07-02T18:43:50.000Z</ns0:name>
+  </ns0:author>
+  <ns0:author>
+    <ns0:name>Johnson Lau 2016-07-02T19:20:42.000Z</ns0:name>
+  </ns0:author>
+  <ns0:author>
+    <ns0:name>Peter Todd 2016-07-04T23:27:15.000Z</ns0:name>
+  </ns0:author>
+  <ns0:link href="bitcoin-dev/July_2016/012886_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
+  <ns0:link href="bitcoin-dev/July_2016/012881_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
+  <ns0:link href="bitcoin-dev/July_2016/012880_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
+  <ns0:link href="bitcoin-dev/June_2016/012831_Code-Review-The-Consensus-Critical-Parts-of-Segwit-by-Peter-Todd.xml" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+  <ns0:entry>
+    <ns0:id>2</ns0:id>
+    <ns0:title>Combined summary - Code Review: The Consensus Critical Parts of Segwit by Peter Todd</ns0:title>
+    <ns0:updated>2025-11-11T02:53:33.921534+00:00</ns0:updated>
+    <ns0:link href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012886.html" rel="alternate"/>
+    <ns0:published>2016-07-04T23:27:15+00:00</ns0:published>
+    <ns0:summary>In a discussion about the implementation of Segregated Witness (SegWit) on the Bitcoin network, one issue raised is the odd result that occurs when a transaction spends a witness output with an unknown version. Surprisingly, this transaction is valid even if it doesn't have any witnesses. One suggestion is to leave these unknown witness programs as any-one-can-spend without looking at the witness. However, this creates a special case in the code, allowing spending of a witness output without a witness.There is a debate about whether to allow the use of 160-bit commitments for multisig transactions, which may require 256-bit security. The argument is that using shorter hash and pubkey for storing a small amount of Bitcoin could save bytes. However, concerns are raised about potential hash collisions and the reuse of signatures for different signature hashes. To address this, tagged hashing is proposed as a way to ensure that signatures cannot be reused in different contexts. XORing the magic tag prior to its use is suggested as sufficient for signature applications.Unfortunately, this method is not compatible with timestamping schemes like OpenTimestamps, which rely on all operations being cryptographically secure. Another concern is the difficulty of adding new commitments with soft forks. It is pointed out that anything after 38 bytes in the reserve value of a 32-byte hash has no consensus meaning, making it inefficient to add new commitments with softforks.In an email exchange between Johnson Lau and Bitcoin developer Peter Todd, various issues related to SegWit implementation are discussed. They discuss the possibility of allowing users to choose a less secure 160-bit commitment if their use-case doesn't require the full 256-bit security level. Additionally, the maximum size of serialized witness scripts is debated, with the constraint being set at 520 bytes. Lastly, there is a mention of concern about hash collision, although it is unclear how it could be possible.Overall, the discussion revolves around the complexities and potential vulnerabilities of implementing Segregated Witness on the Bitcoin network, with various suggestions and concerns being raised by different participants. The goal is to find solutions that ensure the security and efficiency of transactions while avoiding any potential issues or conflicts.</ns0:summary>
+  </ns0:entry>
+</ns0:feed>
