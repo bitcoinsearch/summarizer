@@ -141,7 +141,7 @@ class AuthorRestorer:
     
     def restore_all_missing_authors(self):
         """Restore missing authors in all XML files that need it"""
-        dev_url = "https://gnusha.org/pi/bitcoindev/"
+        dev_url = "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/"
         
         logger.info("🚀 RESTORE: Starting author restoration for bitcoin-dev")
         
