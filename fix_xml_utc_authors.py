@@ -11,6 +11,7 @@ import requests
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Optional, Dict, List
+from bs4 import BeautifulSoup
 
 # Elasticsearch configuration
 ES_INDEX = "bitcoin-search-august-23"
@@ -27,7 +28,7 @@ ATOM_NS = {'atom': 'http://www.w3.org/2005/Atom'}
 
 
 def has_utc_author(xml_file: Path) -> bool:
-    """Check if XML file has UTC as author"""
+    """Check if XML file has UTC or placeholder as author"""
     try:
         tree = ET.parse(xml_file)
         root = tree.getroot()
@@ -37,12 +38,12 @@ def has_utc_author(xml_file: Path) -> bool:
         
         # Check old format: <author><name>
         for author in root.findall('.//atom:author/atom:name', ATOM_NS):
-            if author.text and ('UTC' in author.text or 'newest]' in author.text):
+            if author.text and ('UTC' in author.text or 'newest]' in author.text or author.text == 'Mailing List'):
                 return True
         
         # Check new threaded format: <thread><message><author>
         for author in root.findall('.//atom:thread/atom:message/atom:author', ATOM_NS):
-            if author.text and ('UTC' in author.text or 'newest]' in author.text):
+            if author.text and ('UTC' in author.text or 'newest]' in author.text or author.text == 'Mailing List'):
                 return True
                 
         return False
@@ -65,6 +66,60 @@ def extract_title_from_xml(xml_file: Path) -> Optional[str]:
         return None
     except Exception as e:
         print(f"❌ Error extracting title from {xml_file}: {e}")
+        return None
+
+
+def extract_author_from_url_fallback(title: str) -> Optional[str]:
+    """Try to get author from URL by searching ES for URL, then scraping"""
+    try:
+        # Query ES for URL
+        query = {
+            "query": {
+                "match_phrase": {
+                    "title": title
+                }
+            },
+            "size": 1,
+            "_source": ["url"]
+        }
+        
+        url = f"{ES_URL}/{ES_INDEX}/_search"
+        response = requests.post(url, json=query, headers=ES_HEADERS, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        hits = data.get("hits", {}).get("hits", [])
+        if not hits:
+            return None
+        
+        doc_url = hits[0]["_source"].get("url")
+        if not doc_url:
+            return None
+        
+        # Fetch and parse the URL
+        from bs4 import BeautifulSoup
+        response = requests.get(doc_url, timeout=10)
+        response.raise_for_status()
+        html_text = response.text
+        
+        # Try old format: @ YYYY-MM-DD HH:MM Author
+        old_format_match = re.search(r'@\s+(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2})\s+(.+?)(?:\n|<|$)', html_text)
+        if old_format_match:
+            author = old_format_match.group(2).strip()
+            author = re.sub(r'<[^>]+>', '', author)
+            author = author.split('\n')[0].strip()
+            author = author.replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">")
+            # Clean up common suffixes
+            author = author.replace(" via Bitcoin Development Mailing List", "")
+            author = author.replace("via Bitcoin Development Mailing List", "").strip()
+            # Remove surrounding quotes if present
+            author = author.strip("'\"")
+            if author and not (author.startswith('UTC') or 'newest' in author or author == 'Mailing List'):
+                return author
+        
+        return None
+        
+    except Exception as e:
         return None
 
 
@@ -97,9 +152,11 @@ def get_author_from_elasticsearch(title: str) -> Optional[str]:
         
         author = authors[0]
         
-        # Skip if still UTC
-        if 'UTC' in author or 'newest]' in author:
-            return None
+        # Skip if still UTC or generic placeholder
+        if 'UTC' in author or 'newest]' in author or author == 'Mailing List':
+            # Try to fetch from URL as fallback
+            print(f"   ⚠️  ES has placeholder '{author}', trying URL extraction...")
+            return extract_author_from_url_fallback(title)
         
         return author
         

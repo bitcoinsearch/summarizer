@@ -1,28 +1,26 @@
 name: Daily XML Generation Script
 on:
-  workflow_dispatch:  # Manual trigger only - same as other workflows
-    inputs:
-      dry_run:
-        description: 'Dry run (check only, no restoration)'
-        required: false
-        default: 'false'
+  schedule:
+    - cron: "0 1 * * *" # every day at 01:00 AM UTC
+  workflow_dispatch:
+  repository_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  restore_authors:
+  execute_and_commit:
     runs-on: ubuntu-latest
 
     env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       ES_CLOUD_ID: ${{ secrets.ES_CLOUD_ID }}
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       ES_INDEX: ${{ secrets.ES_INDEX }}
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 0
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -34,66 +32,38 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install requests
+         pip install --upgrade pip setuptools
+         pip install -r requirements.txt
+         pip install requests beautifulsoup4
+
+    # - name: Execute Python script
+    #   run: python xmls_generator_production.py
     
-    - name: Run XML author fix script
+    - name: Fix XML authors (UTC issue)
       run: |
-        cd /home/runner/work/tldr/tldr/summarizer || cd $GITHUB_WORKSPACE
-        
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-          echo "🔍 Running in DRY RUN mode"
-          python fix_xml_utc_authors.py --static-dir static --dry-run
+        echo "=========================================="
+        echo "🔧 FIXING UTC AUTHORS"
+        echo "=========================================="
+        python fix_xml_utc_authors.py --static-dir static || echo "⚠️ UTC fix skipped (script may not exist yet)"
+    
+    - name: Fix XML authors (Missing authors)
+      run: |
+        echo "=========================================="
+        echo "🔧 FIXING MISSING AUTHORS"
+        echo "=========================================="
+        python fix_missing_authors_final.py || echo "⚠️ Missing authors fix skipped (script may not exist yet)"
+    
+    - name: Configure Git
+      run: |
+         git config user.email "${{ secrets.GIT_AUTHOR_EMAIL }}"
+         git config user.name "${{ secrets.GIT_AUTHOR_NAME }}"
+
+    - name: Add and commit changes
+      run: |
+        git add .
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
         else
-          echo "🔧 Running in FIX mode"
-          python fix_xml_utc_authors.py --static-dir static
+          git commit -m "Updated newly generated XML files with threading structure and fixed authors"
+          git push
         fi
-    
-    - name: Check for changes
-      id: check_changes
-      run: |
-        if git diff --quiet; then
-          echo "has_changes=false" >> $GITHUB_OUTPUT
-          echo "✅ No changes to commit"
-        else
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-          echo "📝 Changes detected"
-        fi
-    
-    - name: Show changed files
-      if: steps.check_changes.outputs.has_changes == 'true'
-      run: |
-        echo "Changed files:"
-        git diff --name-only
-        echo ""
-        echo "Number of changed files:"
-        git diff --name-only | wc -l
-    
-    - name: Commit and push changes
-      if: steps.check_changes.outputs.has_changes == 'true' && github.event.inputs.dry_run != 'true'
-      run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "actions@github.com"
-        
-        git add static/**/*.xml
-        
-        # Count changed files
-        CHANGED_COUNT=$(git diff --staged --name-only | wc -l)
-        
-        git commit -m "fix: Update XML authors from UTC to correct names"
-        
-        git push
-        
-        echo "✅ Committed and pushed $CHANGED_COUNT fixed XMLs"
-    
-    - name: Summary
-      if: always()
-      run: |
-        echo "============================================"
-        echo "✅ Workflow completed"
-        echo "============================================"
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-          echo "Mode: DRY RUN (no files modified)"
-        else
-          echo "Mode: FIX (files were modified and committed)"
-        fi
-        echo "============================================"
