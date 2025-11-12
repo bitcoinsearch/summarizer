@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2025-11-12T03:43:12.735684+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-11-22 20:52:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2025-11-12T03:43:12.735714+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m18a1ec088ed509ac4cc5a07caff4182175a9f059" rel="alternate"/>
+    <summary>In a detailed analysis of script processing in relation to Bitcoin's underlying technology, the discussion points out that assuming a script size of 128 bytes, including SHA256 padding, the cumulative size for 2^20 scripts is projected at 134MB. When accounting for the merkle branch hashes, this size doubles to 268MB. Given a transfer rate of roughly 100MB/s, the time required to process these would be approximately 2.5 seconds or, when scaled up to 30 levels, around 42 minutes. However, this calculation does not take into account memory usage, which could significantly impact performance.
+
+Further examination reveals that the `CTransactionSignatureSerializer()` function plays a crucial role in scanning every script for the `OP_CODESEPARATOR` operation. It is highlighted that scripts, irrespective of their inclusion or exclusion of `OP_CODESEPARATOR`, should theoretically take the same amount of time to process, based on their size. This point is substantiated by a reference to a [Bitcoin GitHub pull request](https://github.com/bitcoin/bitcoin/pull/14786), which suggests that the impact of `OP_CODESEPARATOR` has been effectively neutralized under the segregated witness (segwit) protocol, introduced as BIP143. Segwit's design simplifies the handling of operations like `OP_CODESEPARATOR`, making them less of a concern compared to before its implementation.
+
+The conversation also touches upon the comparison between `OP_CODESEPARATOR` and another proposed operation, `OP_MASK`. The preference expressed towards `OP_CODESEPARATOR` over "flow operator counting" is justified by the desire to avoid unnecessary additions to the consensus code, especially when most objectives can be achieved through existing mechanisms like MAST (Merkelized Abstract Syntax Trees). This perspective underscores a preference for leveraging existing functionalities within the Bitcoin protocol to achieve optimization, rather than introducing new complexities.</summary>
+    <published>2018-11-22T20:52:00+00:00</published>
+  </entry>
+</feed>

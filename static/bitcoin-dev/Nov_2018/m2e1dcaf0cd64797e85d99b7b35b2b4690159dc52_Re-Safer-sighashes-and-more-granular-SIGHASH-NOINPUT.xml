@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2025-11-12T03:44:57.282763+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-11-28 08:31:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2025-11-12T03:44:57.282794+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m2e1dcaf0cd64797e85d99b7b35b2b4690159dc52" rel="alternate"/>
+    <summary>In a series of email exchanges between Christian Decker and Russell O'Connor, discussions were held regarding the implementation and implications of introducing a new opcode, referred to as OP_MASKEDPUSH. This proposal aims at addressing the limitations imposed by Bitcoin's current scripting system, particularly concerning the 201 opcode limit. The suggestion is to use the position of OP_RESERVED (0x50) for OP_MASKEDPUSH, primarily because it is not counted towards this opcode limit, allowing for more flexibility in script creation. This would enable users to mask an unlimited number of pushes without worrying about hitting the limit, albeit in a newer script version to avoid creating inconsistencies within the EvalScript() code.
+
+The dialogue also touches upon the technical specifics of implementing OP_MASKEDPUSH, debating whether to utilize one or three hashes for its operation. The preference leans towards three hashes to share elements with BIP143, reducing redundancy. Furthermore, it introduces a policy to restrict the use of the SIGHASH type SINGLE unless it corresponds to a matching output and deems undefined output types invalid. An essential aspect of their discussion is the method to differentiate between p2sh and native segwit for MASKED NOINPUT, suggesting the necessity of committing to an additional 1-bit value.
+
+Another significant point raised concerns the handling of direct key-spending transactions. It proposes setting the hash of the scriptCode (H(scriptCode)) to zero for such transactions for efficiency and security reasons. This approach is justified by the redundancy of hashing scriptCode when it's already indirectly hashed through scriptPubKey (sPK), alongside savings in computational resources and facilitating hardware wallets to discern transaction paths more efficiently. Moreover, the conversation advocates banning MASKED NOINPUT for direct-spending transactions due to safety concerns, as both H(scriptCode) and sPK would be undefined.
+
+Lastly, the emails delve into the strategic use of sighash bits, pondering over how to manage the four out of eight unused bits. A method suggested involves designating specific bits to serve as markers for replay protection across potential hardforks. This system would categorize signatures based on the set or unset state of these bits, thus defining their validity across original and forked chains, addressing concerns related to transaction replayability post-fork.</summary>
+    <published>2018-11-28T08:31:00+00:00</published>
+  </entry>
+</feed>

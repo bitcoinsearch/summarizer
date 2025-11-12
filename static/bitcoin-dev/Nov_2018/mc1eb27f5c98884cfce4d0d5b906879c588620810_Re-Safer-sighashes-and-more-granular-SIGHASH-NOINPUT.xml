@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2025-11-12T03:44:33.609504+00:00</updated>
+  <author>
+    <name>[bitcoin-dev] Safer sighashes and more granular SIGHASH_NOINPUT Bob McElrath 2018-11-28 00:54:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2025-11-12T03:44:33.609535+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#mc1eb27f5c98884cfce4d0d5b906879c588620810" rel="alternate"/>
+    <summary>Bob McElrath, in his communication, sheds light on the innovative approach he has taken towards enhancing Bitcoin security through the implementation of Bitcoin Covenants or Vaults. This method revolves around a concept he refers to as "Pay-to-Timelock Signed Transaction" (P2TST), an idea that was also touched upon by kanzure in a recent talk. The core of this concept lies in depositing Bitcoins into an address whose private key is unknown. Instead, what follows is the crafting of a secondary transaction that directs these funds to a timelocked staging address. This particular address does have a known private key and includes an IF/ELSE condition to cater to potential theft attempts.
+
+The unique methodology proposed involves a departure from traditional practices where the private key of the deposit address would be deleted, a process fraught with uncertainty regarding the actual deletion of the key. McElrath suggests an alternative wherein a signature is constructed using a Random Number Generator (RNG), allowing for the computation of the corresponding public key via ECDSA recovery. This process facilitates the derivation of the associated address, effectively creating a wallet comprising P2TST transactions alongside a corresponding private key and emergency keys.
+
+A pivotal aspect of McElrath's proposal is its interaction with the NOINPUT flag, which addresses a potential circular dependency issue inherent in traditional sighash mechanisms. These dependencies arise due to the commitment of the input to the transaction to the public key, thus necessitating a break in hash function to resolve. By employing SIGHASH_NOINPUT | SIGHASH_SCRIPTMASK, McElrath's approach circumvents this by excluding the scriptPubKey/redeemScript from the sighash calculation, thereby removing the aforementioned circular dependency.
+
+Furthermore, McElrath discusses the necessity of managing fee pressures, especially considering the time lapse that may occur between the initial vaulting and eventual unvaulting of funds. To this end, he advocates for the use of SIGHASH_SINGLE to facilitate the addition of fees from a separate wallet, ensuring adaptability in response to fluctuating fee dynamics. Additionally, the mention of SIGHASH_NOFEE suggests a vision for further optimizing transaction cost-efficiency.
+
+McElrath also expresses enthusiasm towards integrating this covenant/vault model with more recent Bitcoin protocol enhancements such as Taproot/Graftroot/g'Root, hinting at the potential for even greater security and efficiency improvements within the Bitcoin ecosystem. This exploration and subsequent implementation reflect a profound commitment to solving complex problems within cryptocurrency security, embodying the inventive spirit that drives the community forward.</summary>
+    <published>2018-11-28T00:54:00+00:00</published>
+  </entry>
+</feed>

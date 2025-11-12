@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2025-11-12T03:42:28.913551+00:00</updated>
+  <author>
+    <name>Russell O'Connor 2018-11-21 17:07:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2025-11-12T03:42:28.913581+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m6831641f08059d246c06e1492f616e54119d520c" rel="alternate"/>
+    <summary>In the evolving landscape of Bitcoin transaction security and flexibility, discussions have emerged focusing on improving the sighash (signature hash) algorithm, a critical component for ensuring transaction integrity and versatility. Among these ideas, the requirement that OP_MASK should be followed by a push operation has been underscored, aiming to prevent the substitution of arbitrary opcodes, which complicates reasoning about transactions. This modification proposes transforming it into a multi-byte OP_MASKEDPUSH opcode, enhancing clarity and security in transaction constructions.
+
+The suggestion to sign all input and output amounts, including those of the transaction fees, is gaining traction. While signing transaction fees explicitly was considered, it was argued that if the net difference between inputs and outputs remains constant, the explicit signing of transaction fees might be redundant. This insight leads to a potential simplification of the current system by removing the necessity for a NOFEE option in the sighash specification. Furthermore, a cleaner approach is advocated for the signing of sequence values of inputs, suggesting that all included inputs' sequence values should be signed, diverging from the current practice where only default sighashes sign other inputs' sequence values unless specified by ANYONECANPAY or NOINPUT flags.
+
+A novel encoding strategy for combining NOINPUT, ANYONECANPAY, and MASK flags into just two bits was proposed, based on PARTIALSCRIPT/KNOWNSCRIPT/KNOWNTX/ALL_INPUTS encoding. This approach could streamline the complexity and size of transaction encoding.
+
+The discussion also touched upon the challenge of preventing signatures from being repurposed across different scripts or execution paths, especially in the context of MAST (Merkleized Abstract Syntax Trees) and complex script constructs. It was highlighted that simply signing the position of a CHECKSIG operator might not suffice due to the potential for cross-execution path rebinding. An alternative solution proposed involves signing the position of the last executed CODESEPARATOR, aiming to provide a more straightforward method to ensure signature commitment without significantly increasing signer complexity.
+
+Several miscellaneous ideas were shared to further refine the proposal. These include eliminating the need for a sighash byte for a default sign-everything approach, introducing an intermediary hash for scriptPubKey and scriptCode to enhance efficiency, and specifying a new opcode, OP_MASKEDPUSH, to enforce the immediate follow-up of a push operation after its invocation. Additionally, the adoption of a fixed 64-byte array tag for sighashes was suggested to prevent misinterpretation of signatures within the Bitcoin ecosystem.
+
+The comprehensive proposal encapsulates enhancements to the sighash algorithm, intending to bolster transaction security, reduce ambiguity in transaction signing, and address concerns related to script execution and signature applicability across diverse transaction scenarios. This initiative reflects a concerted effort to refine Bitcoin's scripting capabilities in response to the community's feedback and technological advancements.</summary>
+    <published>2018-11-21T17:07:00+00:00</published>
+  </entry>
+</feed>

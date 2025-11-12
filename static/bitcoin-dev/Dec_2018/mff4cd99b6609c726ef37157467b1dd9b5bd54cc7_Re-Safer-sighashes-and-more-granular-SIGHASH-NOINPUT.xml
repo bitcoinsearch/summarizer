@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2025-11-12T03:50:56.784249+00:00</updated>
+  <author>
+    <name>Johnson Lau 2018-12-24 21:23:00+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2025-11-12T03:50:56.784279+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#mff4cd99b6609c726ef37157467b1dd9b5bd54cc7" rel="alternate"/>
+    <summary>The discussion revolves around a proposed use of `CODESEPARATOR` in the context of Bitcoin scripting, especially focusing on its utility within the Lightning Network as outlined in a [message on the Linux Foundation's mailing list](https://lists.linuxfoundation.org/pipermail/lightning-dev/2016-March/000455.html). The conversation highlights two scripts: the first script (`S1`) involves conditional execution with `OP_CHECKSIGVERIFY` and `OP_CHECKSIG` separated by an `OP_IF` clause, while the second script (`S2`) utilizes a delay operation (`OP_CSV`) followed by a signature check that could benefit from simplification under Taproot.
+
+Under Taproot, the proposition is to simplify these operations by combining keys through a MuSig operation, thereby rendering certain opcodes such as `OP_IF` and `CODESEPARATOR` unnecessary for the second script. This optimization would not only streamline the process but also potentially reduce transaction size and increase efficiency. Specifically, it suggests calculating a new public key (`Q`) by adding a hash of the concatenation of a public key (`P`, itself a combination of `KeyA` and `KeyB` through MuSig) and the second script (`S2`) to the original public key, multiplied by the generator point (`G`). This approach enables direct spending with `Q`, eliminating the need for conditional checks or code separation in `S2`.
+
+Further elaboration compares different methods of achieving reuse of the `R` value in a signature without utilizing `CODESEPARATOR`. One method mentioned requires duplicating inputs and performing checks which result in a longer script. In contrast, employing `CODESEPARATOR` saves three bytes by rearranging inputs and operations, demonstrating a more byte-efficient approach. However, an even more efficient method is suggested where the script directly uses a known `R` value alongside the signature, thus significantly simplifying the verification process and saving more space.
+
+This exchange underscores the ongoing optimization efforts within the Bitcoin developer community, especially concerning how best to utilize scripting capabilities for more efficient transaction validation mechanisms. It reflects the nuanced considerations developers must balance, including operational efficiency, transaction size, and security implications, in the evolving landscape of Bitcoin scripting and network operation enhancements.</summary>
+    <published>2018-12-24T21:23:00+00:00</published>
+  </entry>
+</feed>
