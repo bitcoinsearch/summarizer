@@ -2,14 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Alternative way to count sigops</title>
-  <updated>2025-10-12T01:19:47.592998+00:00</updated>
+  <updated>2025-11-12T13:14:57.100034+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0" anchor="m4044a0660923f7b3c3340b58f5f4561c8b37ff84">
-      <author>[bitcoin-dev] Alternative way to count sigops Johnson Lau</author>
+      <author>Johnson Lau</author>
       <timestamp>2018-02-16T22:49:00.000Z</timestamp>
     </message>
-    <message id="msg_2" depth="1" position="1" reply_to="[bitcoin-dev] Alternative way to count sigops Johnson Lau" parent_id="mailing-list-2018-02-m4044a0660923f7b3c3340b58f5f4561c8b37ff84" anchor="mc3099d5b8ee417e85bdbf226c9617db358376ea5">
+    <message id="msg_2" depth="1" position="1" reply_to="Johnson Lau" parent_id="mailing-list-2018-02-m4044a0660923f7b3c3340b58f5f4561c8b37ff84" anchor="mc3099d5b8ee417e85bdbf226c9617db358376ea5">
       <author>Gregory Maxwell</author>
       <timestamp>2018-02-17T02:33:00.000Z</timestamp>
     </message>
@@ -18,12 +18,13 @@
   <link href="bitcoin-dev/Feb_2018/015764_Alternative-way-to-count-sigops.xml" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015764.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015764.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015764.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Alternative way to count sigops</title>
-    <updated>2025-10-12T01:19:47.593501+00:00</updated>
+    <updated>2025-11-12T13:14:57.100075+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015764.html" rel="alternate"/>
-    <published>2018-02-17T02:33:32+00:00</published>
+    <published>2025-11-12T13:14:57.100078+00:00</published>
     <summary>In a recent discussion on the bitcoin-dev forum, Johnson Lau highlighted the current limitations on block weight and sigops. Currently, the block weight limit is set at 4,000,000, with a sigop limit of 80,000. This means that each sigop cannot use more than 50 weight units. To address new script proposals, there is a suggestion to count the actual number of sigops during execution and ensure that the total number of executed sigops multiplied by 50 does not exceed the size of the input.Bitcoin Core has had a related policy rule in place for some time, where the weight of a transaction for mining purposes is determined by max(weight, lambda*sigops). However, lambda has been set lower than ideal due to limitations in checkmultisig. This policy replaced an earlier rule that rejected transactions with too many sigops per byte count, but it was found to block valid transactions. Moving forward, this framework may not be ideal as new operation proposals may require additional input but have relatively small computational costs, such as aggregation.In the early days of Bitcoin, Satoshi implemented sigops counting as a softfork to limit the number of signature operations in a block. However, this counting method was not contextual, resulting in an overestimation of the cost of multi-signature transactions and counting of sigops in unexecuted branches. As P2SH (Pay-to-Script-Hash) was introduced, sigop counting also encompassed the sigop redeemScript, improving the counting of OP_CHECKMULTISIG but making counting without the UTXO (Unspent Transaction Output) set impossible.Segwit (BIP141) addressed this issue by scaling the legacy sigop limit by 4x, with a new block limit of 80,000 sigops. Despite this improvement, implementing static sigop counting for second-generation script proposals like BIP114, BIP117, and taproot is challenging. However, it is still necessary to have a limit for more complex script functions in order to prevent unexpected Denial-of-Service (DoS) attacks.A proposal suggests that each sigop should not consume more than 50 weight units on average, with a per-input limit of (164 + input witness size) &gt;= (actual_sigop * 50), where script validation is parallel. In cases where many signatures are aggregated, the 1:50 ratio may not be sufficient, and it could be reduced to 1:32 or lower to ensure that legitimate usage does not exceed the limit. This approach would allow relay nodes to determine if a transaction requires excessive CPU power by simply examining its size. If it does, the transaction would be considered invalid, and script execution could be terminated early.</summary>
   </entry>
 </feed>
