@@ -242,6 +242,55 @@ class GenerateXML:
         with open(xml_file, 'w', encoding='utf-8') as f:
             f.write(pretty_xml)
     
+    def _clean_author_name(self, raw_author):
+        """Clean malformed author names that include subject lines or have trailing punctuation"""
+        import re
+        
+        if not raw_author or raw_author == 'Unknown':
+            return 'Unknown'
+        
+        # Remove trailing apostrophes and quotes
+        author = raw_author.rstrip("'\"")
+        
+        # Check if author contains subject line markers or is suspiciously long
+        # Typical author names are < 50 chars, anything longer likely includes subject
+        if len(author) > 50 or author.startswith('['):
+            logger.debug(f"🧹 AUTHOR CLEANING: Detected malformed author: {author[:80]}...")
+            
+            # Pattern 1: "[Subject] ... Author Name" 
+            if author.startswith('['):
+                # Find the closing bracket
+                closing_bracket = author.find(']')
+                if closing_bracket > 0:
+                    # Get everything after the closing bracket
+                    after_subject = author[closing_bracket + 1:].strip()
+                    # Take last 2-3 words as author name
+                    words = after_subject.split()
+                    if len(words) >= 2:
+                        author = ' '.join(words[-2:])
+                    elif words:
+                        author = words[-1]
+                    logger.debug(f"   → Cleaned to: {author}")
+            else:
+                # Pattern 2: Very long string - take last 2-3 words
+                words = author.split()
+                if len(words) > 3:
+                    author = ' '.join(words[-2:])
+                    logger.debug(f"   → Cleaned to: {author}")
+        
+        # Additional cleanup
+        author = author.strip()
+        
+        # Remove "via Bitcoin Development Mailing List" suffix
+        author = re.sub(r'\s+via\s+Bitcoin\s+Development\s+Mailing\s+List.*$', '', author, flags=re.IGNORECASE).strip()
+        
+        # If still suspiciously long or empty, fall back to "Unknown"
+        if not author or len(author) > 100:
+            logger.warning(f"⚠️ AUTHOR CLEANING: Could not clean author '{raw_author[:80]}', using 'Unknown'")
+            return 'Unknown'
+        
+        return author
+    
     def _build_threaded_structure(self, parent_element, thread_data):
         """
         Build nested thread structure that exactly matches mailing list display order
@@ -262,12 +311,17 @@ class GenerateXML:
         # Create message elements in exact mailing list order - NO DEEP NESTING
         for i, thread_item in enumerate(sorted_data):
             msg_id = f"msg_{i+1}"
-            author_name = thread_item['author']
+            raw_author = thread_item['author']
+            author_name = self._clean_author_name(raw_author)  # ✅ CLEAN AUTHORS HERE!
             timestamp = thread_item.get('created_at', '')
             thread_depth = thread_item.get('thread_depth', 0)
             reply_to = thread_item.get('reply_to_author', '')
             parent_id = thread_item.get('parent_id', '')
             anchor_id = thread_item.get('anchor_id', '')
+            
+            # Also clean reply_to_author if present
+            if reply_to:
+                reply_to = self._clean_author_name(reply_to)
             
             message = ET.Element('message')
             message.set('id', msg_id)
