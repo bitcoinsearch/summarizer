@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Private Key Handover</title>
+  <updated>2025-11-12T02:45:43.927118+00:00</updated>
+  <author>
+    <name>ZmnSCPxj 2025-11-11 04:06:55.729000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Private Key Handover</title>
+    <updated>2025-11-12T02:45:43.927154+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/private-key-handover/2098" rel="alternate"/>
+    <summary>Private key handover mechanisms present a strategic optimization for blockchain protocols, especially those built on Bitcoin's Taproot architecture. These protocols often involve the transition of fund control from multiple participants to a singular beneficiary at their conclusion. A notable example provided is an onchain Hashed Time-Locked Contract (HTLC), which begins with two parties—the offeror and the acceptor—and ends with the acceptor gaining sole control over the funds upon the successful completion of the contract terms. In such scenarios, the implementation of ephemeral public keys in the keyspend path facilitates a seamless transfer of control. Participants willing to relinquish fund control simply hand over their portion of the ephemeral private key to the final beneficiary, who can then unilaterally claim the funds via the keyspend path without further actions required from any other party.
+
+The use of private key handover introduces significant benefits, notably the ability for the final beneficiary to replace-by-fee (RBF) the transaction claiming the fund without the protocol needing explicit support for RBF. This bypasses the need for anchor outputs for RBF, reducing block space usage and simplifying protocol design while still allowing high-quality implementations to leverage RBF for the transaction that claims the fund. However, this optimization is specifically applicable to protocols resulting in a single UTXO under unilateral control, highlighting its limitation in scenarios where the outcome involves multiple beneficiaries or requires bilateral control post-protocol.
+
+In detailing the practical application of private key handover, the initial phase of a protocol necessitates each participant to provide both ephemeral and permanent public keys. The MuSig2 calculation of these ephemeral keys forms the basis of the keyspend branch of a Taproot output, ensuring that only the ephemeral keys are handed over at the protocol's conclusion. This process allows the beneficiary to assume control by recomputing the MuSig2 sum using the private keys received, enabling them to execute transactions unilaterally. The approach also anticipates potential fallback scenarios where cooperation from all participants might not be forthcoming, outlining steps for unilateral fund access through alternative Taproot output leaves.
+
+Furthermore, the correspondence discusses the importance of secure private key transmission over the network, advocating for encryption methods like ECDH to mask the private keys during handover. This additional security measure aims to minimize risks associated with key exfiltration within complex software architectures or partial security breaches.
+
+Private key handover extends beyond specific protocol examples like HTLCs, offering a versatile building block for various applications. It supports scenarios requiring unilateral fund control post-protocol, including innovative liquidity management strategies in Lightning Service Provider (LSP) operations or bespoke cooperative exit mechanisms. The methodology also contemplates its applicability with ECDSA, despite the inherent limitations compared to Schnorr signatures, indicating its broader utility across different cryptographic standards. This adaptability underscores the potential of private key handover to streamline protocol designs, enhance operational flexibility, and optimize blockchain space utilization in diverse applications.</summary>
+    <published>2025-11-11T04:06:55.729000+00:00</published>
+  </entry>
+</feed>

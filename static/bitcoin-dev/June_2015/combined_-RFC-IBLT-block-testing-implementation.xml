@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [RFC] IBLT block testing implementation</title>
-  <updated>2025-11-11T14:54:10.943876+00:00</updated>
+  <updated>2025-11-12T02:51:39.521772+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/June_2015/009133_-RFC-IBLT-block-testing-implementation.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2015/009090_-RFC-IBLT-block-testing-implementation.xml" rel="alternate"/>
@@ -40,10 +40,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/009021.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/009021.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/009021.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/009021.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - [RFC] IBLT block testing implementation</title>
-    <updated>2025-11-11T14:54:10.943998+00:00</updated>
+    <updated>2025-11-12T02:51:39.521883+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-June/009021.html" rel="alternate"/>
     <published>2015-06-27T04:46:35+00:00</published>
     <summary>Rusty Russell has developed a model for using Invertible Bloom Lookup Tables (IBLT) to communicate blocks between peers. The model is designed to be as flexible as possible, making few assumptions on transaction selection policy and relying on similarity in mempools, with some selection hints. The selection hints are minimum fee-per-byte and bitmaps of included-despite-that and rejected-despite-that. The former covers things like child-pays-for-parent and the priority area. The latter covers other cases like Eligius censoring &quot;spam&quot;, bitcoin version differences, etc.The model performs reasonably well on a 100 block sample in bitcoin-corpus. There is more work to do, and more investigation to be done, but Rusty doesn't expect more than a 25% reduction in this &quot;ideal minimum&quot; result. Kalle Rosenbaum previously investigated IBLTs with Rusty last year.Rusty Russell's implementation of IBLTs does not use a keyHashSum, but instead concatenates (txid48, fragid, tx-chunk) as the value. The txid48+fragid functions as a kind of keyHashSum. Kalle Rosenbaum thinks this idea is very good.Rosenbaum asked if Rusty implemented his idea to remove all the count==1 fragments in ascending order of (fragid-base_fragid). Rusty replied that he keeps records of all the 1 and -1 buckets; separate lists depending on how far they are off the base. Lists for 0, 1, 2, ... 7, then powers of 2. They also discussed making more comparable tests as proposed last year by Rosenbaum.Rusty's design relies on similarity in mempools, with some selection hints. It is designed to be re-encoded between nodes as nodes will have similar mempools. Actual results will have to be worse than these minima, as peers will have to oversize the IBLT to have a reasonable chance of success.Rosenbaum suggested that exceptional tx *could* instead be encoded in the IBLT, just as if they were unknown differences. Rusty said that it's pretty easy to cut the bitmaps to zero and test this, whereas the overhead of IBLT is some factor greater than txsize. The purpose of reencoding when relaying is to improve the failure probability as new tx may have arrived in the mempool of the intermediary node.Rusty Russell thanks Kalle Rosenbaum for helping investigate IBLTs last year and adds that he works for Blockstream, while supposed to be working on Lightning.</summary>
