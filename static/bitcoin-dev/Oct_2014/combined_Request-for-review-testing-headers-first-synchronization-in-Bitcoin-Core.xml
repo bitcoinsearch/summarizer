@@ -2,38 +2,8 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Request for review/testing: headers-first synchronization in Bitcoin Core</title>
-  <updated>2025-11-11T14:57:59.129951+00:00</updated>
+  <updated>2025-11-13T03:00:59.392122+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
-  <author>
-    <name>Pieter Wuille 2014-10-11T23:34:15.000Z</name>
-  </author>
-  <author>
-    <name>Aaron Voisine 2014-10-12T05:51:41.000Z</name>
-  </author>
-  <author>
-    <name>Greg Maxwell 2014-10-12T07:14:32.000Z</name>
-  </author>
-  <author>
-    <name>Geir Harald Hansen 2014-10-12T08:41:29.000Z</name>
-  </author>
-  <author>
-    <name>Luke Dashjr 2014-10-12T09:44:21.000Z</name>
-  </author>
-  <author>
-    <name>Wladimir J. van der Laan 2014-10-12T09:52:31.000Z</name>
-  </author>
-  <author>
-    <name>Geir Harald Hansen 2014-10-12T10:06:25.000Z</name>
-  </author>
-  <author>
-    <name>Jameson Lopp 2014-10-12T19:13:06.000Z</name>
-  </author>
-  <author>
-    <name>21E14 2014-10-13T22:43:35.000Z</name>
-  </author>
-  <author>
-    <name>Rebroad (sourceforge) 2014-10-16T05:05:58.000Z</name>
-  </author>
   <link href="bitcoin-dev/Oct_2014/006760_Request-for-review-testing-headers-first-synchronization-in-Bitcoin-Core.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2014/006735_Request-for-review-testing-headers-first-synchronization-in-Bitcoin-Core.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2014/006731_Request-for-review-testing-headers-first-synchronization-in-Bitcoin-Core.xml" rel="alternate"/>
@@ -77,10 +47,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006724.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006724.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006724.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006724.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Request for review/testing: headers-first synchronization in Bitcoin Core</title>
-    <updated>2025-11-11T14:57:59.130071+00:00</updated>
+    <updated>2025-11-13T03:00:59.392247+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006724.html" rel="alternate"/>
     <published>2014-10-16T05:05:58+00:00</published>
     <summary>A developer named Edmund has made improvements to Pieter Wuille's headers-first synchronization pull request for Bitcoin Core. The code updates are available on Github at https://github.com/rebroad/bitcoin/ and the branch is &quot;sipa-headersfirst8-patches&quot;. Edmund has improved the code by tracking the block as it downloads and avoiding node stalling due to many blocks being added to the ActiveTip. Additionally, he has added code ready to adapt the window size for download and make it prefer downloading from faster nodes.Pieter Wuille's headers-first synchronization changes the way the best chain is discovered, downloaded, and verified. It allows for parallel block downloading, no more stalled downloads, much more robustness against unresponsive or slow peers, removes a class of DoS attacks related to peers feeding low-difficulty valid large blocks on a side branch, reduces the need for checkpoints in the code, no orphan blocks stored in memory anymore, and is a major step towards an SPV mode using the reference codebase.The code is available as a GitHub pull request (https://github.com/bitcoin/bitcoin/pull/4468) or packaged on http://bitcoin.sipa.be/builds/headersfirst, where binaries can be found to test with. There are known issues such as very slow downloading at the beginning of sync, blocks will be stored on disk out of order, and the block index database will now hold headers for which no block is stored on disk. However, if fully synced, it may still be possible to go back to an earlier version.In an email exchange between Wladimir and Geir Harald Hansen on October 12, 2014, Pieter Wuille had announced that orphan blocks would no longer be stored in memory, reducing memory usage during sync. When Geir asked if this change would slow down reorgs after a fork, Wladimir responded by explaining that orphan blocks are blocks whose parent is not known and in the case of a reorganization, the client jumps to a new best chain, for which the original tip and the new best tip and all their parents must already be known. Geir then apologized for his confusion earlier regarding shorter sides of forks being orphaned.Pieter Wuille has developed a change in Bitcoin Core which he refers to as headers-first synchronization. This new method of syncing the blockchain brings with it several advantages that include much faster sync on typical network connections, no more stalled downloads, and being much more robust against unresponsive or slow peers. Further to this, headers-first removes a class of DoS attacks that have been related to peers feeding low-difficulty valid large blocks on a side branch. According to Pieter, headers-first is a major step towards an SPV mode using the reference codebase. The headers-first synchronization works by replacing the single-peer blocks download by a single-peer headers download (which typically takes seconds/minutes) and verification, and simultaneously fetching blocks along the best known headers chain from all peers that are known to have the relevant blocks. Downloading is constrained to a moving window to avoid unbounded unordering of blocks on disk (which would interfere with pruning later). At the protocol level, headers-first increases the minimally supported version for peers to 31800 (corresponding to bitcoin v3.18, released in December 2010), as earlier versions did not support the getheaders P2P message. The code is available as a Github pull request, or packaged on http://bitcoin.sipa.be/builds/headersfirst where users can also find binaries to test with.There are some known and unknown issues. In an email exchange between Aaron Voisine of breadwallet.com and Pieter Wuille, a large change that Wuille has been working on for Bitcoin Core, headers-first synchronization, was discussed. This mode of operation changes the way the best chain is discovered, downloaded, and verified, and has several advantages including parallel block downloading, no more stalled downloads, more robustness against unresponsive or slow peers, and reduces the need for checkpoints in the code. Additionally, it removes a class of DoS attacks related to peers feeding low-difficulty valid large blocks on a side branch, reduces memory usage during sync, and is a major step towards an SPV mode using the reference codebase. Wuille explained that technically, headers-first synchronization works by replacing the single-peer blocks download by a single-peer headers download and verification, while simultaneously fetching blocks along the best-known headers chain from all peers that have the relevant blocks. The code is available as a github pull request, or packaged on http://bitcoin.sipa.be/builds/headersfirst, where binaries can be tested with. Known issues include slow downloading at the start of the sync (especially before all headers are processed), blocks being stored on disk out of order (making it incompatible with some tools or other programs), and the block index database holding headers for which no block is stored</summary>
