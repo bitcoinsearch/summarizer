@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP352: PSBT support</title>
+  <updated>2025-11-14T02:45:33.859295+00:00</updated>
+  <author>
+    <name>nymius 2025-11-13 20:42:06.815000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP352: PSBT support</title>
+    <updated>2025-11-14T02:45:33.859335+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip352-psbt-support/877/31" rel="alternate"/>
+    <summary>The discussion revolves around the integration of silent payment spending within the PSBT (Partially Signed Bitcoin Transaction) framework, specifically addressing gaps in the current specifications. Silent payments, unlike traditional transactions, require different handling to achieve privacy and security. The conversation touches on several Bitcoin Improvement Proposals (BIPs), including 370 (PSBTv2), 371 (Taproot PSBT fields), 340 (Schnorr signatures), and 373 (MuSig2 PSBT Fields), highlighting the need for a robust solution to include silent payment outputs in PSBT transactions.
+
+The primary concern is identifying an appropriate method to sign silent payment transactions without breaking interoperability among various applications that utilize the PSBT protocol. The proposed approach involves potentially introducing a new PSBT field since relying on existing `PSBT_IN_PROPRIETARY` types poses challenges due to its brittle nature and the need for precise synchronization amongst different implementations. This is seen as a significant limitation of the current BIP 352 specification, which does not adequately address the requirements for silent payment transactions.
+
+Furthermore, the exploration includes technical nuances such as the possibility of utilizing the `PSBT_IN_TAP_MERKLE_ROOT` field. This option was considered because of its conceptual similarity to the mechanics needed for silent payment tweaking. However, this avenue also faces obstacles due to the specific tagged hash (`TapTweak`) utilized in taproot tweaking, which is incompatible with the current hashing requirements for silent payments. Adjusting the hash tag used could theoretically allow for interoperability without compromising the security or verification processes inherent to taproot trees and silent payments. Yet, this would necessitate changes to BIP 352, posing feasibility concerns under the current specifications.
+
+An intriguing aspect of the discussion is the question of why the `PSBT_IN_TAP_MERKLE_ROOT` wasn't initially designed to directly incorporate the taproot tweak (`hash("TapTweak" merkle_root&gt;)`). Such a design would have significantly simplified the inclusion of silent payment tweaks within the PSBT framework. Moreover, it's suggested that if raw tweaks were not exclusively tied to silent payment protocols, a broader range of applications could benefit without necessitating an intermediate tagged hash step. 
+
+Lastly, a practical solution for including spend public keys within the PSBT is debated. By modifying the spend public keys to fit within the `PSBT_IN_TAP_INTERNAL_KEY` field through minor adjustments, such as dropping the first byte, it might be possible to avoid adding new fields or encoding additional data. This approach, however, requires careful consideration to ensure compatibility and integrity during the signing process. The dialogue underscores the complexity and need for further refinement in the development of PSBT standards to accommodate silent payments, suggesting that collaboration and innovation are crucial to evolving these specifications.</summary>
+    <published>2025-11-13T20:42:06.815000+00:00</published>
+  </entry>
+</feed>
