@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - MergeSync: Parallel UTXO-set construction in assumevalid trust model</title>
+  <updated>2025-11-18T02:45:51.032349+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>ffwd  .</author>
+      <timestamp>2025-11-09 18:16:24.744000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>murch</author>
+      <timestamp>2025-11-17 19:14:27.009000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Nov_2025/6206_MergeSync-Parallel-UTXO-set-construction-in-assumevalid-trust-model.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2025/6261_MergeSync-Parallel-UTXO-set-construction-in-assumevalid-trust-model.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - MergeSync: Parallel UTXO-set construction in assumevalid trust model</title>
+    <updated>2025-11-18T02:45:51.032889+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/mergesync-parallel-utxo-set-construction-in-assumevalid-trust-model/2097/2" rel="alternate"/>
+    <published>2025-11-09 18:16:24.744000+00:00</published>
+    <summary>The Bitcoin blockchain's expansion, now exceeding 16 years with over 1.2 billion transactions and nearly 700GiB of data, presents a significant challenge for setting up new nodes due to the sheer volume of information that needs to be processed. This complexity is compounded by the fact that there are more than 3 billion Unspent Transaction Outputs (UTXOs), with the vast majority being either spent or unspendable. The primary task during the initial block download (IBD) phase involves identifying valid UTXOs to allow for efficient transaction verification in newly added blocks. The process, primarily limited by I/O capabilities rather than CPU speed, becomes time-consuming due to the sequential downloading and validating of each block.
+In addressing these scalability and efficiency issues, researchers have explored various strategies. Among them, a new method inspired by but distinct from Ruben Somsen's SwiftSync approach has been proposed. This novel strategy employs a map/reduce technique coupled with parallel data processing to expedite the UTXO-set construction, thereby significantly reducing the synchronization time required for a node to integrate with the network, given certain trust assumptions. The algorithm involves sharding the blockchain data across multiple cores, with each core responsible for processing an equal portion of the data to extract OutPoints from transactions, excluding those that are provably unspendable and coinbase inputs. Following this, the OutPoints are sorted, duplicates are eliminated through a single-pass process, and a recursive merging of CSV files takes place until a singular file remains. This file represents the UTXO set's cardinality at a specific block height, a process referred to as MergeSync. By leveraging parallel processing capabilities and simplifying set operations, MergeSync offers a promising solution to reduce node synchronization times. However, it's important to highlight that this method bypasses signature processing or verification, which could pose security risks unless validated by a trustless node. Consequently, there are concerns regarding potential security vulnerabilities, underscoring the need for further research to both quantify performance improvements across different hardware setups and establish formal security assurances.
+A critique of the proposal questions the expected reduction in I/O compared to the current approach used by Bitcoin Core, especially considering the need to write out all UTXO data and additionally all inputs’ OutPoints. The comparison with SwiftSync, which compresses the checking of all spent UTXOs into a single accumulator that can also be parallelized, suggests that the new proposal might represent a step back. Clarification on the novel contributions of this approach, beyond what has been highlighted, appears necessary to understand its benefits fully.</summary>
+  </entry>
+</feed>
