@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Gossip Observer: New project to monitor the Lightning P2P network</title>
-  <updated>2025-11-18T02:46:18.796047+00:00</updated>
+  <updated>2025-11-20T02:48:31.933983+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -14,21 +14,32 @@
       <timestamp>2025-11-14 21:48:21.505000+00:00</timestamp>
     </message>
     <message id="msg_3" depth="0" position="2">
-      <author>gmaxwell</author>
+      <author>gmaxwell  .</author>
       <timestamp>2025-11-17 21:51:45.899000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>jonhbit</author>
+      <timestamp>2025-11-19 22:36:32.299000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>gmaxwell</author>
+      <timestamp>2025-11-19 23:43:49.164000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/Nov_2025/6246_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6247_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6264_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2025/6293_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2025/6294_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Gossip Observer: New project to monitor the Lightning P2P network</title>
-    <updated>2025-11-18T02:46:18.796626+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/gossip-observer-new-project-to-monitor-the-lightning-p2p-network/2105/3" rel="alternate"/>
+    <updated>2025-11-20T02:48:31.934986+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/gossip-observer-new-project-to-monitor-the-lightning-p2p-network/2105/5" rel="alternate"/>
     <published>2025-11-14 20:48:38.161000+00:00</published>
-    <summary>The project focused on the Lightning gossip network has provided significant insights since its inception, revealing key observations about message propagation dynamics. The initiative has effectively monitored the network by collecting gossip messages from a broad range of nodes, with crucial resources and findings available [here](https://www.example.com). One primary observation is the notable decrease in convergence delay for messages to spread across the network, improving from around 500 seconds to 200 seconds for 75% propagation. This improvement likely stems from Lightning Network (LN) implementations favoring more peer-to-peer connections by default. Additionally, it was found that a considerable portion of messages were received from less than a quarter of the observing node's peers, hinting at potential inefficiencies or selective filtering policies within LN implementations. Regarding message types, channel_update messages made up 60% of total message volume, with 20% of channels exceeding 144 messages. This data is crucial for evaluating proposed rate limits for Taproot gossip or gossip version 1.5. Furthermore, node_announcement messages, constituting 30% of all messages, had 2.5% of nodes announced over 144 times, indicating possible issues with specific implementations or automated tools. The overall size of unique messages collected surpassed expectations, emphasizing potential underestimations of node bandwidth usage due to receiving identical messages across multiple peers. Efforts are underway to expand the project by setting up permanent infrastructure to receive gossip from various geographic locations and P2P graph segments, enhancing the study of gossip message spread.
-The discussion also explores the transition of the LN's peer-to-peer (P2P) network towards a more efficient design, inspired by the Erlay paper and Bitcoin Improvement Proposal (BIP), potentially reducing latency and propagation delay. Given that gossip messages are publicly signed, eliminating the need for sender anonymity, this transition focuses on adopting Minisketch for LN gossip. This requires a mapping mechanism resistant to collisions while keeping data elements short. The Erlay-inspired approach suggests using unique salts combined with transaction identifiers (TXIDs) to create distinct Minisketch set elements via a fast hash function like SipHash. An alternative involving the channel's short ID and block height was considered less favorable due to low entropy issues. The proposed gossip 1.5 format could include optional fields in messages, allowing nodes to customize the information sent based on supported features, aiming to eliminate message flooding in favor of set reconciliation methods. This evolution seeks to simplify implementation and reduce bandwidth consumption but faces challenges such as disparate node filtering policies, which could lead to inefficiencies and failed reconciliations. Engaging with LN implementers on the feasibility of these changes is vital, as feedback will guide the development of a concrete proposal or draft BIP, marking a significant step towards improving LN's efficiency and scalability.
-In contrast to the Erlay design, there's an argument that LN might not require any message flooding, as combining limited flooding with set reconciliation can help reduce total propagation delay. However, Minisketch entails superlinear decoding costs, making frequent reconciliations potentially costly due to communication overheads. The use of iblt instead of Minisketch, possibly supplemented with a small Minisketch to resolve stuck IBLT decodes, is suggested as an alternative, despite higher overheads, if traffic runs entirely through it. This approach would leverage the strengths of both methods, balancing out the limitations inherent in each.</summary>
+    <summary>The project aimed at monitoring the Lightning gossip network has provided several insights into the dynamics of message propagation. Since its start at PlebFi Miami, efforts have involved collecting gossip messages from various nodes, with findings and resources available [here](https://www.example.com). Observations indicate a decrease in convergence delay, suggesting improvements in network efficiency, partly due to Lightning Network (LN) implementations increasing peer connections. A considerable portion of messages were received from a limited number of peers, indicating potential connectivity or filtering inefficiencies. The analysis of message types revealed significant data on channel updates and node announcements, underscoring challenges and considerations for proposed rate limits and the impact on network bandwidth usage. Plans are underway to enhance the project's infrastructure to capture more diverse gossip data, encouraging community engagement for further analysis and implementation suggestions.
+Discussions around transitioning the LN P2P network towards a more efficient design have been inspired by the Erlay paper and Bitcoin Improvement Proposal (BIP). The proposed move away from a message flooding protocol could reduce latency and propagation delay, crucial for LN gossip. Emphasis is placed on adapting Minisketch for LN gossip, utilizing unique salts and transaction identifiers for collision-resistant mapping. This approach aims to simplify gossip propagation through set reconciliation methods, potentially reducing bandwidth consumption. However, challenges such as disparate node filtering policies need addressing. Feedback from LN implementers will be vital in refining these proposals.
+Critique of the current message flooding technique used in LN implementations highlights potential benefits of combining limited flooding with set reconciliation, following Erlay's design. Nonetheless, concerns regarding Minisketch's superlinear decoding costs and its impact on CPU usage have been raised. Alternatives such as IBLT (Invertible Bloom Lookup Tables) and frequent reconciliations are considered to mitigate these issues. Recent research suggests that IBLT-based protocols may offer a promising solution, particularly in scenarios requiring efficient small set exchanges. This exploration underscores the importance of selecting appropriate technologies based on LN's operational needs, balancing effectiveness against overheads in data propagation.
+The efficacy of IBLT and related schemes for set reconciliation in the LN context has been further explored, revealing advantages in terms of bandwidth overhead and encoding costs. Notably, the Rateless IBLT (RIBLT) protocol demonstrates potential for efficient sync without needing to estimate set differences, offering an appealing mix of low bandwidth overhead and linear encoding cost growth. However, careful consideration of element sizes and the trade-off between bandwidth overhead and CPU savings is necessary. Moreover, the practicality of integrating these technologies into LN implementations warrants further investigation, highlighting the ongoing need for research and development in this area.</summary>
   </entry>
 </feed>
