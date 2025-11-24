@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2025-11-22T02:28:05.494514+00:00</updated>
+  <updated>2025-11-24T02:55:37.300220+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -190,8 +190,12 @@
       <timestamp>2025-11-19 08:14:42.353000+00:00</timestamp>
     </message>
     <message id="msg_47" depth="0" position="46">
-      <author>polespinasa</author>
+      <author>polespinasa  .</author>
       <timestamp>2025-11-21 21:50:29.998000+00:00</timestamp>
+    </message>
+    <message id="msg_48" depth="0" position="47">
+      <author>instagibbs</author>
+      <timestamp>2025-11-23 19:37:44.173000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/Aug_2024/2911_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -241,17 +245,15 @@
   <link href="delvingbitcoin/Nov_2025/6287_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6288_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6309_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2025/6315_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2025-11-22T02:28:05.498570+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/48" rel="alternate"/>
+    <updated>2025-11-24T02:55:37.305146+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/49" rel="alternate"/>
     <published>2024-08-02 12:08:52.409000+00:00</published>
-    <summary>The analysis of transaction rejections and requests for block reconstruction over approximately six weeks, from block 918234 to block 924597, reveals significant insights into mempool dynamics and the efficacy of recent policy adjustments within a Bitcoin network node. The logging focused on transactions that were initially rejected by the mempool but later requested during the block reconstruction phase, highlighting the reasons for rejection which include 'bad-txns-inputs-missingorspent', 'insufficient fee', among others.
-A notable aspect of this study is the application of a modified version of the Bitcoin Core software, which logs all requested transactions for block reconstruction irrespective of the number missing, diverging from the default behavior of logging only when fewer than five transactions are missing. This adjustment provides a comprehensive view of the transactions impacted during block reconstruction, offering a granular perspective on the challenges faced.
-The node in question operated on a fork of the master branch, incorporating changes up to commit &quot;084fd68fda2c604a873f0f54c0c3723850509019&quot;, where a new minimum fee rate policy was implemented. This update is critical as it directly influences the mempool's acceptance criteria, impacting both the immediate transaction throughput and subsequent block reconstruction processes.
-The results of the logging revealed that the most common reason for transaction rejection was 'bad-txns-inputs-missingorspent', accounting for 1376 instances. This indicates transactions were attempting to spend inputs that were either already spent or not present in the mempool, suggesting potential issues with transaction propagation or timing discrepancies between nodes. Following this, 'insufficient fee' led to 1130 rejections, underscoring the importance of fee rate policies in determining a transaction's eligibility for inclusion in the mempool and, by extension, its readiness for block reconstruction without additional requests.
-Other reasons for rejection included 'txn-same-nonwitness-data-in-mempool', 'non-BIP68-final', 'min relay fee not met', among others, each contributing to a smaller fraction of the total. These rejections highlight various facets of transaction validation rules and mempool policy enforcement, reflecting the complex interplay of factors governing transaction propagation and acceptance within the network.
-This detailed logging and analysis offer valuable insights into the operational dynamics of the Bitcoin network's mempool, particularly in the context of recent policy changes. Understanding the reasons behind transaction rejections and the subsequent impact on block reconstruction is pivotal for ongoing efforts to optimize network performance and reliability. The findings underscore the need for continuous monitoring and adaptation of network policies to balance efficiency, security, and user experience in the evolving landscape of blockchain technology.</summary>
+    <summary>The identification of 1376 instances where transactions were rejected due to 'bad-txns-inputs-missingorspent' indicates a significant number of transactions encountering issues with their inputs, either because they were not present in the mempool or had already been spent. This scenario suggests these transactions could be orphans, which are transactions that reference inputs not yet recognized by the node's blockchain or mempool, essentially making them incomplete for processing and validation at the time of receipt.
+The question regarding the subsequent handling of these transactions within the orphanage is crucial for understanding the broader implications of such rejections. The orphanage is a temporary holding area for orphan transactions until their missing parents (inputs) are received, allowing them to be fully validated and potentially included in future blocks. Investigating what happens later in the orphanage involves tracking these transactions to see if and when their missing inputs arrive, enabling their eventual acceptance into the mempool and inclusion in a block, or if they remain unfulfilled and are eventually dropped due to timeout or replacement.
+This process underscores the dynamic nature of transaction validation and the challenges nodes face in managing dependencies among unconfirmed transactions. It also highlights the importance of efficient orphan management policies in maintaining the health and throughput of the network, ensuring that temporary setbacks in validation do not permanently hinder transaction finality. Further examination of the outcomes for transactions in the orphanage would provide valuable insights into the effectiveness of the node's strategies for dealing with orphaned transactions and improving overall network performance.</summary>
   </entry>
 </feed>
