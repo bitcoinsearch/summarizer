@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Consensus bug on NBitcoin: out-of-bound issue in `Remove()`</title>
+  <updated>2025-11-25T02:48:19.616314+00:00</updated>
+  <author>
+    <name>bruno 2025-11-24 19:03:42.502000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Consensus bug on NBitcoin: out-of-bound issue in `Remove()`</title>
+    <updated>2025-11-25T02:48:19.616348+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/consensus-bug-on-nbitcoin-out-of-bound-issue-in-remove/2120" rel="alternate"/>
+    <summary>The integration of `NBitcoin` into the `script_eval` target of bitcoinfuzz, which is designed for differential fuzzing of Bitcoin script evaluation logic, revealed a significant discrepancy when compared to the behavior of existing projects like Bitcoin Core and btcd. This discrepancy surfaced during a fuzzing campaign that utilized a good corpus, leading to the discovery of a crash caused by a specific script involving multiple `OP_NIP` operations. Upon closer inspection, it was found that while Bitcoin Core correctly evaluated the script as valid, NBitcoin did not, indicating a consensus discrepancy due to a bug in NBitcoin's handling of the `OP_NIP` operation.
+
+Further analysis pinpointed the issue to NBitcoin's implementation of `OP_NIP`, which erroneously threw an `IndexOutOfRangeException` upon executing the third `OP_NIP` command in the script. This exception was triggered because of an incorrect operation on the stack, which should remove the second item from the top but instead led to an out-of-range error due to mishandling of the stack's indices.
+
+The discovery of this bug underscores the value of differential fuzzing in identifying discrepancies and potential errors in cryptocurrency software implementations. The quick reporting and confirmation of the issue by Bruno Garcia to Nicolas Dorier, followed by an expedited resolution and release of NBitcoin 9.0.3, highlight the responsiveness and collaborative nature of open-source development communities. Notably, the absence of any node implementations using NBitcoin mitigates the risk of a chain split, allowing for transparency in publicizing the issue. The entire episode, documented with a timeline and culminating in the fix being merged through [pull request 1288](https://github.com/MetacoSA/NBitcoin/pull/1288), serves as an informative case study in effective problem-solving within digital currency ecosystems.</summary>
+    <published>2025-11-24T19:03:42.502000+00:00</published>
+  </entry>
+</feed>
