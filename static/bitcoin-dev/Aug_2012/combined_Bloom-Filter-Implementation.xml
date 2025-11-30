@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Bloom Filter Implementation</title>
-  <updated>2025-11-29T02:58:24.023366+00:00</updated>
+  <updated>2025-11-30T03:08:19.755403+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Aug_2012/001791_Bloom-Filter-Implementation.xml" rel="alternate"/>
   <link href="bitcoin-dev/Aug_2012/001790_Bloom-Filter-Implementation.xml" rel="alternate"/>
@@ -56,10 +56,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-August/001790.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-August/001790.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-August/001790.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-August/001790.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Bloom Filter Implementation</title>
-    <updated>2025-11-29T02:58:24.023495+00:00</updated>
+    <updated>2025-11-30T03:08:19.755534+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2012-August/001790.html" rel="alternate"/>
     <published>2012-08-15T10:07:14+00:00</published>
     <summary>The writer of the message expresses gratitude and provides feedback on the suggestion to update the filter after every block download. They argue that this would negatively affect performance gains by causing a round-trip. Instead, they propose a solution to do bulk getblocks on hundreds/thousands of blocks at a time, allowing data to stream in.To save bandwidth and network round-trips, the writer suggests using a class called CLiteMerkleTx and a class called CMerkleBlock. These classes include variables such as nVersion, hashPrevBlock, hashMerkleRoot, nTime, nBits, nNonce, and vMatchedTxns, and provide transactions immediately in the block.The author mentions implementing a new bloom filter and block relay type in response to the &quot;New P2P commands for diagnostics, SPV clients&quot; thread. This implementation enables faster relay for clients with transactions in the memory pool. SPV clients can request that all future MSG_TX inv messages and blocks are filtered by sending a filterload message with a serialized bloom filter.Nodes can add particular data blocks to the filter using filteradd messages (not recommended for anonymity) and disable filtering on a node's connection until re-enabled by calling filterclear. The filter matches transactions with script data elements in either a scriptPubKey or scriptSig, spends an input whose COutPoint is in the filter, has a hash in the filter, or has a script data element in a prevout's scriptPubKey. Matching of prevouts only occurs on free txes, not those in blocks.The writer advises SPV clients to update the remote node's filter before requesting a block, if necessary, to ensure it includes the hash of any transaction that would not otherwise match the filter. This allows the node to know when its transactions are included in blocks.While the author is not keen on requiring SPV nodes to constantly update the filter when they learn about new transactions, they believe it is not worth loading all prevouts when a node is in IBD to fix the issue.For those interested, the branch of this implementation can be found at https://github.com/TheBlueMatt/bitcoin/compare/master...bloom.</summary>
