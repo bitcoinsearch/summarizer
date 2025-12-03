@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2025-11-24T02:55:37.300220+00:00</updated>
+  <updated>2025-12-03T02:50:02.734827+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -194,8 +194,16 @@
       <timestamp>2025-11-21 21:50:29.998000+00:00</timestamp>
     </message>
     <message id="msg_48" depth="0" position="47">
-      <author>instagibbs</author>
+      <author>instagibbs  .</author>
       <timestamp>2025-11-23 19:37:44.173000+00:00</timestamp>
+    </message>
+    <message id="msg_49" depth="0" position="48">
+      <author>polespinasa</author>
+      <timestamp>2025-12-02 06:33:59.651000+00:00</timestamp>
+    </message>
+    <message id="msg_50" depth="0" position="49">
+      <author>ajtowns</author>
+      <timestamp>2025-12-02 11:51:51.421000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/Aug_2024/2911_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -246,14 +254,16 @@
   <link href="delvingbitcoin/Nov_2025/6288_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6309_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6315_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2025/6361_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2025/6362_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2025-11-24T02:55:37.305146+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/49" rel="alternate"/>
+    <updated>2025-12-03T02:50:02.739734+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/51" rel="alternate"/>
     <published>2024-08-02 12:08:52.409000+00:00</published>
-    <summary>The identification of 1376 instances where transactions were rejected due to 'bad-txns-inputs-missingorspent' indicates a significant number of transactions encountering issues with their inputs, either because they were not present in the mempool or had already been spent. This scenario suggests these transactions could be orphans, which are transactions that reference inputs not yet recognized by the node's blockchain or mempool, essentially making them incomplete for processing and validation at the time of receipt.
-The question regarding the subsequent handling of these transactions within the orphanage is crucial for understanding the broader implications of such rejections. The orphanage is a temporary holding area for orphan transactions until their missing parents (inputs) are received, allowing them to be fully validated and potentially included in future blocks. Investigating what happens later in the orphanage involves tracking these transactions to see if and when their missing inputs arrive, enabling their eventual acceptance into the mempool and inclusion in a block, or if they remain unfulfilled and are eventually dropped due to timeout or replacement.
-This process underscores the dynamic nature of transaction validation and the challenges nodes face in managing dependencies among unconfirmed transactions. It also highlights the importance of efficient orphan management policies in maintaining the health and throughput of the network, ensuring that temporary setbacks in validation do not permanently hinder transaction finality. Further examination of the outcomes for transactions in the orphanage would provide valuable insights into the effectiveness of the node's strategies for dealing with orphaned transactions and improving overall network performance.</summary>
+    <summary>The examination of transactions rejected by the mempool, particularly those classified as `bad-txns-inputs-missingorspent`, highlights a significant number of transactions that are either missing or have already been spent. This classification suggests these transactions might be orphan transactions, which are transactions that reference inputs not yet seen in the blockchain. The investigative focus on what happens to these orphan transactions subsequently uncovers that many remain in the orphanage until the block reconstruction occurs but are not utilized during this process. This discovery points towards a potential inefficiency in how orphan transactions are managed, especially considering that the system ends up re-requesting transactions it already possesses.
+Further analysis into the interaction between the orphanage and the extrapool reveals an opportunity for optimization. Orphan transactions, by their nature, require specific handling due to their dependency on transactions not yet confirmed in the blockchain. The suggestion to potentially exclude orphan transactions from the extrapool and instead iterate through the orphanage during block reconstruction could streamline the process. This approach may mitigate unnecessary bandwidth usage by avoiding additional requests for transactions already held within the node's memory. However, the benefits in terms of time saved may be marginal unless there is an underlying issue with the orphanage management system itself. For example, if the orphanage incorrectly identifies transactions as lacking parents when they are, in fact, available within the extra transactions pool for block reconstruction but not for resolving orphans.
+This situation underscores a nuanced aspect of blockchain transaction management, where the efficiency of block reconstruction can be impacted by how orphan transactions are handled. It suggests a need for further investigation into the mechanisms governing the orphanage and the extrapool's interplay. Resolving these inefficiencies could result in more streamlined transaction processing, reducing unnecessary network load while maintaining effective block reconstruction processes.</summary>
   </entry>
 </feed>
