@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Gossip Observer: New project to monitor the Lightning P2P network</title>
+  <updated>2025-12-05T02:55:38.407008+00:00</updated>
+  <author>
+    <name>rustyrussell 2025-12-04 04:36:13.212000+00:00</name>
+  </author>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Gossip Observer: New project to monitor the Lightning P2P network</title>
+    <updated>2025-12-05T02:55:38.407035+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/gossip-observer-new-project-to-monitor-the-lightning-p2p-network/2105/14" rel="alternate"/>
+    <summary>The discussion revolves around optimizing the process of reconciling data differences between parties, such as in a distributed system where nodes need to synchronize their state by exchanging minimal information. The primary focus is on making this reconciliation process more efficient and reliable, especially when direct decoding of the exchanged information fails due to excessive differences or constraints like minimum transaction size.
+
+The proposed method involves an initial attempt to reconcile differences through a process called sketching, where a compressed representation of a set's differences is created and sent to another party. If the receiver cannot decode this sketch due to its limitations or an overload of differences, several strategies are suggested for handling such scenarios. One strategy suggests that if decoding fails, the sender should wait for a third of the predefined timer interval, then attempt to create a larger sketch based on an expanded local set for another try at reconciliation. If this second attempt also fails, the next step could involve requesting a sketch extension from the recipient for a third attempt. Should this fail as well, the sender has two options: either request all set elements from the recipient, which would be bandwidth-intensive but minimally taxing on the CPU, or give up on reconciliation for the current interval and retry with the normal protocol after two-thirds of the timer interval, hoping that reconciliation with other peers in the meantime reduces the difference with the initial recipient.
+
+An alternative approach discussed involves adjusting the frequency and strategy of sketch exchanges. For example, sending sketches every 60 seconds and reducing the set size before sending can be effective. Upon receiving a sketch, if it’s decodable, the recipient simply replies with the missing messages. If decoding fails, various conditions are considered such as differences in block height, the possibility of sending a larger set later, waiting for more failures if there are other peers to sync with, streaming gossip if the recipient has significantly less information, or querying the sender for their entire dataset in cases where something goes wrong and no direct channel of communication exists.
+
+These outlined strategies underscore the necessity for flexibility and adaptability in handling failures in data reconciliation processes. They point towards a preference for avoiding fallbacks that heavily rely on bandwidth or computational resources, suggesting instead a tiered approach to problem-solving that incrementally increases the effort and resources committed only as simpler methods fail. This discussion highlights the importance of simulation and parameter tweaking in finding the most effective reconciliation strategy, acknowledging that evidence from such activities is crucial for making informed decisions about which strategy to employ.</summary>
+    <published>2025-12-04T04:36:13.212000+00:00</published>
+  </entry>
+</feed>

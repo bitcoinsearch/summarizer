@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Great Consensus Cleanup Revival</title>
-  <updated>2025-11-29T02:43:55.343091+00:00</updated>
+  <updated>2025-12-05T02:51:29.342520+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -350,8 +350,12 @@
       <timestamp>2025-11-27 22:29:06.681000+00:00</timestamp>
     </message>
     <message id="msg_87" depth="0" position="86">
-      <author>ajtowns</author>
+      <author>ajtowns  .</author>
       <timestamp>2025-11-28 12:23:04.905000+00:00</timestamp>
+    </message>
+    <message id="msg_88" depth="0" position="87">
+      <author>sjors</author>
+      <timestamp>2025-12-04 14:33:42.335000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/March_2024/1996_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
@@ -441,16 +445,15 @@
   <link href="delvingbitcoin/April_2025/4847_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6354_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6355_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Dec_2025/6377_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Great Consensus Cleanup Revival</title>
-    <updated>2025-11-29T02:43:55.354803+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/88" rel="alternate"/>
+    <updated>2025-12-05T02:51:29.352403+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/89" rel="alternate"/>
     <published>2024-03-24 19:53:27.073000+00:00</published>
-    <summary>The discussion provides a nuanced approach to optimizing the nonce space within Bitcoin's coinbase transactions, particularly addressing the challenges faced by miners in adjusting the nonce to maintain the network's security and efficiency. By leveraging the OP_RETURN operation within the coinbase transaction, miners can effectively increase the nonce space, allowing for a more flexible and efficient mining process.
-This method involves appending a zero-value output with a specific structure to the coinbase transaction. The structure includes the OP_RETURN operation followed by a push operation that introduces a nonce composed of four bytes plus an optional extension to ensure alignment. The size of this extension is dynamically calculated based on the total size of the coinbase transaction (excluding the witness data), ensuring that the end of the OP_RETURN data aligns optimally for hashing purposes. The proposed range for additional coinbase data required to achieve this alignment varies from 14 to 30 bytes, offering a practical solution for miners to update the nonce without significantly increasing the transaction size.
-Furthermore, the technique presents an alternative to using the `nLockTime` field as a nonce, which itself can necessitate up to 12 bytes of padding for proper alignment. The advantage of utilizing the OP_RETURN method lies in its minimal overhead, especially when miners are already employing OP_RETURN outputs for extranonce work. The additional space required for alignment in this context is negligible, ranging from zero to four bytes.
-By expanding the nonce space through this mechanism—coupled with the existing 32-byte `nNonce`, 16-byte flexibility afforded by BIP 320, and the potential for rolling the `nTime` field—miners have access to a significantly enhanced nonce capacity. This capacity is quantified as supporting up to 1200 zettahash per second, or approximately 1000 times the current total hashrate of the Bitcoin network. This vast increase underscores the potential of the proposed method to accommodate future growth in hashing power while maintaining the integrity and functionality of the mining process.
-In essence, this approach not only offers a technical solution to the constraints on nonce space within Bitcoin's mining protocol but also reflects the ongoing innovation and adaptability within the community to address operational challenges. By providing detailed calculations and considerations, the discussion contributes valuable insights into the optimization of Bitcoin mining operations, highlighting the collaborative effort to enhance the cryptocurrency's underlying technology.</summary>
+    <summary>The discussion delves into the technicalities of Bitcoin mining, specifically focusing on strategies to optimize the efficiency and effectiveness of coinbase transactions. A notable method for enhancing this process involves appending a 0 satoshi output with a distinct structure that incorporates an `OP_RETURN` operation followed by a push instruction to add a nonce. This approach allows miners to adjust the nonce value with minimal impact on the transaction size, necessitating only the final SHA-256 hashing round for updates. Depending on the initial size of the coinbase transaction (excluding the witness data), the additional data required for alignment ranges from 14 to 30 bytes.
+Comparatively, alternative strategies like using the nlocktime of the coinbase transaction for nonce purposes also require padding for proper alignment, typically needing an additional 0 to 12 bytes of data. However, if miners are already utilizing an `OP_RETURN` output for extranonce activities, the extra overhead introduced by this alignment strategy is minimal, ranging from 0 to 4 bytes. When considering the addition of 32 bytes of extra nonce space alongside the standard 32-byte nonce and the 16 bytes afforded by BIP 320, combined with the ability to roll nTime at one-second intervals, the theoretical hash rate capability significantly increases. Specifically, it could reach approximately 1200 zettahash per second (or 1.2 trillion TH/s), representing a thousandfold increase over the current total hash rate. This dramatic enhancement underscores the potential impact of optimizing nonce handling and alignment within coinbase transactions on mining efficiency and output.
+Furthermore, the discussion acknowledges practical considerations related to block template configurations in Bitcoin Core, which by default reserves 8000 weight units for coinbase and header operations. While miners have the option to adjust this threshold via the `-blockreservedweight` parameter, real-world usage, such as by Ocean Pool and Datum users, illustrates varying practices concerning coinbase transaction sizes. Despite the potential for future concerns regarding maximizing block space utilization, the current landscape suggests that the addition of 15 to 31 extra bytes for nonce adjustment would predominantly consume existing safety margins without impacting revenue. This observation highlights the balance between technical optimization strategies and their practical application within the existing mining ecosystem, pointing to the ongoing evolution of practices as miners strive to enhance efficiency while navigating the constraints and opportunities presented by the Bitcoin protocol.</summary>
   </entry>
 </feed>
