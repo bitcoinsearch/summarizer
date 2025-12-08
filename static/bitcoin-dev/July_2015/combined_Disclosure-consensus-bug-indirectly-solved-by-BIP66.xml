@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Disclosure: consensus bug indirectly solved by BIP66</title>
-  <updated>2025-12-07T03:04:57.263298+00:00</updated>
+  <updated>2025-12-08T02:58:56.939073+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/July_2015/009719_Disclosure-consensus-bug-indirectly-solved-by-BIP66.xml" rel="alternate"/>
   <link href="bitcoin-dev/July_2015/009718_Disclosure-consensus-bug-indirectly-solved-by-BIP66.xml" rel="alternate"/>
@@ -66,10 +66,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-July/009697.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-July/009697.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-July/009697.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-July/009697.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Disclosure: consensus bug indirectly solved by BIP66</title>
-    <updated>2025-12-07T03:04:57.263478+00:00</updated>
+    <updated>2025-12-08T02:58:56.939201+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-July/009697.html" rel="alternate"/>
     <published>2015-07-29T13:48:16+00:00</published>
     <summary>The Bitcoin development community has been discussing the replacement of OpenSSL with alternative libraries, such as secp256k1, for various uses including RPC SSL and BIP 70. Pieter and Greg have extensively tested secp256k1 and believe it to be more reliable than *SSL libraries. The consensus is that openSSL and its derivatives are not focused on consensus consistency, which can potentially cause their own bug fixes to break Bitcoin. As a result, developers suggest using alternative libraries like LibreSSL or BoringSSL instead.This change in library paves the way for non-OpenSSL signature verification in the future. The community recognizes the importance of security and continues to work towards improving Bitcoin's codebase. A recent vulnerability in OpenSSL has been solved, allowing for the possibility of replacing OpenSSL with alternatives like LibreSSL or BoringSSL.Pieter Wuille, a Bitcoin developer, recently disclosed a vulnerability that he discovered in September 2014. This vulnerability could have led to forking of the blockchain between nodes. However, when BIP66's 95% threshold was reached earlier this month, the vulnerability became unexploitable. The vulnerability specifically affected systems using OpenSSL on a 32-bit system and on 64-bit Windows systems, as well as those that use some non-OpenSSL codebases for parsing signatures.Bitcoin's signature encoding rules are ASN.1 BER encoded, which allows for many different encodings for the same data. Since Bitcoin Core 0.8, a standardness rule has been in effect that only allowed a subset of encodings (DER) for relay and mining. However, any BER encoding remained valid in the blockchain. In practice, though, BER has many edge cases that no single cryptographic codebase, including OpenSSL, Crypto++, BouncyCastle, btcec, and libsecp256k1 library, can parse correctly.The vulnerability is related to the signature encoding rules. One of the features of BER is the ability for internal structures to have a length descriptor whose size itself can be up to 126 bytes. If a transaction with a valid signature using a 5-byte length descriptor were included in the blockchain, it would be accepted by some systems and not by others, potentially resulting in a fork if it were mined into a block.Bitcoin Core 0.10.0 was released with support for BIP66, which introduced a consensus rule for strict DER signatures in the blockchain. This resolved the vulnerability and opens the possibility of using non-OpenSSL signature verification in the near future.</summary>
