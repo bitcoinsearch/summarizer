@@ -41,6 +41,7 @@ def sanitize_author(author, max_length=60):
     - Author too long (likely contains title)
     - UTC | newest pattern
     - Timestamps in author
+    - Delvingbitcoin .NNNNNN+00:00 suffix
     """
     if not author:
         return "Unknown Author"
@@ -50,6 +51,9 @@ def sanitize_author(author, max_length=60):
     # Remove 'UTC | newest]' pattern
     if 'UTC' in author and '|' in author and 'newest' in author:
         return "Unknown Author"
+    
+    # Remove delvingbitcoin .NNNNNN+00:00 suffix
+    author = re.sub(r'\.\d{6}[+\-]\d{2}:\d{2}$', '', author)
     
     # Remove timestamps at the end in various formats:
     # - "2025-12-12 20:17:00+00:00"
