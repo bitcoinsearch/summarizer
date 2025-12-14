@@ -6,7 +6,7 @@
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
-      <author>UTC | newest]</author>
+      <author>Antoine Riard</author>
       <timestamp>2025-12-04 22:33:00+00:00</timestamp>
     </message>
     <message id="msg_2" depth="1" position="1" reply_to="Splitting more block, addr and tx classes of network traffic Antoine Riard" parent_id="mailing-list-2025-12-ma5eb03aabc91e5c9e747e763b49c7311266f6d68" anchor="m9d3c7ef7d7a9d962e2149238f7570a455225ef68">
@@ -14,17 +14,17 @@
       <timestamp>2025-12-09 23:13:00+00:00</timestamp>
     </message>
   </thread>
-  <link href="bitcoin-dev/Dec_2025/ma5eb03aabc91e5c9e747e763b49c7311266f6d68_Splitting-more-block-addr-and-tx-classes-of-network-traffic.xml" rel="alternate"/>
-  <link href="bitcoin-dev/Dec_2025/m9d3c7ef7d7a9d962e2149238f7570a455225ef68_Splitting-more-block-addr-and-tx-classes-of-network-traffic.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Dec_2025/ma5eb03aabc91e5c9e747e763b49c7311266f6d68_Splitting-more-block-addr-and-tx-classes-of-network-traffic.xml" rel="alternate" />
+  <link href="bitcoin-dev/Dec_2025/m9d3c7ef7d7a9d962e2149238f7570a455225ef68_Splitting-more-block-addr-and-tx-classes-of-network-traffic.xml" rel="alternate" />
   <entry>
     <id>2</id>
     <title>Combined summary - Splitting more block, addr and tx classes of network traffic</title>
     <updated>2025-12-11T03:04:53.119021+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/CALZpt+Hx9vFwNQd6qGSFMWXU=A6j82m6ZjJg3JaHK26WW0UQZw@mail.gmail.com/T/#m9d3c7ef7d7a9d962e2149238f7570a455225ef68" rel="alternate"/>
+    <link href="https://gnusha.org/pi/bitcoindev/CALZpt+Hx9vFwNQd6qGSFMWXU=A6j82m6ZjJg3JaHK26WW0UQZw@mail.gmail.com/T/#m9d3c7ef7d7a9d962e2149238f7570a455225ef68" rel="alternate" />
     <published>2025-12-04 22:33:00+00:00</published>
     <summary>The evolution of the Bitcoin network's management of traffic and the potential for further improvements in how different types of network messages are segregated has been a topic of discussion among developers. Initially, Bitcoin Core connections did not distinguish between types of network traffic, such as block, transaction, and address messages, which were all relayed over a single network link. However, there has been progress in segregating these connections, with the introduction of outbound block-relay-only connections as a notable advancement. This segregation offers a clearer separation of traffic classes and provides nodes with increased flexibility in signaling their message handling preferences to peers, enhancing the network's overall security and efficiency.
 The discussion also highlights the importance of protecting economic nodes, particularly those participating in the Lightning Network, from escalation attacks that exploit network topology information. The proposal suggests further segregation by classifying messages and signaling specific capabilities using the ADDR/ADDRv2 service bits or within the VERSION message when establishing a connection. Although mechanisms exist to disable tx-relay via the VERSION message, no equivalent currently exists for block-relay, indicating a gap in the signaling framework. Some nodes have started to isolate traffic types into separate processes, indicating only essential services in the VERSION message to optimize resource use, though this could lead to inefficiencies across the network.
-A more innovative approach, such as the `archive_relayd` process for servicing &quot;cold&quot; blocks, demonstrates the potential for optimizing network traffic at the node level. Yet, this raises broader discussions about developing more efficient mechanisms for traffic segregation and signaling within the Bitcoin network. Such enhancements are vital for improving the scalability, security, and efficiency of Bitcoin's infrastructure. Further exploration of these topics is crucial, with ongoing discussions and proposals available for review in the Bitcoin GitHub repository, which can be accessed [here](https://github.com/bitcoin/bitcoin/blob/master/src/node/connection_types.h).
+A more innovative approach, such as the `archive_relayd` process for servicing "cold" blocks, demonstrates the potential for optimizing network traffic at the node level. Yet, this raises broader discussions about developing more efficient mechanisms for traffic segregation and signaling within the Bitcoin network. Such enhancements are vital for improving the scalability, security, and efficiency of Bitcoin's infrastructure. Further exploration of these topics is crucial, with ongoing discussions and proposals available for review in the Bitcoin GitHub repository, which can be accessed [here](https://github.com/bitcoin/bitcoin/blob/master/src/node/connection_types.h).
 Peer declaration and the potential for topology inference attacks through relay behavior pose significant challenges. Explicit signaling of specialized roles could increase the fingerprint or profile of nodes, making them more vulnerable to attacks. However, internal class-based models that allow nodes to randomize acceptance, forwarding, and scheduling behavior per class may mitigate some of these concerns by making it difficult for observers to infer specific peer responsibilities.
 Additionally, the discussion touches on system bottlenecks related to introducing multiple traffic classes as separate processes and sockets, which could increase resource consumption. An alternative approach might involve integrating class separation internally within a single process and socket, allowing incoming messages to be classified and managed according to per-class policies without increasing the signaling surface to peers. This method would maintain flexibility and efficiency while avoiding the complexities associated with multiple processes, VERSION messages, and physical sockets. Such an integrated approach could facilitate better bandwidth accounting and load shedding under congestion, prioritizing critical traffic while throttling less critical classes.</summary>
   </entry>
