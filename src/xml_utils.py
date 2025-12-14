@@ -35,6 +35,58 @@ def get_base_directory(url):
     return directory
 
 
+def sanitize_author(author, max_length=60):
+    """
+    Sanitize author name to prevent common bugs:
+    - Author too long (likely contains title)
+    - UTC | newest pattern
+    - Timestamps in author
+    """
+    if not author:
+        return "Unknown Author"
+    
+    author = str(author).strip()
+    
+    # Remove 'UTC | newest]' pattern
+    if 'UTC' in author and '|' in author and 'newest' in author:
+        return "Unknown Author"
+    
+    # Remove timestamps at the end in various formats:
+    # - "2025-12-12 20:17:00+00:00"
+    # - "2025-12-12T20:17:00.000Z"
+    # - "2025-12-12 20:17:00"
+    author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}[+\-]\d{2}:\d{2}$', '', author)
+    author = re.sub(r'\s+\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.*$', '', author)
+    author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$', '', author)
+    author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}$', '', author)
+    
+    # If author is too long, extract last words that aren't dates/timestamps
+    if len(author) > max_length:
+        words = author.split()
+        real_author_words = []
+        
+        for word in reversed(words):
+            # Skip if word looks like a date or timestamp component
+            if re.match(r'^\d{4}-\d{2}-\d{2}$', word):  # Date: 2025-12-11
+                continue
+            if re.match(r'^\d{1,2}:\d{2}(:\d{2})?$', word):  # Time: 12:30 or 12:30:00
+                continue
+            if re.match(r'^\d{4}$', word):  # Year: 2025
+                continue
+            if re.match(r'^[+\-]\d{2}:\d{2}$', word):  # Timezone: +00:00
+                continue
+            
+            real_author_words.insert(0, word)
+            # Most author names are 1-3 words
+            if len(real_author_words) >= 2:
+                break
+        
+        if real_author_words:
+            author = ' '.join(real_author_words)
+    
+    return author.strip() if author.strip() else "Unknown Author"
+
+
 class XMLReader:
 
     def get_xml_summary(self, data, dev_name):
@@ -176,8 +228,17 @@ class GenerateXML:
         fe.summary(feed_data['summary'])
 
         # generate the feed XML
-        feed_xml = fg.atom_str(pretty=True)
-        with open(xml_file, 'wb') as f:
+        feed_xml = fg.atom_str(pretty=True).decode('utf-8')
+        
+        # Add <timestamp> tag after </author> for consistency
+        timestamp = str(feed_data['created_at'])
+        feed_xml = feed_xml.replace(
+            '</author>',
+            f'</author>\n  <timestamp>{timestamp}</timestamp>',
+            1  # Only first occurrence
+        )
+        
+        with open(xml_file, 'w', encoding='utf-8') as f:
             f.write(feed_xml)
 
     def generate_threaded_xml(self, feed_data, xml_file, thread_data=None):
@@ -329,6 +390,8 @@ class GenerateXML:
         author_result = re.sub(r"\d", "", author)
         author_result = author_result.replace(":", "")
         author_result = author_result.replace("-", "")
+        # Sanitize author to prevent title-in-author and timestamp bugs
+        author_result = sanitize_author(author_result)
         df_dict["authors"].append([author_result.strip()])
         
         # Extract the body/summary from the XML
@@ -571,7 +634,7 @@ class GenerateXML:
                     feed_data = {
                         'id': combine_flag,
                         'title': cols['title'],
-                        'authors': [f"{cols['authors'][0]} {cols['created_at']}"],
+                        'authors': [cols['authors'][0]],  # Author only, no timestamp
                         'url': cols['url'],
                         'links': [],
                         'created_at': cols['created_at_org'],
@@ -609,9 +672,9 @@ class GenerateXML:
                     xml_name = clean_title(title)
                     # Generate XML files (if not exist) for each post in the thread, collecting their paths into combined_links
                     combined_links = list(title_df.apply(generate_local_xml, args=("1", url), axis=1))
-                    # Generate a list of strings, each combining the first author's name with their post's creation date
+                    # Generate a list of author names only (no timestamps)
                     combined_authors = list(
-                        title_df.apply(lambda x: f"{x['authors'][0]} {x['created_at']}", axis=1))
+                        title_df.apply(lambda x: x['authors'][0], axis=1))
                     # Group emails by month and year based on their creation date to process them in time-based segments
                     month_year_group = \
                         title_df.groupby([title_df['created_at'].dt.month, title_df['created_at'].dt.year])
