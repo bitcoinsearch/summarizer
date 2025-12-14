@@ -41,6 +41,8 @@ def sanitize_author(author, max_length=60):
     - Author too long (likely contains title)
     - UTC | newest pattern
     - Timestamps in author
+    - Delvingbitcoin .NNNNNN+00:00 suffix
+    - Title embedded in author
     """
     if not author:
         return "Unknown Author"
@@ -51,6 +53,9 @@ def sanitize_author(author, max_length=60):
     if 'UTC' in author and '|' in author and 'newest' in author:
         return "Unknown Author"
     
+    # Remove delvingbitcoin .NNNNNN+00:00 suffix
+    author = re.sub(r'\.\d{6}[+\-]\d{2}:\d{2}$', '', author)
+    
     # Remove timestamps at the end in various formats:
     # - "2025-12-12 20:17:00+00:00"
     # - "2025-12-12T20:17:00.000Z"
@@ -60,8 +65,13 @@ def sanitize_author(author, max_length=60):
     author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$', '', author)
     author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}$', '', author)
     
-    # If author is too long, extract last words that aren't dates/timestamps
-    if len(author) > max_length:
+    # Check for title-in-author pattern (common title keywords)
+    title_keywords = ['Re:', 'Re ', '[BIP', '[Discussion', 'BIP ', 'Draft ', 
+                      'Bitcoin ', 'The Cat', 'OP_', 'Post-Quantum', 'discussion']
+    has_title = any(kw.lower() in author.lower() for kw in title_keywords) and len(author) > 30
+    
+    # If author is too long or has title pattern, extract last 2 words
+    if len(author) > max_length or has_title:
         words = author.split()
         real_author_words = []
         
