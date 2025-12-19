@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>A quantum resistance script only using op_ctv/op_txhash and no new signatures</title>
+  <updated>2025-12-19T02:59:29.868569+00:00</updated>
+  <author>
+    <name>simul</name>
+  </author>
+  <timestamp>2025-12-18 23:27:11.773000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>A quantum resistance script only using op_ctv/op_txhash and no new signatures</title>
+    <updated>2025-12-19T02:59:29.868610+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-quantum-resistance-script-only-using-op-ctv-op-txhash-and-no-new-signatures/2168" rel="alternate"/>
+    <summary>The email discusses a sophisticated method for securing Bitcoin transactions against quantum attacks and signature forgery using a combination of OP_CHECKTEMPLATEVERIFY (OP_CTV) and OP_TXHASH/OP_CHECKTXHASHVERIFY protocols, as outlined in BIP119 and a current draft proposal, respectively. This method involves creating a multi-phase envelope that ensures even if signatures are forgeable in the future, funds can only be moved into a protected Anchor envelope and from there, only along predefined paths. The construction disables Taproot key-path spending by utilizing Nothing-Up-My-Sleeve (NUMS) internal keys to force all Taproot outputs through the script path, enhancing security against quantum threats.
+
+In the initial phase, Phase 0, the aim is to funnel all value into a predestined Anchor envelope without committing to final recipients or future templates. This phase employs OP_TXHASH to enforce conditions that prevent value leakage outside of the Anchor output and limit transaction fee extraction. Phase 1 follows by spending the Phase 0 UTXO to create the Anchor UTXO, effectively bringing the Anchor envelope on-chain without allowing an attacker to redirect the value. 
+
+The Anchor UTXO utilizes a Taproot script tree offering two spending paths: a reveal path and an escape hatch. The reveal path requires a one-time secret, adhering to a relative timelock and matching a specific template via OP_CTV. Conversely, the escape hatch does not disclose the secret and must match a different template, also enforced by OP_CTV. Phase 2 entails choosing between these paths to spend the Anchor UTXO, with security measures in place to ensure that value cannot be stolen, even if signatures are compromised.
+
+This structured approach restricts attackers to merely delaying or forcing execution of transactions rather than stealing funds, thanks to the quantum-resistant design and reorg resistance provided by the relative timelock mechanism. Additionally, the protocol supports graceful degradation in the face of quantum advancements and does not require nodes to maintain historical transaction indices, making it prunable-friendly.
+
+For further technical details and demonstration code, the original email includes a link to a [Gist](https://gist.github.com/earonesty/ea086aa995be1a860af093f93bd45bf2).</summary>
+    <published>2025-12-18T23:27:11.773000+00:00</published>
+  </entry>
+</feed>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [was BIP OP_CHECKTEMPLATEVERIFY] Fee Bumping Operation</title>
-  <updated>2025-12-18T03:02:08.160566+00:00</updated>
+  <updated>2025-12-19T03:06:19.940006+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/June_2020/017940_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2020/017938_-was-BIP-OP-CHECKTEMPLATEVERIFY-Fee-Bumping-Operation.xml" rel="alternate"/>
@@ -75,10 +75,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017938.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017938.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017938.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017938.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - [was BIP OP_CHECKTEMPLATEVERIFY] Fee Bumping Operation</title>
-    <updated>2025-12-18T03:02:08.160703+00:00</updated>
+    <updated>2025-12-19T03:06:19.940165+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017938.html" rel="alternate"/>
     <published>2020-06-08T07:15:11+00:00</published>
     <summary>A proposal was made on the bitcoin-dev mailing list to introduce a new type of transaction called PFN (Parent Fixing Nonce) that aims to fix stuck transactions by modifying their parent transactions. However, concerns were raised about the feasibility and complexity of implementing this proposal due to the requirement of a new index of all past transactions for consensus.In response to these concerns, another proposal was suggested for a Fee Bump transaction. This transaction would target a list of TXIDs or a single TXID representing all ancestors it wants to include in a block. The goal is to make it similar to normal transactions for inclusion, with potential minimums for mempool inclusion. However, there are still questions regarding whether the sender of a PFN transaction could Replace-By-Fee (RBF) it or increase the fee for its parent transactions without being able to replace any other transactions besides their own.To address application-DoS attacks in the mempool beyond CTV (CheckTemplateVerify), a potential solution is proposed: the &quot;Pay for Neighbor&quot; transaction. With this approach, a transaction can specify that it wants to pay the fee for another transaction(s). This creates a 'ghost child' transaction that can only be mined if its 'ghost parents' are confirmed as well. This method is essentially Child-Pays-for-Parent (CPFP) but ensures that the examined link is always one hop away, reducing CPFP graph traversal issues. However, the existing CPFP logic is not working as expected, and it may be necessary to remove CPFP entirely to make fee bumping work smoothly.A Fee Bump transaction can name a list of TXIDs or a single TXID that represents all ancestors it wishes to include in a block. It must be included in that block and should have no unconfirmed ancestors or children. Transactions in the mempool can set a flag to opt out of CPFP for descendants/blocks to prevent pinning. Channel protocols should use this feature to prevent pinning and then use the Fee Bump transaction to add fees to transactions that need to be processed.There is also a suggestion to use the annex or anyone-can-spend output for this purpose. If implemented correctly, a coinswap protocol could be layered with the fee-bumping transactions change, providing privacy benefits. Initially, this idea required a hardfork, but it could potentially be achieved as a soft fork past-taproot by including the txids of 'ghost parents' in the taproot annex. However, creating a new index of all past transactions for consensus would be problematic and cannot be done.</summary>
