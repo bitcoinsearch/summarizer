@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Proposal] Add sp() output descriptor format for BIP352</title>
+  <updated>2025-12-23T03:03:03.606695+00:00</updated>
+  <author>
+    <name>Sebastian Falbesoner</name>
+  </author>
+  <timestamp>2025-12-22 20:47:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Proposal] Add sp() output descriptor format for BIP352</title>
+    <updated>2025-12-23T03:03:03.606733+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/59b1879d-b43d-41ac-9b3e-3e65cf31d4e5n@googlegroups.com/T/#ma25b2a2b7c0342efe823ca51e5aa0f95e673e013" rel="alternate"/>
+    <summary>The discussion around the cost and efficiency of label scanning in the context of SP wallets reveals a critical examination of commonly held assumptions regarding implementation methodologies. A notable point of contention is the prevalent belief that label scanning inherently suffers from scalability issues. This belief largely stems from the traditional approach where each label is iterated over and matched against taproot outputs, which can indeed become inefficient as the number of labels increases.
+
+However, an alternative methodology as outlined in BIP-352 offers a different perspective by suggesting a reverse process. In this approach, for every taproot output, its corresponding candidate is subtracted and then checked against a label cache to see if the result exists within. This method's primary advantage lies in its scanning cost being independent of the number of labels involved. The efficiency of this process is attributed to the constant and rapid lookup times facilitated by utilizing an appropriate data structure for the cache. Evidence supporting this claim can be found in module PR 1765, which incorporates an actual label cache using a third-party hash table implementation. Benchmarking results demonstrate that the cache lookup cost remains negligible, even with a significantly large number of labels, thereby challenging the notion that label scanning does not scale well.
+
+Further analysis reveals that while the traditional "iterate over labels" method may be quicker for scanning a minimal number of labels, there exists a cross-over point beyond which the BIP-style scanning with label-cache lookup outperforms. Notably, after reaching this point, the addition of more labels does not degrade scanning performance, essentially rendering each additional label cost-free in terms of scanning efficiency. This finding suggests that label scanning can indeed scale effectively, provided that an alternative approach, such as the one described in the BIP, is employed. It's important to note, however, that this BIP-style scanning may not be suitable for all wallet types, particularly light clients that lack complete transaction output data.
+
+Despite these potential limitations, the future could see full-node wallets with specific use cases capable of handling vast numbers of labels without noticeable performance declines, assuming they adopt the BIP-suggested scanning technique and implement an efficient label cache. This prospect supports the argument for allowing label ranges in the SP descriptor format, even for applications involving a relatively small number of labels, as it would likely simplify the descriptor string in most instances. The dialogue also touches on the unnecessary nature of introducing gaps in the m values for label creation, emphasizing a broader curiosity regarding practical applications for labels, especially those requiring large quantities. Such curiosity underscores the importance of not prematurely restricting potential use-cases based on current assumptions or understandings.</summary>
+    <published>2025-12-22T20:47:00+00:00</published>
+  </entry>
+</feed>
