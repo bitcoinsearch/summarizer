@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Malleable booleans</title>
-  <updated>2025-12-23T03:07:17.897119+00:00</updated>
+  <updated>2025-12-24T03:03:34.388523+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <link href="bitcoin-dev/Oct_2014/006744_Malleable-booleans.xml" rel="alternate"/>
   <link href="bitcoin-dev/Oct_2014/006743_Malleable-booleans.xml" rel="alternate"/>
@@ -86,10 +86,11 @@
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006736.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006736.html" rel="alternate"/>
   <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006736.html" rel="alternate"/>
+  <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006736.html" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Malleable booleans</title>
-    <updated>2025-12-23T03:07:17.897259+00:00</updated>
+    <updated>2025-12-24T03:03:34.388675+00:00</updated>
     <link href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2014-October/006736.html" rel="alternate"/>
     <published>2014-10-14T19:45:18+00:00</published>
     <summary>In a discussion on the Bitcoin-dev forum, Pieter Wuille argues that requiring canonical bool testing for all boolean-using opcodes would save a significant amount of bytes. He suggests that if a script author fails to properly 'bool-ize' every boolean-using path that can have non-minimal encodings, one can always create a nVersion=1 transaction manually to spend the output and prevent loss of funds. However, he acknowledges an opposing argument that there may not be many use cases where BOOLAND and BOOLOR are applied to unsanitized input from scriptSig.Pieter Todd adds to the conversation by stating his intention to only allow 0 and 1 as booleans, resulting in script failure if any other stack element is evaluated as a boolean. This applies to inputs to OP_IF and OP_NOTIF, inputs to OP_BOOLAND and OP_BOOLOR, and the resulting final element on the stack for validity. His goal is to ensure that there is an equivalent non-malleable script for every possible script.Pieter Wuille, a Bitcoin developer, discovers another type of malleability while working on a BIP62 implementation. He notes that any byte array with non-zero bytes in it (except for the highest bit of the last byte) is interpreted as true and anything else as false in the code for dealing with booleans. However, this interpretation of booleans is inconsistent and scripts using booleans as inputs will be inherently malleable. In response, Wuille proposes changing BIP62 to require interpreted booleans to be of minimal encoded size to solve the problem.Another developer, Peter Todd, comments that relying on BIP62 for specialty contract applications is risky and argues that having canonical bool testing in every boolean-using opcode saves a lot of bytes. In an email thread, Thomas Zander raises a concern about the inherent malleability of scripts that use booleans as inputs. Pieter Wuille had previously mentioned this issue. Zander gives an example of assigning &quot;2&quot; to a native C++ bool, resulting in neither true nor false being hit when checked. However, Wladimir clarifies that C++ booleans are protected against this and provides code to demonstrate it. The code prints 'It is true' and also shows how `bool(something)` can be used as an equivalent of x != 0.In another email thread, Thomas Zander asks about rejecting a script where a boolean value is not explicitly set to zero or one. While the context of Zander's question is unclear, enforcing strict boolean values in programming is a common practice that improves code reliability and readability.Overall, the discussions revolve around the malleability issues with scripts using booleans as inputs. Proposed solutions include requiring minimal encoded size for interpreted booleans and enforcing strict boolean values in programming. These changes aim to improve the reliability and consistency of Bitcoin scripts.</summary>
