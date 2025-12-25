@@ -35,64 +35,42 @@ def get_base_directory(url):
     return directory
 
 
-def sanitize_author(author, max_length=60):
+def sanitize_author(author, max_length=100):
     """
-    Sanitize author name to prevent common bugs:
-    - Author too long (likely contains title)
-    - UTC | newest pattern
-    - Timestamps in author
     - Delvingbitcoin .NNNNNN+00:00 suffix
-    - Title embedded in author
     """
     if not author:
         return "Unknown Author"
     
     author = str(author).strip()
     
-    # Remove 'UTC | newest]' pattern
+    # Remove 'UTC | newest]' pattern (navigation artifact)
     if 'UTC' in author and '|' in author and 'newest' in author:
         return "Unknown Author"
+    
+    # Remove leading/trailing quotes (some author names have these)
+    author = author.strip('`"\' ')
     
     # Remove delvingbitcoin .NNNNNN+00:00 suffix
     author = re.sub(r'\.\d{6}[+\-]\d{2}:\d{2}$', '', author)
     
-    # Remove timestamps at the end in various formats:
-    # - "2025-12-12 20:17:00+00:00"
-    # - "2025-12-12T20:17:00.000Z"
-    # - "2025-12-12 20:17:00"
+    # Remove timestamps at the end in various formats
     author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}[+\-]\d{2}:\d{2}$', '', author)
     author = re.sub(r'\s+\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.*$', '', author)
     author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$', '', author)
     author = re.sub(r'\s+\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}$', '', author)
     
-    # Check for title-in-author pattern (common title keywords)
-    title_keywords = ['Re:', 'Re ', '[BIP', '[Discussion', 'BIP ', 'Draft ', 
-                      'Bitcoin ', 'The Cat', 'OP_', 'Post-Quantum', 'discussion']
-    has_title = any(kw.lower() in author.lower() for kw in title_keywords) and len(author) > 30
+    # Remove "via Bitcoin Development Mailing List" suffix
+    author = re.sub(r'\s+via\s+Bitcoin\s+Development\s+Mailing\s+List.*$', '', author, flags=re.IGNORECASE)
     
-    # If author is too long or has title pattern, extract last 2 words
-    if len(author) > max_length or has_title:
-        words = author.split()
-        real_author_words = []
-        
-        for word in reversed(words):
-            # Skip if word looks like a date or timestamp component
-            if re.match(r'^\d{4}-\d{2}-\d{2}$', word):  # Date: 2025-12-11
-                continue
-            if re.match(r'^\d{1,2}:\d{2}(:\d{2})?$', word):  # Time: 12:30 or 12:30:00
-                continue
-            if re.match(r'^\d{4}$', word):  # Year: 2025
-                continue
-            if re.match(r'^[+\-]\d{2}:\d{2}$', word):  # Timezone: +00:00
-                continue
-            
-            real_author_words.insert(0, word)
-            # Most author names are 1-3 words
-            if len(real_author_words) >= 2:
-                break
-        
-        if real_author_words:
-            author = ' '.join(real_author_words)
+    # Remove common title prefixes that might have leaked in
+    author = re.sub(r'^Re:\s*', '', author)
+    author = re.sub(r'^\[bitcoindev\]\s*', '', author, flags=re.IGNORECASE)
+    author = re.sub(r'^\[Bitcoin-development\]\s*', '', author, flags=re.IGNORECASE)
+    author = re.sub(r'^\[bitcoin-dev\]\s*', '', author, flags=re.IGNORECASE)
+    
+    # Final cleanup of any remaining quotes
+    author = author.strip('`"\' ')
     
     return author.strip() if author.strip() else "Unknown Author"
 
