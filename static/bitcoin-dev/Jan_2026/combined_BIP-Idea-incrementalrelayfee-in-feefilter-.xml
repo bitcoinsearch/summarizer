@@ -2,28 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - BIP Idea: incrementalrelayfee in feefilter?</title>
-  <updated>2026-01-08T03:11:59.880243+00:00</updated>
+  <updated>2026-01-09T03:09:26.644543+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
-    <message id="msg_1" depth="0" position="0" anchor="m37debc8393e229593ce3775c3548bc2798eb48a9">
+    <message id="msg_1" depth="0" position="0">
       <author>Matthew Husák</author>
       <timestamp>2026-01-07 01:36:00+00:00</timestamp>
     </message>
-    <message id="msg_2" depth="1" position="1" reply_to="Matthew Husák" parent_id="mailing-list-2026-01-m37debc8393e229593ce3775c3548bc2798eb48a9" anchor="m5cf3ed063e257f105fd8bcfb10ca9fa67860f1ee">
+    <message id="msg_2" depth="0" position="1">
       <author>Murch</author>
       <timestamp>2026-01-07 18:50:00+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Murch" parent_id="mailing-list-2026-01-m5cf3ed063e257f105fd8bcfb10ca9fa67860f1ee" anchor="m9ebfa054458e237fcf9f48a7e4a4dd4b3bb772d0">
+      <author>Matthew Husák</author>
+      <timestamp>2026-01-08 18:13:00+00:00</timestamp>
     </message>
   </thread>
   <link href="bitcoin-dev/Jan_2026/m37debc8393e229593ce3775c3548bc2798eb48a9_BIP-Idea-incrementalrelayfee-in-feefilter-.xml" rel="alternate"/>
   <link href="bitcoin-dev/Jan_2026/m5cf3ed063e257f105fd8bcfb10ca9fa67860f1ee_BIP-Idea-incrementalrelayfee-in-feefilter-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Jan_2026/m9ebfa054458e237fcf9f48a7e4a4dd4b3bb772d0_BIP-Idea-incrementalrelayfee-in-feefilter-.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - BIP Idea: incrementalrelayfee in feefilter?</title>
-    <updated>2026-01-08T03:11:59.880713+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/7992d314-c068-4bea-b3da-03d65ea2d334@murch.one/T/#m5cf3ed063e257f105fd8bcfb10ca9fa67860f1ee" rel="alternate"/>
+    <updated>2026-01-09T03:09:26.645258+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/a02be21c-2483-4753-b6db-4bd159e8c4e0n@googlegroups.com/T/#m9ebfa054458e237fcf9f48a7e4a4dd4b3bb772d0" rel="alternate"/>
     <published>2026-01-07 01:36:00+00:00</published>
-    <summary>Matthew Husák's email addresses a significant concern with Bitcoin's Replace-By-Fee (RBF) transactions and the variability in incremental relay fee policies across nodes, leading to potential issues in transaction propagation. He highlights two primary problems: first, the scenario where a user's node accepts an RBF transaction but it gets rejected by peers due to differing incrementalrelayfee settings, resulting in a deadlock. Second, the lack of visibility into peers' minimum RBF fees complicates the situation further. As a solution, Husák proposes extending the feefilter message to include an incrementalrelayfee field, parallel to the existing minrelaytxfee field. This adjustment would enable nodes to filter out RBF transactions that cannot be bumped, thereby reducing spam and enhancing the transparency of RBF policies among nodes without posing any consensus risk.
-In response, Murch outlines the recent changes in fee rate policies with the release of Bitcoin Core 30.0 and its backport to 29.1, noting that a significant portion of nodes has already adopted the lower default incremental fee rate. Murch presents a statistical argument suggesting that most nodes are likely connected to at least one peer that supports the rebroadcasting of replacement transactions at the lower fee rate, implying that the network is adapting organically to the policy changes. However, he also acknowledges a lag in wallet adoption of these lower fee rates and expresses skepticism about the necessity for special handling of incrementalrelayfee at this moment. Instead, Murch points towards a more general solution, the proposed BIP 153: SENDTEMPLATE, as a potentially more impactful approach for addressing the broader issue of transaction replacements and network efficiency, providing a link to the proposal for further reference.
-This exchange reflects a nuanced discussion within the Bitcoin development community regarding how best to manage transaction fees and network policies to ensure efficient transaction processing and propagation. The dialogue underscores the complexity of balancing innovation with network stability and the ongoing efforts to refine Bitcoin's protocol to support user needs while mitigating potential bottlenecks and points of failure.</summary>
+    <summary>The recent discussions and developments within the Bitcoin community, particularly on the Bitcoin Development Mailing List, have highlighted critical challenges and proposed solutions regarding transaction fees and network policies. Matt initiated a conversation emphasizing the difficulties users face due to discrepancies in `minrelaytxfee` and `incrementalrelayfee` settings across nodes. A significant issue arises when a Replace-By-Fee (RBF) transaction is accepted by a user's node but rejected by peers with different `incrementalrelayfee` settings, creating a deadlock where the transaction cannot proceed. Furthermore, the lack of visibility into peers' minimum RBF fee preferences exacerbates this problem, as there is currently no mechanism for sharing such preferences over the Peer-to-Peer (P2P) network, barring the `minrelaytxfee` communicated through BIP133’s `feefilter`.
+In response to these challenges, there has been an update in the feerate policy in Bitcoin Core's latest releases, which is reflected in adoption rates according to Clark Moody's dashboard. Over 30% of listening nodes have adopted the new lower incremental feerate, indicating a shift towards more economical transaction policies. However, the uptake by wallets to support creating transactions with these reduced feerates or to implement replacements at the lower incremental relay fee has been slow. This lag suggests that while node policy may evolve, wallet support does not always keep pace, leading to a misalignment in the ecosystem's adaptation to new policies. The discussion around whether to introduce special handling for `incrementalrelayfee` points towards a preference for broader, scalable solutions, with BIP 153: SENDTEMPLATE being proposed as a more effective approach to address these issues comprehensively.
+Matt, in his communication, shared insights from firsthand experience as one of the early adopters of the lower fee settings, highlighting the practical challenges in finding compatible peers and suggesting enhancements to improve the situation. He proposes two ideas: firstly, making `incrementalrelayfee` information available to promote better network compatibility and secondly, enhancing node configuration options to allow targeting peers that meet specific `minrelaytxfee` and `minincrementalfee` criteria during the discovery process. These suggestions aim to ease the adoption process and enhance transaction efficiency across the network, underscoring the importance of adaptability and collaboration among developers, node operators, and wallet providers in the evolving Bitcoin ecosystem.</summary>
   </entry>
 </feed>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Addressing remaining points on BIP 54</title>
+  <updated>2026-01-09T03:07:54.741956+00:00</updated>
+  <author>
+    <name>Sjors Provoost</name>
+  </author>
+  <timestamp>2026-01-08 08:30:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Addressing remaining points on BIP 54</title>
+    <updated>2026-01-09T03:07:54.741987+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/f68d7c20-5119-4159-8e42-f7c10597a789@mattcorallo.com/T/#m75bc018f52190dd5cd139e39666b83f1854bb375" rel="alternate"/>
+    <summary>In a detailed discussion regarding the limitations and technical intricacies of the coinbase scriptSig, which is constrained to 100 bytes, various aspects of its implementation and potential modifications were analyzed. The primary concern highlighted revolves around the complexity involved in its manipulation, especially for ASICs (Application-Specific Integrated Circuits) tasked with mining operations. This complexity arises from the need for these circuits to discern the end of transactions accurately without a comprehensive understanding of the transaction's serialization process.
+
+The discourse suggests that the nLockTime feature, occupying the last 4 bytes of a transaction, presents a simpler modification target for ASICs. This simplicity stems from its consistent positioning, allowing for straightforward adjustments by the ASIC without necessitating an understanding of the variable length of the scriptSig. In contrast, modifying the scriptSig demands a parsing of its length byte to identify the concluding 4 bytes accurately, introducing an added layer of complexity due to its variable size.
+
+An alternative approach recommended involves appending a 0-sat OP_RETURN output with padding, ensuring a 4-byte nonce is positioned within the final 64-byte SHA256 chunk. This method is lauded for its simplicity and ease of implementation compared to the scriptSig variations, as it allows ASICs to alter a fixed 4-byte field at a predetermined offset, circumventing the need to parse variable-length fields.
+
+The conversation also touches upon the current strategies employed by Stratum v1 and Stratum v2 protocols, which divide the scriptSig into two segments. This division is managed by the control board, suggesting a preference for shifting the rolling functionality directly onto the ASIC hardware to simplify the process. However, despite these technical considerations, there appears to be no immediate speed advantage prompting this behavior's adoption in practical scenarios.
+
+Moreover, the combination of rolling the nVersion (as per BIP310) and regularly updating nTime has been deemed effective for operations up to 280 TH/s. Beyond this threshold, ASICs would require alterations to the coinbase to maintain efficiency, underlining the nuanced balance between operational capacity and the technical feasibility of implementing these changes.</summary>
+    <published>2026-01-08T08:30:00+00:00</published>
+  </entry>
+</feed>
