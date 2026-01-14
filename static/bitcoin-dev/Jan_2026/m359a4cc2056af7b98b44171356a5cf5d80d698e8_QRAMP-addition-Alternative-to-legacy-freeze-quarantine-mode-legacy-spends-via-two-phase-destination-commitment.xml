@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>QRAMP addition: Alternative to legacy freeze: “quarantine-mode” legacy spends via two-phase destination commitment</title>
+  <updated>2026-01-14T03:19:35.582541+00:00</updated>
+  <author>
+    <name>bnv</name>
+  </author>
+  <timestamp>2026-01-13 02:15:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>QRAMP addition: Alternative to legacy freeze: “quarantine-mode” legacy spends via two-phase destination commitment</title>
+    <updated>2026-01-14T03:19:35.582575+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/e2NtSyWxHaZUUHSKA4XYAr8etu7yfXwUTy6gRm456-wWa0UDz_DfoZ9W6ACIVtbMIRjL26yFRCu0iKr5wWfNf0xITLT7EiB-uPYqt2C1e28=@proton.me/T/#u#m359a4cc2056af7b98b44171356a5cf5d80d698e8" rel="alternate"/>
+    <summary>The concept introduced as an alternative to freezing or sunsetting legacy signatures within the Quantum‑Resistant Address Migration Protocol (QRAMP) involves placing legacy Unspent Transaction Outputs (UTXOs) into a quarantine mode. This mode allows these UTXOs to remain spendable post-quantum activation but introduces a two-phase commit and spend flow. This approach aims to prevent destination substitution even if the legacy private key is derived quickly following a public key reveal. The commit phase requires publishing a commitment on-chain that binds the eventual spend outputs, including amounts and scriptPubKeys, which only becomes valid after achieving a predefined number of confirmations. Following this, during the spend phase, a legacy spend can only proceed if it presents proof that a matching commitment was previously mined and has matured, alongside evidence that the spend's outputs match the committed template.
+
+A significant technical challenge highlighted is implementing this mechanism in a way that is consensus-enforced without necessitating historical transaction lookups, which could exclude pruned nodes or those without a transaction index. The proposed solution suggests that spends carry an SPV-style inclusion proof for the commit, incorporating the transaction ID, a merkle branch to a block header, and adhering to a depth rule of at least K confirmations.
+
+Addressing user experience, the concept includes a provision for fee sponsorship. This allows a receiver, exchange, or service to publish the commitment transaction and cover its fees. Meanwhile, the legacy holder would authorize the commitment off-chain through a signature over the commitment hash. This setup seeks to mitigate issues related to fee payment for the initial phase of the process.
+
+Included in the communication are links to a short design note and a diagram that further illustrate the proposed two-phase destination commitment mechanism: [Markdown](https://github.com/bnavf/bitcoinqp/blob/main/two_phase_destination_commitment.md) and [Diagram](https://github.com/bnavf/bitcoinqp/blob/main/two_phase_destination_commitment.svg). The sender poses questions to the recipient, seeking feedback on whether similar proposals exist, the feasibility of commitment inclusion and maturity proofs without creating dependency on an indexer for consensus, and whether binding the full output set effectively prevents practical variants of destination substitution.</summary>
+    <published>2026-01-13T02:15:00+00:00</published>
+  </entry>
+</feed>
