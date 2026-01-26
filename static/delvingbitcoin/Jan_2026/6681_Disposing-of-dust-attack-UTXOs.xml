@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disposing of "dust attack" UTXOs</title>
+  <updated>2026-01-26T03:19:50.203528+00:00</updated>
+  <author>
+    <name>bubb1es</name>
+  </author>
+  <timestamp>2026-01-25 17:20:49.445000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disposing of "dust attack" UTXOs</title>
+    <updated>2026-01-26T03:19:50.203563+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disposing-of-dust-attack-utxos/2215" rel="alternate"/>
+    <summary>The issue of handling "dust attack" UTXOs in on-chain wallets presents a significant challenge, where adversaries send small amounts of cryptocurrency to various addresses in an attempt to reveal connections between them. This strategy relies on the hope that these dust UTXOs will be spent alongside larger, unrelated UTXOs, inadvertently linking them together. A comprehensive discussion on this can be found at [BitcoinOps](https://bitcoinops.org/en/topics/output-linking/). Further insights into the distribution of output sizes within the UTXO set, focusing on spam meta protocols rather than specifically on dust attack UTXOs, are available at [Mempool Research](https://research.mempool.space/utxo-set-report/).
+
+Modern wallet designs attempt to mitigate the risks associated with dust attacks by automatically locking dust UTXOs to prevent their use. However, this approach is not without costs or future risks. The immediate cost is an increase in the mempool size due to UTXOs that will never be spent. Future risks include potential wallet software bugs, restoration from keys, or migration to new wallets, which could inadvertently unlock these dust UTXOs. Additionally, there's a concern that future wallet owners might not understand the significance of these locked UTXOs and may spend them, risking de-anonymization.
+
+A proposed solution involves creating transactions that would spend these dust UTXOs entirely on transaction fees, incorporating an OP_RETURN output. With the default minimum relay fee rate now lowered to 0.1 satoshis per virtual byte (sats/vb), it becomes feasible to dispose of typical dust UTXOs in this manner. The required transaction structure varies based on the type of address and includes scenarios for P2WPKH, P2SH 2-of-3 multisig, and P2WSH 2-of-3 multisig, with specific virtual byte sizes and fee rates provided for each. Detailed calculations are supported by tools available at [BitcoinOps Tools](https://bitcoinops.org/en/tools/calc-size/).
+
+Implementing such a feature in wallets, however, comes with its own set of challenges and risks. These include potential fingerprinting of users if only a few wallets support this feature, the risk of correlating multiple dust transactions if broadcast simultaneously, the necessity to rebroadcast transactions if fee rates increase, and possible confusion or inconvenience for multisig and hardware signing device users. Feedback from wallet or wallet library developers on the feasibility and interest in supporting such a feature is sought to address these concerns effectively.</summary>
+    <published>2026-01-25T17:20:49.445000+00:00</published>
+  </entry>
+</feed>
