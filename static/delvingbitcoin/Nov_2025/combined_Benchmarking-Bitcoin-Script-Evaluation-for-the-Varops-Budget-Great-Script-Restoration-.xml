@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Benchmarking Bitcoin Script Evaluation for the Varops Budget (Great Script Restoration)</title>
-  <updated>2025-12-18T02:53:12.874959+00:00</updated>
+  <updated>2026-01-27T03:10:28.795883+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -61,6 +61,14 @@
       <author>ajtowns</author>
       <timestamp>2025-12-18 00:56:31.102000+00:00</timestamp>
     </message>
+    <message id="msg_15" depth="0" position="14">
+      <author>rustyrussell</author>
+      <timestamp>2026-01-26 03:52:44.709000+00:00</timestamp>
+    </message>
+    <message id="msg_16" depth="0" position="15">
+      <author>ajtowns</author>
+      <timestamp>2026-01-26 05:31:22.674000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/Nov_2025/6198_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Nov_2025/6210_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
@@ -76,18 +84,20 @@
   <link href="delvingbitcoin/Dec_2025/6401_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2025/6412_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2025/6454_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2026/6683_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Jan_2026/6685_Benchmarking-Bitcoin-Script-Evaluation-for-the-Varops-Budget-Great-Script-Restoration-.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Benchmarking Bitcoin Script Evaluation for the Varops Budget (Great Script Restoration)</title>
-    <updated>2025-12-18T02:53:12.876598+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/benchmarking-bitcoin-script-evaluation-for-the-varops-budget-great-script-restoration/2094/14" rel="alternate"/>
+    <updated>2026-01-27T03:10:28.797861+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/benchmarking-bitcoin-script-evaluation-for-the-varops-budget-great-script-restoration/2094/16" rel="alternate"/>
     <published>2025-11-07 15:14:37.127000+00:00</published>
-    <summary>The introduction of a new Tapscript leaf version within Bitcoin's script execution framework aims to address concerns related to the disabling of various opcodes in previous versions due to denial-of-service attack vulnerabilities. The approach involves generalizing the sigops budget into a varops budget, which is applied across all operations. This adjustment allows for a proportional allocation of compute units based on transaction weight, with the current setting at 5,200 units per weight unit. To assess the effectiveness and efficiency of this strategy, benchmarking focuses on analyzing block-sized scripts against a varops budget of 20.8 billion compute units. Such evaluations include testing different operational patterns to identify potential bottlenecks in script validation under the new system, using Schnorr signatures as a comparative benchmark.
-Community involvement is emphasized as crucial for refining the varops budget. Developers are invited to participate by engaging with the GSR prototype implementation, where they can compile with benchmarks enabled to run specific tests. The outcomes from these benchmarks, particularly those detailing performances of varops limited scripts and Schnorr checksig times, are essential for tailoring the varops budget to individual machine capabilities, ensuring broad effectiveness.
-The conversation also delves into the technical specifics of compiling code for benchmarking, suggesting `CMAKE_BUILD_TYPE` settings to maximize result accuracy. A new GitHub repository has been established for contributors to share benchmark data, aiming to enhance analysis comparability across systems. Acknowledging errors during benchmarks as anticipated, the discussion highlights the need for methodological refinement, especially around capping the varops budget at 100% to better evaluate varops ratios and their impact on performance across varying input sizes.
-In examining the efficiency of cryptographic operations within Bitcoin, particularly concerning Schnorr signatures, an experiment highlighted the potential for increased verification times, raising concerns about the implications for network responsiveness and transaction cost. This issue is particularly pertinent given the computational demands associated with verifying large numbers of transactions, emphasizing the need for a balance between security and efficiency.
-Further discourse explores blockchain validation processes, suggesting that real-world operations are unlikely to push the computational budget to its limits, indicating possible over-preparation for worst-case scenarios. This insight leads to discussions on optimizing blockchain network operations without compromising validation integrity, highlighting strategies like leveraging cached data for more effective validation.
-The prospect of incorporating advanced logic opcodes, such as those enabling zero-knowledge proofs, showcases the evolving capacity for complex operations within blockchain technology. However, this development necessitates a careful approach to ensure network security and user safety, avoiding undue resource strain from potentially exploitative transactions.
-Lastly, the dialogue touches upon the strategic considerations behind maintaining signature operation limits within Taproot/BIP340-342, reflecting a cautious but flexible approach to evolution within Bitcoin’s scripting infrastructure. This stance underscores a readiness to reassess and adapt to technological advancements while considering the broader implications for network functionality and security.</summary>
+    <summary>The introduction of a new Tapscript leaf version addresses the disabling of many opcodes in Bitcoin script execution version 0.3.1, motivated by the need to mitigate denial-of-service attacks. The proposed solution generalizes the sigops budget into a varops budget, linked to transaction weight, allowing for proportional compute units based on transaction size. Benchmarking focuses on block-sized scripts with a cap at 4M weight units, translating to a varops budget of 20.8 billion compute units, to determine feasibility and efficiency. Tests include hashing loops and bit operations within this budget, aiming to identify slowest script validation scenarios. Community involvement is emphasized for refining the varops budget, with developers encouraged to participate in benchmarking efforts.
+Benchmarking methods are crucial, with specific configurations needed to ensure comparable results across systems. Issues such as script errors need addressing to ensure data reliability. The varops budget's effectiveness in limiting script execution time is questioned, particularly when capped at 100%, suggesting a need for methodological improvement. Preliminary calculations for opcode factors under less than 100% varops budget could aid in revising hardcoded factors, indicating potential areas for further investigation into operation costs and stack setup.
+The discussion extends to cryptographic operations' optimization, particularly Schnorr signatures, revealing concerns over current benchmarking practices potentially setting unrealistic standards for transaction verification times. A debate emerges on acceptable verification times, highlighting challenges in predicting Bitcoin's future transaction verification landscape. Additionally, the conversation touches upon blockchain validation, emphasizing that the average block is unlikely to reach computational budget limits, suggesting that full validation processes could be quicker than worst-case scenarios.
+Further analysis delves into the methodology of blockchain transaction validation benchmarking, pointing out efficiency gains from cached signature verification processes. It also explores the implications of segwit v0/BIP141 standards and Taproot/BIP340-342 for signature operations, suggesting opportunities for optimizing validation through smarter strategies and multi-threaded processing. Intriguingly, the potential for advanced logic opcodes to handle complex operations like zero-knowledge proofs under current constraints is discussed, hinting at broader implications for blockchain efficiency and security.
+The preservation of the 80,000 signature operations limit in Taproot/BIP340-342 underscores a cautious development approach, balancing various factors like security and scalability. The discussion reflects a willingness to diverge from past decisions, fostering innovation while maintaining network integrity. Concerns about Taproot's vulnerabilities highlight the importance of carefully considering operational limits to prevent abuse while ensuring system integrity and security.
+RIPEMD160's performance when applied repetitively to 520-byte elements offers insights into computational demands, emphasizing the need for efficient data validation in blockchain technologies. This discussion suggests ongoing efforts to refine cryptographic practices, highlighting the dynamic nature of programming in addressing data security and performance challenges.
+Overall, the dialogue encapsulates critical reflections within the blockchain developer community on thoughtful decision-making, the balance between innovation and network integrity, and the continuous pursuit of optimization amidst complex trade-offs.</summary>
   </entry>
 </feed>
