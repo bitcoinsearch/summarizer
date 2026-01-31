@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Addressing remaining points on BIP 54</title>
+  <updated>2026-01-31T03:31:30.349841+00:00</updated>
+  <author>
+    <name>Antoine Riard</name>
+  </author>
+  <timestamp>2026-01-30 04:08:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Addressing remaining points on BIP 54</title>
+    <updated>2026-01-31T03:31:30.349889+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/e758af9b-72fc-4fdd-8e07-e1126635780an@googlegroups.com/T/#me12871832aef23d2776f0fbdcab2a261bba25008" rel="alternate"/>
+    <summary>The discussion initiated by Antoine delves into the nuanced aspects of enhancing coinbase transaction uniqueness within the Bitcoin protocol, particularly in the context of post-BIP34 implementations and the proposed BIP54. Antoine highlights a historical challenge faced by the Bitcoin network where duplicate coinbase transaction identifiers could lead to potential issues with unspent coinbase transactions being overwritten by new ones with identical IDs. This problem was initially addressed by BIP30, which introduced a validation check to prevent the acceptance of blocks containing duplicate transactions after its activation date.
+
+Further improvements were made with the introduction of BIP34, which aimed to enforce block and coinbase transaction uniqueness through a network-wide upgrade mechanism. One of the key features of BIP34 was requiring a scriptSig to commit to the block height, thereby ensuring the uniqueness of coinbase transactions. However, Antoine points out that there are pre-BIP34 activation height coinbase transactions that violate this solution, indicating an area where BIP34's approach falls short. As a solution, BIP54 proposes a different method for achieving transaction uniqueness by mandating an additional uniqueness mechanism beyond what BIP34 offers, potentially allowing for the retirement of BIP30's checks entirely.
+
+Antoine raises a concern regarding the potential issue with historical BIP34-violating coinbase transactions, specifically those with a CScriptNum value equal to or greater than 1,983,702, where the nLocktime field might conflict with post-BIP54 activation heights. While coinbase transaction finality is typically enforced through the unique nSequence field set to CTxIn::SequenceFinal (making the nLocktime irrelevant), Antoine questions the necessity of setting the sequence field to final given that the primary goal is to ensure coinbase uniqueness rather than to apply timelock semantics. He suggests preserving the nSequence field for future use as an extranonce without compromising the network-wide policy.
+
+Antoine favors encoding the uniqueness of the coinbase in the nLocktime field over adding an additional op_return field, arguing that nLocktime's mandatory nature makes it a more space-efficient option. He also dismisses concerns about cryptoeconomic attacks leveraging coinbase time finality, considering them already possible with all post-BIP34 coinbase transactions.
+
+This detailed exploration not only sheds light on the technical intricacies involved in ensuring the uniqueness of coinbase transactions but also underscores the ongoing efforts within the Bitcoin development community to refine and optimize the protocol's security and efficiency.</summary>
+    <published>2026-01-30T04:08:00+00:00</published>
+  </entry>
+</feed>
