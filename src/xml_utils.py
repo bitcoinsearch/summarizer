@@ -340,11 +340,15 @@ class GenerateXML:
         
         logger.success(f"✅ XML THREADING: Built flat structure with {len(sorted_data)} messages in perfect mailing list order")
 
-    def append_columns(self, df_dict, file, title, namespace):
+    def append_columns(self, df_dict, file, title, namespace, threading_lookup=None):
         """
         Extract specific information from the given XML file corresponding to
         a single post or reply within a thread and append this information to
         the given dictionary (df_dict)
+        
+        Args:
+            threading_lookup: Optional dict mapping anchor_id to ES threading data
+                              Used to get proper thread_depth, parent_id, reply_to_author
         """
         # Append default values for columns that will not be directly filled from the XML
         df_dict["body_type"].append(0)
@@ -386,20 +390,40 @@ class GenerateXML:
         summary = root.find('atom:entry/atom:summary', namespace).text
         df_dict["body"].append(summary)
         
-        # Add default values for threading fields (since XML files don't contain this data)
-        # These will be None/0 for existing XML files, as threading data only comes from ElasticSearch
-        df_dict["thread_depth"].append(0)  # Default to root level
-        df_dict["thread_position"].append(0)  # Default position
-        df_dict["parent_id"].append(None)  # No parent info in XML
-        df_dict["reply_to_author"].append(None)  # No reply info in XML
-        df_dict["anchor_id"].append(None)  # No anchor info in XML
+        # Get threading data from ES lookup if available, otherwise use defaults
+        # Extract anchor_id from URL to match with ES data
+        threading_data = None
+        if threading_lookup and link_href:
+            # Try to extract anchor_id from URL (e.g., ".../T/#m2583281d5ba90ce658e17c250704a454bc80babc")
+            # The anchor_id is typically the last part after '#' or the message ID
+            for anchor_id, data in threading_lookup.items():
+                if anchor_id and anchor_id in link_href:
+                    threading_data = data
+                    break
+        
+        if threading_data:
+            df_dict["thread_depth"].append(threading_data.get('thread_depth', 0))
+            df_dict["thread_position"].append(threading_data.get('thread_position', 0))
+            df_dict["parent_id"].append(threading_data.get('parent_id'))
+            df_dict["reply_to_author"].append(threading_data.get('reply_to_author'))
+            df_dict["anchor_id"].append(threading_data.get('anchor_id'))
+        else:
+            # Fallback to defaults if no threading data found
+            df_dict["thread_depth"].append(0)
+            df_dict["thread_position"].append(0)
+            df_dict["parent_id"].append(None)
+            df_dict["reply_to_author"].append(None)
+            df_dict["anchor_id"].append(None)
 
     def file_not_present_df(self, columns, source_cols, df_dict, files_list, dict_data, data,
-                            title, combined_filename, namespace):
+                            title, combined_filename, namespace, threading_lookup=None):
         """
         Processes data directly from the given document (`data`) as no XML summary is
         available for that document. Also, for each individual summary (XML file) that
         already exists for the given thread, extracts and appends its content to the dictionary.
+        
+        Args:
+            threading_lookup: Optional dict mapping anchor_id to ES threading data
         """
         # Append basic data from dict_data for each column into df_dict
         for col in columns:
@@ -436,17 +460,20 @@ class GenerateXML:
                 file_title = root.find('atom:entry/atom:title', namespace).text
 
                 if title == file_title:
-                    self.append_columns(df_dict, file, title, namespace)
+                    self.append_columns(df_dict, file, title, namespace, threading_lookup)
             else:
                 logger.info(f"file not present: {file}")
 
-    def file_present_df(self, files_list, namespace, combined_filename, title, individual_summaries_xmls_list, df_dict):
+    def file_present_df(self, files_list, namespace, combined_filename, title, individual_summaries_xmls_list, df_dict, threading_lookup=None):
         """
         Iterates through the list of XML files, identifying the combined XML file and
         individual summaries relevant to the given thread (as specified by title).
         It copies the combined XML file to all relevant month folders. If no combined
         summary exists, it extracts the content of individual summaries, appending it
         to the data dictionary.
+        
+        Args:
+            threading_lookup: Optional dict mapping anchor_id to ES threading data
         """
         combined_file_fullpath = None  # the combined XML file if found
         # List to keep track of the month folders that contain
@@ -482,7 +509,7 @@ class GenerateXML:
         if len(individual_summaries_xmls_list) > 0 and not any(combined_filename in item for item in files_list):
             logger.info("individual summaries are present but not combined ones ...")
             for file in individual_summaries_xmls_list:
-                self.append_columns(df_dict, file, title, namespace)
+                self.append_columns(df_dict, file, title, namespace, threading_lookup)
 
     def preprocess_authors_name(self, author_tuple):
         author_tuple = tuple(s.replace('+', '').strip() for s in author_tuple)
@@ -555,6 +582,22 @@ class GenerateXML:
             title_dict_data = elastic_search.fetch_data_based_on_title(
                 es_index=ES_INDEX, title=thread_title, url=dev_url
             )
+            
+            # Build threading lookup from ES data - maps anchor_id to threading fields
+            # This ensures threading data is available even when XML files already exist
+            threading_lookup = {}
+            for doc in title_dict_data:
+                source = doc.get('_source', {})
+                anchor_id = source.get('anchor_id')
+                if anchor_id:
+                    threading_lookup[anchor_id] = {
+                        'thread_depth': source.get('thread_depth', 0),
+                        'thread_position': source.get('thread_position', 0),
+                        'parent_id': source.get('parent_id'),
+                        'reply_to_author': source.get('reply_to_author'),
+                        'anchor_id': anchor_id
+                    }
+            
             for data_idx in range(len(title_dict_data)):
                 # Extract relevant identifiers and metadata from the document
                 title = title_dict_data[data_idx]["_source"]["title"]
@@ -568,10 +611,10 @@ class GenerateXML:
                 if not any(file_name in item for item in files_list):
                     logger.info(f"Not present: {created_at} | {file_name}")
                     self.file_not_present_df(columns, source_cols, df_dict, files_list, title_dict_data, data_idx,
-                                             title, combined_filename, namespaces)
+                                             title, combined_filename, namespaces, threading_lookup)
                 else:
                     logger.info(f"Present: {created_at} | {file_name}")
-                    self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict)
+                    self.file_present_df(files_list, namespaces, combined_filename, title, xmls_list, df_dict, threading_lookup)
 
                 seen_titles.add(thread_title)
 
