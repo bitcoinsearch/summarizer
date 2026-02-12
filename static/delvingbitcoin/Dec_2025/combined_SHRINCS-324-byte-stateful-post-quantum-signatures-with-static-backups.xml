@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - SHRINCS: 324-byte stateful post-quantum signatures with static backups</title>
-  <updated>2026-02-08T03:57:51.666765+00:00</updated>
+  <updated>2026-02-12T03:46:45.042355+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -65,6 +65,10 @@
       <author>gmaxwell</author>
       <timestamp>2026-02-07 17:12:10.573000+00:00</timestamp>
     </message>
+    <message id="msg_16" depth="0" position="15">
+      <author>EthanHeilman</author>
+      <timestamp>2026-02-11 23:11:18.663000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/Dec_2025/6418_SHRINCS-324-byte-stateful-post-quantum-signatures-with-static-backups.xml" rel="alternate"/>
   <link href="delvingbitcoin/Dec_2025/6421_SHRINCS-324-byte-stateful-post-quantum-signatures-with-static-backups.xml" rel="alternate"/>
@@ -81,18 +85,18 @@
   <link href="delvingbitcoin/Jan_2026/6672_SHRINCS-324-byte-stateful-post-quantum-signatures-with-static-backups.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2026/6694_SHRINCS-324-byte-stateful-post-quantum-signatures-with-static-backups.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2026/6770_SHRINCS-324-byte-stateful-post-quantum-signatures-with-static-backups.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2026/6804_SHRINCS-324-byte-stateful-post-quantum-signatures-with-static-backups.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - SHRINCS: 324-byte stateful post-quantum signatures with static backups</title>
-    <updated>2026-02-08T03:57:51.668560+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/shrincs-324-byte-stateful-post-quantum-signatures-with-static-backups/2158/15" rel="alternate"/>
+    <updated>2026-02-12T03:46:45.043974+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/shrincs-324-byte-stateful-post-quantum-signatures-with-static-backups/2158/16" rel="alternate"/>
     <published>2025-12-11 08:40:59.575000+00:00</published>
-    <summary>SHRINCS represents a novel hybrid signature scheme designed to combine the efficiency of stateful hash-based signatures with the robustness of stateless ones, positioning it as a particularly suitable choice for applications requiring a limited number of signatures from a given key. By leveraging an unbalanced XMSS tree for stateful operations and a variant of SPHINCS+ for stateless operations, SHRINCS achieves a high level of operational efficiency under typical conditions while ensuring reliability through a fallback mechanism in case of state loss or corruption. This dual-mode functionality is supported by a public key derived from both the stateful and stateless public keys, allowing seamless operation across modes depending on the state's integrity.
-The scheme addresses the primary challenge of managing the state securely, mitigating risks associated with mismanagement through its ability to switch to stateless signatures when necessary. The innovative use of WOTS+C within the stateful path enhances both efficiency and security. Furthermore, the paper &quot;Hash-based Signatures for Bitcoin,&quot; co-authored by Mikhail Kudinov, provides detailed insights into SHRINCS' architecture and potential applications, highlighting its significance in the field of post-quantum cryptography (PQC).
-The adequacy of a 128-bit security level in PQC is critically evaluated, revealing that such a level effectively offers only a 64-bit security level against quantum attacks facilitated by Grover's algorithm. This analysis underscores the importance of considering cryptographic strength through the lens of quantum-resistant metrics, emphasizing the necessity for ongoing evolution in cryptographic practices to address the challenges posed by quantum computing advancements.
-In addition to security considerations, the discussion explores the Winternitz One-Time Signature Scheme (WOTS) and its checksum mechanism's role in preventing specific types of attacks. This mechanism ensures the authenticity of messages by invalidating attempts to impersonate or replace the original message during the verification process. The exploration also touches upon efficient checksum strategies using modulo negated values, offering a compact alternative to traditional methods.
-Concerns are raised about the vulnerability of WOTS to specialized hardware capable of generating alternative signatures, suggesting the enlargement of envelope and signature sizes as potential solutions. However, this idea was later retracted, indicating ongoing deliberations for more viable solutions. 
-SHRINCS' approach to managing wallet seeds introduces constraints to enhance security but raises questions regarding the practicality and flexibility of seed generation and state management across devices. The discourse also covers the implications of user behavior and device interactions on security, suggesting mechanisms to detect potential state loss or corruption. Moreover, the integration of TPM technology for secure state management on non-dedicated devices is discussed, highlighting the potential to improve software wallets' usability and security.
-Lastly, the conversation delves into advanced security measures, including the use of state commitments and the exploration of various technologies for securing cryptographic operations. The dialogue encapsulates a broad perspective on securing cryptographic operations, advocating for flexibility, creativity, and thorough consideration in developing and implementing security measures against quantum computing threats and other vulnerabilities.</summary>
+    <summary>Implementing SHRINCS within the context of CAT (Covenants and Transactions) potentially introduces a new layer of complexity and cost considerations. The integration of SHRINCS, a hybrid signature scheme designed to provide efficient and reliable cryptographic operations under both stateful and stateless scenarios, with covenants that control how bitcoins can be spent, could offer nuanced transaction capabilities. However, this amalgamation requires careful architectural planning to ensure seamless operation, especially in managing state transitions from one transaction to the next while safeguarding against state confusion leakage.
+One of the primary challenges in combining SHRINCS with covenants lies in maintaining the integrity and security of the state information across transactions. Covenants, by their nature, impose certain conditions on transactions, which could include stipulations about state transitions. The state information in SHRINCS, critical for determining whether operations proceed in a stateful or stateless manner, must be meticulously managed to prevent any form of state confusion or leakage. This involves securely passing state data between transactions in a way that is both transparent to the protocol and resistant to manipulation.
+The concept of incorporating state as an explicit aspect of transaction outputs in blockchain protocols introduces a mechanism for achieving this. By embedding state information within transaction outputs, it becomes feasible to enforce covenant rules regarding state transitions directly within the blockchain's consensus rules. This method ensures that state transitions are atomic with transactions, thereby eliminating discrepancies between intended and actual state usage.
+However, the implementation of such a system incurs additional costs, both in terms of transaction size and computational overhead. Transaction sizes may increase due to the inclusion of state information, impacting transaction fees and block space utilization. Additionally, the computational complexity associated with verifying state transitions and enforcing covenant conditions could lead to increased processing times, affecting the overall scalability of the blockchain network.
+To mitigate these impacts, optimization strategies such as state compression, efficient encoding mechanisms, and selective state transition validation could be explored. These approaches aim to reduce the additional burden imposed by the integration of SHRINCS with covenants, focusing on maintaining a balance between enhanced transaction capabilities and system performance.
+In summary, while integrating SHRINCS with CAT offers promising avenues for advanced transaction control and security within blockchain systems, it necessitates a comprehensive evaluation of the associated costs and technical challenges. Developing effective solutions to manage state information securely and efficiently within this framework is essential for limiting potential damage from state confusion leakage, ensuring the viability of such an integration for practical applications.</summary>
   </entry>
 </feed>
