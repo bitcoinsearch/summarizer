@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Stateless VTXO Verification: Decoupling Custody from Implementation-Specific Stacks</title>
+  <updated>2026-02-19T03:42:36.787380+00:00</updated>
+  <author>
+    <name>jgmcalpine</name>
+  </author>
+  <timestamp>2026-02-18 20:03:07.480000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Stateless VTXO Verification: Decoupling Custody from Implementation-Specific Stacks</title>
+    <updated>2026-02-19T03:42:36.787416+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stateless-vtxo-verification-decoupling-custody-from-implementation-specific-stacks/2267" rel="alternate"/>
+    <summary>The VTXO ecosystem is experiencing a significant evolution, leading to diverse implementations designed to optimize various throughput and latency profiles. This flexibility, while advantageous in several respects, introduces a challenge known as the "Verification Gap." The core of this issue lies in the bifurcation of custody within the VTXO model, where spending authority necessitates both a private key and a specific off-chain transaction context, referred to as the "Map." This situation contrasts with the L1 UTXO model, where transaction contexts are publicly available on-chain, thereby ensuring their persistence and accessibility. The ephemeral nature of VTXO contexts, which are maintained off-chain, potentially compromises user custody by binding it to the proprietary software stacks of Ark Service Providers (ASPs). This phenomenon, dubbed "Implementation-Coupled Custody," raises concerns about users' ability to independently verify or reconstruct their exit paths outside proprietary environments.
+
+In response to these challenges, the proposal for a Stateless VTXO Verification model, complemented by a neutral "Audit Ingredient" schema, seeks to facilitate independent auditability. This approach is particularly geared toward enhancing security in `no_std` environments, such as hardware wallets, allowing users to confirm their off-chain state irrespective of the underlying implementation's design nuances. The development of `libvpack-rs`, a stateless `no_std` verifier, has illuminated the considerable "dialect" differences across implementations concerning the construction of VTXO identity and transaction templates. These discrepancies underscore the necessity for a universal verification mechanism capable of accommodating varying indexing standards and the divergent uses of the `nSequence` field in pre-signed exit trees.
+
+The proposed Minimal Viable VTXO (MVV) Schema v0.1 aims to standardize the representation of VTXO components, enabling ASPs to export user "Maps" into a neutral verification environment. Such standardization facilitates the re-construction and validation of the user's spending authority by external tools like `vpack`. However, achieving structural validity—ensuring the mathematical soundness of the off-chain "Map"—constitutes only one aspect of the verification process. Future developments will extend to proving consensus validity, involving the verification of the unspent status of `anchor_outpoint` through interfaces with Compact Block Filters (BIP-158) or block explorer data, all within a `no_std` framework to suit high-security devices.
+
+A notable obstacle for independent verifiers emerges from "Mempool Policy," where an exit path's validity under consensus rules does not guarantee its broadcastability under current relay policies. This "Policy Trap" can mislead users into believing they possess a valid exit path when, in reality, their transaction might be unrelayable due to policy restrictions. To address this, there's an ongoing exploration into incorporating a "Policy Auditor" within `vpack` to alert users to potential policy-related issues with their VTXO "Map."
+
+Looking forward, several open questions warrant further research. Among these are the challenges of ensuring path exclusivity to guard against malicious pathways, the debate over treating connectors generically versus understanding their semantic logic for verification purposes, and the consideration of formalizing a Nostr Backup Standard for encrypted `VtxoIngredient` storage. The overarching aim of these initiatives is to preserve the diversity and innovation within the Ark protocol ecosystem while eliminating the risks associated with implementation-coupled custody. Through the adoption of a stateless verification model and standardized audit ingredients, the goal is to shift from a paradigm of trust to one of verifiable assurance. The current state and future updates of the stateless verifier can be followed on [GitHub](https://github.com/jgmcalpine/libvpack-rs).</summary>
+    <published>2026-02-18T20:03:07.480000+00:00</published>
+  </entry>
+</feed>
