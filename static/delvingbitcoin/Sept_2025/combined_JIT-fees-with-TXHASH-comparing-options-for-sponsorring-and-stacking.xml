@@ -1,31 +1,35 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - JIT fees with TXHASH: comparing options for sponsorring and stacking</title>
-  <updated>2025-10-01T02:47:01.681183+00:00</updated>
-  <author>
-    <name>ademan</name>
-  </author>
-  <author>
-    <name>stevenroose  .</name>
-  </author>
-  <link href="delvingbitcoin/Sept_2025/5989_JIT-fees-with-TXHASH-comparing-options-for-sponsorring-and-stacking.xml" rel="alternate"/>
-  <link href="delvingbitcoin/June_2025/5256_JIT-fees-with-TXHASH-comparing-options-for-sponsorring-and-stacking.xml" rel="alternate"/>
+  <updated>2026-03-19T03:49:45.215010+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>stevenroose</author>
+      <timestamp>2025-06-09 10:29:38.803000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>ademan</author>
+      <timestamp>2025-09-30 20:25:10.596000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>stevenroose</author>
+      <timestamp>2026-02-25 16:14:01.884000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/June_2025/5256_JIT-fees-with-TXHASH-comparing-options-for-sponsorring-and-stacking.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2025/5989_JIT-fees-with-TXHASH-comparing-options-for-sponsorring-and-stacking.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Feb_2026/6949_JIT-fees-with-TXHASH-comparing-options-for-sponsorring-and-stacking.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - JIT fees with TXHASH: comparing options for sponsorring and stacking</title>
-    <updated>2025-10-01T02:47:01.681232+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/jit-fees-with-txhash-comparing-options-for-sponsorring-and-stacking/1760" rel="alternate"/>
-    <summary>The discussion begins with an inquiry into the rationale behind not maintaining contiguous outputs in the stacking protocol, specifically within the context of Bitcoin transactions and the TXHASH Bitcoin Improvement Proposal (BIP). It raises a question about the potential efficiency or issues with different approaches to committing output indices in transaction stacking, hinting at an underlying complexity in optimizing blockchain transactions.
-
-In addressing the complexities of fee payments in Bitcoin transactions, especially given the evolution toward second-layer solutions, the conversation shifts to traditional methods like Child Pays for Parent (CPFP) and introduces the concept of Tx Sponsors. CPFP is described as increasingly costly due to the necessity of additional fee anchor outputs and child transactions. In contrast, Tx Sponsors are presented as a more efficient alternative that allows a transaction to cover the fees of another by specifying it by txid, requiring their simultaneous block inclusion without altering the original transaction or creating extra outputs.
-
-David Harding's contribution to the development of this idea includes suggesting a potentially free input/output marker for indicating sponsorship and a commitment mechanism within the sponsor transaction’s input signature hash. The dialogue further explores the innovative TXSIGHASH approach, which leverages TXHASH for selecting parts of the transaction to be included in the hash. This method significantly alters transaction construction and identification through flexible field, input, and output selection, directly impacting protocols reliant on stable txids like Lightning and Ark through rebindable signatures.
-
-The efficiency and cost-effectiveness of TXSIGHASH compared to other methods such as CPFP and Tx Sponsors are highlighted, particularly in scenarios involving both single transactions and stacks of transactions. TXSIGHASH is shown to reduce virtual byte costs consistently and simplify the process by treating multiple transactions as a single entity, thus lowering per-transaction costs. However, it also introduces the challenge of managing multiple signature variants for each transaction, adding complexity despite its benefits.
-
-Ultimately, the exploration concludes that while TXSIGHASH presents a promising method for reducing transaction costs and complexities in Bitcoin, the increased burden of managing signature variations requires careful consideration. Its potential to streamline transaction processing and fee management offers significant advancements in blockchain transaction management, but the practical implications of its complexity must not be overlooked.</summary>
-    <published>2025-09-30T20:25:10.596000+00:00</published>
+    <updated>2026-03-19T03:49:45.215430+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/jit-fees-with-txhash-comparing-options-for-sponsorring-and-stacking/1760/3" rel="alternate"/>
+    <published>2025-06-09 10:29:38.803000+00:00</published>
+    <summary>In the evolving landscape of Bitcoin transactions, especially with the introduction of second layer solutions, the complexity of fee payments has significantly increased. Traditional methods like Child Pays for Parent (CPFP) have been utilized to manage just-in-time fee payments through the creation of a new transaction linked to the original one, thus covering the fees for both transactions simultaneously. However, this method incurs additional costs due to the need for an extra fee anchor output and a new child transaction. An alternative, more efficient proposal is the concept of Tx Sponsors, which simplifies the process by allowing a transaction to sponsor another's fees without modifying the sponsored transaction or creating additional outputs. This is achieved by specifying another transaction by its txid and mandating their simultaneous block inclusion.
+David Harding has contributed ideas towards implementing this concept, suggesting the use of a potentially free input/output marker to indicate sponsorship and a commitment within the sponsor transaction’s input sighash to the sponsored txids. A further innovation, TXSIGHASH, builds on this by enabling specific parts of the transaction to be included in the tx hash through a `TxFieldSelector`. This feature provides flexibility in transaction construction and identification, particularly beneficial for p2tr outputs by altering how the txid is calculated and affecting protocols reliant on stable txids, such as Lightning and Ark. These protocols could, however, adapt by using rebindable signatures to accommodate the changes.
+TXSIGHASH stands out for its cost-effectiveness and efficiency in managing fees, showing significant reductions in virtual byte costs for single transactions compared to CPFP and Tx Sponsors methods. Its advantage extends to multi-transaction sponsoring or stacking, where it enables incorporation of multiple transactions into a single, larger transaction, reducing per-transaction costs and simplifying processing. The stacking strategy requires generating multiple signatures to support various configurations, ensuring all related transactions are included atomically. Despite these benefits, TXSIGHASH introduces complexity in creating, storing, and relaying multiple signature variants for each transaction, posing challenges compared to the straightforward approach of Tx Sponsors.
+A separate inquiry delves into the protocol design choices within the Bitcoin Improvement Proposal (BIP), questioning the decision not to keep outputs contiguous within the transaction hash. The sender proposes an alternative method that commits output indices in a contiguous sequence, contrasting with the current non-contiguous approach and seeking clarification on any overlooked benefits or drawbacks. This reflects a broader curiosity about optimization strategies in blockchain transaction management, indicating both potential for improvement and the inherent complexities in optimizing transaction structuring and signature requirements.</summary>
   </entry>
 </feed>

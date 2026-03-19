@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Sharing block templates</title>
+  <updated>2026-03-19T03:51:22.421466+00:00</updated>
+  <author>
+    <name>ajtowns</name>
+  </author>
+  <timestamp>2026-03-12 03:10:03.634000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Sharing block templates</title>
+    <updated>2026-03-19T03:51:22.421503+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/sharing-block-templates/1906/25" rel="alternate"/>
+    <summary>Recent experimentation on the Bitcoin mainnet has provided insights into the network's traffic usage, revealing a significant amount of data being transmitted. For instance, one node, referred to as nodeA, was observed sending and receiving various types of messages, including inv (inventory), tx (transactions), tmplt (template), and tmplttxn (template transactions) with volumes reaching up to 35 million for sent inventory messages and 15 million for received inventory messages. Another node, nodeB, showed different patterns, notably sending 138 million transaction messages while receiving only 3 million. These observations suggest that the network traffic could be as demanding as adding an additional peer, primarily due to the large volume of inventory messages exchanged.
+
+In response to these findings, there is an exploration into utilizing minisketch, a library for efficient set reconciliation, to reduce the network traffic. The strategy involves using 46-bit short ids for identification, as recommended by the minisketch documentation, because this size is considered optimal for the library's implementation and minimizes the chances of false positives among thousands of entries. The proposed solution employs a bisection approach with eight sketches, each having a capacity of 256. This method aims to efficiently reconcile differences between node mempools with varying degrees of divergence. For smaller discrepancies of fewer than a couple of hundred items, a single sketch of approximately 1500 bytes should suffice for perfect recovery. If the differences span up to around 1000 items, four sketches are likely to successfully reconcile the data. However, for over 2000 differences, the full set of shortids would need to be communicated. There's optimism that many situations will require only a single sketch for resolution, potentially minimizing the traffic significantly. Nonetheless, should there be a necessity, the introduction of a secondary mechanism employing smaller (32 byte) shortids for capturing any remaining false positives through an additional small sketch is considered a viable backup plan. Further development and testing will determine the efficacy of these strategies in reducing network traffic while maintaining accurate and efficient data reconciliation.</summary>
+    <published>2026-03-12T03:10:03.634000+00:00</published>
+  </entry>
+</feed>

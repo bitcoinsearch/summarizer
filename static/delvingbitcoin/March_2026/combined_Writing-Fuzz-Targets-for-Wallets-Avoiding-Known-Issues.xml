@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Writing Fuzz Targets for Wallets: Avoiding Known Issues</title>
+  <updated>2026-03-19T04:12:38.851194+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>bruno</author>
+      <timestamp>2026-03-03 22:32:15.082000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>benalleng</author>
+      <timestamp>2026-03-05 12:46:24.527000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>bruno</author>
+      <timestamp>2026-03-05 19:49:03.407000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/March_2026/7005_Writing-Fuzz-Targets-for-Wallets-Avoiding-Known-Issues.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2026/7008_Writing-Fuzz-Targets-for-Wallets-Avoiding-Known-Issues.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2026/7010_Writing-Fuzz-Targets-for-Wallets-Avoiding-Known-Issues.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Writing Fuzz Targets for Wallets: Avoiding Known Issues</title>
+    <updated>2026-03-19T04:12:38.851748+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/writing-fuzz-targets-for-wallets-avoiding-known-issues/2316/3" rel="alternate"/>
+    <published>2026-03-03 22:32:15.082000+00:00</published>
+    <summary>Fuzzing Bitcoin wallets presents unique challenges compared to more straightforward targets like parsers or pure functions due to their stateful nature, reliance on cryptographic operations, and dependency on chain state. A crucial aspect of effectively fuzzing such applications is understanding and optimizing around these complexities to avoid performance bottlenecks and ensure deterministic outcomes. The discussion here draws from experiences in writing fuzz targets for Bitcoin Core, aiming to aid developers in crafting effective fuzz tests for similar applications.
+One significant area of focus is the management of the keypool size. In production environments, Bitcoin wallets use a pre-generated pool of keys to improve user experience by making address generation quick and ensuring backups contain future keys. However, this behavior, while beneficial in live use, can lead to performance issues in fuzzing contexts due to the overhead of constantly checking the pool size, generating new keys, and updating internal metadata. A practical solution is to minimize the keypool size to a single entry when not explicitly testing keypool behavior, thereby reducing unnecessary computational overhead and allowing for more efficient fuzzing.
+Another critical consideration is the complexity of descriptor and miniscript parsing. Unrestricted fuzz input can lead to computationally intensive parsing operations, overwhelming the fuzzing process with syntactically valid but pathologically complex descriptors. To mitigate this, it's advised to limit descriptor complexity through various strategies, such as tracking wrapper depth and bounding derivation ranges. Implementing constraints directly within the input generation phase rather than post-generation filtering can significantly enhance fuzzing efficiency by focusing efforts on realistic and relevant wallet behaviors.
+Moreover, mocking external dependencies and expensive operations can further optimize the fuzzing workflow. For instance, substituting the wallet's fee estimator with a mock version allows for comprehensive testing of fee-related logic without the need for a populated database, which would be impractical in a fuzzing context. Similarly, avoiding encryption/decryption routines unless specifically testing those features prevents unnecessary computational expense. Utilizing an in-memory database instead of actual disk writes eliminates non-determinism and performance issues associated with file system interactions.
+Creating a &quot;wrapped wallet&quot; fixture that provides a minimal, deterministic wallet setup for fuzz tests can drastically reduce setup time per iteration. This approach ensures that fuzz tests spend the majority of computing resources on exercising targeted wallet functionalities rather than repetitive initialization tasks.
+In addition to these technical strategies, exploring process improvements such as ensemble fuzzing—using multiple fuzzing engines simultaneously—and periodically culling the corpus to introduce variance can potentially enhance coverage and efficiency. These methods reflect an ongoing exploration of ways to maximize the effectiveness of fuzzing workflows beyond traditional practices.
+Together, these strategies underscore the importance of tailoring fuzzing approaches to the specific characteristics of Bitcoin wallets. By addressing the unique challenges they present, developers can significantly improve the efficiency and effectiveness of their fuzzing efforts, contributing to more robust and secure wallet implementations.</summary>
+  </entry>
+</feed>

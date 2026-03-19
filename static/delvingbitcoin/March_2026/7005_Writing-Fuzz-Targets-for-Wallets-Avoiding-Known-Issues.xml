@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Writing Fuzz Targets for Wallets: Avoiding Known Issues</title>
+  <updated>2026-03-19T04:11:59.831471+00:00</updated>
+  <author>
+    <name>bruno</name>
+  </author>
+  <timestamp>2026-03-03 22:32:15.082000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Writing Fuzz Targets for Wallets: Avoiding Known Issues</title>
+    <updated>2026-03-19T04:11:59.831508+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/writing-fuzz-targets-for-wallets-avoiding-known-issues/2316" rel="alternate"/>
+    <summary>Fuzzing Bitcoin wallets presents unique challenges compared to fuzzing parsers or single functions, due to their stateful nature, persistence, cryptographic operations, and dependence on chain state. Optimizing fuzz testing for such applications is essential to avoid performance and determinism issues. One significant optimization involves reducing the keypool size to a minimum when fuzzing. The keypool in Bitcoin wallets, like Bitcoin Core, is a pre-generated set of keys for future address generation, which can become costly in fuzzing contexts due to unnecessary HD key derivations and database interactions. By setting the keypool size to 1, unnecessary pre-allocations are avoided without hindering correct wallet behavior, significantly improving fuzzing efficiency.
+
+Descriptor and miniscript parsing also require careful handling during fuzzing. Unbounded fuzz input can lead to computationally intensive parsing and validation, overshadowing more relevant wallet behaviors. Constraining descriptor complexity by limiting wrapper depth, subfragment counts, and derivation ranges helps focus fuzzing efforts on meaningful wallet operations rather than parser performance. Using structured input generators or custom mutators to enforce these constraints from the start further enhances fuzzing effectiveness.
+
+Mocking the fee estimator and avoiding wallet encryption/decryption during fuzzing are other critical strategies for maintaining performance. Fuzz targets should replace real fee estimation logic with fuzz-controlled values to explore all code paths efficiently. Since wallet encryption is computationally expensive, it's advisable to work with unencrypted wallets unless specifically testing encryption-related behaviors. This approach allows for higher iteration rates and more focused fuzzing campaigns.
+
+Efficient fuzzing also entails minimizing disk I/O and nondeterminism introduced by database-backed operations. Bitcoin Core achieves this by using mockable database backends for wallet fuzzing. Creating a "wrapped wallet" fixture that initializes a minimalistic, deterministic wallet setup for each fuzz iteration can drastically reduce setup overhead. This setup includes forcing descriptor mode, initializing chain-related state, reducing keypool size, and importing a controlled set of descriptors. Such optimizations allow fuzz targets to concentrate computational resources on testing wallet operations rather than repeatedly handling wallet setup tasks.
+
+Overall, effective fuzzing of Bitcoin wallets requires not just random input generation but strategic avoidance of performance and determinism pitfalls. Through optimizations like minimizing keypool size, constraining descriptor complexity, mocking fee estimators, bypassing encryption routines, using in-memory databases, and employing wrapped wallet fixtures, fuzzing efforts can be significantly more productive, focusing on uncovering meaningful vulnerabilities and behavior insights.</summary>
+    <published>2026-03-03T22:32:15.082000+00:00</published>
+  </entry>
+</feed>
