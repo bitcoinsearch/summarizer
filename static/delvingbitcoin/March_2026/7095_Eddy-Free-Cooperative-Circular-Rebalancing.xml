@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Eddy: Free Cooperative Circular Rebalancing</title>
+  <updated>2026-03-22T04:47:30.238513+00:00</updated>
+  <author>
+    <name>wactario</name>
+  </author>
+  <timestamp>2026-03-21 22:49:44.001000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Eddy: Free Cooperative Circular Rebalancing</title>
+    <updated>2026-03-22T04:47:30.238552+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/eddy-free-cooperative-circular-rebalancing/2349" rel="alternate"/>
+    <summary>The issue at hand involves the challenge of circular rebalancing within payment networks, where the reluctance to bear routing fees hinders the execution of potentially beneficial rebalances. This situation arises because initiating such transactions incurs costs that others are unwilling to shoulder, leading to a stalemate despite the presence of opportunities that could advantage all nodes involved. Additionally, when rebalances do occur, they may inadvertently adjust other nodes' balances in undesired ways, further complicating the matter.
+
+A novel solution has been introduced through Eddy, a daemon designed to operate alongside LND (Lightning Network Daemon). Eddy leverages LND's custom peer-to-peer messaging system to allow nodes to broadcast information about their channels' surplus outbound liquidity. By monitoring this shared data, nodes can identify cycles of channels where a rebalance would benefit all parties by aligning liquidity movement. A unique aspect of Eddy's approach is the use of a tiebreaker mechanism: if a node detects a beneficial cycle and possesses the lowest public key within that cycle, it gains the right to propose the rebalance to others. This proposal can either be accepted or rejected by the remaining nodes. Upon unanimous agreement, the proposing node initiates the rebalance. The process is designed to fail safely; if any part of the transaction fails, it does so atomically, negating any potential risks and obviating the need for centralized coordination or trust among participants.
+
+The development of this project underwent several iterations, reflecting an evolving understanding of how to best facilitate cooperative rebalancing without introducing undue risk. Initially, the system relied on a central coordinator, necessitating a degree of trust that was deemed undesirable. A subsequent version eliminated this coordinator but introduced potential vulnerabilities by utilizing HODL invoices to lock HTLCs (Hash Time Locked Contracts) across each transaction hop. This approach was problematic, as it could result in complications if a node became unresponsive during the process. The latest iteration of the project takes advantage of a lesser-known feature within LND, the `RESUME_MODIFIED` action for HTLC interceptors, discovered to be an ideal tool for this application. This feature, which emerged around the v0.18.x release timeline, permits a node to alter the outgoing amount of an HTLC before it is forwarded. Such functionality enables a forwarding node to bypass the deduction of routing fees, thereby facilitating a fee-free rebalance that returns the full amount to the initiator, provided all participating nodes agree to waive their fees. The effectiveness of this method was confirmed through experiments conducted on a regtest setup.
+
+Eddy's protocol is characterized by its simplicity and voluntary participation basis. The process begins with the initiator constructing a route and generating an invoice, followed by sending a proposal containing the payment hash to each node in sequence. Each node evaluates whether the proposed rebalance would positively impact its balance before passing the proposal along. If any node declines, the process is halted. Successful completion of the proposal loop allows the initiator to execute the payment, with each node along the path adjusting their forwarded amounts to eliminate fees. The initiative is currently in the Minimum Viable Product (MVP) stage, having been developed in a relatively informal manner. Feedback and code reviews are actively sought to refine and enhance the solution, with the project repository made available for scrutiny at [GitHub](https://github.com/wactario/eddy).</summary>
+    <published>2026-03-21T22:49:44.001000+00:00</published>
+  </entry>
+</feed>
