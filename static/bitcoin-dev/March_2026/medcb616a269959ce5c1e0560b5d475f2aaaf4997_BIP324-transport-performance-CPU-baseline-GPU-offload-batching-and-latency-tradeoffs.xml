@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP324 transport performance: CPU baseline, GPU offload, batching and latency tradeoffs</title>
+  <updated>2026-03-24T03:46:49.249124+00:00</updated>
+  <author>
+    <name>Vano Chkheidze</name>
+  </author>
+  <timestamp>2026-03-23 02:52:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP324 transport performance: CPU baseline, GPU offload, batching and latency tradeoffs</title>
+    <updated>2026-03-24T03:46:49.249162+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/35d5cbfb-48ea-4cec-bbb2-6597d40d8795n@googlegroups.com/T/#u#medcb616a269959ce5c1e0560b5d475f2aaaf4997" rel="alternate"/>
+    <summary>The exploration of BIP324 v2 encrypted transport by Ivane Chkheidze presents a comprehensive analysis on its performance, specifically focusing on throughput, latency, and batching effects. The study employs a robust setup, utilizing the full BIP324 v2 stack with advanced cryptographic primitives and hardware, including an x86-64 CPU and an RTX 5060 Ti GPU. This setup aims to understand the costs associated with the protocol and how they scale under varied execution models.
+
+Throughput measurements reveal significant findings. On a CPU baseline with a single-thread and a mixed traffic profile, the system achieved approximately 715K packets per second with a goodput of around 221 MB/s, indicating a protocol overhead of about 5.5%. The cryptographic primitives showed varying performance, with ChaCha20 and Poly1305 showcasing impressive speeds. Notably, one-time operations such as HKDF (extract+expand) and ElligatorSwift functions demonstrated swift executions, highlighting the efficiency of the cryptographic operations involved.
+
+Shifting focus to GPU offload through batch processing, the results are striking. With batching, the throughput increased dramatically, reaching up to 21.37M packets per second and a goodput of about 6.6 GB/s after optimizations. This represents up to a 30-fold increase in throughput compared to CPU processing. Despite this significant improvement, the protocol overhead remained relatively consistent.
+
+Latency analysis further underscores the impact of batching on performance. There is a pronounced dependence on batch size, with small workloads facing substantial launch and transfer overheads. Conversely, large batches effectively amortize these costs, suggesting that GPUs serve better as throughput engines rather than latency engines.
+
+End-to-end profiling sheds light on another critical aspect: data movement. Once cryptographic operations are optimized, data movement, particularly PCIe transfers, emerges as the primary bottleneck, stabilizing effective end-to-end throughput at around 3.2–3.6 GB/s. This finding indicates that beyond cryptographic optimization, addressing data movement challenges is crucial for enhancing overall performance.
+
+Additional observations from the study include the minimal impact of decoy traffic overhead on GPU performance and the benefits of multi-stream execution. The optimal batch size for this setup appears to be between 4K and 16K packets, emphasizing the importance of batch size and execution model in achieving optimal performance.
+
+The takeaways from Chkheidze's research highlight several key points: the measurable but not excessive cryptographic overhead on CPU, the potential for significant throughput scaling with parallel execution, the distinct behaviors of latency and throughput depending on batch size, and the shift towards memory/IO-bound constraints once cryptographic operations are sufficiently optimized. These insights raise open questions related to node-level scenarios for large batch sizes, the compatibility of transport-level batching with current peer/message handling models, and the real-world relevance of throughput optimizations versus latency considerations.
+
+For those interested in delving deeper into the technical aspects of this research, Chkheidze provides a [link to the implementation](https://github.com/shrec/UltrafastSecp256k1/tree/dev) used for these measurements, offering a valuable resource for further exploration and development.</summary>
+    <published>2026-03-23T02:52:00+00:00</published>
+  </entry>
+</feed>

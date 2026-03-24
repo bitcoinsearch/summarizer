@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Introducing UltrafastSecp256k1: A Multi-Architecture Exploration of Secp256k1 Optimizations</title>
+  <updated>2026-03-24T03:39:50.919491+00:00</updated>
+  <author>
+    <name>shrec</name>
+  </author>
+  <timestamp>2026-03-23 13:09:07.205000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Introducing UltrafastSecp256k1: A Multi-Architecture Exploration of Secp256k1 Optimizations</title>
+    <updated>2026-03-24T03:39:50.919532+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/introducing-ultrafastsecp256k1-a-multi-architecture-exploration-of-secp256k1-optimizations/2280/11" rel="alternate"/>
+    <summary>Recent experiments with BIP324 v2 encrypted transport have unveiled significant insights into its performance characteristics, emphasizing throughput, latency, and how batching effects impact these metrics. The experimental setup utilized the complete BIP324 v2 stack, incorporating ChaCha20-Poly1305 AEAD, HKDF-SHA256, ElligatorSwift, and session management on a platform powered by an x86-64 CPU and RTX 5060 Ti GPU. The primary aim was to gain a deeper understanding of the inherent costs and scalability of these cryptographic processes under varied execution models without proposing specific changes.
+
+In terms of CPU performance, the system achieved a throughput of approximately 715K packets per second, translating to a goodput of around 221 MB/s, while maintaining a protocol overhead close to 5.5%. This baseline measurement highlighted the efficiency of selected primitives such as ChaCha20 and Poly1305, with considerable speeds noted for both AEAD encryption and decryption processes. Furthermore, one-time operations like HKDF extract and expand, along with ElligatorSwift creation and XDH exchange, were quantified, revealing their relatively low time consumption.
+
+Shifting focus to GPU offload through batch processing revealed a dramatic increase in performance. Initial tests with 128K packets batches saw throughput jump to roughly 12.78M packets per second or 3.9 GB/s goodput, marking over a 17-fold improvement compared to CPU results. Following optimizations, which included state reuse and instruction-level tuning, throughput escalated to about 21.37M packets per second, equivalent to 6.6 GB/s goodput, effectively showcasing a 30-fold enhancement over CPU performance. Despite these gains, the protocol overhead remained consistent at approximately 5.5–5.6%.
+
+Latency analysis underscored a strong correlation with batch size, where larger batches significantly reduced per-packet latency, suggesting that launch and transfer overheads dominate smaller workloads. Moreover, end-to-end profiling pinpointed data movement, particularly PCIe transfer, as the primary bottleneck once cryptographic computations were optimized, stabilizing effective throughput around 3.2–3.6 GB/s.
+
+Additional observations included the minimal impact of decoy traffic on GPU throughput and the benefits of multi-stream execution. The optimal batch size for this setup appeared to be within the 4K–16K packet range, underscoring the importance of batch size and execution model on overall performance.
+
+The experiment's findings raise several open questions regarding the applicability of large batch sizes in real-world scenarios and their compatibility with existing transport and messaging frameworks. It also prompts a discussion on the relative importance of throughput optimizations versus latency reductions in practical node deployments. These insights not only contribute to a better understanding of BIP324 v2 encrypted transport's performance landscape but also invite further exploration and dialogue within the community.</summary>
+    <published>2026-03-23T13:09:07.205000+00:00</published>
+  </entry>
+</feed>
