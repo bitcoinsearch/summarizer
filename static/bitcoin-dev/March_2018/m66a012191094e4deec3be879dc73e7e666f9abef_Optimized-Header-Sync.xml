@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Optimized Header Sync</title>
+  <updated>2026-03-26T05:01:08.249121+00:00</updated>
+  <author>
+    <name>Jim Posen</name>
+  </author>
+  <timestamp>2018-03-27 23:31:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Optimized Header Sync</title>
+    <updated>2026-03-26T05:01:08.249163+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CADZtCShrTKqR26RMnUAwK32_7XKNvsCWgfYvQ3Bud2J6r54AKg@mail.gmail.com/T/#m66a012191094e4deec3be879dc73e7e666f9abef" rel="alternate"/>
+    <summary>The proposed Bitcoin Improvement Proposal (BIP) introduces an extension to the peer-to-peer (P2P) network, aimed at enhancing the efficiency of block header synchronization. This enhancement is particularly beneficial for light clients and nodes during the initial block download phase. By adopting a new method of encoding and downloading block headers, the protocol expects to reduce bandwidth usage by approximately 40%-50%. This is achieved through compressing header data and enabling the parallel downloading of header ranges from multiple peers – a functionality not supported under the current protocol.
+
+The motivation behind this proposal stems from the need to optimize the process of fetching block headers, a critical step that precedes the downloading of full blocks. Since 2015, Bitcoin clients have been designed to retrieve all block headers before obtaining the blocks themselves. This approach ensures that clients only download blocks belonging to the most work chain. However, the existing header fetching protocol is seen as inefficient, with room for optimization in terms of compression and simultaneous downloads. Additionally, the current implementation uses preconfigured checkpoints to protect against attacks aimed at overwhelming a node's storage with low-work headers. The proposed P2P messages introduce more robust sync strategies that can better withstand denial-of-service attacks.
+
+At the core of the proposal are several new structures and messages designed to facilitate this improved synchronization process. Compressed headers allow for a significant reduction in data size by omitting redundant information and employing variable-sized encoding for fields like the block version, timestamp, and difficulty target (nBits). These compressed headers are reconstructed using information from preceding headers in the sequence, ensuring that the integrity of the blockchain is maintained without the need for transmitting excessive data.
+
+Furthermore, the introduction of "checkpoints" - specified as hashes at certain intervals within the block chain - enables a more structured and efficient approach to header sync. New P2P messages, namely `getcheckpts` and `getheaders2`, allow nodes to request and exchange these checkpoints and compressed headers, respectively. The use of service bits identifies nodes that support these advanced features, ensuring compatibility and facilitating a smooth transition from legacy systems.
+
+The synchronization strategies outlined in the BIP include forward sequential syncing, where headers are downloaded from a single peer in order, and parallel header download, which allows for headers to be fetched concurrently from multiple peers, thus increasing throughput. An additional method, random sampling proof-of-work, leverages the FlyClient protocol to efficiently verify the honesty of a peer's claimed chain work, further safeguarding against fraudulent activities during sync.
+
+Inclusion of the coinbase transaction within header messages serves a dual purpose: it offers cryptographic proof of a block's height following the activation of BIP 34, and it provides a straightforward means of requesting a coinbase transaction for verification purposes. The rationale for retaining the nBits field in its uncompressed form is to ensure that headers can be fully decompressed independently of other chain context, allowing for the validation of proof of work across arbitrary header ranges.
+
+This proposal represents a backward-compatible evolution of the Bitcoin network, introducing new P2P messages activated upon signaling via a service bit, without necessitating changes to consensus rules. It is a collaborative effort, incorporating feedback and suggestions from notable contributors within the Bitcoin development community, including Gregory Maxwell for his insights on compressed header encoding and DOS-resistant sync strategies, and Pieter Wuille for his work on VarInt encoding.</summary>
+    <published>2018-03-27T23:31:00+00:00</published>
+  </entry>
+</feed>
