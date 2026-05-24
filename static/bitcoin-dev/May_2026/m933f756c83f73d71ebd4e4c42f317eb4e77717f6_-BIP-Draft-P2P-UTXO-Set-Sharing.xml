@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Draft] P2P UTXO Set Sharing</title>
+  <updated>2026-05-24T07:32:08.749625+00:00</updated>
+  <author>
+    <name>Fabian</name>
+  </author>
+  <timestamp>2026-05-05 15:36:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Draft] P2P UTXO Set Sharing</title>
+    <updated>2026-05-24T07:32:08.749669+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CmNC-9nAajMwaJi6dHTdlpgjzLZazPlMjGAxNT8DJXAnyw2sUKCygJJU4BLqaF8OYw3carG_pt1Rriqu66OG3wQ8u2itVlJCFo1AhI3V4es=@protonmail.com/T/#m933f756c83f73d71ebd4e4c42f317eb4e77717f6" rel="alternate"/>
+    <summary>The Bitcoin Improvement Proposal (BIP) outlined in the recent draft introduces a significant update to peer-to-peer (P2P) UTXO set sharing within the Bitcoin network. This BIP aims to facilitate the decentralized sharing of UTXO sets, thereby allowing new nodes to bootstrap efficiently without reliance on third-party sources for obtaining serialized UTXO sets. The proposal includes the introduction of a new service bit (`NODE_UTXO_SET`), alongside four new P2P messages (`getutxotree`, `utxotree`, `getutxoset`, `utxoset`) designed to manage the data transfer process.
+
+The motivation behind this protocol extension is to leverage the `assumeutxo` mechanism implemented in Bitcoin Core, which permits nodes to operate using a known correct UTXO set while concurrently validating historical blocks. Traditionally, acquiring these UTXO sets required generating them from a fully synchronized node or downloading from an external provider. This BIP proposes a model where nodes can directly obtain UTXO sets from peers over the network, thus potentially reducing the setup time for new nodes and enhancing the overall resilience and decentralization of the network.
+
+In terms of specification, the serialized UTXO set adheres to the format used by Bitcoin Core's `dumptxoutset`. The structure involves a series of chunks hashed into a Merkle tree, with verification facilitated through comparison of computed and known Merkle roots. This design ensures integrity and trust minimization in transferring UTXO sets between peers. Each chunk of the UTXO set is precisely 3.9 MB, aiming to balance memory usage and network request overheads effectively.
+
+The operational flow of this protocol begins when a node identifies peers that signal the availability of UTXO sets via the `NODE_UTXO_SET` service bit. The node then requests the chunk-hash list for a specific UTXO set using the `getutxotree` message. Upon receiving this list along with metadata in a `utxotree` response, the node verifies each chunk against its hash as it is received via `utxoset` messages. This per-chunk verification process allows for efficient error handling and peer switching, ensuring data integrity throughout the transfer process.
+
+This BIP draft is currently available for public comment at [Bitcoin BIPs repository pull](https://github.com/bitcoin/bips/pull/2137). It reflects a structured approach to enhancing the robustness of the Bitcoin network's infrastructure through improved data dissemination mechanisms. The proposal remains open for further discussion and refinement to ensure comprehensive community feedback and engagement.</summary>
+    <published>2026-05-05T15:36:00+00:00</published>
+  </entry>
+</feed>
