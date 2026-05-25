@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Disposing of "dust attack" UTXOs</title>
+  <updated>2026-05-25T05:36:48.715780+00:00</updated>
+  <author>
+    <name>nothingmuch</name>
+  </author>
+  <timestamp>2026-03-30 20:06:53.234000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Disposing of "dust attack" UTXOs</title>
+    <updated>2026-05-25T05:36:48.715819+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disposing-of-dust-attack-utxos/2215/22" rel="alternate"/>
+    <summary>The discussion revolves around the implications of certain Bitcoin Core policies, specifically focusing on the use of `SIGHASH_NONE|SIGHASH_ANYONECANPAY` and its potential to facilitate the construction of transactions that can be aggregated by third parties. This signature hash type allows the creation of 1-input transactions with an `ash OP_RETURN` output, which can later be merged into a larger transaction featuring an empty `OP_RETURN` output. Such flexibility does not, according to the analysis, introduce additional denial-of-service (DoS) risks compared to existing practices. 
+
+Further examination suggests that mandating a non-empty `OP_RETURN ash` could streamline transaction classes, enabling consistent aggregation into valid transactions while avoiding unnecessary overhead. Meanwhile, the current policy discussions under `SIGHASH_ALL|SIGHASH_ANYONECANPAY` seem to neglect the implications of the `ALL` versus `NONE` distinction, focusing predominantly on the `ANYONECANPAY` aspect.
+
+A proposed alternative involves optimizing the handling of minimal transactions by allowing them to always be relayed separately and then aggregated in the mempool using deterministic sorting rules. This strategy would eliminate the need for replacement logic specifically for these types of transactions and could lead to optimal bandwidth usage per output destroyed while maximizing revenue potentials. Such a policy would also be backward compatible, as peers unfamiliar with aggregation practices would continue applying existing standardness and replacement rules to single input-output transactions, potentially aggregated later by miners. This approach demands consideration of either maintaining the 3 virtual byte (`vbyte`) overhead associated with `ash` or adopting `SIGHASH_NONE` to achieve block space efficiency.</summary>
+    <published>2026-03-30T20:06:53.234000+00:00</published>
+  </entry>
+</feed>

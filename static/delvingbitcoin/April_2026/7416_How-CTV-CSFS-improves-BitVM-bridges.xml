@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>How CTV+CSFS improves BitVM bridges</title>
+  <updated>2026-05-25T05:33:12.426669+00:00</updated>
+  <author>
+    <name>AaronZhang</name>
+  </author>
+  <timestamp>2026-04-28 16:11:10.317000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>How CTV+CSFS improves BitVM bridges</title>
+    <updated>2026-05-25T05:33:12.426709+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/how-ctv-csfs-improves-bitvm-bridges/1591/29" rel="alternate"/>
+    <summary>The recent discussions in the thread have focused on advanced concepts like multi-input UTXO binding and transaction introspection. A significant point raised was whether it's feasible to validate a specific field inside SigMsg rather than its overall shape. Practical applications on the Inquisition signet have demonstrated that this is indeed possible by utilizing same-signature binding. This method involves a Schnorr signature that satisfies both OP_CHECKSIG and OP_CHECKSIGFROMSTACK, effectively binding to sha_prevouts.
+
+The technical implementation of this involves a script approximately 196 bytes long that embeds one outpoint directly within it, while the witness provides another. The script then checks if their concatenated on-stack representation matches the sha_prevouts segment of a preimage supplied by the witness. Importantly, the signature connects this preimage back to the actual transaction, ensuring integrity and tying back to the authenticated elements of the transaction.
+
+This technique has been tested with real transactions on the Inquisition signet. For instance, a transaction where components A and B were combined was accepted, showcasing a positive test case. Conversely, a similar construction using components A and C resulted in rejection due to a failure in an OP_EQUALVERIFY operation, highlighted by the `testmempoolaccept` function. This indicates robustness against substitution attacks like those proposed by AJ, as the targeted binding field is inherently secured by the signature itself, not merely by a byte pattern in the script.
+
+These findings are crucial for understanding the security models applicable to blockchain technology and digital transaction scripting. They open up discussions about potential vulnerabilities and the structural integrity of transaction scripts in blockchain implementations.</summary>
+    <published>2026-04-28T16:11:10.317000+00:00</published>
+  </entry>
+</feed>

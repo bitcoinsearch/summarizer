@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Taproot-native prevout binding via sighash preimage decomposition</title>
+  <updated>2026-05-25T05:57:22.196175+00:00</updated>
+  <author>
+    <name>AaronZhang</name>
+  </author>
+  <timestamp>2026-05-13 18:26:24.876000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Taproot-native prevout binding via sighash preimage decomposition</title>
+    <updated>2026-05-25T05:57:22.196211+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/taproot-native-prevout-binding-via-sighash-preimage-decomposition/2483/3" rel="alternate"/>
+    <summary>The discussion revolves around the technical implementation of output binding in Bitcoin transactions using taproot-native constructs, specifically focusing on whether this method serves as a viable alternative to `OP_CHECKTEMPLATEVERIFY` (CTV). In this method, the tapscript is designed to hardcode a 32-byte expected `sha_outputs`, which is crucial for verifying transaction outputs. This `sha_outputs` functions similarly to the digest committed by CTV. During transaction verification, the witness provides the preimage in segmented chunks that include this `sha_outputs` value. These chunks are kept under 80 bytes to comply with standard transaction formats.
+
+The verification script utilizes `OP_EQUALVERIFY` to compare the `sha_outputs` chunk against its hardcoded counterpart, ensuring that only the correct transaction output is processed. Additionally, the script employs `OP_SIZE` to lock one chunk's size, while `OP_CAT` is used to reassemble the full 212-byte preimage. Once reassembled, it computes the TapSighash tagged hash and executes `OP_CHECKSIGFROMSTACK` along with `OP_CHECKSIG` against a 64-byte Schnorr signature. If the signature satisfies both conditions, it confirms that the witness preimage matches the real sighash, validating the integrity of the `sha_outputs`.
+
+This mechanism has been actively tested on the Bitcoin Inquisition signet. One such test involved a transaction (identified by [`05f9372d..`](https://mempool.space/signet/tx/05f9372dff7184ad736373165bc617ba100315bd2c187b0a4c893d796b2ca0cc)) where a tapscript hardcoded the `sha_outputs`. This transaction was successfully confirmed ([`2f345180..`](https://mempool.space/signet/tx/2f345180bc6654353a247a50559c0be42153707b2ca29b621e57671ed41f37e6)), demonstrating the effectiveness of this output-binding method. Conversely, any attempt to alter the output (either the amount or scriptPubKey) resulted in rejection, highlighting the robustness of this approach in maintaining transaction integrity.
+
+In summary, while this taproot-native output binding technique achieves similar security guarantees as CTV regarding where funds are directed, it does not necessarily replace CTV in terms of deployment economics. The method requires multiple preimage chunks and a larger script than a single `OP_CTV` invocation. However, its significance lies in leveraging already-activated opcodes and providing dual covenant semantics, alongside previously discussed input bindings (`sha_prevouts`). This showcases an advanced level of control over transaction elements within the existing Bitcoin script capabilities, opening discussions on its broader applicability and efficiency compared to traditional methods like CTV.</summary>
+    <published>2026-05-13T18:26:24.876000+00:00</published>
+  </entry>
+</feed>

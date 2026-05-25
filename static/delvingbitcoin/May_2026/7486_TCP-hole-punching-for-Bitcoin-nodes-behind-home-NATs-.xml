@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>TCP hole punching for Bitcoin nodes behind home NATs?</title>
+  <updated>2026-05-25T05:59:43.410925+00:00</updated>
+  <author>
+    <name>0xB10C</name>
+  </author>
+  <timestamp>2026-05-11 13:26:22.919000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>TCP hole punching for Bitcoin nodes behind home NATs?</title>
+    <updated>2026-05-25T05:59:43.410961+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/tcp-hole-punching-for-bitcoin-nodes-behind-home-nats/2497" rel="alternate"/>
+    <summary>The discussion surrounding the application of TCP hole punching in Bitcoin Core centers on enhancing connectivity between nodes that are typically unreachable due to being behind home NATs. The technique could potentially enable direct peer-to-peer connections without requiring traffic relay through a server, by exploiting the temporary "holes" punched in the NAT by outbound SYN messages during a connection attempt. This is based on the synchronization of connection attempts from both sides, as outlined in [RFC 9293](https://datatracker.ietf.org/doc/html/rfc9293name-simultaneous-connection-syn), which describes simultaneous connection synchronization. The method requires specific NAT behaviors categorized by [RFC 4787](https://datatracker.ietf.org/doc/html/rfc4787section-4.1), where Endpoint-Independent Mapping (EIM) supports this feature most favorably.
+
+In practical terms, the proposed system would involve a third-party node, referred to as Charlie, acting as a coordinator or rendezvous point. Charlie would facilitate the initial connection between two unreachable nodes, say Alice and Bob, by letting each know the other's public IP and port after observing their packets pass through their respective NATs. After establishing these conditions, Alice and Bob would attempt to make a direct TCP connection using the same local ports they used with Charlie, aiming to utilize the NAT holes created by their outgoing SYN messages.
+
+This approach opens several avenues for further exploration and discussion within the Bitcoin protocol community, particularly regarding its potential implementation in Bitcoin Core. There is an ongoing debate about whether these hole-punched connections should be considered inbound or outbound. Traditional definitions may not apply since these connections are initiated externally but not selected directly from participants' known addresses. Moreover, the security implications, including vulnerability to sybil and eclipse attacks when involving potentially malicious nodes, need careful consideration.
+
+The broader impact of employing TCP hole punching includes possibly increasing the number of connection slots available on the network, thereby allowing for greater peer diversity among unreachable nodes. This could enhance the network's resistance to attacks and optimize relay paths between nodes. However, there are significant technical challenges and open questions about the effectiveness and reliability of TCP hole punching, especially given the variety of NAT behaviors and the stateful, timing-sensitive nature of TCP connections. Further research from theoretical and practical perspectives will be crucial, along with insights from existing peer-to-peer projects that have implemented similar technologies. Additional resources like academic papers and documentation on protocols like libp2p offer valuable information for advancing this discussion ([Communication Across Network Address Translators](https://pdos.csail.mit.edu/papers/p2pnat.pdf), [TCP hole punching on Wikipedia](https://en.wikipedia.org/wiki/TCP_hole_punching), and [libp2p's hole-punching documentation](https://libp2p.io/docs/hole-punching/)).</summary>
+    <published>2026-05-11T13:26:22.919000+00:00</published>
+  </entry>
+</feed>

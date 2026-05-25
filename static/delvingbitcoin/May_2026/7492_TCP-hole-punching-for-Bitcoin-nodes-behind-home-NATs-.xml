@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>TCP hole punching for Bitcoin nodes behind home NATs?</title>
+  <updated>2026-05-25T05:58:44.146790+00:00</updated>
+  <author>
+    <name>0xB10C</name>
+  </author>
+  <timestamp>2026-05-11 13:14:16.900000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>TCP hole punching for Bitcoin nodes behind home NATs?</title>
+    <updated>2026-05-25T05:58:44.146831+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/tcp-hole-punching-for-bitcoin-nodes-behind-home-nats/2497/6" rel="alternate"/>
+    <summary>The discussion focuses on enhancing the privacy and functionality of Bitcoin nodes operating behind Enhanced Inverse Multiplexing (EIM) Network Address Translation (NAT) systems, particularly concerning their ability to establish clearnet connections. A significant challenge addressed is the inability of such nodes to receive inbound connections through clearnet due to NAT restrictions, even though many now support Tor and/or I2P networks which facilitate inbound connections. A proposed solution involves a protocol where two nodes, both behind EIM NAT and connected via Tor or I2P, coordinate TCP hole punching without the need for a central coordinator.
+
+In the initial stages of this protocol, a node, referred to as Node A, must determine whether it is behind an EIM NAT. This can be established by opening dual connections to other nodes and analyzing the consistency of the port numbers returned in version messages, using socket options like `SO_REUSEADDR`/`SO_REUSEPORT`. If Node A ascertains it is behind an EIM NAT and unreachable via clearnet, it then sets up a dedicated Tor or I2P endpoint solely for coordinating hole-punching activities. This specific endpoint does not handle address, transaction, or block relay to maintain separation from other network activities.
+
+Node A advertises this coordination endpoint over clearnet using a new possible service flag (`NODE_HOLEPUNCH`) in an `addrv2` message format. This advertisement strategy is designed to avoid linking clearnet with Tor/I2P addresses and is implemented with mechanisms to prevent the relayed addresses from being stored long-term in addrman, thereby not occupying space or being relayed beyond a short duration.
+
+Upon receiving this advertisement, another node, Node B, which also confirms its status behind an EIM NAT, attempts an outbound connection to Node A’s dedicated coordination endpoint. The connection involves a version handshake that implicitly requests a hole-punch connection. Following successful coordination, Nodes A and B initiate outbound connections to known addresses to finalize their respective NAT IP:port mapping, facilitating a simultaneous TCP open operation to punch through the NATs.
+
+Additionally, the discussion touches on potential simplifications and alternatives to minimize operational complexities and improve reliability. One such suggestion includes predicting NAT ports based on local bindings, potentially eliminating some outbound connection steps. Alternatively, leveraging well-known, community-run servers or enabling special IPv4/IPv6 NAT check connections directly within node software could serve as decentralized solutions, akin to implementing a STUN service for the P2P network. These strategies propose different trade-offs between operational simplicity, privacy concerns, and dependency on external services.</summary>
+    <published>2026-05-11T13:14:16.900000+00:00</published>
+  </entry>
+</feed>

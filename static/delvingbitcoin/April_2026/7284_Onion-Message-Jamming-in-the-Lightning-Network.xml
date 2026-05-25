@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Onion Message Jamming in the Lightning Network</title>
+  <updated>2026-05-25T05:42:14.785932+00:00</updated>
+  <author>
+    <name>erickcestari</name>
+  </author>
+  <timestamp>2026-04-13 17:13:42.816000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Onion Message Jamming in the Lightning Network</title>
+    <updated>2026-05-25T05:42:14.785972+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/onion-message-jamming-in-the-lightning-network/2414" rel="alternate"/>
+    <summary>The current landscape of onion message forwarding within the Lightning Network is outlined through various implementations and proposed security measures to mitigate rate-limiting vulnerabilities. The Lightning Network specifies, through BOLT 4, that onion message routing is unreliable and susceptible to jamming due to its inherent structure. In response, most implementations impose rate limits and recommend only relaying messages from known peers to prevent abuse.
+
+Core Lightning, Eclair, LDK, and LND each have distinct methods of implementing these rate limits. Core Lightning uses a token bucket system allowing four messages per second per peer, while Eclair sets a hard cap at ten messages per second. LDK opts for a less stringent approach by prioritizing other channel messages over onion messages, which are only sent when resources allow. LND is developing a more sophisticated system incorporating a two-tier token bucket with per-peer and global rates, as detailed in their [open PR](https://github.com/lightningnetwork/lnd/pull/10713).
+
+The problem intensifies as attackers can craft messages that exploit these rate limits, leading to legitimate messages being dropped alongside spam. This issue is exacerbated by the potential for high hop counts in onion messages, allowing significant network disruption from single messages due to the way nodes process and forward these packets without being able to inspect their entire path.
+
+Several mitigation strategies are under consideration to address these vulnerabilities. One proposal involves introducing upfront fees for sending onion messages, making sustained spam attacks economically unfeasible. This method would integrate fees into the encrypted payload of the onion message, requiring no new protocol messages but increasing complexity and latency in message forwarding.
+
+Another strategy proposes a hop limit combined with proof-of-stake based forwarding rules, where nodes would impose rate limits based on a peer's visible channel balance. This could potentially centralize the network by advantaging well-funded nodes.
+
+A third approach, bandwidth metered payment, suggests a session-based model where senders prepay for message forwarding capacity, adding stateful tracking at each node but offering a more sustained communication framework.
+
+Lastly, a backpropagation-based rate limiting has been suggested, where nodes reactively adjust rate limits based on the identification of spam sources. This lightweight mechanism aims to trace and penalize spam origins effectively but may misidentify targets due to its reliance on the last sender’s information.
+
+These proposals each offer different benefits and trade-offs, highlighting the complexity of securing a decentralized, real-time communication protocol like the Lightning Network. As this technology advances, especially with the impending integration of BOLT 12 enhancements, addressing these security challenges becomes increasingly crucial to maintaining network reliability and user trust.</summary>
+    <published>2026-04-13T17:13:42.816000+00:00</published>
+  </entry>
+</feed>

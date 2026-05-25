@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Disposing of "dust attack" UTXOs</title>
+  <updated>2026-05-25T05:37:04.430773+00:00</updated>
+  <author>
+    <name>bubb1es</name>
+  </author>
+  <timestamp>2026-03-31 01:54:17.511000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Disposing of "dust attack" UTXOs</title>
+    <updated>2026-05-25T05:37:04.430813+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disposing-of-dust-attack-utxos/2215/23" rel="alternate"/>
+    <summary>The discourse surrounding Bitcoin Core's transaction fee policies, especially in the context of version 30.0 and beyond, reveals a nuanced approach to handling sub 1 sat/vb fee-rate transactions. The proposal initially aimed to adapt specifically to Bitcoin Core’s policies could be more universally applicable by avoiding specific fee rate mentions due to potential fluctuations in standard minimum fee rates over time. This adjustment would remove unnecessary restrictions that currently tailor the proposal exclusively for Bitcoin Core’s existing policy.
+
+Further analysis suggests the use of `SIGHASH_NONE|SIGHASH_ANYONECANPAY`, which facilitates the construction of transactions with one input and an `ash OP_RETURN` output that can subsequently be aggregated by third parties into a transaction with an empty `OP_RETURN` output. This method also permits miners or third-party aggregators to add additional outputs without raising DoS concerns, addressing initial worries regarding dust disposal transactions being poached into regular transactions and occupying more block space. However, this is counterbalanced by the ability to batch these inputs effectively under the revised proposal, thereby removing the "ash" marker when it is not needed and adhering to Replace-By-Fee (RBF) rules to avoid spam.
+
+Moreover, there's a shift towards embracing the `SIGHASH_NONE|SIGHASH_ANYONECANPAY` configuration over the initially discussed `SIGHASH_ALL|SIGHASH_ANYONECANPAY`. This change supports smaller single output transactions and reduces DoS risks comparably to the presently permitted transactions. The reevaluation supports the strategy of allowing transactions that can always be aggregated into valid transactions without necessitating an `ash` marker unless absolutely necessary. Consequently, this would optimize bandwidth usage per output destroyed and potentially maximize revenue without requiring replacement logic for such aggregate transactions. This approach is further supported by its backward compatibility wherein peers unfamiliar with aggregation could still enforce current standardness and replacement rules while relaying efficient 1 input, 1 output transactions.
+
+Additionally, the implementation of these strategies in the `ddust` reference client by @harris highlights an opportunistic approach to batching by wallets, which finds and incorporates other dust disposal transactions from the mempool during the creation of their own dust disposal transactions. This method, while possibly less efficient than dedicated third-party batching, offers increased reliability by decentralizing the aggregation process and reducing reliance on specific mempool or third-party behaviors.</summary>
+    <published>2026-03-31T01:54:17.511000+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Taproot-native prevout binding via sighash preimage decomposition</title>
+  <updated>2026-05-25T05:56:54.756034+00:00</updated>
+  <author>
+    <name>AaronZhang</name>
+  </author>
+  <timestamp>2026-05-06 19:35:12.603000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Taproot-native prevout binding via sighash preimage decomposition</title>
+    <updated>2026-05-25T05:56:54.756090+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/taproot-native-prevout-binding-via-sighash-preimage-decomposition/2483" rel="alternate"/>
+    <summary>The discussion revolves around a technical solution to enhance the functionality of BitVM bridges by binding two specific inputs, A and B, so they can only be spent together. This method addresses a previous limitation where bindings were made to scriptSig bytes rather than directly to the outpoint itself. The improved approach uses the `sha_prevouts` field from the sighash preimage as a binding mechanism, ensuring higher security and specificity in transactions.
+
+In practical terms, the script developed for this purpose hardcodes the outpoint of input B within its code, which comprises approximately 36 bytes of raw data. When a transaction is attempted, the script computes a SHA256 hash of the concatenated outpoints of A (provided by the witness) and B (hardcoded). This hash must match the `sha_prevouts` segment extracted from the preimage. To ensure integrity across the transaction, a Schnorr signature is employed that satisfies both `OP_CHECKSIG` and `OP_CHECKSIGFROMSTACK`, confirming the legitimacy of the combined inputs.
+
+Significant testing on the Bitcoin Inquisition signet has yielded positive results, demonstrating successful binding and spending of inputs A and B together while rejecting unauthorized transactions involving other unbound UTXOs, such as substituting input C for B. These tests, recorded on platforms like [mempool.space](https://mempool.space/signet/tx/b7959a71b74b8bbed69d52c22a9b3b90af176391be2d0b7f33eb1a6473304606), validate the robustness of the script against potential attacks and confirm its effectiveness in maintaining the integrity of input combinations at the consensus level.
+
+This development not only enhances security but also introduces a generalizable method for sighash preimage decomposition, offering broader applications for various cryptographic challenges in blockchain technologies. The source code and further details about this implementation are available on [GitHub](https://github.com/aaron-recompile/inquisition-experiments/blob/main/experiments/exp_sighash_prevout_binding_chunked.py), providing an open platform for additional evaluation and adaptation within the community.</summary>
+    <published>2026-05-06T19:35:12.603000+00:00</published>
+  </entry>
+</feed>
