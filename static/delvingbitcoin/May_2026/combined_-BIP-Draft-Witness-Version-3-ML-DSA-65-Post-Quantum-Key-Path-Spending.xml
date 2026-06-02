@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [BIP Draft] Witness Version 3: ML-DSA-65 Post-Quantum Key-Path Spending</title>
-  <updated>2026-05-25T05:46:51.772294+00:00</updated>
+  <updated>2026-06-02T04:50:57.192165+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -13,19 +13,23 @@
       <author>conduition</author>
       <timestamp>2026-05-08 18:07:44.208000+00:00</timestamp>
     </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>conduition</author>
+      <timestamp>2026-06-01 17:41:52.443000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/April_2026/7328_-BIP-Draft-Witness-Version-3-ML-DSA-65-Post-Quantum-Key-Path-Spending.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2026/7479_-BIP-Draft-Witness-Version-3-ML-DSA-65-Post-Quantum-Key-Path-Spending.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2026/7623_-BIP-Draft-Witness-Version-3-ML-DSA-65-Post-Quantum-Key-Path-Spending.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - [BIP Draft] Witness Version 3: ML-DSA-65 Post-Quantum Key-Path Spending</title>
-    <updated>2026-05-25T05:46:51.772652+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip-draft-witness-version-3-ml-dsa-65-post-quantum-key-path-spending/2422/2" rel="alternate"/>
+    <updated>2026-06-02T04:50:57.192491+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-witness-version-3-ml-dsa-65-post-quantum-key-path-spending/2422/3" rel="alternate"/>
     <published>2026-04-16 08:28:42.689000+00:00</published>
-    <summary>The recent proposal for a draft Bitcoin Improvement Proposal (BIP) introduces a post-quantum key-path spending mechanism to Bitcoin by utilizing the FIPS 204 ML-DSA-65 standard, which adheres to NIST Level 3 security. This new witness version, designated as version 3, is detailed in the provided BIP text and includes a reference implementation that applies cleanly against a specific commit of the bitcoin/bitcoin repository. The design of this implementation specifies that outputs should utilize a 32-byte SHA-256 hash of the ML-DSA-65 public key, formatted in bech32m with a &quot;bc1r&quot; prefix on the mainnet. The witness stack would entail a large 3309-byte signature and a 1952-byte public key, aligning with the Taproot 0x50 annex convention. Notably, verification processes occur within VerifyWitnessProgram without the need for script execution, thereby circumventing traditional script-based limitations.
-In terms of transaction management, this proposal introduces a new script flag and deployment bit specifically for this upgrade, along with five unique script errors relevant to the post-quantum context. This setup allows for deployment via a soft fork, where non-upgraded nodes will treat these new outputs as anyone-can-spend, thus maintaining backward compatibility as per BIP 141. The proposed changes also include considerations for sighash configurations, opting for a tagged hash approach dubbed &quot;PQSighash,&quot; which utilizes existing BIP 341 precomputed hashes but differentiates from Taproot sighash through unique identifiers like epoch bytes and spend-type bytes.
-Critically, the proposed ML-DSA-65 was chosen over other cryptographic schemes such as SLH-DSA or hybrid ECDSA+PQ due to its relatively compact signature size under 3.5 kB, despite being approximately eight times larger than alternatives. This choice, however, remains open for discussion, particularly in relation to its deployment implications on transaction sizes and fees. For instance, a typical post-quantum spend might cost significantly more in transaction fees compared to current standards, raising concerns about scalability and economic viability.
-Furthermore, the dependency on liboqs 0.15.0 for prototyping poses a notable risk as it introduces an external consensus-critical dependency, underscoring the necessity for a more secure integration of ML-DSA-65 into the Bitcoin core before full activation.
-This initiative also prompts several important questions needing community feedback, especially concerning the construction of the new sighash, the decision between introducing a new witness version versus extending Tapscript opcode, and the feasibility of integrating ML-DSA directly into the Bitcoin core. Moreover, the proposal seeks input on historical discussions and further insights into post-quantum cryptographic approaches, ensuring a comprehensive evaluation before any formal adoption.</summary>
+    <summary>The recent proposal for integrating a post-quantum cryptographic method into the Bitcoin protocol by introducing a new witness version highlights a proactive step toward enhancing security against quantum threats. This approach utilizes the FIPS 204 ML-DSA-65 standard, aiming to secure transactions without the need for script execution by directly verifying within the VerifyWitnessProgram. The details outlined include a new signature hash titled &quot;PQSighash,&quot; designed to incorporate features like epoch byte and extended flags, ensuring compatibility with existing BIP 341 hashes while marking a significant shift from current Taproot applications. A soft fork following BIP 9 protocols would deploy this, allowing transactions to be treated as anyone-can-spend by nodes not updated, thus maintaining network integrity.
+The proposed mechanism also includes using a 32-byte SHA-256 hash of the public key, formatted in a new bech32m address format with a &quot;bc1r&quot; prefix for mainnet applications. The initiative is documented comprehensively in a draft available [here](https://github.com/btcpqresearch/bip-pq-witness-v3/blob/main/bip-pq-witness-v3.mediawiki), which provides further technical specifications and the broader context in BIP 361 concerning the transition from legacy cryptographic mechanisms to those capable of withstanding quantum-level threats. However, this is just one potential solution amidst various others being considered within the cryptocurrency community.
+Regarding the design choices and implementation specifics, there are substantial queries and concerns. For instance, the selection of ML-DSA-65 aims to provide a 192-bit security level, despite the availability of smaller parameters such as ML-DSA-44, which aligns with the classical security level of secp256k1 but at a reduced size. This decision lacks clear justification given that the larger bit security leads to trade-offs in signature size and computational overhead. Additionally, the adoption of an output type that strictly commits to an ML-DSA key, similar in nature to P2WPKH, restricts cryptographic agility. This limitation could pose risks, especially if ML-DSA becomes vulnerable, suggesting the potential future need for a rescue protocol soft fork.
+Furthermore, implementing ML-DSA without witness discounts could significantly decrease transactions per second (TPS), raising scalability issues for the Bitcoin network. Alternative cryptographic schemes, such as SLH-DSA or hash-based signatures like XMSS, offer potentially more efficient solutions in terms of key and signature sizes and do not introduce new cryptographic assumptions. These alternatives could provide similar or improved security and efficiency without the limitations posed by ML-DSA. Such considerations necessitate a thorough evaluation and justification for the chosen cryptographic strategies to ensure they align with the network's performance and security requirements.</summary>
   </entry>
 </feed>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>PQC: Lattice-based signatures</title>
+  <updated>2026-06-02T05:33:27.196151+00:00</updated>
+  <author>
+    <name>Nagaev Boris</name>
+  </author>
+  <timestamp>2026-05-27 06:16:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>PQC: Lattice-based signatures</title>
+    <updated>2026-06-02T05:33:27.196185+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/b3988d19-b1b8-49ed-82c5-1447f37bf473n@googlegroups.com/T/#mb1438e9406dcb1a047a82ada23a2b950092ccdb5" rel="alternate"/>
+    <summary>In exploring the optimization of cryptographic schemes in Bitcoin development, particularly when considering the implementation of a hybrid scheme combining SHRINCS with Elliptic Curve (EC) cryptography, specific optimizations can be effectively applied to minimize space and improve efficiency. The proposed approach involves using an EC signature that features a recoverable public key, which could either be based on ECDSA or a Schnorr signature that does not conform to BIP-340 standards. This setup allows the embedding of the EC public key within the hybrid key commitment itself, thereby negating the need for separate storage space for this key.
+
+The process works by having the verifier extract the EC public key directly from the signature and associated message. Once extracted, this key is compared against the hybrid key commitment. If they match, the verifier employs both the recovered EC public key and the Post-Quantum (PQ) public key to recompute the hybrid public-key commitment, thus streamlining the verification process without requiring additional space for the EC public key.
+
+Further space savings are achievable through strategic reuse of components in the signature encoding. Specifically, the encoding of the EC signature's public nonce 'R' can also be utilized as the randomization field 'R' of the SHRINCS signature. This dual use permits the total signature size to exceed that of a standard SHRINCS signature by only 32 bytes, while maintaining the public key size unchanged.
+
+However, it is crucial to note the limitations of these optimizations when implemented within certain Bitcoin Script contexts. For instance, if the policy requires the expression of this scheme through two consecutive Bitcoin Script opcodes, such as `&lt;bip340_pubkey&gt; OP_CHECKSIGVERIFY &lt;shrincs_pubkey&gt; OP_CHECKSHRINCSSIG`, the necessity for the EC public key to be revealed in the script/witness for a Taproot script-path spend arises. This requirement results in the loss of the aforementioned optimizations since the independent signatures cannot share the public nonce/randomization field. This highlights the importance of context in the application of these cryptographic optimizations in blockchain environments.</summary>
+    <published>2026-05-27T06:16:00+00:00</published>
+  </entry>
+</feed>

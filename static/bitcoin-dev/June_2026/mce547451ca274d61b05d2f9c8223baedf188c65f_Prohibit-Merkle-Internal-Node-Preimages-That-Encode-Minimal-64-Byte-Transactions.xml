@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Prohibit Merkle Internal Node Preimages That Encode Minimal 64-Byte Transactions</title>
+  <updated>2026-06-02T05:39:41.118396+00:00</updated>
+  <author>
+    <name>jeremy</name>
+  </author>
+  <timestamp>2026-06-01 17:46:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Prohibit Merkle Internal Node Preimages That Encode Minimal 64-Byte Transactions</title>
+    <updated>2026-06-02T05:39:41.118433+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/f97afcc5-54ba-4284-8e9b-e8c35c7101f6n@googlegroups.com/T/#u#mce547451ca274d61b05d2f9c8223baedf188c65f" rel="alternate"/>
+    <summary>The proposal in discussion aims to introduce a new consensus rule for Bitcoin that targets the encoding of minimal 64-byte transactions within Merkle Tree internal node preimages, while maintaining their validity in general transaction processing. The rule specifies that a block should be considered invalid if any transaction Merkle tree internal node preimage matches the exact byte structure of a minimal one-input, one-output, non-witness transaction. This is a significant move to counteract issues related to SPV (Simplified Payment Verification) malleability, where an SPV verifier might accept a Merkle proof that incorrectly terminates at an internal node instead of a true transaction leaf.
+
+The motivation behind this proposal stems from the ambiguity that arises when a valid transaction serialization, which is exactly 64 bytes, could also be interpreted as a concatenation of two 32-byte hashes forming an internal Merkle node. Since Bitcoin computes both transaction identifiers and transaction Merkle internal nodes using double SHA256, this poses a potential security risk. 
+
+To address this, the new rule will only invalidate blocks if the specific 64-byte preimage used in the transaction Merkle tree has the precise structure that could be mistaken for a valid transaction. It's crucial to note here that not all 64-byte transactions are invalidated; rather, the rule specifically targets those that could be confused with Merkle node preimages. This approach avoids broader changes to transaction validity that could impact other aspects of network operation.
+
+Furthermore, this proposal does not affect SegWit transactions directly since the marker, flag, and witness data are excluded from the txid computation, which is what the transaction Merkle root commits to in the block header. However, it remains relevant due to the fact that the ambiguity can still exist at the txid level even post-SegWit.
+
+For implementation, the proposal includes a minimal C++ function that checks for prohibited internal node preimages based on the outlined criteria. This involves examining positions within the serialized format to ensure they meet the specific conditions set forth by the new rule. Additionally, miners are advised on how to handle potential violations during block construction, including procedures for shuffling transaction order or removing problematic transactions to produce a valid block template.
+
+Overall, the proposal carefully delineates between maintaining the functionality of 64-byte transactions in general and preventing specific configurations that pose security risks, thereby enhancing the robustness of the network against certain types of malleability attacks without imposing undue restrictions on transaction formats.</summary>
+    <published>2026-06-01T17:46:00+00:00</published>
+  </entry>
+</feed>

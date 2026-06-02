@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - QR-based signing flow payloads in Miniscript context</title>
-  <updated>2026-05-25T05:50:29.753593+00:00</updated>
+  <updated>2026-06-02T04:56:12.332701+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -18,25 +18,29 @@
       <timestamp>2026-04-28 13:13:37.964000+00:00</timestamp>
     </message>
     <message id="msg_4" depth="0" position="3">
-      <author>scarlin90</author>
+      <author>scarlin</author>
       <timestamp>2026-05-01 15:46:58.091000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>benk10</author>
+      <timestamp>2026-05-29 16:33:25.497000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/April_2026/7413_QR-based-signing-flow-payloads-in-Miniscript-context.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2026/7414_QR-based-signing-flow-payloads-in-Miniscript-context.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2026/7415_QR-based-signing-flow-payloads-in-Miniscript-context.xml" rel="alternate"/>
   <link href="delvingbitcoin/May_2026/7436_QR-based-signing-flow-payloads-in-Miniscript-context.xml" rel="alternate"/>
+  <link href="delvingbitcoin/May_2026/7605_QR-based-signing-flow-payloads-in-Miniscript-context.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - QR-based signing flow payloads in Miniscript context</title>
-    <updated>2026-05-25T05:50:29.754234+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/qr-based-signing-flow-payloads-in-miniscript-context/2464/4" rel="alternate"/>
+    <updated>2026-06-02T04:56:12.333395+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/qr-based-signing-flow-payloads-in-miniscript-context/2464/5" rel="alternate"/>
     <published>2026-04-28 11:35:37.688000+00:00</published>
-    <summary>The ongoing discussions and proposals surrounding the integration of Miniscript into QR-based signing flows highlight significant advancements in cryptographic protocols and user interaction with air-gapped devices. The primary motivation behind this initiative is to enhance existing multisig protocols, which currently manage descriptors, xpubs, and PSBTs efficiently but are limited when it comes to handling the more dynamic and complex Miniscript policies. These can include features like timelocked recovery and decaying thresholds, which aren't well-supported by existing QR protocols.
-A significant aspect of the proposed changes involves defining a clear set of payloads that would facilitate the entire Miniscript flow over QR codes. Despite the current use of JSON for illustrative purposes in discussions, there is an open acknowledgment that a bytes/binary encoding might be more practical in real-world applications to conserve space and reduce the number of necessary QR frames. This strategic shift underscores a commitment to refining the data exchange process between software wallets (or coordinators) and signing devices, focusing on what data needs to be transmitted before tackling the serialization specifics.
-In terms of specific payload functionalities, there are several key components: flexible xpub retrieval, user-customizable descriptors, and a clear descriptor-PSBT binding at the signing stage. These functionalities aim to improve both the security and user experience by ensuring that signing devices can verify and label transactions accurately according to known descriptors, thus providing clearer information to users.
-Moreover, the feedback from developers, such as those working on platforms like Signingroom.io, emphasizes a preference for minimal data transmission to optimize QR code size and readability. The suggestion to return only signatures rather than full PSBTs (Option B) reflects a practical approach to managing data bandwidth in air-gapped operations. Furthermore, the idea to replace model and version strings with a device-agnostic array of supported features proposes a scalable solution for future-proofing device compatibility checks without maintaining extensive device look-up tables.
-Lastly, the call for standardized error codes over raw text error messages suggests an effort to make error handling more systematic and user-friendly, potentially aligning error reporting more closely with established protocols like JSON-RPC. This structured approach to error management could greatly enhance troubleshooting processes and user guidance during transactions.
-Overall, these discussions and the resultant proposals represent a thoughtful evolution in cryptographic transaction management, aiming to balance technical efficiency with practical usability considerations. As the community continues to refine these proposals, the focus remains on creating robust frameworks that support advanced script functionalities while enhancing the security and operability of cryptocurrency transactions.</summary>
+    <summary>The integration of Miniscript within QR-based signing flows presents several innovations and challenges in the realm of cryptocurrency transactions, particularly enhancing transaction security and user experience. Traditional multisig protocols, which effectively manage the transfer of descriptors, xpubs, and PSBTs between software wallets and air-gapped devices, now face complexities brought about by customizable spending policies inherent in Miniscript. These policies can include features like timelocked recovery or decaying thresholds, which are not well-supported by existing QR protocols. A significant advancement with Miniscript is the flexible retrieval of extended public keys (xpubs), allowing a software wallet to request multiple xpubs from various derivation paths simultaneously. This enhancement not only simplifies the user interaction by reducing the necessity for multiple QR scans but also supports advanced backup encryption schemes, detailed [here](https://github.com/bitcoin/bips/pull/1951).
+Further development includes the registration and verification of descriptors on signing devices, which would permit the device to display and allow users to verify new or previously unregistered descriptors. This feature addresses issues related to devices with limited storage or those that are stateless. The registration process might involve sending an alias for the descriptor along with optional parameters tied to different BIPs, while the device's response could confirm the registration or indicate an error. Additionally, refining the signing process where the device requires exact information about which descriptor a transaction relates to is crucial for accurately labeling inputs and outputs, thereby improving both security and user experience.
+Compatibility considerations are essential when dealing with various Bitcoin scripting languages such as tapminiscript. Understanding device support for specific features, such as those in the Jade wallet, is critical for users creating complex wallet descriptors for taproot applications. This knowledge significantly impacts user decisions and capabilities in cryptocurrency management, underscoring the importance of clear and accessible information about hardware and software limitations and capabilities.
+Maintenance concerns also arise with the complexity and operational demands of such systems. Anticipated difficulties in managing and updating the system highlight the need for designs that consider long-term sustainability and ease of maintenance to prevent future operational issues.
+Sean Carlin's development of Signingroom.io aims to facilitate the coordination of multisig transactions without acting as a full software wallet. His approach favors transmitting only the signatures rather than the entire PSBT, enhancing efficiency by minimizing data transmission and simplifying QR codes requirements. Carlin proposes a device-agnostic feature array for compatibility checks, moving away from a model and version-specific list to a more scalable method. He also suggests standardized integer error codes for improved error handling mechanisms, reflecting a commitment to enhancing usability and troubleshooting in the system. Carlin's openness to further collaboration, especially concerning transport and QR aspects once traditional PSBT fountain QR codes are implemented, indicates a proactive stance toward continuous improvement in multisig transaction processes.</summary>
   </entry>
 </feed>
