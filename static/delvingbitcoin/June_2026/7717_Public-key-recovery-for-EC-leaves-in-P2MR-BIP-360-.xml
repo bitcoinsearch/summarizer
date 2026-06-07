@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Public key recovery for EC leaves in P2MR (BIP-360)</title>
+  <updated>2026-06-07T05:24:39.344292+00:00</updated>
+  <author>
+    <name>starius</name>
+  </author>
+  <timestamp>2026-06-06 22:00:54.554000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Public key recovery for EC leaves in P2MR (BIP-360)</title>
+    <updated>2026-06-07T05:24:39.344329+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/public-key-recovery-for-ec-leaves-in-p2mr-bip-360/2603" rel="alternate"/>
+    <summary>The proposal outlined in the note focuses on a potential optimization for BIP-360 involving public key recovery from elliptic curve (EC) signatures within a Pay-to-Merkle-root (P2MR) structure. This approach introduces a recoverable EC leaf that aims to reduce the witness size associated with EC spends without worsening quantum exposure. The essence of this optimization is to eliminate the script containing the EC public key from the witness, allowing the public key to be derived directly from the signature using a modified Schnorr verification equation.
+
+In traditional P2MR structures, removing the EC public key script would typically result in a larger witness size. However, by employing a recoverable EC leaf where the public key is deduced from the signature itself, the witness size could approximate or even slightly undercut that of Pay-to-Witness-Public-Key-Hash (P2WPKH). This reduction is achieved by replacing the script with a straightforward computation that recovers the EC public key from the signature data and ensures it matches the P2MR Merkle root via its hash.
+
+Further details describe the technical underpinnings of this method. The signature challenge is linked to the P2MR root hash rather than the public key itself, which helps avoid certain cryptographic vulnerabilities such as related-key attacks. This is accomplished by incorporating the root hash `q` into the signature challenge, thus breaking potential circular dependencies and enabling public key recovery. The recovered public key must validate against the P2MR Merkle root to ensure it is correct and has not been tampered with in a way that would affect other leaves in the tree.
+
+This proposal also specifies changes to the validation logic for these new types of leaves within the P2MR scheme. It necessitates modifications to how witnesses are parsed and validated, particularly since the recoverable EC leaf lacks a traditional script component. Instead, the witness structure is streamlined to include only essential elements like the signature and a control block defining the leaf version and path within the Merkle tree.
+
+To support the proposed changes, a specific nonce derivation process is suggested to maintain security when the same nonce might be used with different control blocks, potentially exposing the private key. This revised nonce generation incorporates additional inputs to ensure uniqueness and security across different signing instances.
+
+Overall, this optimization not only reduces the size of the EC witness but also aligns with the objectives of BIP-360 by integrating seamlessly prior to activation, thereby avoiding complications that might arise from later amendments. The potential impact includes more efficient use of blockchain space and reduced transaction costs for operations involving EC public keys within a quantum-resistant framework.</summary>
+    <published>2026-06-06T22:00:54.554000+00:00</published>
+  </entry>
+</feed>
