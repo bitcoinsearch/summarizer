@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Public key recovery for EC leaves in P2MR (BIP-360)</title>
-  <updated>2026-06-09T05:14:02.916674+00:00</updated>
+  <updated>2026-06-10T05:23:04.983655+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -57,6 +57,14 @@
       <author>conduition</author>
       <timestamp>2026-06-09 01:06:13.954000+00:00</timestamp>
     </message>
+    <message id="msg_14" depth="0" position="13">
+      <author>ajtowns</author>
+      <timestamp>2026-06-09 16:09:07.821000+00:00</timestamp>
+    </message>
+    <message id="msg_15" depth="0" position="14">
+      <author>AntoineP</author>
+      <timestamp>2026-06-09 17:55:58.818000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/June_2026/7717_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7718_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
@@ -71,15 +79,18 @@
   <link href="delvingbitcoin/June_2026/7732_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7734_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7735_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2026/7736_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2026/7737_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Public key recovery for EC leaves in P2MR (BIP-360)</title>
-    <updated>2026-06-09T05:14:02.918167+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/public-key-recovery-for-ec-leaves-in-p2mr-bip-360/2603/13" rel="alternate"/>
+    <updated>2026-06-10T05:23:04.985700+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/public-key-recovery-for-ec-leaves-in-p2mr-bip-360/2603/15" rel="alternate"/>
     <published>2026-06-06 22:00:54.554000+00:00</published>
-    <summary>The proposal discussed introduces a significant optimization to the BIP-360 by implementing public key recovery from elliptic curve signatures within a Pay-to-Merkle-root (P2MR) structure. This innovation promises to enhance transaction efficiency by reducing the witness size required for EC spends, without increasing quantum vulnerability. By removing the script that contains the EC public key from the witness and allowing the public key to be deduced directly from the signature using a modified Schnorr verification equation, this approach could potentially reduce the witness size to less than or equal to that of a Pay-to-Witness-Public-Key-Hash (P2WPKH). The essence of this optimization lies in its ability to streamline witness structures by eliminating traditional script components and integrating essential elements like the signature and a control block which defines the leaf version and path within the Merkle tree.
-Further examination reveals potential cryptographic implications and vulnerabilities associated with the new scheme, particularly when substituting the public key with a root plus Merkle branch in the challenge, as well as the risks posed by related keys present in different leaves of a tree structure. These insights underscore the need for additional security considerations, especially for complex systems like MuSig2 and scenarios involving batch validation, which is essential for efficient data processing but becomes impractical under the new scheme. Moreover, there's a discussion on the trade-offs between data encoding, efficiency, and privacy, highlighting how this new configuration seeks a balance by enabling the non-disclosure of the public key until necessary during the key path spend phase.
-Additionally, the discussion touches on the broader implications of using extended public keys (xpubs) and the potential risks associated with quantum computing. There’s a consensus that EC keys used in P2MR constructions should be hardened to prevent derivation from an xpub, thereby enhancing security against quantum attacks. The conversation also explores future adjustments to standards like BIP32 in light of quantum vulnerabilities, suggesting a shift towards new derivation standards that consider advanced cryptographic schemes like SHRINCS. This reflects a critical reevaluation of current practices surrounding key management and sharing within the blockchain ecosystem, emphasizing the necessity for new approaches that ensure robust security against emerging threats. 
-Overall, these discussions not only highlight innovative advancements in blockchain technology but also provoke important considerations regarding the security, efficiency, and practical implementation of such technologies in a rapidly evolving digital landscape.</summary>
+    <summary>The proposal examines an innovative optimization for BIP-360, focusing on enhancing the efficiency of blockchain transactions by utilizing a Pay-to-Merkle-root (P2MR) structure. This structure incorporates a recoverable elliptic curve (EC) leaf, enabling the derivation of the public key directly from the signature without including the EC public key script in the witness. This method notably reduces the witness size, potentially making it comparable or even smaller than that of Pay-to-Witness-Public-Key-Hash (P2WPKH). The technique employs a modified Schnorr verification equation to achieve this reduction, ensuring the security of the transaction by integrating the P2MR root hash into the signature challenge. This modification not only mitigates the risk of certain cryptographic vulnerabilities but also streamlines the witness structure by omitting traditional script components.
+Further analysis delves into the cryptographic implications of this strategy, particularly highlighting its feasibility and security retention as per standards akin to BIP340. However, it acknowledges potential trade-offs, such as the loss of batch validation capabilities, which are crucial for systems like MuSig2. The proposed scheme, while preserving some benefits of the existing Pay-to-Taproot (P2TR), introduces new data requirements and considerations for different transaction scenarios, illustrating a balanced compromise between data size and privacy.
+A critical vulnerability has also been identified, related to the possibility of signature forgery within a tree structure where related EC keys exist. This vulnerability highlights a flaw in the design where the signature challenge does not bind to the control block, allowing potential misuse in various fraudulent contexts. This discovery underscores the need for additional security measures and careful consideration in the implementation of such cryptographic structures.
+The discussion extends to the use of hardened elliptic curve keys within P2MR constructions to safeguard against quantum threats. It emphasizes the importance of non-disclosure of the public key until necessary and explores the implications of using the hash of the public key in future Schnorr challenges. These considerations reflect a broader effort to enhance security and efficiency in blockchain cryptography, grappling with the complexities introduced by advanced quantum computing threats.
+In addressing the broader ecosystem, the necessity of transitioning away from the BIP32 standard to accommodate modern cryptographic schemes is discussed. This transition aims to maintain the usability of wallets while integrating more secure cryptographic mechanisms. The dialogue covers the challenges of migrating to new standards that do not rely on extended public keys, which are vulnerable in a post-quantum scenario. This strategic shift is crucial for ensuring the long-term security and viability of cryptocurrencies in the face of evolving quantum computing capabilities.</summary>
   </entry>
 </feed>
