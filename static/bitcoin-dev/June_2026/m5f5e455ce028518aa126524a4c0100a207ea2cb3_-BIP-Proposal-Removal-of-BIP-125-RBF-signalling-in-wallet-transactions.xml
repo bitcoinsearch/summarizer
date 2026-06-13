@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Proposal] Removal of BIP 125 RBF signalling in wallet transactions</title>
+  <updated>2026-06-13T05:30:54.354188+00:00</updated>
+  <author>
+    <name>SomberNight</name>
+  </author>
+  <timestamp>2026-06-12 06:52:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Proposal] Removal of BIP 125 RBF signalling in wallet transactions</title>
+    <updated>2026-06-13T05:30:54.354221+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/uscVpXZgwC16jogiUouq2bY8y65G8BeiPWHizgCnU-IYtLwZyHY1bRC-VlpwTATpHTOuvQJ_c8KtSkipAsRhieC1wTlR6CDflgz9gwdIv_Q=@protonmail.com/T/#m5f5e455ce028518aa126524a4c0100a207ea2cb3" rel="alternate"/>
+    <summary>The Electrum Wallet has long employed a specific approach to setting the nSequence of transaction inputs, which has evolved over time in response to changes in the broader Bitcoin ecosystem. Historically, from 2017 to 2022, Electrum set the nSequence to MAX-2 by default for most transactions to signal Replace-by-Fee (RBF), offering users the option to set it to MAX-1 if they preferred. However, following the introduction of the `mempoolfullrbf` option in Bitcoin Core 24 around December 2022, Electrum adjusted its default settings to consistently use MAX-2 for standard wallet transactions while maintaining the MAX-1 setting for Lightning funding transactions and potentially for future silent payment addresses.
+
+Electrum's approach to RBF is nuanced, particularly in multi-device scenarios where a wallet might be restored on several devices, such as a phone and a laptop used concurrently. The wallet uses the nSequence field not just for signaling RBF eligibility but also as a method to encode information about the transaction's origin, which is critical in multi-device environments. For transactions that have opted into RBF, any device can replace the transaction in the mempool. Conversely, for those that haven’t, only the originating device can initiate a replacement. This is particularly important for transactions with special conditions, such as those paying to a silent payment address, where adding new inputs could lead to coin loss. These transactions allow for fee adjustment by reducing the change output rather than adding new inputs.
+
+Lightning Network transactions are handled with similar specificity; only the device that originally created the transaction knows the exact conditions under which it is safe to replace it to bump the fee. Depending on the version of the channel establishment protocol used, naively attempting to RBF a Lightning funding transaction can lead to significant issues, such as the failure of the channel opening and potential loss of coins if the counterparty does not cooperate in recovering the funds.
+
+In addition to these functional nuances, the Electrum Wallet also aligns with Bitcoin Core in terms of transaction fingerprinting to avoid unique identifiers that could affect user privacy. This includes adopting similar anti-fee-sniping logic. Thus, it is preferable for Electrum that Bitcoin Core does not begin setting nSequence fields to MAX or MAX-1, to maintain consistency across different wallet implementations. This strategy reflects a careful balance between functionality, security, and user privacy in digital wallet management.</summary>
+    <published>2026-06-12T06:52:00+00:00</published>
+  </entry>
+</feed>
