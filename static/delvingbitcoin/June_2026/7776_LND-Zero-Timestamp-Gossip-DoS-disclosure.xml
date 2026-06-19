@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>LND: Zero-Timestamp Gossip DoS disclosure</title>
+  <updated>2026-06-19T06:24:23.516189+00:00</updated>
+  <author>
+    <name>NishantBansal2003</name>
+  </author>
+  <timestamp>2026-06-18 16:21:34.918000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>LND: Zero-Timestamp Gossip DoS disclosure</title>
+    <updated>2026-06-19T06:24:23.516223+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/lnd-zero-timestamp-gossip-dos-disclosure/2621" rel="alternate"/>
+    <summary>The recent discovery of a significant vulnerability in versions of LND prior to v0.20.1 has prompted the need for immediate updates by network operators. The issue arises from how LND handles zero-timestamp `node_announcement` or `channel_update` messages within its gossip rebroadcast pipeline. Typically, these types of messages are used across the Lightning Network to disseminate information about channel and node states, relying on a sequence where `channel_announcement` must precede and validate any subsequent `node_announcement` or `channel_update`. However, due to a flaw in the de-duplication logic detailed in [`deDupedAnnouncements.addMsg`](https://github.com/lightningnetwork/lnd/blob/91423ee5198e116b210f7f1c2e8b506d5ab28266/discovery/gossiper.goL1133-L1229), announcements with a timestamp of 0 were mistakenly recognized as duplicates of existing messages, leading to an unhandled exception when attempting to access an uninitialized map. This error could crash the node, causing a denial of service until manual intervention was taken to restart the system.
+
+In response to this discovery, new guidelines have been implemented in LND v0.20.1, which can be accessed at [v0.20.1](https://github.com/lightningnetwork/lnd/releases/tag/v0.20.1-beta). These include parsing checks that immediately reject zero-timestamp messages before they enter the gossip pipeline, thereby preventing the crash from occurring. The fix was part of a broader update found in this [pull request](https://github.com/lightningnetwork/lnd/pull/10469/files), clearly indicating the project's commitment to security and stability.
+
+Exploring potential exploitation methods reveals two primary approaches attackers might use: one involves opening a legitimate public Lightning channel and broadcasting a zero-timestamp `node_announcement` or `channel_update`, while the other employs a fabricated channel using attacker-controlled keys and a funded transaction. Although the first method incurs higher costs due to on-chain fees, both strategies aim to exploit the same vulnerability.
+
+This incident underscores the critical importance of continuous testing and validation within network protocols. The vulnerability was initially identified through a state-machine fuzzing exercise aimed at the gossip subsystem, a strategy that proved invaluable in uncovering this flaw. This approach, along with the subsequent swift response by the LND team, highlights the ongoing challenges and necessary vigilance required to secure decentralized financial networks such as the Lightning Network. Furthermore, the development process and quick handling of the bug, including the initial discovery and patch implementation timeline from December 2025 to February 2026, emphasize the active and responsive nature of security management in blockchain technologies.</summary>
+    <published>2026-06-18T16:21:34.918000+00:00</published>
+  </entry>
+</feed>

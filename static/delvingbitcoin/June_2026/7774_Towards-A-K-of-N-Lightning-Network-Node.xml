@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-06-19T06:22:46.693873+00:00</updated>
+  <author>
+    <name>ZmnSCPxj</name>
+  </author>
+  <timestamp>2026-06-18 06:35:17.895000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-06-19T06:22:46.693912+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/5" rel="alternate"/>
+    <summary>The discussion focuses on a cryptographic method using `s` shachains, calculated based on the formula \( s = \frac{n!}{(n - k + 1)! \times (k - 1)!} \), where `n` and `k` represent specific variables in the cryptographic setup. Each shachain has an index ranging from 0 to \( s-1 \) and is associated with a state commitment index. The root secret of each shachain can generate a sequence up to `UINT64_MAX`, crucial for managing revocations in cryptographic transactions.
+
+In the context of a 2-of-3 scheme, three participants (A, B, and C) each hold combinations of these root secrets. For example, A holds the secrets for the first two indices, B for the first and last, and C for the last two. This distribution ensures that no single participant holds all secrets, maintaining security through distributed knowledge.
+
+When preparing a commitment transaction, it's essential to use a MuSig2 construction to compute the `per_commitment_point`. This step involves combining public information from the revocation indices and an additional remote key using the MuSig2 protocol. The necessity of MuSig2 arises from its protection against "key cancellation" risks. Key cancellation could occur if a compromised party manipulates the transaction in such a way that the combined signatures nullify each other, leading to potential fund theft. By using MuSig2, which requires multiple signers' approval, this risk is mitigated.
+
+The constraints imposed ensure that even if one signer, such as `A`, is compromised, they cannot unilaterally cause fund loss by revealing their known revocation points. They would lack access to the complete set of keys needed to validate or revoke the latest transaction. Furthermore, if another signer, say `B`, attempts to deceive `A` by providing incorrect data, the MuSig2 construction prevents this misleading information from succeeding in canceling out the legitimate revocation keys. This robust mechanism ensures that revocation only requires a single signature while preventing unauthorized changes to the commitment transaction.</summary>
+    <published>2026-06-18T06:35:17.895000+00:00</published>
+  </entry>
+</feed>
