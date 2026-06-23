@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Prohibit Merkle Internal Node Preimages That Encode Minimal 64-Byte Transactions</title>
+  <updated>2026-06-23T05:12:12.984857+00:00</updated>
+  <author>
+    <name>Sjors Provoost</name>
+  </author>
+  <timestamp>2026-06-22 14:25:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Prohibit Merkle Internal Node Preimages That Encode Minimal 64-Byte Transactions</title>
+    <updated>2026-06-23T05:12:12.984894+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/8FEEF72A-92A3-48A9-AC49-43107D17B090@sprovoost.nl/T/#m807bb368defbd9a3666fd83525587a60f4fbafcb" rel="alternate"/>
+    <summary>The recent discussion on the Bitcoin Development Mailing List centered around the potential enhancement of the Merkle tree's handling within the blockchain's consensus code. The primary focus is on introducing a method named `IsForbiddenMerkleInternalNodePreimage64`, which aims to address specific issues directly at their root. However, concerns were raised about the complexity this addition might bring to the consensus code, with preferences leaning towards a simpler, albeit longer-term, solution.
+
+A proposed fix, set to be implemented after the year 2106, suggests modifying the leaf hash calculation process. This alteration would only take effect if no hardfork has occurred by then, ensuring that transaction hashes are processed using the current method. In contrast, if a hardfork has happened, the new process would involve utilizing a `TaggedHash` function for transactions that include witness data, thus integrating witness data directly into the transaction Merkle tree. This change is outlined in a sketch available on GitHub, which can be viewed [here](https://github.com/Sjors/bitcoin/tree/2026/06/merkle).
+
+Additionally, several new rules regarding blockchain headers have been implemented to support these changes. These include extending the timestamp field from 32 to 64 bits to accommodate future needs and masking a byte within this expanded field for nonce space. It also specifies that blocks must have a negative version number if they use the new header format, a condition that helps node software recognize the length of the header during deserialization. Moreover, it establishes that new headers must carry a timestamp greater than 2^32, creating a distinct demarcation between older and newer block structures. Blocks failing to meet these criteria, particularly those with outdated versions as specified by BIP34, will be rejected by current nodes, ensuring consistency and security in network operations.</summary>
+    <published>2026-06-22T14:25:00+00:00</published>
+  </entry>
+</feed>
