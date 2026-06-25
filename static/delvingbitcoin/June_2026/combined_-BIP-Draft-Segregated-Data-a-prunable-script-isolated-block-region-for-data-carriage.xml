@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - [BIP Draft] Segregated Data: a prunable, script-isolated block region for data carriage</title>
-  <updated>2026-06-24T05:11:17.006143+00:00</updated>
+  <updated>2026-06-25T05:09:41.335530+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -25,22 +25,32 @@
       <author>MrHash</author>
       <timestamp>2026-06-23 22:09:06.997000+00:00</timestamp>
     </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>AntoineP</author>
+      <timestamp>2026-06-24 20:56:16.116000+00:00</timestamp>
+    </message>
+    <message id="msg_7" depth="0" position="6">
+      <author>MrHash</author>
+      <timestamp>2026-06-24 22:42:09.174000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/June_2026/7838_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7840_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7843_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7844_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7845_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2026/7863_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
+  <link href="delvingbitcoin/June_2026/7864_-BIP-Draft-Segregated-Data-a-prunable-script-isolated-block-region-for-data-carriage.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - [BIP Draft] Segregated Data: a prunable, script-isolated block region for data carriage</title>
-    <updated>2026-06-24T05:11:17.006643+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/bip-draft-segregated-data-a-prunable-script-isolated-block-region-for-data-carriage/2641/5" rel="alternate"/>
+    <updated>2026-06-25T05:09:41.336476+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-segregated-data-a-prunable-script-isolated-block-region-for-data-carriage/2641/7" rel="alternate"/>
     <published>2026-06-23 16:40:23.660000+00:00</published>
-    <summary>The concept of Segregated Data (SegData) provides a structured solution for managing arbitrary data within the Bitcoin network through a soft-fork implementation. This new block region allows for the storage of data that doesn't necessarily involve value transfer, such as application-layer assets, timestamping, and attestations. By creating a separate Merkle root specifically for these entries, they are included in-block but can be pruned by node operators beyond the standard retention window, thereby not burdening all nodes with permanent storage costs.
-SegData is designed to follow the pattern set by BIP-141, incorporating elements like a base and extended serialization for blocks, an extended weight formula, and witness v2 reference outputs which are value-zero, unspendable, and excluded from the UTXO set. This design aims to ensure that the stored data remains prunable—meaning it can be deleted after it's no longer needed for consensus purposes—and does not impact transaction validation processes due to script isolation, ensuring that no opcode can interact with the data entries.
-The introduction of SegData seeks to address the limitations observed with OP_RETURN outputs, which currently serve a similar purpose but result in permanent data storage on all nodes and contribute to blockchain bloat. By offering a prunable option at a witness discount, SegData provides a more resource-efficient alternative while maintaining the integrity and functionality required for certain types of non-value data on the blockchain.
-There are still open questions and considerations surrounding SegData, such as deciding whether to share the witness version and length slot with BIP-360 P2MR or to use a dedicated version, the feasibility of committing per-reference entry length for better transaction weight and fee rate calculation, and the appropriate scope boundary for future restrictions on existing vectors. These aspects require further discussion and consensus within the community.
-For further details, the draft proposals for SegData and its peer services can be reviewed in their respective Bitcoin Improvement Proposals, found here: [Consensus BIP](https://github.com/MrHash/bips/blob/4eeeb0afbb9d256d264225801e635d2df1cc875f/bip-segdata.md) and [Peer-services BIP](https://github.com/MrHash/bips/blob/4eeeb0afbb9d256d264225801e635d2df1cc875f/bip-segdata-peer-services.md). These documents outline the technical implementations and the rationale behind the proposed changes, aiming to enhance the scalability and efficiency of data management within the Bitcoin network.</summary>
+    <summary>SegData represents a strategic advancement in Bitcoin's approach to data management through blockchain technology, specifically designed to enhance efficiency and control over data storage without impacting the network’s core financial transaction functionalities. It introduces a system where data can be segregated within Bitcoin blocks using a separate Merkle root for commitments that are validated only at the tip by every node, thereby allowing for optional pruning after a standard retention window. This method minimizes resource usage across the network since it offloads the responsibility of long-term data storage to those operators who choose to retain the data rather than distributing the burden across all nodes.
+The implementation of SegData draws from the framework set by BIP-141, integrating features like reference outputs that are witness v2, hold no value, are unspendable, and do not affect the UTXO set. The adoption of such structures supports the prunability of data, ensuring that data entries do not necessitate reading post-validation and cannot initiate transactions. With depth-scoped validation, SegData ensures full compliance within the retention period with diminished checks thereafter, facilitating synchronization without mandating nodes to maintain data voluntarily. This design targets applications such as indexers for application-layer assets, timestamping services, and attestations, which currently require efficient, isolated data handling capabilities.
+Several critical aspects remain under consideration regarding the practical implementation of SegData, including the configuration of version and length slots for witness v2 and the implications of committing to per-reference entry lengths on transaction weights and fee calculations. These discussions also extend to the granularity of coverage tiers for peer services, aiming to balance the needs for efficient data retrieval with privacy concerns against potential fingerprinting threats. For further elaboration and community feedback on these technicalities, detailed discussions are provided in the draft BIPs, available here: [Consensus BIP](https://github.com/MrHash/bips/blob/4eeeb0afbb9d256d264225801e635d2df1cc875f/bip-segdata.md) and [Peer-services BIP](https://github.com/MrHash/bips/blob/4eeeb0afbb9d256d264225801e635d2df1cc875f/bip-segdata-peer-services.md).
+Additionally, the broader dialogue around data retention strategies and resource utilization highlights a fundamental trade-off in blockchain operations between immediate resource expenditure and long-term storage efficiencies. Techniques such as leveraging soft forks for embedding data into transactions via `OP_RETURN` are discussed as alternatives to traditional consensus-dependent methods, which are resource-intensive. Platforms like [OpenTimestamps](https://opentimestamps.org/) exemplify the successful application of such methods, suggesting potential pathways for more resource-efficient blockchain functionalities.
+In essence, while the primary function of the Bitcoin network is to facilitate financial transactions, its capability to store nonmonetary data provides unique advantages such as immutability and decentralization. However, the practicality of leveraging this feature for extensive data storage is constrained by inherent design choices prioritizing transactional integrity and scalability. The introduction of SegData could potentially redefine these limitations, offering a more adaptable and efficient framework for managing blockchain data storage needs.</summary>
   </entry>
 </feed>
