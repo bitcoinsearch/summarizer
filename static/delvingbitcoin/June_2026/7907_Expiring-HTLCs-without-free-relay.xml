@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Expiring HTLCs without free relay</title>
+  <updated>2026-06-28T05:20:01.851670+00:00</updated>
+  <author>
+    <name>josh</name>
+  </author>
+  <timestamp>2026-06-28 01:47:36.050000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Expiring HTLCs without free relay</title>
+    <updated>2026-06-28T05:20:01.851699+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/expiring-htlcs-without-free-relay/2663" rel="alternate"/>
+    <summary>The proposed changes to the consensus and the addition of new opcodes aim to enhance the security and efficiency of HTLCs by introducing a mechanism that allows for the expiry of such contracts without relying on preimage publication. This method seeks to eliminate local-mempool monitoring, which could be particularly beneficial in environments with low bandwidth or no mempool availability, such as on a home router running Utreexo.
+
+One of the key modifications involves giving consensus meaning to bit 21 of nSequence. This change would enforce a minimum nLockTime based on BIP68 inclusion height, ensuring that the transaction cannot be included in a block until a specified number of blocks have been added to the chain after the transaction inputs were last confirmed. Additionally, two further changes are suggested for optimal implementation: enforcing bit 21 in `OP_CSV` and introducing `OP_LOCKTIME`, a tapscript-only opcode that pushes nLockTime onto the stack.
+
+These adjustments facilitate the creation of HTLCs that guarantee refunds if the preimage is not published at least 100 blocks before the expiry of the HTLC. The structure of the HTLC would include a two-stage process where the receiver first moves the funds to a staging output through a preimage-gated presigned transaction, followed by spending paths defined for both the receiver and the offerer based on specific conditions met within the BIP68 constraints and the new opcode functionalities.
+
+Furthermore, these proposals aim to address vulnerabilities such as the replacement cycling attack faced by forwarding lightning nodes, as highlighted by Peter Todd's `OP_EXPIRE` proposal. Although the proposed solution does not prevent replacement cycling entirely, it mitigates economic incentives for such attacks by ensuring guaranteed refunds in the absence of timely preimage publication.
+
+However, this approach introduces certain trade-offs, including limitations on the minimum length of HTLCs, potential liquidity constraints for receivers, and increased transaction costs due to the need for multiple transactions. These drawbacks are acknowledged as minor compared to the potential security benefits of eliminating reliance on local mempool states for preimage monitoring.
+
+In summary, the suggested consensus change and the introduction of new opcodes represent an innovative approach to improving the security framework around HTLCs, shifting the reliance from mempool-based to chainstate-based monitoring. This method, while presenting some operational challenges, offers significant advantages in terms of reducing vulnerability to specific types of network attacks and enhancing the robustness of node operations in constrained environments. Such advancements could play a crucial role in the broader adoption and utility of blockchain technology, especially in decentralized financial transactions and smart contracts.</summary>
+    <published>2026-06-28T01:47:36.050000+00:00</published>
+  </entry>
+</feed>
