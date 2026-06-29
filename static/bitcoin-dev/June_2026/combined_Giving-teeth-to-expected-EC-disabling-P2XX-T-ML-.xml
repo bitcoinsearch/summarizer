@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Giving teeth to expected EC disabling: P2XX(-T)(-ML)</title>
-  <updated>2026-06-28T05:24:03.239302+00:00</updated>
+  <updated>2026-06-29T05:58:45.315511+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -25,9 +25,13 @@
       <author>conduition</author>
       <timestamp>2026-06-26 18:20:00+00:00</timestamp>
     </message>
-    <message id="msg_6" depth="1" position="5" reply_to="Pieter Wuille" parent_id="mailing-list-2026-06-m748a7fa3b9c284cae66474304b70d79ba5cd0845" anchor="m5fdfaf5f9b642c895c4f6e0e826ff78db750f4a0">
+    <message id="msg_6" depth="1" position="5" reply_to="Pieter Wuille" parent_id="mailing-list-2026-06-m748a7fa3b9c284cae66474304b70d79ba5cd0845">
       <author>Anthony Towns</author>
       <timestamp>2026-06-27 04:33:00+00:00</timestamp>
+    </message>
+    <message id="msg_7" depth="2" position="6" reply_to="Anthony Towns" parent_id="mailing-list-2026-06-m5fdfaf5f9b642c895c4f6e0e826ff78db750f4a0" anchor="m702bc612e588067e04f23e2908595d9b70fd695e">
+      <author>Antoine Riard</author>
+      <timestamp>2026-06-29 02:17:00+00:00</timestamp>
     </message>
   </thread>
   <link href="bitcoin-dev/June_2026/m748a7fa3b9c284cae66474304b70d79ba5cd0845_Giving-teeth-to-expected-EC-disabling-P2XX-T-ML-.xml" rel="alternate"/>
@@ -36,16 +40,18 @@
   <link href="bitcoin-dev/June_2026/m4af0a37028705f9c52bb36261ab44230f6e1ef49_Giving-teeth-to-expected-EC-disabling-P2XX-T-ML-.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2026/mc3623ade8e2dd2246a51c4fa1eb8761f00f26244_Giving-teeth-to-expected-EC-disabling-P2XX-T-ML-.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2026/m5fdfaf5f9b642c895c4f6e0e826ff78db750f4a0_Giving-teeth-to-expected-EC-disabling-P2XX-T-ML-.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2026/m702bc612e588067e04f23e2908595d9b70fd695e_Giving-teeth-to-expected-EC-disabling-P2XX-T-ML-.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Giving teeth to expected EC disabling: P2XX(-T)(-ML)</title>
-    <updated>2026-06-28T05:24:03.240219+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/aj9SkwXqdRbuVZxH@erisian.com.au/T/#m5fdfaf5f9b642c895c4f6e0e826ff78db750f4a0" rel="alternate"/>
+    <updated>2026-06-29T05:58:45.316519+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/5f59804c-6a3b-41e7-9733-6c253353847an@googlegroups.com/T/#m702bc612e588067e04f23e2908595d9b70fd695e" rel="alternate"/>
     <published>2026-06-25 17:42:00+00:00</published>
-    <summary>The ongoing discussions within the Bitcoin development community focus on enhancing security measures in response to potential threats from quantum computing developments. Two primary mechanisms, Tripwire and Miner Lockdown, have been proposed to manage the automatic disabling of Elliptic Curve (EC) operation codes/paths for new output types like P2TRv2. The Tripwire mechanism, as suggested by Tadge Dryja, uses a specific transaction type as a trigger to deactivate EC operations immediately, ensuring that the disabling does not get indefinitely postponed. In contrast, the Miner Lockdown mechanism allows a majority of the mining hashrate to initiate the disabling, offering a faster response option to emerging threats.
-Boris Nagaev's contributions highlight concerns with these mechanisms, particularly the risk of false-positive activations in the Miner Lockdown feature, where conventional security breaches could mistakenly trigger a cryptographic reaction. He suggests that there should be a capability to reactivate the EC path if it is found that the lockdown was triggered by such a false alarm. He also questions the extent of the disabling, whether it affects all EC-related paths or only the main spending path, which is crucial for ensuring that legitimate operations are not unnecessarily halted.
-Further discussion points raised include the implementation timing and impacts of the Miner Lockdown mechanism. It is suggested that a lengthy period between signaling and activation phases could allow users more flexibility in adapting to changes. Concerns about miners' willingness to take on the responsibilities associated with this mechanism were also noted, highlighting the need for early identification of any opposition to adjust the proposal accordingly.
-Moreover, the dialogue touched on potential inefficiencies arising from users needing to revert from new transaction output types back to P2TR due to CRQC-protection goals. This change could lead to significant chain capacity issues. A critical viewpoint emphasized the need to disable certain functionalities within new output types to maintain security objectives, with proposals including the introduction of an OP_CHECKHYBRIDECSQISIGN opcode to address hybrid signature schemes distinctly at the opcode level.
-Lastly, the discussion explored technical considerations around the tripwire mechanism for disabling EC spending post-quantum transition. The approach focuses on using discrete logarithm signatures as proof, avoiding the need for trustless rewards or on-chain inclusion for historical records. Concerns about premature activations by miners, motivated by transaction fee increases, were highlighted, suggesting that nodes should have the capability to reject such activations. The email concludes with a reflection on the complexities of implementing hybrid cryptographic systems, opting instead for simpler, more isolated paths for future security needs.</summary>
+    <summary>The Bitcoin development community is actively discussing enhancements to the security measures within new transaction output types, specifically focusing on the potential risks posed by quantum computing advancements. Two main mechanisms have been proposed for automatically disabling Elliptic Curve (EC) opcodes/paths: the Tripwire and Miner Lockdown mechanisms. The Tripwire mechanism, suggested by Tadge Dryja, uses a specific transaction type involving a Nothing-Up-My-Sleeve (NUMS) point spend to trigger the deactivation of EC opcodes/paths in subsequent blocks. This sets a definitive timeline for the disabling, ensuring it isn't indefinitely postponed. Conversely, the Miner Lockdown, discussed by Sjors Provoost, would allow a majority of the mining hashrate to initiate the disabling, offering a quicker response to emerging threats.
+Boris Nagaev raised concerns about the Miner Lockdown approach, particularly the risk of false positives where conventional security breaches could mistakenly activate a Cryptographic Quantum Resistance Chain (CRQC) event response. He suggests implementing a mechanism to reactivate the EC path if a lockdown is triggered by such a false alarm. Boris also questions whether the disabling affects only the main EC path or includes all EC-related paths, emphasizing the importance of maintaining operational legitimacy without unnecessary disruptions.
+There are strategic considerations surrounding the timing and implementation of the Miner Lockdown (ML). Proposals include implementing a lengthy period between signaling and activation phases to provide flexibility for users uncomfortable with immediate changes. The incentive structure for ML's activation involves balancing security needs against operational flexibility, considering the miners' potential resistance due to political pressures and responsibilities associated with activating ML.
+Further discussions involve the inefficiencies that could arise from users needing to revert from advanced transaction outputs like P2TRv2 back to P2TR due to CRQC-protection goals. This could create significant chain capacity issues. There's debate over whether introducing a new version of P2TR that remains in a pre-lockdown state could be more beneficial. Additionally, disabling operations involving EC public keys, such as taproot key path spending and certain opcodes with non-empty signatures, is considered crucial for maintaining security integrity.
+Lastly, a recent proposal introduces a tripwire mechanism using a 128-byte value related to the BIP-341 NUMS point and a BIP340 signature, aiming to simplify the verification process by integrating it directly into coinbase witness commitments. This method would enhance Bitcoin's resilience against quantum threats while maintaining network integrity through stringent consensus requirements.
+These discussions reflect ongoing efforts to fortify Bitcoin's cryptographic framework against emerging quantum computing threats, balancing security enhancements with operational flexibility and user autonomy.</summary>
   </entry>
 </feed>
