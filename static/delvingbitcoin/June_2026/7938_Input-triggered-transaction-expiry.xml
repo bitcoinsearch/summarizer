@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Input-triggered transaction expiry</title>
+  <updated>2026-06-30T05:11:20.408631+00:00</updated>
+  <author>
+    <name>josh</name>
+  </author>
+  <timestamp>2026-06-29 19:32:54.464000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Input-triggered transaction expiry</title>
+    <updated>2026-06-30T05:11:20.408665+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667/11" rel="alternate"/>
+    <summary>The double-delay problem in blockchain transactions, particularly in the context of Bitcoin's timelock semantics, presents a significant challenge. This issue arises when one party, such as Alice, has not received a fully signed update transaction while needing to initiate a settlement on-chain. Traditionally, this situation could result in extended delays due to the dependency on receiving final signatures and the mechanics of relative timelocks that reset upon each new transaction update.
+
+To address this, a proposed solution involves the use of what can be termed as a pseudo Contract-level Relative Timelock (CLRT). In this construction, channel updates approve numerous update transactions, all committing to identical state and settlement outputs but differentiated by varying expiry heights. These heights are contingent on the height of the initiating transaction. Crucially, these update transactions do not incorporate relative timelocks. Instead, an absolute timelock, governed by the settlement hash, comes into play only at the expiry height plus a predetermined timeout window. Consequently, when Alice transmits an update with a specified expiry, Bob must correspondingly select an update transaction that aligns with the same expiry height. This mechanism effectively eliminates the double delay by ensuring all updates with a particular expiry have a settlement hash that becomes spendable after the designated window. Notably, incorporating merkle tree verification within this framework is recommended to facilitate the signing of millions of update transactions simultaneously, thereby ensuring that at least one remains valid until its expiration.
+
+Another intricate approach involves the propagation of kickoff heights through transactions, which is enabled by input expiry and additional blockchain features like introspection and dynamically set nLockTime values. By leveraging input expiry, it is possible to push a value onto the stack that represents at least the confirmation height of the input. Subsequent modifications employing key tweaking and further introspection allow for the propagation of this kickoff height across each update transaction. This value can then be read within the settlement script, establishing a concrete CLRT. This method, though more complex, provides a robust framework for managing transaction timelines and mitigating delays inherently associated with conventional relative timelocks. The detailed exploration of these concepts and their potential applications in blockchain technology can be further explored in the provided [discussion on input-triggered transaction expiry](https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667p-7915-construction-8).</summary>
+    <published>2026-06-29T19:32:54.464000+00:00</published>
+  </entry>
+</feed>

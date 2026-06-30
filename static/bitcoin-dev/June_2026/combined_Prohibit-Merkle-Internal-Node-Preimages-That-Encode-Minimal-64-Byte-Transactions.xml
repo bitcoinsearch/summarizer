@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Prohibit Merkle Internal Node Preimages That Encode Minimal 64-Byte Transactions</title>
-  <updated>2026-06-23T05:12:30.150123+00:00</updated>
+  <updated>2026-06-30T05:17:07.263274+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -69,9 +69,13 @@
       <author>Antoine Poinsot</author>
       <timestamp>2026-06-16 20:42:00+00:00</timestamp>
     </message>
-    <message id="msg_17" depth="1" position="16" reply_to="jeremy" parent_id="mailing-list-2026-06-mce547451ca274d61b05d2f9c8223baedf188c65f" anchor="m807bb368defbd9a3666fd83525587a60f4fbafcb">
+    <message id="msg_17" depth="1" position="16" reply_to="jeremy" parent_id="mailing-list-2026-06-mce547451ca274d61b05d2f9c8223baedf188c65f">
       <author>Sjors Provoost</author>
       <timestamp>2026-06-22 14:25:00+00:00</timestamp>
+    </message>
+    <message id="msg_18" depth="2" position="17" reply_to="Sjors Provoost" parent_id="mailing-list-2026-06-m807bb368defbd9a3666fd83525587a60f4fbafcb" anchor="m28a02095128388884ffce56e00943036072e477d">
+      <author>Antoine Riard</author>
+      <timestamp>2026-06-29 03:40:00+00:00</timestamp>
     </message>
   </thread>
   <link href="bitcoin-dev/June_2026/mce547451ca274d61b05d2f9c8223baedf188c65f_Prohibit-Merkle-Internal-Node-Preimages-That-Encode-Minimal-64-Byte-Transactions.xml" rel="alternate"/>
@@ -91,16 +95,18 @@
   <link href="bitcoin-dev/June_2026/me7d63b44292d284c0fcff311f5a67329b90c443b_Prohibit-Merkle-Internal-Node-Preimages-That-Encode-Minimal-64-Byte-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2026/m0ffa331beba48a3abb5de414e3609c89a535950c_Prohibit-Merkle-Internal-Node-Preimages-That-Encode-Minimal-64-Byte-Transactions.xml" rel="alternate"/>
   <link href="bitcoin-dev/June_2026/m807bb368defbd9a3666fd83525587a60f4fbafcb_Prohibit-Merkle-Internal-Node-Preimages-That-Encode-Minimal-64-Byte-Transactions.xml" rel="alternate"/>
+  <link href="bitcoin-dev/June_2026/m28a02095128388884ffce56e00943036072e477d_Prohibit-Merkle-Internal-Node-Preimages-That-Encode-Minimal-64-Byte-Transactions.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Prohibit Merkle Internal Node Preimages That Encode Minimal 64-Byte Transactions</title>
-    <updated>2026-06-23T05:12:30.152115+00:00</updated>
-    <link href="https://gnusha.org/pi/bitcoindev/8FEEF72A-92A3-48A9-AC49-43107D17B090@sprovoost.nl/T/#m807bb368defbd9a3666fd83525587a60f4fbafcb" rel="alternate"/>
+    <updated>2026-06-30T05:17:07.265844+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/6c02cc0f-13c0-4670-8689-9ad39cd8a203n@googlegroups.com/T/#m28a02095128388884ffce56e00943036072e477d" rel="alternate"/>
     <published>2026-06-01 17:46:00+00:00</published>
-    <summary>The proposal discussed introduces a new consensus rule for Bitcoin, aiming to address the security vulnerabilities associated with Merkle Tree internal node preimages that match the byte structure of a minimal 64-byte transaction. This rule is specifically designed to counteract SPV malleability issues by invalidating blocks containing such transactions, thereby enhancing the robustness of the network against certain types of malleability attacks. The proposal also outlines a minimal C++ function for implementation, which checks for prohibited internal node preimages based on specified criteria. Additionally, it advises miners on handling potential violations during block construction, including shuffling transaction order or removing problematic transactions to produce a valid block template.
-Further discussions emphasize the ongoing vulnerability in SPV verifiers and propose a more systemic solution at the consensus level rather than relying on individual security enhancements. This approach seeks to patch the security loophole beneath the usage of Merkle proofs fundamentally. It contrasts with another method that involves invalidating 64-byte transactions, clarifying that only specific systems would need modifications to reject these transactions. This distinction impacts a subset of systems, especially those not involved in securing valuable transactions, making it a practical and focused solution preferred in BIP 54.
-Additionally, concerns are raised about the potential risks posed by not having strict rules against nodes containing valid transactions within their path, highlighting how this could allow an attacking miner to manipulate the scenario. The complexity of implementing specific mitigations for this issue is underlined, along with the operational dynamics within layer 2 protocols of blockchain networks, where unspent transaction outputs (UTXOs) are utilized as intermediary inputs under certain conditions. This nuanced understanding reflects the intricate balance required to maintain functionality while ensuring security across the network.
-Moreover, the necessity for Simplified Payment Verification (SPV) verifiers to perform additional checks despite primarily relying on the heaviest chain is questioned, suggesting a reevaluation of standard practices in blockchain security models. This inquiry prompts a deeper examination of the role and essentiality of SPV verifiers in maintaining blockchain integrity and security.
-Lastly, the discussion touches upon the utilization of artificial intelligence in drafting a Bitcoin Improvement Proposal (BIP), emphasizing the critical review and manual editing required to ensure accuracy and integrity in the proposal's substance. This approach demonstrates a commitment to maintaining transparency and rigor in the developmental processes of blockchain technology.</summary>
+    <summary>The recent discussions on the Bitcoin Development Mailing List have unveiled a significant focus on enhancing the security protocols concerning transaction handling within Bitcoin's blockchain. A key aspect of this discourse is the proposed implementation of a new consensus rule that would essentially invalidate blocks containing Merkle tree internal node preimages that match the byte structure of minimal one-input, one-output, non-witness transactions. This proposal aims to address potential vulnerabilities in Simplified Payment Verification (SPV) systems by preventing the misinterpretation of internal nodes as transaction leaves, a scenario that could compromise transaction integrity and network security.
+The initiative does not affect SegWit transactions directly, as it excludes marker, flag, and witness data from the transaction identifier calculations. However, the ambiguity surrounding transaction identifiers at the txid level remains a concern even post-SegWit, prompting the need for this rule. The implementation details suggest a minimalistic approach involving a simple C++ function to check for prohibited internal node preimages, alongside guidance for miners on how to manage their block constructions to avoid these invalid configurations. This method is designed to maintain the standard functionality of 64-byte transactions while safeguarding against certain types of malleability attacks.
+Further insights into the operational dynamics of blockchain technology were discussed, particularly concerning the challenges posed by third-party malleability. These include serious implications for the network’s integrity, such as the potential manipulation of transaction IDs by attackers, which could obscure sub-trees and permit unauthorized actions. The discussion also extends to layer 2 protocols, emphasizing the nuanced transactions involving unspent outputs subject to specific conditions, which highlight the intricate balance required to maintain both functionality and security across the network.
+Moreover, there has been a candid acknowledgment of the use of artificial intelligence in drafting a Bitcoin Improvement Proposal (BIP). This application of AI was confined to assisting in drafting rather than generating ideas or analytical insights, ensuring the human experts critically review and manually edit the substantive content. This reflects a commitment to transparency and integrity in the developmental processes, recognizing the utility of tools while understanding their limitations.
+Lastly, the dialogue touched upon the broader philosophical shifts within Bitcoin development, critiquing the movement towards a &quot;trust-same philosophy&quot; as opposed to the foundational principle of a trust-minimized model. This critique stemmed from a detailed examination of proposals suggesting minor but potentially impactful modifications to transaction validity rules, indicating a tension between maintaining core principles and evolving to address emerging challenges.
+Overall, these discussions underscore the complexity and critical nature of ongoing efforts to enhance transaction security and system reliability within Bitcoin’s infrastructure, balancing technical innovation with fundamental principles to ensure robust, secure, and efficient network operations.</summary>
   </entry>
 </feed>
