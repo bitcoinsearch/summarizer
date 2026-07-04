@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Public key recovery for EC leaves in P2MR (BIP-360)</title>
-  <updated>2026-07-03T04:46:04.436694+00:00</updated>
+  <updated>2026-07-04T04:39:49.339274+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -93,6 +93,10 @@
       <author>sipa</author>
       <timestamp>2026-07-02 19:18:21.835000+00:00</timestamp>
     </message>
+    <message id="msg_23" depth="0" position="22">
+      <author>ajtowns</author>
+      <timestamp>2026-07-03 05:28:52.001000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/June_2026/7717_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7718_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
@@ -116,15 +120,17 @@
   <link href="delvingbitcoin/June_2026/7779_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7780_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2026/7968_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/7970_Public-key-recovery-for-EC-leaves-in-P2MR-BIP-360-.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Public key recovery for EC leaves in P2MR (BIP-360)</title>
-    <updated>2026-07-03T04:46:04.438529+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/public-key-recovery-for-ec-leaves-in-p2mr-bip-360/2603/22" rel="alternate"/>
+    <updated>2026-07-04T04:39:49.341886+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/public-key-recovery-for-ec-leaves-in-p2mr-bip-360/2603/23" rel="alternate"/>
     <published>2026-06-06 22:00:54.554000+00:00</published>
-    <summary>The proposal under discussion introduces a significant optimization for BIP-360 that would allow public key recovery from elliptic curve signatures within a Pay-to-Merkle-root structure. By employing a recoverable elliptic curve leaf, the witness size associated with elliptic curve spends can be reduced without increasing quantum exposure. This is achieved by removing the script containing the elliptic curve public key from the witness, enabling the derivation of the public key directly from the signature using a modified Schnorr verification equation. The essence of this approach is to streamline the witness structure by eliminating traditional script components and including only vital elements like the signature and a control block that defines the leaf version and path within the Merkle tree. This streamlined method not only shrinks the EC witness size but also aims to integrate seamlessly into the BIP-360 framework, potentially enhancing blockchain space efficiency and reducing transaction costs in operations involving elliptic curve public keys.
-Further technical details highlight the potential cryptographic implications of replacing the public key with a root plus Merkle branch in the challenge, especially concerning BIP340 and related script signatures. This substitution could retain the security properties of existing standards while introducing new dynamics in cryptographic verification processes. For instance, incorporating the Merkle path in the challenge could mitigate specific types of malleation attacks but at the expense of relinquishing batch validation capabilities, which are crucial in the design of BIP340-342. The trade-offs of this new scheme were quantified in terms of data encoding and efficiency, revealing a balanced compromise between data size and privacy. The proposed configuration manages to recover some benefits of the Pay-to-Taproot system, though it sacrifices simplicity and batch validation capabilities.
-Security vulnerabilities also emerge, particularly in scenarios where related elliptic curve keys exist within the same tree structure. An adversary aware of both keys and the tweak could exploit the system by forging signatures, as illustrated by the potential attack identified by Conduition. This vulnerability underscores the need for enhanced security measures in cryptographic protocols utilizing tree structures for key management.
-In summary, while the proposed modifications offer several advantages in terms of efficiency and integration within existing cryptographic frameworks, they also introduce new complexities and potential security risks. These factors must be carefully considered to ensure that the benefits outweigh the drawbacks, particularly in maintaining robust security against emerging threats, including those posed by quantum computing advancements. Additionally, ongoing developments and optimizations in related cryptographic libraries could further influence the feasibility and desirability of implementing these proposals in real-world blockchain applications.</summary>
+    <summary>The recent discussions on improving Bitcoin's cryptographic protocols have led to the development of a novel approach within the Pay-to-Merkle-root (P2MR) framework, which explores the potential for public key recovery from elliptic curve signatures. The proposed method aims to streamline transactions by eliminating the script containing the public key from the witness segment, thus reducing the witness size and potentially lowering transaction costs. By instead deriving the public key directly from the signature via a modified Schnorr verification equation, this method not only promises to maintain quantum resistance but also to approximate or even reduce witness sizes compared to traditional Pay-to-Witness-Public-Key-Hash (P2WPKH) structures.
+Further elaboration on this proposal reveals technical enhancements that integrate the root hash `q` into the signature challenge, which effectively mitigates possible cryptographic vulnerabilities like related-key attacks. This innovation necessitates alterations in the validation logic for new types of leaves within the P2MR scheme, simplifying the witness structure to include only the signature and a control block delineating the leaf version and path within the Merkle tree. These developments are seen as aligning well with the objectives of BIP-360, particularly in terms of optimizing blockchain space usage and reducing operational costs in a secure manner.
+An additional layer of complexity is discussed concerning the security implications of replacing the public key with a combination of a root and Merkle branch in cryptographic challenges. This adjustment retains the security properties of existing standards, including BIP340, while proposing a careful balance between data size and privacy. However, the replacement strategy sacrifices the capability for batch validation, which has been a critical efficiency factor in systems like MuSig2. Moreover, a detailed analysis of a theoretical two-leaf output scenario provides insights into the comparative data requirements and costs associated with key spends and script spends under different configurations, highlighting the trade-offs between various schemes.
+Security concerns also extend to the vulnerability of elliptic curve keys within tree structures where related keys could be exploited through signature forgery. Such risks underline the need for enhanced measures in cryptographic protocols employing tree-based management of keys. Additionally, discussions around the use of hardened elliptic curve keys in P2MR constructions emphasize the necessity of non-derivable keys from extended public keys to protect against quantum threats effectively.
+Overall, the ongoing exploration and adaptation of cryptographic methods in blockchain technologies reflect a dynamic response to emerging security challenges and operational efficiencies. The integration of advanced cryptographic techniques, such as using hashes of public keys in challenges and exploring new leaf versions for future upgrades, illustrates the proactive strategies being considered to maintain robust security frameworks in anticipation of quantum computing advancements. These discussions encapsulate a broader re-evaluation of cryptographic practices, aiming to ensure secure, efficient, and future-proof implementations in blockchain systems.</summary>
   </entry>
 </feed>
