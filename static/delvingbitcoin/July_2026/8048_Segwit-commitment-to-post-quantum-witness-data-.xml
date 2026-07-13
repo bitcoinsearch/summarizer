@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Segwit commitment to post-quantum witness data?</title>
+  <updated>2026-07-13T04:34:17.634794+00:00</updated>
+  <author>
+    <name>sipa</name>
+  </author>
+  <timestamp>2026-07-13 01:11:33.183000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Segwit commitment to post-quantum witness data?</title>
+    <updated>2026-07-13T04:34:17.634829+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/segwit-commitment-to-post-quantum-witness-data/2702/3" rel="alternate"/>
+    <summary>In the proposed transaction handling model, each transaction is assigned a style number that indicates its type of witness data. The system introduces multiple styles to accommodate different protocol extensions and signature schemes, with style numbers starting from 0 for SegWit up to 1 for pqdata, and potentially more for future developments. This approach allows flexibility in how transactions are processed and ensures compatibility with varying node capabilities, as nodes can choose which styles they wish to receive based on their consensus rules.
+
+The serialization process for transactions has been updated to include a flag byte (0x02) after the initial marker (0x00), used specifically when any transaction input witness style is greater than 0. This modification aids in differentiating between standard and extended transaction types. Additionally, each transaction input includes a style byte to denote its specific witness format, maintaining uniformity in encoding yet allowing for distinction in processing needs.
+
+For nodes that do not support certain witness styles, there exists a mechanism to "collapse" these styles into a basic style 0 format. This involves replacing the unsupported witness data with a single 34-byte element, ensuring backward compatibility while simplifying relay across nodes with varying capabilities. The transaction identifiers (wtxid and txid) and weight calculations follow the conventional SegWit definitions but are adjusted to accommodate these new style-specific rules.
+
+Moreover, all existing witness output types such as P2TR, P2WPKH, and P2WSH now include a rule specifying that an input must have a style=0 witness, enhancing security and consistency across transaction types. Any deviations from this standard, characterized by a single-element style=0 witness that does not comply with the defined format, are regarded as critical errors, potentially leading to the invalidation of the block or transaction containing them. Additionally, concerns about potential layer violations within the peer-to-peer and serialization logic have been raised, suggesting that further refinement might be necessary to seamlessly integrate these changes without compromising underlying script validations.</summary>
+    <published>2026-07-13T01:11:33.183000+00:00</published>
+  </entry>
+</feed>

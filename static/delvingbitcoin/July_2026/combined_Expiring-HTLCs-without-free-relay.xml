@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Expiring HTLCs without free relay</title>
-  <updated>2026-07-12T04:29:03.923824+00:00</updated>
+  <updated>2026-07-13T04:32:23.265411+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -17,19 +17,24 @@
       <author>josh</author>
       <timestamp>2026-07-12 00:46:55.653000+00:00</timestamp>
     </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>instagibbs</author>
+      <timestamp>2026-07-12 12:11:19.943000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/June_2026/7907_Expiring-HTLCs-without-free-relay.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7923_Expiring-HTLCs-without-free-relay.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2026/8041_Expiring-HTLCs-without-free-relay.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8044_Expiring-HTLCs-without-free-relay.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Expiring HTLCs without free relay</title>
-    <updated>2026-07-12T04:29:03.924526+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/expiring-htlcs-without-free-relay/2663/3" rel="alternate"/>
+    <updated>2026-07-13T04:32:23.265920+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/expiring-htlcs-without-free-relay/2663/4" rel="alternate"/>
     <published>2026-06-28 01:47:36.050000+00:00</published>
-    <summary>The proposed updates to the consensus and the introduction of new opcodes are primarily designed to improve the security and functionality of Hashed Timelock Contracts (HTLCs). By providing an expiry mechanism independent of preimage publication, these updates aim to circumvent the need for local-mempool monitoring. This is especially advantageous in scenarios with limited or no mempool access, such as on a home router operating Utreexo. A significant amendment includes assigning a consensus role to bit 21 of nSequence, which would enforce a minimum nLockTime based on the BIP68 inclusion height, ensuring that a transaction cannot be processed until after a certain number of blocks post the last confirmation of its inputs.
-Additionally, the changes propose the enforcement of bit 21 in `OP_CSV` and the creation of `OP_LOCKTIME`, an opcode exclusive to tapscript that pushes nLockTime onto the stack. These modifications support the formation of HTLCs that secure refunds if the preimage is not disclosed at least 100 blocks prior to the HTLC's expiration. The HTLC structure would follow a two-stage procedure where initially, funds are moved to a staging output via a preimage-gated presigned transaction. Subsequent spending paths for both the receiver and offerer are then defined according to specific BIP68 constraints and the newly introduced opcode functionalities. Although these alterations do not fully prevent replacement cycling attacks as highlighted by Peter Todd’s `OP_EXPIRE` proposal, they diminish economic incentives for such attacks by ensuring refunds when a timely preimage publication does not occur.
-Despite these benefits, the approach introduces some trade-offs, like restrictions on the minimum HTLC length, potential liquidity issues for receivers, and higher transaction costs due to multiple transactions being necessary. Nonetheless, these disadvantages are considered minor relative to the substantial security improvements achieved by shifting from reliance on local mempool states to chainstate-based monitoring for preimage verification.
-In an additional discussion, it is suggested that the free relay feature can be omitted entirely, which offers a distinct advantage. This method does not block replacement cycling within the refund path but removes the economic incentive for such behaviors by guaranteeing a refund if the preimage is delayed. This ensures a more secure and dependable framework for transactions, particularly in environments susceptible to delays or non-compliance. Moreover, the possibility of reducing the conservative 100 block delay to a lower number without affecting consensus and relay has been mentioned as a future consideration, thus potentially enhancing the system's efficiency further ([per](https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667/3?u=josh) @ajtowns). These advancements suggest significant potential for improving blockchain technology's adoption and utility, particularly in decentralized financial transactions and smart contracts.</summary>
+    <summary>The recent proposals to amend blockchain transaction protocols particularly target the enhancement of Hashed Timelock Contracts (HTLCs), focusing on security and efficiency improvements in low-bandwidth or constrained environments like home routers running Utreexo. A critical amendment includes altering the consensus meaning of bit 21 of nSequence, which would establish a minimum nLockTime based on the BIP68 inclusion height, ensuring transactions cannot be included in a block until after a designated number of blocks post-confirmation of transaction inputs. This change, along with the enforcement of bit 21 in `OP_CSV` and the introduction of `OP_LOCKTIME`, a tapscript-only opcode that presents nLockTime onto the stack, aims to solidify the HTLC structure by mandating refunds if preimages are not revealed timely, specifically at least 100 blocks before HTLC expiry.
+These modifications intend to mitigate vulnerabilities noted in current mechanisms, like the replacement cycling attack, a problem highlighted within previous frameworks such as those proposed by Peter Todd in his `OP_EXPIRE` initiative. Although complete prevention of replacement cycling is not achieved, the economic incentives for executing such attacks are significantly reduced through guaranteed refunds for non-timely preimage publications. This approach introduces some operational limitations, such as restrictions on the minimum length of HTLCs and potential liquidity constraints for receivers, but these are viewed as minor when compared to the enhanced security benefits that come from eliminating dependency on local mempool states for monitoring preimages.
+Further insights into the email reveal an unexpected understanding concerning the commonality of mempool monitoring in blockchain transactions. The sender expresses a shift towards exploring alternative methods like grinding and rebroadcasting while maintaining focus on implementing a relay-safe expiry mechanism to address time-sensitive replacement cycling attacks. This strategy appears to offer a robust framework for managing blockchain transactions more securely and reliably, especially under scenarios susceptible to delays or non-compliance. Additionally, the email references a suggestion by @ajtowns to reconsider the conservative 100 block delay currently implemented in `OP_EXPIRE`, hinting at potential future adjustments that could maintain stability in consensus and relay operations even with a reduced delay. For more details on this topic, the sender directs to a post by @ajtowns available [here](https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667/3?u=josh).
+Overall, the proposals and discussions encapsulated in the email reflect a proactive and ongoing engagement with enhancing blockchain technology's security framework, particularly around transaction management and HTLCs. These advancements are critical for the broader adoption and utility of blockchain in decentralized financial transactions and smart contracts, showing a promising direction towards more secure and efficient network transaction handling.</summary>
   </entry>
 </feed>
