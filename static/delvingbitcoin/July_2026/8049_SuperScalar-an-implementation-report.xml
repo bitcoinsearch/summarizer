@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>SuperScalar: an implementation report</title>
+  <updated>2026-07-14T04:03:25.074253+00:00</updated>
+  <author>
+    <name>8144225309</name>
+  </author>
+  <timestamp>2026-07-13 07:21:28.805000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>SuperScalar: an implementation report</title>
+    <updated>2026-07-14T04:03:25.074281+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/superscalar-an-implementation-report/2705" rel="alternate"/>
+    <summary>The SuperScalar project, designed by @ZmnSCPxj, presents an innovative approach to managing multiple self-custodial Lightning clients using a single on-chain UTXO without the need for a soft fork and eliminating trust dependencies on the coordinating Lightning Service Provider (LSP). The design is detailed in a forum post titled [SuperScalar with pseudo-Spilman leaves, t/1242](https://delvingbitcoin.org/t/superscalar-laddered-timeout-tree-structured-decker-wattenhofer-factories-with-pseudo-spilman-leaves/1242), which also outlines the implementation of a working model tested on regtest and signet environments. The project’s codebase is accessible on GitHub under the MIT license at [v0.2.0](https://github.com/8144225309/SuperScalar/releases/tag/v0.2.0) and includes several binaries like `superscalar_lsp`, `superscalar_client`, `superscalar_watchtower`, and `superscalar_bridge`.
+
+A key architectural component of SuperScalar is the channel factory, which utilizes a P2TR funding UTXO. This UTXO's internal key comprises a MuSig2 aggregate involving the LSP and up to 127 clients. The integrity of transactions within this setup is maintained through consensus-enforced timelocks and the requirement for aggregate signatures for any spending, effectively ensuring that no subset of participants can unilaterally move funds. The structure allows for complex configurations as guided by the design's tree structuring principles, including varying arities and static levels to manage the worst-case scenarios for exit processes.
+
+Another notable feature includes the innovative use of timeout-sig-trees, where the default state after a timeout is structured to favor clients over the LSP. This ensures client protection through a distribution transaction co-signed during the initial ceremony, which can be broadcasted by the LSP or any client, thereby allowing fund recovery without dependency on the LSP’s honesty. Furthermore, the factory setup supports dynamic refreshes in place, allowing re-signing with later CLTV without on-chain transactions, thereby optimizing for both security and efficiency.
+
+The operational dynamics of the SuperScalar system are robust, incorporating advanced security measures such as poison transactions that penalize the broadcast of stale states and mechanisms to ensure signing keys' safety by avoiding persistent secret nonces. Fee strategies are designed to attach at broadcast time, which aligns incentives correctly by having the party at risk manage the associated costs. Additionally, the system's resilience against network reorganizations is meticulously addressed through specific messaging protocols and watchtower functionalities.
+
+From a scalability and interoperability perspective, the SuperScalar setup has been validated on public networks with up to 127 clients, demonstrating its capability to handle real transactions and cooperate closures efficiently. Notably, it integrates seamlessly with existing Lightning network nodes without requiring modifications, showcasing its practical applicability and ease of adoption.
+
+As the system prepares for broader deployment, the focus shifts towards external audits, particularly examining the double-sign defense mechanism critical to the system's overall security. The continuous development and testing efforts, supported by extensive documentation and community engagement through platforms like [superscalar.win](https://superscalar.win) and related GitHub repositories, underline the project’s commitment to transparency and collaborative refinement. The ongoing enhancements and explorations, including potential covenant applications using CTV, highlight SuperScalar’s ambitious roadmap towards reshaping Lightning network operations.</summary>
+    <published>2026-07-13T07:21:28.805000+00:00</published>
+  </entry>
+</feed>
