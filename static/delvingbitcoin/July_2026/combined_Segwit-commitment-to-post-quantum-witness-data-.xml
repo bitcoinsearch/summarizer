@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Segwit commitment to post-quantum witness data?</title>
-  <updated>2026-07-14T04:03:02.032621+00:00</updated>
+  <updated>2026-07-15T04:05:24.411511+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -21,20 +21,30 @@
       <author>ajtowns</author>
       <timestamp>2026-07-13 19:33:38.206000+00:00</timestamp>
     </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>sipa</author>
+      <timestamp>2026-07-14 22:40:16.100000+00:00</timestamp>
+    </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>ajtowns</author>
+      <timestamp>2026-07-15 00:11:33.891000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/July_2026/8036_Segwit-commitment-to-post-quantum-witness-data-.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2026/8046_Segwit-commitment-to-post-quantum-witness-data-.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2026/8048_Segwit-commitment-to-post-quantum-witness-data-.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2026/8056_Segwit-commitment-to-post-quantum-witness-data-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8075_Segwit-commitment-to-post-quantum-witness-data-.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8078_Segwit-commitment-to-post-quantum-witness-data-.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Segwit commitment to post-quantum witness data?</title>
-    <updated>2026-07-14T04:03:02.033350+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/segwit-commitment-to-post-quantum-witness-data/2702/4" rel="alternate"/>
+    <updated>2026-07-15T04:05:24.412374+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/segwit-commitment-to-post-quantum-witness-data/2702/6" rel="alternate"/>
     <published>2026-07-10 23:13:25.815000+00:00</published>
-    <summary>Enhancing blockchain technology to accommodate post-quantum cryptography necessitates several strategic modifications to the existing framework. One notable proposal is the expansion of block sizes to introduce an extension block area tailored for post-quantum signature data, which would also address ECC spends in P2MR or P2MR+PKR transactions. This could potentially make economic sense by not charging for the initial bytes used by these transactions, thus aligning them with more commonly used paths like p2wpkh and p2tr. Additionally, integrating another witness area for post-quantum cryptographic schemes seems technically viable but involves complexities such as the creation of a new transaction identifier (pqwtxid) that amalgamates pqdata with traditional segwit data. Such changes would require significant updates across mining and network infrastructure, including a new block commitment and possibly a pqwtxid relay feature, akin to the existing [BIP339 wtxid relay](https://github.com/bitcoin/bips/blob/c021a5f51ae9d3e71a41eac3dda6dc060fead35d/bip-0339.mediawiki). An alternative method might involve embedding a commitment to pqdata within the segwit area to maintain the current transaction identification system while accommodating new data requirements.
-Innovations are also being explored in enhancing ECDSA signatures by incorporating quantum mechanics directly into the R-value of signatures, representing a shift towards embedding quantum elements in digital signatures to enhance security against quantum computing threats. This suggests implementing a sigops-based limit on quantum signatures per transaction, ensuring consistency and optimizing cryptographic operations in a quantum-influenced landscape. Such advancements highlight the necessity of developing robust cryptographic protocols capable of withstanding advanced computational capabilities.
-The proposed transaction handling model introduces multiple styles of witness data to increase flexibility and ensure compatibility across various network nodes. Each transaction input is distinguished by a style number indicating its type of witness data, improving the processing and compatibility of transactions. Modifications include a flag byte after the initial marker in the serialization process when any transaction input witness style is greater than 0, aiding in differentiating between standard and extended transaction types. For nodes unable to support certain witness styles, a mechanism exists to &quot;collapse&quot; these styles into a basic style 0 format, ensuring backward compatibility and simplifying network operations. These adjustments necessitate careful integration to avoid disrupting underlying script validations and maintaining network efficiency.
-Furthermore, discussions around transaction authorization encodings emphasize the need for detailed considerations regarding how inputs should be handled, especially when dealing with different types of data commitments and potential expansions in the future. The idea of having annex commitments in transactions to extend functionalities like per-input locktimes reflects a thoughtful approach to evolving blockchain technology responsibly. This nuanced handling of data underscores the importance of scalability and adaptability in blockchain's continuous evolution, particularly in response to the advent of quantum computing.</summary>
+    <summary>Enhancing blockchain technology to support post-quantum cryptography involves incorporating innovative elements that adapt current systems for future security requirements. One proposition is to expand the block size to create additional space for quantum-resistant signature data in an extension block area, which could also accommodate ECC spends used in transactions like P2MR or P2MR+PKR. This strategy includes making the first 32B or 64B per input free, potentially equalizing the costs between these paths and more traditional ones such as p2wpkh and p2tr. The new structure would require a pqwtxid, combining pqdata with traditional segwit data, necessitating extensive updates across mining and network infrastructures. A suggested modification could see a commitment to pqdata within the segwit area of an input, allowing the wtxid to remain the primary transaction identifier, thus minimizing disruptions while still introducing necessary quantum-resistant data. This solution would increase storage and bandwidth demands but could be managed through node-specific optimizations.
+In another development, there is a push to integrate quantum mechanics into ECDSA signatures by allowing the signature to commit directly to a quantum state within the R-value. This approach marks a significant shift from conventional digital signature schemes by embedding quantum components intended to enhance security against quantum computing threats. The introduction of a sigops-based system for these quantum signatures would limit the number of quantum signatures per transaction, ensuring consistency and streamlined processing.
+The proposed handling model for transactions introduces multiple styles of witness data to accommodate various protocol extensions and signature schemes. By assigning each transaction input a style number, the system allows nodes to select which styles they accept based on their consensus rules. This flexibility ensures compatibility across different node capabilities, though it introduces complexities in maintaining backward compatibility and simplifying data relay across diverse network setups. Each input's witness data is categorized by a style byte, affecting the input's weight calculation and transaction validation processes. Implementing these changes requires careful consideration to balance technological advancements with the need to maintain efficient and reliable network operations.
+Lastly, discussions around witness data encoding highlight the necessity of strict management of authorization types within transaction inputs. Current protocols prohibit using multiple authorization types simultaneously, presenting challenges for potential rescue protocols that might use composite approaches. Proposals suggest collapsing unsupported witness styles to a basic format, simplifying data processing while retaining crucial transaction details through an annex entry. This method ensures essential elements are preserved, even when the primary data is not present, aiding in maintaining integrity across varying node versions and capabilities throughout the blockchain network.</summary>
   </entry>
 </feed>
