@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Input-triggered transaction expiry</title>
-  <updated>2026-07-13T04:33:07.294166+00:00</updated>
+  <updated>2026-07-16T04:14:17.462997+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -57,6 +57,10 @@
       <author>josh</author>
       <timestamp>2026-07-12 02:25:58.036000+00:00</timestamp>
     </message>
+    <message id="msg_14" depth="0" position="13">
+      <author>josh</author>
+      <timestamp>2026-07-15 22:03:57.190000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/June_2026/7915_Input-triggered-transaction-expiry.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7917_Input-triggered-transaction-expiry.xml" rel="alternate"/>
@@ -71,16 +75,18 @@
   <link href="delvingbitcoin/June_2026/7934_Input-triggered-transaction-expiry.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7942_Input-triggered-transaction-expiry.xml" rel="alternate"/>
   <link href="delvingbitcoin/July_2026/8043_Input-triggered-transaction-expiry.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8091_Input-triggered-transaction-expiry.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Input-triggered transaction expiry</title>
-    <updated>2026-07-13T04:33:07.295255+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667/14" rel="alternate"/>
+    <updated>2026-07-16T04:14:17.464242+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667/15" rel="alternate"/>
     <published>2026-06-29 01:13:39.099000+00:00</published>
-    <summary>The exploration of input-triggered transaction expiry presents a significant advancement in blockchain technology, particularly in managing the lifecycle and security of transactions. This method employs `nSequence` for setting a height-based relative timelock combined with `nLockTime`, allowing transactions to expire if inputs are mined too late. This approach not only mitigates issues like free relay troubles seen in earlier models but also enhances transaction validity against potential blockchain reorganizations up to 100 blocks. Its application in mempool-free HTLC forwarding is notable as it removes the need for local preimage monitoring, thus optimizing both the process and security. The use of `TEMPLATEHASH` and vector commitments further reduces storage and interactivity requirements by committing to a merkle root of approved windows, which simplifies state verification processes.
-The relationship between `nLockTime` and `nSequence` underpins a broader understanding of input expiry in blockchain transactions. `nLockTime` specifies the earliest block height at which a transaction may be included, playing a crucial role in timing transaction executions. On the other hand, `nSequence` provides a mechanism for transaction inputs to expire independently, offering enhanced control over their validity. These mechanisms support various blockchain applications and scenarios, highlighting the critical nature of these settings for developers dealing with time-sensitive or conditional transactions.
-Innovations in Bitcoin transaction protocols have introduced new methodologies that differentiate from traditional expiry proposals. For example, the new approaches suggest that a transaction path becomes invalid if confirmed after a specific time threshold, contrasting with older methods where transactions were deemed invalid post-specific events. Such developments align with discussions around enhancing transaction validation relative to confirmation times, providing a more nuanced perspective on managing transaction delays and associated risks.
-The discussion also extends into the practical applications of Hash Time-Locked Contracts (HTLCs) in facilitating secure cryptocurrency swaps and contract executions. By integrating expiration features into HTLCs, the necessity for a final confirming transaction can potentially be eliminated, streamlining operations and reducing costs, particularly in high fee environments. This adjustment not only simplifies the transaction process but also bolsters security and reliability in digital contracts and exchanges.
-Lastly, the proposal of partial height introspection within blockchain transactions introduces a capability where a coin confirmed at or before a specified block height can influence the conditions under which it can be spent. This adds an extra layer of flexibility and security to transaction rules, impacting how smart contracts are devised and executed across blockchain platforms. Such innovations are pivotal in advancing the efficiency and functionality of blockchain technology, encouraging its wider adoption and adaptation in various sectors.</summary>
+    <summary>The exploration of input-triggered transaction expiry in blockchain technology presents a novel approach to managing transaction lifecycles, distinct from traditional methods involving `OP_EXPIRE`. By incorporating specific bits within `nSequence` to enforce a relative height-based timelock and utilizing `nLockTime`, this method ensures transactions automatically expire if not mined within an acceptable timeframe. This not only provides robustness up to a 100-block reorganization but also addresses issues related to free relay that were prevalent in earlier models. One significant advantage is its application in mempool-free HTLC forwarding, which eliminates the need for local preimage monitoring, thereby simplifying operations and bolstering security. Furthermore, it supports the implementation of pseudo contract level relative timelocks (CLRTs), essential for streamlining operations in complex multi-party payment channels without necessitating extensive consensus changes.
+The `nLockTime` and `nSequence` parameters play pivotal roles in defining the lifecycle of blockchain transactions. `nLockTime` sets the minimum block height for a transaction's inclusion in the blockchain, crucial for timing transaction executions. Conversely, `nSequence` allows setting expiration conditions for transaction inputs independently, adding a layer of flexibility and control over transaction validity. This orthogonal relationship between the two parameters enables diverse applications and scenarios within blockchain operations, highlighting their critical role for developers working with time-sensitive or conditional transactions.
+Innovative approaches to Bitcoin transaction protocols have been discussed, contrasting traditional expiry methods with newer proposals that consider transaction validation relative to confirmation times. For instance, a transaction might be deemed invalid if confirmed after a certain threshold, a concept supported by scripting 'OP_TX LESSTHANOREQUAL VERIFY' to introspect confirmation heights directly. This method facilitates parent height introspection and could potentially streamline the setting of consensus-enforced delays for transactions, especially non-coinbase outputs where the necessity and length of such delays are debatable.
+HTLCs in blockchain technology introduce efficiencies, particularly in contract execution and cryptocurrency swaps. By integrating an expiration feature into these contracts, the process can be simplified by eliminating the need for a final confirming transaction, thus reducing overall transaction costs and enhancing the practicality of blockchain for secure exchanges. Additionally, the discussion around `CLTV` specifications suggests modifications like implementing a maximum `nLockTime` through introspection techniques, which would allow more precise control over transaction timings, ensuring both security and compliance with intended timings.
+Further discussions propose partial height introspection for blockchain transactions, allowing conditions based on historical confirmation heights. This capability could modify how smart contracts are written and executed, impacting security protocols associated with transaction confirmations. The discourse also explores the potential of shorter-duration HTLCs, which could complete in fewer transactions in high-fee environments, and discusses alternative approaches to transaction expiry using `nLockTime` for a more intrinsic integration of expiry conditions within the transaction structure itself.
+For deeper insights into these topics, further reading and detailed discussions can be found at [OP_TX thread on bitcoindev](https://gnusha.org/pi/bitcoindev/aOOq-Pw0ht_R0OAK@erisian.com.au/) and [discussion on input-triggered transaction expiry](https://delvingbitcoin.org/t/input-triggered-transaction-expiry/2667p-7915-construction-8). These resources provide a comprehensive understanding of the ongoing developments and debates within the field of blockchain transaction management.</summary>
   </entry>
 </feed>
