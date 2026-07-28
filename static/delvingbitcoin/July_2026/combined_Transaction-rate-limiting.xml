@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Transaction rate-limiting</title>
+  <updated>2026-07-28T04:18:45.706912+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>ajtowns</author>
+      <timestamp>2026-07-27 07:59:57.980000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>0xB10C</author>
+      <timestamp>2026-07-27 14:55:58.251000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/July_2026/8158_Transaction-rate-limiting.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8167_Transaction-rate-limiting.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Transaction rate-limiting</title>
+    <updated>2026-07-28T04:18:45.707408+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/transaction-rate-limiting/2744/2" rel="alternate"/>
+    <published>2026-07-27 07:59:57.980000+00:00</published>
+    <summary>The recent integration of [Pull Request 34628](https://github.com/bitcoin/bitcoin/pull/34628) into Bitcoin Core version 32.0 marks a significant development in the optimization of transaction handling within the network. This update stems from an extensive three-year period of iterative enhancements initiated by alarming signals of excessive CPU usage from a VPS hosting a mainnet debug-build node. Investigations revealed that this issue was partly due to inefficient iterator implementations by Boost, causing O(N) performance relative to container size, compounded by mechanisms designed to mitigate the impact of large transaction bursts on the network.
+Historically, Bitcoin nodes operate as amplifiers in transaction relay: a single incoming transaction copy can result in multiple outbound copies disseminated to each peer. This mechanism, while essential for network-wide transaction propagation, also presents vulnerabilities. An exploitative attack could potentially magnify a small input into a substantial network-wide disruption, characterized by excessive bandwidth and CPU consumption. The underlying design intended to prevent such scenarios was flawed, leading to inefficiencies such as lower-than-expected transaction throughput and discrepancies in transaction relay and mining priority. Notably, these issues were exacerbated by changes in Bitcoin's network dynamics over the years, such as the introduction of segregated witness and the popularity of replace-by-fee policies.
+In response to these challenges, modifications were made to increase the processing rate of transactions and clear backlogs more efficiently. These adjustments included reconfiguring the sorting protocols within mempools and doubling the target transaction relay rate. Further observation of network behavior, especially following surges in specific types of transactions, highlighted ongoing inefficiencies and prompted a significant redesign. The solution entailed replacing per-peer transaction queues with a single global queue, thus reducing CPU usage not just incrementally but across all transactions cumulatively.
+This new system architecture aims to maintain CPU availability for critical tasks like block validation while managing large volumes of transactions more efficiently. It also introduces bandwidth rate limits to prevent the network strain caused by unconfirmed large transactions. This comprehensive approach should enhance the robustness of nodes against both legitimate high-volume usage and potential malicious attacks aiming to disrupt network operations.</summary>
+  </entry>
+</feed>

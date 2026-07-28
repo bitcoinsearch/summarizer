@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>PQC output type discussion</title>
+  <updated>2026-07-28T04:20:19.451657+00:00</updated>
+  <author>
+    <name>sipa</name>
+  </author>
+  <timestamp>2026-07-27 21:25:57.536000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>PQC output type discussion</title>
+    <updated>2026-07-28T04:20:19.451693+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/pqc-output-type-discussion/2749" rel="alternate"/>
+    <summary>The progression and diversification of Bitcoin transaction output types have been influenced by an ongoing discussion about adapting to post-quantum cryptographic (PQC) concerns. The key variations discussed include several notable proposals, each aiming to enhance security against quantum computing threats while considering efficiency and current technological constraints.
+
+One such proposal is the **P2MR** or "Pay to Merkle Root," detailed in [BIP-360](https://github.com/bitcoin/bips/blob/8c369ac8e60629ac6c032ffe21bb5ec5b35213d7/bip-0360.mediawiki). In this model, the transaction output stores a Merkle root which represents a tree of leaf scripts. When spending, the Merkle path along with the leaf script and inputs are revealed, keeping EC points off-chain until they're needed. An extension of P2MR is **P2QR** or "Pay to Quantum Resistant," which disables ECC opcodes from the start, aiming for unconditional quantum resistance at the expense of losing ECC's efficiency prior to a potential 'Q-day'.
+
+On the other hand, **P2TRv2** follows similar semantics to the existing [BIP-341](https://github.com/bitcoin/bips/blob/9783d61f1b9c81231581fee026c8e8cb9499d265/bip-0341.mediawiki) but incorporates PQC opcodes and expects a future consensus change that disables ECC within the output type itself. A variant, **P2TRH**, proposed [here](https://delvingbitcoin.org/t/public-key-recovery-for-ec-leaves-in-p2mr-bip-360/2603/17), includes a scriptPubKey that contains a hash of the tweaked point *Q*, and utilizes public key recovery for key path spending, maintaining a similar weight profile to P2TRv2 without leaving an EC point on the chain.
+
+Innovative elements like **Public Key Recovery** (PKR) reduce the explicit exposure of public keys at spending time by using a signature and EC public key recovery against the public key hash, thus saving space but requiring a new [BIP-340](https://github.com/bitcoin/bips/blob/9783d61f1b9c81231581fee026c8e8cb9499d265/bip-0340.mediawiki) variant. Further discussions propose a new witness style that allows for additional witness data with modified discounting/cost rules, facilitating the deployment of transaction serialization changes and extensions to the P2P protocol.
+
+Security strategies such as **Tripwire** and **Miner Lockdown** provide mechanisms to disable ECC under certain conditions, either through on-chain proof of ECDLP breaking or via a softfork enabled by miner consensus, respectively. This aims to limit unexpected vulnerabilities by disabling ECC only within specific output types.
+
+Lastly, proposals for hybrid PQC opcodes present a way to combine ECC with PQC signatures, offering security even if one of the schemes fails. However, these introduce larger signatures and higher verification costs, demonstrating the trade-offs involved in enhancing Bitcoin's resistance to quantum threats.
+
+These discussions reflect a community actively exploring various paths to securing Bitcoin against emerging cryptographic challenges, balancing security, efficiency, and backward compatibility in the design of new transaction output types.</summary>
+    <published>2026-07-27T21:25:57.536000+00:00</published>
+  </entry>
+</feed>
