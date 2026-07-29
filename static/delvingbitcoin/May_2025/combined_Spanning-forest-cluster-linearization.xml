@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Spanning-forest cluster linearization</title>
-  <updated>2026-02-23T03:48:00.961827+00:00</updated>
+  <updated>2026-07-29T04:15:53.593629+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -53,6 +53,14 @@
       <author>sipa</author>
       <timestamp>2026-02-22 15:05:58.415000+00:00</timestamp>
     </message>
+    <message id="msg_13" depth="0" position="12">
+      <author>isadofschi</author>
+      <timestamp>2026-04-16 16:02:02.029000+00:00</timestamp>
+    </message>
+    <message id="msg_14" depth="0" position="13">
+      <author>sipa</author>
+      <timestamp>2026-07-28 03:22:56.948000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/Feb_2025/4171_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2025/4223_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
@@ -66,20 +74,18 @@
   <link href="delvingbitcoin/Jan_2026/6630_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <link href="delvingbitcoin/Jan_2026/6633_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <link href="delvingbitcoin/Feb_2026/6930_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
+  <link href="delvingbitcoin/April_2026/7330_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8179_Spanning-forest-cluster-linearization.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Spanning-forest cluster linearization</title>
-    <updated>2026-02-23T03:48:00.963549+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/spanning-forest-cluster-linearization/1419/12" rel="alternate"/>
+    <updated>2026-07-29T04:15:53.596063+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/spanning-forest-cluster-linearization/1419/14" rel="alternate"/>
     <published>2025-02-05 01:08:43.125000+00:00</published>
-    <summary>The discussion begins with an examination of the spanning-forest cluster linearization algorithm, a novel approach aimed at enhancing the efficiency of Bitcoin Core's transaction processing. This method, despite its absence of known complexity bounds, offers elegance, speed, and practicality in prototype implementations. It stands out as a potential advancement over traditional algorithms by focusing on the highest-feerate topologically-valid subset of transactions within a cluster. The application of linear programming (LP) techniques, particularly the Interior Point Methods and simplifications to the simplex algorithm, allows for polynomial-time solutions to problems that were previously thought to be more complex. The modifications lead to an optimized process by partitioning the transaction graph into &quot;chunks,&quot; each internally connected through a spanning tree of free variables. This restructuring is instrumental in achieving optimal linearization, ensuring no higher-feerate chunk depends on a lower-feerate one.
-Further elaboration on the algorithm details significant improvements made to the `Linearize()` function in Bitcoin Core, highlighting performance enhancements in handling transaction clusters. These advancements are evident in benchmark comparisons showcasing substantial reductions in processing time across various challenging clusters encountered on the network. Such improvements not only illustrate the method's efficiency but also suggest an increase in the robustness of transaction handling processes.
-In addressing the algorithm's strengths and limitations, discussions emphasize the termination condition and complexity bound of the SFL algorithm, comparing it with other algorithms like GGT and CSS. The analysis reveals the challenges associated with achieving termination and managing equal-feerate chunk splitting. Despite these hurdles, the introduction of mechanisms like LIMO-like improvements and considering the active dependencies arrangement as a spanning forest presents avenues for further refinement and effectiveness.
-The exploration extends to the optimization of transaction processing, shedding light on strategies to enhance split operations' fairness and efficiency. Different approaches are scrutinized, leading to the integration of randomness into the algorithm to prevent deterministic exploitation by attackers. This development underscores the importance of safeguarding against targeted disruptions within the network.
-A notable cycle phenomenon within the Shared Fragment Log (SFL), demonstrating the algorithm's potential to enter repeating cycles under certain conditions, prompts a reconsideration of guaranteed progress assumptions. Although theoretical, the practical impact of such cycles appears mitigated by system-inherent randomness, suggesting a balance between algorithmic predictability and robustness against manipulation.
-On the implementation side, recent updates have focused on refining merge and split selection mechanisms, significantly boosting processing efficiency and security. Adjustments in dependency activation methods and failure handling in chunk splits introduce uniform randomness, reducing vulnerabilities and improving performance in handling synthetic clusters.
-A breakthrough in partitioning equal-feerate chunks within Bitcoin Core emphasizes the algorithmic creativity in adjusting transaction fee rates to facilitate topologically valid splits. This advancement, integrated into Bitcoin Core through significant pull requests, marks a step forward in refining transaction fee rate management strategies.
-Lastly, the conversation transitions towards a broader perspective on programming paradigms, contemplating the shift from emphasizing algorithms to prioritizing variables. This shift reflects a deeper understanding of software development principles, advocating for flexibility, state management, and modularity. Additionally, clarifications on the simplex algorithm's operation highlight the importance of accurate comprehension in applying optimization techniques effectively.
-The culmination of these discussions and updates signifies ongoing efforts to enhance Bitcoin Core's transaction processing capabilities, underscored by theoretical insights and practical implementations. Links to relevant resources and pull requests ([PR 32545](https://github.com/bitcoin/bitcoin/pull/32545), [PR 34259](https://github.com/bitcoin/bitcoin/pull/34259), [PR 34023](https://github.com/bitcoin/bitcoin/pull/34023)) provide direct access to detailed information and developments slated for the upcoming [31.0 release](https://github.com/bitcoin/bitcoin/issues/33607).</summary>
+    <summary>The recent discourse on the Spanning-Forest Cluster Linearization (SFL) algorithm provides a comprehensive overview of its potential as an effective replacement for traditional techniques used in Bitcoin Core's transaction processing. The SFL algorithm, derived from modifications to the simplex method, utilizes a linear programming framework to manage and optimize transaction clusters efficiently. By introducing variables representing transactions within a linear programming model and enforcing topological constraints, this approach ensures that transactions are processed in polynomial time, thereby establishing the problem as non-NP-hard.
+Significant enhancements have been implemented in the `Linearize()` function within Bitcoin Core, evident from the performance improvements recorded against the master branch benchmarks. These updates, available for review on [GitHub](https://github.com/sipa/bitcoin/commits/spanning_tree_linearization), demonstrate substantial reductions in processing times for complex transaction clusters, affirming the practical benefits of adopting the SFL approach. Furthermore, comparative analysis with older algorithms like GGT and CSS has shown that SFL not only improves efficiency but also maintains operational integrity under various computational scenarios.
+Despite its advantages, the SFL algorithm faces challenges regarding termination conditions and complexity bounds. Issues such as the possibility of entering non-terminating loops due to repetitive states pose significant concerns, although the introduction of randomness in decision-making processes may mitigate some risks. The algorithm’s complexity, while theoretically bound by the finite nature of potential states, still presents practical constraints, particularly when handling equal-feerate chunks within transaction clusters.
+Recent developments include the integration of new split and merge strategies within the SFL framework to enhance transaction fee rate management in Bitcoin Core. A novel approach involving slight perturbations of transaction fee rates has proven effective in segregating transactions within a chunk that share equal fee rates yet require distinct topological ordering. This method, detailed in [Bitcoin Core PR 32545](https://github.com/bitcoin/bitcoin/pull/32545), underscores ongoing efforts to refine the efficiency and reliability of the transaction processing mechanism.
+Looking forward, the formalization of the SFL algorithm’s correctness in Lean 4, as seen in [isadofschi/cluster-mempool-formalization](https://github.com/isadofschi/cluster-mempool-formalization), alongside the theoretical discussions on platforms like DelvingBitcoin.org, highlights the collaborative and open-ended nature of research in this area. Efforts continue to address the nuanced challenges presented by the algorithm, aiming to enhance both theoretical understanding and practical application within digital transaction systems.</summary>
   </entry>
 </feed>

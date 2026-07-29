@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP 360 (P2MR) implemented in Bitcoin Core on regtest: vector results, measurements, spec feedback</title>
+  <updated>2026-07-29T04:22:52.397524+00:00</updated>
+  <author>
+    <name>jeanpablojp</name>
+  </author>
+  <timestamp>2026-07-28 21:29:41.575000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP 360 (P2MR) implemented in Bitcoin Core on regtest: vector results, measurements, spec feedback</title>
+    <updated>2026-07-29T04:22:52.397565+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-360-p2mr-implemented-in-bitcoin-core-on-regtest-vector-results-measurements-spec-feedback/2751" rel="alternate"/>
+    <summary>In a recent endeavor within the Bitcoin Core community, a programmer dedicated time to implementing BIP 360, also referred to as P2MR, in a regtest environment. This implementation was primarily an exercise to deepen understanding and ascertain the practicality of this proposal compared to existing structures like BIP 341/342. The integration showed promising results with all official construction vectors passing successfully. It also highlighted areas for improvement in the specification's clarity and technical accuracy.
+
+The codebase for this project can be accessed at [jeanpablojp/bitcoin, branch `p2mr-regtest`](https://github.com/jeanpablojp/bitcoin/tree/p2mr-regtest), while detailed notes and findings are documented at [jeanpablojp/bitcoin-p2mr](https://github.com/jeanpablojp/bitcoin-p2mr). Through testing, several bugs were identified and subsequently reported for corrections, ensuring reliability and robustness of the system. Notably, discrepancies were found in the ordering and validation of leaf hashes in the PQC vector file which led to misrepresentations of tree depth. Fixes for these issues were proposed to maintain integrity of the protocol.
+
+From a technical perspective, the consensus changes introduced by BIP 360 are minimal, adding only small increments to the existing framework set by BIPs 341/342. Specifically, it adds roughly 96 lines to consensus-related code and slightly more extensive changes across policy flags, address recognition, and testing scripts. The design leverages much of the tapscript execution paths and only modifies commitment checks, making it a lightweight addition to the blockchain's operational rules.
+
+Moreover, during implementation, it was discovered that merely patching the script interpreter was insufficient for correct operation. The initialization process within `PrecomputedTransactionData::Init()` does not recognize witness v2 programs unless expressly modified to do so, which is crucial for validating real transactions.
+
+Additionally, there are measures related to witness cost. Comparative analysis with equivalent Taproot script paths demonstrated that P2MR could potentially offer modest reductions in space requirements. For example, a 4-leaf P2MR spend has identical vB costs to a 2-leaf P2TR script path, illustrating efficiency gains at certain tree depths. However, the savings varied and were sometimes less significant than initially projected by the BIP.
+
+Feedback on the specification suggested improvements such as clarifying the control byte's role, enhancing single-leaf vector documentation, and introducing spend-path vectors for comprehensive testing. These contributions aim to refine the user experience and ensure clearer guidelines for future implementers.
+
+The ongoing development and open invitation for peer review signify a collaborative effort to enhance Bitcoin’s scripting capabilities while maintaining community oversight. The programmer remains engaged with the community, offering further enhancements and expressing interest in adapting these innovations for broader application if they prove effective.</summary>
+    <published>2026-07-28T21:29:41.575000+00:00</published>
+  </entry>
+</feed>
