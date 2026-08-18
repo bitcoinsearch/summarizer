@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>PQ-single-address-backup - BIP-38 for P2MR (bc1z) - 104-char encrypted backup format</title>
+  <updated>2026-08-18T02:36:45.905339+00:00</updated>
+  <author>
+    <name>coldtest-berlin</name>
+  </author>
+  <timestamp>2026-08-06 11:41:35.312000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>PQ-single-address-backup - BIP-38 for P2MR (bc1z) - 104-char encrypted backup format</title>
+    <updated>2026-08-18T02:36:45.905384+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/pq-single-address-backup-bip-38-for-p2mr-bc1z-104-char-encrypted-backup-format/2767" rel="alternate"/>
+    <summary>The discussion around safely storing a 32-byte SLH-DSA seed for long-term cold storage or inheritance purposes has led to the proposal of a Post-Quantum single-address backup (PQ-SAB). This new approach aims to enhance the security of storing seeds by using an encrypted paper backup, allowing multiple copies to be safe against risks like fire or theft. The PQ-SAB is specifically designed as a companion to BIP-360, which defines the essence of `bc1z` addresses but does not outline how to securely store their corresponding seeds. 
+
+The proposed format for the PQ-SAB includes a base58-encoded payload consisting of a salt, initialization vector, ciphertext, and tag—totaling 76 bytes that strictly convert to 104 characters in Base58. This format utilizes Bitcoin's modified Base58 alphabet and employs PBKDF2-HMAC-SHA256 with 200,000 iterations for key derivation and AES-256-GCM for encryption. Importantly, the seed itself contains no version byte, adhering to FIPS-205 and the draft specifications of BIP-360, ensuring it remains purely a 32-byte random sequence.
+
+The implementation of this backup strategy involves a single offline HTML file, approximately 200 lines long, designed to operate with Wi-Fi turned off to ensure security during the encryption and decryption processes. This file, essential for handling the PQ-SAB, facilitates the generation of a single `bc1z` address per file, with each address requiring a mandatory password for access. The aim is for future wallet software to easily identify and utilize the specified algorithm through clearly marked, human-readable algorithm, KDF, and encryption details outside of the encrypted portion of the backup.
+
+Currently, a working prototype and specification document are available [in this repository](https://github.com/coldtest-berlin/pq-single-address-backup), with a live demonstration accessible [here](https://coldtest-berlin.github.io/pq-single-address-backup/). The community is now invited to provide feedback on this proposal and discuss the potential standardization of the 104-character encrypted single-address backup as a standard practice alongside BIP-360. The next steps include auditing the current version and considering the adaptation of other cryptographic profiles, such as Argon2id, based on community reception and technical feedback.</summary>
+    <published>2026-08-06T11:41:35.312000+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disclosure: LND doesn't wait for enough confirmations when closing channels</title>
+  <updated>2026-08-18T02:44:45.570697+00:00</updated>
+  <author>
+    <name>t-bast</name>
+  </author>
+  <timestamp>2026-08-13 15:06:43.375000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disclosure: LND doesn't wait for enough confirmations when closing channels</title>
+    <updated>2026-08-18T02:44:45.570737+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-lnd-doesnt-wait-for-enough-confirmations-when-closing-channels/2800" rel="alternate"/>
+    <summary>A significant security vulnerability was identified in the lnd software, specifically affecting all versions prior to 20.0, which was released in February 2026. The issue pertained to the way lnd handled collaboratively closed channels. Previously, lnd would immediately forget such channels after their first on-chain confirmation, neglecting to wait for additional confirmations to safeguard against potential blockchain reorganizations (reorgs). This oversight meant that if a one-block reorg occurred, an attacker could exploit this by publishing any previously revoked state of the channel. Consequently, lnd would fail to execute penalty transactions, leading to possible financial losses up to the total amount of the channel.
+
+The discovery of this flaw was made during tests involving the `option_simple_close` feature between `eclair` and `lnd` in February 2025. The specific bug resided within the code at [this GitHub link](https://github.com/lightningnetwork/lnd/blob/09a4d7e224a64499017c392abe2ccd7f5cc48d03/peer/brontide.goL3622). Upon identification, the issue was promptly communicated to Laolu, who is part of the lnd team, leading to a swift resolution. The fix was implemented and merged through [this pull request](https://github.com/lightningnetwork/lnd/pull/10331), and subsequently included in the release of lnd version 20.0.
+
+To prevent similar vulnerabilities in the future, it is recommended that all lightning nodes adhere to the BOLT standards, which suggest waiting for at least six confirmations before deeming a transaction fully confirmed. While node operators can opt for more than six confirmations for increased security, it is advised against setting the threshold below this number. Fortunately, there have been no reported cases of users being affected by this vulnerability, indicating that the impact was mitigated effectively through prompt corrective actions.</summary>
+    <published>2026-08-13T15:06:43.375000+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Reducing Bitcoin Full Node Storage Without Consensus Changes</title>
+  <updated>2026-08-18T02:38:55.408701+00:00</updated>
+  <author>
+    <name>BrokenMachine</name>
+  </author>
+  <timestamp>2026-08-09 18:34:24.025000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Reducing Bitcoin Full Node Storage Without Consensus Changes</title>
+    <updated>2026-08-18T02:38:55.408739+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/reducing-bitcoin-full-node-storage-without-consensus-changes/2790" rel="alternate"/>
+    <summary>The recent exploration into blockchain technology, specifically Bitcoin's full-node implementations, has led to the development of an experimental version named **BitcoinRocks v31.1.1**. This new iteration is built upon the foundational elements of Bitcoin Core v31.1 but introduces several significant modifications aimed at enhancing node-side performance and storage efficiency. One of the primary changes is the transition from LevelDB to RocksDB for managing chainstate and database-backed indexes. This switch allows for workload-specific tuning and supports hardware-aware automatic cache allocation, though users can still manually set cache sizes via the `-dbcache` parameter.
+
+In an effort to optimize storage space, **BitcoinRocks v31.1.1** employs Zstandard compression for `blk*.dat` files, ensuring each block is compressed individually while maintaining compatibility with legacy raw records through automatic fallback mechanisms when compression proves ineffective. The implementation also enhances processing speed by enabling parallel fetching of previous outputs during the `ConnectBlock` phase, a feature backported from subsequent developments in Bitcoin Core post-v31.1.
+
+Furthermore, **BitcoinRocks** does not establish a new cryptocurrency or blockchain but remains aligned with Bitcoin's consensus rules. It merely serves as an alternative full-node client focusing on specific technical adjustments rather than altering fundamental network consensus. Users can select from different relay-policy profiles—core, conservative, and strict—to manage local relay and mempool policies without impacting the broader network consensus.
+
+The release also includes detailed dependency pinning for RocksDB, LZ4, and Zstandard, ensuring stability and consistency across builds. Prior to its official release, exhaustive validation was conducted comparing every main-chain block from the Genesis up to a specified height against Bitcoin Core, confirming zero discrepancies and complete agreement on transaction ordering and Merkle proofs up to the live chain tip. Preliminary tests on storage also show promising results, with compressed block files in **BitcoinRocks** saving approximately 171 GiB compared to an uncompressed Bitcoin Core node setup.
+
+This version is currently available as a source-only release, with comprehensive documentation provided under the `doc/` directory in the [GitHub repository](https://github.com/BitcoinRocks-Core/BitcoinRocks). The developer seeks further review, particularly focusing on the integration of RocksDB, the new block-record format, caching and tuning decisions, and the overall interaction between compressed block storage, reindexing, pruning, and indexing strategies.</summary>
+    <published>2026-08-09T18:34:24.025000+00:00</published>
+  </entry>
+</feed>

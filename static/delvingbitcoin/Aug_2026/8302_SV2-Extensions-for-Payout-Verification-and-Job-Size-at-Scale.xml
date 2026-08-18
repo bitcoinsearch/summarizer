@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>SV2 Extensions for Payout Verification and Job Size at Scale</title>
+  <updated>2026-08-18T02:45:02.639109+00:00</updated>
+  <author>
+    <name>SweetHash</name>
+  </author>
+  <timestamp>2026-08-14 06:45:51.426000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>SV2 Extensions for Payout Verification and Job Size at Scale</title>
+    <updated>2026-08-18T02:45:02.639146+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/sv2-extensions-for-payout-verification-and-job-size-at-scale/2805" rel="alternate"/>
+    <summary>The integration of miner-side job declaration in Stratum V2, exemplified by DATUM's implementation on the mainnet, solves significant trust issues by allowing miners to independently choose transactions without relying on a pool's selection. However, it leaves unresolved the problem of verifying payout splits before a block is mined and maintaining consistent job sizes for mining devices as payout structures grow. Tessera addresses these gaps through two new extensions, Pactum and Axiom, designed to enhance the existing Stratum V2 framework.
+
+Pactum introduces a method for pools to commit to a specific payout split via a signed message, using BIP340 Schnorr signatures over the secp256k1 curve. This extension binds the signature to a specific `mining_job_token` from a job declaration session, ensuring that any changes to the payout split after the commitment can be detected and won't verify against the original record. This effectively makes the payout rule a verifiable artifact rather than an internal, unenforceable promise by the pool.
+
+Axiom, on the other hand, aims to address scalability issues in mining hardware caused by increasing payout complexity. It does so by introducing a 32-byte hash representing the midstate of a coinbase transaction's payout outputs, computed upstream. This keeps the size of the data required for mining constant, regardless of the number of payout outputs, thus preventing the job size from growing with the number of transaction outputs and ensuring that resource-constrained mining devices do not have to handle increasingly larger jobs.
+
+Currently, these extensions are in the prototype stage, with a functional Job Declaration Server tested against the Stratum V2 Job Declaration Client from the SRI project. Although the client tolerates the Pactum extension, it does not yet support extension negotiation, indicating a potential area for further development in Stratum V2's reference implementation.
+
+The query remains whether positioning the `SetPayoutCommitment` behind explicit extension negotiation is the most effective method to ensure pool accountability or if there could be a more seamless way to integrate such functionality within Stratum V2. Additionally, the lack of extension-negotiation support by the reference JDC raises questions about its limitations and the need for enhancements. Further discussions and developments are needed to fully integrate and operationalize these extensions within a production environment, emphasizing open collaboration and not being confined to a single pool's implementation.</summary>
+    <published>2026-08-14T06:45:51.426000+00:00</published>
+  </entry>
+</feed>
