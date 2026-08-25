@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Faster txid hash tables with SipHash-1-3-UJ</title>
+  <updated>2026-08-25T02:22:38.669520+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>sipa</author>
+      <timestamp>2026-08-24 21:52:14.611000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>andrewtoth</author>
+      <timestamp>2026-08-24 23:16:38.979000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Aug_2026/8382_Faster-txid-hash-tables-with-SipHash-1-3-UJ.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8383_Faster-txid-hash-tables-with-SipHash-1-3-UJ.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Faster txid hash tables with SipHash-1-3-UJ</title>
+    <updated>2026-08-25T02:22:38.670037+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/faster-txid-hash-tables-with-siphash-1-3-uj/2834/2" rel="alternate"/>
+    <published>2026-08-24 21:52:14.611000+00:00</published>
+    <summary>The upcoming Bitcoin Core 32.0 release, scheduled for October, will feature a significant enhancement to its hashing mechanism used within its hash tables, crucial for managing peer data and deduplication processes among other functions. This version introduces a custom variant of SipHash, optimized specifically for use in environments susceptible to denial-of-service attacks via crafted data that could cause hash collisions. Traditionally, these tables have utilized a salted hash function—SipHash with a secret salt generated at startup—to mitigate such risks. The new variant, termed SipHash-1-3-UJ, modifies the traditional SipHash in several key aspects to increase efficiency and security.
+Firstly, the update reduces the complexity of hash calculations by changing the number of SipRounds per compression from two to one and per finalize from four to three. Additionally, it shifts from a byte-based input system to a block-based approach, which does not require padding, hence avoiding potential collision issues from varying input lengths. Furthermore, the update introduces the capability to handle &quot;jumbo&quot; 256-bit blocks, which are processed as single units if they originate from cryptographic hashes like txids (transaction identifiers). This is particularly pertinent since txids are already secure cryptographic hashes and provide robustness against manipulation.
+These changes collectively reduce the computational overhead, making hash calculations faster and more efficient, a critical factor for performance-sensitive components like the UTXO set cache. For instance, previous configurations required up to 17.0 nanoseconds per lookup, which has now been reduced to 10.6 nanoseconds on specific hardware setups like the Ryzen 5950X CPU. The innovative SipHash-1-3-UJ design has been briefly reviewed by cryptographers and, while it has not undergone extensive scrutiny, initial assessments suggest it remains highly secure against brute-force collision attacks.
+Moreover, the application of this new hashing function extends beyond just internal optimizations. It has also been integrated into processes like fetching block input prevouts in parallel during the ConnectBlock operation, an improvement aimed at speeding up blockchain syncing and verification processes. This particular usage aligns well with the overall strategy of enhancing performance without compromising on the security parameters essential in blockchain operations. Notably, the implementation adjusts how transaction identifiers are managed, optimizing their storage and retrieval in scenarios where multiple transactions within a block need to be accessed rapidly and securely.
+These updates have been made possible through collaborative efforts within the developer community, indicating robust peer review and contributions that bolster the reliability and functionality of Bitcoin Core’s forthcoming version. Additionally, further applications of SipHash-1-3-UJ in future releases are anticipated as its benefits continue to be realized across different facets of blockchain management and operations.</summary>
+  </entry>
+</feed>

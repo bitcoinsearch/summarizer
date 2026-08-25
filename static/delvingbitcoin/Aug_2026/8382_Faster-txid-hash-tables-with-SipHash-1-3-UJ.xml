@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Faster txid hash tables with SipHash-1-3-UJ</title>
+  <updated>2026-08-25T02:22:11.802526+00:00</updated>
+  <author>
+    <name>sipa</name>
+  </author>
+  <timestamp>2026-08-24 21:52:14.611000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Faster txid hash tables with SipHash-1-3-UJ</title>
+    <updated>2026-08-25T02:22:11.802593+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/faster-txid-hash-tables-with-siphash-1-3-uj/2834" rel="alternate"/>
+    <summary>Bitcoin Core 32.0 introduces a significant update to its hash function methodology by implementing a custom variant of SipHash, aimed at enhancing performance and security within the system's validation and P2P logic. This adjustment is particularly relevant given the use of hash tables in various Bitcoin Core processes, such as tracking peer transactions, deduplication, indexing, and caching UTXOs (Unspent Transaction Outputs). The risk of denial-of-service attacks via crafted data that causes hash collisions has prompted this development. To mitigate such risks, Bitcoin Core has traditionally employed SipHash with a randomly generated secret salt at startup.
+
+The new hash function, termed SipHash-1-3-UJ, reduces complexity by lowering the number of SipRound calls from 14 to 5 per operation, thereby cutting down the time cost from 17.0 nanoseconds to 10.6 nanoseconds per lookup on a Ryzen 5950X CPU. This optimization is achieved through three main adjustments: switching to SipHash-1-3, which simplifies the number of rounds; adopting an unpadded and block-based approach that eliminates padding and treats inputs as direct sequences of 64-bit or 256-bit blocks; and introducing support for "jumbo" blocks that allow large 256-bit hashes to be processed more efficiently. This change leverages the fact that txids are already secure cryptographic hashes, thus allowing for a streamlined process without compromising security.
+
+This enhancement was initially proposed in [this GitHub pull request](https://github.com/bitcoin/bitcoin/pull/35215) and has since been incorporated into other areas such as reducing disk usage for hash keys and pack positions. The implementation has undergone preliminary review by experts including Jean-Philippe Aumasson, but it remains under close observation for potential vulnerabilities not yet identified. Additionally, another notable performance improvement in Bitcoin Core 32.0 includes parallel processing of fetch block input prevouts during ConnectBlock, detailed in [another pull request](https://github.com/bitcoin/bitcoin/pull/35295). These updates collectively aim to bolster the efficiency and resilience of Bitcoin Core against potential security threats.</summary>
+    <published>2026-08-24T21:52:14.611000+00:00</published>
+  </entry>
+</feed>
