@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disclosure: Crashing CLN with a flood of pings</title>
+  <updated>2026-08-28T12:38:10.263725+00:00</updated>
+  <author>
+    <name>erickcestari</name>
+  </author>
+  <timestamp>2026-08-27 19:07:59.721000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disclosure: Crashing CLN with a flood of pings</title>
+    <updated>2026-08-28T12:38:10.263765+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-crashing-cln-with-a-flood-of-pings/2846" rel="alternate"/>
+    <summary>A critical denial-of-service (DoS) vulnerability was discovered in Core Lightning (CLN), a node implementation for the Bitcoin Lightning Network, which could be exploited to crash nodes via unbounded memory consumption. The vulnerability was identified during the development of a custom BOLT8 implementation, revealing that CLN's handling of specific messages could lead to out-of-memory (OOM) conditions. This issue arises primarily from the way `connectd`, the daemon responsible for managing peer connections and message routing in CLN, processes certain types of messages that do not get forwarded to subdaemons but are instead handled directly.
+
+In particular, the `ping` and `query_channel_range` messages allow a sender to specify the size of the response directly. By continuously sending these requests without reading responses from the TCP buffer, an attacker could force `connectd` to queue up responses indefinitely. Since `connectd` does not wait for the write buffer to clear before reading the next message, this results in the node's memory being filled until it crashes. During testing, this vulnerability was confirmed on a virtual machine setup, where it was demonstrated that even a single malicious peer could exhaust system resources sufficiently to take down the node.
+
+The resolution to this problem involved modifying how `connectd` handles messages that are processed locally. Instead of immediately reading the next message, the fixed approach involves pausing until the outgoing message queue is sufficiently cleared, effectively implementing a proper backpressure mechanism. This change ensures that the system's memory usage is kept under control, preventing the type of unchecked resource consumption previously possible. The fix was implemented and merged into the main branch of the CLN project as detailed in [PR 8525](https://github.com/ElementsProject/lightning/pull/8525).
+
+This incident underscores the importance of considering all potential paths in data handling and communication protocols in networked systems, especially in security-sensitive contexts like cryptocurrency networks. Properly managing system resources against malformed or malicious inputs is crucial and requires a thorough understanding of both the theoretical and practical aspects of system design and interaction. The lessons learned from this vulnerability have broader implications for the design of robust, secure distributed systems and highlight the ongoing need for vigilance and proactive security practices in the development and maintenance of such systems.</summary>
+    <published>2026-08-27T19:07:59.721000+00:00</published>
+  </entry>
+</feed>
