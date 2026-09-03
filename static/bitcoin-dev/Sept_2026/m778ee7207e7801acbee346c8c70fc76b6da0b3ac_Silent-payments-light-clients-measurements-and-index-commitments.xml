@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Silent payments light clients: measurements and index commitments</title>
+  <updated>2026-09-03T05:36:36.208669+00:00</updated>
+  <author>
+    <name>Rob Segers</name>
+  </author>
+  <timestamp>2026-09-02 09:52:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Silent payments light clients: measurements and index commitments</title>
+    <updated>2026-09-03T05:36:36.208704+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/6871d475-fbd4-4455-954d-20a369fba471n@googlegroups.com/T/#u#m778ee7207e7801acbee346c8c70fc76b6da0b3ac" rel="alternate"/>
+    <summary>An in-depth analysis and measurements on the silent payments light clients [protocol](https://delvingbitcoin.org/t/silent-payments-light-client-protocol/891) offer significant insights into its operational metrics, particularly concerning BlindBit Oracle v2. This version has been actively running on the mainnet from September 1, capturing data from the time taproot was activated. It meticulously checks against the BIPs reference implementation across all blocks (255,434 in total), from block 709,656 to 965,089 without sampling. The full serving index required is substantially large at 109 GB, which contradicts the often-quoted range of 1.7-2.8 GB that only accounts for tweak storage. The index alone comprises 187,814,353 tweaks, averaging about 735 per block, which sums up to approximately 6.2 GB in raw data.
+
+The building of this index took near two hours on an 8-core setup utilizing local Core REST resources. In terms of daily operation details, the mechanism's average per block per day at tip includes: BIP-158 basic filter at 22.6 KB (5.78 GB total), a taproot-only filter introduced in 2024 at 3.7 KB (0.94 GB total), and v2 compute-index payload at 59.0 KB (15.08 GB total). Comparatively, the taproot-only filter saves about 6.1 times more space overall and 3.2 times at inscription peaks compared to the stock BIP-158. The v2 oracle differs notably as it omits filters entirely, opting instead to serve transaction IDs, tweak data, and output-prefixes. A traditional filter client would still necessitate the raw tweaks (6.2 GB) plus a full block per match, totaling around 7.1 GB, whereas v2’s approach costs about 15.1 GB but eliminates false positives and the need for fetching a block per match.
+
+Several issues regarding specification drift were identified and subsequently documented in both relevant repositories ([BIP0352 light client spec](https://github.com/setavenger/BIP0352-light-client-specification/issues/2) and [BIP0352 index server spec](https://github.com/silent-payments/BIP0352-index-server-specification/pull/1)). These include discrepancies such as the omission of filter endpoints, the use of unsalted 8-byte x-only pubkey prefixes despite the specifications indicating salted outpoint hashes, and the deprecation of JSON in favor of gRPC.
+
+The solution also introduces a robust method for ensuring data integrity and accountability through per-block commitments published by the oracle, which are checkpointed every six hours to nostr. This allows for after-the-fact attribution of any omissions, though it doesn’t address potential targeted lying-server attacks, suggesting that clients should still fetch the full block on a match. This integrity measure is critical especially considering the proposal that if Bitcoin Core ever opts to serve a tweak index over P2P, using a canonical per-block digest chain would enable peer cross-checking following the BIP-157 pattern, potentially eliminating the need for trust altogether.
+
+Feedback on serialization of these processes is solicited before it becomes standardized, underscoring the importance of establishing a reliable and agreed-upon framework now, while the number of servers and the scope of deployment remain manageable.</summary>
+    <published>2026-09-02T09:52:00+00:00</published>
+  </entry>
+</feed>
