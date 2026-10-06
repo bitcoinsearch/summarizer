@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Disclosure: DoS vulnerabilities fixed in Eclair v0.14.1</title>
+  <updated>2026-10-06T16:07:49.962057+00:00</updated>
+  <author>
+    <name>erickcestari</name>
+  </author>
+  <timestamp>2026-10-01 18:50:37.535000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Disclosure: DoS vulnerabilities fixed in Eclair v0.14.1</title>
+    <updated>2026-10-06T16:07:49.962091+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-dos-vulnerabilities-fixed-in-eclair-v0-14-1/2928" rel="alternate"/>
+    <summary>Two significant vulnerabilities have been addressed in Eclair's recent update, version 0.14.1, which are crucial for users to be aware of in order to maintain the security and functionality of their nodes. The first issue pertains to a denial-of-service (DoS) exploit identified as LNF-2026-0003 in the channel opening process of versions up to Eclair v0.14.0. This vulnerability arises due to a race condition where duplicate `temporary_channel_id`s, when sent in rapid succession, can bypass initial security checks. This allows an attacker to initiate multiple channel actors for a single `temporary_channel_id`, leading to the overwriting of the first actor by the second. Consequently, an orphaned channel actor persists, occupying about 25 KB of heap memory until the peer disconnects. This flaw could potentially cause a severe memory leak, approximately 1 MB per second, resulting in a Java Virtual Machine out-of-memory crash or a severe garbage collection issue that could incapacitate all operating cores and disconnect the node from the network. This vulnerability was discovered by Matt Morehouse using a tool named smite, which identified the issue during fuzz testing of Eclair’s funding flow. Further details regarding this vulnerability can be found in the [lnfuzz advisory](https://lnfuzz.org/advisories/eclair-open-channel-race-dos/).
+
+The second vulnerability involves the misuse of `temporary_channel_id` in creating unfunded channels, also present up to Eclair v0.14.0. The system’s `PendingChannelsRateLimiter`, designed to prevent fake channel DoS attacks, fails when an attacker reuses a `temporary_channel_id` from a finalized channel for a new `open_channel` request. This manipulation allows the rate limiter to track the reused ID twice without recognizing the increase in pending channels, effectively bypassing the safeguard. Each channel, storing a copy of the peer's `init` features, consumes about 65 KB, enabling a single connection to exhaust a node with a 4 GB memory heap in roughly 48 minutes. Persistent across restarts, this vulnerability forces the node to crash repeatedly until corrective measures are taken, either by increasing the heap size or deleting the problematic rows manually. This critical issue was uncovered through an LLM-based harness that scrutinizes codebase entry points and the associated invariants, using BOLTs as a reference framework. A blog post providing more insight into this discovery and its implications is available at [Erick Cestari's blog](https://erickcestari.dev/blog/eclair-oom-pending-channels/).
+
+Both these vulnerabilities highlight significant risks in the earlier versions of Eclair and underscore the importance of updating to version 0.14.1 or later to mitigate these potential threats to network stability and security.</summary>
+    <published>2026-10-01T18:50:37.535000+00:00</published>
+  </entry>
+</feed>

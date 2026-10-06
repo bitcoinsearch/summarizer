@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Disclosure: DoS vulnerabilities fixed in Eclair v0.14.1</title>
+  <updated>2026-10-06T16:08:14.808543+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>erickcestari</author>
+      <timestamp>2026-10-01 18:50:37.535000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>Anzus_GemWallet</author>
+      <timestamp>2026-10-06 03:26:40.196000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8705_Disclosure-DoS-vulnerabilities-fixed-in-Eclair-v0-14-1.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8723_Disclosure-DoS-vulnerabilities-fixed-in-Eclair-v0-14-1.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Disclosure: DoS vulnerabilities fixed in Eclair v0.14.1</title>
+    <updated>2026-10-06T16:08:14.808931+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-dos-vulnerabilities-fixed-in-eclair-v0-14-1/2928/2" rel="alternate"/>
+    <published>2026-10-01 18:50:37.535000+00:00</published>
+    <summary>Two critical vulnerabilities were addressed in the recent update to Eclair, version 0.14.1, which are essential for users operating nodes to understand and mitigate. The first issue involves a denial-of-service attack triggered by exploiting the `open_channel` message processing in versions up to v0.14.0. This vulnerability, identified by Matt Morehouse using smite during fuzz testing, arises from a race condition where multiple identical `open_channel` messages can be sent in quick succession before the channel map is updated. This flaw allows two messages with the same `temporary_channel_id` to pass validation, leading to the creation of duplicate channel actors. One actor eventually overwrites another, leaving an orphaned channel actor that consumes approximately 25 KB of memory. Continuous exploitation can lead to severe memory leakage, approximately 1 MB per second, potentially causing a JVM out-of-memory crash or heavy garbage collection loads that could deactivate the node. Further details on this vulnerability can be found in the [lnfuzz advisory](https://lnfuzz.org/advisories/eclair-open-channel-race-dos/).
+The second vulnerability pertains to the `PendingChannelsRateLimiter`, which is designed to prevent fake channel DoS attacks. However, attackers have been able to circumvent this measure by recycling the final id of one channel as the temporary id for the next, thereby bypassing duplicate checks and misleading the rate limiter. This manipulation causes the number of unconfirmed channels to increase unchecked, each consuming about 65 KB of memory, which can exhaust the node's memory resources swiftly. A single instance can run a node with a 4 GB heap out of memory in less than an hour. Due to the persistence of these channels, affected nodes may crash repeatedly until corrective actions, such as increasing the heap size or manually clearing the data, are taken. This issue was discovered through a harness based on LLM technology, which detects violations by mapping codebase entry points against expected invariants, using BOLTs as a reference framework. More insights into this problem are detailed in the [blog post](https://erickcestari.dev/blog/eclair-oom-pending-channels/).
+For individuals who use mobile Lightning wallets rather than directly operating an Eclair node, the responsibility to upgrade lies primarily with the node or backend operators. Mobile wallet users are generally not required to take action themselves but should be aware of these updates to ensure their service providers have taken the necessary steps to secure the infrastructure. This distinction is crucial for non-technical users to understand their exposure to these vulnerabilities and the measures taken to protect their transactions.</summary>
+  </entry>
+</feed>
