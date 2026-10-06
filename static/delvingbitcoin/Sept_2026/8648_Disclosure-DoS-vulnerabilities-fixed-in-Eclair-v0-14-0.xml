@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disclosure: DoS vulnerabilities fixed in Eclair v0.14.0</title>
+  <updated>2026-10-06T20:02:08.663177+00:00</updated>
+  <author>
+    <name>morehouse</name>
+  </author>
+  <timestamp>2026-09-24 22:47:22.705000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disclosure: DoS vulnerabilities fixed in Eclair v0.14.0</title>
+    <updated>2026-10-06T20:02:08.663219+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-dos-vulnerabilities-fixed-in-eclair-v0-14-0/2914" rel="alternate"/>
+    <summary>The recent release of Eclair v0.14.0 addresses two critical denial-of-service (DoS) vulnerabilities that were present in earlier versions up to v0.13.1. It is highly recommended for users to update their nodes to this latest version to enhance security and stability. The first vulnerability, identified as [LNF-2026-0001](https://lnfuzz.org/advisories/eclair-feature-parsing-dos/), involved an issue where the parsing of feature vectors was handled inefficiently. Specifically, each bit of the feature vector was processed individually, resulting in significant memory allocation and processing delays. This inefficiency could be exploited by sending a crafted `init` message containing a large feature vector, which would then cause approximately 300 MB of heap churn and occupy a parsing thread for about 300 milliseconds. Such an attack could lead to a disconnection of all peers of the victim within a minute and exhaust the node's memory in about five minutes.
+
+The second vulnerability, documented as [LNF-2026-0002](https://lnfuzz.org/advisories/eclair-zlib-decompression-dos/), pertained to the handling of zlib-encoded channel queries which should have been phased out following updates to BOLT 7 four years prior. However, Eclair versions up to v0.13.1 continued to accept these encoded messages. The lack of an output limit during decompression meant that a 64 KB `query_short_channel_ids` message could expand to 64 MB, leading to the allocation of around 17 million heap objects. An attacker exploiting this vulnerability could incapacitate a node within seconds and deplete its memory resources shortly thereafter. This particular DoS vulnerability was uncovered following a comprehensive analysis conducted using LLM-assisted variant analysis techniques on the Eclair codebase after the discovery of the first vulnerability. This proactive approach helped in identifying other potential vulnerabilities, such as the faulty zlib codec, thereby preventing further exploits. 
+
+Both vulnerabilities highlight the importance of continuous monitoring and updating of software to guard against emerging threats. Users are urged to upgrade to Eclair v0.14.0 or later versions to mitigate these risks effectively.</summary>
+    <published>2026-09-24T22:47:22.705000+00:00</published>
+  </entry>
+</feed>

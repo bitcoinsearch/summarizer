@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Proposal] Wallet label synchronization (BIP-329 records over encrypted stores)</title>
+  <updated>2026-10-06T20:15:43.688400+00:00</updated>
+  <author>
+    <name>Jakub</name>
+  </author>
+  <timestamp>2026-09-13 19:47:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Proposal] Wallet label synchronization (BIP-329 records over encrypted stores)</title>
+    <updated>2026-10-06T20:15:43.688445+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAPR5oBMgNRJQbnkj1-bV7AVpDYB+JKQ2M5_3aKUUJ=zjH9XWzw@mail.gmail.com/T/#m9353f626a8fb738b573b956ac568be3305c4e4a0" rel="alternate"/>
+    <summary>The recent discussion in the Bitcoin Development Mailing List highlights a persistent issue with the synchronization of wallet labels across multiple wallets that share the same descriptor, such as a combination of a desktop coordinator and a mobile watch-only wallet. The main problem identified is the lack of a consistent view of labels and particularly, the challenges in managing UTXO labels which can impact privacy-sensitive coin selection decisions. This is exacerbated by the manual process required to transfer labels between different wallets under the current system facilitated by BIP-329, which only addressed the data layer for wallet labels.
+
+A proposed solution to standardize the synchronization of unaltered BIP-329 records via a shared, untrusted store has been outlined, focusing on several core innovations. Firstly, deterministic discovery would allow wallets to derive both a storage location and encryption keys directly from the wallet descriptor. This approach uses a hash of the sorted xpubs along with script type and network identifiers, ensuring that no private keys are needed and that wallets with the same descriptor can automatically locate the same data. Secondly, an encrypted envelope system with merge semantics is suggested, where records are contained within an AEAD-encrypted envelope that includes an author timestamp and handles deletions through tombstones, as BIP-329 lacks a native deletion feature. This design supports a simple last-write-wins merging strategy based on timestamps embedded within the ciphertext.
+
+Additionally, the proposal emphasizes transport agnosticism, suggesting that the encrypted envelope and merging rules should be compatible with any basic storage service capable of put/fetch operations. Nostr relays were mentioned as the reference transport mechanism, though other options like HTTPS stores or synchronized folders could also fulfill this role without compromising the security or integrity of the data, given that the local database of a wallet remains the authoritative source.
+
+The request for feedback focuses particularly on key derivation modes and the identity model to be used. Two modes of key derivation were discussed: Mode A allows for zero-interaction restoration using keys derived directly from the descriptor, while Mode B, similar to the approach used by Bitcoin Safe, involves an independent random sync secret enhancing privacy at the cost of additional backup requirements. The identity model debate centers around whether to use a single shared derived keypair for simplicity and ease of restoration, or continue with Bitcoin Safe’s method of per-device keys requiring manual approval, which might enhance security but add complexity.
+
+Finally, there is an ongoing consideration regarding the canonical form of the wallet descriptor, debating whether to hash the full script template or just a coarse script-type tag, each having implications for consistency and potential collision of identifiers across different wallet implementations. These discussions are critical as they address foundational aspects of wallet interoperability and privacy in the evolving landscape of cryptocurrency technologies.</summary>
+    <published>2026-09-13T19:47:00+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>PSBT/MuSig2 coordination over Nostr relays: transport invariants for nonce safety under at-least-once delivery</title>
+  <updated>2026-10-06T19:45:53.261960+00:00</updated>
+  <author>
+    <name>rafaelturon</name>
+  </author>
+  <timestamp>2026-09-03 12:55:40.362000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>PSBT/MuSig2 coordination over Nostr relays: transport invariants for nonce safety under at-least-once delivery</title>
+    <updated>2026-10-06T19:45:53.261996+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/psbt-musig2-coordination-over-nostr-relays-transport-invariants-for-nonce-safety-under-at-least-once-delivery/2852/3" rel="alternate"/>
+    <summary>The discussion revolves around the handling of connectivity issues and message delivery in a distributed relay system, focusing on how to maintain secure and reliable communication despite potential failures. When a connection drops, the system is designed to failover to other relays preset during the setup, allowing the session to continue as each message is broadcasted to all relays, requiring only one viable path for delivery. This design ensures that even if a relay fails, the client may not necessarily observe this immediately, as it could appear similar to situations where a relay is merely slow or another peer is offline. The recovery process is dependent not on identifying the specific failure but rather on managing the local session state combined with implementing a timeout strategy.
+
+In terms of message delivery integrity, particularly against duplicate deliveries, the protection mechanism is localized within the signing process. The system utilizes a once-off consumable security nonce (secnonce) during the signing process, ensuring that any attempt to resend the same message bytes does not lead to a recomputation of the signature, which could potentially compromise security. If a duplicate nonce is received after the initial completion was withheld and the client has timed out, re-running the `Sign` function with an already used secnonce risks exposing the private key. To prevent such occurrences, the transport system must handle idempotent message identities tied to session-specific parameters and sequences, allowing clients to identify and reject repeated or outdated sessions.
+
+The protocol specifies procedures for handling different states of message transmission: if waiting for nonces, the sender should keep resending their public nonce until it is acknowledged or time out and start over with new session identifiers and nonces; if a partial signature has been sent, it should be resent until acknowledged, ensuring never to re-sign within the same session to avoid potential security risks. Conflicts in values for the same session, round, and signer result in an abortion of the process. This structured approach provides automatic recovery from connection losses and manages lost or duplicated messages effectively, with explicit restart protocols for cases where timeouts occur, ensuring no silent retries that could endanger security.
+
+Overall, these mechanisms are critical to maintaining trust and integrity in large-scale implementations of the system, as they provide clear, actionable states for users—reconnecting, waiting on peers, or dealing with expired sessions—and require precise specification to ensure reliability and security before widespread adoption.</summary>
+    <published>2026-09-03T12:55:40.362000+00:00</published>
+  </entry>
+</feed>

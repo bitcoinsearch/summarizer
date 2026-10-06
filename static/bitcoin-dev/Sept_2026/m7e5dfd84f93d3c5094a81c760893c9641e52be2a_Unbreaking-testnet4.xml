@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Unbreaking testnet4</title>
+  <updated>2026-10-06T20:07:01.758289+00:00</updated>
+  <author>
+    <name>Melvin Carvalho</name>
+  </author>
+  <timestamp>2026-09-07 14:44:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Unbreaking testnet4</title>
+    <updated>2026-10-06T20:07:01.758327+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAKaEYh+d3vpzZ85YVrasPt4QunGeNpd8nequ-DRd8d5m2ShTJg@mail.gmail.com/T/#m7e5dfd84f93d3c5094a81c760893c9641e52be2a" rel="alternate"/>
+    <summary>The discussion initiated by Greg Maxwell on the Bitcoin Development Mailing List addresses a specific issue within Testnet4 related to its time window mechanisms. Testnet4 operates with two key time-related rules which interact significantly: firstly, the difficulty exception rule allows for the generation of a minimum-difficulty block if its timestamp is at least 20 minutes past the parent's timestamp. Secondly, the future limit rule inherited from mainnet prevents any block header from being accepted if its timestamp is more than 2 hours ahead of the node’s current time. The interaction between these rules permits miners to exploit these windows, resulting in bursts of five or six blocks before a stop, until real-time catches up.
+
+Maxwell proposes a targeted solution aimed at mitigating this issue without overhauling the system drastically. His recommendation is to reduce the future limit to 20 minutes specifically for Testnet4. This adjustment would effectively collapse the potential for multiple-block bursts to just one block ahead of the clock, streamlining block acceptance and reducing anomalies created by the current settings. The proposal involves making `MAX_FUTURE_BLOCK_TIME` a chain-specific parameter and setting it to 20 minutes for Testnet4, while maintaining the two-hour limit for mainnet and signet. 
+
+This change is viewed as a soft fork tightening, where an upgraded node would accept a subset of the headers that an old node accepts. It depends on the wall-clock, meaning headers rejected for being too far in the future will eventually become valid as real-time catches up. However, there is a failure possibility where an un-upgraded miner might produce headers stamped more than 20 minutes ahead, which would initially be rejected by upgraded nodes but should be resolved as hash rates on compatible branches increase. The proposed modification underscores the balance between maintaining flexibility in test environments and ensuring robustness against exploits.</summary>
+    <published>2026-09-07T14:44:00+00:00</published>
+  </entry>
+</feed>

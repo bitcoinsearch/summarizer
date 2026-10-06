@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Towards A K-of-N Lightning Network Node</title>
-  <updated>2026-06-19T06:22:59.752643+00:00</updated>
+  <updated>2026-10-06T19:41:24.134265+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -25,24 +25,27 @@
       <author>ZmnSCPxj</author>
       <timestamp>2026-06-18 06:35:17.895000+00:00</timestamp>
     </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>ZmnSCPxj</author>
+      <timestamp>2026-09-15 16:37:39.154000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/April_2026/7211_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7769_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7770_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7771_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <link href="delvingbitcoin/June_2026/7774_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Sept_2026/8555_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Towards A K-of-N Lightning Network Node</title>
-    <updated>2026-06-19T06:22:59.753417+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/5" rel="alternate"/>
+    <updated>2026-10-06T19:41:24.135177+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/6" rel="alternate"/>
     <published>2026-04-08 09:05:39.089000+00:00</published>
-    <summary>The recent advancements in cryptographic protocols, particularly regarding the integration of multisig configurations with the Lightning Network using Taproot channels, mark a significant step forward in blockchain technology. The [Nested MuSig2 Paper](https://eprint.iacr.org/2026/223) introduces the potential for k-of-n multisig setups within the network, which would require a specified number of signatories to authenticate transactions. This structure aims to enhance security and operational flexibility but introduces several challenges due to the unique dynamics of the Lightning Network's channels and transactions. Currently, the network lacks support for expressing k-of-n requirements natively, compelling users to either await widespread protocol adoption or use gateway nodes that might compromise privacy.
-The implementation of such multisig wallets on the Lightning Network necessitates modifications to the BOLT protocol. These include the elimination of shachain dependencies by adopting a structure conducive to multisig configurations and introducing feature bits for identifying node compatibility. These changes are crucial for accommodating diverse network needs while maintaining security and functionality.
-In addition to protocol challenges, practical considerations also arise, especially concerning the security risks from potentially unreliable channel counterparties. Operators must balance the openness necessary for maximizing routing opportunities against the threat of fraudulent activities. Furthermore, reliance on hardware-based security features, like secure elements or trusted execution environments, is seen as less effective compared to robust multisig arrangements which demand multiple independent validations for accessing funds.
-Another development in this field is detailed in the proof-of-concept repository at [shachain2pc](https://github.com/starius/shachain2pc), where a two-party shachain under malicious assumptions has been implemented. This setup involves substantial memory usage and operates relatively slowly, suggesting room for optimization by precomputing most of the multi-party computation (MPC) and reserving real-time execution for the final output-reveal step. Security enhancements in this prototype mitigate risks associated with intermediate hash state manipulations, which could lead to unauthorized access or fund theft if compromised.
-The system's performance analysis highlights inefficiencies in speed and resource consumption, posing questions about the scalability and economic viability for node operators handling extensive Bitcoin amounts across numerous transactions. Optimizations, such as initiating security processes earlier in the transaction sequence, might offer some relief, yet the requirement for all designated parties' participation in final steps remains a bottleneck.
-Further discussions explore the use of multiple shachains configured so that misbehavior by any party can be effectively punished by others who possess revocation keys. This strategy involves complex calculations for determining the number of required shachains based on signer configurations, which aims to ensure security even when multiple signers become unavailable.
-This ongoing exploration into enhanced multisig functionalities within blockchain networks underscores the need for continued innovation and careful consideration of both technological capabilities and security imperatives. The transition from experimental setups to real-world applications will require thorough reviews and likely further modifications to ensure reliability and protection of funds in operational environments.</summary>
+    <summary>The recent publication of the [Nested MuSig2 Paper](https://eprint.iacr.org/2026/223) highlights an exciting development in blockchain technology, specifically the integration of multisig functionality within Lightning Network nodes utilizing Taproot channels. This integration facilitates k-of-n multisig configurations, which require a predetermined number of signatories from a total group to authenticate transactions and changes. Such configurations enhance both security and operational flexibility within the network. However, implementing these configurations presents challenges due to the unique dynamics of the Lightning Network’s channels and transactions. The existing BOLT protocol does not directly support k-of-n multisig requirements, limiting users to either wait for broad adoption of new protocols or use gateway nodes that might compromise privacy and efficiency.
+In terms of practical implementation, node operators face significant decisions regarding channel counterparties to maximize routing opportunities and fee generation while mitigating risks associated with fraudulent activities. Additionally, the dependence on secure elements or trusted execution environments can introduce vulnerabilities, such as manufacturer backdoors or debugging interfaces that could expose private keys. Thus, a robust multisig setup requiring multiple independent validations for fund access could significantly improve security over hardware-based solutions alone.
+Regarding the system architecture, the revocation mechanism involves generating a new revocation key with each state transition, which complicates the implementation of k-of-n multisig setups due to reliance on shachain—a chain of hashes that cannot accommodate k-of-n requirements. Proposed modifications to the BOLT specifications aim to remove these dependencies by introducing new feature bits that allow nodes to identify compatibility with non-shachain nodes, promoting smoother transitions and interactions among various node configurations.
+Moreover, the introduction of a proof-of-concept repository detailed at [shachain2pc](https://github.com/starius/shachain2pc) explores a client-server setup using substantial memory and operates under malicious assumptions. This prototype showcases a method for generating a single shachain value through private preimage shares between two parties, addressing potential vulnerabilities during hash chain creation. Despite its experimental stage, this system uses technologies like [emp-ag2pc](https://github.com/emp-toolkit/emp-ag2pc) and follows protocols that do not yet support more complex setups such as 2-of-3, highlighting the need for further development and review before deployment in real-world applications.
+Finally, the discussion around the strategic use of multiple shachains and their cryptographic management reveals methods to enhance security through revocation keys. The configuration of these shachains ensures that even if several signatories are unavailable, there remains at least one who can issue the necessary revocation key. This approach leverages the MuSig2 protocol for combining public keys, simplifying operations to requiring only a single public key revelation and corresponding signature, thus optimizing data management and enhancing transaction security within blockchain networks.</summary>
   </entry>
 </feed>

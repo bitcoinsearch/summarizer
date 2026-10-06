@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>PSBT/MuSig2 coordination over Nostr relays: transport invariants for nonce safety under at-least-once delivery</title>
+  <updated>2026-10-06T19:46:09.174645+00:00</updated>
+  <author>
+    <name>rafaelturon</name>
+  </author>
+  <timestamp>2026-09-07 10:16:44.559000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>PSBT/MuSig2 coordination over Nostr relays: transport invariants for nonce safety under at-least-once delivery</title>
+    <updated>2026-10-06T19:46:09.174681+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/psbt-musig2-coordination-over-nostr-relays-transport-invariants-for-nonce-safety-under-at-least-once-delivery/2852/6" rel="alternate"/>
+    <summary>In the realm of wallet security and session integrity, the safety of closing a wallet application hinges significantly on the state of the transaction process at the time of closure. Specifically, if a user decides to close their wallet app before the `Sign` operation has been executed, there are no irreversible changes made to the session state. This is because any secnonce generated during this phase is not yet consumed, allowing the session to be safely discarded without incurring any loss. Reestablishing the session merely requires initiating a new one with a fresh identifier and new nonces, resulting in only the minimal cost of a communication round trip.
+
+Conversely, once the `Sign` operation is completed and a partial signature is emitted, the scenario changes drastically. At this stage, the secnonce is irrevocably consumed. If the session closes post-signature but the partial signature remains cached, the client can resend this data upon reopening, thus completing the session as intended. However, if the partial signature is lost due to the closure, the entire session becomes unrecoverable and must be restarted from scratch. Notably, in both scenarios post-`Sign`, there is no possibility of reverting to a pre-signature state within that same session.
+
+Further complicating the security landscape are the potential risks associated with session state persistence across different platforms or instances. Hazards arise primarily through actions like restoring wallet state from backups, synchronizing session stores across devices, or concurrently running the same signer on multiple devices. Each of these actions can potentially resurrect an already consumed secnonce, posing a significant threat to both the session and the security of the keys involved.
+
+To mitigate such risks, it is recommended that session states be strictly local to each device, without options for synchronization or restoration from snapshots unless explicitly specified by the user. Moreover, optimal practice dictates that wallets should commit the consumed state of a secnonce durably within the system before the completion of the `Sign` command. By adopting these practices, wallet applications can ensure that closing the app does not compromise the integrity or security of the user's data or cryptographic keys.</summary>
+    <published>2026-09-07T10:16:44.559000+00:00</published>
+  </entry>
+</feed>
