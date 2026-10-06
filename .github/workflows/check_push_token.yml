@@ -1,0 +1,16 @@
+name: Check Push Token
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check_push_access:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+    - name: Dry-run push
+      run: git push --dry-run origin HEAD:refs/heads/pat-test
