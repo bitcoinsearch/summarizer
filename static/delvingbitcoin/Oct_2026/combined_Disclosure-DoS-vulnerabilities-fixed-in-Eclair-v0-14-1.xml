@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Disclosure: DoS vulnerabilities fixed in Eclair v0.14.1</title>
-  <updated>2026-10-06T16:08:14.808543+00:00</updated>
+  <updated>2026-10-07T06:51:20.700020+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -13,17 +13,23 @@
       <author>Anzus_GemWallet</author>
       <timestamp>2026-10-06 03:26:40.196000+00:00</timestamp>
     </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>morehouse</author>
+      <timestamp>2026-10-06 13:08:36.329000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/Oct_2026/8705_Disclosure-DoS-vulnerabilities-fixed-in-Eclair-v0-14-1.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2026/8723_Disclosure-DoS-vulnerabilities-fixed-in-Eclair-v0-14-1.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8724_Disclosure-DoS-vulnerabilities-fixed-in-Eclair-v0-14-1.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Disclosure: DoS vulnerabilities fixed in Eclair v0.14.1</title>
-    <updated>2026-10-06T16:08:14.808931+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/disclosure-dos-vulnerabilities-fixed-in-eclair-v0-14-1/2928/2" rel="alternate"/>
+    <updated>2026-10-07T06:51:20.700862+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-dos-vulnerabilities-fixed-in-eclair-v0-14-1/2928/3" rel="alternate"/>
     <published>2026-10-01 18:50:37.535000+00:00</published>
-    <summary>Two critical vulnerabilities were addressed in the recent update to Eclair, version 0.14.1, which are essential for users operating nodes to understand and mitigate. The first issue involves a denial-of-service attack triggered by exploiting the `open_channel` message processing in versions up to v0.14.0. This vulnerability, identified by Matt Morehouse using smite during fuzz testing, arises from a race condition where multiple identical `open_channel` messages can be sent in quick succession before the channel map is updated. This flaw allows two messages with the same `temporary_channel_id` to pass validation, leading to the creation of duplicate channel actors. One actor eventually overwrites another, leaving an orphaned channel actor that consumes approximately 25 KB of memory. Continuous exploitation can lead to severe memory leakage, approximately 1 MB per second, potentially causing a JVM out-of-memory crash or heavy garbage collection loads that could deactivate the node. Further details on this vulnerability can be found in the [lnfuzz advisory](https://lnfuzz.org/advisories/eclair-open-channel-race-dos/).
-The second vulnerability pertains to the `PendingChannelsRateLimiter`, which is designed to prevent fake channel DoS attacks. However, attackers have been able to circumvent this measure by recycling the final id of one channel as the temporary id for the next, thereby bypassing duplicate checks and misleading the rate limiter. This manipulation causes the number of unconfirmed channels to increase unchecked, each consuming about 65 KB of memory, which can exhaust the node's memory resources swiftly. A single instance can run a node with a 4 GB heap out of memory in less than an hour. Due to the persistence of these channels, affected nodes may crash repeatedly until corrective actions, such as increasing the heap size or manually clearing the data, are taken. This issue was discovered through a harness based on LLM technology, which detects violations by mapping codebase entry points against expected invariants, using BOLTs as a reference framework. More insights into this problem are detailed in the [blog post](https://erickcestari.dev/blog/eclair-oom-pending-channels/).
-For individuals who use mobile Lightning wallets rather than directly operating an Eclair node, the responsibility to upgrade lies primarily with the node or backend operators. Mobile wallet users are generally not required to take action themselves but should be aware of these updates to ensure their service providers have taken the necessary steps to secure the infrastructure. This distinction is crucial for non-technical users to understand their exposure to these vulnerabilities and the measures taken to protect their transactions.</summary>
+    <summary>The recent update to Eclair, version 0.14.1, addresses two critical vulnerabilities that were present in previous versions up to v0.14.0. These vulnerabilities are essential for users and operators to understand to ensure the security and functionality of their nodes.
+The first vulnerability identified as LNF-2026-0003 involves a denial-of-service (DoS) exploit related to the channel opening process. This flaw occurs due to a race condition where sending duplicate `temporary_channel_id`s in rapid succession can bypass initial security checks. This issue allows an attacker to initiate multiple channel actors for a single `temporary_channel_id`, leading to potential severe memory leaks that could incapacitate the node by exhausting Java Virtual Machine memory or triggering critical garbage collection issues. The discovery was made possible through fuzz testing with a tool named smite, which scrutinized Eclair’s funding flow. More details on this vulnerability can be found in the [lnfuzz advisory](https://lnfuzz.org/advisories/eclair-open-channel-race-dos/).
+The second vulnerability relates to the misuse of `temporary_channel_id` in creating unfunded channels. In this scenario, Eclair's `PendingChannelsRateLimiter`, which aims to prevent fake channel DoS attacks, fails when an attacker reuses a `temporary_channel_id` from a finalized channel for a new `open_channel` request. This failure enables the attacker to exhaust the node's resources, potentially causing the node to crash repeatedly until resolved by increasing the heap size or manually deleting problematic rows. This issue was uncovered using an LLM-based harness that analyses codebase entry points against BOLTs framework. Further exploration of this issue is detailed in [Erick Cestari's blog](https://erickcestari.dev/blog/eclair-oom-pending-channels/).
+In terms of user responsibility, particularly for non-technical users of mobile Lightning wallets like Phoenix, it is crucial to understand the upgrade processes. Users of these wallets do not need to perform upgrades themselves; instead, this responsibility lies with the operators of the Eclair nodes or backend systems that support these wallets. This clarification helps users understand their roles and ensures they are aware of what actions, if any, are required from them during such updates. Notably, ACINQ, the operator behind Phoenix, has already patched these vulnerabilities in their Eclair nodes, securing the system well ahead of potential exploits.</summary>
   </entry>
 </feed>

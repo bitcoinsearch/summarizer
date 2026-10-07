@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Anchoring an SPV light client on another chain: checkpoint trust, retargeting and reorg handling</title>
+  <updated>2026-10-07T06:51:53.680501+00:00</updated>
+  <author>
+    <name>sebas</name>
+  </author>
+  <timestamp>2026-10-06 16:32:13.864000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Anchoring an SPV light client on another chain: checkpoint trust, retargeting and reorg handling</title>
+    <updated>2026-10-07T06:51:53.680539+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/anchoring-an-spv-light-client-on-another-chain-checkpoint-trust-retargeting-and-reorg-handling/2939" rel="alternate"/>
+    <summary>The Writz Protocol operates as an open-source lending platform utilizing a unique method where Bitcoin serves as collateral on its native blockchain, while loans are disbursed as USDC on the Stellar network. The protocol is currently in the testnet phase and lacks a formal audit, which underscores the importance of scrutinizing its design, particularly the Bitcoin-related components.
+
+The Bitcoin collateral within the protocol is managed through a Pay-to-Witness-Script-Hash (P2WSH) output, incorporating a specific redeem script designed for security and conditional access to the funds. This script includes provisions for both cooperative release post-loan repayment, requiring signatures from all involved parties, and unilateral withdrawal by the user after a predetermined period, set by default to approximately 37 days post-deposit. This mechanism employs an absolute timelock to ensure that the release times are predefined and immutable once the deposit is confirmed.
+
+Additionally, the protocol's handling of Bitcoin transactions relies heavily on a Simplified Payment Verification (SPV) client model adjusted for on-chain operations. This design moves away from a stateless approach due to vulnerabilities associated with minimal proof validation, towards an on-chain light client that demands more rigorous proof of work verification. It involves a single trusted checkpoint and allows the submission of contiguous headers with strict validation criteria, including adherence to the required 'bits', linkage to a stored parent block, and compliance with timestamp rules. Transaction proofs necessitate a Merkle path verified against a header stored at a minimum depth of six confirmations, enhancing security but also increasing operational complexity and costs.
+
+Several areas within this framework are highlighted for review and potential improvement:
+1. **Checkpoint Trust**: The current system relies on a single administrative setting for checkpoints, posing a central point of failure or trust manipulation. Alternatives could involve mechanisms that aggregate multiple independent verifications or cumulative work metrics to enhance reliability without extensive header storage.
+2. **Confirmation Depth**: The protocol differentiates between regular and small deposits, applying six and three confirmations respectively. The question arises whether a fixed or scalable confirmation depth based on transaction size would be more appropriate, balancing security with efficiency.
+3. **Timelock Types**: Choosing between absolute and relative timelocks affects the predictability and flexibility of fund accessibility. An absolute timelock sets a fixed future date at the time of the deposit, while a relative timelock would begin counting from the transaction's confirmation.
+4. **Fee Management in Release Transactions**: Since transaction fees are predefined in cooperative releases, strategies like CPFP or anchor outputs might be necessary to accommodate fee variations post-transaction signing.
+5. **Header Submission Costs**: Given the financial and computational expenses associated with re-validating block retargets on a smart contract platform, finding less resource-intensive methods to ensure difficulty continuity could significantly reduce overheads.
+6. **Handling Reorgs**: The protocol must decide on a bound for how many blocks a reorganization can affect, which is crucial for maintaining network stability and integrity.
+
+For those interested in a deeper exploration of the protocol’s architecture and initial stateless design, further details are available in the whitepaper accessible [here](https://writz.xyz/whitepaper), and the source code is hosted on GitHub at [this link](https://github.com/WritzProtocol/writz). These resources provide comprehensive insights into the foundational elements and operational dynamics of the protocol, essential for understanding its full scope and potential areas of vulnerability.</summary>
+    <published>2026-10-06T16:32:13.864000+00:00</published>
+  </entry>
+</feed>
