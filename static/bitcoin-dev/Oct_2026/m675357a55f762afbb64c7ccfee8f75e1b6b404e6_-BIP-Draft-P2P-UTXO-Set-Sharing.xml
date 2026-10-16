@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Draft] P2P UTXO Set Sharing</title>
+  <updated>2026-10-16T05:27:00.706382+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2026-10-15 08:42:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Draft] P2P UTXO Set Sharing</title>
+    <updated>2026-10-16T05:27:00.706418+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/atCSAVprBE-tAnN3@erisian.com.au/T/#m675357a55f762afbb64c7ccfee8f75e1b6b404e6" rel="alternate"/>
+    <summary>The recent discussions on the Bitcoin Development Mailing List have brought forward several technical improvements aimed at optimizing the handling and verification of UTXO data. One of the key suggestions involves hardcoding a basic summary for the snapshot block in chain parameters, specifically at height 935,000. This would include details such as network type, base block hash, coins count, data length, and merkle root.
+
+Further improvements focus on enhancing the efficiency of syncing the UTXO set by using tagged hashes for identifying the UTXO set by its merkle root. This method commits to both the number and size of the chunks, ensuring clarity and reducing ambiguity. The approach suggests managing the data in 64kB chunks, which not only aligns with filesystem pages when stored but also minimizes data wastage. These chunks are then dealt with in sets of 2048, making file sizes manageable (around 128MB) and message sizes reasonable (64kB).
+
+In terms of data synchronization, it is proposed to fetch chunk hashes in sets of 2048, requiring approximately 70 requests on the mainnet. Each message would uniquely verify itself by providing paths to the merkle root alongside the hashes, thus maintaining integrity with minimal overhead. This system supports parallel requests for chunk data, allowing for efficient and reliable data validation upon receipt.
+
+An exploratory tool has been developed to facilitate these processes, available on GitHub ([utxo_snapshot_chunks.py](https://github.com/ajtowns/bitcoin/blob/202610-auto-utxo-snap/contrib/utxo-tools/utxo_snapshot_chunks.py)). This tool assists in various tasks such as splitting the UTXO data, calculating metadata, verifying the integrity of hashes, and even initializing copies based on summarized data. The utility of this tool extends to detailed commands provided for effectively managing and testing UTXO sets through various stages of processing.
+
+Moreover, consideration is given to potential future scenarios where disk space constraints might necessitate storing only portions of the UTXO set. Suggestions include employing FEC encoding, which would allow for significant reductions in data storage needs while still maintaining hash validation capabilities post-combination. This strategy could enable more nodes, including those with limited resources, to participate fully in the network without compromising the integrity or security of data.
+
+These proposed changes are not just technical enhancements but also aim to foster a more resilient and efficient blockchain network infrastructure. They underscore a commitment to continuous improvement within the Bitcoin development community, reflecting a proactive approach to addressing both present and future challenges.</summary>
+    <published>2026-10-15T08:42:00+00:00</published>
+  </entry>
+</feed>
