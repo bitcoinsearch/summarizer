@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>TCP hole punching for Bitcoin nodes behind home NATs?</title>
+  <updated>2026-10-17T05:18:34.643391+00:00</updated>
+  <author>
+    <name>0xB10C</name>
+  </author>
+  <timestamp>2026-10-16 10:02:57.775000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>TCP hole punching for Bitcoin nodes behind home NATs?</title>
+    <updated>2026-10-17T05:18:34.643433+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/tcp-hole-punching-for-bitcoin-nodes-behind-home-nats/2497/22" rel="alternate"/>
+    <summary>The proposed method, termed as "coordinator-less hole punching," introduces a novel approach to NAT traversal without requiring a central coordinator. This method leverages blockchain technology, utilizing the timing of blockchain headers to synchronize actions between two nodes behind NATs. The process begins with a node announcing its intention to perform a hole punch by broadcasting a new `addrv2` type which includes its hole-punchable `IP:port` and an ephemeral Elliptic Curve (EC) public key `P`. Other nodes receive this information and compute an Elliptic Curve Diffie-Hellman (ECDH) shared secret using their own private key and the publicly received `P`.
+
+Subsequently, each node waits for a new block in the blockchain before computing a `SHA256` hash that combines a tag, the shared secret, and the block's hash. Nodes sort these hashes and attempt to connect to peers with the lowest hash values, thus determining potential candidates for hole punching. The connection attempt involves initiating a `connect()` call to the candidate’s `IP:port` from the originating node's punch port, leaving the socket pending.
+
+This technique does not require precise synchronization of time, acknowledging that slight discrepancies in clock settings are tolerable. The reliance on the next block hash enhances security by preventing an attacker who knows a node’s public key from continuously producing favorable outcomes by brute force, as the unpredictability of the block hash acts as a deterrent.
+
+Privacy considerations are also addressed, noting that while two nodes exchange public keys, these alone do not reveal any shared secrets or indicate specific connection details to an external observer. However, because both IP addresses and ports are publicly announced, the participation in the process is inherently public.
+
+For successful implementation, it is crucial to design an effective hole punch address manager and implement rate-limiting measures to guard against potential threats such as address flooding or the dissemination of bogus public keys. These strategies are essential to prevent malicious entities from exploiting the system to hinder genuine hole punch attempts.</summary>
+    <published>2026-10-16T10:02:57.775000+00:00</published>
+  </entry>
+</feed>
