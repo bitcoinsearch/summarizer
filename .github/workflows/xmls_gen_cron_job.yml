@@ -14,6 +14,7 @@ jobs:
 
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      MAX_JOB_COST_USD: ${{ vars.MAX_JOB_COST_USD || '5' }}
       ES_CLOUD_ID: ${{ secrets.ES_CLOUD_ID }}
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
@@ -39,11 +40,13 @@ jobs:
       run: python xmls_generator_production.py
     
     - name: Configure Git
+      if: success() || failure()  # keep XMLs finished before a failure (e.g. spend limit) so they aren't regenerated
       run: |
          git config user.email "${{ secrets.GIT_AUTHOR_EMAIL }}"
          git config user.name "${{ secrets.GIT_AUTHOR_NAME }}"
 
     - name: Add and commit changes
+      if: success() || failure()
       run: |
         git add .
         if git diff --staged --quiet; then
