@@ -20,6 +20,16 @@ class BudgetExceededError(SystemExit):
     """Subclasses SystemExit so the many `except Exception` blocks in callers can't swallow it."""
 
 
+class UnpricedModelError(SystemExit):
+    """Raised before calling a model with no MODEL_PRICING entry, since its spend can't be tracked."""
+
+
+def _check_model_priced(model):
+    if model not in MODEL_PRICING:
+        raise UnpricedModelError(
+            f"No price for model '{model}'. Add its (input, output) USD per 1M tokens to MODEL_PRICING in src/config.py.")
+
+
 def _check_budget():
     if job_cost_usd >= MAX_JOB_COST_USD:
         raise BudgetExceededError(
@@ -29,12 +39,13 @@ def _check_budget():
 def _record_usage(response, model):
     global job_cost_usd
     usage = response.get("usage", {})
-    input_price, output_price = MODEL_PRICING.get(model, MODEL_PRICING["gpt-4-turbo"])
+    input_price, output_price = MODEL_PRICING[model]
     job_cost_usd += (usage.get("prompt_tokens", 0) * input_price
                      + usage.get("completion_tokens", 0) * output_price) / 1_000_000
 
 
 def chat_completion(**kwargs):
+    _check_model_priced(kwargs["model"])
     _check_budget()
     response = openai.ChatCompletion.create(**kwargs)
     _record_usage(response, kwargs["model"])
@@ -42,6 +53,7 @@ def chat_completion(**kwargs):
 
 
 def completion(**kwargs):
+    _check_model_priced(kwargs["model"])
     _check_budget()
     response = openai.Completion.create(**kwargs)
     _record_usage(response, kwargs["model"])
