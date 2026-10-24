@@ -25,6 +25,15 @@ COMPLETION_MODEL = "text-davinci-003"  # "text-ada-001"
 # used in generation of xmls production, homepage, newsletter etc.
 CHAT_COMPLETION_MODEL = "gpt-4-turbo"  # "gpt-3.5-turbo", "gpt-4"
 
+MAX_JOB_COST_USD = float(os.getenv("MAX_JOB_COST_USD", "5"))
+
+MODEL_PRICING = {
+    "gpt-4-turbo": (10.00, 30.00),
+    "gpt-4": (30.00, 60.00),
+    "gpt-3.5-turbo": (0.50, 1.50),
+    "text-davinci-003": (20.00, 20.00),
+}
+
 ES_CLOUD_ID = os.getenv("ES_CLOUD_ID")
 ES_USERNAME = os.getenv("ES_USERNAME")
 ES_PASSWORD = os.getenv("ES_PASSWORD")

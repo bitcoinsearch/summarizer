@@ -1,4 +1,5 @@
 import sys
+import atexit
 import openai
 from tqdm import tqdm
 from openai.error import APIError, PermissionError, AuthenticationError, InvalidAPIType, ServiceUnavailableError
@@ -6,10 +7,51 @@ import time
 import traceback
 from loguru import logger
 
-from src.config import TOKENIZER, OPENAI_API_KEY, OPENAI_ORG_KEY, CHAT_COMPLETION_MODEL, COMPLETION_MODEL
+from src.config import TOKENIZER, OPENAI_API_KEY, OPENAI_ORG_KEY, CHAT_COMPLETION_MODEL, COMPLETION_MODEL, \
+    MAX_JOB_COST_USD, MODEL_PRICING
 
 openai.organization = OPENAI_ORG_KEY
 openai.api_key = OPENAI_API_KEY
+
+job_cost_usd = 0.0
+
+
+class BudgetExceededError(SystemExit):
+    """Subclasses SystemExit so the many `except Exception` blocks in callers can't swallow it."""
+
+
+def _check_budget():
+    if job_cost_usd >= MAX_JOB_COST_USD:
+        raise BudgetExceededError(
+            f"OpenAI spend limit reached: ${job_cost_usd:.2f} >= MAX_JOB_COST_USD=${MAX_JOB_COST_USD:.2f}. Aborting run.")
+
+
+def _record_usage(response, model):
+    global job_cost_usd
+    usage = response.get("usage", {})
+    input_price, output_price = MODEL_PRICING.get(model, MODEL_PRICING["gpt-4-turbo"])
+    job_cost_usd += (usage.get("prompt_tokens", 0) * input_price
+                     + usage.get("completion_tokens", 0) * output_price) / 1_000_000
+
+
+def chat_completion(**kwargs):
+    _check_budget()
+    response = openai.ChatCompletion.create(**kwargs)
+    _record_usage(response, kwargs["model"])
+    return response
+
+
+def completion(**kwargs):
+    _check_budget()
+    response = openai.Completion.create(**kwargs)
+    _record_usage(response, kwargs["model"])
+    return response
+
+
+@atexit.register
+def _log_job_cost():
+    if job_cost_usd:
+        logger.info(f"OpenAI spend this run: ${job_cost_usd:.2f} (limit ${MAX_JOB_COST_USD:.2f})")
 
 
 def generate_summary(prompt):
@@ -26,7 +68,7 @@ def generate_summary(prompt):
         9. Do not refer to cryptocurrency or cryptocurrencies. This is a summary for the Bitcoin community. Substitute all instances of cryptocurrencies with Bitcoin and Lightning as appropriate.
         10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
-    response = openai.Completion.create(
+    response = completion(
         model=COMPLETION_MODEL,
         prompt=summarization_prompt,
         temperature=0.7,
@@ -53,7 +95,7 @@ def consolidate_summary(prompt):
         9. Do not refer to cryptocurrency or cryptocurrencies. This is a summary for the Bitcoin community. Substitute all instances of cryptocurrencies with Bitcoin and Lightning as appropriate.
         10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
     \n\nCONTEXT:\n\n{prompt}"""
-    response = openai.Completion.create(
+    response = completion(
         model=COMPLETION_MODEL,
         prompt=consolidate_prompt,
         temperature=0.7,
@@ -68,7 +110,7 @@ def consolidate_summary(prompt):
 
 def generate_title(prompt):
     title_generation_prompt = f"Generate an appropriate title for below context.\n\n CONTEXT:\n\n{prompt}"
-    response = openai.Completion.create(
+    response = completion(
         model=COMPLETION_MODEL,
         prompt=title_generation_prompt,
         temperature=0.7,
@@ -97,7 +139,7 @@ def generate_chatgpt_summary(body, custom_prompt=None):
             8. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
             9. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility. 
         \n\nCONTEXT:\n\n{body}"""
-    response = openai.ChatCompletion.create(
+    response = chat_completion(
         model=CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
@@ -130,7 +172,7 @@ def consolidate_chatgpt_summary(body, custom_prompt=None):
             9. Break down the summary into concise, meaningful paragraphs ensuring each paragraph captures a unique aspect or perspective from the original text.
             10. URLs should be formatted in markdown syntax, where the clickable text is placed in square brackets followed by the URL in parentheses, without spaces between them (e.g., [OpenAI](https://www.openai.com)). This format enhances readability and accessibility.
         \n\nCONTEXT:\n\n{body}"""
-    response = openai.ChatCompletion.create(
+    response = chat_completion(
         model=CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
@@ -148,7 +190,7 @@ def consolidate_chatgpt_summary(body, custom_prompt=None):
 
 def generate_chatgpt_title(prompt):
     title_generation_prompt = f"Generate an appropriate title for below context.\n\n CONTEXT:\n\n{prompt}"
-    response = openai.ChatCompletion.create(
+    response = chat_completion(
         model=CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
@@ -179,7 +221,7 @@ def create_n_bullets(body_summary, n=3):
             Do not introduce sentences with phrases like: "The context discusses...", "In this context..." or "The context covers..."
     CONTEXT:\n\n{body_summary}"""
 
-    response = openai.ChatCompletion.create(
+    response = chat_completion(
         model=CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent assistant."},
@@ -280,7 +322,7 @@ def create_summary(body, custom_prompt=None):
 
 
 def generate_chatgpt_summary_for_prompt(summarization_prompt, max_tokens):
-    response = openai.ChatCompletion.create(
+    response = chat_completion(
         model=CHAT_COMPLETION_MODEL,
         messages=[
             {"role": "system", "content": "You are an intelligent agent with an exceptional skills in writing."},
