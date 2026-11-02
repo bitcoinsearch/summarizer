@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Reducing Bitcoin Full Node Storage Without Consensus Changes</title>
+  <updated>2026-11-02T07:33:28.296983+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>BrokenMachine</author>
+      <timestamp>2026-08-09 18:34:24.025000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>reardencode</author>
+      <timestamp>2026-08-11 17:14:24.609000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>BrokenMachine</author>
+      <timestamp>2026-08-11 21:50:46.462000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>fabohax</author>
+      <timestamp>2026-08-12 03:01:53.623000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>BrokenMachine</author>
+      <timestamp>2026-08-12 03:14:00.571000+00:00</timestamp>
+    </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>andrewtoth</author>
+      <timestamp>2026-08-14 18:47:00.069000+00:00</timestamp>
+    </message>
+    <message id="msg_7" depth="0" position="6">
+      <author>BrokenMachine</author>
+      <timestamp>2026-08-14 22:32:32.421000+00:00</timestamp>
+    </message>
+    <message id="msg_8" depth="0" position="7">
+      <author>BrokenMachine</author>
+      <timestamp>2026-08-15 11:29:03.052000+00:00</timestamp>
+    </message>
+    <message id="msg_9" depth="0" position="8">
+      <author>guyefubi</author>
+      <timestamp>2026-10-26 20:36:38.193000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Aug_2026/8256_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8273_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8277_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8279_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8280_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8310_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8313_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Aug_2026/8318_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8837_Reducing-Bitcoin-Full-Node-Storage-Without-Consensus-Changes.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Reducing Bitcoin Full Node Storage Without Consensus Changes</title>
+    <updated>2026-11-02T07:33:28.298055+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/reducing-bitcoin-full-node-storage-without-consensus-changes/2790/9" rel="alternate"/>
+    <published>2026-08-09 18:34:24.025000+00:00</published>
+    <summary>BitcoinRocks v31.1.1 represents a significant experimental advancement in the realm of Bitcoin full-node clients, introducing a series of modifications designed to enhance performance and storage efficiency while maintaining strict adherence to Bitcoin’s consensus rules. Building upon the foundation of Bitcoin Core v31.1, BitcoinRocks implements RocksDB as a replacement for LevelDB to manage both chainstate and database-backed indexes. This transition permits more granular workload-specific tuning, including hardware-aware automatic cache allocation, though it preserves user flexibility by allowing manual adjustments via the `-dbcache` parameter. Integral to its storage strategy is the use of Zstandard compression for block data files (`blk*.dat`), ensuring each block is compressed individually. If compression is ineffective, the system seamlessly falls back to storing raw records, thereby retaining full compatibility with legacy data formats.
+A notable structural innovation in BitcoinRocks lies in its approach to parallelism and data access during blockchain validation. The ConnectBlock phase now benefits from parallel fetching of previous outputs—a technique backported from later iterations of Bitcoin Core—which substantially accelerates synchronization. Users are also empowered to choose between core, conservative, and strict relay-policy profiles, allowing flexible local management of mempool and relay behaviors without influencing network-wide consensus. Furthermore, detailed dependency pinning for third-party libraries such as RocksDB, LZ4, and Zstandard ensures build consistency and operational stability across varying environments. Comprehensive documentation supporting this release can be found in the [GitHub repository](https://github.com/BitcoinRocks-Core/BitcoinRocks).
+Extensive validation precedes this release. Every main-chain block from Genesis through to a specified height has been meticulously compared against Bitcoin Core, confirming perfect alignment in transaction ordering and Merkle proofs up to the tip of the live chain. Preliminary storage benchmarks reveal that compressed block files reduce disk usage dramatically, saving approximately 171 GiB compared to uncompressed setups—equivalent to a 24% reduction for the logical block payload, or a 19% overall decrease in total database size. After a full sync including optional indexes (`txindex`, `blockfilterindex`, `coinstatsindex`), the apparent data directory size measures over 769 GB, with the vast majority attributed to compressed block and undo (rev) files. When omitting optional indexes, the base node data shrinks further, highlighting the impact of modular index inclusion on total resource consumption.
+Performance optimization extends beyond storage; during Initial Block Download (IBD), BitcoinRocks utilizes up to 25% of available system RAM, facilitating a notably faster sync process—approximately 30 hours from Genesis to mainnet tip on test hardware—while ensuring that post-sync operation remains minimally intrusive even on heavily loaded systems. To fairly assess these improvements, independent benchmarking under controlled conditions is recommended, accounting for hardware, configuration, and network variables.
+These technical advancements necessitate careful consideration regarding historical data accessibility and system resilience. Compression and novel storage formats must not impede efficient retrieval of historical blocks, particularly given the importance of archival integrity in blockchain operations. An open question persists as to whether these innovations might introduce complexity or latency in retrieving older data, especially when combined with strategies like pruning and reindexing. Ensuring robust mechanisms for safe failure—such as fault-injection testing that simulates truncated or corrupted block records—is vital. The client should fail transparently and securely in the face of incomplete or invalid data rather than silently accepting errors. Reporting accurate validation and reindex times is also crucial, as reduced disk usage may shift some processing costs to CPU due to decompression overhead.
+BitcoinRocks’ divergence from Bitcoin Core is further clarified through a detailed comparative analysis. It incorporates not only the switch to RocksDB and advanced compression methods but also refines the distinction between physical and logical block sizes within its database management system. Performance enhancements include a doubled per-peer in-flight block window, improving throughput during IBD, and changes to the test framework to accommodate new block download policies. User-facing options for transaction policy profiles allow for tailored risk management without affecting consensus validity, reflecting a nuanced approach to node behavior customization. Updates to the build process, executable naming, integration of dependencies, and continuous integration processes reinforce the project’s commitment to cross-platform reliability and developer accessibility.
+In the broader landscape of Bitcoin development, ongoing research into database technologies continues. While early indications suggest similar performance characteristics between RocksDB and LevelDB for certain workloads, systematic benchmarking remains essential. RocksDB's ability to efficiently handle historical lookups on compressed datasets stands out as a potential advantage, though definitive conclusions await further empirical testing. Proper benchmark planning—avoiding pitfalls like hardware saturation or confounding multi-node tests on the same host—will ensure meaningful results.
+Concurrently, new developments in Bitcoin Core, announced via [GitHub pull request #35531](https://github.com/bitcoin/bitcoin/pull/35531), demonstrate substantial reductions in transaction index database size—down from 66 GB to 26 GB—by leveraging modern compression techniques</summary>
+  </entry>
+</feed>

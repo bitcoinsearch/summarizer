@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Silent Payments for Multiparty Wallets</title>
+  <updated>2026-11-02T07:41:24.131965+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>olkurbatov</author>
+      <timestamp>2026-10-15 15:41:44.723000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>poyuholu</author>
+      <timestamp>2026-10-27 15:12:46.527000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>olkurbatov</author>
+      <timestamp>2026-10-27 16:48:57.048000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>macgyver</author>
+      <timestamp>2026-10-29 00:09:51.201000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8776_Silent-Payments-for-Multiparty-Wallets.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8870_Silent-Payments-for-Multiparty-Wallets.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8875_Silent-Payments-for-Multiparty-Wallets.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8905_Silent-Payments-for-Multiparty-Wallets.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Silent Payments for Multiparty Wallets</title>
+    <updated>2026-11-02T07:41:24.132774+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/silent-payments-for-multiparty-wallets/2960/4" rel="alternate"/>
+    <published>2026-10-15 15:41:44.723000+00:00</published>
+    <summary>Secure multiparty signing protocols are evolving to address the growing need for privacy and security in Bitcoin transactions, especially with the advent of Silent Payments. The proposed protocol integrates established cryptographic techniques from various Bitcoin Improvement Proposals (BIPs) and focuses on elliptic curve cryptography over the secp256k1 curve. Multiparty wallet keys are constructed as linear combinations of individual secrets, allowing compatibility with protocols like FROST, MuSig2, Nested MuSig2, and BLISK. Each protocol variant influences how secret shares and coefficients are aggregated, ensuring that each participant's contribution is securely and correctly represented in the final transaction output.
+A key innovation is the use of Weighted Elliptic Curve Diffie-Hellman (ECDH), where each signer computes a share that, when summed and hashed, produces a shared secret integral to forming payment outputs. This method allows separate handling of inputs while maintaining secure aggregation into a single transaction, thus supporting efficient and private payments. The protocol further incorporates tweaks based on BIP requirements, such as parity adjustments and tweak accumulations, guaranteeing full compliance with existing standards.
+To ensure the integrity of all contributions without exposing any private information, the protocol employs an aggregated Discrete Logarithm Equality (AggDLEQ) proof system. AggDLEQ validates that each public key and ECDH share stem from the same private input. Should any signer's input be malformed, this mechanism ensures the session aborts rather than compromising transaction correctness, preserving the security guarantees required for trustless multiparty collaboration.
+During review, it was observed that the equations lacked the explicit application of the parity factor, which could lead to verification failures or incorrect proofs under certain conditions, specifically when the accumulated parity coefficient \(g\) equals \(-1\). Correct notation requires each coefficient \(c_i\) to be multiplied by the parity factor, denoted as \(\hat{c}_i = g \cdot c_i\), aligning with practices in [BIP-327](https://github.com/bitcoin/bips/blob/master/bip-0327.mediawiki) and [BIP-445](https://github.com/bitcoin/bips/blob/master/bip-0445.mediawiki). This adjustment prevents mismatches in discrete log proofs and ensures that, if the parity is not properly accounted for, protocol checks fail cleanly rather than accepting invalid shares.
+Implementation experiences highlight practical considerations for real-world deployments. For instance, one approach focused on enabling a treasury wallet to spend via hardware signers, introducing two provisional fields to the Partially Signed Bitcoin Transaction (PSBT): `PSBT_IN_SP_PARTIAL_ECDH_SHARE` for each signer's ECDH share and `PSBT_IN_SP_PARTIAL_DLEQ` for their BIP-374-compatible proof. Each participant verifies all proofs and independently computes outputs before signing, minimizing communication rounds and PSBT field usage. Prototypes have demonstrated successful integration with hardware wallets like Jade and COLDCARD, confirming the feasibility of multiparty Silent Payments detected by multiple receiving wallets.
+Further advances involve adapting coordination mechanisms, such as those developed by the Frostsnap team using Nostr, to facilitate Silent Payments across air-gapped devices. These workflows demonstrate robust user experiences even without persistent connectivity, leveraging PSBTs for secure data interchange. However, questions remain regarding the operation of AggDLEQ in fully air-gapped settings and whether the security analysis will encompass scenarios where each signer publishes a distinct BIP-374 proof for their ECDH share.
+While the protocol maintains compatibility with verifier logic from [BIP-374](https://github.com/bitcoin/bips/blob/master/bip-0374.mediawiki) and [BIP-375](https://github.com/bitcoin/bips/blob/master/bip-0375.mediawiki), and does not require changes to the PSBT format, its ultimate security assurances await further internal review and formal cryptographic analysis. Ongoing research and peer feedback will inform refinements, ensuring that the protocol upholds both efficiency and robust security within the evolving Bitcoin ecosystem.</summary>
+  </entry>
+</feed>

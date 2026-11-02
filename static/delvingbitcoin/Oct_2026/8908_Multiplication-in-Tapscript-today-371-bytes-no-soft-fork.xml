@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Multiplication in Tapscript today: 371 bytes, no soft fork</title>
+  <updated>2026-11-02T07:48:07.567826+00:00</updated>
+  <author>
+    <name>Laz1m0v</name>
+  </author>
+  <timestamp>2026-10-29 19:20:36.335000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Multiplication in Tapscript today: 371 bytes, no soft fork</title>
+    <updated>2026-11-02T07:48:07.567857+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/multiplication-in-tapscript-today-371-bytes-no-soft-fork/3010" rel="alternate"/>
+    <summary>Multiplication in Bitcoin Script has long been constrained due to the disabling of `OP_MUL` since 2010. Under BIP-342, multiplication must be synthesized using only `OP_ADD` and shift operations, with a strict requirement that every intermediate value fits within a 4-byte `CScriptNum`. This constraint enforces operands in the range \([-2^{31}+1, 2^{31}-1]\), with overflow detection delegated to subsequent numeric opcodes. The tightest symmetric limit for safe arithmetic is determined by \(\lfloor\sqrt{2^{31}-1}\rfloor = 46,340\), ensuring that multiplying two maximal values remains within bounds.
+
+A compact, standalone multiplication core—occupying just 371 bytes—has been introduced to perform safe 16-bit multiplication for pairs \(x, y \in [0, 46,340]\). This implementation also offers Euclidean division extensions (375 and 377 bytes) and an optimized 275-byte variant that omits redundant bit guards under consensus rules such as `MINIMALIF`. The full solution includes not only the core scripts but also rigorous formal proofs written in Coq, a Rust-based auditor for exhaustive testing, a Python reference implementation, and a live regtest harness for `bitcoind`, all provided in the [GitHub Gist](https://github.com/Laz1mov/tapscript-mul16-unrolled).
+
+The multiplication logic is witness-assisted: the transaction supplies the 16 bits of the multiplier \(y\), which are processed from most significant to least significant bit. A prologue parks inputs on the altstack and pushes zero accumulators. For each bit, the script conditionally adds \(x\) and increments the reconstructed multiplier \(Y\), then doubles both accumulators except at the last step. An epilogue checks that the reconstructed \(Y\) matches the original \(y\) and leaves the product on the stack. The main computation uses only 13 active opcodes, without resorting to disabled or non-standard ones, and achieves a peak stack depth of 21 items.
+
+Attention to consensus details is evident throughout. Strict opcode size limits no longer apply under BIP-342, allowing for variable-length execution dependent on the Hamming weight of \(y\). Explicit branch guards like `OP_1 OP_NUMEQUALVERIFY` are retained inside the 371-byte version for soundness proofs independent of `SigVersion`, though these become redundant when relying on `MINIMALIF`. Removing them yields a more efficient 275-byte core at the cost of consensus version dependence, reducing virtual bytes (vB) usage.
+
+Testing revealed and resolved subtle bugs, such as incorrect opcode choice for bound-checking and improper encoding of maximum allowed values. These issues were corrected in the finalized 10-byte `LOT_BOUND_VERIFY` prefix and thorough duplication of operands prior to guarded evaluation to preserve stack correctness. The entire TapLeaf script, including all necessary checks, totals 396 bytes and passes formal verification—six theorems proven in Coq with no axioms or unproven statements.
+
+Comprehensive mutation testing is performed by the Rust auditor, which exhaustively sweeps all valid input pairs at the upper bounds in under 60 milliseconds, successfully detecting a wide array of potential faults. The regtest framework further validates behavior against Bitcoin Core’s mempool acceptance policy. Optional artifacts extend the multiplication core to verify exact Euclidean quotient/remainder relationships or floor inequalities, sharing the same primary bytecode prefix.
+
+While this multiplication engine is robust and formally verified, it does not provide arbitrary precision. Wider integer support would require multi-limb composition. The script’s execution path depends on the bit pattern of the input witness, which is publicly visible on L1, mitigating side-channel concerns in on-chain contexts, although they remain relevant for private, off-chain scenarios.
+
+Several technical questions remain open for further investigation. There is debate over whether the explicit, `SigVersion`-agnostic bit guards justify their additional weight, or if production deployments should opt for the leaner, `MINIMALIF`-reliant variant. Opportunities for further compression of the computational rounds and bound checks are being explored, especially without the use of `OP_PICK`. Additionally, research continues into alternative encodings that might allow higher single-limb ceilings while maintaining 4-byte compatibility. Looking ahead, the utility of this gadget in the event of future protocol upgrades—such as 64-bit arithmetic or the re-enabling of `OP_MUL`—is questioned, with consideration given to its continued role as a fallback mechanism.
+
+Complete documentation, proofs, reference code, and testing instructions are available in the repository’s README, accessible at [https://github.com/Laz1mov/tapscript-mul16-unrolled](https://github.com/Laz1mov/tapscript-mul16-unrolled). Contributions identifying proof gaps or surviving mutants are welcomed and will be credited in</summary>
+    <published>2026-10-29T19:20:36.335000+00:00</published>
+  </entry>
+</feed>

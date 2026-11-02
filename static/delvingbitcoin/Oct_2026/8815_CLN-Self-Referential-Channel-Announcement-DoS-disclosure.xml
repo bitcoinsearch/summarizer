@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>CLN: Self-Referential Channel Announcement DoS disclosure</title>
+  <updated>2026-11-02T07:45:36.687014+00:00</updated>
+  <author>
+    <name>NishantBansal2003</name>
+  </author>
+  <timestamp>2026-10-24 10:00:27.748000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>CLN: Self-Referential Channel Announcement DoS disclosure</title>
+    <updated>2026-11-02T07:45:36.687060+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cln-self-referential-channel-announcement-dos-disclosure/2974" rel="alternate"/>
+    <summary>Between versions v25.02 and v26.04, Core Lightning (CLN) contained a vulnerability that allowed a node to crash when it received a `channel_announcement` message where both endpoints—`node_id_1` and `node_id_2`—were set to the same node. This occurred because CLN did not verify that these two node IDs were distinct, contrary to the intended protocol design in [BOLT 7](https://github.com/lightning/bolts/blob/191462825ae341f0a27098765c075f01ca9bc6c2/07-routing-gossip.md), which expects the sender to order the node IDs lexicographically, implying they must be different. However, there was no requirement for the receiver to enforce this check until this bug was uncovered.
+
+When such a malformed announcement reached CLN's `gossipd`, the process appended the record to its persistent `gossip_store` and then attempted to load it into the in-memory routing graph (`gossmap`). The function responsible for adding channels, [`add_channel()`](https://github.com/ElementsProject/lightning/blob/6f9356fb9369d34811640f292c75cc3b7e43e9d1/common/gossmap.cL451-L520), assumed that each endpoint was a unique entity. If both endpoints were identical and previously unknown, the function would inadvertently create two separate entries for the same node ID. When trying to insert the duplicate into the hash table, an assertion designed to prevent such duplications failed, causing `gossipd` to abort. Because `lightningd` treats a failure in `gossipd` as fatal, this took down the whole node.
+
+A critical aspect of the vulnerability was its persistence across restarts. Since the invalid announcement had already been written to disk before the crash, every subsequent restart resulted in `gossipd` reloading the bad record and immediately crashing again. As a result, the affected node would remain offline until an operator manually edited or removed the problematic entry from `gossip_store`. Notably, upgrading the software alone would not purge the invalid record; direct intervention was necessary.
+
+The exploit required minimal effort from an attacker. After establishing a BOLT 8 handshake with the victim and completing the standard `init` exchange, the attacker could fund a 2-of-2 P2WSH output using keys under their control. They would then craft a `channel_announcement` referencing the same node ID for both endpoints, sign it appropriately, and submit it once the funding output had sufficient confirmations. Because the signatures and structure appeared valid, CLN accepted the announcement and crashed. The attack only incurred on-chain fees, and the funds remained under the attacker's control. Furthermore, the exploit could propagate without direct contact: any node relaying such malformed announcements—including CLN releases prior to v25.02 that allowed duplicates—could unwittingly ferry the exploit to vulnerable peers.
+
+While the node was offline, it lost the ability to monitor the blockchain. This exposed funds to risk, as it could miss time-sensitive events such as revoked commitment broadcasts or expiring HTLCs. Even after manual remediation, the attacker retained the capacity to resend the malicious announcement repeatedly, causing recurring outages as long as the original funding output remained unspent.
+
+The fix introduced in [Core Lightning v26.04.1](https://github.com/ElementsProject/lightning/releases/tag/v26.04.1) changed the validation logic so that `node_id_1` must be strictly less than `node_id_2`, in accordance with [BOLT 7’s updated requirements](https://github.com/lightning/bolts/pull/1333). This measure prevented announcements with duplicate or misordered node IDs from being stored or processed, thereby eliminating the root cause of the crash.
+
+Discovery of this bug stemmed from targeted fuzz testing of the gossip state machine within Core Lightning. A fuzzer generated both valid and malformed messages, simulating chain lookups and storing accepted announcements. The crash was initially observed when a self-referential channel announcement triggered the no-duplicates assertion during replay on a regtest node, confirming that the issue would recur on every restart.
+
+Key lessons drawn from this incident include the necessity of keeping up-to-date with the latest Core Lightning releases—currently v26.06.9—as vulnerabilities are being discovered and addressed at an accelerated pace. It is crucial to validate all untrusted input before persisting it, since storing a harmful message can render a node perpetually vulnerable to denial-of-service attacks. Additionally, protocol requirements imposed on senders should also be enforced by receivers, as malicious actors may disregard them, exposing systems that rely solely on sender compliance.
+
+Operators and developers are strongly encouraged to upgrade to [Core Lightning v26.04.1](https://github.com/ElementsProject/lightning/releases/tag/v26.</summary>
+    <published>2026-10-24T10:00:27.748000+00:00</published>
+  </entry>
+</feed>

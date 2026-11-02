@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-02T07:23:40.725289+00:00</updated>
+  <author>
+    <name>ZmnSCPxj</name>
+  </author>
+  <timestamp>2026-10-26 07:48:17.427000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-02T07:23:40.725322+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/8" rel="alternate"/>
+    <summary>There is consideration of whether to propose a new upstream bLIP, specifically referencing the available slots 266 and 267. The suggestion is made to initially target a BOLT proposal and only pursue a bLIP if the BOLT is not accepted. It is noted that the requirement for two independent implementations has already been satisfied.
+
+The specification outlines a method where each signer independently checks what it signs and revokes. A key point is that a signer who has signed a state should never participate in revoking that same state. Additionally, every signer must record a revocation event before any part of the secret involved is released. This protocol becomes particularly important when signers are distinct entities from the node itself. In cases where the signer and node are integrated or the signer is performing blind-signing, recording the revocation after releasing the secret may suffice. However, when signers maintain their own independent state, the order is crucial: the node must first log the revocation, then instruct the signers to proceed with revocation, ensuring all parties reflect the “revocation done” state consistently.
+
+The progression involves developing a joint secret generator suitable for small k-of-n groups, which allows revocation public keys to be generated even if only K signers are online. For the most straightforward scenario where K equals N minus one, any pair of signers can utilize ECDH with the other’s root public key. For smaller values of K, during channel setup, the online subset generates root private keys which are then encrypted both to themselves and to the remaining N - K signers. Each signer stores the complete set of encrypted revocation root private keys. If K represents a majority, this structure ensures that, regardless of future changes in the online set, there will always be at least one overlap with the original online group. As a result, at least one signer remains able to supply encrypted root private keys to other signers, maintaining the integrity and continuity of the revocation process.</summary>
+    <published>2026-10-26T07:48:17.427000+00:00</published>
+  </entry>
+</feed>

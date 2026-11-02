@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Cost-Bounded Transaction Filtering Language</title>
+  <updated>2026-11-02T07:43:13.564293+00:00</updated>
+  <author>
+    <name>bkeroack</name>
+  </author>
+  <timestamp>2026-10-20 22:33:01.616000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Cost-Bounded Transaction Filtering Language</title>
+    <updated>2026-11-02T07:43:13.564330+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cost-bounded-transaction-filtering-language/2966" rel="alternate"/>
+    <summary>A transaction filtering policy domain-specific language (DSL) has been developed and integrated into satd, a full Bitcoin node implementation written in Rust. This system empowers node operators to precisely define which transaction types their nodes will relay or include in block templates, all without compromising consensus correctness. The DSL is deliberately kept non-Turing-complete and cost-bounded, ensuring that execution remains safe and predictable. Each rule within the policy can either allow or quarantine transactions based on customizable logic, with additional controls to prevent relaying or block template inclusion as desired.
+
+Rules are stored in a plain text file referenced by the node’s configuration and can be reloaded dynamically via SIGHUP. The policy engine includes safeguards to recognize when rules might mistakenly match critical protocol transactions, such as Lightning Network channel closures. By default, if such risks are detected, the filter will not load; however, an override option (`allowdangerousfilters=1`) allows operators to proceed with only a warning. Instead of outright rejecting filtered transactions, the system quarantines them. This approach provides transparency, makes policies adjustable, and enables more efficient processing of compact blocks, since quarantined transactions remain accessible for proper parent-child association—critical in cases like Child Pays for Parent (CPFP). Quarantining ensures that when a parent transaction matches a rule, its children are also quarantined, preserving the integrity of dependent transaction chains.
+
+The DSL syntax is designed for clarity and hand-editability, targeting common use cases such as filtering out inscriptions or large OP_RETURN values. For instance, one can specify rules like: 
+```
+quarantine big-inscription when any input (in.leaf_script.contains_ops(script(OP_FALSE OP_IF push(0x6f7264))) and in.witness_size &gt; 1kb)
+quarantine big-opreturn when sum outputs (out.op_return_size) &gt; 80
+```
+Such expressiveness allows node operators to tailor behavior according to their preferences, promoting operator sovereignty and reducing pressure on maintainers to enforce universal defaults. Allowing users flexibility in setting node policy helps mitigate community controversies over minor policy decisions and aligns with best practices in software design.
+
+However, widespread adoption of standardized or “viral” filter sets could inadvertently affect network behavior, highlighting the importance of keeping the language simple and comprehensible to discourage uncritical copy-pasting. Open areas for further exploration include enhancing transaction introspection capabilities, supporting limited regular expressions for richer matching (while maintaining safety), and identifying other sensitive transaction types that may warrant special handling beyond those already addressed.
+
+Further details, including documentation and examples, are available on [GitHub](https://github.com/epochbtc/satd) and in the [policy documentation](https://epochbtc.github.io/satd/policy.html).</summary>
+    <published>2026-10-20T22:33:01.616000+00:00</published>
+  </entry>
+</feed>

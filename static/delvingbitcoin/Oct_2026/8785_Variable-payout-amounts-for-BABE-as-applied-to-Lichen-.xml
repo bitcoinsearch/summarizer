@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Variable payout amounts for BABE (as applied to Lichen)</title>
+  <updated>2026-11-02T07:41:36.417437+00:00</updated>
+  <author>
+    <name>AdamISZ</name>
+  </author>
+  <timestamp>2026-10-18 22:09:57.584000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Variable payout amounts for BABE (as applied to Lichen)</title>
+    <updated>2026-11-02T07:41:36.417467+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/variable-payout-amounts-for-babe-as-applied-to-lichen/2963" rel="alternate"/>
+    <summary>Groth16 provides a powerful proof system enabling the demonstration of complex computational statements via succinct proofs, expressible with just three group elements. In typical applications, this allows a prover to convince a verifier that a statement is true with minimal data transfer and verification complexity. The mathematical foundation involves pairing operations on these group elements, but witness encryption (WE) schemes face challenges when confronted with the non-linear structure of Groth16's verification equation. While linear pairing relations are amenable to established WE techniques—such as those explored in KZG commitments—the non-linearity here requires innovative solutions.
+
+The BABE protocol introduces such a solution by leveraging two-party computation and garbled circuits. Instead of attempting direct witness encryption over the original Groth16 relation, BABE modifies the process: during setup, the verifier creates a garbled circuit for computing a scalar multiplication of one of the proof elements by a hidden random value. At proving time, the prover publishes their proof element, and the verifier can challenge its validity by revealing the appropriate garbled circuit inputs. The prover then computes the blinded proof element without learning the underlying randomness. This mechanism enables witness encryption in a setting where only a correct proof allows decryption of a secret ciphertext, thus permitting conditional asset unlocking—such as spending a bitcoin output—based solely on possession of a valid proof.
+
+A notable constraint of BABE's approach is that the statement being proved, and therefore any public input such as a payout amount, must be fixed at setup. This limitation hinders applications requiring flexibility, such as contracts where the withdrawal amount is not predetermined. While one could attempt to encode multiple possible amounts via transaction trees or bitwise decomposition, this quickly becomes unwieldy and inefficient.
+
+To address this, the interaction model between prover and verifier is adapted to introduce variable statement parameters post-setup. Specifically, instead of fixing the withdrawal amount from the outset, the protocol allows the prover to request withdrawal of a chosen amount at execution time. The verifier, upon receiving this request, issues a one-time signature on the specified amount. The prover then demonstrates, via zero-knowledge proof, that they possess both a valid signature from the verifier on the chosen amount and the requisite correctness proof for the withdrawal. This design cleverly sidesteps the rigidity of fixed public inputs in witness encryption, allowing dynamic inclusion of transaction-specific values while preserving all cryptographic guarantees and maintaining constant proof size.
+
+This extension does not alter the fundamental cryptographic mechanisms within BABE; the garbled circuit remains unchanged, and the overall proof construction continues to rely on efficient, succinct Groth16 proofs. The innovation lies in shifting some logic to the Bitcoin contract layer, where the prover commits to the withdrawal amount and the verifier countersigns it. By tying the zero-knowledge proof to this countersigned value, the contract ensures the integrity and correctness of withdrawals without needing to change the underlying encryption or circuit design.
+
+Further discussion and alternative proposals regarding variable amounts in BABE can be found in [this analysis](https://hackmd.io/@goatresearch/HkKp2g1Zfl), though these may require more elaborate cryptographic constructs. For practical purposes, especially in contexts like [Lichen](https://github.com/AdamISZ/lichen), the countersignature method described here offers a simple and effective way to implement flexible contract logic atop the robust cryptographic foundations provided by BABE and Groth16.</summary>
+    <published>2026-10-18T22:09:57.584000+00:00</published>
+  </entry>
+</feed>

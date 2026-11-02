@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Cost-Bounded Transaction Filtering Language</title>
+  <updated>2026-11-02T07:43:29.219205+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>bkeroack</author>
+      <timestamp>2026-10-20 22:33:01.616000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>bkeroack</author>
+      <timestamp>2026-10-22 14:07:25.332000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8794_Cost-Bounded-Transaction-Filtering-Language.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8803_Cost-Bounded-Transaction-Filtering-Language.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Cost-Bounded Transaction Filtering Language</title>
+    <updated>2026-11-02T07:43:29.219665+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/cost-bounded-transaction-filtering-language/2966/2" rel="alternate"/>
+    <published>2026-10-20 22:33:01.616000+00:00</published>
+    <summary>A transaction filtering policy domain-specific language (DSL) was developed and integrated into satd, a Rust-based, full Bitcoin node implementation. This feature empowers node operators to explicitly define which transaction patterns their nodes will relay or include in block templates, ensuring that these local policies never interfere with consensus rules. The DSL is intentionally designed to be cost-bounded and non-Turing complete, prioritizing simplicity and security. Each rule defined within this system can either allow or quarantine transactions that match specific criteria, with optional settings to prevent such transactions from being relayed or included in block construction.
+The configuration for these filtering rules resides in an external text file referenced by the node's configuration, allowing operators to conveniently reload the policy via SIGHUP. Importantly, if any quarantined filter might inadvertently impact critical protocol operations, such as Lightning Network channel closures, the system's default behavior is to refuse loading the potentially dangerous filter. However, advanced users can override this by setting `allowdangerousfilters=1`, which switches refusal to a warning only. Transactions are quarantined rather than outright rejected, making the policy’s effects transparent and adjustable, while also enabling more efficient handling of compact blocks since related data is preserved rather than discarded.
+In scenarios where a child transaction references a parent subjected to the quarantine policy, the system ensures both transactions remain associated by storing them within a separate, fixed-size quarantine budget. If a parent is quarantined, its children are automatically quarantined as well. This approach avoids issues like transaction orphaning, which could otherwise arise from naive rejection strategies.
+An illustrative example demonstrates how the DSL can be used to target common filtering needs, such as quarantining inscriptions and transactions with large OP_RETURN outputs:
+```
+quarantine big-inscription when any input (in.leaf_script.contains_ops(script(OP_FALSE OP_IF push(0x6f7264))) and in.witness_size &gt; 1kb)
+quarantine big-opreturn when sum outputs (out.op_return_size) &gt; 80
+```
+While the introduction of transaction filtering does not significantly impact the overall network—consensus-compliant transactions still propagate and get mined as long as at least one node or mining process accepts them—the primary motivation is to enhance operator autonomy. By decentralizing policy decisions, node maintainers are relieved from the pressure of enforcing universally &quot;correct&quot; defaults, thereby reducing potential conflicts over minor policy disputes. This design philosophy advocates for user empowerment and software flexibility.
+However, there are caveats. Widespread adoption of generic, copy-pasted filtering rules could introduce unintended negative consequences on the network. Thus, the DSL remains deliberately simple and accessible, encouraging thoughtful, hand-crafted rules over complex patterns that may foster misunderstanding or misuse.
+Open questions remain regarding further development. These include whether to expand transaction introspection capabilities, support more general-purpose regular expressions within safe bounds, and identify additional protocol-critical operations—beyond Lightning Network transactions—that warrant special safeguards.
+For further exploration and technical details, refer to the [satd GitHub repository](https://github.com/epochbtc/satd) and the [policy language documentation](https://epochbtc.github.io/satd/policy.html).
+A screenshot showcasing the quarantine status in satd’s terminal user interface provides a visual overview of filtered transactions.</summary>
+  </entry>
+</feed>

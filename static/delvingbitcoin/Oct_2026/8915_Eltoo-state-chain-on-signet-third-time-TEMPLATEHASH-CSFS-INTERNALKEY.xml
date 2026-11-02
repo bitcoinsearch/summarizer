@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Eltoo state chain on signet, third time: TEMPLATEHASH + CSFS + INTERNALKEY</title>
+  <updated>2026-11-02T07:48:30.494717+00:00</updated>
+  <author>
+    <name>AaronZhang</name>
+  </author>
+  <timestamp>2026-10-31 23:05:32.380000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Eltoo state chain on signet, third time: TEMPLATEHASH + CSFS + INTERNALKEY</title>
+    <updated>2026-11-02T07:48:30.494759+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/eltoo-state-chain-on-signet-third-time-templatehash-csfs-internalkey/3012" rel="alternate"/>
+    <summary>A comparative implementation of an Alice/Bob/Carol channel was conducted using three distinct approaches: [APO+CTV](https://delvingbitcoin.org/t/eltoo-state-chain-on-signet-three-rounds-six-transactions-apo-ctv/2413), a [CSFS+CTV rekey ladder](https://delvingbitcoin.org/t/eltoo-state-chain-on-signet-again-three-rounds-two-transactions-csfs-ctv-with-rekey-and-ladder-no-cat/2430), and, following the activation of [`OP_TEMPLATEHASH`](https://delvingbitcoin.org/t/bitcoin-inquisition-29-4/2739) in Inquisition 29.4, scripts from @instagibbs’ [`2026-01-eltoo_th`](https://github.com/instagibbs/bolts/tree/2026-01-eltoo_th) BOLT draft utilizing TEMPLATEHASH, CSFS, and INTERNALKEY.
+
+The most recent iteration intentionally published an outdated state to observe whether a newer update could supersede it—a core requirement for eltoo-style state channels. This process involved a sequence of transactions, beginning with funding ([`1163d3d5…9c259124`](https://mempool.space/signet/tx/1163d3d5ae78069dd41ad951de47460358db689b3b5d6b951dbb57399c259124)), publishing an old state ([`22c0c67b…02188692`](https://mempool.space/signet/tx/22c0c67b33f6620fe9165dca835408de91f4dd873018ab1c06a26a2f02188692)), replacing it with a newer one ([`4a11cfca…dea15007`](https://mempool.space/signet/tx/4a11cfca7e35564f932ee30a66dec9f9bbd95cdbc8ad8b34190b4c8fdea15007)), and finally settling the latest state ([`e7476180…e8001568`](https://mempool.space/signet/tx/e7476180b2f784ce81c859c6a9d48a0f72c0e72937ac1cd37e183ec6e8001568)). The deliberate skipping of a state further demonstrated the robustness of the mechanism.
+
+A side-by-side comparison reveals significant differences among the three methods. The APO+CTV approach uses approximately 35 bytes for the update leaf and results in a witness size of about 150 bytes per update, requiring six transactions for a complete run. The CSFS+CTV ladder method increases the update witness size to 512 bytes (which grows with each step) but reduces the transaction count to just two. The new TEMPLATEHASH+CSFS+INTERNALKEY configuration results in a dramatically smaller update leaf (10 bytes), maintains a constant 143-byte witness, and uses four transactions—including the deliberate publication of an obsolete state.
+
+Diving into the technical distinctions illuminates the unique ways these mechanisms interact with Bitcoin’s script interpreter. APO handles rebinding internally during signature verification by omitting the previous output when constructing the sighash, so the script receives only a binary valid/invalid response. CTV checks the hash and similarly provides a yes/no result, meaning that if another component like CSFS needs to sign off on the hash, it must be explicitly supplied in the witness data. TEMPLATEHASH, in contrast, pushes the computed hash onto the stack, enabling subsequent opcodes to manipulate or verify it directly. This subtle architectural change reduces the complexity of the update script to merely three opcodes and allows for more flexible scripting possibilities.
+
+This implementation represents a simplified demonstration—using just one key and no HTLCs—to illustrate the fundamental mechanics rather than provide a production-ready payment channel. Source code for reproducing and examining the scripts is available at [`templatehash.py`](https://github.com/aaron-recompile/btcaaron/blob/5ef4cb3dff5d51d812ff55a134d48c0e269323e7/btcaaron/templatehash.py) and [`th_csfs_ik_eltoo.py`](https://github.com/aaron-recompile/btcaaron/blob/5ef4cb3dff5d51d812ff55a134d48c0e269323e7/examples/eltoo/th_csfs_ik_eltoo.py).</summary>
+    <published>2026-10-31T23:05:32.380000+00:00</published>
+  </entry>
+</feed>

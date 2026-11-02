@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Stats on compact block reconstructions</title>
-  <updated>2026-10-06T16:16:43.162401+00:00</updated>
+  <updated>2026-11-02T07:11:40.055987+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -206,11 +206,11 @@
       <timestamp>2025-12-02 11:51:51.421000+00:00</timestamp>
     </message>
     <message id="msg_51" depth="0" position="50">
-      <author>0xB10C</author>
+      <author>xBC</author>
       <timestamp>2026-04-10 12:04:29.284000+00:00</timestamp>
     </message>
     <message id="msg_52" depth="0" position="51">
-      <author>0xB10C</author>
+      <author>xBC</author>
       <timestamp>2026-09-27 22:31:09.744000+00:00</timestamp>
     </message>
     <message id="msg_53" depth="0" position="52">
@@ -244,6 +244,10 @@
     <message id="msg_60" depth="0" position="59">
       <author>johnnyasantoss</author>
       <timestamp>2026-09-29 20:23:32.391000+00:00</timestamp>
+    </message>
+    <message id="msg_61" depth="0" position="60">
+      <author>0xB10C</author>
+      <timestamp>2026-11-01 10:21:31.799000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/Aug_2024/2911_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
@@ -306,15 +310,19 @@
   <link href="delvingbitcoin/Sept_2026/8677_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2026/8678_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <link href="delvingbitcoin/Sept_2026/8680_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/8916_Stats-on-compact-block-reconstructions.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Stats on compact block reconstructions</title>
-    <updated>2026-10-06T16:16:43.165907+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/61" rel="alternate"/>
+    <updated>2026-11-02T07:11:40.062994+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/stats-on-compact-block-reconstructions/1052/63" rel="alternate"/>
     <published>2024-08-02 12:08:52.409000+00:00</published>
-    <summary>The exploration into the dynamics of compact block reconstructions within the Bitcoin network highlights several intricate aspects, particularly focusing on the efficiency of block propagation and the role of various node settings in this process. The analysis delves into how nodes handle transactions during block reconstructions, emphasizing the interaction between pre-filled transactions, the node's mempool, and additional transaction pools. A significant revelation from this study is the impact of node configuration changes on their performance, especially in terms of handling inbound connections and managing transaction replacements in the mempool. For example, adjustments to node configurations, such as increasing the maximum connections for node `dave` and switching node `erin` to `mempoolfullrbf=1`, have shown notable effects on the effectiveness of the block reconstruction processes.
-Another critical focus area has been the examination of compact blocks under different bandwidth conditions. It was found that high-bandwidth modes facilitate a more efficient reconstruction process compared to low-bandwidth modes due to the lesser frequency of transaction requests. This distinction underscores potential areas for optimization, particularly in improving the low-bandwidth mode by enhancing how transactions are prefilled before being announced. Moreover, the upcoming adoption of Bitcoin Core v28.0 introduces full-RBF by default, which is anticipated to influence future block reconstructions significantly.
-Furthermore, the study extends into the management of extra pool sizes and their impact on block reconstruction. The nuances of how these pools interact with the blockchain technology are explored, shedding light on strategies like tracking peer `feefilter` to estimate pool sizes despite challenges in accuracy and privacy concerns. Additionally, the differentiation between the specialized pool maintained by Bitcoin Core to aid compact block reconstructions and mempool variations across nodes highlights targeted approaches to optimizing blockchain efficiency.
-The investigation also raises questions about the comparative needs for extra transactions in various scenarios and the historical performance of block reconstructions. These inquiries aim to uncover underlying mechanisms affecting blockchain operations and seek to optimize the process across the network. By examining the performance of different node types and configurations, insights are gleaned into potential improvements in transaction processing and block reconstruction efforts, contributing to the ongoing development and refinement of blockchain systems.</summary>
+    <summary>Recent investigations into compact block reconstruction within the Bitcoin network have yielded a comprehensive understanding of how transaction propagation, node configuration, and mempool dynamics interplay to affect network efficiency. Detailed logging and analysis using the `debug=cmpctblock` setting on monitoring nodes have illuminated the frequency with which nodes require additional `getblocktxn` → `blocktxn` round trips for block completions due to missing transactions. The study carefully tracked several variables: the number of prefilled transactions, those utilized from the mempool, extra pool, and those requested anew. It was observed that changes in node configurations—such as increasing inbound connections or enabling full-RBF (Replace-By-Fee) modes—notably influenced block reconstruction success rates. For instance, enabling `mempoolfullrbf=1` led to marked improvements in some nodes, suggesting that broader adoption of this policy could benefit network-wide block propagation times.
+The performance of compact block relay is closely tied to the operational mode—high-bandwidth versus low-bandwidth. High-bandwidth mode, employed for the majority of blocks, allows for more efficient reconstructions with fewer transaction requests required post-announcement. Conversely, the low-bandwidth mode, which validates blocks before sending them, reveals opportunities for optimization, particularly in pre-filling unknown transactions to reduce subsequent requests. However, such enhancements are yet to be realized in the current implementation, as noted in outstanding [TODOs](https://github.com/bitcoin/bitcoin/blob/2aff9a36c352640a263e8b5de469710f7e80eb54/src/blockencodings.cppL24-L25). The anticipated release of Bitcoin Core v28.0, which will enable full-RBF by default, presents a timely moment to revisit these architectural choices and possibly implement such optimizations.
+A deeper dive into the mechanics of block reconstruction underscores the importance of the &quot;extra pool&quot;—a limited buffer (defaulting to 100 transactions) maintained to store recently evicted or replaced transactions. Unlike the main mempool, whose contents are widely relayed and thus likely convergent across nodes, extra pools are highly individualized, reflecting each node's unique peer relationships and rejection history. This individuality means that prefilling transactions from an extra pool may not be as redundant as previously assumed, given the substantial variance between different nodes' extra pools. Furthermore, the handling of RBF-replaced transactions, where original versions are relegated to the extra pool while replacements continue to propagate, highlights the nuanced role this buffer plays in maintaining block assembly efficiency under dynamic mempool conditions.
+Bandwidth and congestion control emerge as central considerations in optimizing compact block propagation. Developers are advised to limit prefill sizes—typically to around 10kB, as outlined in [BIP152 implementation notes](https://github.com/bitcoin/bips/blob/02ad0e01c2a9189124e05a52afe97ef90a3b7f1f/bip-0152.mediawikiimplementation-notes)—to prevent unnecessary expansion of CMPCTBLOCK messages and potential overflow of TCP windows. Empirical studies confirm that prefilling, when kept within the boundaries of the receiver's TCP window, can dramatically improve reconstruction rates without incurring additional latency. Yet, if prefill data exceeds the window, the benefits diminish due to induced round-trip delays. These findings underscore the necessity for dynamic tuning of prefill parameters, potentially informed by real-time feedback from kernel-level congestion control mechanisms.
+The investigation also brings to light the complexities introduced by orphan transactions—those referencing unavailable inputs. A significant proportion of rejected transactions during block reconstructions were attributable to missing or spent inputs, i.e., orphan status. While orphanage management remains an area ripe for further exploration, it is clear that optimal handling could reduce redundancy and streamline reconstruction workflows. Suggestions include iterating the orphanage during block reconstruction or refining policies to exclude orphans from extra pools entirely.
+Privacy implications and protocol-level innovations also figure prominently in ongoing discussions. The risk of exposing node-specific mempool policies or inadvertently revealing non-standard transactions through compact block announcements has prompted proposals for segregated user-pool mempools and more sophisticated prefill selection heuristics. Additionally, the integration of Forward Error Correction (FEC) techniques and advanced coding strategies, such as minisketch, promise to further reduce message sizes and accelerate recovery from missing transactions, albeit with deployment challenges related to licensing and network compatibility.
+Significant real-world events have directly affected network performance and reconstruction metrics. Notably, a period characterized by unsolicited chains of rune mint transactions and aggressive burning behavior, as documented in [examples](https://mempool.space/tx/13b821bcdf10da153ab6f1e98b58bd45772cfd1e02a0e51369a2b0e319092d2a?cpfp=true), introduced considerable divergence among node mempools. This practice ceased abruptly on October 18, 2026</summary>
   </entry>
 </feed>

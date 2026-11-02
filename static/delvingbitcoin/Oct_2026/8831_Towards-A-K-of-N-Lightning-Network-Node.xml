@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-02T07:23:54.816239+00:00</updated>
+  <author>
+    <name>davelund110</name>
+  </author>
+  <timestamp>2026-10-26 13:16:49.964000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-02T07:23:54.816282+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/9" rel="alternate"/>
+    <summary>A commitment transaction in a multi-signer protocol requires strict ordering and revocation enforcement to maintain security. When a signer participates in signing a node’s commitment transaction for a given commitment number n, it must never assist in revoking n or any subsequent commitments. This ensures that once the node has signed its own commitment—specifically the one that might be broadcast in a unilateral channel close—the integrity of the revocation process is preserved. If a commitment is revoked after being signed, it could provide an adversary with the information needed to inflict punitive consequences should the broadcast occur. Conversely, a signer that acknowledges a particular commitment as revoked must never help sign that commitment or any earlier ones.
+
+Managing such rules is straightforward with a single signer, but complexities arise when multiple signers are involved. The specification recommends that before any part of the secret associated with a commitment is released, every signer managing a share of the key for a funding output—which can still be spent by one of the commitments—must have independently recorded the commitment as revoked. Verification must not rely solely on the node's assertion, but should come from verifiable statements, such as a signed declaration specifying the channel and commitment number.
+
+Challenges emerge when considering encrypted roots and secret distribution among multiple signers, especially if some were offline during setup. In such scenarios, each offline signer could potentially decrypt all root secrets, thus holding every future secret, including the current state. This reintroduces the shachain problem, where spreading roots differently does not resolve the issue; the math guarantees that at least one signer will always have access to more than one root, allowing potential collusion to compromise all secrets.
+
+To address this, an approach inspired by replicated secret sharing and pseudorandom secret sharing (as described in Cramer, Damgård, Ishai) is adopted. Groups of N - K + 1 signers share a key, and each group’s contribution for any commitment n is computed using a pseudorandom function: PRF(key, c || n), where c is a unique, fixed value for each channel (such as the node’s funding public key at channel open). Each signer binds the key to a specific channel, preventing reuse across different channels. Any collection of K signers encompasses at least one member from every group, enabling them to reconstruct the necessary point and, subsequently, the secret. However, any set of K - 1 signers misses an entire group and therefore cannot obtain the secret.
+
+Setting up such a system parallels the shachain structure but replaces roots with keys established for the set of signers rather than per channel. This method reduces dependency on which signers are online during channel establishment. The construction requires combinatorial management of keys—for example, a 3-of-5 scheme necessitates ten keys, with each signer handling six—so applicability is best suited for small groups.
+
+Simple aggregation of terms is insufficient due to the risk of a signer manipulating its term to cancel out others, thus learning the secret. To prevent this, each term is weighted by a hash of the complete list of terms, as seen in MuSig2’s key aggregation. This design ensures that even across retries, every permutation of the list results in new weights, maintaining the secrecy of the aggregate. The resulting secret is then a weighted sum, computable only by the requisite threshold of signers. Proper care is needed in handling retries, signer records, and cases where a participant intentionally reports an incorrect term, as these aspects introduce potential vectors for error or attack. A comprehensive treatment of these nuances is deferred for formal documentation beyond this overview.</summary>
+    <published>2026-10-26T13:16:49.964000+00:00</published>
+  </entry>
+</feed>

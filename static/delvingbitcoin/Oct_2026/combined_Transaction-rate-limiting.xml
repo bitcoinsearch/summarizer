@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Transaction rate-limiting</title>
+  <updated>2026-11-02T07:32:40.761888+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>ajtowns</author>
+      <timestamp>2026-07-27 07:59:57.980000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>xBC</author>
+      <timestamp>2026-07-27 14:55:58.251000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>instagibbs</author>
+      <timestamp>2026-07-28 14:50:50.681000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>AntoineP</author>
+      <timestamp>2026-07-29 18:30:34.403000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>xomegaxi</author>
+      <timestamp>2026-10-26 20:36:56.500000+00:00</timestamp>
+    </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>ajtowns</author>
+      <timestamp>2026-10-27 01:52:56.119000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/July_2026/8158_Transaction-rate-limiting.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8167_Transaction-rate-limiting.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8187_Transaction-rate-limiting.xml" rel="alternate"/>
+  <link href="delvingbitcoin/July_2026/8193_Transaction-rate-limiting.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8840_Transaction-rate-limiting.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8853_Transaction-rate-limiting.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Transaction rate-limiting</title>
+    <updated>2026-11-02T07:32:40.762948+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/transaction-rate-limiting/2744/6" rel="alternate"/>
+    <published>2026-07-27 07:59:57.980000+00:00</published>
+    <summary>A major update has been introduced to Bitcoin Core via [pull request 34628](https://github.com/bitcoin/bitcoin/pull/34628), representing a significant advancement in transaction processing and CPU efficiency for Bitcoin nodes. This development results from an extensive three-year effort prompted by issues of excessive CPU consumption on certain mainnet debug-build nodes, which were traced back to inefficient iterator implementations in Boost and legacy anti-congestion mechanisms. The previous system, originally designed to limit network congestion by amplifying outbound transaction data per node, revealed limitations as transaction patterns evolved with innovations such as segregated witness and the increase in small, text-based inscriptions. These changes placed additional strain on the relay mechanism, resulting in reduced throughput and growing discrepancies between fee expectations set by miners and those used during relays.
+To address these challenges, a comprehensive overhaul was implemented, including the elimination of per-peer transaction queues in favor of a single global queue. This restructuring enables more consistent CPU usage across all peers and improves overall management of high transaction volumes. Accompanying this change are new bandwidth rate limits that help prevent node overload during periods of elevated network activity, thereby strengthening both performance and stability. Together, these improvements not only resolve immediate practical concerns but also fortify the network against theoretical vulnerabilities, ensuring that Bitcoin nodes remain robust under varying conditions, whether due to increased adoption or targeted attacks.
+Monitoring and diagnostics have also evolved alongside these technical upgrades. A peer-observer dashboard is actively employed to track node behaviors, with a particular focus on comparative analysis between different node versions—namely, running a 31.x node in parallel with multiple master/v32.0 nodes. This approach enhances the ability to identify, diagnose, and respond to anomalies or future incidents, underscoring a commitment to proactive system management.
+Effective communication and mutual support within the developer community continue to play a vital role in driving progress. The sharing of encouragement and timely updates has proven instrumental in sustaining momentum and revitalizing efforts on ongoing projects. Recognition of these contributions highlights the importance of collaborative engagement and information exchange in fostering a productive and motivated professional environment.
+Detailed adjustments have also been made to the propagation rates of transactions across network links. Transaction throughput is now regulated to approximately 24.5 transactions per second—comprising 17.5 transactions from outbound connections and 7 from inbound peers—with actual effectiveness influenced by overlapping announcements and duplicates. Modifications in inventory broadcast intervals for outbound peers, where privacy is less sensitive, have halved the time between broadcasts, now allowing 35 items every 2 seconds. This refined broadcasting strategy is further elucidated in the [GitHub pull request on Bitcoin](https://github.com/bitcoin/bitcoin/pull/7840/changesdiff-34d21af3c614ea3cee120df276c9c4ae95053830d7f1d3deaf009a4625409ad2R5802-R5803).
+Crucially, the bandwidth budget operates on a global basis per node rather than per peer. Broadcast transactions are counted against the global limit regardless of how many peers receive announcements or subsequently request transaction bodies. For example, broadcasting ten 100kB transactions will count as 1MB towards the budget, whether announced to 10 or 100 peers, and independent of how many actually retrieve the full transaction data. Consequently, the actual outgoing bandwidth may vary widely—from as little as 3200 bytes (if none of the peers request the data) to as much as 100MB (if all peers request every transaction)—for the same 1MB budget allocation. This policy simplifies reasoning about bandwidth constraints, especially when considering adversarial network conditions, and ensures fairer, more predictable resource usage across the network.</summary>
+  </entry>
+</feed>

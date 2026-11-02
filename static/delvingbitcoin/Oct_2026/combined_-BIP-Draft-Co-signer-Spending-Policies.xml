@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - [BIP Draft] Co-signer Spending Policies</title>
+  <updated>2026-11-02T07:40:48.395209+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>lukecarriere</author>
+      <timestamp>2026-10-10 04:46:04.108000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>PREDGE</author>
+      <timestamp>2026-10-22 21:01:05.571000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>tehiyadu</author>
+      <timestamp>2026-10-27 15:12:46.050000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>lukecarriere</author>
+      <timestamp>2026-10-28 14:37:19.671000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>lukecarriere</author>
+      <timestamp>2026-10-28 14:38:05.131000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8758_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8805_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8869_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8901_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8903_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - [BIP Draft] Co-signer Spending Policies</title>
+    <updated>2026-11-02T07:40:48.395977+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/5" rel="alternate"/>
+    <published>2026-10-10 04:46:04.108000+00:00</published>
+    <summary>Luke Carriere has introduced a draft that establishes a standardized policy format for governing the criteria under which a co-signer is authorized to sign a transaction. This proposal is designed to unify disparate approaches and innovations in the domain of co-signed transactions, including methods such as Halseth's blinded co-signers, Chain Code Delegation, predicate blind signatures, and bonded co-signers, along with platforms like Liquidium and Lendasat. Each of these technologies currently operates under its own set of policies, leading to limited interoperability among wallets and co-signers. By focusing on standardizing the policy format itself rather than the co-signers, the draft aims to facilitate broader compatibility and ease of integration across different systems.
+The draft outlines several verification processes—open, blinded, and enclave verification—to ensure that all co-signing conditions, whether intrinsic to the transaction or based on external attestations, are verifiable in a transparent and secure manner. The policy requires that all enforceable scripts be included directly, thereby maintaining a straightforward execution path that does not rely on additional co-signer interaction. Furthermore, this framework accommodates Discreet Log Contract (DLC) oracle attestations, enabling current oracles to provide evidence without modification. The comprehensive details of the proposal can be found in the Bitcoin Improvement Proposal (BIP), accessible at [this link](https://github.com/lukecarriere/bip-cosigner-spending-policies/blob/468fdd1b75647432ed56c3a2b5579cbcfedaec74/bip-cosigner-spending-policies.md).
+Several technical considerations and open questions are being actively discussed to refine the draft. Among these are the choice between canonical JSON and TLV serialization formats for data representation, the feasibility of specifying blinded verification mechanisms at this stage, the most appropriate location for defining the statement attestation format (whether within the policy specification or DLC standards), the sufficiency of the output expression language, and the potential need for timelocking fallback paths. These decisions are pivotal for ensuring the draft’s robustness and practicality.
+A key concern addressed relates to statement finality. In version 0 of the statement format, the signed tuple includes only the event ID, outcome, and timestamp, lacking any indicator as to whether the outcome may subsequently change. This omission could allow a co-signer to act upon an initial statement that might later be revised. To resolve this, a finality flag will be incorporated into the signed tuple, allowing evidence conditions to require confirmation of finality before any action is taken. For example, escrow scenarios will mandate a final statement, or alternatively, templates can require waiting through a dispute window if finality is never explicitly marked by the attestor. Attestations leveraging DLC nonce pre-commitment already guarantee finality, since revealing two outcomes for a single event would result in the exposure of the attestor's key.
+Further enhancements focus on ensuring the integrity and determinism of policy identification. The policy hash must commit to the exact semantics enforced by the verifier, not simply to a syntactically valid document. This necessitates clear definitions regarding the treatment of unknown fields, duplicate keys, and default values. Specifically, any policy containing unknown fields or duplicate keys is invalid, and a co-signer is required to refuse signing such policies. Extensions must occur through new profile versions instead of by ignoring unrecognized fields, and every field must be serialized explicitly to ensure byte-level fidelity to enforced conditions. The format version is placed as the first field in the preimage, and distinct tags are used for each commitment type, further separating policy and statement commitments from other cryptographic tags in the ecosystem. Thorough test vectors will accompany the finalized format, including examples of rejected documents to aid in implementation accuracy.
+This ongoing process exemplifies a rigorous approach to developing a standard that can support secure, interoperable co-signer policies across a variety of platforms and future innovations.</summary>
+  </entry>
+</feed>

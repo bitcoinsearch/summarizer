@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Btc-verified October Update: Connecting Map to Territory</title>
+  <updated>2026-11-02T07:42:27.340042+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>ProofOfKeags</author>
+      <timestamp>2026-10-19 16:32:15.183000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>bruno</author>
+      <timestamp>2026-10-27 16:52:03.122000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8788_Btc-verified-October-Update-Connecting-Map-to-Territory.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8876_Btc-verified-October-Update-Connecting-Map-to-Territory.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Btc-verified October Update: Connecting Map to Territory</title>
+    <updated>2026-11-02T07:42:27.340593+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/btc-verified-october-update-connecting-map-to-territory/2964/3" rel="alternate"/>
+    <published>2026-10-19 16:32:15.183000+00:00</published>
+    <summary>btc-verified has been developed as a minimal model of Bitcoin consensus, with an emphasis on formalizing the protocol layer by layer. Formalization helps uncover subtle aspects of how systems work; yet, it is essential to recognize that even the most precise models may not fully capture the complexities of real-world implementations. The ambition is to bridge the gap between the formal model and the operational Bitcoin network, striving to ensure that btc-verified aligns as closely as possible with the behavior defined by Bitcoin Core.
+Direct verification of Bitcoin Core is challenging due to its implementation in modern C++, which is neither a verifiable language nor pure C. While tools exist to verify C code, verifying C++ at scale remains impractical with current resources. Consequently, the focus shifts from direct formal proofs to empirical validation: testing whether btc-verified diverges in any observable way from Bitcoin Core's consensus protocol semantics. An ideal outcome would see btc-verified’s behavior match Bitcoin Core’s across all relevant operations, thereby attesting to the model’s correctness.
+To approach this goal, the consensus verification code within Bitcoin Core provides a clear interface that isolates essential consensus logic. This separation enables alternative implementations, such as btc-verified, to serve as drop-in modules behind the same interface. This effort is not intended to encourage the replacement of Bitcoin Core’s consensus with btc-verified in production, but rather to use btc-verified as a benchmark for measuring fidelity to Core’s semantics. By integrating btc-verified into this interface, it becomes feasible to systematically compare behaviors using established techniques like differential fuzzing.
+Differential fuzzing involves subjecting both implementations—Bitcoin Core and btc-verified—to identical, high-entropy inputs and comparing their outputs and state changes. This technique, with proven success in projects like [bitcoinfuzz](https://github.com/bitcoinfuzz/bitcoinfuzz), provides practical assurance of behavioral equivalence, though it cannot guarantee universal correctness as formal proofs do. Practical benefits accrue as the sample space of inputs grows, increasing confidence that no divergence exists.
+A dedicated [differential fuzzing harness](https://github.com/ProofOfKeags/btc-verified/blob/5cd2d824784dc2fac33aec641a0e10fcf869d0b2/Fuzz/README.md) was constructed targeting the kernel consensus interface. Currently, [nine kernel functions](https://github.com/ProofOfKeags/btc-verified/blob/5cd2d824784dc2fac33aec641a0e10fcf869d0b2/Kernel/README.mdpublic-c-interface)—including transaction creation, copying, serialization, checking, and associated validation-state management—are implemented in Lean and covered by the harness. Built directly atop [libFuzzer](https://llvm.org/docs/LibFuzzer.html), the system feeds identical transaction bytes to both implementations and compares parsing, serialization, transaction-local checks, validation state reporting, and correct state reuse after invalid transactions.
+Testing has involved over 100,000 fuzz executions, leveraging both random mutations and a set of 11 regression test cases representing important edge conditions (such as legacy, SegWit, malformed, and boundary-size transactions). The retained corpus at the close of a recent [CI run](https://github.com/ProofOfKeags/btc-verified/actions/runs/39158271308/job/117765944780) included 264 unique input seeds, which drive further coverage-guided mutations. These tests are integrated into continuous integration workflows, so any observed disagreement between btc-verified and Bitcoin Core automatically blocks code changes, tightening the feedback loop and ensuring ongoing alignment.
+The approach has also been extended to external platforms. For instance, btc-verified was added as a new module to [bitcoinfuzz](https://github.com/bitcoinfuzz/bitcoinfuzz/pull/681), reusing existing infrastructure for libbitcoinkernel and implementing a new target analogous to internal benchmarks. This broadens the testing landscape and leverages community-driven bug discovery.
+Although btc-verified does not yet cover the entire kernel interface, the progress made demonstrates that, for the implemented subset, observable behaviors are indistinguishable from those of Bitcoin Core. Continued efforts will focus on expanding kernel interface coverage, aiming to establish a robust correspondence between the formal model and the operational reality. Achieving this connection opens the door to transferring formally derived insights from btc-verified to real-world statements about Bitcoin Core’s consensus behavior, enhancing both understanding and reliability of the world’s most widely used cryptocurrency protocol.</summary>
+  </entry>
+</feed>

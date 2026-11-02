@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Silent Payments for Multiparty Wallets</title>
+  <updated>2026-11-02T07:41:12.347974+00:00</updated>
+  <author>
+    <name>macgyver</name>
+  </author>
+  <timestamp>2026-10-29 00:09:51.201000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Silent Payments for Multiparty Wallets</title>
+    <updated>2026-11-02T07:41:12.348002+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/silent-payments-for-multiparty-wallets/2960/4" rel="alternate"/>
+    <summary>Exploring the integration of Silent Payments with multiparty signing, the unified interface spanning FROST, MuSig2, and their nested variants provides a robust conceptual foundation. This approach facilitates consistent handling across different protocols, supporting flexibility in implementation strategies for enhanced payment privacy.
+
+A practical solution was developed targeting treasury wallets that utilize hardware signers. The method involves augmenting partially signed Bitcoin transactions (PSBTs) with two specific fields per input. The first field, `PSBT_IN_SP_PARTIAL_ECDH_SHARE`, contains each participant’s ECDH-derived share, referenced as Dᵢ, and is keyed by both the scan key and the participant key. The second field, `PSBT_IN_SP_PARTIAL_DLEQ`, stores a standard BIP-374 proof corresponding to each Dᵢ, using the same key data. Through this design, every signer independently verifies all proofs and recalculates the transaction outputs before providing their signature. Efficiency is achieved by limiting the protocol to only two communication rounds, which is particularly beneficial for workflows involving air-gapped hardware where minimizing interaction and PSBT complexity is paramount.
+
+Prototypes implementing this scheme were successfully tested with MuSig2 on Jade and COLDCARD devices. These prototypes demonstrated cross-compatibility, with payments executed on signet and recognized by multiple recipient wallets, highlighting both the practicality and interoperability of the system. Initial designs prioritized strictly air-gapped signer environments, underscoring the importance of minimal PSBT fields and limited rounds in such contexts.
+
+Further advancements included adapting Nostr-based coordination mechanisms from the Frostsnap team to enable Silent Payments from a FROST wallet. Conducting live experiments over a coordinating channel yielded positive results, suggesting that real-time collaboration can enhance user experience while maintaining security.
+
+Consideration is given to scenarios involving air-gapped signers like COLDCARD, SeedSigner, and Jade, which depend exclusively on PSBT exchanges for information transfer. Questions remain regarding the functioning of AggDLEQ in the absence of a live coordinator channel and whether the planned security analysis will address the publication of individual BIP-374 proofs for each Dᵢ by each signer. These considerations are critical for ensuring the robustness and adaptability of Silent Payments in diverse operational settings.</summary>
+    <published>2026-10-29T00:09:51.201000+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-02T07:23:32.770864+00:00</updated>
+  <author>
+    <name>davelund110</name>
+  </author>
+  <timestamp>2026-10-26 01:57:06.519000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-02T07:23:32.770903+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/7" rel="alternate"/>
+    <summary>A new add-on to the Lightning Network protocol, `option_independent_secrets`, has been developed and integrated into two major implementations: lnd and Core Lightning. This feature, negotiated via the `channel_type` using feature bits 266/267, eliminates the previous shachain requirement for managing per-commitment secrets within payment channels. Under this mechanism, the sender can generate per-commitment secrets through any method, including distributed schemes across multiple signers, while the receiver is responsible for storing every secret it receives. The changes have been formalized as amendments to BOLT 2, 3, and 9, with successful interoperability testing between lnd (merged in [Lightning Fork](https://github.com/paulscode/lightning-fork/pull/7)) and Core Lightning (pending review in [privkeyio's fork](https://github.com/privkeyio/lightning/pull/48)). In breach tests, attempts at cheating consistently resulted in the cheater forfeiting their entire balance.
+
+This work was initially implemented on BLAKE2b Bitcoin, which transitioned its proof of work algorithm at block 961,640. However, the design remains agnostic to the specific proof of work used and is equally applicable to SHA256d-based Bitcoin networks, suggesting easy portability to mainstream Lightning implementations. The scheme introduces a single bit pair negotiated per channel, rather than node-wide, and no longer requires an explicit "still send shachain secrets" indicator. Receivers dynamically transition from compact storage to individual secret storage as needed. In Core Lightning, seed-based peers incur no added storage costs, while lnd stores each secret regardless, requiring 38 bytes per update. The even bit (266) is only valid in `channel_type`; if encountered elsewhere, such as in `init` or `node_announcement`, the connection is either closed or the bit is ignored as unknown.
+
+Addressing bridging and upgrade complexities, nodes that cannot derive secrets from a seed must set bit 267, include the add-on, and refuse channels lacking the option. This ensures k-of-n multi-signer nodes never maintain single-shachain channels susceptible to attacks. As Lightning Fork restarts its network, the intention is to enable this option by default after initial release, ensuring widespread acceptance without manual peer upgrades.
+
+The updated specification introduces several rules emerging from peer review. Secrets should be generated so they are recomputable, ideally using a seed, key derivation function, or threshold pseudorandom function over the commitment number and a unique channel value fixed at opening—such as the `funding_pubkey`. Random generation is permitted only if secrets are durably stored before their corresponding points are transmitted, and re-use across commitment numbers or channels is strictly prohibited. For multi-signer nodes, it is required that no coalition smaller than the defined threshold can both obtain a secret and a valid signature for broadcasting, nor can they trigger a revoked state or leave the node unable to broadcast. Each signer autonomously verifies what it signs and revokes; once a signer has signed a state, it never aids in its revocation, and all revocations are recorded prior to revealing any part of the secret. Verification of claimed secrets always relies on checking against their computed point.
+
+For channel reestablishment, if a node temporarily cannot verify a claimed secret (e.g., due to unreachable signers), it must disconnect and retry later without broadcasting, failing, or throwing errors. Permanent loss of verification ability equates to a data loss scenario. Storage requirements dictate that receivers must retain all secrets, allowing them to set a limit of at least one million individually stored secrets. Upon reaching this threshold, the channel closes cooperatively, and persistent excess updates may lead to channel failure, except for those caused by the receiver’s own activity. For Taproot-enabled multi-signer nodes, these protocols supersede simple taproot nonce management, ensuring no signer learns another’s nonce share or reuses nonces.
+
+Storage implications are significant, especially compared to shachain. With 500,000 payments, lnd requires approximately 38 MB and Core Lightning about 60 MB; doubling the payments doubles the storage. lnd augments its existing revocation log entries by 38 bytes for each added secret.
+
+Implementation details reveal that lnd integrates each secret within the revocation log (TLV type 65537), with the feature disabled by default and database protection against backward incompatibility. Core Lightning maintains shachain storage until capacity is exceeded, then transitions to a dedicated table, also defaulting the feature off and enforcing a per-channel secret cap. It refuses to operate with external signers that rely on legacy shachain verification unless they support the new mechanism. Both implementations provide developer-only tools to test the receiving logic, and comprehensive test vectors exist for corner cases such as switching storage modes.
+
+Extensive interoperability testing included scenarios ranging from revoked commitments (with and without pending HTLCs), node restarts, cooperative</summary>
+    <published>2026-10-26T01:57:06.519000+00:00</published>
+  </entry>
+</feed>

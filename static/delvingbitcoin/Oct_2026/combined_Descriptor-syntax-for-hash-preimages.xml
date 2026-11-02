@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Descriptor syntax for hash preimages</title>
+  <updated>2026-11-02T07:40:08.161144+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>jaonoctus</author>
+      <timestamp>2026-10-04 08:54:41.343000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>fametrano</author>
+      <timestamp>2026-10-27 17:39:56.421000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8720_Descriptor-syntax-for-hash-preimages.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8886_Descriptor-syntax-for-hash-preimages.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Descriptor syntax for hash preimages</title>
+    <updated>2026-11-02T07:40:08.161595+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/descriptor-syntax-for-hash-preimages/2935/2" rel="alternate"/>
+    <published>2026-10-04 08:54:41.343000+00:00</published>
+    <summary>Expanding Bitcoin’s descriptor system to handle hash preimages introduces a significant enhancement to how wallets can manage and automate complex script conditions. Presently, descriptors support both public and private key representations but lack direct provisions for specifying the preimages required in scripts utilizing functions like `sha256` or `hash160`. This limitation becomes evident when constructing transactions that demand the revelation of a hash preimage—a scenario not natively supported by most wallet infrastructures. The proposed solution advocates for integrating explicit preimage storage within descriptors, suggesting formats such as `sha256(preimage(HEX))`, where the actual preimage is securely encrypted and managed by the wallet, paralleling private key handling.
+This change aims to standardize the way hash preimages are incorporated into wallet operations, ensuring that they are treated with the same security and usability considerations as cryptographic keys. By mandating a strict 32-byte length for preimages, the proposal aligns with existing script requirements and upholds script integrity and security. Such an approach could streamline scenarios where hash preimages function similarly to keys, due to their static nature and transaction independence, simplifying management and reducing operational friction.
+However, there are nuanced differences between using private keys and literal preimages. While a private key remains confidential after being used in a transaction, a preimage revealed during a spend through its corresponding hash path becomes public on-chain. In ranged descriptors—where multiple outputs share the same hash branch—this means all related outputs lose the secrecy of the hash condition once any one is spent. Although signatures are still required for spending other outputs, the additional protection offered by the hash constraint vanishes post-exposure. This distinction necessitates careful consideration in descriptor design, especially regarding security guarantees and privacy expectations.
+Addressing these complexities, the proposal contemplates deterministic derivation of preimages from key material, allowing each output in a range to have a unique digest. Such a method, inspired by approaches in protocols like the Lightning Network, would ensure that each output retains its own distinct secret, mitigating the risk associated with shared preimages. Incorporating this capability might require extending existing standards such as BIP 379 or introducing a new dedicated proposal. Implementation specifics—including syntax, checksum handling for public and private strings, and hardware wallet compatibility—remain open questions, inviting further research and community input.
+Ongoing efforts to refine this concept are reflected in active discussions and proposals across various platforms. Notable references include [Tr(): rawnode() and rawleaf() support](https://delvingbitcoin.org/t/tr-rawnode-and-rawleaf-support/901), [Unspendable keys in descriptors](https://delvingbitcoin.org/t/unspendable-keys-in-descriptors/304), and [BIP352 private key formats](https://delvingbitcoin.org/t/bip352-private-key-formats/2080). These resources underscore the collaborative push toward a more flexible and secure scripting environment for Bitcoin, highlighting the importance of robust descriptor capabilities as foundational infrastructure for future wallet innovation.</summary>
+  </entry>
+</feed>
