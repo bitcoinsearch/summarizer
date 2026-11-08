@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Machine-checked soundness of BIP340 batch verification with 128-bit derived randomizers</title>
+  <updated>2026-11-08T07:12:21.755409+00:00</updated>
+  <author>
+    <name>dni</name>
+  </author>
+  <timestamp>2026-11-02 08:53:43.583000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Machine-checked soundness of BIP340 batch verification with 128-bit derived randomizers</title>
+    <updated>2026-11-08T07:12:21.755443+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/machine-checked-soundness-of-bip340-batch-verification-with-128-bit-derived-randomizers/3019" rel="alternate"/>
+    <summary>Soundness for both derivations in Lean 4 has been formally established, leveraging Mathlib and VCVio. The complete repository can be found at [https://github.com/dni/bip340-batch-verify](https://github.com/dni/bip340-batch-verify). In this analysis, the randomizer hash is modeled as a random oracle that outputs `b`-bit values, while `q` denotes the number of oracle queries made by an attacker. The challenge hash remains an arbitrary function.
+
+A comparative table of settings and their associated soundness bounds was constructed. For independent uniform `b`-bit randomizers, the bound is `2^-b`. When randomizers are hashed from the entire batch, following the BIP340 specification, or when using incremental derivation where each randomizer hashes the first `i` entries, the bound becomes `(q + 1)/2^b`, irrespective of batch size. Specializing these results to secp256k1 with `b = 128` leads to a bound of `(q + 1)/2^128`. Furthermore, a general lower bound for grinding attacks is given by `1 - (1 - 2^-b)^q ≈ q/2^b`. This demonstrates that 128-bit randomizers provide robust security: deterministic derivation incurs minimal cost, limited to offline grinding at about one hash per attempt. Practically, around `2^64` hashes yield an invalid batch accepted with probability approximately `2^-64`.
+
+The grinding attack exploits the structure of valid signatures. Starting from a valid signature `(pk, m, r, s)`, constructing a batch such as `[(pk, m, r, s - δ), (pk, m, r, s + δ)]` results in two invalid signatures whose verification errors cancel out. The batch passes precisely when the second randomizer equals `1`. By hashing batches for each `δ` from `1` to `q`, the lower bound is effectively achieved for both derivations.
+
+The underlying proof relies on the property that if any single signature in a batch is invalid, fixing the other randomizers restricts the batch to at most one value of its randomizer for successful verification. In the incremental derivation scenario, the batch can be truncated after the last invalid signature; this prefix's verification involves only the randomizers for its own prefixes, necessitating a specific value for the final randomizer to pass. While a single fresh answer may complete several extensions of a queried prefix, the total number of “bad” values per query is preserved. The verifier’s queries collectively incur a cost of `1/2^b` rather than individually, which justifies the appearance of the `+ 1` term in the bound.
+
+The trust base rests on rigorous formalization. The elliptic curve secp256k1 is defined within Mathlib as a `WeierstrassCurve`, utilizing Mathlib’s proven prime with kernel-checked Pratt certificates, ensuring the group order is exactly `n`. All reasoning employs only Lean’s standard axioms, without reliance on `native_decide`, ensuring that all critical checks are performed by the kernel. Moreover, the model aligns with the official BIP340 test vectors, enhancing confidence in its correctness.
+
+However, there is a caveat concerning seed encoding. The proofs assume that different batches produce distinct hash inputs. Since BIP340 allows messages of arbitrary length but concatenates them without including message lengths in the seed (`seed_hash(pk_1.pk_u || m_1.m_u || sig_1.sig_u)`), simply rearranging or modifying byte sequences could result in non-unique seeds. The derivation in 1134, which encodes each entry as `type || sig64 || msg || pk33` without the message length, shares this vulnerability. While this does not impact Bitcoin—since every signed message is a fixed 32-byte sighash—it poses risks elsewhere. Hashing each message’s length before the message itself resolves the ambiguity, extending the validity of the results to messages of any length. Further feedback is encouraged, particularly regarding whether the modeling accurately matches practical implementations.</summary>
+    <published>2026-11-02T08:53:43.583000+00:00</published>
+  </entry>
+</feed>

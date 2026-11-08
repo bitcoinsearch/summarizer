@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Full OP_RETURN value pruning</title>
+  <updated>2026-11-08T07:12:35.009312+00:00</updated>
+  <author>
+    <name>bkeroack</name>
+  </author>
+  <timestamp>2026-11-02 20:31:43.853000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Full OP_RETURN value pruning</title>
+    <updated>2026-11-08T07:12:35.009343+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/full-op-return-value-pruning/3026" rel="alternate"/>
+    <summary>satd introduces a novel approach to managing OP_RETURN data in Bitcoin node operations by enabling optional full pruning of OP_RETURN values. This feature is governed by several configuration options: -pruneopreturn, which determines the number of blocks behind the tip from which pruning begins (with a minimum of 288 blocks to align with NODE_NETWORK_LIMITED), -pruneopreturnsize, which sets the byte threshold for OP_RETURN values subject to pruning, and -restoreopreturns, which halts the pruning process and restores all previously pruned blocks. Importantly, the restoration option is mutually exclusive with the pruning settings, ensuring clear operational states for node administrators.
+
+The impetus for implementing OP_RETURN value pruning stems from ongoing debates about the presence of non-financial data on the Bitcoin blockchain, notably highlighted during the BIP-110 controversy. While the overall footprint of OP_RETURN data remains negligible on mainnet, the argument persists that such data constitutes unwanted spam. By offering granular control over OP_RETURN pruning, satd provides node operators with the flexibility to tailor their nodes according to personal or community preferences without impacting consensus or essential node functionalities. This flexibility holds promise for mitigating future disputes regarding blockchain data content.
+
+Integrating OP_RETURN pruning with advanced policy tools enhances its utility. When combined with the [Transaction Filter Policy language](https://delvingbitcoin.org/t/cost-bounded-transaction-filtering-language/2966), node operators can filter out transactions containing large OP_RETURN values, preventing them from being relayed or included in block templates. For instance, applying a conditional filter like sum outputs (out.op_return_size) &gt; 80 allows fine-grained transaction screening as detailed in the [manual](https://epochbtc.github.io/satd/policy.html). This ensures that nodes need not assist in propagating or storing data deemed extraneous.
+
+On a technical level, OP_RETURN value pruning is executed by creating holes in on-disk block files using system calls such as FALLOC_FL_PUNCH_HOLE and FALLOC_FL_KEEP_SIZE on Linux, and F_PUNCHHOLE on MacOS. These techniques redact specific data in place without affecting the rest of the block file. However, this method has several implications. Firstly, nodes running with value pruning advertise themselves as NODE_NETWORK_LIMITED, restricting their ability to serve blocks to most peers despite potentially having intact blocks. Secondly, disk usage may actually increase rather than decrease, because hole-punching only reclaims disk space when the removed section meets certain size thresholds, and additional indexing is required to track pruned blocks. Thirdly, pruned nodes cannot serve raw transaction bytes for pruned values, resulting in errors for certain JSON-RPC requests. To aid transparency, API responses include custom fields indicating the extent of OP_RETURN stripping. Additionally, complete secure deletion of pruned values is challenging, particularly on SSDs, making forensic recovery possible for some time. Snapshots maintained by copy-on-write filesystems such as ZFS and btrfs will also preserve original data regardless of pruning efforts.
+
+satd offers further customization through the -pruneopreturnpeers option. When set to "intact," the node advertises NODE_INTACT_BLOCKS (service bit 28) to signal the availability of certain blocks to other satd 0.7.0+ peers, even while retaining NODE_NETWORK_LIMITED status. This enables selective block sharing among compatible nodes, although Core clients continue to treat such peers as fully pruned.
+
+Reversibility is a key aspect of this implementation. By invoking the -restoreopreturns option, nodes can initiate a background process to re-download and restore all previously pruned blocks. During restoration, the node remains in NODE_NETWORK_LIMITED mode, but upon completion, it reverts to NODE_NETWORK, resuming normal block serving capabilities. This ensures that no permanent loss occurs due to OP_RETURN pruning, and node operators can freely transition between pruned and unpruned states as needed.
+
+To explore these features, users can download [satd 0.7.0 here](https://github.com/epochbtc/satd/releases/tag/v0.7.0). Comprehensive documentation, including in-depth coverage of OP_RETURN pruning, is available in the [Disk Footprint chapter](https://epochbtc.github.io/satd/disk-footprint.htmlop_return-data-pruning) of the manual.</summary>
+    <published>2026-11-02T20:31:43.853000+00:00</published>
+  </entry>
+</feed>

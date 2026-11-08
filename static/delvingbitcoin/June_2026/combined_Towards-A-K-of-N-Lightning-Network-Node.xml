@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Towards A K-of-N Lightning Network Node</title>
-  <updated>2026-11-02T07:24:12.640703+00:00</updated>
+  <updated>2026-11-08T07:08:11.112328+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -30,7 +30,7 @@
       <timestamp>2026-09-15 16:37:39.154000+00:00</timestamp>
     </message>
     <message id="msg_7" depth="0" position="6">
-      <author>davelund110</author>
+      <author>davelund</author>
       <timestamp>2026-10-26 01:57:06.519000+00:00</timestamp>
     </message>
     <message id="msg_8" depth="0" position="7">
@@ -38,8 +38,20 @@
       <timestamp>2026-10-26 07:48:17.427000+00:00</timestamp>
     </message>
     <message id="msg_9" depth="0" position="8">
-      <author>davelund110</author>
+      <author>davelund</author>
       <timestamp>2026-10-26 13:16:49.964000+00:00</timestamp>
+    </message>
+    <message id="msg_10" depth="0" position="9">
+      <author>ZmnSCPxj</author>
+      <timestamp>2026-11-02 17:46:53.755000+00:00</timestamp>
+    </message>
+    <message id="msg_11" depth="0" position="10">
+      <author>ZmnSCPxj</author>
+      <timestamp>2026-11-02 18:08:47.430000+00:00</timestamp>
+    </message>
+    <message id="msg_12" depth="0" position="11">
+      <author>davelund110</author>
+      <timestamp>2026-11-05 00:34:27.145000+00:00</timestamp>
     </message>
   </thread>
   <link href="delvingbitcoin/April_2026/7211_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
@@ -51,20 +63,22 @@
   <link href="delvingbitcoin/Oct_2026/8825_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2026/8827_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <link href="delvingbitcoin/Oct_2026/8831_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/8935_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/8936_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/8986_Towards-A-K-of-N-Lightning-Network-Node.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Towards A K-of-N Lightning Network Node</title>
-    <updated>2026-11-02T07:24:12.641345+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/9" rel="alternate"/>
+    <updated>2026-11-08T07:08:11.113601+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/12" rel="alternate"/>
     <published>2026-04-08 09:05:39.089000+00:00</published>
-    <summary>The integration of advanced multisignature protocols, specifically Nested MuSig2, with Lightning Network nodes operating on Taproot channels represents a significant leap in both the flexibility and security of off-chain Bitcoin payments. By enabling k-of-n multisig configurations—where any k signatories out of n are required to authorize transactions—this evolution aims to address longstanding challenges in trust distribution and operational risk. However, incorporating such multisig setups into the Lightning Network is not straightforward due to its unique transaction lifecycle and the current limitations of the BOLT protocol suite, which does not natively support k-of-n arrangements for channel management.
-Presently, users seeking robust multisig functionality must either wait for broad ecosystem upgrades or operate through gateway nodes that adopt early protocol modifications. This approach can compromise privacy and efficiency, especially as it relates to managing open channels with a diverse set of counterparties. While broad connectivity maximizes routing opportunities and potential fee income, it inherently exposes node operators to increased risks if channel peers are insufficiently vetted. Effective multisig deployment thus demands not only technological adaptation but also prudent operational policies around counterparty selection.
-In terms of implementation, reliance on dedicated hardware security modules or trusted execution environments has been typical for safeguarding private keys. Yet, these methods are vulnerable to manufacturer backdoors or debugging exploits, making them less reliable than a well-architected multisig design. The latter requires multiple independent parties to validate sensitive operations, thereby dramatically improving resilience against single points of failure.
-A core technical challenge lies in the Lightning Network’s commitment state revocation process, which currently depends on shachain—a hash chain structure designed for efficient secret management. Shachain’s cryptographic nature does not accommodate k-of-n requirements, creating a significant obstacle for multisig-enabled Lightning nodes. Proposed solutions involve altering the BOLT specification to decouple revocation from shachain, replacing it with mechanisms better suited to multisignature contexts. Such changes would be marked by new feature bits within the protocol to allow seamless identification and interoperability among nodes supporting these enhancements.
-Experimental research has explored implementing two-party shachain schemes under adversarial assumptions, as demonstrated in the [shachain2pc proof-of-concept](https://github.com/starius/shachain2pc). In this model, two parties collaborate to generate shared shachain values using secure multiparty computation (MPC), but with considerable resource demands—each party requires over 700MB of RAM, and state derivation takes over a second per operation. These inefficiencies highlight the need for optimized MPC protocols or alternative architectures, particularly for high-throughput networks like Lightning where scalability and economic viability are paramount.
-Security analysis reveals that naïve MPC implementations risk intermediate state manipulation, potentially exposing critical revocation keys. Robust circuit construction across all hash levels is necessary to prevent such attacks. Existing toolkits like [emp-ag2pc](https://github.com/emp-toolkit/emp-ag2pc) offer foundational support but lack features for more complex arrangements such as 2-of-3 MPC, which are essential for practical multisig deployments. Workarounds, such as isolating a third signer or adopting alternate secret-sharing schemes, trade off between security, availability, and operational complexity.
-The underlying mathematics of multisig revocation management involves distributing shachain commitments across groups of signers, calculated combinatorially based on the desired threshold parameters. Each group's root secret is used to produce per-commitment secrets via pseudorandom functions, leveraging techniques from replicated and pseudorandom secret sharing literature. This structure ensures that any authorized subset of signers can reconstruct necessary secrets, while unauthorized subsets remain unable to compromise key material. To mitigate risks associated with “key cancellation” during signature aggregation, MuSig2 is employed for combining public keys, preventing malicious actors from nullifying others’ contributions.
-Transitioning away from shachain-based revocation necessitates protocol-level modifications. Recent work has culminated in the proposal and implementation of a `channel_type` extension called `option_independent_secrets`, represented by feature bits 266 and 267. Under this scheme, each side may independently generate and manage its per-commitment secrets, unconstrained by shachain’s linearity. Receivers are tasked with storing every secret they obtain, with practical storage limits and policies for cooperative closure when thresholds are reached. Both [lnd](https://github.com/paulscode/lightning-fork/pull/7) and [Core Lightning](https://github.com/privkeyio/lightning/pull/48) have developed interoperable implementations, confirmed through comprehensive breach and operational testing ([independent-secrets-interop](https://github.com/davelund110/independent-secrets-interop)). These implementations default to standard behavior unless explicitly enabled and provide mechanisms for safe upgrade paths and database versioning.
-The revised protocol introduces rigorous rules for secret generation, storage, and revocation actions among multi-signer nodes. Notably, no group of signers below</summary>
+    <summary>Recent advancements in cryptography and protocol design have paved the way for more robust multisignature (multisig) capabilities within the Lightning Network, particularly through the integration of k-of-n multisig schemes using Taproot channels. The publication of the [Nested MuSig2 Paper](https://eprint.iacr.org/2026/223) has accelerated discussions about enhancing both the security and flexibility of Lightning node operations by allowing any k of n signers to authorize transactions. This development aims to surpass the traditional single-signature model, offering a significant improvement in fund protection through distributed validation.
+Implementing k-of-n multisig in the Lightning Network introduces several technical challenges due to the network’s reliance on unique channel and transaction mechanisms, notably its revocation protocols. Unlike on-chain transactions that can directly encode k-of-n requirements, the Lightning Network's current infrastructure requires either widespread adoption of new standards or the use of intermediary nodes with early protocol modifications, which may affect privacy and efficiency. Central to this evolution is the need to manage channel counterparties effectively; while broad openness maximizes routing and fee opportunities, it also heightens security risks if counterparties are not thoroughly vetted. Moreover, the limitations of hardware-based security—such as vulnerabilities from manufacturer backdoors—underscore the necessity of robust, distributed multisig arrangements over sole reliance on secure elements.
+A critical barrier arises from the Lightning Network’s state update and revocation system, which employs shachain structures—a chain of hashes ill-suited for k-of-n operations due to their cryptographic constraints. Addressing this, proposals suggest modifying the BOLT specifications to replace shachain with alternative structures supporting flexible multisig configurations. One such modification involves introducing new feature bits to signal compatibility between nodes, enabling a smooth transition toward more sophisticated multisig arrangements without disrupting network interoperability. The overarching goal is to accommodate diverse participant needs while maintaining strong security guarantees as the protocol evolves.
+Experimentation with two-party shachain under adversarial conditions, demonstrated in the [shachain2pc proof-of-concept](https://github.com/starius/shachain2pc), illustrates the practical complexities of secure revocation management. In this approach, parties collaboratively generate shachain values using private preimage shares, with each operation requiring substantial memory and computational resources. The process secures intermediate states against manipulation, mitigating risks such as unauthorized key exposure through undetected bit alteration. The underlying technology leverages the [emp-ag2pc framework](https://github.com/emp-toolkit/emp-ag2pc), though current implementations do not yet support higher-threshold setups like 2-of-3, which are crucial for enhanced security in multi-device environments. While theoretical alternatives exist—such as isolating a subset of signers to form a 2-of-2 configuration—these often introduce trade-offs in availability and usability. Despite promising advances, these approaches remain experimental and require thorough review before deployment in real financial systems.
+Performance assessments of current implementations reveal notable inefficiencies in speed and resource usage. Each transaction can take over a second to process, and the memory footprint per party is considerable, raising concerns about economic viability in high-volume, multi-channel environments. Although certain optimizations—such as earlier computation of revocation keys—may partially address these issues, the requirement for all minimum-signature parties to participate in critical steps remains a significant bottleneck. Real-world scalability thus hinges on balancing stringent security measures with practical performance and cost considerations.
+Innovative strategies for handling revocation keys include employing multiple shachains, where a designated number of chains must be known to the punitive counterparty to enable effective enforcement against misbehavior. Distribution of these secrets among signers ensures continuity even when some participants are offline, and integration with threshold signing frameworks like FROST allows efficient setup during channel opening. On-chain, MuSig2 facilitates key aggregation, reducing complexity and data overhead. Storage optimization is considered by limiting state numbering and proactively managing channel closure, thereby keeping storage requirements manageable on both sender and receiver sides.
+In-depth examination of k-of-n revocation protocols reveals the use of combinatorial groupings, where every subset of N–K+1 signers shares a key. For each commitment, partial secrets are derived and aggregated using MuSig2-style constructions to prevent key cancellation attacks and unauthorized access. These designs ensure that no coalition smaller than the threshold can unilaterally revoke or compromise old channel states, and that all necessary verifications and secret releases are independently recorded before exposing any sensitive information. The approach draws on established cryptographic principles, including pseudorandom secret sharing and polynomial interpolation, to guarantee that only the required quorum can reconstruct secrets and execute revocations.
+The primary obstacle in achieving scalable k-of-n multisig support lies not in the act of signing, which aligns with the linear properties of Schnorr signatures and Taproot, but in efficiently managing revocation of previous states—an inherently nonlinear process due to reliance on SHA256 operations. Several strategies have been proposed: dec</summary>
   </entry>
 </feed>

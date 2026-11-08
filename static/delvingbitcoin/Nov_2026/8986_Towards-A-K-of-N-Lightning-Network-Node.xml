@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-08T07:07:53.585712+00:00</updated>
+  <author>
+    <name>davelund110</name>
+  </author>
+  <timestamp>2026-11-05 00:34:27.145000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-08T07:07:53.585744+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/12" rel="alternate"/>
+    <summary>A correction is made to the previously described scheme for threshold signing in Lightning channels, clarifying that with only K signers online, it is possible for the K − 1 colluding signers to be the only participants in a group, which means that the reported term is not checked by any independent online member. By varying the reported terms, these colluders can influence the chosen points, and the weighted approach of MuSig2 does not prevent this manipulation, although it stops them from learning the secret. The BOLT 3 specification stipulates that no subset of K − 1 signers may select a point, and, crucially, that all updates require participation from every funding-key holder (N-of-N) before any revocation or subsequent action is released. This full participation prevents a coordinator from manipulating state updates across different signers who might not be aware of each other’s actions. Hence, group constructions relying on just K-of-N are insufficient except during channel closures.
+
+The proposed scheme leverages the VPSS1 protocol as analyzed by Komlo and Goldberg in Arctic (PKC 2025), a verifiable pseudorandom secret sharing variant of Cramer–Damgård–Ishai. In this construction, each group of N − K + 1 signers shares a PRF key, and signer j’s share for commitment n is constructed through a polynomial-based calculation involving the PRF keys and specific coefficients. All signers publish their computed points, and the system ensures, via polynomial verification, that these points collectively define a unique secret value. During revocation, any K valid shares suffice to reconstruct the secret, and deterministic share assignment ensures that retries yield the same results without requiring per-update record-keeping. Signers contribute fresh randomness to the channel value for each operation and refuse to reuse funding keys, maintaining strong separation between sequential commitments.
+
+Operationally, every participant must confirm possession of the next commitment (n + 1) and peer signatures before recording a revocation, ensuring that all parties agree on the current state and preventing equivocation by malicious coordinators. A commitment or splice transaction is signed only when all signers confirm holding the same state, and nonces fixed in advance bind each signer to a single version per commitment number. Revocations and splices proceed only after all relevant statements are collected, so colluding signers cannot prematurely unlock secrets. If a signer loses its records, it ceases to participate in further revocations or splices but can still help close channels based on consensus among remaining signers. Handling cases where a signer has undetected data loss remains an unresolved challenge.
+
+Each signer is expected to validate all payments, reliably store its records to avoid rollback vulnerabilities, maintain direct communication with other signers, and possess the ability to function independently of a central coordinator. The key-management overhead scales combinatorially with group size, making it most practical for small groups: for example, 3 keys for 2-of-3, 10 keys for 3-of-5, and 35 keys for 4-of-7 arrangements. Every update requires full N-member participation, imposing significant liveness requirements—one offline signer stalls all channels associated with that node, and restoration without records forces immediate closure. At minimal group sizes (N = 2K − 1), incorrect points can be detected but not uniquely attributed; unambiguous identification needs larger groups (N ≥ 3K − 2). The scheme precludes zero-confirmation splices, as splicing is finalized only when all signers have validated the new state, and recommends against configurations like K = N − 1 due to lack of safety margins for availability.
+
+Storage demands, particularly under option 2A, primarily affect the peer side, resulting in approximately 38 MB per million updates in lnd and 60 MB in Core Lightning. While individual light clients incur minimal storage costs, receivers can enforce per-channel caps and use splicing to periodically drop old secrets. Shachain channels do not offer a viable alternative for multi-signer nodes, as funds can always be routed into single-signer channels. Option 2B offers improved storage efficiency for receivers by keeping protocol groupings internal to the node, while externally the receiver continues to store one secret per commitment. Future extensions could allow the receiver to manage secrets more compactly by grouping secrets per commitment, as in [shachain-mpc](https://github.com/jespos/shachain-mpc), reducing storage to around 20 KB at 3-of-5, though such changes would require protocol upgrades.
+
+Prior art includes Iceberg, a nested threshold MuSig2 implementation by Gerhart, Kohen, Posner, and Furszyfer, which already employs replicated keys and VPSS nonces for secure signing. In this design, agreement on commitment numbers precedes signing, restricting honest signers to one signature per commitment and avoiding ambiguity. Jesse Posner’s [shachain-mpc</summary>
+    <published>2026-11-05T00:34:27.145000+00:00</published>
+  </entry>
+</feed>

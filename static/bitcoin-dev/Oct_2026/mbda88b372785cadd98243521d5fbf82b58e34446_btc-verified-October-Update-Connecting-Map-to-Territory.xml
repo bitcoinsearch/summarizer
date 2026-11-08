@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>btc-verified October Update: Connecting Map to Territory</title>
+  <updated>2026-11-08T07:17:11.847648+00:00</updated>
+  <author>
+    <name>Keagan McClelland</name>
+  </author>
+  <timestamp>2026-10-19 16:33:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>btc-verified October Update: Connecting Map to Territory</title>
+    <updated>2026-11-08T07:17:11.847676+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/8bfb3bbc-0682-49c8-b461-676aa619688e@mattcorallo.com/T/#mbda88b372785cadd98243521d5fbf82b58e34446" rel="alternate"/>
+    <summary>The btc-verified project has been developed with the objective of constructing a minimal model of consensus, proceeding incrementally to formalize the core operations underpinning Bitcoin’s protocol. This modeling process aims not only for precision but also for alignment with real-world behavior, recognizing that formalization alone does not guarantee true correspondence with operational systems such as the Bitcoin network. The critical challenge lies in ensuring that the “map”—the formal model—faithfully represents the “territory”—the actual implementation and behavior of Bitcoin Core.
+
+Direct formal verification of Bitcoin Core presents substantial obstacles, given its codebase is written in modern C++ rather than a verifiable language or even pure C, which is more amenable to existing verification tools like [Frama-C](https://www.frama-c.com/fc-plugins/wp.html). As a result, alternative strategies are required to compare the btc-verified model with Bitcoin Core’s consensus logic. A key focus is on achieving behavioral equivalence: the goal is that observations made at the protocol level do not reveal any discrepancies between the two implementations.
+
+Efforts to modularize Bitcoin Core’s consensus mechanism have led to projects like [libbitcoinkernel](https://thecharlatan.ch/Kernel/), which isolates the consensus verification code from other aspects of Core, creating a defined interface. This separation not only enhances security by reducing reliance on non-Core implementations but also provides an ideal entry point for rigorous comparison and experimental validation. By implementing libbitcoinkernel’s interface within btc-verified, it becomes possible to directly benchmark btc-verified’s faithfulness against Bitcoin Core, utilizing the same boundaries already recognized by the Core development team.
+
+To achieve robust validation, differential fuzzing serves as a practical tool. Projects such as [bitcoinfuzz](https://github.com/bitcoinfuzz/bitcoinfuzz) employ this technique by bombarding both implementations with randomized inputs (entropy) and evaluating whether their outputs and state transitions are indistinguishable. Differential fuzzing has yielded significant results, uncovering numerous bugs and inconsistencies across various implementations as documented in [bitcoinfuzz’s findings](https://github.com/bitcoinfuzz/bitcoinfuzzbugsinconsistencesmismatches-found-by-bitcoinfuzz). While exhaustive proof is unattainable through sampling alone, high-entropy testing meaningfully reduces the likelihood of behavioral divergence as more of the input space and control flow graph is exercised.
+
+A specialized differential fuzzing harness has been constructed for [btc-verified and Bitcoin Core](https://github.com/ProofOfKeags/btc-verified/blob/5cd2d824784dc2fac33aec641a0e10fcf869d0b2/Fuzz/README.md), focusing specifically on the kernel interface. Currently, nine kernel functions are implemented in Lean and tested, encompassing transaction creation, copying, serialization, checking, and validation-state management. The harness, built atop [libFuzzer](https://llvm.org/docs/LibFuzzer.html), feeds identical transaction bytes into both Bitcoin Core and btc-verified, then compares their observable responses. The behaviors under scrutiny include parsing consistency, serialization matching, agreement on transaction-local checks (such as duplicate inputs and output limits), congruence in reported validation states, and proper handling of state reuse after invalid transactions.
+
+Empirical results thus far demonstrate that btc-verified and Bitcoin Core produce identical outcomes across several metrics: 100,000 fuzz executions representing extensive attempts at finding disagreements; 11 carefully selected regression inputs, including legacy, SegWit, malformed, and boundary-size transactions; and a retained corpus of 264 inputs optimized for coverage. These tests run continuously as part of the [continuous integration pipeline](https://github.com/ProofOfKeags/btc-verified/blob/5cd2d824784dc2fac33aec641a0e10fcf869d0b2/.github/workflows/ci.ymlL77-L106), preventing regressions by blocking code changes upon detection of any inconsistency with Core.
+
+Despite these advances, further efforts are needed to fully implement and verify the entire kernel interface. Achieving a comprehensive and credible correspondence will allow theoretical results derived from btc-verified to be meaningfully applied to interpretations of Bitcoin Core’s behavior. The ongoing work focuses on extending this linkage, with the intention of establishing a reliable framework for future formal analysis and verification.</summary>
+    <published>2026-10-19T16:33:00+00:00</published>
+  </entry>
+</feed>

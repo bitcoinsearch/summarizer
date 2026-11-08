@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>[Proposal] Tapleaf 0xc2: An overview of the Great Script Restoration (GSR)</title>
+  <updated>2026-11-08T07:19:21.290775+00:00</updated>
+  <author>
+    <name>Julian</name>
+  </author>
+  <timestamp>2026-11-06 09:30:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>[Proposal] Tapleaf 0xc2: An overview of the Great Script Restoration (GSR)</title>
+    <updated>2026-11-08T07:19:21.290808+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/34b14b4f-7dce-466e-9d80-1af3b465c40fn@googlegroups.com/T/#u#m2bf9958df2e7e374bfbd64d6fc4f7e083545965c" rel="alternate"/>
+    <summary>A comprehensive framework is being introduced to restore and expand the capabilities of Bitcoin Script. This initiative comprises five interrelated proposals—collectively defining Tapleaf 0xc2, which is recognized as the second Taproot leaf version. The primary objectives are to reinstate script functionalities that were previously disabled in Bitcoin 0.3.1, introduce transaction introspection, extend script primitives, and enforce a computational budget on each 0xc2 script to limit validation cost. Importantly, legacy scripts, SegWit v0, and Tapleaf 0xc0 remain unaffected by these changes, ensuring backward compatibility.
+
+The five foundational documents include: BIP 440, which generalizes the sigops budget into a varops budget affecting every operation with a transaction-wide constraint; BIP 441, which introduces the new leaf version and re-enables fifteen previously disabled opcodes, supports arbitrary-length unsigned integers, and increases stack limits; OP_TX, providing transaction introspection through a selector mechanism for accessing transaction fields; an extended set of primitives such as OP_CHECKSIGFROMSTACK (for signature verification over arbitrary messages), OP_TWEAKADD (to compute the next output’s key), and OP_BYTEREV (to reverse bytes); and Reusable Macros, allowing code sequences to be referenced and expanded inline before execution, without altering control flow or code execution guarantees. All links to the detailed proposals are provided in markdown format for further exploration, including [BIP 440](https://github.com/jmoik/bips/blob/gsr-full/bip-0440.mediawiki), [BIP 441](https://github.com/jmoik/bips/blob/gsr-full/bip-0441.mediawiki), [OP_TX](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-optx.md), [Extended Primitives](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-extended-primitives.md), and [Reusable Macros](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-reusable-macros.md).
+
+This suite of proposals enables a range of advanced scripting features. General covenants—including recursive ones capable of retaining state across outputs—can now be expressed. Custom sighash modes and signatures that can be rebound, as well as Taproot outputs constructed from computed data, become possible. Verification of cryptographic proofs and hash-based signatures within scripts also comes within reach, making a post-quantum fallback feasible without introducing new opcodes for such use cases. Optimizations such as CTV- and TemplateHash-style commitments can already be architected using OP_TX, rendering future dedicated opcodes optional rather than essential.
+
+Tapleaf 0xc2 is currently anyone-can-spend, so the proposed rules strictly restrict behavior and thus qualify as a soft fork upgrade. The design maintains static analysis guarantees: only standard control flow opcodes (OP_IF, OP_NOTIF, OP_ELSE, OP_ENDIF) are permitted, with no support for loops or jumps, and scripts cannot execute stack data as code. Macros are expanded prior to execution and scripts are capped at four million bytes, ensuring each opcode executes at most once. Numbers are implemented as growing, non-wrapping unsigned integers—subtraction resulting in values below zero causes failure.
+
+Certain implementation details have evolved since previous drafts. Inputs with independent signature limits (like Tapleaf 0xc0) no longer contribute to the global computational budget. Operation costs are now derived from lower-level primitives and calibrated using benchmarking data collected from diverse hardware configurations, allowing adjustments based on performance evidence. Every opcode and data push incurs a fixed cost, capping logical operations despite script compression—this measure facilitates safe inclusion of reusable macros. The full framework is designed for simultaneous deployment as a single soft fork, backed by a reference implementation in a [dedicated Bitcoin Core fork](https://github.com/bitcoin-gsr/bitcoin/tree/gsr), with comprehensive unit, functional, and fuzz tests available.
+
+Several open questions remain regarding broader impacts and potential extensions. The direction and risk of adopting such an encompassing consensus change require careful evaluation, particularly considering concerns about Miner Extractable Value (MEV) and whether advanced covenant contracts might favor resource-rich miners due to their influence on transaction ordering. Consideration is being given to OP_SEGMENT, which could allow for segmented script evaluation, and to OP_MULTI, supporting variable-arity operations for more flexible value aggregation. Further, there is ongoing discussion about enabling amount accounting across multiple inputs, as seen in proposals like OP_CHECKCONTRACTVERIFY (BIP 443) and OP_VAULT (BIP 345).
+
+A wealth of resources supports this initiative, including the [reference implementation](https://github.com/bitcoin-gsr/bitcoin/tree/gsr), [benchmarking tools](https://github.com/bitcoin-gsr/varopsData), and [previous discussions](https</summary>
+    <published>2026-11-06T09:30:00+00:00</published>
+  </entry>
+</feed>

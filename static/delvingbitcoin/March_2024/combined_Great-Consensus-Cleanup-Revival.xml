@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>2</id>
   <title>Combined summary - Great Consensus Cleanup Revival</title>
-  <updated>2026-05-25T05:24:35.637301+00:00</updated>
+  <updated>2026-11-08T06:59:33.957339+00:00</updated>
   <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
   <thread>
     <message id="msg_1" depth="0" position="0">
@@ -377,6 +377,14 @@
       <author>AntoineP</author>
       <timestamp>2026-04-27 17:03:09.154000+00:00</timestamp>
     </message>
+    <message id="msg_94" depth="0" position="93">
+      <author>LearnBitcoin.com</author>
+      <timestamp>2026-11-05 19:18:15.202000+00:00</timestamp>
+    </message>
+    <message id="msg_95" depth="0" position="94">
+      <author>AntoineP</author>
+      <timestamp>2026-11-06 16:52:20.198000+00:00</timestamp>
+    </message>
   </thread>
   <link href="delvingbitcoin/March_2024/1996_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2024/2020_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
@@ -471,15 +479,21 @@
   <link href="delvingbitcoin/Feb_2026/6837_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <link href="delvingbitcoin/March_2026/7080_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <link href="delvingbitcoin/April_2026/7410_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/8991_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/8992_Great-Consensus-Cleanup-Revival.xml" rel="alternate"/>
   <entry>
     <id>2</id>
     <title>Combined summary - Great Consensus Cleanup Revival</title>
-    <updated>2026-05-25T05:24:35.643919+00:00</updated>
-    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/94" rel="alternate"/>
+    <updated>2026-11-08T06:59:33.967119+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/96" rel="alternate"/>
     <published>2024-03-24 19:53:27.073000+00:00</published>
-    <summary>The discussion about blockchain and Bitcoin's transaction validation times provides significant insights into the challenges and technical considerations involved in maintaining network efficiency and integrity. In a specific case study, it was revealed that block validation could take as long as 10 minutes on a machine equipped with fairly advanced hardware specifications. This variability in validation times underscores the importance of hardware capabilities in managing blockchain operations efficiently. Moreover, the demonstration at the OP_NEXT conference, which presented a longer validation time of 29 minutes due to less powerful hardware, illustrates how technological disparities can impact performance.
-Further analysis into the conditions necessary for such extended validation times pointed out that several preparation blocks and specific types of unspent transaction outputs (UTxOs) are required to reach these extremes. Notably, using secure preparation UTxOs can reduce validation times significantly, by around 40%, highlighting the critical role of secure transaction management practices in enhancing system performance. The discussion also categorizes potential attackers into two main groups: those motivated externally, possibly aiming to disrupt the system, and those with economic motivations, who might exploit vulnerabilities for profit. The latter group is particularly troubling as they could potentially slow down the network deliberately to gain competitive advantages, posing a real threat to the blockchain's operational integrity.
-In terms of forward compatibility and ongoing efforts to enhance blockchain protocols, discussions at BNOC regarding the adoption of BIP 54 compatible coinbase nLockTime/nSequence settings by mining pools are crucial. These discussions reflect the community's proactive approach to addressing future challenges and ensuring that the network remains robust against evolving threats and technologies. By participating in these forums, stakeholders can stay informed about the latest developments and contribute to collective efforts aimed at securing the blockchain ecosystem.
-Overall, these discussions not only highlight the technical complexities involved in managing blockchain systems but also underscore the community-driven nature of cryptocurrency innovations. By continuously evaluating and updating security measures and operational protocols, the Bitcoin community demonstrates its commitment to maintaining a secure, efficient, and reliable digital currency platform.</summary>
+    <summary>Matt Corallo’s Great Consensus Cleanup proposal constitutes a comprehensive effort to address longstanding vulnerabilities and inefficiencies in the Bitcoin protocol. It targets critical issues such as the timewarp vulnerability in mining difficulty adjustment, which could otherwise be exploited to artificially lower network difficulty, undermining security and stability. The proposal recommends precise changes to retarget periods—mandating that timestamps for the last block of any retarget period cannot precede those of the first block—to eliminate negative timespans and prevent manipulation tactics like the Murch-Zawy attack. This solution is complemented by discussions on whether such timestamp limits should be enforced globally across all blocks or selectively at each 2016-block interval. Proponents argue for minimal, targeted changes to consensus rules to avoid unforeseen complications, while still ensuring robust protection against attacks.
+Another focal point is the mitigation of validation slowdowns caused by maliciously crafted non-SegWit transactions. The proposal introduces constraints on legacy script usage and caps the size of legacy transactions, greatly reducing the worst-case validation time (by a factor of forty) without introducing confiscatory risks. These changes are informed by real-world measurements, where certain blocks have been shown to require several minutes—or even over an hour on less powerful hardware—to validate. Community feedback has been instrumental in refining these mitigations, ensuring they balance security with practical deployment and do not inadvertently lead to asset confiscation.
+The integrity of the blockchain’s structure is further reinforced by addressing vulnerabilities in merkle root computation. Transactions of exactly 64 bytes present a unique risk; the inability to distinguish them from internal nodes in the merkle tree can enable subtle attacks on SPV (Simplified Payment Verification) proofs and sidechains. Rather than adopting complex workarounds, the consensus coalesces around simply making 64-byte transactions consensus-invalid. This approach provides clarity, reduces implementation complexity for SPV and other lightweight clients, and preempts potential exploits—even though no 64-byte transaction has ever occurred in Bitcoin’s history, as confirmed by exhaustive scans ([see GitHub analysis](https://github.com/bitcoin/bips/pull/1760/filesdiff-62b4650c88cc2ccee485ed278b8e7c55dd985a22d7d7c056fbf9b3b92cb14c9b)).
+A suite of additional consensus improvements is outlined, including enforcing uniqueness in coinbase transactions via new requirements for their nLockTime field, set to match the previous block’s height. This standardization not only streamlines extraction of block height from the coinbase but also closes loopholes that could otherwise allow duplicate coinbases. Discussions have evaluated multiple approaches, weighing the merits of encoding block height in different fields (nLockTime, nVersion) and debating the precise activation schedule for these changes. Ultimately, activating such rules after ample lead time—potentially as much as twenty-one years hence—is favored for smooth transition and broad miner compliance.
+The management of signature operation limits (sigops) is another area of focus. Legacy scripts, bare outputs, and P2SH inputs are now subject to a per-transaction cap of 2,500 sigops, with accounting methods harmonized across contexts. For example, in CheckMultisig (CMS) operations, sigops are counted according to the number of keys (up to sixteen), defaulting to twenty in ambiguous cases. Historical analysis demonstrates that this adjustment would not retroactively validate any previously invalid transactions, and the shift aligns with the natural decline in large legacy multisignature use in favor of more efficient SegWit alternatives.
+Significant attention is given to the mechanisms underlying SPV security and bandwidth optimization. Arguments against introducing new consensus rules solely for wallet efficiency are tempered by evidence that failing to address obscure but dangerous edge cases—such as malleable block hashes or indistinguishable merkle tree nodes—can expose side-systems to catastrophic vulnerabilities. As demonstrated in smart contract platforms like Keep Network’s tBTC ([see source](https://github.com/keep-network/tbtc-v2/blob/cf4d12f71b08511bc2185802be88e302b7bef656/solidity/contracts/bridge/BitcoinTx.solL176-L225)), unawareness of such risks may result in severe losses. Thus, the cleanup’s pragmatic stance favors clear, enforceable consensus rules over reliance on documentation or best practices alone.
+The technical evolution of mining protocols is also addressed. Updates in Stratum v2 specify roles for ASICs and pool software in managing version bits (BIP320), extraNonce spaces, and timestamp rolling. Strategies to maximize hash rates and optimize coinbase data alignment are explored, considering both current hardware and anticipated future needs. The flexibility in reserving block space for coinbase transactions is juxtaposed with actual miner behavior, revealing that the modest increase required for additional nonce data has negligible revenue impact under present conditions.
+In terms of testability and deployment, the proposal is backed by extensive empirical</summary>
   </entry>
 </feed>

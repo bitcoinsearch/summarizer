@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Lichen: L2s In CHannels ENforced on bitcoin</title>
+  <updated>2026-11-08T07:16:47.188887+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>waxwing/ AdamISZ</author>
+      <timestamp>2026-10-11 15:03:00+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="waxwing/ AdamISZ" parent_id="mailing-list-2026-10-meada812a2bd06fbc42dea1266bae99f970d7bd19">
+      <author>Dustin Ray</author>
+      <timestamp>2026-10-11 23:46:00+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="2" position="2" reply_to="Dustin Ray" parent_id="mailing-list-2026-10-mcd07fd970d614cf1a63a194ab9f559c740727378">
+      <author>waxwing/ AdamISZ</author>
+      <timestamp>2026-10-12 12:18:00+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="3" position="3" reply_to="waxwing/ AdamISZ" parent_id="mailing-list-2026-11-mac5b5d97a0f767a93ac4b478cc035d0cefcadf4d" anchor="ma8acf6f90da06a08fd9c284af64fa00c64dc56dd">
+      <author>waxwing/ AdamISZ</author>
+      <timestamp>2026-11-01 06:24:00+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="bitcoin-dev/Oct_2026/meada812a2bd06fbc42dea1266bae99f970d7bd19_Lichen-L2s-In-CHannels-ENforced-on-bitcoin.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2026/mcd07fd970d614cf1a63a194ab9f559c740727378_Lichen-L2s-In-CHannels-ENforced-on-bitcoin.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Oct_2026/mac5b5d97a0f767a93ac4b478cc035d0cefcadf4d_Lichen-L2s-In-CHannels-ENforced-on-bitcoin.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2026/ma8acf6f90da06a08fd9c284af64fa00c64dc56dd_Lichen-L2s-In-CHannels-ENforced-on-bitcoin.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Lichen: L2s In CHannels ENforced on bitcoin</title>
+    <updated>2026-11-08T07:16:47.189544+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/9dd171c9-e4fa-4b4d-b0d6-33bc46e48b30n@googlegroups.com/T/#ma8acf6f90da06a08fd9c284af64fa00c64dc56dd" rel="alternate"/>
+    <published>2026-10-11 15:03:00+00:00</published>
+    <summary>A new framework for Layer 2 (L2) transactions on Bitcoin has emerged, focusing on contracts co-owned by a user and a single central hub. This design allows users to hold tokens issued by the hub, which can be redeemed as bitcoin using a secure multi-signature arrangement. The key innovation is that withdrawals from the hub do not require trust in the hub's ongoing honesty or uptime; if the hub fails or becomes unresponsive, users maintain the ability to enforce withdrawals directly on the Bitcoin blockchain. This is achieved without any modification to Bitcoin’s underlying consensus protocol.
+The withdrawal process employs advanced cryptographic proof systems, particularly leveraging RISC Zero to generate proofs of withdrawal statements, wrapped inside Groth16 zk-SNARKs. In the case of disputes, BitVMX originally facilitated on-chain verification by executing RISC-V programs—most notably, a Groth16 verifier—to resolve contested withdrawals. However, recent progress has made it possible to substitute BitVMX with BABE, significantly reducing the number of required on-chain transactions for full dispute resolution and cutting overall costs. With BABE, a typical dispute may now require only four to five transactions and approximately 30 kilobytes of data, compared to the earlier need for up to 25 transactions and 200 kilobytes. This makes mass exit scenarios, where large numbers of users might seek to withdraw simultaneously, more manageable. The main operational constraint remains the inbound liquidity managed by the hub, akin to a Lightning Service Provider (LSP), which determines the system's capacity to serve user withdrawals.
+The L2 architecture described extends beyond basic payment functionality. It supports high-privacy transactions similar to those found in Zcash, as well as sophisticated smart contract logic across various hubs. Each token within this model is fully backed by the hub’s reserves, ensuring every claim can be enforced on-chain even if the hub does not cooperate. This approach contrasts sharply with multi-hub systems, where cross-hub transfers may introduce imbalances and additional layers of trust. While the reliance on a single hub mitigates certain risks such as Sybil attacks and simplifies enforceability, it also concentrates risk and introduces concerns related to centralization. Comprehensive documentation and practical demonstrations—including inclusion proofs, STARK and Groth16-based verifications, and working code—are available for review in the [Lichen Draft Paper](https://github.com/AdamISZ/lichen/blob/master/papers/lichen-draft.pdf).
+There are notable security considerations associated with the use of cryptographic schemes like Groth16 within this context. One highlighted vulnerability is Groth16’s dependence on a Common Reference String (CRS), which could be susceptible to quantum attacks in the future. If an attacker were to compromise the CRS, the integrity of withdrawal proofs—and thus user funds—could be at risk. These concerns underscore the importance of evaluating post-quantum resilience when integrating advanced cryptography into Bitcoin-related infrastructure. Alternative proof systems like STARKs, though offering stronger security foundations, currently face challenges with proof sizes that limit their practicality for on-chain use in Bitcoin.
+Privacy-preserving enhancements remain a priority, both for safeguarding user freedom and for ensuring system versatility. By fostering rapid, private transactions and supporting a wide range of computational proofs, these L2 designs aim to deliver greater utility while allowing the community to adopt or reject innovations through voluntary participation rather than consensus changes to Bitcoin itself. Ongoing research continues to explore ways to manage large data volumes, enhance scalability, and develop innovative verification models capable of efficiently handling arbitrary computations.
+Recent updates have optimized the integration of BABE into the L2 protocol, making the dispute resolution process more efficient and scalable. The refined design centers on a 2-of-2 contract model—enforced by a “verification gadget”—which verifies state transitions proven by the L2. This modularity permits the attachment of the core protocol to alternative L2 systems, provided they can produce verifiable state. Current deployments, such as on mutinynet, demonstrate practical implementations of these concepts, including sequencers, validity proofs, shielded notes, and anchoring mechanisms for finality on Bitcoin. Further technical details and a cleaned-up specification are provided in the latest version of the draft paper, alongside a supplementary reference document that outlines the experimental L2 implementation.
+As the field advances, there is active speculation about further reductions in storage requirements and transaction overhead, driven by innovations such as Duty Free Bits and optimizations proposed in the BABE literature. Regardless of ongoing technical improvements, the design ensures robust exit guarantees, even under adversarial conditions where the hub operator acts maliciously. Continued vigilance around data availability and careful analysis of edge cases are necessary to uphold the strong security assurances offered by this model.
+For additional information on privacy policies and proper handling of confidential material, readers are referred to Anchorage’s policy page at [https://www.anchorage.com/privacy-policy](https://www.anchorage.com/privacy-policy). This work represents a collaborative effort within the broader</summary>
+  </entry>
+</feed>

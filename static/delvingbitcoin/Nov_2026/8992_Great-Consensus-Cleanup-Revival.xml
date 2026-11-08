@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Great Consensus Cleanup Revival</title>
+  <updated>2026-11-08T06:59:17.266080+00:00</updated>
+  <author>
+    <name>AntoineP</name>
+  </author>
+  <timestamp>2026-11-06 16:52:20.198000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Great Consensus Cleanup Revival</title>
+    <updated>2026-11-08T06:59:17.266107+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710/96" rel="alternate"/>
+    <summary>Applying a small patch to [the Bitcoin Core pull request #35793](https://github.com/bitcoin/bitcoin/pull/35793) allows for the enforcement of a timewarp rule across all blocks during mainnet synchronization. The modification involves editing the `src/validation.cpp` file so that the timewarp check is always activated, regardless of deployment status. This adjustment ensures that the maximum allowable timewarp is consistently set, and detailed logging is added to report whether each block at the start of a difficulty adjustment period passes or fails the timewarp check. The logs provide explicit information on blocks that fail due to their timestamps being too early, as well as those that successfully meet the required conditions.
+
+Executing this patched version of Bitcoin Core during the header synchronization phase—performed rapidly at the beginning of Initial Block Download (IBD)—provides immediate feedback about block validity in relation to the timewarp rule. This process can be tested using a new, temporary data directory and standard build commands, such as initializing the build with CMake, creating a datadir, and running `bitcoind` with the `-stopatheight=1` flag to limit processing. These steps make it possible to efficiently validate changes without affecting existing blockchain data.
+
+The results from this approach align with problematic cases outlined in a provided CSV file. For example, a specific seam where a block's timestamp is earlier than allowed is clearly demonstrated: block 203616 at `2012-10-16T22:56:08Z` follows block 203615 at `2012-10-16T23:14:55Z`, yielding a negative seam of -1127 seconds. This evidence confirms the ability of the patched client to detect and log such edge cases effectively, supporting further analysis and validation of consensus rule implementations.</summary>
+    <published>2026-11-06T16:52:20.198000+00:00</published>
+  </entry>
+</feed>

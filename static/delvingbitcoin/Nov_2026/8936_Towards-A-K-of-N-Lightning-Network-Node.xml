@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-08T07:07:38.387743+00:00</updated>
+  <author>
+    <name>ZmnSCPxj</name>
+  </author>
+  <timestamp>2026-11-02 18:08:47.430000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-08T07:07:38.387775+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/11" rel="alternate"/>
+    <summary>Channel storage requirements on the receiving end are influenced by the number of updates per payment, with Core Lightning incurring these costs only for peers that transmit non-seed secrets, whereas lnd bears this cost for every channel that supports the option. For instance, handling 500,000 payments results in about 2 KB of data, translating to approximately 38 MB for lnd and 60 MB for Core Lightning. This storage demand doubles as the number of payments reaches one million, resulting in around 76 MB for lnd and 120 MB for Core Lightning. In the case of lnd, each revocation log record for an old state is augmented by an additional 38 bytes due to the secret.
+
+While these overheads may be manageable for general public forwarding nodes, they pose significant challenges for Lightning Service Providers (LSPs) catering to low-resource client devices such as mobile phones. Notably, if an LSP adopts a k-of-n scheme, the counterparty—typically the resource-constrained client device—must store more data. Although adherence to the BOLT specification requires clients to retain hashes, a slight transaction structure modification could alleviate this burden. Rather than following the standard sequence of Commitment Transaction leading to HTLC and then either the revocation path or CSV, restructuring it so that the Commitment Transaction leads to a revocable nSequence'd transaction before the HTLC allows clients to rely solely on revocation data for security, without needing access to HTLC hashes.
+
+This alternative design presents a trade-off. The use of nSequence’d timeouts shortens the window available for valid state HTLCs, necessitating larger final_ctlv_delta values. However, it enables client devices to maintain a single channel with a k-of-n LSP while keeping storage requirements constant and minimal, which is advantageous for devices with limited resources. Managing ten shachains would amount to roughly 20 kilobytes of persistent storage, ideally backed up externally rather than by the LSP, which may have conflicting incentives regarding data retention.
+
+Despite these optimizations, if a low-resource client does not process a high volume of payments, total storage needs remain modest, typically under 1 MB even when storing all revocations. This ensures that the system remains practical and efficient for most mobile users without imposing excessive storage demands.</summary>
+    <published>2026-11-02T18:08:47.430000+00:00</published>
+  </entry>
+</feed>

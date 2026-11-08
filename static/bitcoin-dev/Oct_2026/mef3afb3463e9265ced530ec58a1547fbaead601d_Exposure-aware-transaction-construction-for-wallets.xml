@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Exposure-aware transaction construction for wallets</title>
+  <updated>2026-11-08T07:17:37.270092+00:00</updated>
+  <author>
+    <name>Zeeshan Ali Khan</name>
+  </author>
+  <timestamp>2026-10-19 17:29:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Exposure-aware transaction construction for wallets</title>
+    <updated>2026-11-08T07:17:37.270128+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/CAAa3hFNACEoE4KXi06SaqGM0qsOTrgT3HB6X2oiocp--r6-rmg@mail.gmail.com/T/#u#mef3afb3463e9265ced530ec58a1547fbaead601d" rel="alternate"/>
+    <summary>Preserving resistance to long exposure attacks, particularly those outlined in BIP 360, demands a robust transaction-construction policy at the wallet level. The proposed opt-in rule advances beyond best-effort UTXO grouping seen in Bitcoin Core’s -avoidpartialspends and BitGo’s quantum-risk controls, by mandating that wallets actively track all material about to be disclosed during transaction construction. This approach ensures a more comprehensive protection strategy against adversaries capable of reconstructing spend conditions from disclosed information. For further reading on BIP 360 long exposure, refer to [bitcoin/bips PR 2294](https://github.com/bitcoin/bips/pull/2294), which introduces exposure classification and SWEEP_WHEN_SPENDING recommendations for outputs sharing a script.
+
+When multiple P2WPKH outputs pay to the same script, spending one can reveal the public key necessary to spend the others, exposing them to potential attacks. To mitigate this, wallets should detect newly exposed outputs in real time and include them in the same spend batch. This workflow also dictates that change must be sent to a fresh output whose spend condition remains undisclosed, thus maintaining future eligibility for security upgrades or rescue mechanisms such as DropKick. Whenever key material is reused across scripts, vulnerability boundaries may cross script types, requiring careful tracking of disclosures.
+
+A wallet’s trust boundary consists of all components and parties not expected to leak sensitive material. Disclosure encompasses not only public keys and xpubs, but also PSBT derivation data, protocol reuse, and ECDSA signatures over known messages, the latter being susceptible to public-key recovery (a property absent in BIP 340 Schnorr signatures). Because operational constraints may make strict key-sharing rules impractical, the policy is opt-in by design.
+
+Outputs are considered hidden as long as their spend conditions have not been fully disclosed through publication of necessary key material, scripts, or Merkle paths. The process for determining which outputs become newly vulnerable involves iteratively aggregating the set of intended inputs and tracking additional outputs whose spend recipes become reconstructible with each new disclosure. Outputs already exposed before the current transaction are handled separately and do not trigger automatic inclusion unless user action deems it necessary. This iterative approach is especially relevant when prior disclosures and spending-path choices interact in non-trivial ways.
+
+Before any new sensitive material leaves the trust boundary, wallets must prepare transactions that spend every confirmed affected output that is spendable at present. If any affected output cannot be included, the wallet refrains from offering protection guarantees unless explicitly overridden by the user. When multiple transactions are required, they should be constructed and broadcast together; if coverage lapses due to network issues or transaction replacement, the wallet must rebroadcast or fee-bump as necessary to maintain protection over all at-risk outputs.
+
+The intended outcome is that, upon deliberate disclosure of new material, all confirmed affected outputs are spent and submitted to the network simultaneously, minimizing the window of vulnerability. Unconfirmed parent transactions authored by the wallet remain under its control, but third-party unconfirmed payments introduce uncertainty and may warrant a waiting period before proceeding. After a configurable wait, the user can decide whether to continue waiting or relax the guarantee, acknowledging an inherent tradeoff between resilience and potential denial-of-service vectors. Importantly, wallet-local metadata tracks all disclosures, even those for transactions that never confirm, as seed or descriptor restores cannot reconstruct off-chain exposure histories—missing metadata must therefore be flagged as unknown.
+
+Change outputs must use conditions for which the necessary secp256k1 material remains undisclosed. Fresh P2WPKH outputs meet this requirement only if their derivation data stays within the trust boundary throughout the PSBT handling process. In contrast, P2TR outputs cannot provide this assurance because their output keys are public and consensus allows key-path signatures irrespective of how the key was generated. The P2MR scheme is highlighted as a promising direction once available. Any funds received to previously disclosed destinations become immediately vulnerable, reinforcing the need for destination management practices akin to Bitcoin Core’s avoid_reuse policy, which prompts user warnings and remediation rather than automatic sweeping.
+
+Cross-script grouping, while enhancing security, can increase input linkage and reduce privacy. Additional complications arise with CoinJoin, Payjoin, explicit coin control, timelocks, or unavailable cosigners, potentially preventing full protective coverage. In such scenarios, the wallet should either decline to assert the security property or require explicit user override, recognizing that these are wallet-level policies rather than consensus-enforced rules.
+
+Several open questions remain: the appropriateness of a standalone companion proposal cross-linked from PR 2294, the suitability of complete-spend-recipe exposure as an abstraction for Taproot and future script types, the criteria for excluding economically insignificant outputs, optimal wait policies for third-party unconfirmed outputs, methods for persisting disclosure metadata across backups (such as leveraging [BIP 329 label records](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki)), and whether</summary>
+    <published>2026-10-19T17:29:00+00:00</published>
+  </entry>
+</feed>
