@@ -1,5 +1,5 @@
 {
-    "header_summary": "A suite of five interrelated proposals, including [BIP 440](https://github.com/jmoik/bips/blob/gsr-full/bip-0440.mediawiki) and [BIP 441](https://github.com/jmoik/bips/blob/gsr-full/bip-0441.mediawiki), aims to restore and expand Bitcoin Script capabilities through the introduction of Tapleaf 0xc2. The framework enables advanced features such as transaction introspection, expressive covenants, extended script primitives, and reusable macros, while maintaining backward compatibility and strict computational limits; details and reference implementations are accessible at the [Bitcoin GSR repository](https://github.com/bitcoin-gsr/bitcoin/tree/gsr).\n\nA new anti-exfiltration protocol, as described by Sjors Provoost and others, addresses the risk of compromised signing devices leaking seed information through manipulated nonces by allowing the host to participate in and verify nonce generation. Despite draft [specifications](https://github.com/AvilaLabs/anti-exfil) and experimental implementations, the protocol lacks formal review, and further peer evaluation is encouraged via available [resources](https://anti-exfil.avilalabs.org).\n\nDecentralized identity solutions leveraging cryptographic keys and anchored to the Bitcoin blockchain, such as the \"tulip\" protocol, provide pseudonymous, user-controlled identities with secure key rotation and on-chain state management. The scalability of these systems is enhanced by minimizing on-chain interactions and enabling efficient transaction indexing, with technical details outlined in the [tuliproot.com whitepaper](https://tuliproot.com/).\n\nConcerns about privacy in Bitcoin fee payments highlight the risks of transaction linkage when the same wallet is reused; privacy-enhancing strategies under consideration include wallet rotation, CoinJoin, and intermediary services to disrupt payment patterns and improve anonymity.\n\nAdvancements in threshold signing for Lightning Network nodes, based on the VPSS1 protocol and informed by prior work such as Iceberg and [shachain-mpc](https://github.com/jespos/shachain-mpc), emphasize full N-of-N participation for secure state updates, robust key management, and careful trade-offs between liveness, security, and storage requirements, particularly for small node groups.",
+    "header_summary": "A comprehensive framework of five Bitcoin Improvement Proposals\u2014collectively defining Tapleaf 0xc2\u2014proposes restoring and expanding Bitcoin Script capabilities, including re-enabling previously disabled opcodes, enabling transaction introspection, and supporting advanced primitives such as reusable macros. These updates, described in [BIP 440](https://github.com/jmoik/bips/blob/gsr-full/bip-0440.mediawiki), [BIP 441](https://github.com/jmoik/bips/blob/gsr-full/bip-0441.mediawiki), [OP_TX](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-optx.md), [Extended Primitives](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-extended-primitives.md), and [Reusable Macros](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-reusable-macros.md), introduce a computational budget for scripts to ensure validation costs remain bounded while preserving backward compatibility with existing address types. The reference implementation and benchmarking resources are available in a [dedicated Bitcoin Core fork](https://github.com/bitcoin-gsr/bitcoin/tree/gsr), supporting robust static analysis and safe deployment via a single soft fork.\n\nTo mitigate risks of seed exfiltration from malicious signing devices, an anti-exfiltration protocol has been drafted by Sjors Provoost and others, specifying collaborative nonce generation and new PSBT fields for enhanced security. This protocol, described at [https://github.com/AvilaLabs/anti-exfil](https://github.com/AvilaLabs/anti-exfil), has experimental support across multiple hardware wallets, though it remains unaudited and subject to further review and testing.\n\nA critical vulnerability in Eclair 0.14.0 allowed attackers to exhaust node memory through improperly validated `start_batch` messages, potentially causing recurring Lightning Network node crashes and loss of funds. The flaw, rooted in deviations from [BOLT 2](https://github.com/lightning/bolts/blob/191462825ae341f0a27098765c075f01ca9bc6c2/02-peer-protocol.md?plain=1L3043) requirements, was resolved in [version 0.14.1](https://github.com/ACINQ/eclair/blob/d769db070424ae0ab6c05975fd7c86dac8b3e1f4/docs/release-notes/eclair-v0.14.1.md), and immediate upgrades are strongly advised.\n\nSerialization strategies for policy objects are being debated, with a hybrid of TLV (for policy identifiers) and JSON (for human readability) emerging as a likely compromise to balance strict protocol requirements and reviewability. This approach, as discussed in [BIP draft deliberations](https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/7), aims to ensure compatibility across Lightning, DLC, and co-signer applications.\n\nWallet teams continue to confront compatibility challenges between Taproot (bc1p\u2026) and SegWit (bc1q\u2026) address formats, as service-side support for Taproot remains inconsistent. User experience considerations and ecosystem transparency are driving calls for improved resources such as a [compatibility database](https://en.bitcoin.it/wiki/Bech32_adoption) to better inform wallet development and end users.",
     "recent_posts": [
         {
             "id": "m2bf9958df2e7e374bfbd64d6fc4f7e083545965c",
@@ -9,7 +9,7 @@
                 "Julian"
             ],
             "published_at": "2026-11-06T09:30:00+00:00",
-            "summary": "- Five coordinated proposals aim to restore, extend, and modernize Bitcoin Script while preserving compatibility.  - Advanced scripting, transaction introspection, reusable macros, and new primitives enable powerful features and safe execution.  - The framework is a single soft fork, with strict controls, reference implementation, and comprehensive testing available.",
+            "summary": "- Five proposals introduce Tapleaf 0xc2, expanding Bitcoin Script functionality while maintaining backward compatibility.  - Advanced features like general covenants, transaction introspection, and reusable macros are now supported.  - Static analysis, strict execution limits, and benchmarking ensure safety, with open questions on broader impacts.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -24,7 +24,7 @@
                 "Connor Avila"
             ],
             "published_at": "2026-11-05T21:08:00+00:00",
-            "summary": "- A new anti-exfiltration protocol involves hosts participating in nonce generation to prevent seed leakage.  - Two draft BIPs outline protocol specifications and propose new PSBT fields for enhanced security.  - Current resources include reference implementations and documentation, but formal cryptographic review remains outstanding.",
+            "summary": "- A protocol enables host systems to help generate nonces, reducing risks of seed exfiltration.  - Two BIP drafts define the protocol, introduce new PSBT fields, and detail compliance handling procedures.  - Formal cryptographic review is pending, with peer feedback and expert evaluation actively encouraged.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -32,59 +32,52 @@
             "combined_summ_file_path": ""
         },
         {
-            "id": "8988",
-            "title": "TULIP: Permissionless Decentralized Identity",
-            "link": "https://delvingbitcoin.org/t/tulip-permissionless-decentralized-identity/3050",
+            "id": "9002",
+            "title": "Disclosure: Memory-exhaustion DoS in Eclair 0.14.0",
+            "link": "https://delvingbitcoin.org/t/disclosure-memory-exhaustion-dos-in-eclair-0-14-0/3057",
             "authors": [
-                "tidwell"
+                "rorp"
             ],
-            "published_at": "2026-11-05T16:07:21.168000+00:00",
-            "summary": "- Decentralized identity uses cryptographic keys and the Bitcoin blockchain to ensure control and verifiability.  - Key rotation and recovery leverage taproot transactions, precommitted chains, and built-in recovery protocols.  - The protocol supports varied applications, efficient indexing, off-chain proofs, and scalable, user-controlled infrastructure.",
+            "published_at": "2026-11-09T03:20:57.105000+00:00",
+            "summary": "- Eclair 0.14.0 allowed attackers to exhaust node memory, causing denial-of-service by abusing batch parameters.  - Improper validation of batch size and channel IDs enabled unbounded message buffering and memory usage.  - The issue was fixed in version 0.14.1, and users should upgrade immediately for security.",
             "n_threads": 0,
             "dev_name": "delvingbitcoin",
             "contributors": [],
-            "file_path": "static/delvingbitcoin/Nov_2026/8988_TULIP-Permissionless-Decentralized-Identity.xml",
+            "file_path": "static/delvingbitcoin/Nov_2026/9002_Disclosure-Memory-exhaustion-DoS-in-Eclair-0-14-0.xml",
             "combined_summ_file_path": ""
         },
         {
-            "id": "8987",
-            "title": "Shielded Bitcoin: Private Transfers on the Bitcoin L1",
-            "link": "https://delvingbitcoin.org/t/shielded-bitcoin-private-transfers-on-the-bitcoin-l1/2912/14",
+            "id": "9001",
+            "title": "[BIP Draft] Co-signer Spending Policies",
+            "link": "https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/7",
             "authors": [
-                "arminsdev"
+                "lukecarriere"
             ],
-            "published_at": "2026-11-05T15:09:20.024000+00:00",
-            "summary": "- Repeated use of the same Bitcoin wallet can link transactions and compromise user privacy.  - Strategies such as using multiple wallets and privacy-enhancing technologies help prevent transaction linkages.  - The current payment system lacks privacy protections, making advanced fee-handling mechanisms necessary.",
-            "n_threads": 13,
+            "published_at": "2026-11-08T21:40:02.502000+00:00",
+            "summary": "- Multiple serialization formats are being compared, each with unique trade-offs for policy object encoding.  - TLV, canonical JSON, and CBOR offer different compatibilities, readability, and challenges regarding field handling.  - There is a preference for a hybrid model, but feedback on failure cases and compatibility is requested.",
+            "n_threads": 6,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "ZmnSCPxj",
-                "Anzus_GemWallet",
-                "ClaraShk",
-                "nemothenoone",
-                "AdamISZ",
-                "dorugoqu"
+                "PREDGE",
+                "tehiyadu"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2026/8987_Shielded-Bitcoin-Private-Transfers-on-the-Bitcoin-L1.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Shielded-Bitcoin-Private-Transfers-on-the-Bitcoin-L1.xml"
+            "file_path": "static/delvingbitcoin/Nov_2026/9001_-BIP-Draft-Co-signer-Spending-Policies.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_-BIP-Draft-Co-signer-Spending-Policies.xml"
         },
         {
-            "id": "8986",
-            "title": "Towards A K-of-N Lightning Network Node",
-            "link": "https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/12",
+            "id": "8997",
+            "title": "Should wallets default to Taproot or SegWit receive addresses while some services still reject bc1p?",
+            "link": "https://delvingbitcoin.org/t/should-wallets-default-to-taproot-or-segwit-receive-addresses-while-some-services-still-reject-bc1p/3056",
             "authors": [
-                "davelund110"
+                "Anzus_GemWallet"
             ],
-            "published_at": "2026-11-05T00:34:27.145000+00:00",
-            "summary": "- K \u2212 1 colluding signers can manipulate state in K-of-N schemes, making N-of-N necessary for security.  - The proposed protocol uses VPSS1 for verifiable sharing, requiring all N signers to participate in updates.  - Every update requires unanimous validation, with storage and coordination overhead increasing significantly as group size grows.",
-            "n_threads": 11,
+            "published_at": "2026-11-08T13:33:13.184000+00:00",
+            "summary": "- Cryptocurrency wallet users often face compatibility issues when sending funds due to unsupported address formats.  - Wallet providers must balance future-proofing with current compatibility when choosing default address formats.  - Improved UI/UX and clear community resources are needed to help users address compatibility challenges efficiently.",
+            "n_threads": 0,
             "dev_name": "delvingbitcoin",
-            "contributors": [
-                "ZmnSCPxj",
-                "starius"
-            ],
-            "file_path": "static/delvingbitcoin/Nov_2026/8986_Towards-A-K-of-N-Lightning-Network-Node.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Towards-A-K-of-N-Lightning-Network-Node.xml"
+            "contributors": [],
+            "file_path": "static/delvingbitcoin/Nov_2026/8997_Should-wallets-default-to-Taproot-or-SegWit-receive-addresses-while-some-services-still-reject-bc1p-.xml",
+            "combined_summ_file_path": ""
         }
     ],
     "active_posts": [
@@ -96,7 +89,7 @@
                 "Ram"
             ],
             "published_at": "2026-07-29T17:21:00+00:00",
-            "summary": "- The staletip proposal enables Bitcoin nodes to share stale tip block information for enhanced network observability.  - Nodes exchange compressed header sequences and fork points, with communication limited to recent tips for efficiency.  - The initiative addresses block propagation issues, providing tools for faster diagnostics and improved network health insights.",
+            "summary": "- The `staletip` proposal introduces an optional messaging system for sharing stale block tip information.\n- Its technical policy limits messages to relevant tips, compressed headers, and maintains a recent tip cache.\n- This initiative aims to enhance network observability, enabling improved diagnostics and response to stale events.",
             "n_threads": 3,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -107,21 +100,19 @@
             "combined_summ_file_path": "static/bitcoin-dev/July_2026/combined_-BIP-Proposal-Stale-Tip-Relay.xml"
         },
         {
-            "id": "meada812a2bd06fbc42dea1266bae99f970d7bd19",
-            "title": "Lichen: L2s In CHannels ENforced on bitcoin",
-            "link": "https://gnusha.org/pi/bitcoindev/9dd171c9-e4fa-4b4d-b0d6-33bc46e48b30n@googlegroups.com/T/#meada812a2bd06fbc42dea1266bae99f970d7bd19",
+            "id": "m27f677aecdec71eb48941e3b818f2b207a7398e1",
+            "title": "[bitcoindev]",
+            "link": "https://gnusha.org/pi/bitcoindev/CAFYm+Pe8_a568_=GtHhHMVZUF8j8JSS_eYJEaTSbJnOn-dkCHw@mail.gmail.com/T/#m27f677aecdec71eb48941e3b818f2b207a7398e1",
             "authors": [
-                "waxwing/ AdamISZ"
+                "Luke Carriere"
             ],
-            "published_at": "2026-10-11T15:03:00+00:00",
-            "summary": "- Users and a central hub co-own contracts, enabling token withdrawal to Bitcoin using multi-signature arrangements.  - Disputed withdrawals are resolved efficiently using RISC Zero, Groth16 proofs, and on-chain BitVMX evaluations.  - The system prioritizes liquidity and security, with tokens always backed by actual reserve assets.",
-            "n_threads": 3,
+            "published_at": "2026-10-06T01:16:00+00:00",
+            "summary": "- The draft proposes a standardized enforcement policy format to improve interoperability among blockchain security products.  - It includes various verification methods, enforces script-inclusion of all conditions, and supports Discreet Log Contracts.  - Feedback is requested on serialization formats, blinded verification feasibility, attestation formats, output language, and timelock requirements.",
+            "n_threads": 1,
             "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Dustin Ray"
-            ],
-            "file_path": "static/bitcoin-dev/Oct_2026/meada812a2bd06fbc42dea1266bae99f970d7bd19_Lichen-L2s-In-CHannels-ENforced-on-bitcoin.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Oct_2026/combined_Lichen-L2s-In-CHannels-ENforced-on-bitcoin.xml"
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Oct_2026/m27f677aecdec71eb48941e3b818f2b207a7398e1_-bitcoindev-.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Oct_2026/combined_-bitcoindev-.xml"
         },
         {
             "id": "mf34978d175c7e432f8b66d7e6d88b977c83da474",
@@ -131,7 +122,7 @@
                 "Cory Fields"
             ],
             "published_at": "2026-11-04T21:05:00+00:00",
-            "summary": "- Quantum-safe outputs, landmines, and auctions are proposed to deter quantum theft of legacy coins.  - These mechanisms employ collateral, commit/reveal schemes, and incentive-driven auctions with strategic complexity.  - Designs remain theoretical, emphasizing adaptive, game-theoretic defenses against evolving quantum computing threats.",
+            "summary": "- Quantum-safe output types and enforced collateralization aim to safeguard legacy cryptocurrency against quantum threats.  - Game-theoretic mechanisms like Quantum Landmines and auctions incentivize defenders and penalize potential attackers.  - These adaptive, incentive-driven protocols harness economic theory to strengthen security in decentralized systems.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -146,7 +137,7 @@
                 "AntoineP"
             ],
             "published_at": "2024-03-24T17:29:42.691000+00:00",
-            "summary": "- The proposal highlights vulnerabilities in Bitcoin, including timewarp and legacy transaction inefficiencies.  - Solutions include adjusting difficulty retargets, limiting legacy scripts, and invalidating certain small transactions.  - Some changes, such as reducing block size, face debate due to potential impacts on scalability and functionality.",
+            "summary": "- The proposal addresses vulnerabilities in Bitcoin\u2019s protocol, including timewarp and merkle root computation risks.  - It recommends limits on legacy transaction types and invites community collaboration for further improvements.  - Some suggestions, like block size reduction, face debate due to concerns about scalability and protocol changes.",
             "n_threads": 94,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -179,7 +170,7 @@
                 "0xB10C"
             ],
             "published_at": "2024-08-02T11:58:02.413000+00:00",
-            "summary": "- The efficiency of compact block reconstruction is influenced by node configurations, transaction pools, and mempool activity.  - Enabling mempoolfullrbf significantly improved block reconstruction efficiency, suggesting benefits for network-wide adoption.  - Block reconstruction times varied notably based on transaction request needs and network connectivity conditions.",
+            "summary": "- Compact block reconstruction efficiency depends on node transaction awareness and changes to configuration settings.  - Increased inbound connections and mempool activity influence block reconstruction rates and associated request frequencies.  - Enabling `mempoolfullrbf` and evaluating connectivity models may optimize block propagation across the network.",
             "n_threads": 61,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -211,7 +202,7 @@
                 "starius"
             ],
             "published_at": "2026-06-06T22:00:54.554000+00:00",
-            "summary": "- The proposal enables public key recovery from EC signatures, reducing witness size without increasing quantum exposure.  - A recoverable EC leaf allows deriving the public key from the signature, eliminating the need for scripts.  - Security is enhanced by linking the signature challenge to the P2MR root hash and revising nonce derivation.",
+            "summary": "- The proposal enables public key recovery from elliptic curve signatures, reducing witness size without increasing quantum risk.\n- The approach modifies signature validation, incorporates the root hash into challenges, and streamlines the witness structure.\n- Revised nonce derivation enhances security, while blockchain space and transaction costs are efficiently minimized.",
             "n_threads": 36,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -230,64 +221,60 @@
     ],
     "today_in_history_posts": [
         {
-            "id": "013290",
-            "title": "BIP30 and BIP34 interaction (was Re: [BIP Proposal] Buried Deployments)",
-            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-November/013290.html",
+            "id": "018269",
+            "title": "Bitcoin Archaeology",
+            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-November/018269.html",
             "authors": [
-                "Jorge Tim\u00f3n"
+                "Dan Bryant"
             ],
-            "published_at": "2016-11-17T00:06:45+00:00",
-            "summary": "- Duplicate transaction hashes are valid in Bitcoin, and BIP34 does not prevent their occurrence.  - Committed block height helps prevent collisions specifically with coinbase transactions.  - Regular transactions have a low collision risk due to varied inputs and ample entropy usage.",
-            "n_threads": 18,
+            "published_at": "2020-11-11T15:06:54+00:00",
+            "summary": "- The author aims to rebuild early Bitcoin versions using MinGW, as Visual C++ 6 is unavailable.  - OpenSSL fails to build due to mk1mf.pl issues, likely caused by an incompatible MSYS perl version.  - Possible solutions include various build environments, patching, or precompiled releases, but difficulties persist.",
+            "n_threads": 7,
             "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Eric Voskuil",
-                "Johnson Lau",
-                "Tier Nolan",
-                "Alex Morcos",
-                "Peter Todd"
-            ],
-            "file_path": "static/bitcoin-dev/Nov_2016/013290_BIP30-and-BIP34-interaction-was-Re-BIP-Proposal-Buried-Deployments-.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Nov_2016/combined_BIP30-and-BIP34-interaction-was-Re-BIP-Proposal-Buried-Deployments-.xml"
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Nov_2020/018269_Bitcoin-Archaeology.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Nov_2020/combined_Bitcoin-Archaeology.xml"
         },
         {
-            "id": "000652",
-            "title": "LN without SegWit: less efficient or less secure?",
-            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2017-January/000652.html",
+            "id": "002882",
+            "title": "SIGHASH_SINGLE + update_fee Considered Harmful",
+            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-November/002882.html",
             "authors": [
-                "Andr\u00e9s G. Aragoneses"
+                "Johan Tor\u00e5s Halseth"
             ],
-            "published_at": "2017-01-14T10:17:40+00:00",
-            "summary": "- SegWit activation status and its influence on the Lightning Network's feasibility are being questioned.  - There is uncertainty about the security of level 2, compared to the efficiency of level 3.  - Clarification is needed on whether outsourcing channel monitoring could solve level 2's security concerns.",
-            "n_threads": 9,
+            "published_at": "2020-11-23T15:11:52+00:00",
+            "summary": "- A vulnerability enables attackers to bypass penalties on HTLC transactions by redirecting inflated fees.  - Countermeasures include tighter channel policies and adopting a scorched earth approach for justice transactions.  - Addressing this requires removing certain fee appliances and considering the impact on channel usability.",
+            "n_threads": 5,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Anthony Towns",
-                "Christian Decker",
-                "Rusty Russell",
-                "Stefano Pepe"
+                "Antoine Riard",
+                "Olaoluwa Osuntokun"
             ],
-            "file_path": "static/lightning-dev/Jan_2017/000652_LN-without-SegWit-less-efficient-or-less-secure-.xml",
-            "combined_summ_file_path": "static/lightning-dev/Jan_2017/combined_LN-without-SegWit-less-efficient-or-less-secure-.xml"
+            "file_path": "static/lightning-dev/Nov_2020/002882_SIGHASH-SINGLE-update-fee-Considered-Harmful.xml",
+            "combined_summ_file_path": "static/lightning-dev/Nov_2020/combined_SIGHASH-SINGLE-update-fee-Considered-Harmful.xml"
         },
         {
-            "id": "342",
-            "title": "Batched Splicing Considered Risky",
-            "link": "https://delvingbitcoin.org/t/batched-splicing-considered-risky/170",
+            "id": "6196",
+            "title": "P2share: how to turn any network (or testnet!) into a bitcoin miner",
+            "link": "https://delvingbitcoin.org/t/p2share-how-to-turn-any-network-or-testnet-into-a-bitcoin-miner/2093",
             "authors": [
-                "ZmnSCPxj"
+                "VzxPLnHqr"
             ],
-            "published_at": "2023-11-08T14:45:57.141000+00:00",
-            "summary": "- Splicing transactions in the Lightning Network introduce vulnerabilities due to lack of effective disincentives for disruption.  - Malicious actors can exploit these vulnerabilities, causing failed transactions and harming involved parties.  - Proposed mitigation strategies increase complexity and trust issues, especially in zero-confirmation channel scenarios.",
-            "n_threads": 10,
+            "published_at": "2025-11-07T01:06:06.018000+00:00",
+            "summary": "- The p2share network distributes bitcoin mining rewards by randomly selecting a single shareholder for each block.  - Shares are transferable, enabling miners to accumulate or trade them based on network rules and incentives.  - This model promotes fairness, efficiency, and decentralization while minimizing transaction bloat in bitcoin mining.",
+            "n_threads": 28,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "ajtowns",
-                "instagibbs",
-                "t-bast"
+                "ZmnSCPxj",
+                "cmp_ancp",
+                "jungly",
+                "AdamISZ",
+                "coinjoinkillua",
+                "garlonicon",
+                "pojeyuhu"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2023/342_Batched-Splicing-Considered-Risky.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2023/combined_Batched-Splicing-Considered-Risky.xml"
+            "file_path": "static/delvingbitcoin/Nov_2025/6196_P2share-how-to-turn-any-network-or-testnet-into-a-bitcoin-miner.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2025/combined_P2share-how-to-turn-any-network-or-testnet-into-a-bitcoin-miner.xml"
         }
     ]
 }
