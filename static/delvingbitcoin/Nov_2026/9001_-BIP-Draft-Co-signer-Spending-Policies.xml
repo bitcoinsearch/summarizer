@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Draft] Co-signer Spending Policies</title>
+  <updated>2026-11-09T07:37:02.970502+00:00</updated>
+  <author>
+    <name>lukecarriere</name>
+  </author>
+  <timestamp>2026-11-08 21:40:02.502000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Draft] Co-signer Spending Policies</title>
+    <updated>2026-11-09T07:37:02.970530+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/7" rel="alternate"/>
+    <summary>Several serialization strategies are under consideration for encoding policy objects, each with distinct advantages and trade-offs. The TLV (Type-Length-Value) format, as used in BOLT 1 and Discreet Log Contracts (DLC), enforces strict ordering and uniqueness of fields by design, preventing duplicates or reordering. This approach aligns closely with existing Lightning Network and DLC oracle message structures, allowing direct reuse of established components. However, TLV is not human-readable without specialized decoding tools, and implementers would need to adjust their code to reject all unknown fields, diverging from the typical "ignore unknown odd types" rule in Lightning v2.1.
+
+Canonical JSON, following [RFC 8785](https://tools.ietf.org/html/rfc8785), offers broad readability and compatibility, making it easy to review and compare differences. Its ubiquity ensures consistent support across platforms. Yet, common JSON parsers tend to accept duplicate keys by default, which contradicts the strict requirements of v2.1 that demand all duplicates be rejected. Additionally, handling large integers and ensuring Unicode normalization would necessitate supplementary rules. Previous experience with Nostr reveals persistent event-ID mismatches stemming from subtle implementation discrepancies in JSON processing.
+
+CBOR with deterministic encoding, as specified in [RFC 8949](https://www.rfc-editor.org/rfc/rfc8949), provides a compact and standardized binary format already utilized for airgapped wallet data transfers via QR codes. Despite its efficiency, CBOR introduces complexity due to inconsistent duplicate-key handling across different libraries. Furthermore, its use here would introduce yet another data format not currently adopted by protocols such as DLC, Lightning, or Partially Signed Bitcoin Transactions (PSBT) for these types of objects.
+
+A hybrid approach is also being considered. In this model, the policy identifier is derived strictly from the TLV encoding, with versioning and tagging (using `CSP/policy/v0`), while a corresponding JSON representation maps directly to the TLV fields. The JSON serves purposes of authoring and review but is never used for cryptographic operations like hashing or signing. Although this method increases specification and testing overhead by requiring two formats, it attempts to balance machine-readability with human accessibility.
+
+At present, there is a leaning toward the hybrid model, although a final decision has not been reached. Input is sought regarding potential failure scenarios, especially from developers working with co-signers or DLC oracles, to ensure robust and compatible serialization moving forward.</summary>
+    <published>2026-11-08T21:40:02.502000+00:00</published>
+  </entry>
+</feed>

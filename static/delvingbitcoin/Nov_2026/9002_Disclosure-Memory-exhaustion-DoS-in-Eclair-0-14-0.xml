@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Disclosure: Memory-exhaustion DoS in Eclair 0.14.0</title>
+  <updated>2026-11-09T07:38:54.636290+00:00</updated>
+  <author>
+    <name>rorp</name>
+  </author>
+  <timestamp>2026-11-09 03:20:57.105000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Disclosure: Memory-exhaustion DoS in Eclair 0.14.0</title>
+    <updated>2026-11-09T07:38:54.636323+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/disclosure-memory-exhaustion-dos-in-eclair-0-14-0/3057" rel="alternate"/>
+    <summary>Eclair version 0.14.0 contained a critical vulnerability that allowed remote peers to exhaust the node’s memory, resulting in a denial-of-service (DoS) condition. This issue stemmed from improper enforcement of protocol parameters in the handling of `start_batch` messages within Lightning Network channel operations. Specifically, an attacker could induce a vulnerable Eclair node to buffer an unlimited number of `commitment_signed` messages without requiring an open channel, leading to unbounded memory usage and eventual process termination.
+
+The `start_batch` message, as defined in [BOLT 2](https://github.com/lightning/bolts/blob/191462825ae341f0a27098765c075f01ca9bc6c2/02-peer-protocol.md?plain=1L3043), is necessary for managing updates when splicing channels. While a typical channel requires only one `commitment_signed` message per update, multiple pending splices necessitate batching of these messages. The protocol specifies that each `start_batch` should declare the number of expected `commitment_signed` messages (`batch_size`), with strict upper and lower bounds to prevent abuse: no more than 20 messages, and at least two to ensure batching makes sense. 
+
+In Eclair 0.14.0, the code enforced only the upper bound on `batch_size`, accepting values as low as zero. When a peer sent a `start_batch` with a `batch_size` of zero, subsequent `commitment_signed` messages for the same channel ID would be buffered indefinitely because the batch-completion condition could never be met. The system failed to verify whether the provided channel ID corresponded to an actual channel, which meant any arbitrary value could be used. Furthermore, there was no validation of message content or size at this protocol layer, allowing near-maximum-size messages to be accepted. Since transport acknowledgments were provided before buffering, attackers could rapidly fill memory without encountering resistance or backpressure. The attack persisted as long as the connection remained alive, and existing limits on channel-less connections did not mitigate the risk because they did not restrict per-connection memory usage.
+
+The consequence of this flaw was that a single persistent connection could bring down an Eclair node by consuming all available heap memory. While the bug did not directly compromise channel funds, it posed a significant risk by repeatedly crashing Lightning nodes, potentially causing loss of funds through missed responses to revoked commitments or expiring HTLCs.
+
+This vulnerability was resolved in [version 0.14.1](https://github.com/ACINQ/eclair/blob/d769db070424ae0ab6c05975fd7c86dac8b3e1f4/docs/release-notes/eclair-v0.14.1.md) via commit [e4e1a19](https://github.com/ACINQ/eclair/commit/e4e1a19d913279b3cdea1feefee1ec8372735172). The patch updated the input validation logic to reject `start_batch` messages with a `batch_size` less than or equal to one, fully aligning with the specification and eliminating the possibility of indefinite message queuing. Users running Eclair 0.14.0 are strongly advised to upgrade to 0.14.1 or later to ensure operational security and protocol compliance.</summary>
+    <published>2026-11-09T03:20:57.105000+00:00</published>
+  </entry>
+</feed>

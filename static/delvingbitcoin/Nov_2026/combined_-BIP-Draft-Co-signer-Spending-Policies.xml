@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - [BIP Draft] Co-signer Spending Policies</title>
+  <updated>2026-11-09T07:37:25.774527+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>lukecarriere</author>
+      <timestamp>2026-10-10 04:46:04.108000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>PREDGE</author>
+      <timestamp>2026-10-22 21:01:05.571000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>tehiyadu</author>
+      <timestamp>2026-10-27 15:12:46.050000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>lukecarriere</author>
+      <timestamp>2026-10-28 14:37:19.671000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>lukecarriere</author>
+      <timestamp>2026-10-28 14:38:05.131000+00:00</timestamp>
+    </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>lukecarriere</author>
+      <timestamp>2026-11-08 21:29:44.438000+00:00</timestamp>
+    </message>
+    <message id="msg_7" depth="0" position="6">
+      <author>lukecarriere</author>
+      <timestamp>2026-11-08 21:40:02.502000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Oct_2026/8758_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8805_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8869_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8901_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Oct_2026/8903_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/9000_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/9001_-BIP-Draft-Co-signer-Spending-Policies.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - [BIP Draft] Co-signer Spending Policies</title>
+    <updated>2026-11-09T07:37:25.775162+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/7" rel="alternate"/>
+    <published>2026-10-10 04:46:04.108000+00:00</published>
+    <summary>Luke Carriere has introduced a comprehensive draft that seeks to standardize the policy format governing when and how co-signers are permitted to sign transactions. The objective is not to enforce a uniform set of co-signers, but rather to harmonize the various policies that dictate co-signer behavior across different technologies and platforms. This standardization aims to address the current fragmentation in the ecosystem, where solutions such as Halseth's blinded co-signers, Chain Code Delegation, predicate blind signatures, bonded co-signers, and products like Liquidium and Lendasat each operate under their own distinct rules. The lack of interoperability between these methods poses challenges for wallet compatibility and cross-platform integration.
+The proposal introduces multiple verification processes—including open verification, blinded verification, and enclave verification—that collectively ensure transaction conditions are met with both transparency and security. All enforceable scripts must be included within the policy, guaranteeing that direct execution does not rely on the presence of a co-signer. Additionally, support for Discreet Log Contract (DLC) oracles is incorporated, allowing oracles to serve as unchanged sources of evidence. The full details of this BIP (Bitcoin Improvement Proposal) can be accessed at [this link](https://github.com/lukecarriere/bip-cosigner-spending-policies/blob/468fdd1b75647432ed56c3a2b5579cbcfedaec74/bip-cosigner-spending-policies.md), where further public feedback is invited.
+Central technical questions remain open for discussion. The draft invites input on data serialization options—specifically canonical JSON, TLV (Type-Length-Value), and CBOR—and their implications for test vectors, implementation consistency, and human readability. Each format presents unique trade-offs: TLV offers strict uniqueness per policy and seamless integration with existing protocols like Lightning and DLCs, but lacks human readability. Canonical JSON is widely supported and user-friendly but raises concerns about duplicate keys and inconsistent byte representations. CBOR is compact and standardized for airgapped transfers, though it is less commonly used for these objects. A hybrid approach is also considered, wherein strict TLV is used for hashing and signing, while a JSON mapping facilitates authoring and review. The decision on serialization has significant consequences for interoperability and long-term maintainability.
+A key aspect of the policy hash is that it must capture the exact semantics of the verifier, not merely reference a syntactically valid document. This demands explicit handling of unknown fields, duplicate keys, and default values. Any deviation, such as the presence of unrecognized fields or duplicate keys, immediately invalidates the policy, ensuring stringent adherence to the intended policy logic. Policy commitments are domain-separated from both statement and transaction hashes, with the format version embedded as the first field in the hash preimage. The tagging scheme is structured to prevent collisions with existing standards, using `CSP/policy/v0` for policies and maintaining separation from tags found in BIP340 and BIP341.
+Within the signing process, the signed tuple initially comprised only the event ID, outcome, and timestamp, omitting any indication of whether an outcome was final or provisional. This posed potential risks in contexts like escrow, where outcomes may be revised by attestors. To mitigate this, a finality flag will be introduced, enabling evidence conditions to require confirmation of final status before permitting actions. In scenarios where finality cannot be marked, templates can incorporate dispute windows to provide a safeguard. For DLC attestations, finality is enforced cryptographically; signing conflicting outcomes exposes the attestor’s key, thus preventing ambiguity. Test vectors specifying the exact byte representation of policy IDs will be provided alongside the chosen serialization format, further promoting implementation consistency.
+Ongoing development reflects active community engagement and iterative refinement. The latest draft, v2.1, incorporates strict verifier semantics, versioned commitments, signed finality, corrections for k-of-n thresholds, citation fixes, and header updates. However, certain aspects, such as the complete schema definition, exact-byte test vectors, and a reference implementation, remain works in progress. Public commentary and criticism continue to shape the evolution of this proposal, with ongoing discussions accessible via the [original October 5 bitcoindev post](https://groups.google.com/g/bitcoindev/c/yoL5VVMO4Qg) and the [latest draft update](https://github.com/lukecarriere/bip-cosigner-spending-policies/commit/c21ed45c1eb78a562962d17a5fdaa86c9d7befb3).
+The choice of serialization remains undecided, with considerations detailed for TLV, canonical JSON, CBOR, and hybrid approaches. TLV ensures strict encoding with no duplicates or reordering, aligning well with existing Lightning and DLC messaging. Canonical JSON brings advantages in readability and tooling, though it requires additional validation to reject duplicate keys and handle normalization issues. CBOR</summary>
+  </entry>
+</feed>
