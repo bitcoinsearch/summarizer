@@ -1,6 +1,21 @@
 {
-    "header_summary": "A comprehensive framework of five Bitcoin Improvement Proposals\u2014collectively defining Tapleaf 0xc2\u2014proposes restoring and expanding Bitcoin Script capabilities, including re-enabling previously disabled opcodes, enabling transaction introspection, and supporting advanced primitives such as reusable macros. These updates, described in [BIP 440](https://github.com/jmoik/bips/blob/gsr-full/bip-0440.mediawiki), [BIP 441](https://github.com/jmoik/bips/blob/gsr-full/bip-0441.mediawiki), [OP_TX](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-optx.md), [Extended Primitives](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-extended-primitives.md), and [Reusable Macros](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-reusable-macros.md), introduce a computational budget for scripts to ensure validation costs remain bounded while preserving backward compatibility with existing address types. The reference implementation and benchmarking resources are available in a [dedicated Bitcoin Core fork](https://github.com/bitcoin-gsr/bitcoin/tree/gsr), supporting robust static analysis and safe deployment via a single soft fork.\n\nTo mitigate risks of seed exfiltration from malicious signing devices, an anti-exfiltration protocol has been drafted by Sjors Provoost and others, specifying collaborative nonce generation and new PSBT fields for enhanced security. This protocol, described at [https://github.com/AvilaLabs/anti-exfil](https://github.com/AvilaLabs/anti-exfil), has experimental support across multiple hardware wallets, though it remains unaudited and subject to further review and testing.\n\nA critical vulnerability in Eclair 0.14.0 allowed attackers to exhaust node memory through improperly validated `start_batch` messages, potentially causing recurring Lightning Network node crashes and loss of funds. The flaw, rooted in deviations from [BOLT 2](https://github.com/lightning/bolts/blob/191462825ae341f0a27098765c075f01ca9bc6c2/02-peer-protocol.md?plain=1L3043) requirements, was resolved in [version 0.14.1](https://github.com/ACINQ/eclair/blob/d769db070424ae0ab6c05975fd7c86dac8b3e1f4/docs/release-notes/eclair-v0.14.1.md), and immediate upgrades are strongly advised.\n\nSerialization strategies for policy objects are being debated, with a hybrid of TLV (for policy identifiers) and JSON (for human readability) emerging as a likely compromise to balance strict protocol requirements and reviewability. This approach, as discussed in [BIP draft deliberations](https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/7), aims to ensure compatibility across Lightning, DLC, and co-signer applications.\n\nWallet teams continue to confront compatibility challenges between Taproot (bc1p\u2026) and SegWit (bc1q\u2026) address formats, as service-side support for Taproot remains inconsistent. User experience considerations and ecosystem transparency are driving calls for improved resources such as a [compatibility database](https://en.bitcoin.it/wiki/Bech32_adoption) to better inform wallet development and end users.",
+    "header_summary": "Coordination is underway to mine the testnet 5 genesis block in alignment with the upcoming mainnet retarget event at block 975,744, with resources available for participants including solo-mining pool details and comprehensive documentation ([documentation](https://gist.github.com/ajtowns/ebb148819c6028387271e6f0dce5e1da), [mining pool](https://lapis.erisian.com.au/chain.html)). Several genesis block structure modifications have been proposed to simplify pooled mining and increase compatibility, while challenges persist regarding block height encoding inconsistencies between Bitcoin Core and common mining software ([pull request 1](https://github.com/bitcoin/bips/pull/2347), [pull request 2](https://github.com/bitaxeorg/ESP-Miner/pull/2089)).\n\nA suite of five interrelated Bitcoin Script proposals, collectively defining Tapleaf 0xc2, introduces restored and expanded scripting capabilities, enabling transaction introspection, advanced covenants, and reusable macros while maintaining backward compatibility. The framework enforces computational budgets, restricts control flow for static analysis, and provides a reference implementation for review ([BIP 440](https://github.com/jmoik/bips/blob/gsr-full/bip-0440.mediawiki), [BIP 441](https://github.com/jmoik/bips/blob/gsr-full/bip-0441.mediawiki), [OP_TX](https://github.com/jmoik/bips/blob/gsr-full/bip-unknown-optx.md), [reference implementation](https://github.com/bitcoin-gsr/bitcoin/tree/gsr)).\n\nTo mitigate the risk of hardware wallets leaking sensitive seed information via manipulated nonces, an anti-exfiltration protocol involving host participation in nonce generation has been proposed, accompanied by draft BIPs and experimental implementations ([specification and resources](https://github.com/AvilaLabs/anti-exfil), [handbook](https://anti-exfil.avilalabs.org)). The protocol has yet to undergo formal cryptographic review, and community feedback is sought to enhance its security assurances.\n\nEnhancements to the Bitcoin BIP archive now provide clear mapping of BIP implementation status within Bitcoin Core, comprehensive release histories, and more frequent updates, improving traceability and documentation ([BIP 141 example](https://www.learnbitcoin.com/archive/bips/141), [archive](https://www.learnbitcoin.com/archive/releases)). The Eclair Lightning implementation addressed a critical vulnerability in version 0.14.0 that allowed remote memory exhaustion via improperly validated batch messages, urging users to upgrade to [version 0.14.1](https://github.com/ACINQ/eclair/blob/d769db070424ae0ab6c05975fd7c86dac8b3e1f4/docs/release-notes/eclair-v0.14.1.md) for security.\n\nOngoing research highlights the risk of message equivocation within Lightning's gossip network, where set reconciliation protocols can allow attackers to partition the network and extract excessive fees. Solutions focus on cryptographic commitments, including tree-based multiset hashing, to strengthen message integrity and improve detection of inconsistencies, with several reference materials and approaches under consideration ([Incremental Hashes](https://cseweb.ucsd.edu/~mihir/papers/inchash.pdf), [Elliptic Curve Multiset Hash](https://arxiv.org/abs/1601.06502), [Range-Based Set Reconciliation](https://arxiv.org/abs/2212.13567)).",
     "recent_posts": [
+        {
+            "id": "m93ff7df21789eafa76fd5b0b1c65c75ae1fbaec2",
+            "title": "Testnet 5 launch",
+            "link": "https://gnusha.org/pi/bitcoindev/avINnoG-1r242rAw@erisian.com.au/T/#u#m93ff7df21789eafa76fd5b0b1c65c75ae1fbaec2",
+            "authors": [
+                "Anthony Towns"
+            ],
+            "published_at": "2026-11-09T18:14:00+00:00",
+            "summary": "- Mining of testnet 5 genesis block will align with the mainnet retarget event at block 975,744.  - Genesis block structure has been modified to simplify pooled mining and improve compatibility.  - Differences in BIP 34 block height encoding may cause issues during blockchain initialization and bootstrapping.",
+            "n_threads": 0,
+            "dev_name": "bitcoin-dev",
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Nov_2026/m93ff7df21789eafa76fd5b0b1c65c75ae1fbaec2_Testnet-5-launch.xml",
+            "combined_summ_file_path": ""
+        },
         {
             "id": "m2bf9958df2e7e374bfbd64d6fc4f7e083545965c",
             "title": "[Proposal] Tapleaf 0xc2: An overview of the Great Script Restoration (GSR)",
@@ -9,7 +24,7 @@
                 "Julian"
             ],
             "published_at": "2026-11-06T09:30:00+00:00",
-            "summary": "- Five proposals introduce Tapleaf 0xc2, expanding Bitcoin Script functionality while maintaining backward compatibility.  - Advanced features like general covenants, transaction introspection, and reusable macros are now supported.  - Static analysis, strict execution limits, and benchmarking ensure safety, with open questions on broader impacts.",
+            "summary": "- Five proposals collectively define Tapleaf 0xc2, expanding Bitcoin Script with advanced features and robust safeguards.  - These changes re-enable opcodes, add transaction introspection, extend primitives, and maintain backward compatibility.  - Comprehensive documentation, reference implementation, and extensive testing ensure safe deployment and encourage ongoing discussion.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -24,12 +39,50 @@
                 "Connor Avila"
             ],
             "published_at": "2026-11-05T21:08:00+00:00",
-            "summary": "- A protocol enables host systems to help generate nonces, reducing risks of seed exfiltration.  - Two BIP drafts define the protocol, introduce new PSBT fields, and detail compliance handling procedures.  - Formal cryptographic review is pending, with peer feedback and expert evaluation actively encouraged.",
+            "summary": "- An anti-exfiltration protocol involves host participation to prevent device-based leakage of signing secrets.  - Two draft Bitcoin Improvement Proposals define the protocol, responsibilities, and introduce new PSBT fields.  - Formal cryptographic review is pending, and further peer feedback is strongly encouraged for security validation.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
             "file_path": "static/bitcoin-dev/Nov_2026/m97c8fd52f592b62d97d1e82ac0c6ab44a94e5b04_Draft-BIPs-anti-exfil-signing-for-BIP340-and-ECDSA-with-PSBT-fields.xml",
             "combined_summ_file_path": ""
+        },
+        {
+            "id": "9005",
+            "title": "We made the bitcoin-dev mailing list readable: 15 years, 24,699 messages",
+            "link": "https://delvingbitcoin.org/t/we-made-the-bitcoin-dev-mailing-list-readable-15-years-24-699-messages/2985/4",
+            "authors": [
+                "LearnBitcoin.com"
+            ],
+            "published_at": "2026-11-09T22:48:59.613000+00:00",
+            "summary": "- The Bitcoin BIP archive now details BIP integration, modification versions, and includes direct documentation references.  - Archive documentation is comprehensive, covering all 74 BIPs and 137 Bitcoin Core releases from version 0.1.5 onward.  - Archive updates now occur twice daily, and user records have been unified for improved accuracy and accessibility.",
+            "n_threads": 3,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "AdamISZ"
+            ],
+            "file_path": "static/delvingbitcoin/Nov_2026/9005_We-made-the-bitcoin-dev-mailing-list-readable-15-years-24-699-messages.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_We-made-the-bitcoin-dev-mailing-list-readable-15-years-24-699-messages.xml"
+        },
+        {
+            "id": "9004",
+            "title": "Gossip Observer: New project to monitor the Lightning P2P network",
+            "link": "https://delvingbitcoin.org/t/gossip-observer-new-project-to-monitor-the-lightning-p2p-network/2105/25",
+            "authors": [
+                "jonhbit"
+            ],
+            "published_at": "2026-11-09T21:11:15.553000+00:00",
+            "summary": "- Message equivocation enables attackers to partition the network and deceive honest nodes with conflicting updates.  - Cryptographic commitment structures, like multiset hashing and fingerprint trees, detect and localize inconsistencies efficiently.  - Community feedback is encouraged to refine these sub-protocols and strengthen defenses against message equivocation.",
+            "n_threads": 23,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "rustyrussell",
+                "gmaxwell",
+                "jpjuni0r",
+                "endothermicdev",
+                "fabian.kraus"
+            ],
+            "file_path": "static/delvingbitcoin/Nov_2026/9004_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Gossip-Observer-New-project-to-monitor-the-Lightning-P2P-network.xml"
         },
         {
             "id": "9002",
@@ -39,44 +92,11 @@
                 "rorp"
             ],
             "published_at": "2026-11-09T03:20:57.105000+00:00",
-            "summary": "- Eclair 0.14.0 allowed attackers to exhaust node memory, causing denial-of-service by abusing batch parameters.  - Improper validation of batch size and channel IDs enabled unbounded message buffering and memory usage.  - The issue was fixed in version 0.14.1, and users should upgrade immediately for security.",
+            "summary": "- Eclair 0.14.0 allowed attackers to exhaust node memory, causing a denial-of-service condition.  - Improper enforcement of protocol parameters permitted unbounded buffering of commitment_signed messages with invalid batch sizes.  - The vulnerability was fixed in version 0.14.1, and users should urgently upgrade for security.",
             "n_threads": 0,
             "dev_name": "delvingbitcoin",
             "contributors": [],
             "file_path": "static/delvingbitcoin/Nov_2026/9002_Disclosure-Memory-exhaustion-DoS-in-Eclair-0-14-0.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "9001",
-            "title": "[BIP Draft] Co-signer Spending Policies",
-            "link": "https://delvingbitcoin.org/t/bip-draft-co-signer-spending-policies/2955/7",
-            "authors": [
-                "lukecarriere"
-            ],
-            "published_at": "2026-11-08T21:40:02.502000+00:00",
-            "summary": "- Multiple serialization formats are being compared, each with unique trade-offs for policy object encoding.  - TLV, canonical JSON, and CBOR offer different compatibilities, readability, and challenges regarding field handling.  - There is a preference for a hybrid model, but feedback on failure cases and compatibility is requested.",
-            "n_threads": 6,
-            "dev_name": "delvingbitcoin",
-            "contributors": [
-                "PREDGE",
-                "tehiyadu"
-            ],
-            "file_path": "static/delvingbitcoin/Nov_2026/9001_-BIP-Draft-Co-signer-Spending-Policies.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_-BIP-Draft-Co-signer-Spending-Policies.xml"
-        },
-        {
-            "id": "8997",
-            "title": "Should wallets default to Taproot or SegWit receive addresses while some services still reject bc1p?",
-            "link": "https://delvingbitcoin.org/t/should-wallets-default-to-taproot-or-segwit-receive-addresses-while-some-services-still-reject-bc1p/3056",
-            "authors": [
-                "Anzus_GemWallet"
-            ],
-            "published_at": "2026-11-08T13:33:13.184000+00:00",
-            "summary": "- Cryptocurrency wallet users often face compatibility issues when sending funds due to unsupported address formats.  - Wallet providers must balance future-proofing with current compatibility when choosing default address formats.  - Improved UI/UX and clear community resources are needed to help users address compatibility challenges efficiently.",
-            "n_threads": 0,
-            "dev_name": "delvingbitcoin",
-            "contributors": [],
-            "file_path": "static/delvingbitcoin/Nov_2026/8997_Should-wallets-default-to-Taproot-or-SegWit-receive-addresses-while-some-services-still-reject-bc1p-.xml",
             "combined_summ_file_path": ""
         }
     ],
@@ -84,15 +104,16 @@
         {
             "id": "m41b778c563618967693cc6dce70328d7cb7151db",
             "title": "[BIP Proposal] Stale Tip Relay",
-            "link": "https://gnusha.org/pi/bitcoindev/3rRzUIQUWDcT-ASQXvovARX12jzE0UWy0RQ8fk7M_z3bW_k2LWPPEvRhoD6sEe3GW3fjCdtzLOZN34TCsB2CI6iRcdjer9Y8QiNwUh2QepI=@protonmail.com/T/#m41b778c563618967693cc6dce70328d7cb7151db",
+            "link": "https://gnusha.org/pi/bitcoindev/avHvtxnvoNwbczC8@erisian.com.au/T/#m41b778c563618967693cc6dce70328d7cb7151db",
             "authors": [
                 "Ram"
             ],
             "published_at": "2026-07-29T17:21:00+00:00",
-            "summary": "- The `staletip` proposal introduces an optional messaging system for sharing stale block tip information.\n- Its technical policy limits messages to relevant tips, compressed headers, and maintains a recent tip cache.\n- This initiative aims to enhance network observability, enabling improved diagnostics and response to stale events.",
-            "n_threads": 3,
+            "summary": "- The `staletip` proposal introduces optional P2P messaging to improve stale rate observability in the Bitcoin network.  - It uses BIP 434 messaging, compresses header sequences, and limits shared data and cache size for efficiency.  - Nodes gain better visibility of stale tips, enabling faster responses and improved diagnosis of network health.",
+            "n_threads": 4,
             "dev_name": "bitcoin-dev",
             "contributors": [
+                "Anthony Towns",
                 "Antoine Poinsot",
                 "Edil Guimar\u00e3es de Medeiros"
             ],
@@ -107,7 +128,7 @@
                 "Luke Carriere"
             ],
             "published_at": "2026-10-06T01:16:00+00:00",
-            "summary": "- The draft proposes a standardized enforcement policy format to improve interoperability among blockchain security products.  - It includes various verification methods, enforces script-inclusion of all conditions, and supports Discreet Log Contracts.  - Feedback is requested on serialization formats, blinded verification feasibility, attestation formats, output language, and timelock requirements.",
+            "summary": "- A new draft proposes standardizing enforcement policies for blockchain co-signers to improve interoperability.  - The draft covers unified policy formats, verification methods, script-enforceable conditions, and oracle attestations.  - Feedback is requested on technical issues such as serialization, blinded verification, attestation formats, and fallback paths.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -122,7 +143,7 @@
                 "Cory Fields"
             ],
             "published_at": "2026-11-04T21:05:00+00:00",
-            "summary": "- Quantum-safe output types and enforced collateralization aim to safeguard legacy cryptocurrency against quantum threats.  - Game-theoretic mechanisms like Quantum Landmines and auctions incentivize defenders and penalize potential attackers.  - These adaptive, incentive-driven protocols harness economic theory to strengthen security in decentralized systems.",
+            "summary": "- Several post-quantum strategies use game theory and incentives to protect cryptocurrency from quantum attacks.  - Mechanisms like Quantum Landmines, Staked Auctions, and Sats Auctions involve collateral, bidding, and time restrictions.  - Adaptive schemes combining cryptographic and economic approaches can transform system vulnerabilities into self-policing defenses.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -137,7 +158,7 @@
                 "AntoineP"
             ],
             "published_at": "2024-03-24T17:29:42.691000+00:00",
-            "summary": "- The proposal addresses vulnerabilities in Bitcoin\u2019s protocol, including timewarp and merkle root computation risks.  - It recommends limits on legacy transaction types and invites community collaboration for further improvements.  - Some suggestions, like block size reduction, face debate due to concerns about scalability and protocol changes.",
+            "summary": "- The proposal highlights vulnerabilities in Bitcoin, including timewarp attacks and inefficient legacy transaction handling.  - Solutions include retarget period adjustments, transaction constraints, and invalidation of risky small transactions.  - Some recommendations, like reducing block size and standardizing SegWit elements, have prompted community debate.",
             "n_threads": 94,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -170,7 +191,7 @@
                 "0xB10C"
             ],
             "published_at": "2024-08-02T11:58:02.413000+00:00",
-            "summary": "- Compact block reconstruction efficiency depends on node transaction awareness and changes to configuration settings.  - Increased inbound connections and mempool activity influence block reconstruction rates and associated request frequencies.  - Enabling `mempoolfullrbf` and evaluating connectivity models may optimize block propagation across the network.",
+            "summary": "- Nodes adjusted configurations such as maximum inbound connections, blocksonly setting, and mempoolfullrbf option.  - Increased mempool activity and network congestion resulted in decreased compact block reconstruction efficiency.  - Enabling mempoolfullrbf improved reconstruction efficiency, suggesting network-wide benefits if adopted by most pools.",
             "n_threads": 61,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -202,7 +223,7 @@
                 "starius"
             ],
             "published_at": "2026-06-06T22:00:54.554000+00:00",
-            "summary": "- The proposal enables public key recovery from elliptic curve signatures, reducing witness size without increasing quantum risk.\n- The approach modifies signature validation, incorporates the root hash into challenges, and streamlines the witness structure.\n- Revised nonce derivation enhances security, while blockchain space and transaction costs are efficiently minimized.",
+            "summary": "- The proposal introduces a method to recover EC public keys from signatures, reducing witness size.  - A recoverable EC leaf eliminates the public key script, ensuring security and streamlined witness validation.  - Modified nonce derivation and validation logic enhance security and efficiency for Pay-to-Merkle-root transactions.",
             "n_threads": 36,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -221,60 +242,64 @@
     ],
     "today_in_history_posts": [
         {
-            "id": "018269",
-            "title": "Bitcoin Archaeology",
-            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-November/018269.html",
+            "id": "021175",
+            "title": "Removing BIP-125 Rule #5 Pinning with the Always-Replaceable Invariant",
+            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-November/021175.html",
             "authors": [
-                "Dan Bryant"
+                "Peter Todd"
             ],
-            "published_at": "2020-11-11T15:06:54+00:00",
-            "summary": "- The author aims to rebuild early Bitcoin versions using MinGW, as Visual C++ 6 is unavailable.  - OpenSSL fails to build due to mk1mf.pl issues, likely caused by an incompatible MSYS perl version.  - Possible solutions include various build environments, patching, or precompiled releases, but difficulties persist.",
-            "n_threads": 7,
+            "published_at": "2022-11-07T20:17:29+00:00",
+            "summary": "- Bitcoin Core limits original and descendant transactions that can be replaced to a total of 100.  - The Replaceability Invariant ensures no transaction becomes unreplaceable due to exceeding this limit.  - This method maintains transaction replaceability and prevents issues caused by Rule #5 pinning.",
+            "n_threads": 9,
             "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Nov_2020/018269_Bitcoin-Archaeology.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Nov_2020/combined_Bitcoin-Archaeology.xml"
+            "contributors": [
+                "Suhas Daftuar",
+                "Antoine Riard",
+                "David A. Harding"
+            ],
+            "file_path": "static/bitcoin-dev/Nov_2022/021175_Removing-BIP-125-Rule-5-Pinning-with-the-Always-Replaceable-Invariant.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Nov_2022/combined_Removing-BIP-125-Rule-5-Pinning-with-the-Always-Replaceable-Invariant.xml"
         },
         {
-            "id": "002882",
-            "title": "SIGHASH_SINGLE + update_fee Considered Harmful",
-            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-November/002882.html",
+            "id": "003775",
+            "title": "Mitigating Channel Jamming with Reputation Credentials: a Protocol Sketch",
+            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-December/003775.html",
             "authors": [
-                "Johan Tor\u00e5s Halseth"
+                "ZmnSCPxj"
             ],
-            "published_at": "2020-11-23T15:11:52+00:00",
-            "summary": "- A vulnerability enables attackers to bypass penalties on HTLC transactions by redirecting inflated fees.  - Countermeasures include tighter channel policies and adopting a scorched earth approach for justice transactions.  - Addressing this requires removing certain fee appliances and considering the impact on channel usability.",
-            "n_threads": 5,
+            "published_at": "2022-12-01T11:52:13+00:00",
+            "summary": "- Credential tampering by intermediary nodes in payment paths can result in wasted sender credentials.  - Routing nodes generally avoid intentional attacks that would reduce their chance to earn fees.  - Effective protection mechanisms mean most remaining jamming instances are accidental node failures.",
+            "n_threads": 23,
             "dev_name": "lightning-dev",
             "contributors": [
                 "Antoine Riard",
-                "Olaoluwa Osuntokun"
+                "Clara Shikhelman",
+                "David Harding",
+                "Michael Folkson"
             ],
-            "file_path": "static/lightning-dev/Nov_2020/002882_SIGHASH-SINGLE-update-fee-Considered-Harmful.xml",
-            "combined_summ_file_path": "static/lightning-dev/Nov_2020/combined_SIGHASH-SINGLE-update-fee-Considered-Harmful.xml"
+            "file_path": "static/lightning-dev/Dec_2022/003775_Mitigating-Channel-Jamming-with-Reputation-Credentials-a-Protocol-Sketch.xml",
+            "combined_summ_file_path": "static/lightning-dev/Dec_2022/combined_Mitigating-Channel-Jamming-with-Reputation-Credentials-a-Protocol-Sketch.xml"
         },
         {
-            "id": "6196",
-            "title": "P2share: how to turn any network (or testnet!) into a bitcoin miner",
-            "link": "https://delvingbitcoin.org/t/p2share-how-to-turn-any-network-or-testnet-into-a-bitcoin-miner/2093",
+            "id": "3521",
+            "title": "CTV, APO, CAT activity on signet",
+            "link": "https://delvingbitcoin.org/t/ctv-apo-cat-activity-on-signet/1257",
             "authors": [
-                "VzxPLnHqr"
+                "ajtowns"
             ],
-            "published_at": "2025-11-07T01:06:06.018000+00:00",
-            "summary": "- The p2share network distributes bitcoin mining rewards by randomly selecting a single shareholder for each block.  - Shares are transferable, enabling miners to accumulate or trade them based on network rules and incentives.  - This model promotes fairness, efficiency, and decentralization while minimizing transaction bloat in bitcoin mining.",
-            "n_threads": 28,
+            "published_at": "2024-11-14T17:29:02.674000+00:00",
+            "summary": "- BIPs 118, 119, and 347 have enabled advanced Bitcoin script features, expanding transaction flexibility.  - APO and CTV are used for coinbase payouts, structured spending, and more secure transaction conditions.  - OP_CAT, integrated in Proof of Work faucets, dominates usage, supporting sophisticated contracts and verification methods.",
+            "n_threads": 20,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "ZmnSCPxj",
-                "cmp_ancp",
-                "jungly",
-                "AdamISZ",
-                "coinjoinkillua",
-                "garlonicon",
-                "pojeyuhu"
+                "1440000bytes",
+                "fiatjaf",
+                "JeremyRubin",
+                "vostrnad",
+                "AdamISZ"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2025/6196_P2share-how-to-turn-any-network-or-testnet-into-a-bitcoin-miner.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2025/combined_P2share-how-to-turn-any-network-or-testnet-into-a-bitcoin-miner.xml"
+            "file_path": "static/delvingbitcoin/Nov_2024/3521_CTV-APO-CAT-activity-on-signet.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2024/combined_CTV-APO-CAT-activity-on-signet.xml"
         }
     ]
 }
