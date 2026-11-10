@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Gossip Observer: New project to monitor the Lightning P2P network</title>
+  <updated>2026-11-10T08:01:49.066528+00:00</updated>
+  <author>
+    <name>jonhbit</name>
+  </author>
+  <timestamp>2026-11-09 21:11:15.553000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Gossip Observer: New project to monitor the Lightning P2P network</title>
+    <updated>2026-11-10T08:01:49.066564+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/gossip-observer-new-project-to-monitor-the-lightning-p2p-network/2105/25" rel="alternate"/>
+    <summary>Set reconciliation introduces a vulnerability in the gossip network known as message equivocation. This occurs when an attacker, by controlling multiple channels, can broadcast different versions of messages to disjoint partitions of the network. Honest nodes, relying on set reconciliation over short IDs that do not bind to message contents, are unable to detect these differences, resulting in stable network partitions where each group of nodes holds a distinct view of the same channel state.
+
+The mechanism enables several attacks with increased effectiveness. When an attacker controls a number of channels and issues unique signed updates for each partition, sender fingerprinting becomes trivial: by observing which version of a channel update a payment traverses, the attacker reliably identifies the sender. Traffic diversion is facilitated by selectively offering reduced fees to targeted nodes, such as those likely to be high-volume sources or recipients, allowing the attacker to position themselves as intermediaries in more payment routes and extract excessive fees. Additionally, if an attacker operates multiple colluding nodes, they can manipulate routing fees over multi-hop paths they control, further increasing their gains at the expense of honest participants.
+
+Mitigation strategies center around strengthening the binding between message content and its identifier within the set reconciliation protocol. One approach involves augmenting the sketch ID to include a commitment to message contents; however, this comes with significant performance drawbacks, as larger sketch elements degrade the efficiency of reconciliation. Alternatively, replacing the existing short ID with a cryptographic hash could address the issue, but short hashes remain vulnerable to collisions, and relying solely on hashes could result in stale message propagation since the relative freshness of messages cannot easily be determined without the full data.
+
+Another solution proposes maintaining an auxiliary sketch or commitment structure over message contents, synchronized less frequently to minimize bandwidth overhead. Among several incremental hashing methods, MuHash stands out for its security properties over large fields and is already utilized in Bitcoin Core. Nevertheless, the Elliptic Curve Multiset Hash presents a particularly attractive option due to its compact output, efficient implementation with existing cryptographic libraries such as libsecp256k1, and compatibility with tree-based structures for hierarchical comparison. By constructing a fingerprint tree over the current network view, nodes can periodically compare fingerprints, identify discrepancies indicating equivocation, and generate proofs to alert the broader network.
+
+Range-Based Set Reconciliation and tree-friendly multiset hash functions enable efficient detection and localization of inconsistencies, drawing on techniques also used in collaborative data synchronization and decentralized relay protocols such as Nostr. These cryptographic commitments empower nodes to incrementally verify the integrity of their shared network state while minimizing communication costs. Feedback and further suggestions regarding these sub-protocols and potential improvements are sought from the community to refine the proposal and ensure robust defenses against message equivocation in the gossip network.
+
+References:
+- [Incremental Hashes](https://cseweb.ucsd.edu/~mihir/papers/inchash.pdf)
+- [Bitcoin Core UTXO Set Commitment](https://bitcoincore.reviews/19055)
+- [Security of Incremental Hash Functions](https://logperiodic.com/rbsr.htmlsecurity-of-incremental-hash-functions)
+- [Elliptic Curve Multiset Hash](https://arxiv.org/abs/1601.06502)
+- [Efficient Hash-to-Curve Implementation](https://github.com/bitcoin/bips/blob/99e21c81547bc14445d9a2083647f19621e3a840/bip-0324.mediawikiuser-content-ElligatorSwift_encoding_of_curve_X_coordinates)
+- [Tree-Friendly Functions](https://logperiodic.com/rbsr.htmltree-friendly-functions)
+- [Range-Based Set Reconciliation](https://arxiv.org/abs/2212.13567)
+- [Nostr Relay Sync](https://logperiodic.com/rbsr.html)</summary>
+    <published>2026-11-09T21:11:15.553000+00:00</published>
+  </entry>
+</feed>

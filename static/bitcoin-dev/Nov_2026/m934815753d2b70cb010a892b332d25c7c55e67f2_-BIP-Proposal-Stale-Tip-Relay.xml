@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Proposal] Stale Tip Relay</title>
+  <updated>2026-11-10T08:06:56.085157+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2026-11-09 16:07:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Proposal] Stale Tip Relay</title>
+    <updated>2026-11-10T08:06:56.085197+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/avHvtxnvoNwbczC8@erisian.com.au/T/#m934815753d2b70cb010a892b332d25c7c55e67f2" rel="alternate"/>
+    <summary>The reference implementation introduces three operational modes for tracking and relaying stale tips within the Bitcoin network: no stale relay, stale header relay only, and stale block relay, with the default setting being none. The configuration is managed through a command-line argument that allows users to specify their preferred mode. There is ongoing discussion regarding whether "blocks" should be the default, a supported option, or excluded entirely, as well as whether formal specification of stale block relay is warranted.
+
+Analysis suggests that enabling stale block relay does not meaningfully alter mining incentives. Any miner seeking advantages from improved stale block relay can independently implement such functionality at relatively low cost, especially when compared to the resources required for large-scale attacks on the network. Mining rewards are determined by blocks with the highest cumulative proof of work, which inherently excludes stale blocks from direct incentive consideration. Relay mechanisms primarily affect propagation speed, and since the relay of new tips based on previously stale blocks is already efficient, further improvements are unlikely to significantly influence mining strategies.
+
+Relaying stale blocks at the same height as the current tip offers two notable benefits. First, it improves network transparency by revealing what is actively being mined, thereby mitigating suspicions of block-withholding attacks during chain reorganizations. Second, it exposes possible double-spend attempts or transaction censorship — whether due to broad consensus around a soft fork or a 51% attack — by making visible alternative chains that may have been otherwise hidden. The practical impact of faster reorganizations is limited, typically becoming relevant only in specialized attack scenarios where slow-to-validate blocks are countered by an alternative fast-to-validate chain, provided that parallel validation is widely supported.
+
+Empirical data from real-world reorganization events, such as the two-block reorg at block 941880, provides quantifiable insights. Downloading and validating blocks during a reorg occurs rapidly, with full alternative chains being processed in just over four seconds. The economic analysis demonstrates minimal expected reward differences for miners across varying hashrate percentages; even infrequent miners realize similar outcomes. These findings underscore that optimizing relay speeds for ancestor blocks yields only marginal advantages, which individual miners can address within their own infrastructure if necessary.
+
+Visibility into stale blocks during incidents like the aforementioned reorg would have clarified network behavior and dispelled premature suspicions of selfish mining or attacks. Several public discussions and social media posts reflected confusion that could have been avoided had stale blocks been promptly propagated ([bnoc.xyz](https://bnoc.xyz/t/two-block-reorg-at-height-941880/97/32), [x.com](https://x.com/wk057/status/2036674054971703361), [Stacker News](https://stacker.news/items/1460047)). Providing both timestamps and transaction details through stale block relay can serve as robust evidence against claims of untimely publication or malicious activity, whereas headers alone may not suffice, particularly with nTime rolling.
+
+Adopting the precautionary principle implies that if there is concern about potential harm from this feature, similar attention should be paid to the possibility of attackers implementing private relay networks, necessitating thorough analysis and, if justified, proactive countermeasures. Conversely, restricting honest participants from relaying stale blocks may inadvertently benefit adversaries who construct superior relay infrastructures, thus undermining the broader network. Ultimately, relaying information substantiated by mainnet-level proof of work is not considered dangerous under these circumstances, and enhancing transparency is likely to strengthen rather than weaken network security. 
+
+For further technical context and historical data, refer to the [stale-blocks repository](https://github.com/bitcoin-data/stale-blocks/).</summary>
+    <published>2026-11-09T16:07:00+00:00</published>
+  </entry>
+</feed>
