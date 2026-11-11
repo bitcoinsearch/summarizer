@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Decentralized Coinbase Payout Protocols (DCPP): A Framework for Discussion</title>
+  <updated>2026-11-11T07:34:44.634286+00:00</updated>
+  <author>
+    <name>7d5x9</name>
+  </author>
+  <timestamp>2026-11-11 03:41:14.733000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Decentralized Coinbase Payout Protocols (DCPP): A Framework for Discussion</title>
+    <updated>2026-11-11T07:34:44.634319+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/decentralized-coinbase-payout-protocols-dcpp-a-framework-for-discussion/3060" rel="alternate"/>
+    <summary>The open-source mining ecosystem is experiencing renewed innovation, with considerable attention given to decentralized mining pool protocols such as Sv2, DATUM, and the [Open Mining Stack](https://www.256foundation.org/). These efforts build on earlier initiatives like P2Pool, whose principal challenge was the inability to scale coinbase-native payouts to a large number of miners, an issue central to ongoing research and development in this area. As new decentralized pool structures emerge, effectively scaling payout mechanisms remains critical, particularly in addressing both technical constraints and attack surfaces unique to these systems.
+
+Decentralized coinbase payout protocols (DCPPs) are governed by three primary design limitations. First, paying each miner directly through distinct coinbase outputs does not scale due to fixed output slots and block space limitations. Second, DCPPs inherently expand the attack surface—if payouts become unreliable or uncompetitive, a decentralized pool risks economic infeasibility, especially under targeted payout settlement griefing (PSG) attacks. Third, Bitcoin’s scripting capabilities are limited, restricting the sophistication of payout logic that can be implemented at the protocol level.
+
+When more miners seek payment than available coinbase slots ($N$), pools must select which contributors receive direct payouts. A typical approach pays the top $N$ hashrate contributors, but this “rich list” method is susceptible to identity laundering: miners can split their hashrate among multiple identities, increasing their chance of securing payout slots and pushing out smaller miners. This behavior, known as the Rich List Attack (RLA), can result either in unfair reward redistribution or deferred settlement, introducing complex liabilities for the pool operator and requiring robust rules to ensure fair, eventual payments.
+
+Several schemes have been proposed to address these challenges. Chris Belcher's 2017 [proposal](https://bitcointalk.org/index.php?topic=2135429.0) introduced a payment hub model where the coinbase funds a central hub that manages off-chain payment channels with miners. The hub cooperates with miners to release payments, using multisig paths and timelocks to protect participants against stalling or ransom attempts. Braidpool's [Rolling Coinbase Aggregation (RCA)](https://github.com/braidpool/braidpool/blob/8d3c5198593d691f50ae5238cdaee215f4213cda/docs/braidpool_spec.mdpayout-update) instead accumulates rewards into a single UTXO, periodically signing batch payout transactions (UHPOs) with a threshold of recent block-finding miners, thus reducing block space usage and batching payouts over longer intervals. P2Poolv2 envisions a [market-driven](https://github.com/p2poolv2/p2poolv2/wiki/Payout-mechanism---Trading-Shares-For-Bitcoin) approach, allowing miners to trade sharechain UTXOs for Lightning payments via atomic swaps, aggregating enough value to secure coinbase slots through market makers.
+
+Each proposal contains inherent vulnerabilities to PSG, often shifting risks rather than fully mitigating them. For example, Belcher’s scheme can be undermined by identity laundering, requiring hubs to open channels with many low-value identities, which can erode fee competitiveness or reintroduce RLA if thresholds are applied. In Braidpool, control over RCA outputs becomes a point of attack if malicious actors accumulate sufficient signing authority. In P2Poolv2’s structure, attackers can still crowd out legitimate participants by splitting holdings across multiple identities.
+
+An idealized coinpool-style DCPP would enable every participant to receive a proportional, independently enforceable payout claim, eliminating competition for ranked slots and removing incentives for identity splitting. Each claim could be freely transferred or atomically swapped, with settlement costs assigned proportionally. However, constructing such a system within Bitcoin’s current covenant and scripting constraints remains an open problem. As a result, practical approaches must balance between what is technically achievable and what achieves the highest degree of fairness and security.
+
+Two central tools are available: Bitcoin script and external hashrate/liquidity markets. One promising direction is building a coinpool funded directly from the coinbase, where participants acquire pre-signed exit transactions to guarantee unilateral withdrawal. This construction requires careful selection of who holds the threshold keys controlling the pooled output, how they are selected, and the fallback mechanisms should those parties become unavailable or uncooperative.
+
+Applying existing coinpool structures such as Spark and Ark within the P2Poolv2 sharechain framework offers illustrative case studies. In a Spark-like statechain model, a professional Spark Service Provider (SSP) and elected market makers (MMs) form the Coinbase Payout Operators (CPOs), collectively controlling the output. Miners are allocated leaves in a payout tree, each enabling cooperative or fallback exits. However, this design is vulnerable to the “poison pill” vector, where attackers inflate subtrees with multiple identities and sell all but one, forcing market makers to incur</summary>
+    <published>2026-11-11T03:41:14.733000+00:00</published>
+  </entry>
+</feed>
