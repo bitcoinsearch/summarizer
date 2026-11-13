@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-13T07:35:54.110509+00:00</updated>
+  <author>
+    <name>ZmnSCPxj</name>
+  </author>
+  <timestamp>2026-11-12 20:11:15.778000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-13T07:35:54.110550+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/15" rel="alternate"/>
+    <summary>A shachain seed must be uniquely generated for each Lightning Network channel to ensure security. Reusing a shachain seed, even after an old channel has been securely closed on-chain, is not permissible, as the structure of shachain does not support this practice. The risk is compounded by the inability to verify whether supposed different peers are genuinely distinct entities; they could potentially be operated or simulated by the same adversary. Therefore, every new channel—regardless of whether it involves the same or a different peer—demands a fresh shachain seed.
+
+The management of encrypted shachain sequences introduces operational challenges, particularly when channels are closed and new ones opened. Maintaining a reserve of encrypted shachain sequences is necessary to prevent frequent replenishment, which would otherwise necessitate activating an offline machine to transfer sensitive data. This process is both cumbersome and increases exposure to potential vulnerabilities during data transfer.
+
+In the context of key rotation, a more robust approach favors rotating entire seed private keys for each signer instead of merely rotating ECDSA key shares. This method involves retaining old keys temporarily but using only the latest key for newly established channels. In Bitcoin, such a rotation requires an on-chain transaction to migrate funds from the old key to the new one. However, since channels naturally terminate over time, transitioning to a new key for each new channel is both logical and secure. Old keys can be safely disposed of once all associated channels have been closed. Rotating key shares rather than full seed keys may be considered only to avoid closing existing channels, but given that channels will eventually close regardless, this advantage is limited. Furthermore, periodic key share rotation demands complex multi-round interaction protocols, which are susceptible to implementation flaws and could potentially introduce greater risks than benefits.
+
+Enhancing Lightning node operator security through Multi-Party Computation (MPC) or similar cryptographic techniques represents a promising avenue. A trusted offline computer can perform any operation achievable by MPC, though at significantly lower computational cost. While MPC offers increased flexibility and resilience, it comes at the expense of dramatically higher CPU and networking requirements. For example, operations that typically complete in milliseconds on an offline machine could take several minutes under MPC.
+
+The JPosner MPC scheme exemplifies how secret keys and revocation root keys can be managed collaboratively among multiple signers. Initially, a k-of-n threshold scheme is transformed into an n-of-n configuration, ensuring that each participant controls multiple private keys within the group. Each signer contributes their own revocation root key, and within the MPC, computations are performed to generate additional shachains and derive necessary public and encrypted revocation keys. At revocation time, individual signers reveal their respective shachain outputs, enabling the construction of the joint revocation key required for safe channel closure.
+
+When employing an offline machine, each signer transmits their root revocation key—encrypted using an ephemeral public key provided by the offline machine—to facilitate computation without exposing secrets. This process may utilize random nonce challenges and ephemeral keypairs to prevent replay attacks and ensure message authenticity. Key derivation paths for per-channel root revocation keys should employ hardened derivation methods to maintain strong security boundaries between channels and across time.
+
+Comparing the MPC and offline machine approaches highlights several trade-offs. MPC provides ongoing operational flexibility, allowing signers to independently generate new keyblobs as needed, reducing reliance on periodic offline processes, and offering adaptable storage-to-computation tradeoffs. However, this flexibility is accompanied by substantial computational overhead. Conversely, the offline machine approach minimizes CPU requirements, making it feasible on low-powered hardware, but necessitates careful procedures for keeping the device isolated and securely transferring data. Additionally, the offline machine strategy favors generating very large keyblobs to minimize the frequency of device activation, accommodating the unpredictable nature of channel closures and reopenings.
+
+To summarize, robust Lightning channel management relies on unique per-channel shachain seeds and careful key rotation strategies. Both MPC and offline machine methods offer viable paths for enhancing operational security, each presenting distinct advantages and practical considerations regarding computational resources, manual intervention, and resilience to network events. Comprehensive guides tailored to these approaches would be invaluable for Lightning node operators seeking to strengthen their security posture. For further details on related MPC implementations, refer to [JPosner's work](https://github.com/JeremyRubin/mpc).</summary>
+    <published>2026-11-12T20:11:15.778000+00:00</published>
+  </entry>
+</feed>

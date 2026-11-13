@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Towards A K-of-N Lightning Network Node</title>
+  <updated>2026-11-13T07:36:10.195374+00:00</updated>
+  <author>
+    <name>tony</name>
+  </author>
+  <timestamp>2026-11-12 22:03:44.708000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Towards A K-of-N Lightning Network Node</title>
+    <updated>2026-11-13T07:36:10.195407+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/towards-a-k-of-n-lightning-network-node/2395/14" rel="alternate"/>
+    <summary>A growing consensus within the bitcoin ecosystem is forming around the use of "multivendor multisig" for secure private key custody. This approach enhances security by distributing control across multiple independent devices and vendors, thereby reducing the risk that a single point of compromise could endanger funds. The flexibility to rotate out compromised or outdated signers without disrupting overall operations further strengthens resilience. However, implementing multivendor multisig in the context of Lightning or hot wallets remains technically challenging. Progress toward robust K-of-N architectures for Lightning nodes—and ensuring their secure ongoing operation—will be crucial for attracting more capital to the Lightning Network.
+
+The economic and cybersecurity challenges facing Lightning node operators are significant. Current conditions render node operation more of a specialized hobby than a commercially viable pursuit, as highlighted by respected participants like Megalithic, who describe running a node as a [gentleman's pastime](https://docs.megalithic.me/the-gentlemans-guide-to-routing-nodes/a-node-for-a-gentleman/) rather than a true business opportunity. Without substantial improvements to builder security, expecting widespread adoption of new use-cases may be unrealistic.
+
+To address these challenges, a practical Multi-Party Computation (MPC) solution is proposed that does not require changes to the Lightning protocol specification. The suggested design utilizes a K-of-N Lightning custody model, combining threshold ECDSA signing with threshold encryption of offline-precomputed revocation secrets. An independently validating quorum of signers authorizes both transaction signatures and the release of revocation secrets, which effectively removes any single online machine’s ability to compromise channel funds.
+
+Traditional threshold ECDSA MPC focuses on protecting signing keys, but Lightning adds complexity with per-commitment secrets used for state revocation. If these secrets are leaked prematurely, an attacker could unjustly penalize an otherwise honest node operator, potentially claiming all funds in the channel. Under the proposed architecture, multiple independent MPC signers each run policy validation akin to VLS, track channel state, and collectively hold shares of the signing and decryption keys. Revocation secrets are precomputed offline by an air-gapped device, encrypted under a threshold scheme, and distributed to the signers. When a new commitment is signed, each signer validates the process before jointly decrypting and releasing the previous commitment’s secret only after the new state is securely recorded. Regular maintenance involves periodically replenishing encrypted secrets and rotating key shares.
+
+This methodology requires a trusted offline machine for initial secret generation and custom integrations for threshold decryption, alongside robust signer coordination and state validation. While it departs from strict K-of-N by introducing a trusted dealer for revocation secrets, it ensures that no single online system ever holds unrevoked secrets, and reconstruction occurs only when safe.
+
+Despite its strengths, K-of-N schemes are not foolproof, as evidenced by incidents such as the $6 billion hack of Binance's hot wallet, which employed MPC. Nevertheless, major platforms like Binance, Coinbase, OKX, Fireblocks, and BitGo rely on MPC for various reasons, including chain agnosticism and operational security through key share rotation. ACINQ’s experience, documented in their blog post ["Securing a $100M Lightning Node"](https://acinq.co/blog/securing%20a%20100M%20lightning%20node), illustrates the operational difficulties of sophisticated hardware security modules and the trade-offs involved—ultimately opting for a hardened single-sig server complemented by custom software and multi-device authorization for updates.
+
+Looking ahead, the ideal trajectory for the bitcoin ecosystem involves advancing multisignature-based security for both deployment and ongoing operations. More adaptable frameworks, such as K-of-N models for Lightning, will facilitate this evolution. Whether achieved via proposed BOLT 3 modifications, eltoo, or improved MPC implementations, producing accessible, practical guides for Lightning node operators will empower broader adoption and enhanced security practices.</summary>
+    <published>2026-11-12T22:03:44.708000+00:00</published>
+  </entry>
+</feed>

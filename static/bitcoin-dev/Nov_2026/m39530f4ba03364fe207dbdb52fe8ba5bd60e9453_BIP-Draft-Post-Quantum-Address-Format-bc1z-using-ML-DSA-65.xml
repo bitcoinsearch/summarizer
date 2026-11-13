@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+  <updated>2026-11-13T07:42:48.483265+00:00</updated>
+  <author>
+    <name>Hans Stringuer</name>
+  </author>
+  <timestamp>2026-11-12 17:25:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+    <updated>2026-11-13T07:42:48.483295+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/9463348c-b2ec-4c6f-b9ec-2e9e2fc7d105n@googlegroups.com/T/#u#m39530f4ba03364fe207dbdb52fe8ba5bd60e9453" rel="alternate"/>
+    <summary>A proposal has been introduced for a new Bitcoin address format, designated as `bc1z`, designed to provide quantum resistance by leveraging the ML-DSA-65 signature scheme in accordance with FIPS 204 standards. This address format enhances security by committing to a SHA-256 hash of the ML-DSA public key, ensuring that the full public key is only disclosed at the time of spending within the transaction witness. This approach mirrors the privacy and security properties found in current Pay-to-Witness-Public-Key-Hash (P2WPKH) addresses.
+
+The need for this advancement arises from the vulnerability of existing cryptographic schemes, specifically ECDSA and Schnorr signatures, to quantum computational attacks such as those enabled by Shor's algorithm. Should a cryptographically relevant quantum computer become operational, it could derive private keys from any exposed public keys on-chain, threatening approximately 6.9 million BTC, which represents an immense value currently stored in publicly exposed addresses.
+
+Key elements of the proposed design include the construction of addresses in the form `bc1z&lt;witness version 0x02&gt;&lt;32-byte SHA-256 commitment&gt;`. When spending from these addresses, the transaction witness reveals both the ML-DSA signature (occupying 3,309 bytes) and the corresponding public key (1,952 bytes). Backward compatibility is achieved through a soft fork: older nodes will interpret outputs using this new format as anyone-can-spend due to the witness version being greater than one. To facilitate adoption and experimentation, an open-source Python reference implementation is provided, offering tools for key generation, signing, signature verification, migration assistance, and real-time monitoring for quantum threats. An additional prototype demonstrates the potential for significant signature compression, utilizing SNARKs to reduce the combined size of ten individual ML-DSA signatures from approximately 33KB to around 2KB.
+
+Further information, including the complete draft specification, can be accessed in the [btc-safe repository](https://github.com/Zaenus/btc-safe), specifically under `docs/bip/0001-pq-address-format.md`. The development community is invited to review and comment on several aspects: the specifics of the address format design, the balance between security and signature size in the choice of ML-DSA-65 parameters, the mechanisms for deploying this change as a soft fork, strategies for migrating existing UTXOs to the new standard, and the broader question of whether proactive adoption is warranted prior to the emergence of a capable quantum adversary.
+
+Engagement and feedback are encouraged to refine this proposal and guide its evolution in response to collective expertise and concerns. For those interested in exploring the code or contributing, the repository is available at [https://github.com/Zaenus](https://github.com/Zaenus).</summary>
+    <published>2026-11-12T17:25:00+00:00</published>
+  </entry>
+</feed>
