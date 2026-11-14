@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+  <updated>2026-11-14T07:25:19.125714+00:00</updated>
+  <author>
+    <name>Hans Stringuer</name>
+  </author>
+  <timestamp>2026-11-13 17:25:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+    <updated>2026-11-14T07:25:19.125741+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/274e5242-4654-4f7c-b56f-609a3f2ee132@murch.one/T/#m6b3f36ca3910ab71581c5b52fe6a540a9642d4ab" rel="alternate"/>
+    <summary>A significant update has been made to a draft proposal concerning the post-quantum address format for Bitcoin, now available as version 0.2 at [this link](https://github.com/Zaenus/btc-safe/blob/main/docs/bip/0001-pq-address-format.md). The revised Motivation section addresses the impracticality of waiting for a soft fork in the context of quantum threats, given that soft fork activation can span years and migration is constrained by block space limitations. For instance, migrating 10 million UTXOs would demand approximately 1,200 completely full blocks, underscoring the necessity for a secure destination well ahead of any emergent threat.
+
+The design's security model has been clarified, correcting earlier mischaracterizations. While hash commitments are instrumental in keeping output sizes manageable—34 bytes compared to roughly 1,955 bytes—they do not provide the actual security guarantees. Unlike P2WPKH outputs, this new output type maintains its safety even while awaiting confirmation in the mempool, after it has been spent, and under address reuse, though privacy concerns remain with address reuse.
+
+Several inaccuracies from the initial draft have been addressed. The witness version for the proposed address format has shifted from version 2 (used by BIP-360) to version 3, resulting in addresses that begin with bc1r on mainnet and tb1r on testnet. The prior analogy to P2WPKH’s operation was deemed misleading and corrected. Additionally, rather than using an outdated estimate of bitcoin exposure, the updated figure aligns with BIP-361, noting that over 34% of all bitcoin had an exposed public key as of March 2026. Claims regarding signature aggregation efficiencies have been withdrawn due to the unsoundness of the prototype and vulnerabilities in pairing-based SNARKs like Groth16 to quantum attacks; consensus mechanisms cannot depend on trusted setups, so aggregation is excluded from scope. Furthermore, the reference implementation now correctly uses bech32m checksums for the new witness version and defaults to generating testnet addresses to prevent premature anyone-can-spend outputs before a soft fork activates.
+
+The technical design introduces a commitment mechanism constructed from a concatenation of the key type and public key, hashed with a tagged prefix. The scriptPubKey structure is specified, and witness data includes the signature, hash type, and key blob. The signature message follows BIP-341's SigMsg format, but under a new tag, ensuring commitments to all input amounts and scriptPubKeys, which improves upon BIP-143’s approach. Context strings compliant with FIPS 204 standards separate transaction and off-chain message signatures. Comprehensive spending rules, relay policies, size metrics, and a rationale comparing this proposal to alternatives like BIP-360, hybrid keys, ML-DSA-44, SLH-DSA, and FN-DSA are now included. Test vectors, found at [docs/bip/0001-test-vectors.json](https://github.com/Zaenus/btc-safe/blob/main/docs/bip/0001-test-vectors.json), cover a wide range of cases, including all seven hash types and both valid and invalid spends, sourced from an independent ML-DSA implementation. Size evaluations indicate that each ML-DSA-65 input requires 5,433 WU (approximately 1,358 vB), allowing for about 736 such inputs per block, with typical transactions sized accordingly.
+
+Open questions persist regarding the choice between ML-DSA-65 and smaller parameters like ML-DSA-44, with the former offering better future-proofing against lattice cryptanalysis at the cost of larger input sizes. There is also ongoing consideration of supporting hybrid key types, such as combining secp256k1 and ML-DSA, from the outset. No specific activation mechanism for deployment has been proposed yet, pending benchmarking of ML-DSA-65 verification within Bitcoin Core. Migration strategies are facilitated by reference tools capable of classifying addresses based on exposure and deriving secure destinations from BIP-39 seeds, with policy guidelines detailed in BIP-361.
+
+Further in-depth discussion is taking place on Delving Bitcoin, accessible at [Delving Bitcoin](https://delvingbitcoin.org/t/bip-draft-witness-version-3-ml-dsa-65-post-quantum-key-path-spending/). For a comprehensive breakdown of all modifications, consult the [CHANGELOG](https://github.com/Zaenus/btc-safe/blob/main/CHANGELOG.md). The evolving nature of this proposal reflects rigorous peer review and an ongoing commitment to robust, quantum-resistant security for Bitcoin.</summary>
+    <published>2026-11-13T17:25:00+00:00</published>
+  </entry>
+</feed>

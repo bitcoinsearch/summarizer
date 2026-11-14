@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+  <updated>2026-11-14T07:22:17.289244+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>Zaenus</author>
+      <timestamp>2026-11-13 02:35:28.276000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>Zaenus</author>
+      <timestamp>2026-11-13 17:28:51.219000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Nov_2026/9038_BIP-Draft-Post-Quantum-Address-Format-bc1z-using-ML-DSA-65.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/9045_BIP-Draft-Post-Quantum-Address-Format-bc1z-using-ML-DSA-65.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+    <updated>2026-11-14T07:22:17.289401+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-post-quantum-address-format-bc1z-using-ml-dsa-65/3067/2" rel="alternate"/>
+    <published>2026-11-13 02:35:28.276000+00:00</published>
+    <summary>Bitcoin’s reliance on cryptographic security faces an urgent challenge from the future potential of quantum computers. A new proposal introduces an address format aimed at securing Bitcoin against quantum threats. This format uses addresses beginning with bc1z and is built on ML-DSA-65, a post-quantum digital signature algorithm standardized in FIPS 204. The design commits to a SHA-256 hash of the ML-DSA public key during address creation, ensuring that the full public key is only disclosed when funds are spent. This mirrors the privacy features of P2WPKH, with the added benefit of quantum resistance; even after public key and signature revelation, the output remains secure against attackers leveraging quantum computing.
+Current Bitcoin signature schemes like ECDSA and Schnorr are vulnerable if a sufficiently advanced quantum computer can run Shor’s algorithm. Once a public key is published on-chain, such adversaries could derive the corresponding private key and steal funds. Approximately 6.9 million BTC, valued at about $586 billion, are already at risk because their public keys have been exposed. The new address format aims to mitigate this threat before quantum computers become a practical danger. The proposed technical structure employs the bc1z prefix followed by a 32-byte commitment, and supports backward compatibility via a soft fork. Older nodes interpret these outputs as anyone-can-spend, utilizing a higher witness version for differentiation. The project’s source code, including key generation, signing, verification tools, migration support, and quantum activity monitoring (“quantum canary”), is open sourced at [btc-safe](https://github.com/Zaenus/btc-safe), with the draft specification found in [this document](https://github.com/Zaenus/btc-safe/blob/4e09003f69ee276f8df1eadcc913ab98a84dbf52/docs/bip/0001-pq-address-format.m).
+Significant revisions have been made in response to feedback. Initially, the reference implementation incorrectly used bech32 checksums instead of bech32m for witness v3, leading to incompatibility with BIP-350 decoders; this has been corrected to ensure compliance with official standards. The earlier claim to use BIP-143 sighash was unimplemented and is now replaced with a BIP-341-style SigMsg under a distinct tag, ensuring each input’s amount and scriptPubKey are committed for accurate fee calculation and improved compatibility with Taproot implementations. Notably, the prototype for SNARK-based signature aggregation was withdrawn after it was determined that pairing-based SNARKs do not provide post-quantum security and rely on trusted setups unsuitable for consensus mechanisms.
+The updated protocol introduces a key type byte, allowing for future extensibility. The key blob—composed of the key type and public key—is always the final element in the witness stack, enabling undefined key types to succeed similarly to OP_SUCCESS and offering an upgrade path for alternative or hybrid signature schemes without exhausting available witness versions. The Signature Message (SigMsg) is tagged distinctly to avoid collisions with Taproot sighashes, and FIPS 204 context strings distinguish transaction signatures from off-chain message signatures. Additional clarifications specify how non-standard scripts are handled and outline relay policies for witness data.
+Importantly, unlike existing formats, the v3 output maintains quantum resistance even after public key and signature revelation. The hash commitment primarily serves to maintain efficient output size. This means mempool attacks exploiting short exposure windows are ineffective, and address reuse, while still detrimental to privacy, does not compromise quantum security. Activation of this proposal must occur before the advent of cryptographically relevant quantum computers, as deployment and migration require significant time and block space. For example, migrating every 10 million UTXOs would necessitate roughly 1,200 fully utilized blocks due to the input size of ML-DSA-65 signatures.
+Test vectors are provided covering key and address derivation, BIP-39 support, and all hash types, with both valid and invalid cases. Independent validation of these vectors is encouraged to ensure robust, interoperable implementations. Specific questions remain open: whether to default to ML-DSA-44 or ML-DSA-65 given the trade-off between signature size and security margin; whether to introduce hybrid key types combining classical and quantum-resistant algorithms; the relationship and possible integration with BIP-360’s P2MR approach; the necessity of a separate sigops budget given the computational cost of ML-DSA verification; and the appropriate discounting of witness data, considering its increased size.
+Further details, including the changelog and migration guidance, are available in the [project repository](https://github.com/Zaenus/btc-safe). The ongoing development invites community contribution to refine the address format and prepare the Bitcoin network for a post-quantum future.</summary>
+  </entry>
+</feed>

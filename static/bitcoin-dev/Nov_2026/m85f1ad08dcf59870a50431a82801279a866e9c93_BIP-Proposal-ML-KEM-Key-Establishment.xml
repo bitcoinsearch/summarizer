@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>BIP Proposal: ML-KEM Key Establishment</title>
+  <updated>2026-11-14T07:25:54.594298+00:00</updated>
+  <author>
+    <name>Liam Gilligan</name>
+  </author>
+  <timestamp>2026-11-13 17:57:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>BIP Proposal: ML-KEM Key Establishment</title>
+    <updated>2026-11-14T07:25:54.594329+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/12a1a76d-0e27-4035-9fe8-a47524729c47n@googlegroups.com/T/#u#m85f1ad08dcf59870a50431a82801279a866e9c93" rel="alternate"/>
+    <summary>A mechanism for negotiating transport layer upgrades, including key establishment and authentication, has been proposed for the P2P protocol. The primary goal is to introduce ML-KEM-based key establishment as a feature, ensuring that current P2P traffic cannot be decrypted by quantum attackers in the future. The ML-KEM-768 parameter set, corresponding to NIST category 3, is recommended due to its enhanced security margin over ML-KEM-512, which only offers a classical security level similar to ECDH on secp256k1 (about 128 bits). Although ML-KEM-1024 provides even higher security (category 5), it comes with the drawback of significantly larger encapsulation keys and ciphertexts.
+
+The implementation involves payloads containing both the encapsulation key (1184 bytes) and ciphertext (1088 bytes) as specified by [FIPS 203](https://csrc.nist.gov/csrc/media/Events/2025/workshop-on-guidance-for-kems/documents/papers/kemeleon-paper.pdf). Nodes advertising ML-KEM support may choose to omit their encapsulation key initially to reduce bandwidth if they are uncertain their peer supports ML-KEM. In such cases, the selector node sends its encapsulation key first, prompting the advertiser to respond with its ciphertext in a subsequent packet. Key derivation uses both the existing BIP-324 shared secret and the newly established ML-KEM shared secret, maintaining or improving overall connection security.
+
+Operationally, once a party sends its ciphertext, it immediately rekeys and begins encrypting with the new keys from the following packet onward. The sender of the encapsulation key waits until receiving the ciphertext before rekeying, so its next packet is encrypted under the fresh keys. If an invalid encapsulation key is received, failing the FIPS 203 input check, the node disconnects. ML-KEM’s probability of decapsulation failure is negligible (approximately 2^-165), requiring no special handling as mismatched keys would simply result in failed decryption and subsequent disconnection.
+
+No additional encoding techniques, such as ElligatorSwift or Kemeleon, are needed for the encapsulation key or ciphertext because these elements are already protected under BIP-324 encryption, making them indistinguishable from random data in transit. For further details about BIP-324's approach to encoding, refer to the [BIP-324 mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0324.mediawikielligatorswift-encoding-of-curve-x-coordinates).
+
+Feedback is sought regarding the chosen ML-KEM parameter set and whether it is preferable for advertisers to send their encapsulation key by default, considering the trade-off between security and bandwidth efficiency.</summary>
+    <published>2026-11-13T17:57:00+00:00</published>
+  </entry>
+</feed>

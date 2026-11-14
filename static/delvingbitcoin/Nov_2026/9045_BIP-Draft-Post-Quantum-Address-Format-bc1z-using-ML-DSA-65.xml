@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+  <updated>2026-11-14T07:22:01.551829+00:00</updated>
+  <author>
+    <name>Zaenus</name>
+  </author>
+  <timestamp>2026-11-13 17:28:51.219000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>BIP Draft Post-Quantum Address Format (bc1z) using ML-DSA-65</title>
+    <updated>2026-11-14T07:22:01.551855+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bip-draft-post-quantum-address-format-bc1z-using-ml-dsa-65/3067/2" rel="alternate"/>
+    <summary>The revised proposal introduces significant updates to the post-quantum (PQ) address format, with a focus on enhancing security and future-proofing Bitcoin transactions. The updated draft and its reference implementation are accessible at [btc-safe GitHub repository](https://github.com/Zaenus/btc-safe/blob/4e09003f69ee276f8df1eadcc913ab98a84dbf52/docs/bip/0001-pq-address-format.m), and corresponding test vectors are provided in the linked JSON file. Previous errors have been rectified, including the correction of bech32m checksums for witness version 3 addresses, ensuring compatibility with BIP-350 standards. Additionally, misleading references to BIP-143 sighash have been replaced, and the previously proposed SNARK aggregation prototype has been withdrawn due to concerns about post-quantum soundness and consensus trust requirements.
+
+The updated specification defines a key type byte within the key blob structure, facilitating seamless upgrades and enabling future support for alternative signature schemes such as ML-DSA-44, SLH-DSA, FN-DSA, or hybrid types without depleting available witness versions. The design explicitly rejects certain values to prevent collisions, such as `0x50` due to annex overlap. The sighash mechanism now utilizes a distinct tag under BIP-341 SigMsg, which binds every input’s amount and scriptPubKey, thus resolving issues related to fee manipulation in signing devices and allowing code sharing with Taproot implementations. This separation ensures that Taproot sighashes remain distinct from v3 sighashes. Furthermore, FIPS 204-compliant context strings are used to clearly differentiate transaction signatures from off-chain message signatures. Additional rules clarify that non-32-byte programs and P2SH-wrapped v3 outputs are considered unencumbered and non-standard, while relay policy prohibits annexes and undefined key types.
+
+Quantum resistance is a central property of this scheme. Unlike previous approaches such as P2WPKH, version 3 outputs maintain quantum resistance even after public keys and associated signatures are revealed. The hash commitment exists solely to preserve output size, rendering mempool-based attacks and address reuse safe against quantum adversaries, though privacy considerations remain. Given the anticipated timeline for cryptographically relevant quantum computers (CRQCs), proactive deployment is emphasized, as activation and migration processes are lengthy and constrained by network throughput. For instance, migrating 10 million UTXOs would require approximately 1,200 full blocks, considering a 1-in/1-out transition costs 486 weight units.
+
+Performance metrics highlight trade-offs between different key types. An ML-DSA-65 input consumes 5,433 weight units, roughly translating to 1,358 virtual bytes, whereas ML-DSA-44 inputs are about 28% smaller. In contrast, Taproot key-path inputs remain markedly lighter. A typical 1-in/2-out v3 transaction is estimated at 1,455 virtual bytes. Comprehensive test vectors have been created, encompassing valid and invalid cases, BIP-39 derivations, all supported sighash variants, and compliance with both deterministic and independent signature verification. These vectors are compatible with official BIP-341 tests and are available for community validation through independent implementations.
+
+Several open questions remain for further discussion. Choosing between ML-DSA-44 and ML-DSA-65 as the initial key type involves balancing input size efficiency against cryptanalytic robustness; the use of a key type byte allows flexibility for future default changes. There is also consideration of defining a hybrid secp256k1 plus ML-DSA key type at inception, which could offer resilience against classical cryptographic breakdowns at the expense of increased data size. The relationship with P2MR (BIP-360) is characterized as complementary: P2MR is suited for more complex scripts, while v3 targets single-key spends, potentially reusing the key_blob encoding in future opcodes. Validation cost analysis shows each input requires only one ML-DSA-65 verification, removing the need for additional sigops budgeting, although further benchmarking within Bitcoin Core is planned. The question of whether ML-DSA witness data should benefit from the same discount as existing witness data remains unresolved, given its larger size.
+
+Allocation details include the assignment of a BIP-43 purpose number (currently using `3'` as a placeholder with hardened derivation) and proprietary PSBT field types (`0xFC`). Ongoing development and change tracking can be followed in the project's [CHANGELOG.md](https://github.com/Zaenus/btc-safe/blob/4e09003f69ee276f8df1eadcc913ab98a84dbf52/CHANGELOG.md). Community input, particularly regarding implementation feedback and the open questions outlined above, is actively encouraged to refine and advance these proposals.</summary>
+    <published>2026-11-13T17:28:51.219000+00:00</published>
+  </entry>
+</feed>

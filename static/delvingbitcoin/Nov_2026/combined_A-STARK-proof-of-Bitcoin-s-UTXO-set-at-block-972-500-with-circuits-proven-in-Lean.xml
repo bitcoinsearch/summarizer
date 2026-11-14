@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+  <updated>2026-11-14T07:22:54.809391+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>l-henri</author>
+      <timestamp>2026-11-13 10:11:27.833000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>AdamISZ</author>
+      <timestamp>2026-11-14 01:12:38.373000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Nov_2026/9042_A-STARK-proof-of-Bitcoin-s-UTXO-set-at-block-972-500-with-circuits-proven-in-Lean.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/9047_A-STARK-proof-of-Bitcoin-s-UTXO-set-at-block-972-500-with-circuits-proven-in-Lean.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+    <updated>2026-11-14T07:22:54.809558+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070/2" rel="alternate"/>
+    <published>2026-11-13 10:11:27.833000+00:00</published>
+    <summary>A recent project explores the application of STARK-based proofs to Bitcoin consensus, aiming to efficiently verify Bitcoin’s chain state in a highly succinct and trust-minimized manner. The central artifact is a proof file, or “seal,” measuring 1.6 MB, which can be rapidly verified—about half a second—in any modern browser. This seal attests to the validity of the header chain from genesis through to a recent tip, confirming adherence to Core’s mainnet header rules such as SHA256d linkage, proof-of-work, retargeting, median time past, minimum version, and exact chainwork, with the exception of the wall-clock time-too-new rule. The validation extends beyond headers: blocks from height 935,001 to 972,500 are fully replayed, ensuring that all block data matches Merkle roots, transaction IDs, and witness transaction IDs, while also performing structural checks, verifying transaction values, and tracing every coin created and spent. The resulting UTXO set after block 972,500 matches precisely with Core’s output, and the proof commits to a Merkle root over this set, enabling efficient inclusion and non-inclusion proofs for individual outpoints.
+The approach deliberately omits scripts and signature verification at this stage, confining trust assumptions to those analogous with Bitcoin Core’s assumevalid and assumeUTXO mechanisms. The replay commences from an assumeUTXO snapshot at block 935,000, anchored by a hash_serialized value embedded in Core’s chainparams. As a consequence, coins prior to this point are only protected by the header chain, not full block replay; achieving a complete proof from genesis would require significant additional resources, currently estimated at 325 H100 GPU-hours and a monetary cost of $1,000–$1,500. There has yet to be external review of the system, and feedback is actively encouraged.
+Construction of the prover leverages Stwo (circle STARKs over M31) via a Zig port ([stwo-zig](https://github.com/teddyjfpender/stwo-zig)), with a CUDA backend ensuring byte-identical proofs. Large blocks are proven rapidly, and aggregation is performed recursively per epoch before final wrapping into a single proof combining the header chain and UTXO set. Circuits are specified in Lean 4, with the Zig prover interpreting constraints exported from Lean. Machine-checked proofs guarantee that accepted header segments satisfy consensus rules, that SHA-256 computations conform to FIPS 180-4, and that transitions of the set and recursive composition yield correct statements. Differential fuzzing between the Lean specs and Bitcoin Core’s C++ code covers hundreds of thousands of cases without mismatch, providing practical assurance though not formal equivalence. Trust assumptions for soundness involve the underlying cryptographic primitives, recursive Fiat–Shamir transformations, and some native verifier checks; a comprehensive breakdown is documented in [verification.md](https://github.com/starknet-innovation/starked-bitcoin/blob/a3e06f53f8b28310933265540e8b4189fe630f66/docs/reference/verification.md).
+A key utility demonstrated is the rapid validation of assumeUTXO snapshots from arbitrary sources. Using Core’s dumptxoutset file, the tool verifies base block, coin count, total amount, and hash_serialized against the seal. On a standard ARM64 machine, a snapshot at block 972,500 containing over 164 million coins and spanning 9.39 GB was validated in just 72 seconds using minimal memory.
+Further discussion raises the challenge of incorporating batch verification of Schnorr signatures, potentially reducing computational costs by aggregating signature checks into a single multi-scalar multiplication—a technique that could extend even to blockchain-wide verification with suitable acceleration, as seen in projects leveraging RiscZero. While script verification is anticipated to be less complex than signatures, the ultimate goal remains full from-genesis proof, encompassing all validation rules. Concerns about the O(log² n) verification time, evident in the recorded 72-second snapshot check, suggest exploring “shrink wrap” techniques: wrapping the STARK proof verifier itself in a Groth16 proof to achieve near-instantaneous verification times, especially advantageous for lightweight clients. Community sentiment may diverge on the value of non-quantum-resistant solutions, but continued experimentation and critical review remain vital for advancing Bitcoin’s trustless verification capabilities.
+For further exploration, both the [interactive demo](https://starknet-innovation.github.io/starked-bitcoin/) and the [source repository](https://github.com/starknet-innovation/starked-bitcoin) are available.</summary>
+  </entry>
+</feed>

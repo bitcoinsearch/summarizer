@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+  <updated>2026-11-14T07:22:33.631793+00:00</updated>
+  <author>
+    <name>l-henri</name>
+  </author>
+  <timestamp>2026-11-13 10:11:27.833000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+    <updated>2026-11-14T07:22:33.631822+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070" rel="alternate"/>
+    <summary>A new side project demonstrates the application of a STARK prover to Bitcoin’s consensus mechanism, providing a verifiable cryptographic proof over a substantial section of the blockchain. The live demonstration is accessible at [https://starknet-innovation.github.io/starked-bitcoin/](https://starknet-innovation.github.io/starked-bitcoin/), with the source repository available at [https://github.com/starknet-innovation/starked-bitcoin](https://github.com/starknet-innovation/starked-bitcoin). The approach results in a single 1.6 MB proof file ("seal") that can be verified by a browser in approximately half a second.
+
+The proof establishes three core facts. First, it validates the header chain from genesis to the current tip, ensuring compliance with Bitcoin Core’s mainnet header rules, including SHA256d linkage, proof-of-work, retargeting, and accurate chainwork calculation, while only omitting the wall-clock time-too-new rule. This process aligns with SPV-style verification, where the verifier checks the chainwork against a trusted minimum. Second, it fully replays blocks 935,001 through 972,500, matching raw block data to Merkle roots, verifying txid and wtxid, enforcing structural rules for blocks and transactions, and tracking every coin created or spent. Third, the resulting UTXO set after block 972,500 is confirmed, producing a hash_serialized identical to what Core would provide at the same height (as obtained via gettxoutsetinfo/dumptxoutset), allowing independent verification. A Merkle root is also committed over the set, enabling generation of compact inclusion or non-inclusion proofs for specific outpoints, which the demo facilitates by downloading relevant segments.
+
+Certain limitations are inherent in this proof system. Script validation and signature checks are omitted; trust assumptions are equivalent to those made with assumevalid, although witness data is included to allow for future script validation modules without re-proving prior work. The replayed segment begins from Core's assumeUTXO snapshot at block 935,000, with the initial state checked against the hash pinned in Core's chain parameters. Earlier blocks are covered solely by their headers, and the trust model corresponds to that accepted by assumeUTXO users, as a full-from-genesis proof would require additional resources. The estimated compute cost for proving all blocks from genesis is about 325 H100-hours, translating into a significant monetary expense. To date, the project has not undergone external review and invites scrutiny.
+
+The construction leverages Stwo, a circle STARKs implementation over M31, accessed via a Zig port ([https://github.com/teddyjfpender/stwo-zig](https://github.com/teddyjfpender/stwo-zig)), with a CUDA backend achieving byte-identical proofs. Proving a large block (with 2^23 trace rows) takes just under three seconds on an H100 GPU. Proofs are recursively aggregated by epoch, then combined, resulting in one encompassing proof that binds together the header chain, block data, and UTXO set. Circuits are designed using Lean 4, with constraints exported for interpretation by the Zig prover. Machine-checked proofs confirm the correctness of header segments, SHA-256 implementation, block validation, set transitions, and recursive composition, culminating in the seal statement (sealT_soundW).
+
+Specification fidelity is maintained by differential fuzz testing. The Lean specifications are systematically compared with Bitcoin Core’s C++ code, covering hundreds of thousands of header-rule cases and block/transaction cases without observed mismatches. These tests ensure behavioral alignment, though they do not constitute formal proofs against Core’s implementation. Trust assumptions include reliance on the soundness of Stwo/FRI/LogUp, Fiat–Shamir heuristics within the random oracle model (including recursive applications as discussed in [this delvingbitcoin.org thread](https://delvingbitcoin.org/t/block-wide-signature-aggregation-via-snarks/2875)), and a concise set of native checks in the verifier. Full documentation of what is proven versus what remains trusted is found in [verification.md](https://github.com/starknet-innovation/starked-bitcoin/blob/a3e06f53f8b28310933265540e8b4189fe630f66/docs/reference/verification.md).
+
+A practical tool emerges from this work: verify-snapshot. This utility allows anyone to check an assumeUTXO snapshot—using a Core dumptxoutset file—against the seal, verifying base block, coin count, total amount, and hash_serialized. On a standard mainnet node running Core v31.1, a snapshot at block 972,500 (containing over 164 million coins and occupying 9.39 GB) was successfully verified in seventy-two seconds using only 0.5 GB of memory on an arm64 machine. This advancement illustrates the feasibility of scalable,</summary>
+    <published>2026-11-13T10:11:27.833000+00:00</published>
+  </entry>
+</feed>
