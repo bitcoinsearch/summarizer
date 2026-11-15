@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>spscand and libspscan: a watch-only BIP352 scanner</title>
+  <updated>2026-11-15T07:32:51.686567+00:00</updated>
+  <author>
+    <name>Ali Sherief</name>
+  </author>
+  <timestamp>2026-11-14 08:40:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>spscand and libspscan: a watch-only BIP352 scanner</title>
+    <updated>2026-11-15T07:32:51.686600+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/05fbac98-5a91-4224-ad9b-745441252e26n@googlegroups.com/T/#u#ma8201f1e47129be61257f5a0a3141cb879821f1e" rel="alternate"/>
+    <summary>spscand is a watch-only scanner designed for BIP352 silent payments, currently at version 1.1.2. It operates by holding the scan private key alongside the spend public key, enabling detection of outputs sent to an sp1 address and its associated labels. The tool tracks both spends and blockchain reorganizations, providing status updates through a local read-only HTTP API as well as webhooks. For each identified output, spscand stores the tweak t_k, allowing a separate signing component to derive the spend key using d = b_spend + t_k. This architecture ensures that only confirmed blocks are processed.
+
+Privacy in the scanning process is a central feature. No server queries are made about specific addresses, outputs, or transactions, minimizing information leakage. Three distinct block sources are supported: Bitcoin Core via RPC, a BlindBit Oracle server, and filters as described in the BIP352 appendix. With Bitcoin Core, all computations occur locally, and no data leaves the user's machine. The BlindBit Oracle method involves downloading all tweaks, taproot outputs, and spent-key prefixes for every block from the wallet's inception onward; matching occurs locally, but the server can infer some metadata such as client IP (barring Tor usage), wallet birthday, and activity times. The filter-based strategy leverages BIP158 basic filters from P2P peers, only fetching full blocks when a match is detected. Each block request is distributed randomly among peers to reduce privacy risks, and filter headers are cross-checked across multiple peers to mitigate the possibility of withheld or falsified data. SOCKS5 proxy support is implemented with strict isolation measures, ensuring that each process and connection uses random credentials for enhanced privacy, especially when combined with Tor.
+
+libspscan serves as the underlying C library responsible for executing BIP352 receiving logic and BIP158 filter checks. It remains agnostic of input/output operations and never requires access to the spend private key. Only the C standard library is needed, making libspscan suitable for integration into other wallets or blockchain indexers. The spscand application interfaces with libspscan via ctypes. The library includes libsecp256k1 v0.8.0 without modification, relying on it for cryptographic operations such as shared secret derivation, output tweaks, and label management. Label matching utilizes field arithmetic directly within the same translation unit for efficiency, exposing only the spscan_* symbols externally.
+
+The tweak server does not disclose transaction associations for the tweaks, so each tweak must be tested against all taproot outputs within a block. Labels add further complexity by introducing additional candidate keys per tweak. To optimize performance, batch processing and lookup strategies adapt based on the ratio of labels to outputs, following recommendations from BIP352. Shared secrets are always computed in constant time, and subsequent matching logic branches only on public output keys. Lookup tables are protected against collision attacks by keying them with SipHash, derived from the scan key, preventing senders from crafting colliding output keys.
+
+Performance metrics demonstrate practical resource usage. On mainnet block 833044, which contains 721 eligible transactions and 2105 taproot outputs, the BlindBit approach requires 135 kB of downloads and minimal CPU time, even with extensive labels. The filter method reduces bandwidth further, though the probability of unnecessary block downloads increases with the number of labels. In typical scenarios, this overhead remains manageable.
+
+Comprehensive tests validate correctness. Both the C library and Python code pass BIP352 receiving test vectors, with results cross-verified between implementations. BIP158 vector compliance is ensured by producing byte-for-byte identical filters to Bitcoin Core. Real-world use cases, including mainnet validation and regtest end-to-end runs with various input types and network configurations, confirm accurate detection and privacy safeguards. Filter mode is specifically checked to guarantee that only relevant blocks are downloaded, and that the SOCKS proxy encapsulates all network traffic as intended.
+
+Further insights, discussions, and source code can be accessed at [spscand GitHub repository](https://github.com/ZenulAbidin/spscand). Feedback, corrections, and constructive criticism are encouraged via the project’s issue tracker or mailing list.</summary>
+    <published>2026-11-14T08:40:00+00:00</published>
+  </entry>
+</feed>
