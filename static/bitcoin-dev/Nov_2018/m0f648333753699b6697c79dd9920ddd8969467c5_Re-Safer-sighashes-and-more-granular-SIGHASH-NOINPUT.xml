@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:59:40.531619+00:00</updated>
+  <author>
+    <name>Christian Decker</name>
+  </author>
+  <timestamp>2018-11-29 17:00:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:59:40.531653+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m0f648333753699b6697c79dd9920ddd8969467c5" rel="alternate"/>
+    <summary>In the ongoing discussion about proposed changes to Bitcoin's transaction signature hashing, there is a suggestion to append a new field called `hashValues` to the hashed representation. This field would consist of the double SHA256 hash of all transaction values. The implication is that, under the SINGLE sighash type, this hash must be omitted or blanked out; otherwise, the system would inadvertently commit to all inputs again, contradicting the intended behavior of SINGLE.
+
+The relationship between fee commitments and value commitments is scrutinized. Since transaction fees are effectively defined by the difference between input and output values, any commitment scheme needs to consider how these may be altered under different signature flags. With NOINPUT (as described in [BIP118](https://github.com/bitcoin/bips/blob/master/bip-0118.mediawiki)), signatures inherently commit to the input value, a property that extends naturally to other inputs, with no apparent use case for altering this approach. For ANYONECANPAY, committing to a fee does not make sense because additional inputs can always be appended, thus ANYONECANPAY would likely imply that there is no fee commitment (NOFEE). When using NONE, the flexibility is so complete that fee commitment is irrelevant. 
+
+SINGLE introduces unique considerations. For value commitments, it functions equivalently to its current behavior—committing only to its own value. Fee commitments under SINGLE are difficult to justify and, in most practical scenarios, the combination SINGLE|NOFEE would prevail. Ensuring that SINGLE does not commit to the sequence of other inputs is crucial, as doing so would undermine its independent nature. Maintaining proper isolation ensures that the integrity of SINGLE remains intact.
+
+Further clarifications address implementation details, especially regarding the treatment of hash fields like `hashSequence`. While NOINPUT does not strictly require blanking `hashSequence`, aligning its handling with other cases could simplify implementation and reduce the number of special cases developers need to manage. There is also contemplation on whether to enumerate all valid combinations of signature flags rather than maintaining independent bits for each option. While enumerating combinations could save storage space, it might complicate code structure and maintainability if new features are introduced in the future.
+
+Lastly, the technical discussion highlights the importance of clearly defining what data elements are being referenced—distinguishing among the spending transaction, the specific input being signed, and the output or transaction being spent. This separation aids in reasoning about how commitments function across different transaction contexts and signature types.</summary>
+    <published>2018-11-29T17:00:00+00:00</published>
+  </entry>
+</feed>

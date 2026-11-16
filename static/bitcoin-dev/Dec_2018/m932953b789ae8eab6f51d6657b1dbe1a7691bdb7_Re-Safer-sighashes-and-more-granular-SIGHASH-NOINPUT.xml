@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:01:39.760692+00:00</updated>
+  <author>
+    <name>Rusty Russell</name>
+  </author>
+  <timestamp>2018-12-13 00:37:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:01:39.760726+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m932953b789ae8eab6f51d6657b1dbe1a7691bdb7" rel="alternate"/>
+    <summary>Recent analysis reveals that the constant in the timelock comparison changes with every update, rather than remaining fixed as previously assumed. The consideration of introducing a new opcode, such as OP_TIMELOCKGREATERVERIFY, would necessitate tracking the nLocktime for each UTXO, complicating implementation. Instead, attention has shifted toward evaluating the practical utility and security implications of employing NOINPUT in conjunction with the absence of NOMASK, specifically questioning whether the added mask complexity is justified compared to simply removing script commitment when using NOINPUT.
+
+The safety of restricting which scripts can be signed is debated, with no clear evidence that tighter restrictions inherently improve security. NOINPUT is particularly relevant in scenarios where transaction re-signing is not possible and it becomes necessary to generate a new transaction even after the input has been spent. In these cases, an attacker could exploit this either with or without SIGHASH_MASK. To mitigate such risks, all other inputs must also be signed with NOINPUT, or alternatively, the specific input must be signed using SIGHASH_SINGLE|ANYONECANPAY.
+
+Both key reuse and amount reuse are prerequisites for potential exploitation. SIGHASH_MASK offers protection only against reusing an input for a standard output, but if a key is employed across multiple scripts of identical structure, vulnerabilities persist. This concern is especially pertinent to Lightning Network software, which tends to use a standardized script, thereby increasing exposure compared to conventional wallets that may avoid repeated key usage.
+
+Ultimately, SIGHASH_NOINPUT poses significant dangers when keys are reused, leading to the clear recommendation to avoid key reuse practices altogether. Adhering to unique key usage for each script and avoiding unnecessary complexity around masking mechanisms provides a more robust security posture in transaction signing protocols.</summary>
+    <published>2018-12-13T00:37:00+00:00</published>
+  </entry>
+</feed>

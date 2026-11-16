@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:59:13.906456+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <timestamp>2018-11-28 08:31:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:59:13.906489+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m2e1dcaf0cd64797e85d99b7b35b2b4690159dc52" rel="alternate"/>
+    <summary>OP_RESERVED (0x50) is suggested to be repurposed as OP_MASKEDPUSH, leveraging the fact that 0x50 does not count towards the 201 opcode limit. This change would enable an unlimited number of masked pushes without breaching the opcode restrictions. However, there is an open question about whether the use of OP_MASKEDPUSH should be limited, as allowing unrestricted usage could introduce additional complexity or unforeseen issues in script evaluation. While it is technically possible to make any opcode exempt from counting in a new script version, doing so would add further special cases to the EvalScript() logic.
+
+Regarding signature hashing, a choice arises between combining all relevant data into a single hash or using three separate hashes that align with BIP143's approach—sharing hashPrevouts and hashSequence. Using just one hash would lead to redundant computational effort for each input, whereas splitting into three hashes could increase efficiency by allowing data reuse across inputs.
+
+For this sighash version, it is recommended to prohibit the use of the SINGLE signature hash type unless there is a corresponding output, thereby preventing invalid or undefined output types. ScriptPubKey should be utilized directly, given its fixed size—23 bytes for P2SH and 35 bytes for native SegWit—which simplifies implementation. To differentiate between P2SH and native SegWit in MASKED NOINPUT scenarios, an extra 1-bit commitment is necessary.
+
+Direct key-spending transactions, which do not involve taprooted scripts, should have their H(scriptCode) set to zero. This adjustment offers several advantages: it eliminates the redundancy of committing to the script code twice, reduces computational overhead by saving a SHA256 compression for the majority of transactions, and helps hardware wallets distinguish between direct-spending paths and taproot script paths. Since these benefits are desirable, introducing another 1-bit commitment becomes unnecessary if H(scriptCode) is simply set to zero. Additionally, MASKED NOINPUT must be disallowed for direct-spending since both H(scriptCode) and sPK are empty in such cases, posing security risks and logical inconsistencies.
+
+The proposed scheme utilizes only four out of eight available sighash bits. There is a strategic decision concerning the handling of the remaining unused bits: making them either invalid or ignored. Keeping at least one bit valid but ignored ("bit-x") and one bit invalid ("bit-y") can facilitate opt-in and opt-out hardfork replay protection mechanisms. For example, if both bits are unset, signatures remain valid for both original and forked chains. If replayability across chains is required, the new fork would reject signatures with bit-x and accept those with or without bit-y. Conversely, if non-replayability is desired, the fork would reject default signatures and only accept those with either bit-x or bit-y set, restricting validity based on chain rules. Replayability serves practical purposes, such as enabling Lightning Network channels opened before a fork to settle on both chains.
+
+For reference on BIP143 and related technical details, consult [BIP143](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki).</summary>
+    <published>2018-11-28T08:31:00+00:00</published>
+  </entry>
+</feed>

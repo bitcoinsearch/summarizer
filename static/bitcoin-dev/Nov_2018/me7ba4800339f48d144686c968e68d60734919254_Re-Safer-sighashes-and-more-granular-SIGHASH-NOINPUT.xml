@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:57:55.727154+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2018-11-23 05:03:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:57:55.727189+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#me7ba4800339f48d144686c968e68d60734919254" rel="alternate"/>
+    <summary>Signing the position within the script of the last OP_CODESEPARATOR allows for a more granular approach to validating signatures in Bitcoin scripts. For instance, in a script such as DUP DUP CHECKSIG CODESEP CHECKSIG CODESEP CHECKSIG, it is possible to design validation so that each signature can explicitly commit to a particular segment of the script by referencing the byte offset or "codesep position" at which the last CODESEPARATOR occurs. In this example, three distinct signatures could be attached: the first corresponding to position 0, the second to position 4, and the third to position 6. Each signature, while being tied to a specific segment, also continues to commit to the full (potentially masked) script.
+
+This mechanism encapsulates all current capabilities afforded by CODESEPARATOR, whose utility remains limited because every signature is bound to the entire redeem script. It does not allow commitment to only subsets of the signature or witness data. Consequently, this proposed method retains orthogonality with other advanced Bitcoin scripting features.
+
+NOINPUT empowers a signature to validate across different transactions, thus increasing flexibility in transaction construction. OP_MASK enables variations in the script to which a signature applies, allowing for dynamic script adaptations. CODESEPARATOR, as discussed, makes it feasible to demand different signatures for discrete sections of a single script. MAST provides the ability to include alternative scripts without affecting how signatures are verified, offering increased privacy and efficiency. Additionally, IF and related opcodes facilitate branching and control flow within a script but do not alter the underlying signature requirements.
+
+The term "script tree" is now commonly preferred over "abstract syntax tree" when discussing these advanced scripting constructs, as it better reflects their structure and usage within the context of Bitcoin's evolving script capabilities.</summary>
+    <published>2018-11-23T05:03:00+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:00:54.181250+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <timestamp>2018-12-12 19:53:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:00:54.181283+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m6feba2ca9ec27c1226cff049ee40586a9997676d" rel="alternate"/>
+    <summary>Witness weight malleability arises when certain opcodes within Bitcoin's scripting language accept variable-sized input from the puzzle solver without influencing the script's output. This issue is observed in opcodes such as IF, NOTIF, VERIFY, DROP, 2DROP, NIP, DEPTH, and arithmetic operations that utilize CScriptNum, including CHECKMULTISIG. However, not all of these present a significant risk. OpCodes like VERIFY, DROP, 2DROP, and NIP are generally not problematic because they are typically not the first to process data directly supplied by the puzzle solver.
+
+The CHECKMULTISIG opcode has already been addressed through [BIP147](https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki), which mitigates its associated vulnerabilities. For elements like key number and signature number, their placement within the script ensures immutability, thereby preventing malleability. The DEPTH opcode only poses a threat if its outputs are not subsequently validated by other opcodes, but such use cases are considered ineffective or "pointless."
+
+To further safeguard against potential exploits, measures such as the MINIMAL_IF policy enforce that inputs to OP_IF must be minimal, reducing the risk associated with non-minimal values. Non-minimal CScriptNum usage is also restricted under [BIP62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki) policy. Many scenarios where OP_IF could introduce malleability may eventually be replaced by taproot implementations, offering additional security improvements.
+
+Ultimately, the prevention of malicious third-party witness data inflation relies on miners consistently enforcing these policies. There is no incentive for miners to include transactions with malleated sizes, as doing so diminishes available block space. If miners deem a transaction undesirable, they would simply exclude it rather than allocate valuable space to unnecessarily bloated transactions.</summary>
+    <published>2018-12-12T19:53:00+00:00</published>
+  </entry>
+</feed>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:03:34.496360+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <timestamp>2018-12-20 19:34:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:03:34.496394+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m64359422676f67f75c63b20909cf01207f53a0a1" rel="alternate"/>
+    <summary>Making scripts more compact is sometimes possible by using certain approaches, as demonstrated in an example provided at [this GitHub comment](https://github.com/bitcoin/bitcoin/pull/11423issuecomment-333441321). However, this specific example may not be optimal for taproot implementations, since efficiency could be improved by structuring the script with two separate branches as distinct merkle leaves.
+
+Currently, the scriptCode is truncated at the last executed CODESEPARATOR. When handling large scripts containing multiple CODESEPARATORs and CHECKSIG operations, this truncation results in significant hashing overhead. In scenarios involving NOINPUT with MASKEDSCRIPT, the commitment is made to the hash of the masked_script rather than the original script hash.
+
+If NOINPUT does not commit to the hash of the masked_script, it can technically still reference the position of the last executed CODESEPARATOR. A wallet, lacking knowledge of the complete script content, would then have to infer the meanings of these committed positions. This might involve speculative reasoning based on hierarchical deterministic (HD) key paths and assumptions about consistent usage of script templates along those paths. For instance, a wallet could assume that signing at the third CODESEPARATOR corresponds to a specific template if no other template has been used at that key path. While functional under correct assumptions, this approach introduces notable reliability concerns due to its dependence on inferred script structure.</summary>
+    <published>2018-12-20T19:34:00+00:00</published>
+  </entry>
+</feed>

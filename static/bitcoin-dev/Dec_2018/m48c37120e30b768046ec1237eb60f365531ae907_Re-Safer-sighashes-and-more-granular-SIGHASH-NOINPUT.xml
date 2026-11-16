@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:02:19.604207+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2018-12-14 00:47:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:02:19.604249+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m48c37120e30b768046ec1237eb60f365531ae907" rel="alternate"/>
+    <summary>When witness data is immutable, any valid witness for a given script will always have the same weight. In such a scenario, signing the script effectively commits to both the script and its associated witness weight. For transactions using SIGHASH_ALL, this also means committing to the entire transaction’s weight. The practical advantage of directly signing the weight comes from its relationship with feerate and transaction priority. By locking in the transaction weight at signing time, the signer can be certain of the fee they are paying per byte, ensuring that the intended priority in the transaction queue is preserved. Without this guarantee, changes to transaction weight after signing could result in paying fees for a different level of priority than was originally intended, potentially leading to overpayment or under-prioritization.
+
+If the variation in witness weight is predictably minor—say, constrained within a small percentage such as 0.8%—then the resulting uncertainty in the actual feerate paid is negligible. Under these circumstances, targeting the lower bound of the possible feerate when signing becomes reasonable. The potential downside is limited to the signer possibly paying up to 0.8% more in fees, which is generally within the margin of error of typical feerate estimations. This approach assumes that significant malleability, where someone else can alter the transaction’s weight unexpectedly, is rare or manageable. Scenarios where an external party could change the transaction weight unpredictably, without the opportunity for the original signer to correct it before broadcast, seem limited in practice.
+
+A more robust solution involves being able to commit to a minimum feerate, which has broader applicability, including for collaborative transactions like those in crowd-funding models using ANYONECANPAY semantics. In this model, each participant could specify their input and stipulate a minimum acceptable feerate, ensuring collective compliance. This could be implemented by calculating the actual transaction feerate (fee multiplied by 4000 divided by weight), rounding down to the nearest exponent of 1.05 satoshis per kilobyte to form a discrete set of allowed feerates, and encoding this commitment within the signature. Adjustments to the signature could then permit raising the committed feerate up to a substantial upper limit, but never reducing it by more than approximately 5% below the expected value.
+
+The proposed mechanism allows a signer to commit to a specific feerate exponent, with optional adjustments encoded in the signature that facilitate higher, but not significantly lower, feerates. For example, a minimum fee rate of 0.001 sat/vbyte would correspond to an exponent of zero, while others could commit to larger exponents, permitting subsequent increases by others up to a defined maximum. This framework offers flexibility but introduces considerable complexity, making it unlikely to see immediate adoption and possibly never achieving sufficient simplicity to warrant widespread use.</summary>
+    <published>2018-12-14T00:47:00+00:00</published>
+  </entry>
+</feed>

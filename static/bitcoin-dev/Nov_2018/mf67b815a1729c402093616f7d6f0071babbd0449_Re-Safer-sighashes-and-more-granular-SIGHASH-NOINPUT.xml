@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:56:29.259334+00:00</updated>
+  <author>
+    <name>Pieter Wuille</name>
+  </author>
+  <timestamp>2018-11-19 22:37:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:56:29.259379+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#mf67b815a1729c402093616f7d6f0071babbd0449" rel="alternate"/>
+    <summary>Enhancements are proposed for future SegWit signature hashing (sighash) mechanisms, addressing limitations found in BIP143. Committing to the absolute transaction fee within the sighash, rather than merely considering the amount spent per input, would prevent hardware wallets and airgapped signers from being misled about fee values. Additionally, incorporating the scriptPubKey into the sighash would eliminate the possibility of devices being deceived regarding output types, even if the scriptCode remains correct. The distinction between scriptCode and scriptPubKey is crucial: scriptCode refers to the executed script—such as the redeemScript in non-SegWit P2SH transactions, or the witnessScript in P2WSH/P2WPKH arrangements.
+
+These additions, while increasing transparency and security, may not be universally desirable. Consequently, making these commitments optional allows flexibility across varying circumstances. This proposal intersects significantly with SIGHASH_NOINPUT, which introduces two primary means of rebinding signatures: modifying the prevout, thereby removing the necessity of a known txid at signature creation, and altering the script itself so that precise knowledge of the scriptPubKey or redeemScript is unnecessary at signing time. Though modifying the script implies the ability to change the prevout, not all applications require both forms of mutability.
+
+BIP118 outlines the security model, asserting that safety is maintained if keys are only employed in scripts where such rebinding is permitted. However, greater clarity and control can be achieved if signatures or scripts explicitly delineate which components are mutable. To facilitate this, a refined approach is suggested through the introduction of specific sighash flags and script modifications.
+
+The combined proposal introduces three new sighash flags: SIGHASH_NOINPUT, SIGHASH_NOFEE, and SIGHASH_SCRIPTMASK. A new opcode, OP_MASK, functions as a no-operation (NOP) during execution but serves as a marker for selective exclusion. When computing the sighash, the process mirrors BIP143 with several key modifications: if SIGHASH_SCRIPTMASK is set, each occurrence of OP_MASK in the scriptCode triggers the removal of the following opcode or data push. Inclusion of the scriptPubKey in the sighash occurs unless SIGHASH_SCRIPTMASK is active, while the absolute transaction fee is incorporated unless SIGHASH_NOFEE is specified. Furthermore, when SIGHASH_NOINPUT is present, hashPrevouts, hashSequence, and outpoint are nullified, mirroring BIP118’s treatment except that this does not apply to scriptCode.
+
+The central question posed concerns whether this scheme introduces unnecessary flexibility or fails to accommodate significant use cases. The intention is to strike a balance between robust security, explicitness in what is committed during signing, and adaptability to different transaction requirements.</summary>
+    <published>2018-11-19T22:37:00+00:00</published>
+  </entry>
+</feed>

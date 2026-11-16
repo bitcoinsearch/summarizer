@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:03:58.189795+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2018-12-23 04:26:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:03:58.189844+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m1875fdf69a4d0139f559d03e5c55d480dd877b89" rel="alternate"/>
+    <summary>Committing to a masked script in the absence of conditionals provides the same capabilities as codeseparator. Without commitment to the masked script, and lacking both conditionals and codeseparator, it becomes challenging for a signature to indicate which alternative script is being signed. However, this limitation can be addressed by assigning each alternative script within the MAST (Merkelized Abstract Syntax Tree) a slightly different key, which effectively differentiates them.
+
+A comparison between traditional scripting approaches using IF statements and CODESEP and their taproot-based equivalents reveals notable differences in efficiency. For example, utilizing code such as DEPTH 3 EQUAL IF &lt;Bob&gt; CHECKSIGVERIFY HASH160 &lt;H&gt; EQUALVERIFY CODESEP ELSE &lt;n&gt; CLTV DROP ENDIF &lt;Alice&gt; CHECKSIG demonstrates that the IF+CODESEP approach can be more cost-effective, particularly when the S1 branch is executed most of the time. This efficiency arises because the overhead associated with "DEPTH 3 EQUAL IF/ELSE/ENDIF CODESEP &lt;n&gt; CLTV DROP" is lower than the 32-byte overhead required for selecting a Merkle branch in taproot constructions.
+
+Nevertheless, questions remain regarding the necessity of Alice’s signature within the S1 branch; excluding it could make the taproot approach consistently cheaper. Furthermore, scriptless scripts offer even greater savings in terms of efficiency and cost.
+
+Since these features primarily influence the behavior of signature verification operators, any disabled feature such as codeseparator could be reinstated relatively easily in future upgrades, such as during a transition from one witness version to another.</summary>
+    <published>2018-12-23T04:26:00+00:00</published>
+  </entry>
+</feed>

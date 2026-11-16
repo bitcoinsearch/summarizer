@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:03:12.276170+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <timestamp>2018-12-17 19:08:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:03:12.276203+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m7f828f26e308be7895ec558ef385496da12cf035" rel="alternate"/>
+    <summary>Effective security measures in cryptocurrency often appear excessive until a vulnerability is exploited. The only sure indicator of their effectiveness is the absence of incidents; thus, truly robust protections may always seem like overkill. For users who maintain exclusive and secure control over their private keys, current risks associated with key reuse are primarily limited to two scenarios: reusing the same signature nonce or signing a specific hash value due to a consensus bug known as SIGHASH_SINGLE. Historical losses have occurred from nonce reuse, a persistent risk inherent to existing cryptographic signature schemes. The issue involving the SIGHASH_SINGLE bug has been addressed through segwit, albeit not fully, but could be entirely resolved with a simple protocol softfork.
+
+Private key reuse presents issues for both fungibility and privacy, but does not constitute a severe direct security threat if users employ deterministic nonces such as those specified by rfc6979 and avoid problematic signature hashes. This partial safety is reinforced by the design of cryptographic signatures in Bitcoin, which tie each signature to a unique transaction ID (txid), ensuring that signatures cannot be reused across multiple unspent transaction outputs (UTXOs). Unfortunately, this property inadvertently encouraged widespread key reuse from Bitcoin’s inception since users felt assured their funds were safe from replay attacks.
+
+The introduction of the NOINPUT feature fundamentally changes these longstanding security assumptions. NOINPUT removes the guarantee that a signature is tied to a single UTXO, thereby creating a new vector by which funds can be compromised through key reuse. Despite this significant shift in potential risk, established user practices are unlikely to change quickly. The debate around NOINPUT centers on the fact that, without it, loss of funds through key reuse is essentially impossible, highlighting why its adoption is so controversial.
+
+Regarding wallet implementation, unnecessary duplication of consensus code—such as parsing scripts unrelated to a wallet’s functionality—can introduce vulnerabilities rather than enhance security. For example, faithfully reproducing all aspects of consensus logic might expose wallets to known bugs like the “hash one” issue, potentially resulting in complete loss of funds. Instead, wallet developers should focus solely on supporting the specific script templates necessary for their use cases, omitting features like OP_CODESEPARATOR if unused.
+
+Signature schemes such as BIP143 require signatures to commit to the script being executed, typically referred to as the “scriptCode.” Wallets generally reconstruct this scriptCode at signing time using predefined templates. To accommodate features like NOINPUT, developers need only extend their template functions to handle masked script codes where appropriate, rather than introducing broad and potentially error-prone script masking functionality. Overengineering in this area not only increases complexity but also risks introducing critical vulnerabilities.
+
+Ultimately, the evolution of Bitcoin protocol features reflects a careful balance between security, complexity, and enhanced functionality. While greater functionality is often desirable, the dominant concern among developers remains security, as demonstrated by past hesitancy toward proposals like BIP148 despite their functional appeal. The discussion surrounding NOINPUT encapsulates this tension, as its deployment would create an enduring obligation to support the feature, making any missteps in its implementation difficult to reverse.</summary>
+    <published>2018-12-17T19:08:00+00:00</published>
+  </entry>
+</feed>

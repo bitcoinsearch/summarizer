@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:57:20.714162+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <timestamp>2018-11-21 17:55:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:57:20.714204+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#ma34760574fffe50cf2f54ec658cfb218aa818ce1" rel="alternate"/>
+    <summary>Signing the transaction IDs of all inputs necessitates an explicit commitment to their values, ensuring that hardware wallets are unable to be misled regarding input values. Retaining SIGHASH_NONE is important because the combination ANYONECANPAY|NONE enables the donation of dust UTXOs to miners. While it might be tempting to refuse signatures for unusual combinations such as NOFEE|ALLINPUT|ALLOUTPUT, maintaining simplicity in the consensus logic suggests that these should be validated as usual.
+
+The complexity involved in these mechanisms primarily enhances security only in certain edge cases that could otherwise be avoided. SIGHASH_NOINPUT introduces specific scenarios: when a masked script or address is reused, OP_MASK fails to prevent signature replay since the same masked script persists. There is, however, an avoidable scenario where replay protection is possible—if the same public key appears in different script templates, and the masked script differs, OP_MASK may provide some defense against signature replay. This risk is best mitigated by using distinct public keys for each script template, a practice that simplifies the issue.
+
+A more streamlined approach would be to implement NOINPUT with or without SCRIPT. This refinement would only assist in the aforementioned avoidable case, introducing minimal additional complexity. OP_MASK has been engineered to maintain compatibility with existing practices while offering limited replay protection, but this benefit materializes only in circumstances that can be sidestepped through better key management. The practical necessity for combining NOINPUT with KNOWNSCRIPT remains uncertain, raising questions about its real-world applicability.</summary>
+    <published>2018-11-21T17:55:00+00:00</published>
+  </entry>
+</feed>

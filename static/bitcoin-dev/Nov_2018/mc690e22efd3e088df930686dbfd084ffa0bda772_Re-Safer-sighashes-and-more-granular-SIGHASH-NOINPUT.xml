@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:58:05.543161+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2018-11-23 06:04:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:58:05.543196+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#mc690e22efd3e088df930686dbfd084ffa0bda772" rel="alternate"/>
+    <summary>Committing solely to sequence numbers during transaction creation does not provide substantial constraints, primarily because it only restricts the addition of new inputs. This approach still permits any existing input to be replaced by a nearly arbitrary transaction, limiting its effectiveness in ensuring transaction integrity. A more robust method would involve committing to the values of each input's outpoint, as this would act as a genuine constraint on what can be altered within the transaction.
+
+Attempts to commit to other attributes, such as the transaction IDs (txids) of other inputs, face significant obstacles. Specifically, using txids is impractical if NOINPUT transactions are present and would greatly increase validation complexity, potentially resulting in a quadratic cost when every input is signed with NOINPUT while also committing to all other input txids. Incorporating scriptPubKeys from other inputs proves problematic for constructions like eltoo, which require flexibility to change scripts while maintaining signature validity. Additionally, requiring knowledge of witness scripts for all other inputs at signing time is unfeasible due to their potential size and the challenge of managing them, especially when hardware wallets are involved.
+
+Treating NOINPUT as a specialized case of ANYONECANPAY provides a simpler and more tractable solution. This maintains clarity in transaction semantics without introducing excessive complexity.
+
+Regarding script handling, OP_MASK functions effectively as a layering mechanism if conceptualized as a set of multibyte "OP_MASKED_PUSH" opcodes. When modifying scripts—for example, masking a value n in a script like &lt;n&gt; OP_CSV OP_DROP &lt;p&gt; OP_CHECKSIG—one could rewrite it as [n] OP_CSV OP_DROP &lt;p&gt; OP_CHECKSIG, marking that n is masked. This abstraction alleviates concerns over the specific bytes encoding the push, similar to how current implementations disregard whether a value is pushed via OP_0, OP_1 through OP_16, or PUSHDATA variants. The key requirement is that OP_MASK must apply exclusively to a PUSH operation and result in an error if not followed immediately by PUSH, ensuring predictable script execution.</summary>
+    <published>2018-11-23T06:04:00+00:00</published>
+  </entry>
+</feed>

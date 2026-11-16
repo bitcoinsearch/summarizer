@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:57:40.305551+00:00</updated>
+  <author>
+    <name>Johnson Lau</name>
+  </author>
+  <timestamp>2018-11-22 20:52:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:57:40.305584+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m18a1ec088ed509ac4cc5a07caff4182175a9f059" rel="alternate"/>
+    <summary>Assuming a script size of 128 bytes, which includes SHA256 padding, calculating for 2^20 scripts results in a total memory requirement of approximately 134 MB. When accounting for the additional storage needed for Merkle branch hashes, this doubles to around 268 MB. With an estimated processing speed of 100 MB per second, traversing these scripts would take about 2.5 seconds, or up to 42 minutes if processing extends across 30 hierarchical levels. However, this estimation does not account for the impact on memory usage.
+
+The CTransactionSignatureSerializer() function examines every script for occurrences of OP_CODESEPARATOR. Regardless of whether a script contains OP_CODESEPARATOR or not, the computational time remains proportional to the size of the script, as detailed in [bitcoin/bitcoin pull request #14786](https://github.com/bitcoin/bitcoin/pull/14786). This behavior is no longer relevant under the Segregated Witness (SegWit) protocol (BIP143), where CTransactionSignatureSerializer() is not utilized.
+
+Under SegWit, the handling of OP_CODESEPARATOR is significantly more straightforward compared to the proposed OP_MASK operator. If the OP_MASK operator is deemed acceptable within consensus rules, then there should be no substantial objection to retaining OP_CODESEPARATOR. Among the options available—OP_CODESEPARATOR and "flow operator counting"—the preference leans toward OP_CODESEPARATOR, primarily because its inclusion does not necessitate expanding the consensus codebase unnecessarily, especially when similar functionalities can be accomplished using MAST (Merkelized Abstract Syntax Trees).</summary>
+    <published>2018-11-22T20:52:00+00:00</published>
+  </entry>
+</feed>

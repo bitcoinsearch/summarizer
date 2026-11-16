@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:57:12.425983+00:00</updated>
+  <author>
+    <name>Russell O'Connor</name>
+  </author>
+  <timestamp>2018-11-21 17:07:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:57:12.426029+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m6831641f08059d246c06e1492f616e54119d520c" rel="alternate"/>
+    <summary>OP_MASK should always be followed by a push operation to prevent the substitution of arbitrary opcodes for masked pushes. This approach simplifies reasoning about script behavior and effectively transforms OP_MASK into a multi-byte OP_MASKEDPUSH opcode. Ensuring such structural clarity helps maintain predictable execution paths in Bitcoin scripts.
+
+Signing all input amounts enhances transaction integrity, reducing the need to sign transaction fees explicitly. When all input and output amounts are signed by default, scenarios where fee manipulation could occur without altering the net balance become unlikely, thereby eliminating the necessity for the NOFEE flag. Consistency is further improved by always signing sequence values of all applicable inputs unless ANYONECANPAY or NOINPUT flags are set. If NOINPUT blanks sequence values as specified in BIP118, and amounts are consistently signed, both fields can be treated identically, simplifying implementation and analysis.
+
+Encoding the MASK, NOINPUT, and ANYONECANPAY flags in just two bits becomes feasible using the PARTIALSCRIPT/KNOWNSCRIPT/KNOWNTX/ALL_INPUTS encoding scheme. This efficient representation streamlines sighash flag management and reduces complexity in signature validation.
+
+In the context of preventing signature rebinding to different script paths or CHECKSIG operators, MAST (Merkelized Abstract Syntax Trees) constructions lessen but do not eliminate the risk. Scripts with extensive branching—such as those featuring numerous IF/THEN/ELSE statements—remain intractable for full Merkle tree computation. Signing solely the opcode position of CHECKSIG does not address complex nesting scenarios where identical keys appear in various combinations. Incorporating the true/false conditions of preceding IF statements into the signature could resolve this, though it adds unnecessary complexity for most use cases. 
+
+Hardware devices may simply sign whatever code path the wallet presents, potentially undermining protection against rebinding if an attacker manipulates which code path is indicated. As a result, strict rebinding prevention may not provide meaningful additional security in practice. Alternatively, making every CHECKSIG operator sign the opcode position of the last executed CODESEPARATOR—while removing earlier cut-of-scriptCode effects—offers a simpler, albeit limited, defense against cross-trace rebinding, allowing targeted scripts to apply this safeguard when needed.
+
+A number of implementation improvements are suggested. For a default “sign-everything” sighash mode, the sighash byte can be omitted from signatures, reducing data overhead. Commitment to the scriptPubKey and scriptCode should utilize intermediary hashes within the sighash calculation, mitigating performance issues that arise when handling large scripts or multiple sighash types. Masking the scriptCode allows replacement of the subsequent push opcode with OP_VERIF, which is guaranteed to invalidate any script it appears in, thus preventing execution ambiguities. Additionally, all new sighashes—and hashes introduced for related purposes—should be prefixed with a fixed 64-byte tag. This design avoids collisions with existing SHA256 uses in Bitcoin and enables efficient implementation by modifying the SHA256 initialization vector.
+
+The combined proposal includes all existing sighash flags along with NOINPUT and MASK, where ANYONECANPAY, NOINPUT, and MASK are encoded in two bits. A new opcode, OP_MASKEDPUSH, enforces its specific placement and usage rules to ensure script validity. Signatures comprise 64 bytes plus an optional sighash byte; absence of this byte implies ALL, which cannot be specified explicitly. The sighash itself incorporates a 64-byte constant tag, transaction metadata (version, hashed inputs and outputs, locktime), details of the output being spent (prevout, amount, sequence, and optionally hashed scriptPubKey), and script execution data (hashed scriptCode, opcode number of the last CODESEPARATOR, and the sighash mode). These combined measures advance the robustness and flexibility of Bitcoin’s transaction signing architecture, supporting more secure and sophisticated smart contract applications.
+
+For reference, further details on these mechanisms and their rationale are available in [this draft BIP](https://github.com/jl2012/bips/blob/sighash2/bip-sighash2.mediawiki).</summary>
+    <published>2018-11-21T17:07:00+00:00</published>
+  </entry>
+</feed>

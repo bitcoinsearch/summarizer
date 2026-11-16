@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T11:00:36.051491+00:00</updated>
+  <author>
+    <name>Russell O'Connor</name>
+  </author>
+  <timestamp>2018-12-11 22:50:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T11:00:36.051530+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#mdf3a78c9743964e628a239f7a82f3af346d21549" rel="alternate"/>
+    <summary>Ensuring scripts are free from witness weight malleability presents both conceptual and practical challenges. While it is theoretically desirable to transform any script into an equivalent form immune to such malleability, achieving this often incurs trade-offs. If signature covers weight functionality is excluded and later found necessary, systems may face limitations that cannot be easily rectified. Conversely, introducing signature covers weight preemptively could introduce unnecessary software complexity if it proves redundant in practice. Nevertheless, the additional complexity appears manageable and justified by the potential benefits.
+
+Strategies to avoid witness weight malleability routinely involve a cost, either in terms of transaction size or design intricacy. An illustrative example can be found in libwally's proposed "[csv_2of3_then_2](https://github.com/ElementsProject/libwally-core/blob/c6db6ccdfa54571afeeb582919240263424736a2/src/script.cL718-L735)" script, which employs “OP_DEPTH OP_1SUB OP_1SUB” at the outset. This approach consumes three virtual bytes to foreclose any possibility of witness malleability, compared to a simpler method that leverages a witness stack item and only demands one or two unmalleated vbytes. Although advancements such as Taproot may render certain malleability issues obsolete for specific script types, Bitcoin Script’s original design did not prioritize protection against scriptSig or witness malleability. As a result, developers must frequently implement ad hoc measures to counteract these vulnerabilities.
+
+A comprehensive solution would ideally entail a fundamental overhaul of Bitcoin Script. In the absence of such a transformation, introducing an option for signature covers weight stands out as an effective remedy. With respect to signature lengths, particularly the 64- versus 65-byte signature debate, most protocols presume that signers are aware of the sighash flags others will use. Nonetheless, safeguarding against weight malleability when sighash flag information is incomplete necessitates ensuring the availability of a 65-byte signature that functions like sigHashAll while still honoring the relevant sighash flag within the signature. This measure guarantees robustness even in scenarios where protocol participants have differing expectations regarding sighash usage.
+
+Despite the potential for larger signatures, omitting anti-malleability script code may yield overall transaction weight reductions. It is also conceivable that participants might generate multiple signatures across a spectrum of weight values, though this complexity poses challenges for workflows like PSBT. The ongoing tension between simplicity, security, and efficiency underscores the importance of carefully considering new features such as signature covers weight in future script designs.</summary>
+    <published>2018-12-11T22:50:00+00:00</published>
+  </entry>
+</feed>

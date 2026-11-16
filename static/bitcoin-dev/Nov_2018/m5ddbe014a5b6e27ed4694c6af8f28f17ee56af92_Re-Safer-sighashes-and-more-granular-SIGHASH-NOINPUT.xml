@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:56:42.132926+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2018-11-20 20:29:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:56:42.132959+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#m5ddbe014a5b6e27ed4694c6af8f28f17ee56af92" rel="alternate"/>
+    <summary>Transaction digest calculation in Bitcoin involves several key fields and flags, such as ALL, NONE, SINGLE, and ANYONECANPAY. The BIP143 transaction digest is constructed from elements including the version number, outpoint, input’s scriptCode, input's outpoint value, sequence number, locktime, and hashes that represent previous outputs, sequences, and outputs themselves. The behavior of these fields changes based on the signature hash (sighash) flag combination chosen for a transaction signature. For example, with the NONE flag, no outputs are signed; with SINGLE, only the corresponding output is committed; otherwise, all outputs are included.
+
+The transaction fee is implicitly committed by hashing both input references and output data. This means that avoiding explicit fee commitment (NOFEE) is only realistically relevant if ANYONECANPAY, NONE, or SINGLE flags are active. In scenarios involving NOINPUT, certain fields—specifically the hashes of previous outputs, sequences, and outpoints—are omitted from the digest. Furthermore, SCRIPTMASK, which modifies how scriptCode is committed, is only meaningful when NOINPUT is used because outpoints otherwise already indirectly commit to script contents.
+
+NOINPUT and ANYONECANPAY are closely related, as enabling NOINPUT effectively enables the semantics of ANYONECANPAY. This relationship is mirrored in proposals like [BIP 118](https://github.com/bitcoin/bips/blob/master/bip-0118.mediawiki), where NOINPUT operates similarly.
+
+Organizing sighash options into distinct classes can clarify their usage. Output-side choices include NONE (where destination is unconstrained), SINGLE (one specific output), and ALL (exact set of outputs). Input-side options could be structured as PARTIALSCRIPT (spending from transactions with similar scripts, enabled by SCRIPTMASK|NOINPUT|ANYONECANPAY), KNOWNSCRIPT (spending from transactions with an exact script, using NOINPUT|ANYONECANPAY), KNOWNTX (spending from a specific transaction plus others, via ANYONECANPAY), and ALL_INPUTS (spending from precisely defined transactions). Additionally, a NOFEE flag can indicate non-commitment to fees, but some combinations, like NONE without NOFEE or ALL|ALL_INPUTS|NOFEE, do not make practical sense and may warrant warnings or outright rejection during transaction validation.
+
+The OP_MASK opcode introduces complexity when applied within scriptCode, especially in conditional structures. A clear rule—such as removing only the immediately following opcode or push after each OP_MASK—could simplify its implementation and minimize unintended effects. Adopting a more descriptive name like MASK_PUSH_FOR_SIGHASH might enhance clarity.
+
+Committing directly to scriptCode generally improves the integrity of NOINPUT operations, reducing potential vulnerabilities or unexpected behaviors in complex spending conditions. This approach mitigates some of the perceived 'hackiness' associated with flexible input commitments, thereby enhancing overall transaction security and predictability.</summary>
+    <published>2018-11-20T20:29:00+00:00</published>
+  </entry>
+</feed>

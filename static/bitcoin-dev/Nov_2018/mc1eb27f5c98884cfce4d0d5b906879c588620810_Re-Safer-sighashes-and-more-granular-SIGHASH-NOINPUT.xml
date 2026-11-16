@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+  <updated>2026-11-16T10:58:51.763158+00:00</updated>
+  <author>
+    <name>Bob McElrath</name>
+  </author>
+  <timestamp>2018-11-28 00:54:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Re: Safer sighashes and more granular SIGHASH_NOINPUT</title>
+    <updated>2026-11-16T10:58:51.763185+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/20181128140412.GC22873@mcelrath.org/T/#mc1eb27f5c98884cfce4d0d5b906879c588620810" rel="alternate"/>
+    <summary>The experimental wallet under development leverages Bitcoin Covenants and Vaults by utilizing a technique known as "Pay-to-Timelock Signed Transaction" (P2TST). This method involves depositing funds into an address for which the user intentionally does not possess the private key. Instead, prior to making the deposit, a secondary transaction is constructed that transfers the funds to a timelocked staging address, where the user does control the private key. The process incorporates conditional logic via an IF/ELSE structure within the script, providing an alternative spending route in case of attempted theft.
+
+To implement this securely without risking exposure or loss of control over private keys, the approach avoids the need to delete any private key—a task that can be challenging to verify. Instead, a signature is generated directly using a random number generator (RNG), and ECDSA recovery is employed to compute the associated public key from the SIGHASH. This allows for the construction of the corresponding address without ever generating or storing its private key. As a result, the wallet essentially manages a set of P2TST transactions and their related private keys, along with a collection of emergency keys for backup or recovery purposes.
+
+A critical technical detail emerges regarding transaction input commitments. If a transaction’s input commits to the public key, a circular dependency arises—since the SIGHASH depends on the transaction ID, which references the address derived from the public key. This circularity can only be resolved through infeasible cryptographic means, such as breaking a hash function. Standard SIGHASH types inherently commit to these elements, posing a challenge for covenant and vault implementations. To solve this, the use of NOINPUT semantics is necessary. Sipa's proposal addresses this by combining SIGHASH_NOINPUT with SIGHASH_SCRIPTMASK, thereby excluding the scriptPubKey/redeemScript from the signed data and eliminating the circular reference. Including the scriptPubKey or redeemScript would otherwise reintroduce the same problematic dependency, but the SIGHASH_SCRIPTMASK effectively circumvents it.
+
+Operationally, it is advantageous to fund transaction fees from a separate wallet. This provides flexibility in adjusting for fee volatility, particularly when there is a significant time gap between the initial vaulting and the eventual unvaulting transaction. To enable this modular fee management and support composability among multiple P2TST transactions, SIGHASH_SINGLE is recommended so that specific outputs can be signed individually, and SIGHASH_NOFEE enables fee wallets to contribute inputs solely for covering transaction costs.
+
+Looking forward, there is considerable enthusiasm around integrating these mechanisms with advanced scripting technologies like Taproot, Graftroot, and g'Root, anticipating further enhancements in security, privacy, and flexibility within Bitcoin smart contract designs.</summary>
+    <published>2018-11-28T00:54:00+00:00</published>
+  </entry>
+</feed>
