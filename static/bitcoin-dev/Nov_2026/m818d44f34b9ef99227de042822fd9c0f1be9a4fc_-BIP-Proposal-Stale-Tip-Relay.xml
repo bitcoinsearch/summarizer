@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>[BIP Proposal] Stale Tip Relay</title>
+  <updated>2026-11-17T08:50:11.426391+00:00</updated>
+  <author>
+    <name>Anthony Towns</name>
+  </author>
+  <timestamp>2026-11-16 06:49:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>[BIP Proposal] Stale Tip Relay</title>
+    <updated>2026-11-17T08:50:11.426424+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/avqnZeBFkF5hQNuU@erisian.com.au/T/#m818d44f34b9ef99227de042822fd9c0f1be9a4fc" rel="alternate"/>
+    <summary>The discussion centers on the benefits and potential drawbacks of relaying stale headers and blocks within the Bitcoin network. Sharing only stale block headers offers limited advantages, such as providing estimates on wasted hashrate and signaling a possible impending reorganization. However, these benefits are mostly analytical and do not clarify the consequences of such reorganizations. The value increases significantly when full stale block data is available, enabling deeper analysis for issues like double spends, censorship, transaction timeliness, and inclusion of non-standard transactions. Stale headers can help identify areas of concern, such as selfish mining attacks or soft forks, while access to complete block data allows researchers to verify whether these concerns are valid or to investigate further.
+
+Availability of stale block information is useful but currently fragile; data can be easily lost because nodes typically share only fully validated blocks. Increasing stale header availability is lightweight and beneficial, making it worthwhile to separate this feature. Nodes that occasionally relay both stale headers and their associated block data enhance the reliability of stale block propagation with minimal overhead. Real-time access to this information is marginally valuable since it does not substantially hasten reorgs or provide immediate actionable insights, given the nature of recent stale work.
+
+A major point is that widespread adoption of stale block or header relay is unnecessary for meaningful results. Even if just 1% of listening nodes—about 100 out of 10,000—support the feature and relay recent stale tips, nearly all stale tips would be propagated across the network over several days. For research and analysis, this approach suffices, as does creating a backbone of well-connected nodes that relay stale blocks quickly and efficiently in case they become relevant due to reorganizations. Making stale block relay either mandatory or enabled by default is unwarranted without evidence from active deployment. For now, defaulting to "none" seems prudent, especially considering potential denial-of-service risks on test networks like signet, where generating fake stale headers is relatively easy.
+
+On the mainnet, if the implementation proves reliable, default relaying of stale headers could be justified. The primary downsides to relaying full stale blocks are minor increases in bandwidth and processing requirements, which may inconvenience nodes with pruned storage, and potential delays caused by transmitting larger blocks as `BLOCK` messages rather than compact blocks. A selective opt-in model—for example, 5% of nodes participating—would likely strike the right balance, especially if nodes that monitor the network or connect broadly enable the feature.
+
+Concerns about changes encouraging undesirable miner behavior, such as tweaking pool settings or engaging in network attacks, are addressed through rational incentives. Miners already have economic reasons to act optimally regardless of stale block relay. For instance, a mining pool with 20% hashrate seeing two competing blocks at the same height faces a calculable expected value tradeoff between building on the first-seen block or their own submitted block. Changes in relay efficiency marginally affect annual expected revenue, but only pools with specific payout schemes (like FPPS versus PPLNS) see direct financial impacts. As such, the availability of stale block data does not meaningfully influence broader mining strategies or network stability, provided miners continue to follow honest protocols.
+
+Monitoring stale block content becomes particularly important during contentious upgrades or soft forks, such as those involving minority chains or transaction censorship. Being able to observe what was included in stale blocks provides transparency and enables verification of whether protocol changes are being implemented correctly, even in scenarios where coordination is less than perfect or deliberately concealed.
+
+Alternative solutions for stale block tracking, such as using a central repository like [bitcoin-data/stale-blocks](https://api.github.com/repos/bitcoin-data/stale-blocks/commits/HEAD), could automate the publishing and reception of stale block data. However, such methods introduce centralization, permission requirements, and potential points of failure, making them less attractive for a resilient peer-to-peer system.
+
+Ultimately, expanding stale header relay should increase the observable rate of stale blocks, improving research opportunities and network transparency. Without supporting full stale block relay, the community risks missing critical analytical insights and fostering unnecessary suspicion. Therefore, balancing overhead, node participation, and research needs leads to a measured approach: encourage but do not require stale block relay, and prioritize support for both headers and blocks to maximize utility for network monitoring and security analysis.</summary>
+    <published>2026-11-16T06:49:00+00:00</published>
+  </entry>
+</feed>

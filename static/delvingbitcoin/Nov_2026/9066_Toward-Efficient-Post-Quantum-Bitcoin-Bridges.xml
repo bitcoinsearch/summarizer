@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Toward Efficient Post-Quantum Bitcoin Bridges</title>
+  <updated>2026-11-17T08:48:35.364795+00:00</updated>
+  <author>
+    <name>eigmax</name>
+  </author>
+  <timestamp>2026-11-16 13:19:01.200000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Toward Efficient Post-Quantum Bitcoin Bridges</title>
+    <updated>2026-11-17T08:48:35.364830+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/toward-efficient-post-quantum-bitcoin-bridges/3079" rel="alternate"/>
+    <summary>A garbled-circuit verifier for hash-based STARK proofs has been developed as a post-quantum alternative to the Groth16 verifier approach, specifically for deployment in BitVM3-style bridges. This design modifies BitVM2 by introducing a garbled verifier, where the operator is responsible for garbling the verifier, proving the correctness of this process, and committing the input keys onto Bitcoin. The technical details are thoroughly documented in [“Toward Efficient Post-Quantum Bitcoin Bridges”](https://eprint.iacr.org/2026/2877), and the implementation is available at [bitcoin-stark-verifier](https://github.com/GOATNetwork/bitcoin-stark-verifier).
+
+The verifier for [Ziren](https://eprint.iacr.org/2026/2330)’s [WHIR](https://eprint.iacr.org/2024/1586.pdf)-based STARK proofs has been compiled into a Boolean circuit and garbled using the free-XOR technique. Utilizing the binary tower field $\mathbb{F}_{2^{128}}$ and Blake3 for both commitments and transcripts, this system avoids reliance on pairings, discrete logarithms, or lattices, ensuring robust post-quantum security. For Ethereum mainnet block 26,206,588, after recursive reduction, the final verifier consumes 520,832 input bits and consists of roughly 175.4 million non-free gates, amounting to approximately 2.81 GB of garbled tables. Without cut-and-choose, only one instance needs to be stored by challengers. Publishing inputs under translated Winternitz keys requires 3.93 MvB across 41 standard transactions, while non-post-quantum Schnorr adaptor baselines are more compact but lack quantum resistance. Notably, the off-chain size of the garbled verifier is around fifteen times smaller than that of BitVM3’s Boolean Groth16 verifier, though on-chain costs are dominated by proof inputs, which are significantly larger.
+
+The underlying efficiency stems from the use of a binary field: over $\mathbb{F}_{2^{128}}$, field additions translate directly to XOR operations, so only multiplications and hashes incur significant costs. Each multiplication equates to 2,187 AND gates (using Karatsuba multiplication), while each Blake3 compression requires 10,281 AND gates, constituting about half of the circuit’s complexity. Blake3 is utilized consistently as the Merkle hash, Fiat–Shamir sponge, and garbling hash, reinforcing cryptographic simplicity and consistency.
+
+Input minimization is achieved through several strategies: table layouts are aligned so that ring-switch claims cover entire blocks; only necessary linear forms are opened, with fixed data preprocessed away; a closing column sumcheck reduces input by 27% at the expense of increasing gates by 41%; concise 200-bit Merkle digests and a Merkle cap at depth 18 are used; and the WHIR schedule employs a rate of 1/1024 and a folding pattern of 4-5-4-4, optimizing the trade-off between input size and computational grinding. The cost structure is tightly coupled—on-chain costs scale linearly with input bits, garbled storage scales with gate count, and the prover’s expected grinding work expands exponentially with the grinding parameter $g$. Each additional bit of $g$ reduces the required input by approximately 5,300 bits.
+
+The WHIR schedule, specifically the 4-5-4-4 sequence, efficiently commits to a polynomial in 23 variables, progressively reducing dimensionality in stages and optimizing the number and size of queries. Folding patterns impact three primary metrics: leaf size, query count, and grinding requirements. For example, moving a five-variable fold to the end (the 4-4-4-5 schedule) slightly increases input size but almost halves the expected grinding effort. An exhaustive evaluation found that 4-5-4-4 yields the most efficient input size at the specified rate.
+
+Publishing the input involves a structured transaction sequence beginning with funding, followed by reveal transactions (which must remain within Bitcoin’s operational limits), and concluding with a join transaction. Comparative measurements show that the translated Winternitz scheme necessitates 41 reveal transactions totaling 3.93 MvB, whereas Antichain Winternitz and Lamport schemes require even more. A challenged dispute scenario typically involves about 46 transactions, whereas an unchallenged claim can complete with just two. Transaction acceptance was validated under strict Bitcoin Core policies, with some constraints when reveals and their funding parents are unconfirmed.
+
+Comparison against BitVM3 and Tiwari–Feickert’s estimates demonstrates pronounced gains in efficiency and storage. The presented solution features a markedly lower gate count, smaller garbled tables (2.61 GiB versus 40.5 GiB for BitVM3 and 23.3 GiB for Tiwari–Feick</summary>
+    <published>2026-11-16T13:19:01.200000+00:00</published>
+  </entry>
+</feed>

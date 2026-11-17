@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - BIP Proposal: ML-KEM Key Establishment</title>
+  <updated>2026-11-17T08:51:29.927161+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>Liam Gilligan</author>
+      <timestamp>2026-11-13 17:57:00+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="1" position="1" reply_to="Liam Gilligan" parent_id="mailing-list-2026-11-m85f1ad08dcf59870a50431a82801279a866e9c93" anchor="m4e75105e0c0269dbb89be9c9390d4579fa42f66c">
+      <author>Yevhen Hrubiian</author>
+      <timestamp>2026-11-16 15:23:00+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="bitcoin-dev/Nov_2026/m85f1ad08dcf59870a50431a82801279a866e9c93_BIP-Proposal-ML-KEM-Key-Establishment.xml" rel="alternate"/>
+  <link href="bitcoin-dev/Nov_2026/m4e75105e0c0269dbb89be9c9390d4579fa42f66c_BIP-Proposal-ML-KEM-Key-Establishment.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - BIP Proposal: ML-KEM Key Establishment</title>
+    <updated>2026-11-17T08:51:29.927336+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/12a1a76d-0e27-4035-9fe8-a47524729c47n@googlegroups.com/T/#m4e75105e0c0269dbb89be9c9390d4579fa42f66c" rel="alternate"/>
+    <published>2026-11-13 17:57:00+00:00</published>
+    <summary>A mechanism has been introduced to facilitate negotiation of transport layer upgrades in the P2P protocol, notably supporting secure key establishment and authentication. The centerpiece of this enhancement is the integration of ML-KEM-based key establishment, aimed at safeguarding current P2P communications from decryption by quantum adversaries in the future. The recommended configuration utilizes the ML-KEM-768 parameter set, which aligns with NIST category 3 security standards and provides a robust margin over the ML-KEM-512 variant. While ML-KEM-1024 offers even greater security (category 5), it incurs substantial bandwidth overhead due to significantly larger encapsulation keys and ciphertexts. As specified by [FIPS 203](https://csrc.nist.gov/csrc/media/Events/2025/workshop-on-guidance-for-kems/documents/papers/kemeleon-paper.pdf), the payload for this implementation comprises both the encapsulation key (1184 bytes) and the ciphertext (1088 bytes).
+To optimize bandwidth usage, nodes that advertise support for ML-KEM may initially refrain from sending their encapsulation key when uncertain about their peer’s capabilities. Instead, the process allows the selector node to transmit its encapsulation key first, prompting the advertiser node to reply with its ciphertext in a subsequent communication. Key derivation leverages both the pre-existing BIP-324 shared secret and the new ML-KEM shared secret, thus maintaining—if not enhancing—the overall security of the connection. Operationally, after dispatching its ciphertext, a party will immediately rekey and begin employing the newly established encryption keys for all subsequent packets. Conversely, the sender of the encapsulation key waits until receipt of the corresponding ciphertext before rekeying, ensuring its next packet is protected using fresh keys.
+Strict validation is enforced during the exchange: if an invalid encapsulation key is detected—failing the FIPS 203 input check—the node disconnects. The probability of decapsulation failure in ML-KEM is extremely low (approximately 2^-165), obviating the need for special error handling; mismatches simply result in failed decryption and disconnection. Additional encoding mechanisms such as ElligatorSwift or Kemeleon are unnecessary, as the encapsulation key and ciphertext are already shielded by BIP-324 encryption, rendering them indistinguishable from random data during transit. Further information regarding BIP-324's encoding methodology can be found on the [BIP-324 mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0324.mediawikielligatorswift-encoding-of-curve-x-coordinates).
+A related proposal, Hybrid Key Encapsulation (HKE), has been developed for the Elements project, as detailed in an [ELIP pull request](https://github.com/ElementsProject/ELIPs/pull/46). This approach employs the UG combiner function from the CFRG draft ([draft-irtf-cfrg-hybrid-kems-12](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hybrid-kems-12/)), combining both secp256k1 ECDH and ML-KEM-768. Such a construction achieves IND-CCA security as long as either cryptographic path remains secure.
+Feedback is sought with regard to the appropriateness of the ML-KEM parameter selection and the operational decision concerning whether advertisers should transmit their encapsulation key by default. The discussion centers on balancing optimal security with bandwidth efficiency.</summary>
+  </entry>
+</feed>
