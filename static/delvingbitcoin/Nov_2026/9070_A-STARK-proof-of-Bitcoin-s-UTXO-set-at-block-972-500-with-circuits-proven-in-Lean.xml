@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+  <updated>2026-11-18T08:12:09.208378+00:00</updated>
+  <author>
+    <name>l-henri</name>
+  </author>
+  <timestamp>2026-11-17 11:37:21.838000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+    <updated>2026-11-18T08:12:09.208408+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070/4" rel="alternate"/>
+    <summary>A notable correction is provided regarding the coverage of consensus rules in the proof system. Previously, it was stated that all rules except for signatures and scripts—such as those affected by assumevalid—were included. However, upon comparison with @ajtowns's comprehensive list, it is clarified that two critical ConnectBlock rules are currently unaccounted for: BIP68 relative locktimes and the complete sigop cost calculation. Presently, only legacy signature operations (sigops) are checked, while pay-to-script-hash (P2SH) and witness sigops verification are absent. While Bitcoin Core under the assumevalid setting still enforces both these constraints, the guarantee provided by the new system is marginally weaker in this respect. Nevertheless, the existing design can accommodate both missing rules since the undo records contain each spent coin’s height and script, and implementing time-based BIP68 locks requires access to the median time past from previous blocks.
+
+Clarification is offered about the timing of proof verification, particularly concerning the 72-second checktime referenced earlier. Of this duration, approximately 70.7 seconds is devoted to reading a 9.4 GB snapshot from disk to recompute its hash, while the actual proof verification executes in roughly 0.5 seconds within a browser environment using WebAssembly (wasm). The application of Groth16 zero-knowledge proof wrapping would not substantially reduce verification time; instead, it would compress the proof size from 1.6 megabytes to a few hundred bytes. This reduction is significant for cross-chain verification scenarios but comes at the expense of requiring a trusted setup and forfeiting the hash-only security assumption that supports plausible post-quantum security via STARKs. Maintaining this security property is presently prioritized over shrinking the proof size.
+
+The prospect of batching Schnorr signatures is explored, emphasizing that a random linear combination transforms verification into a single multi-scalar multiplication (MSM), which theoretically allows batching across multiple blocks. However, there are two key caveats: most historical Bitcoin signatures utilize ECDSA, which does not batch identically, and secp256k1 arithmetic over the M31 field involves foreign-field operations that have not yet been fully analyzed for computational cost. Despite these considerations, this approach represents the most straightforward architecture for a signature verification module.
+
+The modular structure of the proposed proof system aligns closely with the four-layer model previously outlined by @ajtowns. The first layer is a header chain proof, which aggregates approximately 970,000 block headers into a single proof and constructs a Merkle Mountain Range (MMR) commitment over block hashes. This layer does not require zero-knowledge proofs but provides foundational data integrity. The second layer introduces commitments to undo data for each block, capturing essential information about each spent coin, including amount, scriptPubKey, block height, and whether it originated from a coinbase transaction—all elements found in Bitcoin Core’s undo data structures. The third layer addresses UTXO set updates through a multiset argument over coin events spanning the blockchain. This ensures that every spend correctly consumes a unique existing coin, matches undo records accurately, excludes unspendable outputs, and resolves duplicate coinbase transactions in line with Core’s logic. The process concludes with the computation of Core’s hash_serialized value for the UTXO set.
+
+Full per-block validation comprises the fourth layer, which already incorporates several important checks such as Merkle and witness commitments, CheckTransaction, finality, BIP34 compliance, legacy sigop limits, block weight, and, leveraging undo data, enforcement of coinbase maturity, inputs meeting or exceeding outputs, and coinbase reward limits relative to subsidy plus fees. Outstanding tasks for this layer include comprehensive handling of signature verification, script execution, BIP68 enforcement, and the full sigop cost calculation. A key distinction in this architecture is that transaction amounts and coin maturity are handled within the coin-set update layer rather than the per-block validation layer.
+
+Particular emphasis is placed on the durability and criticality of the third layer—the coin-set update mechanism—which persists across soft fork upgrades and is supported by formal soundness proofs written in Lean. It is suggested that the fourth layer could be confined to validation using only block data and corresponding undo commitments, a design intended to facilitate integration with pluggable script modules and support alternative validation strategies such as SwiftSync-style validation. The continued development and refinement of this framework are ongoing, with openness to further experimentation and collaboration.</summary>
+    <published>2026-11-17T11:37:21.838000+00:00</published>
+  </entry>
+</feed>
