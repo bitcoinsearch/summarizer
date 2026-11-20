@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+  <updated>2026-11-20T08:03:16.285912+00:00</updated>
+  <author>
+    <name>l-henri</name>
+  </author>
+  <timestamp>2026-11-19 09:27:48.858000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+    <updated>2026-11-20T08:03:16.285970+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070/6" rel="alternate"/>
+    <summary>Two primary hashing structures are employed over coins in Core's order, using txid and vout. The first, known as hash_serialized, involves a single SHA-256 stream across the serialized data of every coin. This method is inherently sequential, requiring a complete scan of the entire dataset, which currently spans 9.4 GB and takes approximately 70 seconds to process. Proofs that utilize this approach handle the vast amount of data by dividing it into segments, passing the SHA-256 state from one segment to the next for continuity.
+
+The alternative structure uses a Merkle root, specifically leveraging the Blake2s hash function. In this scheme, each leaf node comprises the previous coin’s outpoint concatenated with the coin itself. This enables efficient inclusion and exclusion proofs for individual coins, typically requiring about 1 KB per proof. There is no need for reordering since the leaves are arranged as per the original set. However, the tree structure above the leaves currently mirrors how the set is divided for proofs rather than following any canonical form. Achieving compatibility with Core would necessitate standardizing this shape, potentially adopting a plain balanced tree or a Merkle Mountain Range (MMR) formed over fixed-size chunks.
+
+The Merkle root approach presents several advantages over hash_serialized. It provides per-coin proofs—both for inclusion and exclusion—directly verifiable against values reported by Core. Additionally, this method facilitates parallel computation, allowing snapshots to be downloaded and verified in chunks rather than requiring a single, exhaustive pass at the end. The choice of hash function remains open; while Blake2s is more efficient for proof generation, Core natively supports only SHA-256, which is computationally more intensive to prove.
+
+Further analysis is pending to determine the division of computational costs—particularly whether hashing the block bytes constitutes the primary expense, as all layers require this operation. Other details, such as amounts and maturity, are already present in the existing data model. Measurements will be taken for each component to better understand their cost contributions.
+
+There is openness to adapting these methods to align with Core’s requirements should there be interest. A concrete proposal outlining the specifics of leaf encoding, tree structure, and hash function can be prepared for further discussion if needed. Current implementations provide a 1.6 MB proof that validates the block hash at the snapshot height, includes both hash_serialized and the Merkle root, and ensures integrity via the chainproof verify-snapshot tool prior to reading the snapshot. What remains unaddressed is establishing a hash computed natively on both sides and ensuring Core accepts the resulting proof.
+
+In terms of proof of reserves, integrating ownership signatures and incorporating the process within a zero-knowledge proof framework is considered feasible, though not yet implemented. Finally, generating a proof from genesis, as opposed to starting from an assumeUTXO snapshot, is under consideration, with attention to the associated resource costs before proceeding.</summary>
+    <published>2026-11-19T09:27:48.858000+00:00</published>
+  </entry>
+</feed>
