@@ -1,5 +1,5 @@
 {
-    "header_summary": "A proposal has been introduced to enhance wallet recovery workflows by embedding BIP39 mnemonics and optional passphrases directly within output script descriptors, streamlining secure and interoperable restoration processes for Bitcoin wallets. This approach, detailed in a [pull request](https://github.com/polespinasa/bips/pull/2) and tested via [Bitcoin Core implementation](https://github.com/polespinasa/bitcoin/pull/8), enables accurate derivation of keys and supports complex key expression scenarios.\n\nWithin the Elements project, a Hybrid Key Encapsulation (HKE) mechanism has been proposed, combining secp256k1 ECDH and ML-KEM-768 cryptographic paths using a UG combiner as per the CFRG draft [draft-irtf-cfrg-hybrid-kems-12](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hybrid-kems-12/). This hybrid design, outlined in the [ELIP pull request](https://github.com/ElementsProject/ELIPs/pull/46), strengthens post-quantum security while maintaining compatibility with established standards.\n\nRecent analysis of Bitcoin\u2019s unspent transaction outputs (UTXOs) at block 975,019 reveals that 35.6% of all BTC reside in outputs whose keys or scripts have already been exposed on-chain, with detailed breakdowns available in [extraction rules documentation](https://github.com/duncan0k/btc-exposure-index/blob/2a0f4b053cad2ae3dc101a4e4c154ac2b4706f25/docs/extraction-rules.md11-relation-to-the-bip-362-draft). Notable key reuse patterns and exposure distributions by output type were identified, providing crucial insights for ongoing standards development.\n\nThe spscand tool, described at the [spscand GitHub repository](https://github.com/ZenulAbidin/spscand), offers privacy-focused scanning for BIP352 silent payments, supporting multiple block data sources, strict proxy isolation, and efficient detection of relevant outputs without risking key exposure. Its underlying C library, libspscan, enables seamless integration into other wallets, ensuring robust privacy and correctness through comprehensive testing.\n\nAdvancements in UTXO snapshot hash computation leverage Merkle trees and periodic cryptographic proofs, as outlined in [BIP452](https://github.com/bitcoin/bips/blob/master/bip-0452.mediawiki), to optimize blockchain validation and facilitate privacy-preserving proof of reserves using zero-knowledge techniques.\n\nAdditionally, the mining simulation project has incorporated 2026 values, bug fixes, and improved stale rate analysis in its [repository](https://github.com/darosior/miningsimulation), with ongoing work to model internal delays for evaluating Stratum V2 efficiency, as discussed in the [issue thread](https://github.com/darosior/miningsimulation/issues/2).",
+    "header_summary": "A new proposal introduces enhanced output script descriptors by embedding BIP39 mnemonics and optional passphrases directly within descriptors, thereby facilitating robust wallet recovery through standardized representation of derivation paths and script types. This advancement streamlines workflow integration, improves interoperability between wallet software, and supports secure multi-key and multipath setups. Further information and a demonstration implementation are accessible via the [pull request](https://github.com/polespinasa/bips/pull/2) and [Bitcoin Core repository](https://github.com/polespinasa/bitcoin/pull/8).\n\nThe Node Attestation Protocol (NAP) broadens stakeholder participation in signaling support for Bitcoin protocol changes by enabling cryptographically verifiable, coin-weighted attestations from economic nodes beyond miners. Attestations, distributed via peer-to-peer messages and weighted by UTXO value, are aggregated in a Sybil-resistant and privacy-conscious manner, though they remain non-binding and subject to privacy trade-offs. The protocol is implemented in [satd 0.7+](https://github.com/epochbtc/satd), with continued feedback invited and draft specifications available for review.\n\nBIP54 introduces nuanced timestamp validation rules, creating a dependency between successive block timestamps while maintaining a conservatively wide acceptance window to guard against adversarial manipulation. Although theoretical attacks such as \u201cslow-sliding-mtp\u201d and \u201creverse header time hijacking\u201d exist, their practicality is limited due to network decentralization and the narrow scope of potential exploitation. Additional discussion and technical analysis can be found in the related [mailing list thread](https://groups.google.com/g/bitcoindev/c/tKETFYnEtng).\n\nRecent developments also include the deployment of two public libbitcoin nodes on testnet5, with monitoring tools and web explorers available at [Libbitcoin public configuration](https://libbitcoin.org/configuration/public.html), and the release of spscand 1.1.2, a privacy-focused, watch-only scanner for BIP352 silent payments ([spscand GitHub repository](https://github.com/ZenulAbidin/spscand)). Lithos Protocol further advances decentralized mining pool design by providing scalable, blockchain-agnostic infrastructure with streamlined payout mechanisms, as detailed at [lithosprotocol.org](http://lithosprotocol.org).",
     "recent_posts": [
         {
             "id": "mb4115ce907faa1ca6391f01493bd286c7ee9d37a",
@@ -9,29 +9,12 @@
                 "Pol Espinasa"
             ],
             "published_at": "2026-11-16T15:52:00+00:00",
-            "summary": "- The proposal introduces key expressions in output script descriptors for mnemonic-based wallet recovery.  - Direct inclusion of mnemonics and passphrases in descriptors facilitates standardized and secure wallet restoration.  - Draft details and implementation are available online for testing, with feedback actively requested.",
+            "summary": "- A proposal introduces key expressions in output descriptors for improved mnemonic-based wallet recovery.  - Incorporating mnemonics and passphrases into descriptors enhances compatibility and security for wallet restoration.  - Details, draft, and implementation links are provided, with feedback welcomed on relevant channels.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
             "file_path": "static/bitcoin-dev/Nov_2026/mb4115ce907faa1ca6391f01493bd286c7ee9d37a_-BIP-Draft-bip39-Descriptor-Key-Expression.xml",
             "combined_summ_file_path": ""
-        },
-        {
-            "id": "m4e75105e0c0269dbb89be9c9390d4579fa42f66c",
-            "title": "BIP Proposal: ML-KEM Key Establishment",
-            "link": "https://gnusha.org/pi/bitcoindev/12a1a76d-0e27-4035-9fe8-a47524729c47n@googlegroups.com/T/#m4e75105e0c0269dbb89be9c9390d4579fa42f66c",
-            "authors": [
-                "Yevhen Hrubiian"
-            ],
-            "published_at": "2026-11-16T15:23:00+00:00",
-            "summary": "- Hybrid Key Encapsulation employs a UG combiner to integrate secp256k1 ECDH and ML-KEM-768 methods.  - The construction achieves IND-CCA security if at least one cryptographic path remains secure.  - This hybrid approach improves post-quantum readiness while preserving compatibility with existing cryptographic standards.",
-            "n_threads": 1,
-            "dev_name": "bitcoin-dev",
-            "contributors": [
-                "Liam Gilligan"
-            ],
-            "file_path": "static/bitcoin-dev/Nov_2026/m4e75105e0c0269dbb89be9c9390d4579fa42f66c_BIP-Proposal-ML-KEM-Key-Establishment.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Nov_2026/combined_BIP-Proposal-ML-KEM-Key-Establishment.xml"
         },
         {
             "id": "ma8201f1e47129be61257f5a0a3141cb879821f1e",
@@ -41,7 +24,7 @@
                 "Ali Sherief"
             ],
             "published_at": "2026-11-14T08:40:00+00:00",
-            "summary": "- spscand enables detection of BIP352 silent payments while minimizing information leakage and preserving user privacy.  - Supports three block sources and uses SOCKS5 proxy isolation, batch processing, and SipHash-protected lookups.  - Performance, correctness, and privacy are validated through mainnet tests, BIP352 test vectors, and real-world scenarios.",
+            "summary": "- spscand enables privacy-preserving detection of BIP352 silent payments using multiple block source options.  - libspscan executes core cryptographic functions and is designed for integration without accessing spend keys.  - Security, privacy, and performance are validated through comprehensive tests, with code and support available publicly.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -49,150 +32,192 @@
             "combined_summ_file_path": ""
         },
         {
-            "id": "9078",
-            "title": "How much BTC sits behind keys or scripts already on chain (block 975,019)",
-            "link": "https://delvingbitcoin.org/t/how-much-btc-sits-behind-keys-or-scripts-already-on-chain-block-975-019/3088",
+            "id": "m6fd1d1fb2dd1a81b7316378e77efec400601632c",
+            "title": "Testnet5 Launch",
+            "link": "https://gnusha.org/pi/bitcoindev/HY8DsUoVVHnLe80I6KVSNBpFNJpn8DI7Uf89FfWuKuKMAMAqJHDP5rmpPZi6zVp3JT2Px08Bncryhu05fxBioQ5_v2COC1r2LjncC6vNpFo=@pm.me/T/#u#m6fd1d1fb2dd1a81b7316378e77efec400601632c",
             "authors": [
-                "duncan0k"
+                "neillm"
             ],
-            "published_at": "2026-11-18T03:32:12.409000+00:00",
-            "summary": "- About 35.6% of all Bitcoin UTXOs are exposed, mainly via specific output types and rules.  - Key reuse across output forms is substantial, with notable overlaps and many reused public keys.  - Some outputs remain unmeasured due to specification ambiguities, but sampling shows minimal overlooked exposure.",
+            "published_at": "2026-11-14T05:23:00+00:00",
+            "summary": "- Two public libbitcoin nodes supporting bip54 are available for direct developer connections on testnet5.  - Node status and configuration details can be monitored through an online resource for participants.  - Web explorers are deployed to enable convenient blockchain data navigation and inspection on testnet5.",
             "n_threads": 0,
-            "dev_name": "delvingbitcoin",
+            "dev_name": "bitcoin-dev",
             "contributors": [],
-            "file_path": "static/delvingbitcoin/Nov_2026/9078_How-much-BTC-sits-behind-keys-or-scripts-already-on-chain-block-975-019-.xml",
+            "file_path": "static/bitcoin-dev/Nov_2026/m6fd1d1fb2dd1a81b7316378e77efec400601632c_Testnet5-Launch.xml",
             "combined_summ_file_path": ""
         },
         {
-            "id": "9077",
-            "title": "A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean",
-            "link": "https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070/5",
+            "id": "9096",
+            "title": "Open Question on a hypothetical minor \"slow-sliding MTP\" attack introduced by BIP 54",
+            "link": "https://delvingbitcoin.org/t/open-question-on-a-hypothetical-minor-slow-sliding-mtp-attack-introduced-by-bip-54/3101",
             "authors": [
-                "ajtowns"
+                "ariard"
             ],
-            "published_at": "2026-11-18T03:02:59.959000+00:00",
-            "summary": "- Efficient UTXO snapshot hash computation enables scalable, verifiable blockchain validation with Merkle trees and MMR.  - Data restructuring and standardized hashing facilitate faster, cheaper proof generation and parallel block validation.  - Per-UTXO Merkle trees support independent proof verification and privacy-preserving reserves proof using zkproofs.",
-            "n_threads": 4,
+            "published_at": "2026-11-21T04:07:39.661000+00:00",
+            "summary": "- BIP54 introduces a new consensus rule tying certain block timestamps to their predecessors.  - Security margins and wide acceptance windows limit potential exploits, reducing risk from timestamp manipulation attacks.  - Theoretical attacks require over 51% hash rate but remain impractical and have limited impact.",
+            "n_threads": 0,
             "dev_name": "delvingbitcoin",
-            "contributors": [
-                "l-henri",
-                "AdamISZ"
-            ],
-            "file_path": "static/delvingbitcoin/Nov_2026/9077_A-STARK-proof-of-Bitcoin-s-UTXO-set-at-block-972-500-with-circuits-proven-in-Lean.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_A-STARK-proof-of-Bitcoin-s-UTXO-set-at-block-972-500-with-circuits-proven-in-Lean.xml"
+            "contributors": [],
+            "file_path": "static/delvingbitcoin/Nov_2026/9096_Open-Question-on-a-hypothetical-minor-slow-sliding-MTP-attack-introduced-by-BIP-54.xml",
+            "combined_summ_file_path": ""
         },
         {
-            "id": "9074",
-            "title": "Propagation Delay and Mining Centralization: Modeling Stale Rates",
-            "link": "https://delvingbitcoin.org/t/propagation-delay-and-mining-centralization-modeling-stale-rates/2110/10",
+            "id": "9095",
+            "title": "Node Attestation Protocol",
+            "link": "https://delvingbitcoin.org/t/node-attestation-protocol/3100",
             "authors": [
-                "AntoineP"
+                "bkeroack"
             ],
-            "published_at": "2026-11-17T22:25:37.347000+00:00",
-            "summary": "- The mining simulation project now includes 2026 values and bug fixes from Fable.  - Expanded README documentation analyzes the impact of stale rates on mining profitability.  - Future model extensions may address internal delays and evaluate Stratum V2 efficiency benefits.",
-            "n_threads": 9,
+            "published_at": "2026-11-21T02:11:05.655000+00:00",
+            "summary": "- The Node Attestation Protocol enables non-mining stakeholders to publish cryptographically-linked, human-readable statements.  - Attestations are coin-weighted, non-binding, time-limited, and aggregated for transparency while addressing Sybil resistance.  - Participation increases network inclusivity but raises privacy concerns, with further improvements anticipated in later versions.",
+            "n_threads": 0,
+            "dev_name": "delvingbitcoin",
+            "contributors": [],
+            "file_path": "static/delvingbitcoin/Nov_2026/9095_Node-Attestation-Protocol.xml",
+            "combined_summ_file_path": ""
+        },
+        {
+            "id": "9094",
+            "title": "Decentralized Coinbase Payout Protocols (DCPP): A Framework for Discussion",
+            "link": "https://delvingbitcoin.org/t/decentralized-coinbase-payout-protocols-dcpp-a-framework-for-discussion/3060/9",
+            "authors": [
+                "K-Singh"
+            ],
+            "published_at": "2026-11-20T19:39:15.060000+00:00",
+            "summary": "- Lithos Protocol delivers a blockchain-agnostic, fully decentralized solution for distributed mining pool challenges.  - Its architecture emphasizes scalability, efficient coinbase output management, and streamlined payouts via atomic swaps.  - Secure, transparent block settlement is achieved through a trustless bitcoin relay across multiple blockchains.",
+            "n_threads": 8,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "0xbrito",
-                "0xB10C",
-                "ajtowns",
-                "gmaxwell",
-                "moneyball"
+                "7d5x9",
+                "LearnBitcoin.com",
+                "jungly",
+                "stevenroose"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2026/9074_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml"
+            "file_path": "static/delvingbitcoin/Nov_2026/9094_Decentralized-Coinbase-Payout-Protocols-DCPP-A-Framework-for-Discussion.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Decentralized-Coinbase-Payout-Protocols-DCPP-A-Framework-for-Discussion.xml"
         }
     ],
     "active_posts": [
         {
-            "id": "mb4115ce907faa1ca6391f01493bd286c7ee9d37a",
-            "title": "[BIP Draft] bip39() Descriptor Key Expression",
-            "link": "https://gnusha.org/pi/bitcoindev/JiUeNigF_rzI9YOrqHZrjBrjYeoxPWHsbVSHAaSoA2vimubD0Z-t8eAxL5DfWGTeWuLGxx3xpg-u6MOjYIS17a_MxFA-GiCM5hmaASrAixU=@protonmail.com/T/#u#mb4115ce907faa1ca6391f01493bd286c7ee9d37a",
+            "id": "m41b778c563618967693cc6dce70328d7cb7151db",
+            "title": "[BIP Proposal] Stale Tip Relay",
+            "link": "https://gnusha.org/pi/bitcoindev/avqnZeBFkF5hQNuU@erisian.com.au/T/#m41b778c563618967693cc6dce70328d7cb7151db",
             "authors": [
-                "Pol Espinasa"
+                "Ram"
             ],
-            "published_at": "2026-11-16T15:52:00+00:00",
-            "summary": "- The proposal introduces key expressions in output script descriptors for mnemonic-based wallet recovery.  - Direct inclusion of mnemonics and passphrases in descriptors facilitates standardized and secure wallet restoration.  - Draft details and implementation are available online for testing, with feedback actively requested.",
-            "n_threads": 0,
+            "published_at": "2026-07-29T17:21:00+00:00",
+            "summary": "- The `staletip` proposal enables nodes to share stale tip information for enhanced Bitcoin network diagnostics.  - Technical design uses BIP 434 feature messages and restricts shared data for efficiency and relevance.  - This initiative aims to improve network health monitoring while inviting community feedback for refinement.",
+            "n_threads": 6,
             "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Nov_2026/mb4115ce907faa1ca6391f01493bd286c7ee9d37a_-BIP-Draft-bip39-Descriptor-Key-Expression.xml",
-            "combined_summ_file_path": ""
+            "contributors": [
+                "Anthony Towns",
+                "Antoine Poinsot",
+                "Edil Guimar\u00e3es de Medeiros"
+            ],
+            "file_path": "static/bitcoin-dev/July_2026/m41b778c563618967693cc6dce70328d7cb7151db_-BIP-Proposal-Stale-Tip-Relay.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/July_2026/combined_-BIP-Proposal-Stale-Tip-Relay.xml"
         },
         {
-            "id": "m4e75105e0c0269dbb89be9c9390d4579fa42f66c",
-            "title": "BIP Proposal: ML-KEM Key Establishment",
-            "link": "https://gnusha.org/pi/bitcoindev/12a1a76d-0e27-4035-9fe8-a47524729c47n@googlegroups.com/T/#m4e75105e0c0269dbb89be9c9390d4579fa42f66c",
+            "id": "mf34978d175c7e432f8b66d7e6d88b977c83da474",
+            "title": "Quantum Landmines and Vulnerable Coin Auctions",
+            "link": "https://gnusha.org/pi/bitcoindev/6e4b738d-95ce-49ed-bbc6-afb1b64f7bb2n@googlegroups.com/T/#mf34978d175c7e432f8b66d7e6d88b977c83da474",
             "authors": [
-                "Yevhen Hrubiian"
+                "Cory Fields"
             ],
-            "published_at": "2026-11-16T15:23:00+00:00",
-            "summary": "- Hybrid Key Encapsulation employs a UG combiner to integrate secp256k1 ECDH and ML-KEM-768 methods.  - The construction achieves IND-CCA security if at least one cryptographic path remains secure.  - This hybrid approach improves post-quantum readiness while preserving compatibility with existing cryptographic standards.",
+            "published_at": "2026-11-04T21:05:00+00:00",
+            "summary": "- Strategies discussed include landmines, staked auctions, and Sats auctions for defending legacy coins.  - These mechanisms incentivize security through collateral, time-locks, and game-theoretic bidding structures.  - While currently theoretical, these solutions creatively blend cryptography with economic incentives for decentralized protection.",
+            "n_threads": 2,
+            "dev_name": "bitcoin-dev",
+            "contributors": [
+                "conduition"
+            ],
+            "file_path": "static/bitcoin-dev/Nov_2026/mf34978d175c7e432f8b66d7e6d88b977c83da474_Quantum-Landmines-and-Vulnerable-Coin-Auctions.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Nov_2026/combined_Quantum-Landmines-and-Vulnerable-Coin-Auctions.xml"
+        },
+        {
+            "id": "m85f1ad08dcf59870a50431a82801279a866e9c93",
+            "title": "BIP Proposal: ML-KEM Key Establishment",
+            "link": "https://gnusha.org/pi/bitcoindev/12a1a76d-0e27-4035-9fe8-a47524729c47n@googlegroups.com/T/#m85f1ad08dcf59870a50431a82801279a866e9c93",
+            "authors": [
+                "Liam Gilligan"
+            ],
+            "published_at": "2026-11-13T17:57:00+00:00",
+            "summary": "- A transport layer upgrade mechanism introduces ML-KEM-768 for post-quantum secure key establishment in P2P.  - Nodes can optimize bandwidth by selectively sending encapsulation keys; rekeying occurs after ciphertext exchange.  - Feedback is requested on ML-KEM parameters and default encapsulation key transmission versus bandwidth efficiency.",
             "n_threads": 1,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Liam Gilligan"
+                "Yevhen Hrubiian"
             ],
-            "file_path": "static/bitcoin-dev/Nov_2026/m4e75105e0c0269dbb89be9c9390d4579fa42f66c_BIP-Proposal-ML-KEM-Key-Establishment.xml",
+            "file_path": "static/bitcoin-dev/Nov_2026/m85f1ad08dcf59870a50431a82801279a866e9c93_BIP-Proposal-ML-KEM-Key-Establishment.xml",
             "combined_summ_file_path": "static/bitcoin-dev/Nov_2026/combined_BIP-Proposal-ML-KEM-Key-Establishment.xml"
         },
         {
-            "id": "ma8201f1e47129be61257f5a0a3141cb879821f1e",
-            "title": "spscand and libspscan: a watch-only BIP352 scanner",
-            "link": "https://gnusha.org/pi/bitcoindev/05fbac98-5a91-4224-ad9b-745441252e26n@googlegroups.com/T/#u#ma8201f1e47129be61257f5a0a3141cb879821f1e",
-            "authors": [
-                "Ali Sherief"
-            ],
-            "published_at": "2026-11-14T08:40:00+00:00",
-            "summary": "- spscand enables detection of BIP352 silent payments while minimizing information leakage and preserving user privacy.  - Supports three block sources and uses SOCKS5 proxy isolation, batch processing, and SipHash-protected lookups.  - Performance, correctness, and privacy are validated through mainnet tests, BIP352 test vectors, and real-world scenarios.",
-            "n_threads": 0,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Nov_2026/ma8201f1e47129be61257f5a0a3141cb879821f1e_spscand-and-libspscan-a-watch-only-BIP352-scanner.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "9078",
-            "title": "How much BTC sits behind keys or scripts already on chain (block 975,019)",
-            "link": "https://delvingbitcoin.org/t/how-much-btc-sits-behind-keys-or-scripts-already-on-chain-block-975-019/3088",
-            "authors": [
-                "duncan0k"
-            ],
-            "published_at": "2026-11-18T03:32:12.409000+00:00",
-            "summary": "- About 35.6% of all Bitcoin UTXOs are exposed, mainly via specific output types and rules.  - Key reuse across output forms is substantial, with notable overlaps and many reused public keys.  - Some outputs remain unmeasured due to specification ambiguities, but sampling shows minimal overlooked exposure.",
-            "n_threads": 0,
-            "dev_name": "delvingbitcoin",
-            "contributors": [],
-            "file_path": "static/delvingbitcoin/Nov_2026/9078_How-much-BTC-sits-behind-keys-or-scripts-already-on-chain-block-975-019-.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "9077",
-            "title": "A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean",
-            "link": "https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070/5",
-            "authors": [
-                "ajtowns"
-            ],
-            "published_at": "2026-11-18T03:02:59.959000+00:00",
-            "summary": "- Efficient UTXO snapshot hash computation enables scalable, verifiable blockchain validation with Merkle trees and MMR.  - Data restructuring and standardized hashing facilitate faster, cheaper proof generation and parallel block validation.  - Per-UTXO Merkle trees support independent proof verification and privacy-preserving reserves proof using zkproofs.",
-            "n_threads": 4,
-            "dev_name": "delvingbitcoin",
-            "contributors": [
-                "l-henri",
-                "AdamISZ"
-            ],
-            "file_path": "static/delvingbitcoin/Nov_2026/9077_A-STARK-proof-of-Bitcoin-s-UTXO-set-at-block-972-500-with-circuits-proven-in-Lean.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_A-STARK-proof-of-Bitcoin-s-UTXO-set-at-block-972-500-with-circuits-proven-in-Lean.xml"
-        },
-        {
-            "id": "9074",
-            "title": "Propagation Delay and Mining Centralization: Modeling Stale Rates",
-            "link": "https://delvingbitcoin.org/t/propagation-delay-and-mining-centralization-modeling-stale-rates/2110/10",
+            "id": "1996",
+            "title": "Great Consensus Cleanup Revival",
+            "link": "https://delvingbitcoin.org/t/great-consensus-cleanup-revival/710",
             "authors": [
                 "AntoineP"
             ],
-            "published_at": "2026-11-17T22:25:37.347000+00:00",
-            "summary": "- The mining simulation project now includes 2026 values and bug fixes from Fable.  - Expanded README documentation analyzes the impact of stale rates on mining profitability.  - Future model extensions may address internal delays and evaluate Stratum V2 efficiency benefits.",
+            "published_at": "2024-03-24T17:29:42.691000+00:00",
+            "summary": "- The proposal addresses vulnerabilities like timewarp attacks and inefficient transaction validation impacting network security.  - Suggestions include limiting legacy transaction size, restricting script usage, and invalidating insecure transactions.  - Some recommendations, such as reducing block size and standardizing elements, have sparked debate within the community.",
+            "n_threads": 95,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "ajtowns",
+                "sjors",
+                "evoskuil",
+                "harding",
+                "zawy",
+                "Chris_Stewart_5",
+                "MattCorallo",
+                "ariard",
+                "recent798",
+                "1440000bytes",
+                "LearnBitcoin.com",
+                "benthecarman",
+                "garlonicon",
+                "instagibbs",
+                "kcalvinalvin",
+                "plebhash",
+                "sipa"
+            ],
+            "file_path": "static/delvingbitcoin/March_2024/1996_Great-Consensus-Cleanup-Revival.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/March_2024/combined_Great-Consensus-Cleanup-Revival.xml"
+        },
+        {
+            "id": "789",
+            "title": "Unspendable keys in descriptors",
+            "link": "https://delvingbitcoin.org/t/unspendable-keys-in-descriptors/304",
+            "authors": [
+                "salvatoshi"
+            ],
+            "published_at": "2023-12-19T12:46:39.300000+00:00",
+            "summary": "- New miniscript and taproot integration raises challenges for creating practical unspendable wallet keys.  - Multiple key generation methods exist, trading off between indistinguishability, fingerprinting, and ease of use.  - Further discussion is required to refine solutions and balance security, usability, and descriptor standards.",
+            "n_threads": 33,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "AntoineP",
+                "andrewtoth",
+                "josibake",
+                "sipa",
+                "bitryonix",
+                "RandyMcMillan",
+                "andrewkozlik",
+                "jaonoctus",
+                "wydengyre"
+            ],
+            "file_path": "static/delvingbitcoin/Dec_2023/789_Unspendable-keys-in-descriptors.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Dec_2023/combined_Unspendable-keys-in-descriptors.xml"
+        },
+        {
+            "id": "6256",
+            "title": "Propagation Delay and Mining Centralization: Modeling Stale Rates",
+            "link": "https://delvingbitcoin.org/t/propagation-delay-and-mining-centralization-modeling-stale-rates/2110",
+            "authors": [
+                "AntoineP"
+            ],
+            "published_at": "2025-11-17T14:18:31.321000+00:00",
+            "summary": "- Block propagation times significantly influence miner revenue, especially favoring larger miners and promoting centralization.  - Simulations reveal that even minor propagation differences can shift stale rates and impact pool profitability.  - Reducing propagation delays can enhance decentralization and fairness in mining, supported by data visualizations.",
             "n_threads": 9,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -202,70 +227,70 @@
                 "gmaxwell",
                 "moneyball"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2026/9074_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml"
+            "file_path": "static/delvingbitcoin/Nov_2025/6256_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2025/combined_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml"
         }
     ],
     "today_in_history_posts": [
         {
-            "id": "011805",
-            "title": "OP_CHECKWILDCARDSIGVERIFY or \"Wildcard Inputs\" or \"Coalescing Transactions\"",
-            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-November/011805.html",
+            "id": "021222",
+            "title": "Ephemeral Anchors: Fixing V3 Package RBF againstpackage limit pinning",
+            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-November/021222.html",
             "authors": [
-                "Chris Priest"
+                "Greg Sanders"
             ],
-            "published_at": "2015-11-24T17:34:35+00:00",
-            "summary": "- Small UTXOs from multiple donations increase transaction fees due to numerous listed inputs.  - The proposed OP_CHECKWILDCARDSIGVERIFY opcode enables combining these UTXOs into a single output.  - Using a wildcard input with this method significantly reduces transaction fees.",
-            "n_threads": 10,
+            "published_at": "2022-11-30T15:32:36+00:00",
+            "summary": "- Greg Sanders proposed Ephemeral Anchors to address package limit pinning for fee-paying Bitcoin transactions.  - The proposal enhances smart contract composability and prevents change outputs from being pinned.  - Open concerns include implementation complexity, miner extractable value, and effects on transaction anonymity.",
+            "n_threads": 18,
             "dev_name": "bitcoin-dev",
             "contributors": [
-                "Dave Scotese",
-                "Bryan Bishop",
-                "Erik",
-                "Gavin Andresen",
-                "Jannes Faber",
-                "Trevin Hofmann"
+                "Peter Todd",
+                "Arik Sosman",
+                "James O'Beirne",
+                "Jeremy Rubin",
+                "Johan Tor\u00e5s Halseth"
             ],
-            "file_path": "static/bitcoin-dev/Nov_2015/011805_OP-CHECKWILDCARDSIGVERIFY-or-Wildcard-Inputs-or-Coalescing-Transactions-.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/Nov_2015/combined_OP-CHECKWILDCARDSIGVERIFY-or-Wildcard-Inputs-or-Coalescing-Transactions-.xml"
+            "file_path": "static/bitcoin-dev/Nov_2022/021222_Ephemeral-Anchors-Fixing-V3-Package-RBF-againstpackage-limit-pinning.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/Nov_2022/combined_Ephemeral-Anchors-Fixing-V3-Package-RBF-againstpackage-limit-pinning.xml"
         },
         {
-            "id": "000353",
-            "title": "Payment channel without timeout protected from malleability",
-            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2015-November/000353.html",
+            "id": "003775",
+            "title": "Mitigating Channel Jamming with Reputation Credentials: a Protocol Sketch",
+            "link": "https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2022-December/003775.html",
             "authors": [
-                "Nicolas Dorier"
+                "ZmnSCPxj"
             ],
-            "published_at": "2015-11-27T07:37:04+00:00",
-            "summary": "- A requests B\u2019s pubkey and creates the initial commitment transaction to begin the process.  - A has B sign a hash required for broadcasting, without revealing the commitment details to B.  - B cannot identify A\u2019s anchor before announcement due to lack of P2SH multisig information.",
-            "n_threads": 5,
+            "published_at": "2022-12-01T11:52:13+00:00",
+            "summary": "- Credential tampering by intermediary nodes can cause wasted value in classic payment paths.  - Routing nodes might unintentionally fail or cause accidental channel jamming despite no incentive for deliberate attacks.  - Effective channel jamming protections will leave only accidental failures appearing as apparent jamming instances.",
+            "n_threads": 23,
             "dev_name": "lightning-dev",
             "contributors": [
-                "Anthony Towns",
-                "M"
+                "Antoine Riard",
+                "Clara Shikhelman",
+                "David Harding",
+                "Michael Folkson"
             ],
-            "file_path": "static/lightning-dev/Nov_2015/000353_Payment-channel-without-timeout-protected-from-malleability.xml",
-            "combined_summ_file_path": "static/lightning-dev/Nov_2015/combined_Payment-channel-without-timeout-protected-from-malleability.xml"
+            "file_path": "static/lightning-dev/Dec_2022/003775_Mitigating-Channel-Jamming-with-Reputation-Credentials-a-Protocol-Sketch.xml",
+            "combined_summ_file_path": "static/lightning-dev/Dec_2022/combined_Mitigating-Channel-Jamming-with-Reputation-Credentials-a-Protocol-Sketch.xml"
         },
         {
-            "id": "504",
-            "title": "Can block validation benefit from CUDA?",
-            "link": "https://delvingbitcoin.org/t/can-block-validation-benefit-from-cuda/224",
+            "id": "3611",
+            "title": "OP_EXPIRE: Mitigating replacing cycling attacks",
+            "link": "https://delvingbitcoin.org/t/op-expire-mitigating-replacing-cycling-attacks/1282",
             "authors": [
-                "ss01x"
+                "mpch"
             ],
-            "published_at": "2023-11-28T03:17:39.224000+00:00",
-            "summary": "- Validating each transaction within a block is resource-intensive and currently uses all CPU threads.  - Employing CUDA computing and GPUs could significantly improve transaction validation speed and efficiency.  - Utilizing parallel computing may enhance node performance and contribute to blockchain system robustness.",
-            "n_threads": 5,
+            "published_at": "2024-11-27T11:36:53.864000+00:00",
+            "summary": "- Replacement cycling attacks exploit HTLC scripts, prompting developers to adopt mempool monitoring and rebroadcasting countermeasures.  - Introducing OP_EXPIRE enables script branches to expire, improving contract security and reducing required on-chain interventions.  - OP_EXPIRE implementation involves encoding expiration in nVersion, yet community consensus on specifics remains unresolved.",
+            "n_threads": 6,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "real-or-random",
-                "CubicEarth",
-                "ZmnSCPxj",
-                "vostrnad"
+                "instagibbs",
+                "jonas",
+                "mplsgrant"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2023/504_Can-block-validation-benefit-from-CUDA-.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2023/combined_Can-block-validation-benefit-from-CUDA-.xml"
+            "file_path": "static/delvingbitcoin/Nov_2024/3611_OP-EXPIRE-Mitigating-replacing-cycling-attacks.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2024/combined_OP-EXPIRE-Mitigating-replacing-cycling-attacks.xml"
         }
     ]
 }
