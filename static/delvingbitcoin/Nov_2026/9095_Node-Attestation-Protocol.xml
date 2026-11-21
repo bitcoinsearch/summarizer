@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Node Attestation Protocol</title>
+  <updated>2026-11-21T07:59:33.606002+00:00</updated>
+  <author>
+    <name>bkeroack</name>
+  </author>
+  <timestamp>2026-11-21 02:11:05.655000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Node Attestation Protocol</title>
+    <updated>2026-11-21T07:59:33.606029+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/node-attestation-protocol/3100" rel="alternate"/>
+    <summary>Miner signaling has long served as the predominant method for measuring support within the Bitcoin network for proposed protocol changes. This approach is grounded in mining’s inherent resistance to Sybil attacks and its economic significance. However, miners represent a relatively centralized group and do not encompass all meaningful stakeholders. As the network evolves and contentious proposals arise, there is growing recognition of the need for broader, more inclusive mechanisms to survey sentiment across diverse network participants.
+
+The Node Attestation Protocol (NAP) emerges as a response to this need, enabling a more comprehensive survey that includes so-called “economic nodes”—entities holding substantial economic value that are not involved in mining. NAP empowers node operators and other stakeholders to publish attestations, which are free-form key-value statements cryptographically linked to control of specific Unspent Transaction Outputs (UTXOs). These attestations can range from trivial preferences to explicit endorsements or rejections of technical proposals, such as BIPs. The protocol imposes minimal restrictions on the content of attestations, only limiting their size to 128 bytes per key and value, and restricting character sets to printable ASCII.
+
+Attestations are distributed through a backwards-compatible pair of peer-to-peer messages and a service bit, allowing supporting nodes to serve these attestations upon request. An aggregator—any participant with access to the UTXO set—can collect, validate, and aggregate attestations, de-duplicating by coin and weighting each attestation according to the coin’s value. This approach ensures Sybil resistance: each coin is counted once per attestation key, and multiple attestations from the same coin are superseded by the latest one. Human readability of attestation messages enhances transparency, especially when signing via hardware devices. Signatures utilize either BIP 322 or legacy signmessage, depending on outpoint type.
+
+Attestations are strictly non-binding and serve only as a human-readable indicator of proposal popularity or support level among economic nodes. They are not intended to mechanically trigger protocol decisions, nor should any BIP or upgrade process be gated purely on NAP results. Each attestation is time-limited; it remains valid for approximately six months (26,208 blocks), after which re-signing is required for continued inclusion. Additionally, only coins with at least four weeks of confirmation age and a minimum value of 10,000 satoshis are eligible to back an attestation, further reducing manipulation risks.
+
+While NAP increases transparency and inclusivity, it also introduces privacy considerations. Publishing an attestation reveals control over particular coins, potentially exposing information about holdings. This risk is mitigated by the pseudonymous nature of attestations, but holders should remain mindful, particularly when using certain output types that reveal public keys or scripts. Future iterations of NAP might address privacy further, possibly by incorporating zero-knowledge proofs. Custodianship presents another challenge, as custodians—not beneficial owners—hold signing authority and may act in their own interests.
+
+Historical attempts at coin-weighted network signaling include Bitcoinocracy and HODL.voting in the Bitcoin ecosystem, and CarbonVote within Ethereum. These systems generally relied on trusted tallying parties or required users to time-lock funds. NAP distinguishes itself by eliminating the need for central trust: any node can participate in aggregating attestations, and validation is open to anyone with a copy of the UTXO set.
+
+The protocol is fully implemented in [satd 0.7+](https://github.com/epochbtc/satd), a Rust-based full Bitcoin node. The current protocol specification is still in draft form, and feedback is actively encouraged. Users interested in NAP can immediately begin running the implementation, publishing attestations, and engaging with the reference aggregator. Broader adoption and additional implementations in other node software are anticipated as the specification matures.</summary>
+    <published>2026-11-21T02:11:05.655000+00:00</published>
+  </entry>
+</feed>

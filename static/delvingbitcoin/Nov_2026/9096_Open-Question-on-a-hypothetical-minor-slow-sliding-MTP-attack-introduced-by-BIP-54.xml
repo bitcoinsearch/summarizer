@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Open Question on a hypothetical minor "slow-sliding MTP" attack introduced by BIP 54</title>
+  <updated>2026-11-21T07:59:43.896388+00:00</updated>
+  <author>
+    <name>ariard</name>
+  </author>
+  <timestamp>2026-11-21 04:07:39.661000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Open Question on a hypothetical minor "slow-sliding MTP" attack introduced by BIP 54</title>
+    <updated>2026-11-21T07:59:43.896418+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/open-question-on-a-hypothetical-minor-slow-sliding-mtp-attack-introduced-by-bip-54/3101" rel="alternate"/>
+    <summary>BIP54 brings forth nuanced considerations regarding the security implications of block header timestamps, especially in the context of adversarial manipulation. A long-standing tactic among bitcoin experts to disrupt a competing miner involves hijacking the miner’s local clock settings. By doing so, an attacker can manipulate the [`nTime`](https://github.com/bitcoin/bitcoin/blob/004cfb21a51db563b92cde968f249086ef58df7c/src/primitives/block.hL33) field of upcoming blocks. This approach seeks to trigger a violation of the “block timestamp too far in the future” [consensus rule](https://github.com/bitcoin/bitcoin/blob/004cfb21a51db563b92cde968f249086ef58df7c/src/validation.cppL4197), which could result in a valid block being unfairly rejected. Such manipulation is best described as adversarial header time hijacking.
+
+With BIP54, a new consensus condition stipulates that if the block height modulo 2016 equals zero, the timestamp for that block must be greater than or equal to the timestamp of the immediately preceding block minus 7200 seconds (TN ≥ TN−1 − 7200). This adjustment effectively links the validity of a block’s timestamp at these intervals to the value set in the prior block. As a consequence, whoever controls the `nTime` of the previous block—whether it be the original miner or an adversary who managed to hijack the miner's system—can potentially exert influence over the acceptance of the subsequent block. Theoretically, this presents a potential for “reverse header time hijacking,” where the operator of block N-1 holds discretionary power over block N’s timestamp admissibility.
+
+However, the margin between allowable timestamps has been designed with security in mind. The permitted window—7200 seconds—is intentionally broader than the expected cumulative interval for 11 blocks based on the median-time-past (MTP) mechanism, which would typically sum to 6000 seconds, given a 600-second block target. The [superior margin](https://github.com/bitcoin/bitcoin/pull/35793/changesdiff-74d3d558e2ae1b1c967ea13d01ce15875cc7de50c93c26db73ccb3e4db5cfdacR34) aims to prevent false invalidations due to normal variations in block production times.
+
+A theoretical but unlikely attack vector emerges if an adversary can ensure that all timestamps within the MTP calculation window are set with minimal increments, such as sequential increases of just one second. If maintained over a sufficiently large window, a discrepancy of up to 7200 seconds could accumulate between the latest block in the MTP range and actual wall-clock time. This scenario, termed the “slow-sliding-mtp” attack, would allow an attacker to cause the invalidation of a block at height N % 2016 == 0. Executing this attack would require continuous control of over 51% of the network’s hash rate, making it highly impractical under current decentralization assumptions. Moreover, the impact is limited; only one block out of every 2016 could be targeted, reducing the overall risk.
+
+In certain adversarial strategies, such as selfish mining, this edge case could theoretically be leveraged to selectively invalidate blocks and gain a competitive advantage. Nevertheless, under prevailing consensus rules, lateness in the MTP relative to real-world time does not alone render a new block invalid. It is also conceivable to attempt a “fast-forward” manipulation, pushing the MTP into the future to render a forthcoming block invalid, provided the manipulation remains within the two-hour window. However, such tactics are fraught with uncertainty, since there is no guarantee regarding how the majority of nodes configure their local clocks.
+
+These observations underscore both the strengths and residual vulnerabilities of the new timestamp validation rules in BIP54. While introducing a dependency between successive block timestamps, the protocol balances this with a conservatively wide acceptance window and relies on the improbability of sustained majority hash rate attacks, maintaining a robust defense against practical exploitation. For further technical discussions, refer to the related [ML thread](https://groups.google.com/g/bitcoindev/c/tKETFYnEtng).</summary>
+    <published>2026-11-21T04:07:39.661000+00:00</published>
+  </entry>
+</feed>
