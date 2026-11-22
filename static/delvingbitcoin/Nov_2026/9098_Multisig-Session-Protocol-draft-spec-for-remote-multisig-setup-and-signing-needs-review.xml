@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Multisig Session Protocol: draft spec for remote multisig setup and signing needs review</title>
+  <updated>2026-11-22T07:44:58.040927+00:00</updated>
+  <author>
+    <name>onedigitmoney</name>
+  </author>
+  <timestamp>2026-11-21 17:23:33.902000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Multisig Session Protocol: draft spec for remote multisig setup and signing needs review</title>
+    <updated>2026-11-22T07:44:58.040960+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/multisig-session-protocol-draft-spec-for-remote-multisig-setup-and-signing-needs-review/3103" rel="alternate"/>
+    <summary>Secure multisignature (multisig) wallet setups are critical for robust cryptocurrency management, yet existing standards like BIP-129 leave gaps in how remote cosigners exchange setup files or Partially Signed Bitcoin Transactions (PSBTs). Typically, such exchanges occur over informal channels—email, chat, or proprietary servers—which introduces significant risks, including the "substitution problem," where a malicious coordinator could inject fraudulent keys. To address this, a new open protocol has been developed as a formal specification, enabling wallets to implement secure key exchanges independently of specific tools. This protocol is documented with comprehensive resources, including an explainer, test vectors, and a defects report, all available at [KeylayBTC/msp](https://github.com/KeylayBTC/msp), and is intended for broad adoption beyond the original [Keylay browser app](https://keylay.org).
+
+The protocol operates by facilitating mutual authentication between cosigners through an out-of-band short code, which is used to verify ephemeral X25519 public keys even when communicating over hostile relays. The security process begins with each participant committing to a unique nonce during the initial handshake. These nonces, alongside the exchanged keys, produce a 12-character string that both parties compare using a trusted communication channel such as voice call or secure messenger. Any discrepancy detected in this step results in an immediate abort, ensuring that no sensitive information is exposed if an attacker interferes.
+
+Once authentication succeeds, participants exchange their keys, independently construct the multisig descriptor using a deterministic byte-exact function, and share its hash for verification. If the hashes do not match, the process halts to prevent setup errors or attacks. Prior to funding the wallet, both parties validate the first generated address on their respective signing devices. Importantly, this arrangement eliminates the need for any centralized coordinator to distribute descriptors, significantly reducing the risk of compromise. During transaction signing, PSBTs must originate from the jointly controlled wallet, signatures are restricted to SIGHASH_ALL, and all destination details—including amount and fee—must be explicitly approved on the signing device.
+
+This protocol, currently at version 0.1, supports two clients simultaneously, favoring two-key wallet setups. However, it also accommodates more complex arrangements—such as 2-of-3 wallets created elsewhere—by allowing any pair of cosigners to participate in signing. All participants must be online during the process, and there is no external cryptographic review or post-quantum protection at this stage. While Keylay itself does not yet fully conform to the latest specification, section 14 of the documentation outlines existing discrepancies. An external design review was conducted on the previous draft, resulting in substantive revisions reflected in the current release.
+
+Two core technical constructs within the protocol are under ongoing review. First, the SAS (Short Authentication String) commitment mechanism now commits to fresh nonces during the handshake, preventing attackers with knowledge of the shared code from efficiently searching for collisions. The security bound for successful attack attempts is estimated at around 2^-59 per session using a commit-then-open approach inspired by established protocols such as Vaudenay's numeric comparison. A question remains on how this model can be extended to n-party scenarios, requiring each participant to know the expected group membership prior to revealing nonces.
+
+Second, the authentication join deviates from standard Password Authenticated Key Exchange (PAKE) methods. Instead, it uses HMAC with a PBKDF2-stretched code, making the code susceptible to offline guessing if the user selects weak codes. For randomly generated codes, the entropy margin is sufficient, but user-generated codes with low entropy present a risk, especially since a fixed salt allows attackers to precompute guesses across sessions. The proposed mitigation involves separating the rendezvous segment (used only for public identification) from a secret segment reserved exclusively for CPace password-based authentication. Feedback is sought regarding whether this separation adequately prevents offline attacks and whether the public rendezvous segment leaks sensitive information.
+
+Additionally, symmetric assembly for descriptor creation necessitates n(n−1) key messages and relies on a normative, deterministic function for correctness and security. While this approach appears novel compared to BSMS-style setups, further scrutiny is invited on its necessity and efficiency. Related work is referenced, such as Blind Relay’s approach to relay confidentiality and Turon’s contributions to message identity determinism.
+
+This evolving protocol demonstrates a strong commitment to advancing secure, decentralized multisig wallet coordination, inviting peer review and iterative improvement to address emerging challenges and strengthen overall resilience.</summary>
+    <published>2026-11-21T17:23:33.902000+00:00</published>
+  </entry>
+</feed>
