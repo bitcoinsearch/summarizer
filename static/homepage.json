@@ -1,6 +1,21 @@
 {
-    "header_summary": "Recent Bitcoin Core releases, including versions [31.3](https://bitcoincore.org/en/2026/11/20/release-31.3/) and [30.5](https://bitcoincore.org/en/2026/11/20/release-30.5/), address a medium-severity security vulnerability while providing bug fixes, performance enhancements, and updated translations. The latest security advisory details the vulnerability and mitigation steps at [this link](https://bitcoincore.org/en/2026/11/20/disclose-orphan-inv-stall/), with further technical discussion available via the [mailing list thread](https://gnusha.org/pi/bitcoindev/c47ceea6-99de-41fe-a97c-928881963eccn@googlegroups.com/T/u). Users on older versions are urged to upgrade for continued security and stability.\n\nTechnical improvements in these releases include the implementation of unique transaction inventory processing in the networking layer and optimized continuous integration workflows. Cross-platform compatibility is maintained for Linux, macOS, and Windows, with direct migration support from end-of-life versions and general backward compatibility for wallets. Contributors such as fanquake, Greg Sanders, and willcl-ark are acknowledged, with further details and participation opportunities provided at [Bitcoin Core\u2019s announcements](https://bitcoincore.org/en/list/announcements/join/).\n\nEfforts to formalize secure multisignature wallet setup and PSBT coordination are advancing through open protocols that enhance mutual authentication and eliminate reliance on centralized coordinators. The [KeylayBTC/msp](https://github.com/KeylayBTC/msp) protocol introduces deterministic message identities and robust SAS (Short Authentication String) commitment mechanisms, while inviting peer review on areas such as nonce handling, authentication security, and n-party scalability. These developments aim to address long-standing substitution risks and promote resilient, decentralized multisig operation.\n\nBIP54 introduces new consensus conditions linking block timestamp validity to preceding block values, mitigating adversarial header time hijacking but introducing theoretical attack vectors such as the \u201cslow-sliding-mtp\u201d scenario. These risks are constrained by conservative acceptance windows and practical limitations, preserving network integrity against majority hash rate manipulation [ML thread](https://groups.google.com/g/bitcoindev/c/tKETFYnEtng).",
+    "header_summary": "A draft for a Bitcoin Improvement Proposal (BIP) standardizes transaction inclusion proofs using wtxid, consolidating diverse existing implementations and specifying explicit validation rules, reference code, and comprehensive test vectors. This draft addresses complications such as ambiguous segwit activation detection, risks in lightweight client verification, and proposes two proof formats, with ongoing consideration regarding their mandatory support and flag byte padding requirements. Full details and discussion are available at [GitHub](https://github.com/jeanpablojp/bips/blob/witness-inclusion-proofs/bip-witness-inclusion-proofs.md) and [mailing list thread](https://gnusha.org/pi/bitcoindev/C899B11E-4971-4AAF-8BA3-81EBAFBF7739@jeanpablo.jp/T/#u#meb2b2f0670b30c170d2e4099b87537be5c558448).\n\nRecent releases of Bitcoin Core, specifically [versions 31.3](https://bitcoincore.org/en/2026/11/20/release-31.3/) and [30.5](https://bitcoincore.org/en/2026/11/20/release-30.5/), address a medium-severity security vulnerability, with all users on older versions advised to upgrade promptly. Details on the vulnerability and security disclosure process can be found in the [official advisory](https://bitcoincore.org/en/2026/11/20/disclose-orphan-inv-stall/) and [mailing list discussion](https://gnusha.org/pi/bitcoindev/c47ceea6-99de-41fe-a97c-928881963eccn@googlegroups.com/T/u).\n\nBitcoin Core v30.5 introduces networking efficiency improvements, updated translations, enhanced integration, and expanded OS support, with upgrade instructions and additional resources for feedback and participation provided at [release notes](https://bitcoincore.org/bin/bitcoin-core-30.5/) and the [announcement list](https://bitcoincore.org/en/list/announcements/join/). Contributors such as fanquake, Greg Sanders, and willcl-ark are acknowledged for their efforts in this collaborative release ([source](https://gnusha.org/pi/bitcoindev/b35d81a4-e207-4068-82e5-88a2f882e871n@googlegroups.com/T/#u#m0f38c88cd81ceaf6a985a19100fb133684dbd8db)).\n\nProtocol changes under BIP 54 clarify that block time for block N-1 is now derived from its own timestamp rather than Median Time Past, constraining allowable timestamp manipulation and reinforcing validity through enforced node time margins. Historical data confirm that negative timestamp differences at difficulty retarget boundaries are rare and well within safety limits, as detailed in the [analysis dataset](https://www.learnbitcoin.com/downloads/time-warp-seams.csv).\n\nIn multisig wallet coordination, new open specifications for secure setup and Partially Signed Bitcoin Transaction (PSBT) routing protocols prioritize identity binding, monotonic session sequencing, and robust duplicate detection. The protocol leverages out-of-band authentication via ephemeral X25519 keys and short authentication strings, with comprehensive resources and ongoing development available at [KeylayBTC/msp](https://github.com/KeylayBTC/msp). Security analysis and feedback are invited regarding nonce safety, authentication join mechanisms, and symmetric assembly requirements to further strengthen decentralized multisig wallet workflows ([discussion](https://delvingbitcoin.org/t/multisig-session-protocol-draft-spec-for-remote-multisig-setup-and-signing-needs-review/3103)).",
     "recent_posts": [
+        {
+            "id": "meb2b2f0670b30c170d2e4099b87537be5c558448",
+            "title": "[BIP Proposal] Witness Transaction Inclusion Proofs",
+            "link": "https://gnusha.org/pi/bitcoindev/C899B11E-4971-4AAF-8BA3-81EBAFBF7739@jeanpablo.jp/T/#u#meb2b2f0670b30c170d2e4099b87537be5c558448",
+            "authors": [
+                "Jean Pablo"
+            ],
+            "published_at": "2026-11-22T23:43:00+00:00",
+            "summary": "- A draft standardizes transaction inclusion proofs using wtxid, consolidating prior independent implementations and documentation.  - It describes two proof formats, discusses validation procedures, and addresses blocks before and after SegWit activation.  - Explicit activation status is required, and feedback is sought on format support and flag byte padding.",
+            "n_threads": 0,
+            "dev_name": "bitcoin-dev",
+            "contributors": [],
+            "file_path": "static/bitcoin-dev/Nov_2026/meb2b2f0670b30c170d2e4099b87537be5c558448_-BIP-Proposal-Witness-Transaction-Inclusion-Proofs.xml",
+            "combined_summ_file_path": ""
+        },
         {
             "id": "m70332795a64238e4a0b1d6aae13c31f1c4f93ce8",
             "title": "Bitcoin Core security advisory for an easily discoverable vulnerability",
@@ -9,7 +24,7 @@
                 "Greg Sanders"
             ],
             "published_at": "2026-11-20T15:17:00+00:00",
-            "summary": "- Two new releases fix a medium severity vulnerability and are available for supported major versions.  - A detailed security advisory and accelerated process information are provided through official links.  - Users on version 29.x should upgrade for continued security; further details are available online.",
+            "summary": "- New software releases address a medium severity security vulnerability for supported major versions.  - Comprehensive details and the official security advisory are available through the provided online links.  - Users of version 29.x should upgrade to maintain system safety and reliability.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -24,7 +39,7 @@
                 "fanquake"
             ],
             "published_at": "2026-11-20T13:54:00+00:00",
-            "summary": "- Bitcoin Core v30.5 provides bug fixes, performance improvements, updated translations, and broad operating system compatibility.  - Upgrade instructions vary by operating system, maintaining backward compatibility with most older wallet versions.  - Technical enhancements include unique transaction processing, CI improvements, and contributions from a collaborative team.",
+            "summary": "- Bitcoin Core v30.5 includes bug fixes, performance improvements, and updated translations for wider support.  - Installation requires shutting down previous versions, with instructions tailored to each operating system.  - This release delivers technical networking enhancements, integration improvements, and acknowledges key contributors\u2019 efforts.",
             "n_threads": 0,
             "dev_name": "bitcoin-dev",
             "contributors": [],
@@ -32,19 +47,21 @@
             "combined_summ_file_path": ""
         },
         {
-            "id": "mada2260be4b72bb72cc2ad0f63ff4f9470912587",
-            "title": "Bitcoin Core v31.3 Released",
-            "link": "https://gnusha.org/pi/bitcoindev/26f1e8e8-3f01-462a-b87a-ff7375911ecan@googlegroups.com/T/#u#mada2260be4b72bb72cc2ad0f63ff4f9470912587",
+            "id": "9101",
+            "title": "Open Question on a hypothetical minor \"slow-sliding MTP\" attack introduced by BIP 54",
+            "link": "https://delvingbitcoin.org/t/open-question-on-a-hypothetical-minor-slow-sliding-mtp-attack-introduced-by-bip-54/3101/2",
             "authors": [
-                "fanquake"
+                "LearnBitcoin.com"
             ],
-            "published_at": "2026-11-20T13:53:00+00:00",
-            "summary": "- Bitcoin Core 31.3 delivers bug fixes, performance improvements, and enhanced translations for greater stability.  - Upgrading requires proper shutdown, with specific installation steps for Windows, macOS, and Linux.  - Official support covers recent Linux, macOS, Windows versions, and upgrades from end-of-life releases are supported.",
-            "n_threads": 0,
-            "dev_name": "bitcoin-dev",
-            "contributors": [],
-            "file_path": "static/bitcoin-dev/Nov_2026/mada2260be4b72bb72cc2ad0f63ff4f9470912587_Bitcoin-Core-v31-3-Released.xml",
-            "combined_summ_file_path": ""
+            "published_at": "2026-11-22T15:40:20.806000+00:00",
+            "summary": "- The new rule directly uses block timestamps instead of Median Time Past, nullifying previous manipulation methods.  - Nodes accept blocks only if timestamps are no more than two hours ahead of their own clocks.  - Historical analysis shows rare timestamp anomalies, with recent maximum offsets well below allowable margins.",
+            "n_threads": 1,
+            "dev_name": "delvingbitcoin",
+            "contributors": [
+                "ariard"
+            ],
+            "file_path": "static/delvingbitcoin/Nov_2026/9101_Open-Question-on-a-hypothetical-minor-slow-sliding-MTP-attack-introduced-by-BIP-54.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Nov_2026/combined_Open-Question-on-a-hypothetical-minor-slow-sliding-MTP-attack-introduced-by-BIP-54.xml"
         },
         {
             "id": "9099",
@@ -54,7 +71,7 @@
                 "onedigitmoney"
             ],
             "published_at": "2026-11-21T17:26:35.642000+00:00",
-            "summary": "- Identity binding, per-session sequencing, and counter verification are implemented to ensure communication integrity.  - Message identities use a deterministic hash to support duplicate detection and prevent replay attacks.  - The explicit inclusion of the round parameter is being considered to improve robustness after network reconnections.",
+            "summary": "- Identity binding, monotonic sequencing, and sender counters are enforced to ensure secure PSBT routing protocols.  - Deterministic message identities using truncated hashes provide uniqueness and robust duplicate detection, aborting on inconsistencies.  - The round parameter\u2019s implicit handling raises idempotence concerns, prompting discussion about explicit authenticated inclusion.",
             "n_threads": 7,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -72,26 +89,11 @@
                 "onedigitmoney"
             ],
             "published_at": "2026-11-21T17:23:33.902000+00:00",
-            "summary": "- A new open protocol enables secure, independent multisig wallet key exchanges and authentication.  - Security measures include out-of-band code verification, nonce commitments, and rigorous post-authentication checks.  - Key technical aspects remain under review, including SAS commitment, authentication join, and symmetric key assembly.",
+            "summary": "- The protocol formalizes secure multisig wallet key exchanges, addressing risks of malicious coordinators and setup errors.  - Participants mutually authenticate using a short code and exchange keys, ensuring descriptor correctness without a central coordinator.  - Technical mechanisms prevent offline attacks, but feedback is sought on n-party support and information leakage.",
             "n_threads": 0,
             "dev_name": "delvingbitcoin",
             "contributors": [],
             "file_path": "static/delvingbitcoin/Nov_2026/9098_Multisig-Session-Protocol-draft-spec-for-remote-multisig-setup-and-signing-needs-review.xml",
-            "combined_summ_file_path": ""
-        },
-        {
-            "id": "9096",
-            "title": "Open Question on a hypothetical minor \"slow-sliding MTP\" attack introduced by BIP 54",
-            "link": "https://delvingbitcoin.org/t/open-question-on-a-hypothetical-minor-slow-sliding-mtp-attack-introduced-by-bip-54/3101",
-            "authors": [
-                "ariard"
-            ],
-            "published_at": "2026-11-21T04:07:39.661000+00:00",
-            "summary": "- BIP54 adjusts block timestamp validation, introducing new rules and a conservative two-hour acceptance window.\n- Adversaries could theoretically exploit header timestamp rules, but attacks require sustained majority hash rate control.\n- The protocol's design limits practical exploitation, maintaining security despite possible edge-case vulnerabilities.",
-            "n_threads": 0,
-            "dev_name": "delvingbitcoin",
-            "contributors": [],
-            "file_path": "static/delvingbitcoin/Nov_2026/9096_Open-Question-on-a-hypothetical-minor-slow-sliding-MTP-attack-introduced-by-BIP-54.xml",
             "combined_summ_file_path": ""
         }
     ],
@@ -104,7 +106,7 @@
                 "Ram"
             ],
             "published_at": "2026-07-29T17:21:00+00:00",
-            "summary": "- The `staletip` system enhances stale rate observability, assisting in network health diagnostics and quicker issue detection.  - Nodes share stale tip information using feature messages, limiting communication to recent blocks and compressed headers.  - The initiative encourages feedback to optimize node awareness and facilitate improved handling of stale block events.",
+            "summary": "- The `staletip` system enables nodes to share stale tip information, improving network diagnostics and observability.  - Technical measures restrict data sharing to tips within 1000 blocks and limit header sequences for efficiency.  - Developers encourage feedback to refine `staletip`, aiming for better network health insights and faster responses.",
             "n_threads": 7,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -117,13 +119,13 @@
         },
         {
             "id": "m026732cc28d771c76c5be050aa1b9851c2403b6b",
-            "title": "RFC: Two years of BIP Editing, time for some new faces?",
-            "link": "https://gnusha.org/pi/bitcoindev/62bb6c9b-d3a4-4b5e-97e7-60a2c8c91a2a@murch.one/T/#m026732cc28d771c76c5be050aa1b9851c2403b6b",
+            "title": "Re: RFC: Two years of BIP Editing, time for some new faces?",
+            "link": "https://gnusha.org/pi/bitcoindev/SoWAToywcwdV53iRUabwyoAc2Zli8up12ofKsvbGFk_zONpq9U8hlmG9PzIsd0Fv4bZQZaVCEQ-EC7SLxMqHYEMmYkAo3evOjIrotmlst80=@protonmail.com/T/#u#m026732cc28d771c76c5be050aa1b9851c2403b6b",
             "authors": [
                 "Murch"
             ],
             "published_at": "2026-04-22T23:48:00+00:00",
-            "summary": "- BIP Editors have actively contributed, processing 596 pull requests and publishing 42 new BIPs.  - Most editorial workload fell on just two editors, with only one active in early 2026.  - A proposal suggests appointing three dedicated editors to ensure effective repository management.",
+            "summary": "- The BIPs repository saw increased submissions, dynamic discussions, and significant editorial efforts over two years.  - Key improvements included process updates, document enhancements, and better integration within the editorial workflow.  - A refreshed team of three active editors is proposed to ensure collaboration and sustainable progress.",
             "n_threads": 6,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -131,8 +133,8 @@
                 "Jaroslav Dlouhy",
                 "stickies-v"
             ],
-            "file_path": "static/bitcoin-dev/April_2026/m026732cc28d771c76c5be050aa1b9851c2403b6b_RFC-Two-years-of-BIP-Editing-time-for-some-new-faces-.xml",
-            "combined_summ_file_path": "static/bitcoin-dev/April_2026/combined_RFC-Two-years-of-BIP-Editing-time-for-some-new-faces-.xml"
+            "file_path": "static/bitcoin-dev/April_2026/m026732cc28d771c76c5be050aa1b9851c2403b6b_Re-RFC-Two-years-of-BIP-Editing-time-for-some-new-faces-.xml",
+            "combined_summ_file_path": "static/bitcoin-dev/April_2026/combined_Re-RFC-Two-years-of-BIP-Editing-time-for-some-new-faces-.xml"
         },
         {
             "id": "mf34978d175c7e432f8b66d7e6d88b977c83da474",
@@ -142,7 +144,7 @@
                 "Cory Fields"
             ],
             "published_at": "2026-11-04T21:05:00+00:00",
-            "summary": "- Several mechanisms are proposed to protect legacy cryptocurrency outputs from quantum-enabled attacks through incentives.  - Quantum Landmines, Staked Auctions, and Sats Auctions introduce collateral penalties and competitive bidding strategies.  - These approaches use cryptography and economic game theory to encourage security and adaptive post-quantum defenses.",
+            "summary": "- New consensus rules enforce collateralization, time-locks, and proofs for legacy outputs to deter quantum attacks.\n- Mechanisms like Quantum Landmines, Staked Auctions, and Sats Auctions use game theory to penalize attackers.\n- Adaptive incentive-based defenses may transform quantum risks into opportunities for decentralized financial security.",
             "n_threads": 4,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -159,7 +161,7 @@
                 "AntoineP"
             ],
             "published_at": "2024-03-24T17:29:42.691000+00:00",
-            "summary": "- The proposal addresses Bitcoin vulnerabilities by recommending improvements for network security and performance.  - Solutions include adjusting timewarp vulnerability, restricting legacy transactions, and invalidating short transactions.  - Some changes, like block size reduction and stricter standardization, have generated debate within the community.",
+            "summary": "- The proposal analyzes vulnerabilities in Bitcoin's protocol, suggesting improvements to enhance security and performance.  - Suggested solutions include adjusting mining difficulty, limiting legacy transaction sizes, and invalidating short transactions.  - Community input is encouraged, while some proposed changes, such as reducing block size, remain contentious.",
             "n_threads": 95,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -192,7 +194,7 @@
                 "salvatoshi"
             ],
             "published_at": "2023-12-19T12:46:39.300000+00:00",
-            "summary": "- Integrating miniscript with taproot introduces challenges in generating practical unspendable keys for wallets.  - Various methods for creating unspendable keys exist, each balancing security, uniqueness, and user experience.  - Further refinement and community discussion are needed to achieve optimal solutions for unspendable key generation.",
+            "summary": "- Integration of miniscript with taproot enables new wallet functionalities but introduces challenges with unspendable keys.  - Various generation methods for unspendable keys balance between indistinguishability, uniqueness, and user experience.  - No solution fully meets all requirements; ongoing discussion and further refinements are recommended.",
             "n_threads": 33,
             "dev_name": "delvingbitcoin",
             "contributors": [
@@ -210,25 +212,21 @@
             "combined_summ_file_path": "static/delvingbitcoin/Dec_2023/combined_Unspendable-keys-in-descriptors.xml"
         },
         {
-            "id": "6256",
-            "title": "Propagation Delay and Mining Centralization: Modeling Stale Rates",
-            "link": "https://delvingbitcoin.org/t/propagation-delay-and-mining-centralization-modeling-stale-rates/2110",
+            "id": "8584",
+            "title": "Bounds on chain length with BIP-54 timewarp fixes",
+            "link": "https://delvingbitcoin.org/t/bounds-on-chain-length-with-bip-54-timewarp-fixes/2899",
             "authors": [
-                "AntoineP"
+                "sipa"
             ],
-            "published_at": "2025-11-17T14:18:31.321000+00:00",
-            "summary": "- Selfish mining leverages block propagation delays to increase miner revenues and encourage centralization.  - Simulation results show that larger pools benefit more from propagation delays, affecting mining fairness.  - Reducing propagation times could improve decentralization and revenue equity among miners of different sizes.",
-            "n_threads": 9,
+            "published_at": "2026-09-17T15:20:49.347000+00:00",
+            "summary": "- Timewarp attack rules restrict block timestamps to prevent manipulative attacks and maintain blockchain integrity.  - Mathematical modeling and formulae establish strict upper bounds on blockchain growth under these rules.  - Formal proof confirms the formula's correctness, demonstrating strong protection against timestamp-based vulnerabilities.",
+            "n_threads": 28,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "0xbrito",
-                "0xB10C",
-                "ajtowns",
-                "gmaxwell",
-                "moneyball"
+                "zawy"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2025/6256_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2025/combined_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml"
+            "file_path": "static/delvingbitcoin/Sept_2026/8584_Bounds-on-chain-length-with-BIP-54-timewarp-fixes.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Sept_2026/combined_Bounds-on-chain-length-with-BIP-54-timewarp-fixes.xml"
         }
     ],
     "today_in_history_posts": [
@@ -240,7 +238,7 @@
                 "Greg Sanders"
             ],
             "published_at": "2022-11-30T15:32:36+00:00",
-            "summary": "- Greg Sanders proposes \"Ephemeral Anchors\" to address transaction pinning and enhance smart contract composability.  - The proposal includes watermarking outputs for V3 packages and seeks feedback on complexity and anonymity impacts.  - Open questions remain about MEV risks and SIGHASH_GROUP, while sibling eviction is an alternative solution.",
+            "summary": "- Greg Sanders proposes Ephemeral Anchors to resolve package limit pinning for fee-paying Bitcoin transactions.  - The proposal enhances smart contract composability and addresses change output pinning without arbitrary scripts.  - Open questions remain regarding MEV, SIGHASH_GROUP constructs, anonymity effects, and implementation complexity.",
             "n_threads": 18,
             "dev_name": "bitcoin-dev",
             "contributors": [
@@ -261,7 +259,7 @@
                 "ZmnSCPxj"
             ],
             "published_at": "2022-12-01T11:52:13+00:00",
-            "summary": "- Intermediary nodes may tamper with credentials, causing potential value loss for senders.  - Routing nodes typically avoid intentional attacks on paths they benefit from, but accidents remain possible.  - Effective channel jamming protections can minimize deliberate attacks, leaving mainly accidental failures.",
+            "summary": "- Credential tampering can occur when intermediary nodes waste allocated values in payment paths.  - Routing nodes may accidentally cause failures, but deliberate attacks sacrifice their potential fees.  - Effective channel jamming protections will result in only accidental instances of channel jamming remaining.",
             "n_threads": 23,
             "dev_name": "lightning-dev",
             "contributors": [
@@ -274,25 +272,25 @@
             "combined_summ_file_path": "static/lightning-dev/Dec_2022/combined_Mitigating-Channel-Jamming-with-Reputation-Credentials-a-Protocol-Sketch.xml"
         },
         {
-            "id": "6256",
-            "title": "Propagation Delay and Mining Centralization: Modeling Stale Rates",
-            "link": "https://delvingbitcoin.org/t/propagation-delay-and-mining-centralization-modeling-stale-rates/2110",
+            "id": "62",
+            "title": "Thoughts on scaling and consensus changes (2023)",
+            "link": "https://delvingbitcoin.org/t/thoughts-on-scaling-and-consensus-changes-2023/32",
             "authors": [
-                "AntoineP"
+                "jamesob"
             ],
-            "published_at": "2025-11-17T14:18:31.321000+00:00",
-            "summary": "- Selfish mining strategies can favor larger miners due to block propagation delays and network topology.  - Simulations show that even small differences in propagation times significantly impact revenue and centralization.  - Reducing block propagation delays may improve mining fairness and decrease centralization within the network.",
-            "n_threads": 9,
+            "published_at": "2023-08-16T14:53:52.896000+00:00",
+            "summary": "- Bitcoin scalability relies on off-chain entities like federated sidechains, Chaumian banks, and coinpools.  - Distributed \"banks\" promise improved liquidity, security, and fraud detection, but require auditing and effective exits.  - Critical improvements include robust second-layer protocols, secure custody tools, and infrastructure for regulatory compliance.",
+            "n_threads": 5,
             "dev_name": "delvingbitcoin",
             "contributors": [
-                "0xbrito",
-                "0xB10C",
-                "ajtowns",
-                "gmaxwell",
-                "moneyball"
+                "Ajian",
+                "CubicEarth",
+                "EthnTuttle",
+                "jungly",
+                "melvincarvalho"
             ],
-            "file_path": "static/delvingbitcoin/Nov_2025/6256_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml",
-            "combined_summ_file_path": "static/delvingbitcoin/Nov_2025/combined_Propagation-Delay-and-Mining-Centralization-Modeling-Stale-Rates.xml"
+            "file_path": "static/delvingbitcoin/Aug_2023/62_Thoughts-on-scaling-and-consensus-changes-2023-.xml",
+            "combined_summ_file_path": "static/delvingbitcoin/Aug_2023/combined_Thoughts-on-scaling-and-consensus-changes-2023-.xml"
         }
     ]
 }
