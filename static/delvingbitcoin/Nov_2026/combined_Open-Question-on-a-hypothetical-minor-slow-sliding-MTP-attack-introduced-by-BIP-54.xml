@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - Open Question on a hypothetical minor &quot;slow-sliding MTP&quot; attack introduced by BIP 54</title>
+  <updated>2026-11-23T08:36:14.251894+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>ariard</author>
+      <timestamp>2026-11-21 04:07:39.661000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>LearnBitcoin.com</author>
+      <timestamp>2026-11-22 15:40:20.806000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/Nov_2026/9096_Open-Question-on-a-hypothetical-minor-slow-sliding-MTP-attack-introduced-by-BIP-54.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/9101_Open-Question-on-a-hypothetical-minor-slow-sliding-MTP-attack-introduced-by-BIP-54.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - Open Question on a hypothetical minor &quot;slow-sliding MTP&quot; attack introduced by BIP 54</title>
+    <updated>2026-11-23T08:36:14.252236+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/open-question-on-a-hypothetical-minor-slow-sliding-mtp-attack-introduced-by-bip-54/3101/2" rel="alternate"/>
+    <published>2026-11-21 04:07:39.661000+00:00</published>
+    <summary>BIP54 introduces significant modifications to the handling and validation of block header timestamps in Bitcoin, prioritizing security against adversarial manipulation. A notable vulnerability arises from the possibility of attackers hijacking a miner’s local clock, thereby controlling the [`nTime`](https://github.com/bitcoin/bitcoin/blob/004cfb21a51db563b92cde968f249086ef58df7c/src/primitives/block.hL33) field in forthcoming blocks. This action aims to violate the “block timestamp too far in the future” [consensus rule](https://github.com/bitcoin/bitcoin/blob/004cfb21a51db563b92cde968f249086ef58df7c/src/validation.cppL4197), which could result in valid blocks being incorrectly rejected. This technique, referred to as adversarial header time hijacking, exemplifies the subtle ways in which timestamp manipulation can disrupt consensus.
+The newly implemented BIP54 rule stipulates that for blocks at heights divisible by 2016, the block's timestamp must be greater than or equal to the previous block's timestamp minus 7200 seconds. This condition ties the validity of these block timestamps directly to their predecessors. As a result, the operator of block N-1, whether an honest participant or an adversary, is afforded some influence over the admissibility of the next block's timestamp. Although this introduces a theoretical risk of “reverse header time hijacking,” the design ensures a 7200-second window—broader than the typical 6000-second interval calculated via the median-time-past (MTP) method—to account for natural fluctuations in block production times. The [expanded margin](https://github.com/bitcoin/bitcoin/pull/35793/changesdiff-74d3d558e2ae1b1c967ea13d01ce15875cc7de50c93c26db73ccb3e4db5cfdacR34) is intended to mitigate accidental invalidations due to normal variance.
+A hypothetical but highly impractical attack scenario involves persistently setting block timestamps within the MTP calculation window to minimal increments, such as one second apart. Over a large enough set of blocks, this could create a discrepancy of up to 7200 seconds between the actual wall-clock time and the latest MTP block, resulting in what is termed the “slow-sliding-mtp” attack. Successfully executing this strategy demands ongoing control of more than 51% of the network’s hash rate, a feat considered infeasible given current levels of decentralization. Additionally, only one block per 2016-block cycle could be targeted, substantially limiting the potential impact. While certain adversarial mining strategies, like selfish mining, might theoretically exploit this edge case, prevailing rules ensure that a delayed MTP is insufficient on its own to invalidate subsequent blocks.
+Another angle of attack, known as “fast-forward” manipulation, would involve artificially advancing the MTP into the future to cause rejection of a forthcoming block. However, the variability in node clock configurations renders this tactic unreliable and difficult to coordinate across the network. These mechanisms collectively highlight both the robustness and the residual weaknesses inherent in the revised timestamp validation process. The protocol maintains resilience by introducing interdependencies between block timestamps, employing a generous acceptance window, and depending on the unlikelihood of sustained majority hash rate attacks.
+Analyzing the implementation further, the rule operates based on the timestamp of block N-1 rather than the MTP, which means manipulating the MTP alone is ineffective. The crucial factor is the extent to which T(N-1) can be set ahead of real time. Nodes enforce a maximum allowable skew, accepting only those blocks where N-1 is no more than two hours ahead of their local clock, aligning with the BIP54 margin. Therefore, any accepted block N-1 will have T(N-1) - 7200 at or before the node’s current time, ensuring that honest miners’ blocks are not inadvertently invalidated, except in scenarios involving substantial clock discrepancies. The default block template in Bitcoin Core further enforces these safeguards by requiring that the minimum retarget block time is raised in accordance with predefined constants, preventing the creation of invalid blocks through standard mining software.
+Empirical data supports the effectiveness of these constraints. Out of 484 historical retarget boundaries up to block 975,744, only ten instances were observed where block N had an earlier timestamp than block N-1, with the most significant deviation being -1,127 seconds in October 2012—a fraction of the allowed window. Since 2015, the largest negative difference observed was merely -43 seconds. For those interested in reviewing these boundary cases, the complete list is available in CSV format at [https://www.learnbitcoin.com/downloads/time-warp-seams.csv](https://www.learnbitcoin.com/downloads/time-warp-seams.csv). Additional technical discussion on this topic can be</summary>
+  </entry>
+</feed>

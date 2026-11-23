@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>[BIP Proposal] Witness Transaction Inclusion Proofs</title>
+  <updated>2026-11-23T08:39:32.188474+00:00</updated>
+  <author>
+    <name>Jean Pablo</name>
+  </author>
+  <timestamp>2026-11-22 23:43:00+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>[BIP Proposal] Witness Transaction Inclusion Proofs</title>
+    <updated>2026-11-23T08:39:32.188516+00:00</updated>
+    <link href="https://gnusha.org/pi/bitcoindev/C899B11E-4971-4AAF-8BA3-81EBAFBF7739@jeanpablo.jp/T/#u#meb2b2f0670b30c170d2e4099b87537be5c558448" rel="alternate"/>
+    <summary>A proposal has been drafted to address the absence of a Bitcoin Improvement Proposal (BIP) for proving transaction inclusion in a block using its wtxid. This draft is available at [this GitHub link](https://github.com/jeanpablojp/bips/blob/witness-inclusion-proofs/bip-witness-inclusion-proofs.md). Various implementations and formats have emerged independently, such as those found in Knots, Sjors’s initial sketch, an Electrum protocol draft, and a pull request for electrs. The verification logic is distributed across SomberNight’s comment on the Core pull request and within the codebases of these projects.
+
+The new draft consolidates these approaches by explicitly documenting the required validation checks, providing both a Python reference implementation and extensive test vectors—31 proofs that must be accepted and 62 that must be rejected. It leverages existing fixtures from Sjors’s work and cross-validates Merkle branch calculations over multiple blocks, highlighting key differences such as the handling of block 481823. Historical analysis reveals that miners began including commitment outputs in coinbase transactions well before SegWit activation; yet, none of these coinbases had associated witnesses. Notably, Sjors’s sketch processes each proof within the witness tree of block 481823 but only validates the coinbase’s proof.
+
+For reliable verification, the draft introduces "segwit is active for this block" as an explicit input, since the presence or absence of a witness in the coinbase transaction cannot alone determine segwit activation—a prover could remove the witness without affecting the txid. Furthermore, it explores complexities where Merkle branches can verify at positions beyond the actual transaction count, as observed in block 481823. While a full node can compare the position against the known number of transactions, lightweight clients with only block headers lack this capability. To mitigate risks, the draft proposes that proofs should be rejected if a right-hand Merkle node equals its left sibling, aligning with the approach used in Core’s partial Merkle tree implementation.
+
+Two distinct proof formats are described. The first is a straightforward branch per transaction, consistent with Sjors’s sketch and Electrum. The second adopts the BIP 37 partial Merkle tree format, byte-compatible with Core’s CPartialMerkleTree, as implemented in Knots and suggested by AJ. For example, proving inclusion for ten transactions from block 481823 requires 4,523 bytes in format 1 and 3,325 bytes in format 2. The necessity of supporting both formats remains under consideration, as does the question of whether to mandate zero padding for the unused bits in the last flag byte—BIP 37 does not specify this, nor does Core enforce it.
+
+Feedback on the draft and its design decisions is encouraged to help standardize transaction inclusion proofs using wtxid, ensuring interoperability across different Bitcoin applications and clients.</summary>
+    <published>2026-11-22T23:43:00+00:00</published>
+  </entry>
+</feed>

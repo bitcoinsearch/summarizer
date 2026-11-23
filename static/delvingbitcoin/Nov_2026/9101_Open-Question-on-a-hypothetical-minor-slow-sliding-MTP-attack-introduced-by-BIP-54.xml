@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Open Question on a hypothetical minor "slow-sliding MTP" attack introduced by BIP 54</title>
+  <updated>2026-11-23T08:35:54.716264+00:00</updated>
+  <author>
+    <name>LearnBitcoin.com</name>
+  </author>
+  <timestamp>2026-11-22 15:40:20.806000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Open Question on a hypothetical minor "slow-sliding MTP" attack introduced by BIP 54</title>
+    <updated>2026-11-23T08:35:54.716319+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/open-question-on-a-hypothetical-minor-slow-sliding-mtp-attack-introduced-by-bip-54/3101/2" rel="alternate"/>
+    <summary>A new protocol rule defines that the block time for a given block (N-1) is measured directly from its timestamp rather than the Median Time Past (MTP). This shift renders any manipulation of MTP ineffective with respect to this new rule. The critical variable becomes how far ahead in real time the timestamp T(N-1) can be set. Each node in the network only accepts block N-1 if its timestamp does not exceed the node’s own clock by more than two hours, corresponding to a margin of 7,200 seconds, as outlined in BIP 54. This design ensures that, for any accepted N-1, the difference T(N-1) - 7,200 will always be at or before the node's current time, allowing an honestly mined block N with a proper timestamp to remain valid.
+
+To invalidate a legitimate block N, the preceding block (N-1) would need a timestamp so far in the future that it surpasses the maximum allowable skew of the receiving node, which only occurs in scenarios involving significant clock disagreements across the network. However, such cases have already been considered and set aside in previous discussions.
+
+Within Bitcoin Core's implementation, specifically in the mining logic found in node/miner.cpp, the minimum allowable time for a difficulty retarget block is adjusted by the GetMinimumTime function. This function raises the minimum timestamp to T(N-1) minus MAX_TIMEWARP, where the value of MAX_TIMEWARP is set at 600 seconds as defined by BIP 94—an even stricter standard than BIP 54’s margin. Furthermore, when miners use getblocktemplate, the reported mintime reflects this constraint, ensuring that blocks constructed using the Core template are not susceptible to invalid timestamps, but instead will simply have their timestamps delayed if necessary.
+
+An analysis of historical blockchain data across all 484 difficulty retarget boundaries through block number 975,744 reveals that instances where block N had an earlier timestamp than block N-1 were extremely rare, occurring only ten times. The most extreme case was a negative difference of 1,127 seconds at block 203,616 in October 2012, which represented only about one-sixth of the permitted margin. Since 2015, the largest negative offset has been just 43 seconds, observed at block 812,448 in October 2023. A comprehensive list of these boundary events is available as a CSV file for further review at [https://www.learnbitcoin.com/downloads/time-warp-seams.csv](https://www.learnbitcoin.com/downloads/time-warp-seams.csv).</summary>
+    <published>2026-11-22T15:40:20.806000+00:00</published>
+  </entry>
+</feed>

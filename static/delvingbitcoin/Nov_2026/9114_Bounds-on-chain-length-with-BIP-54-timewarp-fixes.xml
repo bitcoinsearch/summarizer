@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Bounds on chain length with BIP-54 timewarp fixes</title>
+  <updated>2026-11-23T08:34:51.990971+00:00</updated>
+  <author>
+    <name>zawy</name>
+  </author>
+  <timestamp>2026-11-22 22:15:32.482000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Bounds on chain length with BIP-54 timewarp fixes</title>
+    <updated>2026-11-23T08:34:51.991026+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/bounds-on-chain-length-with-bip-54-timewarp-fixes/2899/31" rel="alternate"/>
+    <summary>Bitcoin’s Difficulty Adjustment Algorithm (DAA) plays a pivotal role in maintaining the network’s expected block interval by dynamically recalibrating mining difficulty. The DAA aims to ensure that blocks are mined, on average, every ten minutes, regardless of fluctuations in the total hash rate contributed by miners. However, persistent increases in hash rate can cause discrepancies between various measures of blockchain progress, particularly $T_{min}(U,W)$ and $W_{min}(U,T)$. Here, $T$ denotes chain time since genesis measured in two-week intervals, $U$ is the number of 2016-block periods since genesis, and $W$ represents cumulative chain work, with all units standardized relative to their initial period.
+
+A central challenge arises when the DAA struggles to keep pace with sustained hash rate growth. This allows attackers or private miners to accumulate more blocks than the public chain without a proportionate increase in actual computational effort. Ideally, block height should serve as a reliable proxy for elapsed time, but under the current DAA, it can drift, undermining this property and leaving the system susceptible to manipulation.
+
+Addressing these concerns involves examining the relationship between the averaging window used by the DAA and its responsiveness to hash rate changes. Shortening the averaging window enables the algorithm to react more quickly, thus tightening the bounds on $T_{min}(U,W)$ and $W_{min}(U,T)$. However, this comes at the expense of stability, as more frequent adjustments can introduce volatility into the difficulty level. Notably, virtually all DAAs possess an “equivalent averaging window,” subjecting them to similar trade-offs between speed and stability. Nevertheless, some algorithms can achieve equivalent stability with smaller windows, potentially reducing the aforementioned vulnerabilities by up to 50% compared to Bitcoin’s current DAA when constant hash rate stability is used as the benchmark.
+
+A novel modification is proposed to address these issues more directly. The suggestion involves adjusting the difficulty more aggressively if the chain’s progression in terms of time since genesis exceeds expectations. Specifically, difficulty would be calculated as follows:
+
+difficulty *= 600/timespan * (2016 + (600 * height - min(chain_time, 600 * height)))
+
+This approach penalizes the chain for advancing ahead of schedule by making mining more difficult, thereby curbing accelerated block production. Importantly, the use of the $min()$ function prevents the reverse scenario—whereby the chain could be sped up artificially if blocks are lagging behind schedule—which could otherwise be exploited. While this equation has not yet been experimentally validated, there is concern that it might introduce instability comparable to simply reducing the averaging window. The relationship between adjustment speed and stability is intrinsically tied to the size of the averaging window; speed improves linearly as the window shortens, while stability decreases according to the square root of the window size.
+
+An illustrative example demonstrates that, for $U = 499$, this modification increases $T_{min}$ from 460 to 489, representing a significant reduction in error, though the impact on overall stability remains unclear. Mathematically, the standard DAA produces:
+
+$$ T_{\min} \approx U\left[ \left(\frac{1}{W}\right)^{1/U} \right] $$
+
+With the proposed modification, this becomes:
+
+$$ T_{\min} \approx U - \frac{\ln(W)}{\ln\ln(W)} $$
+
+While this refinement shows promise in narrowing the gap between theoretical and actual minimum times, further empirical analysis is necessary to determine whether the accompanying instability outweighs the benefits, or if alternative DAAs with optimized averaging windows might achieve similar improvements with less risk. For readers interested in exploring this topic further or referencing technical details, consult the original equations and discussion provided above.</summary>
+    <published>2026-11-22T22:15:32.482000+00:00</published>
+  </entry>
+</feed>
