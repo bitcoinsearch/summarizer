@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+  <updated>2026-11-24T10:43:55.650872+00:00</updated>
+  <author>
+    <name>ajtowns</name>
+  </author>
+  <timestamp>2026-11-24 04:19:47.547000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>A STARK proof of Bitcoin's UTXO set at block 972,500, with circuits proven in Lean</title>
+    <updated>2026-11-24T10:43:55.650917+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/a-stark-proof-of-bitcoins-utxo-set-at-block-972-500-with-circuits-proven-in-lean/3070/7" rel="alternate"/>
+    <summary>Switching from the current hashing method to blake2s introduces additional complexity compared to implementing a Merkle tree over snapshot data. A recommended strategy involves publishing authoritative Merkle hashes for snapshots at specific block heights, using these as a foundation for trust similar to core’s assumeutxo hashes. Providing a dedicated tool capable of recalculating these hashes efficiently helps maintain separation between concerns and supports verification. The computational expense is primarily driven by hashing the raw block data itself, which is a requirement at every layer of the process.
+
+Data volume presents a significant challenge, as 14,000 blocks can represent approximately 28GB, not including any associated undo data. However, it may not be necessary for all layers to process the entirety of this data. By feeding both block and undo file data into a purpose-built per-block prover, one could produce transaction and undo commitments under more efficient hash algorithms such as blake or poseidon. These commitments could then serve as inputs for further proofs regarding UTXO updates. Modifying the data structure, for instance by organizing transaction data with explicit hashes — such as `tx=H(txid, wtxid, ver, locktime, Tree_vin(...), Tree_vout(...))` — enhances accessibility and auditability. This approach leverages information obtainable from the output of `bitcoin-cli getblock $HASH 3`, allowing a full node to optionally generate and cache these per-block roots at low cost. Such measures mirror the audit enhancements provided by muhash in `gettxoutsetinfo` when coinstatsindex is enabled.
+
+Performance considerations arise due to the slow nature of `getblock 3`, likely because of the overhead involved in JSON conversion. While this may hinder scalability, it remains suitable for limited experimentation. Adoption of alternative frameworks where sha256 computation is optimized — such as [Flock](https://github.com/succinctlabs/flock) or [Binius64](https://github.com/binius-zk/binius64) — could offer further improvements.
+
+Current proofs are based on assumeUTXO snapshots, but generating proofs starting from genesis could prove valuable. An iterative development approach is advisable, refining techniques with manageable snapshot increments (for example, progressing in steps of 30,000 blocks or using multiples that are conducive to efficient testing) until the feasibility and affordability of producing a complete proof from genesis are established.</summary>
+    <published>2026-11-24T04:19:47.547000+00:00</published>
+  </entry>
+</feed>

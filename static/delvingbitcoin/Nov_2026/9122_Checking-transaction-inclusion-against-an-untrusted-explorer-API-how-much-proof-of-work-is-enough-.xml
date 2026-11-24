@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>Checking transaction inclusion against an untrusted explorer API: how much proof of work is enough?</title>
+  <updated>2026-11-24T10:44:51.745394+00:00</updated>
+  <author>
+    <name>devdavidejesus</name>
+  </author>
+  <timestamp>2026-11-24 02:04:40.810000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>Checking transaction inclusion against an untrusted explorer API: how much proof of work is enough?</title>
+    <updated>2026-11-24T10:44:51.745451+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/checking-transaction-inclusion-against-an-untrusted-explorer-api-how-much-proof-of-work-is-enough/3113" rel="alternate"/>
+    <summary>btc-toolkit is a Python command-line utility that operates independently from a full node and header chain. It interacts solely with Esplora or Mempool APIs to retrieve transaction status, raw transactions, Merkle proofs, and block headers. The tool is designed to trust none of these external sources, implementing several security checks: verifying that the raw transaction matches the claimed transaction ID (rejecting those whose non-witness serialization is exactly 64 bytes), ensuring the Merkle branch cannot be misinterpreted as a 64-byte transaction (addressing CVE-2017-12842), confirming the block header correctly commits to the Merkle root and hashes to the stated block hash, and validating that the PoW target encoded in the header is met and falls within network limits.
+
+The verification process ultimately judges only the cost of forging a single header that satisfies its own PoW requirement. All ancillary information provided by the API, such as block height or timestamp, is disregarded since these values can be manipulated by an adversary. Currently, the toolkit reports mainnet headers with difficulty greater than or equal to 50 T as "verified," corresponding to approximately 2^77.5 hashes—about 38% of the expected work for a typical block at recent difficulties. Headers below this threshold are labeled as "consistent, weak work." The documentation is explicit about the limitations: this approach does not establish the block’s position in the chain nor confirm it is part of the most-work chain.
+
+Several design considerations are raised. Relying on a fixed difficulty threshold becomes increasingly problematic as network difficulty evolves; over time, it represents a diminishing portion of actual block work and can misclassify legitimate older blocks as less secure. A potential solution might be maintaining a hardcoded table mapping block heights to minimum difficulties, updated with each release. This approach would require users to trust the release process but could provide a more accurate anchor.
+
+To enhance verification, one could fetch a sequence of k descendant headers, checking that each header commits to the previous one’s hash. This strategy increases the computational burden for a would-be attacker by a factor of k, while imposing minimal additional bandwidth requirements. Assessing whether cumulative work across a short chain segment provides a better metric and determining an appropriate value of k for practical payment verification remain open questions. However, even this method cannot guarantee consensus, as it remains possible for the API to supply a privately mined alternative chain.
+
+Additional edge cases warrant consideration. While the toolkit already addresses the 64-byte ambiguity, other anomalies may merit detection and rejection. For example, SPV client best practices suggest halting upon observing sudden difficulty drops or significant time discrepancies. With access to only a single block header, comparative evaluation is limited, but incorporating a check that compares the block timestamp against the verifier’s local clock may offer some benefit. Nonetheless, without historical context from preceding headers, such a check risks being misleading.
+
+For further details and code reference, consult [btc_toolkit/verify.py](https://github.com/devdavidejesus/btc-toolkit). Suggestions for improvements, recommendations for related prior solutions, or identification of overlooked issues are welcomed.</summary>
+    <published>2026-11-24T02:04:40.810000+00:00</published>
+  </entry>
+</feed>
