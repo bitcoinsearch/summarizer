@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>0</id>
+  <title>676-Byte Knowledge-Asymmetry UTXO Rescue and Stateless Lattice PQ-MPC for Legacy Supply Migration</title>
+  <updated>2026-11-25T09:33:19.940305+00:00</updated>
+  <author>
+    <name>laudzakusuma</name>
+  </author>
+  <timestamp>2026-11-24 16:38:20.438000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>0</id>
+    <title>676-Byte Knowledge-Asymmetry UTXO Rescue and Stateless Lattice PQ-MPC for Legacy Supply Migration</title>
+    <updated>2026-11-25T09:33:19.940338+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/676-byte-knowledge-asymmetry-utxo-rescue-and-stateless-lattice-pq-mpc-for-legacy-supply-migration/3116" rel="alternate"/>
+    <summary>The transition of Bitcoin to post-quantum cryptography presents two significant challenges: the stateful nature of institutional custodial key management and the substantial overhead involved in rescuing legacy UTXOs vulnerable to quantum attacks. Institutional custodians often operate distributed signing servers that must restore keys from cold backups across isolated environments, making them particularly susceptible to issues with stateful hash-based post-quantum schemes. Desynchronization of counters in these schemes can lead to critical key compromises, thereby impeding safe adoption.
+
+A considerable portion of the Bitcoin supply—approximately 34%—remains in legacy outputs, which are at risk of exposure to quantum-enabled public-key recovery or may become inaccessible due to scheduled address sunsetting. Prior rescue mechanisms for these legacy UTXOs, such as the Lifeboat and Dropkick proposals, have required extremely large on-chain witness data, placing a heavy burden on the blockchain.
+
+The Adaptive Quantum Migration Protocol (AQMP v2.0) introduces a more efficient approach to both issues. For UTXO rescue, it employs a knowledge-asymmetry technique that avoids publishing raw elliptic-curve public keys during emergency migration. Instead, a post-quantum lattice key is derived using the BIP-32 parent chain code and the original derivation path. The total on-chain witness size is reduced to just 676 bytes, a dramatic improvement compared to Lifeboat’s 3,420 bytes and Dropkick’s 3,904 bytes. This reduction is achieved through careful structuring: a 32-byte chain-code commitment, a 64-byte lattice proof transcript, a 164-byte Merkle inclusion proof, and a 320-byte non-interactive zero-knowledge proof for the destination lattice, all protected by a 96-byte Dual-Commit XOR cycle against front-running within a bounded confirmation window.
+
+For institutional custody, AQMP v2.0 provides a stateless threshold engine using Shamir secret sharing and Lagrange interpolation over a finite field, complemented by synthetic HMAC-SHA3-256 nonces. These nonces are carefully tied to the message digest, share commitments, quorum configuration, and backup epochs, ensuring that even after state wipes and restorations, partial signatures remain deterministic and immune to nonce reuse vulnerabilities. The verification process demonstrates stable performance across different quorum configurations, maintaining constant verification times between 3.90 and 4.68 milliseconds. When combined with P2MR roots and optimized aggregation, the protocol achieves a drastic reduction in block witness size for threshold MPC applications—from almost 4 MB per block to just over 11 KB for typical transaction volumes.
+
+Further technical details, reproducibility materials, and reference implementations are provided in the [published paper](https://doi.org/10.5281/zenodo.24341314) and the [BIP draft repository](https://github.com/laudzakusuma/aqmp-protocol), which includes comprehensive tests and datasets. The proposal encourages feedback specifically regarding assumptions about BIP-32 chain-code security and the effectiveness of the Dual-Commit XOR mechanism for mempool protection.</summary>
+    <published>2026-11-24T16:38:20.438000+00:00</published>
+  </entry>
+</feed>
