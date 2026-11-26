@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Reducing Bitcoin Full Node Storage Without Consensus Changes</title>
+  <updated>2026-11-26T09:13:31.787857+00:00</updated>
+  <author>
+    <name>bruno</name>
+  </author>
+  <timestamp>2026-11-25 12:55:58.927000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Reducing Bitcoin Full Node Storage Without Consensus Changes</title>
+    <updated>2026-11-26T09:13:31.787893+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/reducing-bitcoin-full-node-storage-without-consensus-changes/2790/11" rel="alternate"/>
+    <summary>RocksDB serves as the core storage solution for [exnode](https://github.com/brunoerg/exnode), managing all indexes, chain metadata, and transient blocks essential to the platform’s operations. The internal architecture of RocksDB ensures that data is systematically flushed into immutable .sst files, which are structured into approximately 4 KiB blocks. This block-based organization optimizes data access by enabling lookups that only require reading and decompressing a single block at any moment, enhancing performance and efficiency.
+
+Compression plays a pivotal role in this setup. LZ4 compression is applied across all column families and levels within the Log-Structured Merge-tree (LSM) design, with automatic detection at startup. If LZ4 support is absent during the build process, the system reverts to no compression. This approach effectively reduces the size of index blocks while maintaining minimal CPU overhead. However, large raw block values, specifically those linked to :pending entries with sizes greater than or equal to 4 KiB, remain uncompressed. These are stored in BlobDB .blob files, recognizing that such Bitcoin block data does not compress efficiently and is typically deleted after being committed.
+
+The deployment of this strategy yields several significant advantages. Disk usage is reduced, resulting in lower I/O operations, and the operating system’s page cache becomes more effective, further improving overall system responsiveness. Conversely, there are some drawbacks to this approach. Compression introduces additional CPU load and increases memory consumption, as both compressed and uncompressed copies of a block are retained in memory during read operations. Furthermore, when heavier compression codecs are employed, occasional latency spikes have been observed, highlighting a trade-off between compression efficiency and system performance.</summary>
+    <published>2026-11-25T12:55:58.927000+00:00</published>
+  </entry>
+</feed>

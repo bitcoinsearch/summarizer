@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>2</id>
+  <title>Combined summary - State minimization in MuSig2 signing sessions</title>
+  <updated>2026-11-26T09:11:01.771630+00:00</updated>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <thread>
+    <message id="msg_1" depth="0" position="0">
+      <author>salvatoshi</author>
+      <timestamp>2024-03-01 15:24:01.026000+00:00</timestamp>
+    </message>
+    <message id="msg_2" depth="0" position="1">
+      <author>cmd</author>
+      <timestamp>2024-03-02 22:11:50.566000+00:00</timestamp>
+    </message>
+    <message id="msg_3" depth="0" position="2">
+      <author>realorrandom</author>
+      <timestamp>2024-03-06 17:23:09.937000+00:00</timestamp>
+    </message>
+    <message id="msg_4" depth="0" position="3">
+      <author>salvatoshi</author>
+      <timestamp>2024-03-06 18:17:29.781000+00:00</timestamp>
+    </message>
+    <message id="msg_5" depth="0" position="4">
+      <author>realorrandom</author>
+      <timestamp>2024-03-07 07:04:09.950000+00:00</timestamp>
+    </message>
+    <message id="msg_6" depth="0" position="5">
+      <author>salvatoshi</author>
+      <timestamp>2024-03-07 09:26:58.805000+00:00</timestamp>
+    </message>
+    <message id="msg_7" depth="0" position="6">
+      <author>realorrandom</author>
+      <timestamp>2024-03-07 10:44:57.418000+00:00</timestamp>
+    </message>
+    <message id="msg_8" depth="0" position="7">
+      <author>salvatoshi</author>
+      <timestamp>2024-03-07 11:09:06.099000+00:00</timestamp>
+    </message>
+    <message id="msg_9" depth="0" position="8">
+      <author>realorrandom</author>
+      <timestamp>2024-03-07 12:26:19.959000+00:00</timestamp>
+    </message>
+    <message id="msg_10" depth="0" position="9">
+      <author>salvatoshi</author>
+      <timestamp>2024-03-07 12:52:25.967000+00:00</timestamp>
+    </message>
+    <message id="msg_11" depth="0" position="10">
+      <author>salvatoshi</author>
+      <timestamp>2026-11-25 19:44:19.557000+00:00</timestamp>
+    </message>
+  </thread>
+  <link href="delvingbitcoin/March_2024/1742_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1768_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1805_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1806_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1810_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1812_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1814_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1816_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1818_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/March_2024/1819_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <link href="delvingbitcoin/Nov_2026/9138_State-minimization-in-MuSig2-signing-sessions.xml" rel="alternate"/>
+  <entry>
+    <id>2</id>
+    <title>Combined summary - State minimization in MuSig2 signing sessions</title>
+    <updated>2026-11-26T09:11:01.772672+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/state-minimization-in-musig2-signing-sessions/626/11" rel="alternate"/>
+    <published>2024-03-01 15:24:01.026000+00:00</published>
+    <summary>Efficient management of signing flows for hardware wallets, particularly in the context of Bitcoin’s BIP 0327, is vital due to the storage limitations inherent to such devices. The proposal introduces a system that structures signing sessions at the level of Partially Signed Bitcoin Transactions (PSBTs), allowing devices with limited persistent memory to efficiently process transactions containing many inputs. This is achieved by generating synthetic randomness for each input and key pair via a global random number called `rand_root`. For every transaction, `rand_root` is used as the basis for deriving session-specific random values (`rand'`) for each input/key pair through SHA256 hashing, ensuring both uniqueness and resistance to collisions. This framework enables devices to create and validate public nonces and partial signatures without needing to store extensive state across sessions, overcoming a major limitation of embedded hardware.
+The workflow comprises two main phases: pubnonce generation and partial signature creation. Initially, the PSBT, devoid of pubnonces, is sent to the device, which triggers the generation of `rand_root` and starts a new signing session. Pubnonces are generated per input/key pair, after which the session's secret, `rand_root`, is saved to persistent storage. When the updated PSBT containing pubnonces is returned to the device, the session is recreated in volatile memory, pubnonces are validated, and partial signatures are produced using the previously established synthetic randomness. Security is maintained by securely storing `rand_root` and ensuring it is never reused between sessions, thereby mitigating risks of nonce reuse, which could compromise private keys. This method also demonstrates resilience against malleability attacks, since changes to transaction data cannot predictably affect the secnonce/pubnonce outputs, thanks to the secure derivation of synthetic randomness. The ability to support multiple concurrent signing sessions through unique session identifiers further enhances the robustness and flexibility of this approach. More information and related proposals can be found in the discussions on [descriptor containing musig()](https://github.com/bitcoin/bips/pull/1540) and [wallet policy](https://github.com/bitcoin/bips/pull/1389).
+BitEscrow’s implementation exemplifies practical adoption of parallel MuSig2 signing sessions, employing terminology such as &quot;root_nonce&quot; and &quot;session_id.&quot; Their work, available at [BitEscrow/escrow-core](https://github.com/BitEscrow/escrow-core), explores advanced features like computing branching paths from initial nonce values, enabling use cases such as running virtual machines with Discreet Log Contracts (DLCs). Despite these technical advancements, there is an acknowledgment that the real-world impact may not match the theoretical excitement promised by such innovations.
+A notable debate centers on the use of CounterNonceGen for nonce creation, as described in recent BIPs. The primary concern involves the requirement for access to the secret key during nonce generation—a step that may raise security and operational challenges. Such requirements must balance cryptographic best practices against the need for functional efficiency, especially given the sensitivity of private keys and the necessity to avoid exposing them unnecessarily. This tension reflects broader trends in protocol development, highlighting the iterative nature of enhancing cryptographic processes to address emerging threats and operational constraints.
+Ledger device implementations add another layer to the discourse, specifically around how nonces should be generated. One suggested approach leverages the True Random Number Generator (TRNG) within Ledger’s Secure Element for nonce creation, while another relies on CounterNonceGen with a secure atomic counter. Although the underlying mechanisms differ, both methods adhere to the same overarching strategy for managing psbt-level signing sessions. Ensuring session integrity when handling multiple PSBT signing flows simultaneously requires careful commitment to initial counter values and the expected number of signatures within each session, identified by a distinct `session_id`. This structured approach is essential for preventing nonce reuse and maintaining auditability of the signing process.
+Generating random numbers for each (input, key) pair from a root value using the NonceGen function is recognized as a theoretically sound technique. While hash functions like SHA256 are commonly used—partly due to their presence in related cryptographic processes—it is noted that stream ciphers such as ChaCha20 could serve as more resource-efficient alternatives. Nevertheless, the widespread reliance on hash functions continues, largely because they fulfill the necessary cryptographic guarantees. The terminology surrounding these concepts is evolving, with terms like `rand_root` increasingly being replaced by `seed`, `psbt_seed`, or `rand_seed` to better reflect their roles. Handling multiple parallel signing sessions can be facilitated by assigning unique session identifiers derived from hashes of transaction-specific information, such as the transaction ID (`txid`) and wallet policy. However, caution is advised, as hashing `txid` and wallet policy together may introduce subtle risks when processing multiple PSBTs for the same transaction.
+Concerns about possible vulnerabilities arise when multiple PSBTs for the same transaction are processed. If altered PSBTs do not change the NonceGen output</summary>
+  </entry>
+</feed>
