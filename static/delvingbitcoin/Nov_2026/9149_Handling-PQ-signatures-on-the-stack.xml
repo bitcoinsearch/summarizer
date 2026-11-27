@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Handling PQ signatures on the stack</title>
+  <updated>2026-11-27T09:27:21.313252+00:00</updated>
+  <author>
+    <name>conduition</name>
+  </author>
+  <timestamp>2026-11-27 00:08:48.834000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Handling PQ signatures on the stack</title>
+    <updated>2026-11-27T09:27:21.313282+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/handling-pq-signatures-on-the-stack/3128" rel="alternate"/>
+    <summary>The discussion centers on the challenge of enabling Bitcoin Script to support post-quantum (PQ) signatures, such as those proposed by the SHRINCS effort. The current consensus limit for stack element size is 520 bytes, which is insufficient for most practical PQ signature schemes. To address this, a proposal aims to increase the stack element size to 6kb in a new tapscript version, as detailed in [this BIP draft](https://github.com/SHRINCS/shrincs-bip/pull/76). While this change is motivated by advancing cryptographic resilience, it introduces concerns regarding potential denial-of-service (DoS) vectors, since larger stack elements could significantly amplify resource consumption during script execution.
+
+A critical risk emerges from the ability of scripts to duplicate or hash large stack elements. Opcodes such as `OP_RIPEMD160`, which lacks hardware acceleration, and others that process data byte-by-byte like `OP_VERIFY`, `OP_IFDUP`, and `OP_EQUAL`, could be exploited to consume excessive CPU cycles. This risk escalates if an attacker can repeatedly duplicate and operate on large elements, highlighting the necessity for careful protocol adjustments and implementation strategies.
+
+Several approaches are considered for handling large stack elements. One "lazy" option involves chunking, where the 520-byte limit remains at the consensus level, and opcodes consuming more data must concatenate multiple stack elements. This method requires minimal changes to current rules but leads to complex edge cases for users and wallets, as encoding and parsing large objects across chunks becomes cumbersome. The approach also imposes an overhead due to additional length encoding, though this is minor relative to PQ signature sizes.
+
+A stricter alternative suggests opcode blacklisting: only allowing certain opcodes, like signature checks, to operate on large stack elements while restricting or rejecting others such as duplication (`OP_DUP`). This measure would mitigate entire classes of DoS attacks by preventing repeated operations on large data, but may restrict scripting flexibility and eliminate unexplored use cases involving large non-signature data manipulation. Careful analysis would still be required to ensure no expensive operations remain available on large inputs through other opcodes.
+
+Another comprehensive avenue involves optimizing the implementation of all opcodes with costs scaling with input size. This could include introducing hash-caches for costly hash operations, representing stack elements as pointers to reduce duplication cost, and caching results for truthiness evaluations. Such enhancements improve performance without altering consensus rules and could be adopted immediately, though they place greater demands on node software development and still require rigorous review to identify any lingering vulnerabilities.
+
+An ambitious solution borrows from [BIP-440](https://github.com/bitcoin/bips/blob/9f3d3bc6a60db16efbdc71ac8f7ea30217fc0c39/bip-0440.mediawiki), proposing a formal computational budget system—varops—that enforces resource limits at the protocol level. Transactions exceeding their compute or memory allowance would fail, directly addressing DoS risks. While potentially expanding scripting capabilities, this path entails significant complexity and necessitates thorough vetting and testing.
+
+Isolating signature operations onto a dedicated stack—the "sigstack"—offers another possibility. Only signature-checking opcodes would interact with this stack, insulating large signatures from general script logic and minimizing DoS exposure. However, this diverges from established Bitcoin Script behavior and would preclude any direct manipulation of signatures within scripts.
+
+Finally, hybrid approaches could blend these strategies, combining implementation improvements with selective opcode restrictions. For example, efficient pointer-based stack representations could render some operations constant-time, while other high-cost opcodes might be explicitly blacklisted for large stack elements.
+
+Each approach carries unique trade-offs between security, utility, complexity, and compatibility. The optimal path forward requires balancing the pressing need for PQ signature support against the imperative to preserve network robustness and developer usability. Further community discussion and technical collaboration will be essential as these solutions evolve.</summary>
+    <published>2026-11-27T00:08:48.834000+00:00</published>
+  </entry>
+</feed>
