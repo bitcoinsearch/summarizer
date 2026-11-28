@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Segwit commitment to post-quantum witness data?</title>
+  <updated>2026-11-28T08:42:22.378215+00:00</updated>
+  <author>
+    <name>conduition</name>
+  </author>
+  <timestamp>2026-09-05 14:48:15.540000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Segwit commitment to post-quantum witness data?</title>
+    <updated>2026-11-28T08:42:22.378255+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/segwit-commitment-to-post-quantum-witness-data/2702/16" rel="alternate"/>
+    <summary>Post-Quantum (PQ) signature data must be securely included within the block hash to enhance validation efficiency and prevent transaction malleability. By ensuring that commitments to PQ signatures are directly covered by the block hash, validation caching becomes straightforward, and any potential issues with transaction modifications post-signature are mitigated. If future developments lead to the deployment of SNARK aggregation, as explored in [this thread](https://delvingbitcoin.org/t/block-wide-signature-aggregation-via-snarks/2875), the zero-knowledge proof can efficiently demonstrate that all signatures were correctly committed within the block. For hash-based signature SNARKs, this integration would require only a minimal increase in proving time, making it a practical solution for robust cryptographic assurances.
+
+It is essential not to overlook the significance of non-signature witness data. While advancements like CRQCs alter certain aspects of blockchain security, they do not fundamentally affect the computational costs associated with script validation outside of signature verification. As such, there is no compelling reason to revise the block weight cost for scripts, preimages, or other non-signature witness elements at this stage. Focusing discounts exclusively on signatures simplifies the coexistence of different signature cost models and strengthens the system's resistance to inefficient resource use, as only legitimate signatures benefit from the reduced weights.
+
+The ability for users to combine multiple signature algorithms within a single transaction is increasingly important, particularly for multisignature wallets that rely on diverse cryptographic schemes for enhanced security. This requirement necessitates an accounting model capable of evaluating costs at the script execution level, specifically where CHECKSIG operations occur. Such granularity ensures that hybrid signature schemes are accurately and fairly represented in transaction weight calculations.
+
+Transaction weight determination should remain accessible, avoiding the need for software to perform complex, dynamic script analysis to estimate resource consumption. An effective design could involve structuring the witness stack to include a declared computation budget alongside the script’s input data. Each witness style would then define a formula that translates the computation budget and input size into weight units (WU). This approach permits new opcodes with distinct computational costs to be introduced without overhauling the entire witness structure. Only when the relationship between script input bytes and computational cost changes would a new witness style become necessary, potentially allowing a single style per transaction input.
+
+Comparisons can be drawn to proposals such as [the varops budget proposal](https://github.com/bitcoin/bips/blob/09e21036a4001fe6c9ba65c1d3a39b737768132f/bip-0440.mediawiki) for Generalized Signature Replacement (GSR), which fixes the budget based on serialized transaction size. However, introducing an up-front computation budget declaration in the witness field gives senders more flexibility and discourages unnecessary padding to artificially inflate budgets. This methodology aligns conceptually with Ethereum's per-transaction "gas limit" field, providing greater transparency and control for users crafting transactions.</summary>
+    <published>2026-09-05T14:48:15.540000+00:00</published>
+  </entry>
+</feed>

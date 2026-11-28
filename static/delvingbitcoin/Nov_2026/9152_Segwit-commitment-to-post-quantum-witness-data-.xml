@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>1</id>
+  <title>Segwit commitment to post-quantum witness data?</title>
+  <updated>2026-11-28T08:42:29.940699+00:00</updated>
+  <author>
+    <name>conduition</name>
+  </author>
+  <timestamp>2026-11-27 15:22:26.840000+00:00</timestamp>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <entry>
+    <id>1</id>
+    <title>Segwit commitment to post-quantum witness data?</title>
+    <updated>2026-11-28T08:42:29.940732+00:00</updated>
+    <link href="https://delvingbitcoin.org/t/segwit-commitment-to-post-quantum-witness-data/2702/17" rel="alternate"/>
+    <summary>A transaction data format extension is proposed, introducing an "extensions" field to support protocol upgrades and new cryptographic schemes. This field acts as a container for individual extensions, each represented as an opaque data blob paired with an optional hash. The encoding follows the pattern of `compact_size(len(data)) || data || hash`, ensuring that each extension is self-contained and suitably versioned. Extensions are introduced sequentially, allowing transactions to signal compatibility with specific protocol updates or new signature algorithms, such as post-quantum (PQ) schemes. Unrecognized extensions are treated opaquely, enabling forward compatibility by allowing future software to interpret new or unknown extensions without breaking existing functionality.
+
+To maintain integrity across protocol evolutions, each extension incorporates a commitment mechanism inspired by witness-style chaining. Commitment values (`e0..e4`) are computed recursively: each is the hash of its successor concatenated with the current extension blob, forming a linear, unbalanced pseudo-Merkle structure over the extension data. The root commitment, `e0`, becomes crucial for transaction validation and must be placed in the witness field, typically within a dedicated annex element of the first input supporting the new format. Transactions can be downgraded by removing higher-numbered extensions and updating the preceding commitment, reverting to a legacy format (version 0) when all extensions are stripped.
+
+Transaction weight calculations adapt to this extensible design. Each extension receives a unique version number, indicating which protocol features are active. The cost function for each extension, denoted as $f_i(v_i)$, computes its weight in weight units (WU), based on the size or potentially more complex criteria tied to the extension’s semantics. The total transaction weight sums the base transaction size, a byte for the extension version, CompactSize length prefixes for each extension, and the output of each extension's cost function. The formula incorporates these elements, with the CompactSize integer encoding explained in detail at [Learn Me A Bitcoin](https://learnmeabitcoin.com/technical/general/compact-size/).
+
+The design facilitates robust backward and forward compatibility. Nodes capable of parsing version 1 extensions can accept higher-version transactions as valid, since they need only verify the root commitment for consensus purposes. However, unless a node understands newer extensions, it cannot compute their precise transaction weights or validate their contents, meaning compatibility is limited to block validity rather than full verification. Since the root commitment must reside in the witness field, this approach does not directly support spending pre-Taproot outputs, which lack suitable annex slots. Alternative script-level methods may provide workarounds, as discussed in proposals like [this one](https://delvingbitcoin.org/t/segwit-commitment-to-post-quantum-witness-data/2702/2).
+
+By employing a transaction-wide commitment, the architecture allows extensions to affect even legacy output types, provided there is at least one annex slot available for the global extension commitment. This could prove advantageous for implementing recovery protocols, augmenting legacy outputs, or enabling new encumbrance mechanisms in a backwards-compatible manner. There remains a need to specify generic extension formats for verifying new signature schemes, ideally establishing a template that streamlines the integration of advanced cryptographic primitives in future protocol upgrades.</summary>
+    <published>2026-11-27T15:22:26.840000+00:00</published>
+  </entry>
+</feed>
